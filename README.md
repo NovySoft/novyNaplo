@@ -1,2 +1,3 @@
-# novykreta
-NovyKréta
+# NovyKréta
+
+NovyKréta mobilos és asztali alkalmazás
