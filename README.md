@@ -1,3 +1,4 @@
 # NovyKréta
 
-NovyKréta mobilos és asztali alkalmazás
+NovyKréta flutter aplikáció
+
