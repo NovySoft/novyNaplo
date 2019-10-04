@@ -1,4 +1,6 @@
-# NovyKréta
+# novynotifier
 
-NovyKréta flutter aplikáció
+Novy&#x27;s Ekréta Notifier
 
+# Modules
+Flutter
