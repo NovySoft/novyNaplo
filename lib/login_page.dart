@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'home_page.dart';
+import 'package:cipher2/cipher2.dart';
+import 'config.dart' as config;
 import 'package:http/http.dart' as http;
+
 TextEditingController codeController = TextEditingController(text: "klik035046001");
 TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();
@@ -28,6 +30,21 @@ void auth() async{
   }
 }
 
+void save() async{
+  //Inputs
+  String key = config.key;
+  String code = codeController.text;
+  String user = userController.text;
+  String pass = passController.text;
+  //Encryption
+  String iv = 'yyyyyyyyyyyyyyyy';
+  String nonce = await Cipher2.generateNonce();   // generate a nonce for gcm mode we use later
+  if(status == "OK"){
+    String encryptedString = await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
+    String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
+    print(decryptedString);
+  }
+}
 
 
 
@@ -139,6 +156,7 @@ Future<void> _ackAlert(BuildContext context) {;
             child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();
+              save();
             },
           ),
         ],
