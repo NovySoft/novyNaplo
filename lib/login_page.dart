@@ -5,12 +5,30 @@ import 'dart:io';
 import 'package:cipher2/cipher2.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 TextEditingController codeController = TextEditingController(text: "klik035046001");
 TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
+
+
+void onLoad() async{
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String passKey = config.passKey;
+  String codeKey = config.codeKey;
+  String userKey = config.userKey;
+  String iv = config.iv;
+  if(prefs.getString("code") != null){
+    String decryptedCode = await Cipher2.decryptAesCbc128Padding7(prefs.getString("code"), codeKey, iv);
+    String decryptedUser = await Cipher2.decryptAesCbc128Padding7(prefs.getString("user"), userKey, iv);
+    String decryptedPass = await Cipher2.decryptAesCbc128Padding7(prefs.getString("password"), passKey, iv);
+    codeController.text = decryptedCode;
+    userController.text = decryptedUser;
+    passController.text = decryptedPass;
+  }
+}
 
 
 void auth() async{
@@ -21,29 +39,43 @@ void auth() async{
   var response = await http.get(url);
   if(response.statusCode == 200){
     var parsedJson = json.decode(response.body);
-    print('Response body: ${response.body}');
+    //print('Response body: ${response.body}');
     status = parsedJson['Status'];
-    print(status);
+    //print(status);
   }else{
     status = "Error:"+status;
-    print('Response status: ${response.statusCode}');
+    //print('Response status: ${response.statusCode}');
   }
 }
 
 void save() async{
+  //Variables
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
   //Inputs
-  String key = config.key;
+  String key = config.passKey;
+  String codeKey = config.codeKey;
+  String userKey = config.userKey;
   String code = codeController.text;
   String user = userController.text;
   String pass = passController.text;
   //Encryption
-  String iv = 'yyyyyyyyyyyyyyyy';
+  String iv = config.iv;
   String nonce = await Cipher2.generateNonce();   // generate a nonce for gcm mode we use later
   if(status == "OK"){
-    String encryptedString = await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
-    String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
-    print(decryptedString);
+    String encryptedPass = await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
+    String encryptedUser = await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
+    String encryptedCode = await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
+    prefs.setString("password", encryptedPass);
+    prefs.setString("code", encryptedCode);
+    prefs.setString("user", encryptedUser);
+    //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
   }
+  /*
+  print("prefs:");
+  print(prefs.getString("password"));
+  print(prefs.getString("code"));
+  print(prefs.getString("user"));
+  */
 }
 
 
@@ -55,6 +87,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+    onLoad();
+  }
+  
   @override
   Widget build(BuildContext context) {
     final logo = Hero(
@@ -118,8 +156,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Text('Log In', style: TextStyle(color: Colors.white)),
       ),
     );
-
-
+    
+  
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -144,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Future<void> _ackAlert(BuildContext context) {;
+Future<void> _ackAlert(BuildContext context) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
