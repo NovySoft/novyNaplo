@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cipher2/cipher2.dart';
+import 'package:novynotifier/marks.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -194,6 +195,9 @@ Future<void> _ackAlert(BuildContext context) {
             child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();
+              if(status == "OK"){
+                Navigator.of(context).pushNamed(Marks.tag);
+              }
               save();
             },
           ),

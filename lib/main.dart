@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'login_page.dart';
-import 'home_page.dart';
+import 'marks.dart';
 
 void main() async{
   runApp(MyApp());
@@ -11,7 +11,7 @@ void main() async{
 class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
-    HomePage.tag: (context) => HomePage(),
+    Marks.tag: (context) => Marks(),
   };
 
   @override
