@@ -28,6 +28,7 @@ dependencies:
   http: any
   flutter_launcher_icons: any
   shared_preferences: any
+  english_words: any
   cipher2: ^0.3.5
 
 flutter_icons:

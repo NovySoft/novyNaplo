@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cipher2/cipher2.dart';
-import 'package:novynotifier/marks.dart';
+import 'package:novynotifier/marks_tab.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +38,7 @@ void auth() async{
   String pass = passController.text;
   var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
   var response = await http.get(url);
+  print(response.body);
   if(response.statusCode == 200){
     var parsedJson = json.decode(response.body);
     //print('Response body: ${response.body}');
@@ -63,9 +64,13 @@ void save() async{
   String iv = config.iv;
   String nonce = await Cipher2.generateNonce();   // generate a nonce for gcm mode we use later
   if(status == "OK"){
+    int count = 10;
     String encryptedPass = await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
     String encryptedUser = await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
     String encryptedCode = await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
+    //TODO: getCount variable
+    prefs.setInt("count", count);
+
     prefs.setString("password", encryptedPass);
     prefs.setString("code", encryptedCode);
     prefs.setString("user", encryptedUser);
@@ -196,9 +201,9 @@ Future<void> _ackAlert(BuildContext context) {
             onPressed: () {
               Navigator.of(context).pop();
               if(status == "OK"){
-                Navigator.of(context).pushNamed(Marks.tag);
+                save();
+                Navigator.of(context).pushNamed(MarksTab.tag);
               }
-              save();
             },
           ),
         ],
