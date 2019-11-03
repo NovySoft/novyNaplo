@@ -110,8 +110,7 @@ void auth() async {
     }
     if (status == "OK") {
       var headers = {
-        'Authorization':
-            'Bearer $token',
+        'Authorization': 'Bearer $token',
         'User-Agent': '$agent',
       };
 
@@ -120,10 +119,10 @@ void auth() async {
           headers: headers);
       if (res.statusCode != 200)
         throw Exception('get error: statusCode= ${res.statusCode}');
-      if (res.statusCode == 200){
+      if (res.statusCode == 200) {
         var dJson = json.decode(res.body);
         var eval = dJson["Evaluations"];
-        eval.forEach((element) => markCount += 1);   
+        eval.forEach((element) => markCount += 1);
       }
     }
   }
@@ -281,7 +280,7 @@ Future<void> _ackAlert(BuildContext context) {
               Navigator.of(context).pop();
               if (status == "OK") {
                 save();
-                Navigator.of(context).pushNamed(MarksTab.tag);
+                Navigator.pushNamed(context, MarksTab.tag);
               }
             },
           ),

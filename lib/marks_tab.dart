@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:novynotifier/login_page.dart';
 
 import 'marks_detail_tab.dart';
 import 'utils.dart';
@@ -12,9 +13,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 var returnArray = [];
+SharedPreferences prefs;
 
 void loadEvent() async{
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   String passKey = config.passKey;
   String codeKey = config.codeKey;
   String userKey = config.userKey;
@@ -52,7 +54,7 @@ class MarksTab extends StatefulWidget {
 }
 
 class _MarksTabState extends State<MarksTab>{
-  static int _itemsLength = 15;
+  int itemsLength = markCount;
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   List<MaterialColor> colors;
@@ -60,13 +62,15 @@ class _MarksTabState extends State<MarksTab>{
 
   @override
   void initState(){
+    loadEvent();
+    //itemsLength = prefs.getInt("count");
     _setData();
     super.initState();
   }
 
   void _setData(){
-    colors = getRandomColors(_itemsLength);
-    songNames = getRandomNames(_itemsLength);
+    colors = getRandomColors(itemsLength);
+    songNames = getRandomNames(itemsLength);
   }
 
   Future<void> _refreshData() {
@@ -78,7 +82,7 @@ class _MarksTabState extends State<MarksTab>{
   }
 
   Widget _listBuilder(BuildContext context, int index) {
-                        if (index >= _itemsLength) return null;
+                        if (index >= itemsLength) return null;
 
     // Show a slightly different color palette. Show poppy-ier colors on iOS
     // due to lighter contrasting bars and tone it down on Android.
@@ -136,6 +140,7 @@ class _MarksTabState extends State<MarksTab>{
         key: _androidRefreshKey,
         onRefresh: _refreshData,
         child: ListView.builder(
+          itemCount: markCount,
           padding: EdgeInsets.symmetric(vertical: 12),
           itemBuilder: _listBuilder,
         ),
