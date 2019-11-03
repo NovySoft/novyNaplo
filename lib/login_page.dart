@@ -7,6 +7,7 @@ import 'package:novynotifier/marks_tab.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity/connectivity.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -15,7 +16,9 @@ TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
 var agent = 'Kreta.Ellenorzo';
-var response;
+var response, token;
+int markCount = 0;
+bool gotToken;
 
 void onLoad() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,67 +40,91 @@ void onLoad() async {
 }
 
 void auth() async {
-  var res = await http.get('https://www.e-szivacs.org/mirror/settings.json');
-  if (res.statusCode != 200)
-    throw Exception('get error: statusCode= ${res.statusCode}');
-  //print(res.body);
-  if (res.statusCode == 200) {
-    var pJson = json.decode(res.body);
-    agent = pJson['CurrentUserAgent'];
-    print(agent);
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.none) {
+    status = "No internet connection was detected";
   } else {
-    print("Error geting agent");
-  }
-  String code = codeController.text;
-  String user = userController.text;
-  String pass = passController.text;
-  if (code == "" || user == "" || pass == "") {
-    status = "Missing Input";
-  } else {
-    var headers = {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-      'User-Agent': '$agent',
-    };
+    var res = await http.get('https://www.e-szivacs.org/mirror/settings.json');
+    if (res.statusCode != 200)
+      throw Exception('get error: statusCode= ${res.statusCode}');
+    //print(res.body);
+    if (res.statusCode == 200) {
+      var pJson = json.decode(res.body);
+      agent = pJson['CurrentUserAgent'];
+      print(agent);
+    } else {
+      print("Error geting agent");
+    }
+    String code = codeController.text;
+    String user = userController.text;
+    String pass = passController.text;
+    if (code == "" || user == "" || pass == "") {
+      status = "Missing Input";
+    } else {
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'User-Agent': '$agent',
+      };
 
-    var data =
-        'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
-    try {
-      response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
-          headers: headers, body: data);
-      //print(response.body);
-      /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
+      var data =
+          'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
+      try {
+        response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
+            headers: headers, body: data);
+        //print(response.body);
+        /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
     var response = await http.get(url);*/
-      print(response.body);
-      if (response.statusCode == 200) {
-        var parsedJson = json.decode(response.body);
-        //print('Response body: ${response.body}');
-        status = parsedJson['token_type'];
-        if (status == '' || status == null) {
+        print(response.body);
+        if (response.statusCode == 200) {
+          var parsedJson = json.decode(response.body);
+          //print('Response body: ${response.body}');
+          status = parsedJson['token_type'];
+          if (status == '' || status == null) {
+            if (parsedJson["error_description"] == '' ||
+                parsedJson["error_description"] == null) {
+              status = "Invalid username/password";
+            } else {
+              status = parsedJson["error_description"];
+            }
+          } else {
+            status = "OK";
+            token = parsedJson["access_token"];
+          }
+          //print(status);
+        } else if (response.statusCode == 401) {
+          var parsedJson = json.decode(response.body);
           if (parsedJson["error_description"] == '' ||
               parsedJson["error_description"] == null) {
             status = "Invalid username/password";
           } else {
             status = parsedJson["error_description"];
           }
-        }else{
-          status = "OK";
-        }
-        //print(status);
-      } else if (response.statusCode == 401) {
-        var parsedJson = json.decode(response.body);
-        if (parsedJson["error_description"] == '' ||
-            parsedJson["error_description"] == null) {
-          status = "Invalid username/password";
+          //print('Response status: ${response.statusCode}');
         } else {
-          status = parsedJson["error_description"];
+          status = 'post error: statusCode= ${response.statusCode}';
+          throw Exception('post error: statusCode= ${response.statusCode}');
         }
-        //print('Response status: ${response.statusCode}');
-      } else {
-        status = 'post error: statusCode= ${response.statusCode}';
-        throw Exception('post error: statusCode= ${response.statusCode}');
+      } on SocketException {
+        status = "Invalid InstituteCode";
       }
-    } on SocketException {
-      status = "Invalid InstituteCode";
+    }
+    if (status == "OK") {
+      var headers = {
+        'Authorization':
+            'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200){
+        var dJson = json.decode(res.body);
+        var eval = dJson["Evaluations"];
+        eval.forEach((element) => markCount += 1);   
+      }
     }
   }
 }
@@ -117,7 +144,7 @@ void save() async {
   String nonce = await Cipher2
       .generateNonce(); // generate a nonce for gcm mode we use later
   if (status == "OK") {
-    int count = 10;
+    int count = markCount;
     String encryptedPass =
         await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
     String encryptedUser =
