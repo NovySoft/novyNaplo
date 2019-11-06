@@ -1,5 +1,7 @@
 #Novy's ignore
+lib/config.dart
 /lib/config.dart
+
 
 # Miscellaneous
 *.class
