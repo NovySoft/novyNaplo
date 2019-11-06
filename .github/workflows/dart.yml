@@ -17,6 +17,7 @@ jobs:
         flutter-version: '1.7.8+hotfix.4'
     - name: Update and run
       run: |
+        flutter upgrade
         flutter pub get
         flutter pub upgrade
         flutter build apk
