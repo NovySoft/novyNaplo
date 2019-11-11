@@ -1,7 +1,5 @@
 #Novy's ignore
-lib/config.dart
-/lib/config.dart
-
+lib/config-realese.dart
 
 # Miscellaneous
 *.class
@@ -75,3 +73,4 @@ lib/config.dart
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+

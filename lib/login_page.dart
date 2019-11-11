@@ -8,6 +8,7 @@ import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/services.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -15,7 +16,7 @@ TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
-var agent = 'Kreta.Ellenorzo';
+var agent = config.currAgent;
 var response, token;
 int markCount = 0;
 bool gotToken;
@@ -44,17 +45,6 @@ void auth() async {
   if (connectivityResult == ConnectivityResult.none) {
     status = "No internet connection was detected";
   } else {
-    var res = await http.get('https://www.e-szivacs.org/mirror/settings.json');
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    //print(res.body);
-    if (res.statusCode == 200) {
-      var pJson = json.decode(res.body);
-      agent = pJson['CurrentUserAgent'];
-      print(agent);
-    } else {
-      print("Error geting agent");
-    }
     String code = codeController.text;
     String user = userController.text;
     String pass = passController.text;
@@ -74,7 +64,7 @@ void auth() async {
         //print(response.body);
         /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
     var response = await http.get(url);*/
-        print(response.body);
+        //print(response.body);
         if (response.statusCode == 200) {
           var parsedJson = json.decode(response.body);
           //print('Response body: ${response.body}');
@@ -123,12 +113,13 @@ void auth() async {
         var dJson = json.decode(res.body);
         var eval = dJson["Evaluations"];
         eval.forEach((element) => markCount += 1);
+        print(markCount);
       }
     }
   }
 }
 
-void save() async {
+void save(var context) async {
   //Variables
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   //Inputs
@@ -156,6 +147,12 @@ void save() async {
     prefs.setString("password", encryptedPass);
     prefs.setString("code", encryptedCode);
     prefs.setString("user", encryptedUser);
+
+    try {
+      await Navigator.pushNamed(context, MarksTab.tag);
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
     //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
   }
   /*
@@ -279,8 +276,7 @@ Future<void> _ackAlert(BuildContext context) {
             onPressed: () {
               Navigator.of(context).pop();
               if (status == "OK") {
-                save();
-                Navigator.pushNamed(context, MarksTab.tag);
+                save(context);
               }
             },
           ),
