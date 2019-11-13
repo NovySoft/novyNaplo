@@ -12,31 +12,10 @@ import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-var returnArray = [];
 SharedPreferences prefs;
 
-void loadEvent() async{
-  prefs = await SharedPreferences.getInstance();
-  String passKey = config.passKey;
-  String codeKey = config.codeKey;
-  String userKey = config.userKey;
-  String iv = config.iv;
-  String decryptedCode = await Cipher2.decryptAesCbc128Padding7(prefs.getString("code"), codeKey, iv);
-  String decryptedUser = await Cipher2.decryptAesCbc128Padding7(prefs.getString("user"), userKey, iv);
-  String decryptedPass = await Cipher2.decryptAesCbc128Padding7(prefs.getString("password"), passKey, iv);
-  var url = 'https://novy.vip/api/grades.php?code=$decryptedCode&user=$decryptedUser&pass=$decryptedPass';
-  var response = await http.get(url);
-  if(response.statusCode == 200){
-    returnArray = response.body.split(";");
-  }else{
-    returnArray[0] = "Error:"+response.statusCode.toString();
-    //print('Response status: ${response.statusCode}');
-  }
-  if(returnArray.length < 20){
-    while(returnArray.length < 20){
-      returnArray.add("");
-    }
-  }  
+
+void loadEvent() async{ 
 }
 
 class MarksTab extends StatefulWidget {
@@ -62,7 +41,7 @@ class _MarksTabState extends State<MarksTab>{
 
   @override
   void initState(){
-    loadEvent();
+    //loadEvent();
     //itemsLength = prefs.getInt("count");
     _setData();
     super.initState();

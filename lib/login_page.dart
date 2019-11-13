@@ -20,6 +20,7 @@ var agent = config.currAgent;
 var response, token;
 int markCount = 0;
 bool gotToken;
+bool isPressed = false;
 
 void onLoad() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -113,10 +114,11 @@ void auth() async {
         var dJson = json.decode(res.body);
         var eval = dJson["Evaluations"];
         eval.forEach((element) => markCount += 1);
-        print(markCount);
+        //print(markCount);
       }
     }
   }
+  isPressed = false;
 }
 
 void save(var context) async {
@@ -134,19 +136,19 @@ void save(var context) async {
   String nonce = await Cipher2
       .generateNonce(); // generate a nonce for gcm mode we use later
   if (status == "OK") {
-    int count = markCount;
-    String encryptedPass =
-        await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
-    String encryptedUser =
-        await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
-    String encryptedCode =
-        await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
-    //TODO: getCount variable
-    prefs.setInt("count", count);
-
-    prefs.setString("password", encryptedPass);
-    prefs.setString("code", encryptedCode);
-    prefs.setString("user", encryptedUser);
+    try {
+      String encryptedPass =
+          await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
+      String encryptedUser =
+          await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
+      String encryptedCode =
+          await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
+      prefs.setString("password", encryptedPass);
+      prefs.setString("code", encryptedCode);
+      prefs.setString("user", encryptedUser);
+    } on PlatformException catch (e) {
+      print(e);
+    }
 
     try {
       await Navigator.pushNamed(context, MarksTab.tag);
@@ -227,12 +229,15 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          auth();
+          if(!isPressed){
+            isPressed = true;
+            auth();
+            new Timer(const Duration(seconds: 3), () => _ackAlert(context));
+          }
           /*
           Navigator.of(context).pushNamed(HomePage.tag);
           runApp(HomePage(post: fetchPost()));
           */
-          new Timer(const Duration(seconds: 3), () => _ackAlert(context));
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
