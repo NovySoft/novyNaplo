@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cipher2/cipher2.dart';
-import 'package:novynotifier/marks_tab.dart';
+import 'package:novynaplo/marks_tab.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

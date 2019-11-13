@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:novynotifier/functions/parseMarks.dart';
-import 'package:novynotifier/login_page.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/login_page.dart';
 
 import 'marks_detail_tab.dart';
 import 'functions/utils.dart';
