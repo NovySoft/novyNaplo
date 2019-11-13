@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:novynotifier/functions/parseMarks.dart';
 import 'package:novynotifier/login_page.dart';
 
 import 'marks_detail_tab.dart';
-import 'utils.dart';
-import 'widgets.dart';
+import 'functions/utils.dart';
+import 'functions/widgets.dart';
 import 'dart:async';
-import 'package:cipher2/cipher2.dart';
 import 'config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 SharedPreferences prefs;
+var apiResponse = dJson; 
 
 
 void loadEvent() async{ 
+  parseMarks(apiResponse);
 }
 
 class MarksTab extends StatefulWidget {
@@ -41,15 +43,14 @@ class _MarksTabState extends State<MarksTab>{
 
   @override
   void initState(){
-    //loadEvent();
-    //itemsLength = prefs.getInt("count");
+    loadEvent();
     _setData();
     super.initState();
   }
 
   void _setData(){
     colors = getRandomColors(itemsLength);
-    songNames = getRandomNames(itemsLength);
+    songNames = parseMarks(apiResponse);
   }
 
   Future<void> _refreshData() {

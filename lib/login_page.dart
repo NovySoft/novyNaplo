@@ -17,7 +17,7 @@ TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
 var agent = config.currAgent;
-var response, token;
+var response, token, dJson;
 int markCount = 0;
 bool gotToken;
 bool isPressed = false;
@@ -111,8 +111,9 @@ void auth() async {
       if (res.statusCode != 200)
         throw Exception('get error: statusCode= ${res.statusCode}');
       if (res.statusCode == 200) {
-        var dJson = json.decode(res.body);
+        dJson = json.decode(res.body);
         var eval = dJson["Evaluations"];
+        if (markCount != 0) markCount = 0;
         eval.forEach((element) => markCount += 1);
         //print(markCount);
       }
@@ -229,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          if(!isPressed){
+          if (!isPressed) {
             isPressed = true;
             auth();
             new Timer(const Duration(seconds: 3), () => _ackAlert(context));

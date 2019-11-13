@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets.dart';
+import 'functions/widgets.dart';
 
 /// Page shown when a card in the songs tab is tapped.
 ///
