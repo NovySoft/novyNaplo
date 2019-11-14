@@ -31,6 +31,7 @@ dependencies:
   english_words: any
   cipher2: any
   connectivity: any
+  package_info: any
 
 flutter_icons:
   android: true

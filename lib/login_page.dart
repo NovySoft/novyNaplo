@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 
+import 'functions/getVersion.dart';
+
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
 TextEditingController userController = TextEditingController();
@@ -22,7 +24,12 @@ int markCount = 0;
 bool gotToken;
 bool isPressed = false;
 
-void onLoad() async {
+void onLoad(var context) async {
+  if(await getVersion() != "false"){
+     String s = await getVersion();
+     s = "New version: $s";
+    _ackAlert(context,s);
+  }
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String passKey = config.passKey;
   String codeKey = config.codeKey;
@@ -41,7 +48,7 @@ void onLoad() async {
   }
 }
 
-void auth() async {
+void auth(var context) async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.none) {
     status = "No internet connection was detected";
@@ -119,6 +126,7 @@ void auth() async {
       }
     }
   }
+  _ackAlert(context,status);
   isPressed = false;
 }
 
@@ -176,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    onLoad();
+    onLoad(context);
   }
 
   @override
@@ -232,8 +240,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           if (!isPressed) {
             isPressed = true;
-            auth();
-            new Timer(const Duration(seconds: 4), () => _ackAlert(context));
+            auth(context);
           }
           /*
           Navigator.of(context).pushNamed(HomePage.tag);
@@ -269,13 +276,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Future<void> _ackAlert(BuildContext context) {
+Future<void> _ackAlert(BuildContext context,String content) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Status'),
-        content: Text(status),
+        content: Text(content),
         actions: <Widget>[
           FlatButton(
             child: Text('Ok'),
