@@ -115,7 +115,7 @@ void auth() async {
         var eval = dJson["Evaluations"];
         if (markCount != 0) markCount = 0;
         eval.forEach((element) => markCount += 1);
-        //print(markCount);
+        //print(dJson);
       }
     }
   }
@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
           if (!isPressed) {
             isPressed = true;
             auth();
-            new Timer(const Duration(seconds: 3), () => _ackAlert(context));
+            new Timer(const Duration(seconds: 4), () => _ackAlert(context));
           }
           /*
           Navigator.of(context).pushNamed(HomePage.tag);

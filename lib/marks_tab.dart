@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:novynaplo/login_page.dart';
+import 'functions/parseMarks.dart';
+import 'login_page.dart';
 
 import 'marks_detail_tab.dart';
 import 'functions/utils.dart';
@@ -17,7 +17,8 @@ var apiResponse = dJson;
 
 
 void loadEvent() async{ 
-  parseMarks(apiResponse);
+  
+  //parseMarks(apiResponse);
 }
 
 class MarksTab extends StatefulWidget {
