@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 SharedPreferences prefs;
 var apiResponse = dJson; 
+String menuLogo = "assets/home.png";
 
 
 void loadEvent() async{ 
@@ -107,6 +108,35 @@ class _MarksTabState extends State<MarksTab>{
   // ===========================================================================
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Center(child:new Image.asset(menuLogo,fit: BoxFit.fill))
+              ),
+            ListTile(
+              title: Text('Jegyek'),
+              leading: FlutterLogo(),
+              onTap: () {
+                // Update the state of the app.
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Beállítások'),
+              leading: Icon(Icons.settings_applications),
+              onTap: () {
+                // Update the state of the app.
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(MarksTab.title),
         actions: [
@@ -116,7 +146,6 @@ class _MarksTabState extends State<MarksTab>{
           ),
         ],
       ),
-      drawer: widget.androidDrawer,
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: _refreshData,

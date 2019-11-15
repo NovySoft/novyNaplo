@@ -25,10 +25,10 @@ bool gotToken;
 bool isPressed = false;
 
 void onLoad(var context) async {
-  if(await getVersion() != "false"){
-     String s = await getVersion();
-     s = "New version: $s";
-    _ackAlert(context,s);
+  if (await getVersion() != "false") {
+    String s = await getVersion();
+    s = "New version: $s";
+    _ackAlert(context, s);
   }
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String passKey = config.passKey;
@@ -126,7 +126,7 @@ void auth(var context) async {
       }
     }
   }
-  _ackAlert(context,status);
+  _ackAlert(context, status);
   isPressed = false;
 }
 
@@ -276,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Future<void> _ackAlert(BuildContext context,String content) {
+Future<void> _ackAlert(BuildContext context, String content) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {

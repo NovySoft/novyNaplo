@@ -59,7 +59,6 @@ flutter:
   assets:
     - images/novy.jpg
     - assets/home.png
-    - assets/alucard.jpg
 
   fonts:
       - family: Nunito
