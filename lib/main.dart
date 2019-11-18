@@ -3,9 +3,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'login_page.dart';
 import 'marks_tab.dart';
 
-void main() async{
+void main() async {
   runApp(MyApp());
-  Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+  Map<PermissionGroup, PermissionStatus> permissions =
+      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
 }
 
 class MyApp extends StatelessWidget {
@@ -20,9 +21,47 @@ class MyApp extends StatelessWidget {
       title: 'Novy Napló',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-        fontFamily: 'Nunito',
-      ),
+          textTheme: new TextTheme(body1: new TextStyle(color: Colors.black)),
+          
+          brightness: Brightness.light,
+          primarySwatch: Colors.lightBlue,
+          buttonColor: Colors.lightBlueAccent,
+          primaryColor: Colors.lightBlueAccent,
+          backgroundColor: Colors.green,
+          fontFamily: 'Nunito',
+          colorScheme: ColorScheme.light(),
+          hintColor: Colors.lightBlue,
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(
+              color: Colors.blueAccent,
+            ),
+            fillColor: Colors.black,
+            hintStyle: TextStyle(color: Colors.black),
+            focusColor: Colors.orange,
+            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0)),
+          )),
+      darkTheme: ThemeData(
+          primaryTextTheme: new TextTheme(),
+          buttonColor: Colors.orange,
+          backgroundColor: Colors.black,
+          primarySwatch: Colors.orange,
+          primaryColor: Colors.orange,
+          brightness: Brightness.dark,
+          colorScheme: ColorScheme.dark(),
+          hintColor: Colors.red,
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(
+              color: Colors.black,
+            ),
+            fillColor: Colors.black,
+            hintStyle: TextStyle(color: Colors.orange),
+            focusColor: Colors.orange,
+            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0)),
+          )),
       home: LoginPage(),
       routes: routes,
     );

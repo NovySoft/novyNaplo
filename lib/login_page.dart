@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
       tag: 'hero',
       child: CircleAvatar(
         backgroundColor: Colors.black,
-        radius: 60.0,
+        radius: 55.0,
         child: Image.asset('assets/home.png'),
       ),
     );
@@ -202,33 +202,25 @@ class _LoginPageState extends State<LoginPage> {
       controller: codeController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(
-        hintText: 'InstituteCode',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
+      decoration: InputDecoration(hintText: 'Institute code'),
+      style: new TextStyle(color: Colors.orange),
     );
 
     final user = TextFormField(
       controller: userController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(
-        hintText: 'Username',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
+      decoration: InputDecoration(hintText: 'Username'),
+      style: new TextStyle(color: Colors.orange),
     );
 
     final password = TextFormField(
+      
       controller: passController,
       autofocus: false,
       obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
+      decoration: InputDecoration(hintText: 'Password'),
+      style: new TextStyle(color: Colors.orange),
     );
 
     final loginButton = Padding(
@@ -248,13 +240,11 @@ class _LoginPageState extends State<LoginPage> {
           */
         },
         padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        child: Text('Log In', style: TextStyle(color: Colors.black)),
       ),
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: ListView(
           shrinkWrap: true,

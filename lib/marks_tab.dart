@@ -113,9 +113,7 @@ class _MarksTabState extends State<MarksTab>{
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
+              decoration: BoxDecoration(color: Colors.grey),
               child: Center(child:new Image.asset(menuLogo,fit: BoxFit.fill))
               ),
             ListTile(
