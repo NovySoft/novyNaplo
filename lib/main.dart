@@ -21,8 +21,9 @@ class MyApp extends StatelessWidget {
       title: 'Novy Napló',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          textTheme: new TextTheme(body1: new TextStyle(color: Colors.black)),
-          
+          textTheme: TextTheme(
+            subhead: TextStyle(color: Colors.black),
+          ),
           brightness: Brightness.light,
           primarySwatch: Colors.lightBlue,
           buttonColor: Colors.lightBlueAccent,
@@ -39,11 +40,13 @@ class MyApp extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.black),
             focusColor: Colors.orange,
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(32.0)),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
           )),
       darkTheme: ThemeData(
-          primaryTextTheme: new TextTheme(),
+          textTheme: TextTheme(
+            subhead: TextStyle(color: Colors.orange),
+          ),
           buttonColor: Colors.orange,
           backgroundColor: Colors.black,
           primarySwatch: Colors.orange,
@@ -59,8 +62,8 @@ class MyApp extends StatelessWidget {
             hintStyle: TextStyle(color: Colors.orange),
             focusColor: Colors.orange,
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(32.0)),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
           )),
       home: LoginPage(),
       routes: routes,

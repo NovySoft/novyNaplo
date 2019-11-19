@@ -203,7 +203,6 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.text,
       autofocus: false,
       decoration: InputDecoration(hintText: 'Institute code'),
-      style: new TextStyle(color: Colors.orange),
     );
 
     final user = TextFormField(
@@ -211,7 +210,6 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.text,
       autofocus: false,
       decoration: InputDecoration(hintText: 'Username'),
-      style: new TextStyle(color: Colors.orange),
     );
 
     final password = TextFormField(
@@ -220,7 +218,6 @@ class _LoginPageState extends State<LoginPage> {
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(hintText: 'Password'),
-      style: new TextStyle(color: Colors.orange),
     );
 
     final loginButton = Padding(
