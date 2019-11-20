@@ -1,5 +1,3 @@
-import 'package:novynaplo/login_page.dart';
-
 import 'utils.dart';
 var jegyek;
 var jegyArray = [];

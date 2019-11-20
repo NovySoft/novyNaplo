@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
+import 'package:novynaplo/functions/utils.dart';
 
 import 'functions/getVersion.dart';
 
@@ -23,6 +24,8 @@ var response, token, dJson;
 int markCount = 0;
 bool gotToken;
 bool isPressed = false;
+final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
 
 void onLoad(var context) async {
   if (await getVersion() != "false") {
@@ -49,6 +52,7 @@ void onLoad(var context) async {
 }
 
 void auth(var context) async {
+  Dialogs.showLoadingDialog(context, _keyLoader);
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.none) {
     status = "No internet connection was detected";
@@ -126,6 +130,7 @@ void auth(var context) async {
       }
     }
   }
+  Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
   _ackAlert(context, status);
   isPressed = false;
 }
@@ -202,14 +207,14 @@ class _LoginPageState extends State<LoginPage> {
       controller: codeController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Institute code'),
+      decoration: InputDecoration(hintText: 'Iskola azonosító'),
     );
 
     final user = TextFormField(
       controller: userController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Username'),
+      decoration: InputDecoration(hintText: 'Felhasználónév'),
     );
 
     final password = TextFormField(
@@ -217,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: passController,
       autofocus: false,
       obscureText: true,
-      decoration: InputDecoration(hintText: 'Password'),
+      decoration: InputDecoration(hintText: 'Jelszó'),
     );
 
     final loginButton = Padding(
@@ -268,7 +273,7 @@ Future<void> _ackAlert(BuildContext context, String content) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Status'),
+        title: Text('Státusz'),
         content: Text(content),
         actions: <Widget>[
           FlatButton(

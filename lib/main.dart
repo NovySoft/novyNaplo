@@ -3,10 +3,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'login_page.dart';
 import 'marks_tab.dart';
 
+
 void main() async {
   runApp(MyApp());
-  Map<PermissionGroup, PermissionStatus> permissions =
-      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+  /*Map<PermissionGroup, PermissionStatus> permissions =
+      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);*/
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.lightBlue,
           buttonColor: Colors.lightBlueAccent,
           primaryColor: Colors.lightBlueAccent,
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.white,
           fontFamily: 'Nunito',
           colorScheme: ColorScheme.light(),
           hintColor: Colors.lightBlue,

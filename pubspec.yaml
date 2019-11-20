@@ -32,6 +32,7 @@ dependencies:
   cipher2: any
   connectivity: any
   package_info: any
+  flutter_spinkit: any
 
 flutter_icons:
   android: true
