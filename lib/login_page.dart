@@ -147,8 +147,8 @@ void save(var context) async {
   String pass = passController.text;
   //Encryption
   String iv = config.iv;
-  String nonce = await Cipher2
-      .generateNonce(); // generate a nonce for gcm mode we use later
+  /*String nonce = await Cipher2
+      .generateNonce(); // generate a nonce for gcm mode we use later*/
   if (status == "OK") {
     try {
       String encryptedPass =
