@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          )),
+            )),
       home: LoginPage(),
       routes: routes,
     );

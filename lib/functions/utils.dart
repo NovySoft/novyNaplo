@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:english_words/english_words.dart';
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
-
-// This file has a number of platform-agnostic non-Widget utility functions.
+//Loading widget:
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const _myListOfRandomColors = [
   Colors.red,
@@ -93,9 +93,9 @@ class Dialogs {
                   children: <Widget>[
                     Center(
                       child: Column(children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 10,),
-                        Text("Please Wait....",style: TextStyle(color: Colors.blueAccent),)
+                        SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                        SizedBox(height: 10),
+                        Text("Kérlek várj...",style: TextStyle(color: Colors.blueAccent),)
                       ]),
                     )
                   ]));
