@@ -1,7 +1,9 @@
-name: Push/Commit
+name: Release
 
-on: [push]
-
+on:
+  release:
+    types: [created,edited,prereleased]
+    
 jobs:
   build-android:
     runs-on: ubuntu-latest
