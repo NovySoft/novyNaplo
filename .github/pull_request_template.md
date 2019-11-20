@@ -36,4 +36,4 @@ Javítás->hiba
 - [ ] Megtettem a megfelelő lépéseket a 'dokumentáció' módosításához
 - [ ] A változtatásaim nem csinálnak hiba kódokat
 - [ ] Hozzá adtam teszteket a kódom működéséről való igazolásnak
-- [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] Minden dependent változás nem nyúl hozzá más dependentekhez (olyan depentent, ami más depententektől függ)
