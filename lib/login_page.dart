@@ -26,7 +26,6 @@ bool gotToken;
 bool isPressed = false;
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-
 void onLoad(var context) async {
   if (await getVersion() != "false") {
     String s = await getVersion();
@@ -48,6 +47,7 @@ void onLoad(var context) async {
     codeController.text = decryptedCode;
     userController.text = decryptedUser;
     passController.text = decryptedPass;
+    auth(context);
   }
 }
 
@@ -130,8 +130,17 @@ void auth(var context) async {
       }
     }
   }
-  Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-  _ackAlert(context, status);
+  Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+  if (status == "OK") {
+    try {
+      save(context);
+    } on PlatformException catch (e) {
+      print(e.message);
+      _ackAlert(context, e.message);
+    }
+  } else {
+    _ackAlert(context, status);
+  }
   isPressed = false;
 }
 
@@ -149,28 +158,26 @@ void save(var context) async {
   String iv = config.iv;
   /*String nonce = await Cipher2
       .generateNonce(); // generate a nonce for gcm mode we use later*/
-  if (status == "OK") {
-    try {
-      String encryptedPass =
-          await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
-      String encryptedUser =
-          await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
-      String encryptedCode =
-          await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
-      prefs.setString("password", encryptedPass);
-      prefs.setString("code", encryptedCode);
-      prefs.setString("user", encryptedUser);
-    } on PlatformException catch (e) {
-      print(e);
-    }
-
-    try {
-      await Navigator.pushNamed(context, MarksTab.tag);
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
-    //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
+  try {
+    String encryptedPass =
+        await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
+    String encryptedUser =
+        await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
+    String encryptedCode =
+        await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
+    prefs.setString("password", encryptedPass);
+    prefs.setString("code", encryptedCode);
+    prefs.setString("user", encryptedUser);
+  } on PlatformException catch (e) {
+    print(e);
   }
+
+  try {
+    await Navigator.pushNamed(context, MarksTab.tag);
+  } on PlatformException catch (e) {
+    print(e.message);
+  }
+  //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
   /*
   print("prefs:");
   print(prefs.getString("password"));
@@ -190,6 +197,11 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     onLoad(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -218,7 +230,6 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final password = TextFormField(
-      
       controller: passController,
       autofocus: false,
       obscureText: true,
