@@ -52,7 +52,8 @@ void onLoad(var context) async {
 }
 
 void auth(var context) async {
-  Dialogs.showLoadingDialog(context, _keyLoader);
+  Dialogs.showLoadingDialog(context, _keyLoader); //Not showing quickly enough
+  await sleep1(); //So sleep for a second
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.none) {
     status = "No internet connection was detected";

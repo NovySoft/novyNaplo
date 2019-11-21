@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 //Loading widget:
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'dart:async';
+
 const _myListOfRandomColors = [
   Colors.red,
   Colors.blue,
@@ -95,10 +97,16 @@ class Dialogs {
                       child: Column(children: [
                         SpinKitPouringHourglass(color: Colors.lightBlueAccent),
                         SizedBox(height: 10),
-                        Text("Kérlek várj...",style: TextStyle(color: Colors.blueAccent),)
+                        Text(
+                          "Kérlek várj...",
+                          style: TextStyle(color: Colors.blueAccent),
+                        )
                       ]),
                     )
                   ]));
         });
   }
+}
+Future sleep1() async{
+  return new Future.delayed(const Duration(seconds: 1), () => "1");
 }
