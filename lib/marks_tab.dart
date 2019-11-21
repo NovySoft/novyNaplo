@@ -3,21 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'functions/parseMarks.dart';
 import 'login_page.dart';
+import 'package:novynaplo/config.dart';
+import 'package:novynaplo/avarages_tab.dart';
 
 import 'marks_detail_tab.dart';
 import 'functions/utils.dart';
 import 'functions/widgets.dart';
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences prefs;
 var apiResponse = dJson; 
-String menuLogo = "assets/home.png";
-
-
-void loadEvent() async{ 
-  
-  //parseMarks(apiResponse);
-}
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -42,7 +38,6 @@ class _MarksTabState extends State<MarksTab>{
 
   @override
   void initState(){
-    loadEvent();
     _setData();
     super.initState();
   }
@@ -115,18 +110,21 @@ class _MarksTabState extends State<MarksTab>{
               ),
             ListTile(
               title: Text('Jegyek'),
-              leading: FlutterLogo(),
+              leading: Icon(Icons.create),
               onTap: () {
                 // Update the state of the app.
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              title: Text('Beállítások'),
-              leading: Icon(Icons.settings_applications),
+              title: Text('Átlagok'),
+              leading: Icon(Icons.all_inclusive),
               onTap: () {
-                // Update the state of the app.
-                Navigator.pop(context);
+                try {
+                  Navigator.pushNamed(context, AvaragesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
               },
             ),
           ],

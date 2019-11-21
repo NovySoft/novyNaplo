@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:novynaplo/avarages_tab.dart';
 //import 'package:permission_handler/permission_handler.dart';
 import 'login_page.dart';
 import 'marks_tab.dart';
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
+    AvaragesTab.tag: (context) => AvaragesTab(),
   };
 
   @override
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Novy Napló',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          dividerColor: Colors.black,
           textTheme: TextTheme(
             subhead: TextStyle(color: Colors.black),
           ),
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
           )),
       darkTheme: ThemeData(
+          dividerColor: Colors.orange,
           textTheme: TextTheme(
             subhead: TextStyle(color: Colors.orange),
           ),
