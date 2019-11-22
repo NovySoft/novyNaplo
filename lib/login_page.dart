@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/functions/utils.dart';
-
 import 'functions/getVersion.dart';
+import 'functions/parseMarks.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -21,7 +21,7 @@ var status = "No status";
 var i = 0;
 var agent = config.currAgent;
 var response, token, dJson;
-int markCount = 0;
+int markCount,avarageCount = 0;
 bool gotToken;
 bool isPressed = false;
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
@@ -62,7 +62,7 @@ void auth(var context) async {
     String user = userController.text;
     String pass = passController.text;
     if (code == "" || user == "" || pass == "") {
-      status = "Missing Input";
+      status = "Hiányzó bemenet";
     } else {
       var headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -85,7 +85,7 @@ void auth(var context) async {
           if (status == '' || status == null) {
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
-              status = "Invalid username/password";
+              status = "Hibás felhasználónév/jelszó";
             } else {
               status = parsedJson["error_description"];
             }
@@ -98,7 +98,7 @@ void auth(var context) async {
           var parsedJson = json.decode(response.body);
           if (parsedJson["error_description"] == '' ||
               parsedJson["error_description"] == null) {
-            status = "Invalid username/password";
+            status = "Hibás felhasználónév/jelszó";
           } else {
             status = parsedJson["error_description"];
           }
@@ -108,7 +108,7 @@ void auth(var context) async {
           throw Exception('post error: statusCode= ${response.statusCode}');
         }
       } on SocketException {
-        status = "Invalid InstituteCode";
+        status = "Rossz iskola azonosító";
       }
     }
     if (status == "OK") {
@@ -126,7 +126,9 @@ void auth(var context) async {
         dJson = json.decode(res.body);
         var eval = dJson["Evaluations"];
         if (markCount != 0) markCount = 0;
+        if (avarageCount != 0) avarageCount = 0;
         eval.forEach((element) => markCount += 1);
+        avarageCount = countAvarages(dJson);
         //print(dJson);
       }
     }
@@ -254,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
           */
         },
         padding: EdgeInsets.all(12),
-        child: Text('Log In', style: TextStyle(color: Colors.black)),
+        child: Text('Bejelentkezés', style: TextStyle(color: Colors.black)),
       ),
     );
 
