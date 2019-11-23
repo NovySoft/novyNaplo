@@ -4,12 +4,16 @@ import 'package:novynaplo/marks_tab.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/login_page.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/functions/utils.dart';
+
 
 var subjectName = [];
 var subjectAvg = [];
 var subjectClassAvg = [];
 var subjectDiff = [];
 var avgColor = [];
+var tmpArray = [];
+var tmpI = 0;
 
 class AvaragesTab extends StatelessWidget {
   static String tag = 'avarages';
@@ -62,16 +66,44 @@ class BodyLayout extends StatelessWidget {
   }
 }
 
+void setNumberValue(var a,subject){
+  //print("Compare: " +toEnglish(a.subject)+ " and " +toEnglish(subject)+ "value:"+ a.numberValue.toString());
+  if(toEnglish(a.subject) == toEnglish(subject)){
+    tmpArray.add(a.numberValue);
+    tmpI++;
+  }
+}
+
 void setArrays(var n) {
+  double avg = 0;
   subjectName.add(n.subject.toString());
-  subjectAvg.add(n.ownValue.toString());
+  if(n.ownValue == 0){
+    var jegyek = parseAll(dJson);
+    tmpArray = [];
+    tmpI = 0;
+    jegyek.forEach(
+      (a) => setNumberValue(a,n.subject)
+    );
+    num sum = 0;
+    tmpArray.forEach((e){sum += e;});
+    if(sum == 0){
+      subjectAvg.add("Nincs jegyed!");
+      avg = 0;
+    }else{
+      subjectAvg.add((sum/tmpI).toString());
+      avg = sum/tmpI;
+    }
+  }else{
+    subjectAvg.add(n.ownValue.toString());
+    avg = n.ownValue;
+  }
   subjectClassAvg.add(n.classValue.toString());
   subjectDiff.add(n.diff.toString());
-  if(n.ownValue < 2.5){
+  if(avg < 2.5){
     avgColor.add(Colors.redAccent[700]);
-  }else if(n.ownValue < 3 && n.ownValue >= 2.5){
+  }else if(avg < 3 && avg >= 2.5){
     avgColor.add(Colors.redAccent);
-  }else if(n.ownValue < 4 && n. ownValue >= 3){
+  }else if(avg < 4 && avg >= 3){
     avgColor.add(Colors.yellow[800]);
   }else{
     avgColor.add(Colors.green);

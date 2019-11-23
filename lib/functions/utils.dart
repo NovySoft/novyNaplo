@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'dart:async';
 
+import 'package:diacritic/diacritic.dart';
+
 const _myListOfRandomColors = [
   Colors.red,
   Colors.blue,
@@ -109,4 +111,8 @@ class Dialogs {
 }
 Future sleep1() async{
   return new Future.delayed(const Duration(seconds: 1), () => "1");
+}
+
+String toEnglish(var input){
+  return removeDiacritics(input.toString());
 }
