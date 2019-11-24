@@ -91,7 +91,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 1:
                     return SizedBox(
-                      height: 30,
                       child: Text("Tantárgy: " + subject,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -99,7 +98,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 2:
                     return SizedBox(
-                      height: 30,
                       child: Text("Téma: " + theme.toString(),
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -107,7 +105,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 3:
                     return SizedBox(
-                      height: 40,
                       child: Text("Értékelés típusa: " + formName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -120,7 +117,6 @@ class SongDetailTab extends StatelessWidget {
                       switch (numberValue) {
                         case 1:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15,
@@ -130,7 +126,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 2:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15,
@@ -140,7 +135,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 3:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15,
@@ -150,7 +144,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 4:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15,
@@ -160,7 +153,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 5:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15,
@@ -170,7 +162,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         default:
                           return SizedBox(
-                            height: 30,
                             child: Text("Értékelés: " + value,
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
@@ -180,7 +171,6 @@ class SongDetailTab extends StatelessWidget {
                     } else if (form == "Percent") {
                       if (numberValue >= 90) {
                         return SizedBox(
-                          height: 30,
                           child: Text("Értékelés: " + value,
                               style: TextStyle(
                                   fontSize: 15,
@@ -189,7 +179,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 75) {
                         return SizedBox(
-                          height: 30,
                           child: Text("Értékelés: " + value,
                               style: TextStyle(
                                   fontSize: 15,
@@ -198,7 +187,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 60) {
                         return SizedBox(
-                          height: 30,
                           child: Text("Értékelés: " + value,
                               style: TextStyle(
                                   fontSize: 15,
@@ -207,7 +195,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 40) {
                         return SizedBox(
-                          height: 30,
                           child: Text("Értékelés: " + value,
                               style: TextStyle(
                                   fontSize: 15,
@@ -216,7 +203,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else {
                         return SizedBox(
-                          height: 30,
                           child: Text("Értékelés: " + value,
                               style: TextStyle(
                                   fontSize: 15,
@@ -226,7 +212,6 @@ class SongDetailTab extends StatelessWidget {
                       }
                     } else {
                       return SizedBox(
-                        height: 30,
                         child: Text("Értékelés: " + value,
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
@@ -240,7 +225,6 @@ class SongDetailTab extends StatelessWidget {
                       switch (numberValue) {
                         case 1:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -251,7 +235,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 2:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -262,7 +245,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 3:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -273,7 +255,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 4:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -284,7 +265,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         case 5:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -295,7 +275,6 @@ class SongDetailTab extends StatelessWidget {
                           break;
                         default:
                           return SizedBox(
-                            height: 30,
                             child: Text(
                                 "Értékelés számmal: " + numberValue.toString(),
                                 style: TextStyle(
@@ -306,7 +285,6 @@ class SongDetailTab extends StatelessWidget {
                     } else if (form == "Percent") {
                       if (numberValue >= 90) {
                         return SizedBox(
-                          height: 30,
                           child: Text(
                               "Értékelés számmal: " + numberValue.toString(),
                               style: TextStyle(
@@ -316,7 +294,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 75) {
                         return SizedBox(
-                          height: 30,
                           child: Text(
                               "Értékelés számmal: " + numberValue.toString(),
                               style: TextStyle(
@@ -326,7 +303,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 60) {
                         return SizedBox(
-                          height: 30,
                           child: Text(
                               "Értékelés számmal: " + numberValue.toString(),
                               style: TextStyle(
@@ -336,7 +312,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else if (numberValue >= 40) {
                         return SizedBox(
-                          height: 30,
                           child: Text(
                               "Értékelés számmal: " + numberValue.toString(),
                               style: TextStyle(
@@ -346,7 +321,6 @@ class SongDetailTab extends StatelessWidget {
                         );
                       } else {
                         return SizedBox(
-                          height: 30,
                           child: Text(
                               "Értékelés számmal: " + numberValue.toString(),
                               style: TextStyle(
@@ -357,7 +331,6 @@ class SongDetailTab extends StatelessWidget {
                       }
                     } else {
                       return SizedBox(
-                        height: 30,
                         child: Text(
                             "Értékelés számmal: " + numberValue.toString(),
                             style: TextStyle(
@@ -367,7 +340,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 6:
                     return SizedBox(
-                      height: 30,
                       child: Text("Súly: " + weight,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -375,7 +347,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 7:
                     return SizedBox(
-                      height: 30,
                       child: Text("Tanár: " + teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -383,7 +354,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 8:
                     return SizedBox(
-                      height: 30,
                       child: Text("Beírás dátuma: " + date,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -391,7 +361,6 @@ class SongDetailTab extends StatelessWidget {
                     break;
                   case 9:
                     return SizedBox(
-                      height: 30,
                       child: Text("Létrehozás dátuma: " + createDate,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
