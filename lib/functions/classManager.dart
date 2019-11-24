@@ -2,7 +2,8 @@ import 'utils.dart';
 var id = 0;
 
 class Evals{
-  var form,
+  var formName,
+  form,
   id,
   value,
   numberValue,
@@ -26,7 +27,7 @@ class Avarage{
 Evals set(var input){
   Evals temp = new Evals();
   //Magatartas es Szorgalom
-  if(input["Subject"] == null){
+  if(input["Subject"] == null || input["Subject"] == ""){
     temp.subject = input["Jelleg"]["Nev"];
   }else{
     temp.subject = input["Subject"];
@@ -54,7 +55,7 @@ Evals set(var input){
     temp.numberValue = input["NumberValue"];
   }
   //Ertekeles temaja
-  if(input["Theme"] == null){
+  if(input["Theme"] == null || input["Theme"] == ""){
     if(input["Mode"] != null){
       temp.theme = input["Mode"];
     }else{
@@ -65,19 +66,25 @@ Evals set(var input){
     temp.theme = input["Theme"];
   }
   //Ertekeles modja
-  if(input["Mode"] == null){
+  if(input["Mode"] == null || input["Mode"] == ""){
     temp.mode = input["TypeName"];
   }else{
     temp.mode = input["Mode"];
   }
   //Ertekeles sulya
-  if(input["Weight"] == null){
-    temp.weight = "100%"; //feltehetoleg 100%osan beleszámít, pl a szorgalomnal is igy van
+  if(input["Weight"] == null || input["Weight"] == "" || input["Weight"] == "-"){
+    if(input["Form"] != "Percent"){
+      temp.weight = "100%";
+    }else{
+      temp.weight = "0%";
+    }
+    //feltehetoleg 100%osan beleszámít, pl a szorgalomnal is igy van
   }else{
     temp.weight = input["Weight"];
   }
   temp.id = id++;
   temp.value = input["Value"];
+  temp.formName = input["FormName"];
   temp.form = input["Form"];
   temp.teacher = input["Teacher"];
   temp.type = input["Type"];

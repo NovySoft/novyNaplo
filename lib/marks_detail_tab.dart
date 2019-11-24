@@ -1,17 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'functions/widgets.dart';
+import 'functions/parseMarks.dart';
 
 /// Page shown when a card in the songs tab is tapped.
 ///
 /// On Android, this page sits at the top of your app. On iOS, this page is on
 /// top of the songs tab's content but is below the tab bar itself.
 class SongDetailTab extends StatelessWidget {
-  const SongDetailTab({this.id, this.song, this.color});
+  const SongDetailTab(
+      {this.numberValue,
+      this.subject,
+      this.id,
+      this.name,
+      this.color,
+      this.theme,
+      this.teacher,
+      this.createDate,
+      this.date,
+      this.mode,
+      this.weight,
+      this.value,
+      this.form,
+      this.formName});
 
   final int id;
-  final String song;
+  final String name;
+  final String theme;
+  final String weight;
+  final String date;
+  final String teacher;
+  final String mode;
+  final String subject;
+  final String value;
+  final String formName;
+  final String form;
+  final String createDate;
+  final int numberValue;
   final Color color;
 
   Widget _buildBody() {
@@ -25,7 +50,7 @@ class SongDetailTab extends StatelessWidget {
           Hero(
             tag: id,
             child: HeroAnimatingSongCard(
-              song: song,
+              song: name,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(1),
             ),
@@ -36,7 +61,7 @@ class SongDetailTab extends StatelessWidget {
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               return HeroAnimatingSongCard(
-                song: song,
+                song: name,
                 color: color,
                 heroAnimation: animation,
               );
@@ -50,21 +75,331 @@ class SongDetailTab extends StatelessWidget {
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, top: 16, bottom: 8),
-                    child: Text(
-                      'You might also like:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                switch (index) {
+                  case 0:
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, top: 16, bottom: 16),
+                      child: Text(
+                        'Jegy információk:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                    break;
+                  case 1:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Tantárgy: " + subject,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 2:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Téma: " + theme.toString(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 3:
+                    return SizedBox(
+                      height: 40,
+                      child: Text("Értékelés típusa: " + formName,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 4:
+                    if (form == "Mark" ||
+                        form == "Diligence" ||
+                        form == "Deportment") {
+                      switch (numberValue) {
+                        case 1:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red)),
+                          );
+                          break;
+                        case 2:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange)),
+                          );
+                          break;
+                        case 3:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.yellow)),
+                          );
+                          break;
+                        case 4:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.lightGreen)),
+                          );
+                          break;
+                        case 5:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                          );
+                          break;
+                        default:
+                          return SizedBox(
+                            height: 30,
+                            child: Text("Értékelés: " + value,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                          );
+                          break;
+                      }
+                    } else if (form == "Percent") {
+                      if (numberValue >= 90) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text("Értékelés: " + value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green)),
+                        );
+                      } else if (numberValue >= 75) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text("Értékelés: " + value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.lightGreen)),
+                        );
+                      } else if (numberValue >= 60) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text("Értékelés: " + value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.yellow)),
+                        );
+                      } else if (numberValue >= 40) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text("Értékelés: " + value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange)),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 30,
+                          child: Text("Értékelés: " + value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red)),
+                        );
+                      }
+                    } else {
+                      return SizedBox(
+                        height: 30,
+                        child: Text("Értékelés: " + value,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                    }
+                    break;
+                  case 5:
+                    if (form == "Mark" ||
+                        form == "Diligence" ||
+                        form == "Deportment") {
+                      switch (numberValue) {
+                        case 1:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red)),
+                          );
+                          break;
+                        case 2:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange)),
+                          );
+                          break;
+                        case 3:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.yellow)),
+                          );
+                          break;
+                        case 4:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.lightGreen)),
+                          );
+                          break;
+                        case 5:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                          );
+                          break;
+                        default:
+                          return SizedBox(
+                            height: 30,
+                            child: Text(
+                                "Értékelés számmal: " + numberValue.toString(),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                          );
+                          break;
+                      }
+                    } else if (form == "Percent") {
+                      if (numberValue >= 90) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text(
+                              "Értékelés számmal: " + numberValue.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green)),
+                        );
+                      } else if (numberValue >= 75) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text(
+                              "Értékelés számmal: " + numberValue.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.lightGreen)),
+                        );
+                      } else if (numberValue >= 60) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text(
+                              "Értékelés számmal: " + numberValue.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.yellow)),
+                        );
+                      } else if (numberValue >= 40) {
+                        return SizedBox(
+                          height: 30,
+                          child: Text(
+                              "Értékelés számmal: " + numberValue.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange)),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 30,
+                          child: Text(
+                              "Értékelés számmal: " + numberValue.toString(),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red)),
+                        );
+                      }
+                    } else {
+                      return SizedBox(
+                        height: 30,
+                        child: Text(
+                            "Értékelés számmal: " + numberValue.toString(),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                    }
+                    break;
+                  case 6:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Súly: " + weight,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 7:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Tanár: " + teacher,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 8:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Beírás dátuma: " + date,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 9:
+                    return SizedBox(
+                      height: 30,
+                      child: Text("Létrehozás dátuma: " + createDate,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  default:
+                    break;
                 }
-                // Just a bunch of boxes that simulates loading song choices.
-                return SongPlaceholderTile();
               },
             ),
           ),
@@ -79,7 +414,7 @@ class SongDetailTab extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(song)),
+      appBar: AppBar(title: Text(name)),
       body: _buildBody(),
     );
   }
@@ -87,8 +422,8 @@ class SongDetailTab extends StatelessWidget {
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(song),
-        previousPageTitle: 'Songs',
+        middle: Text(name),
+        previousPageTitle: 'Jegyek',
       ),
       child: _buildBody(),
     );

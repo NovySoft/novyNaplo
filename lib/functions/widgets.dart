@@ -209,65 +209,6 @@ class HeroAnimatingSongCard extends StatelessWidget {
   }
 }
 
-/// A loading song tile's silhouette.
-///
-/// This is an example of a custom widget that an app developer might create for
-/// use on both iOS and Android as part of their brand's unique design.
-class SongPlaceholderTile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 95,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: Row(
-          children: [
-            Container(
-              color: Colors.grey[400],
-              width: 130,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 12),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 9,
-                    margin: EdgeInsets.only(right: 60),
-                    color: Colors.grey[300],
-                  ),
-                  Container(
-                    height: 9,
-                    margin: EdgeInsets.only(right: 20, top: 8),
-                    color: Colors.grey[300],
-                  ),
-                  Container(
-                    height: 9,
-                    margin: EdgeInsets.only(right: 40, top: 8),
-                    color: Colors.grey[300],
-                  ),
-                  Container(
-                    height: 9,
-                    margin: EdgeInsets.only(right: 80, top: 8),
-                    color: Colors.grey[300],
-                  ),
-                  Container(
-                    height: 9,
-                    margin: EdgeInsets.only(right: 50, top: 8),
-                    color: Colors.grey[300],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // ===========================================================================
 // Non-shared code below because different interfaces are shown to prompt
 // for a multiple-choice answer.

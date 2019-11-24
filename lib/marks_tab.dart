@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences prefs;
 var apiResponse = dJson; 
+var allParsed;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -34,7 +35,7 @@ class _MarksTabState extends State<MarksTab>{
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   List<MaterialColor> colors;
-  List<String> songNames;
+  List<String> markName;
 
   @override
   void initState(){
@@ -44,7 +45,8 @@ class _MarksTabState extends State<MarksTab>{
 
   void _setData(){
     colors = getRandomColors(itemsLength);
-    songNames = parseMarks(apiResponse);
+    markName = parseMarks(apiResponse);
+    allParsed = parseAll(apiResponse);
   }
 
   Future<void> _refreshData() {
@@ -70,14 +72,25 @@ class _MarksTabState extends State<MarksTab>{
       child: Hero(
         tag: index,
         child: HeroAnimatingSongCard(
-          song: songNames[index],
+          song: markName[index],
           color: color,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: () => Navigator.of(context).push<void>(
             MaterialPageRoute(
               builder: (context) => SongDetailTab(
+                mode: allParsed[index].mode,
+                theme: allParsed[index].theme,
+                weight: allParsed[index].weight,
+                date: allParsed[index].date,
+                createDate: allParsed[index].createDate,
+                teacher: allParsed[index].teacher,
+                subject: allParsed[index].subject,
+                numberValue: allParsed[index].numberValue,
+                value: allParsed[index].value,
+                formName: allParsed[index].formName,
+                form: allParsed[index].form,
                 id: index,
-                song: songNames[index],
+                name: markName[index],
                 color: color,
               ),
             ),
