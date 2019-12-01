@@ -24,12 +24,15 @@ var response, token, dJson;
 int markCount,avarageCount = 0;
 bool gotToken;
 bool isPressed = false;
+bool newVersion = false;
+bool hasPrefs = false;
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
 void onLoad(var context) async {
   if (await getVersion() != "false") {
     String s = await getVersion();
     s = "New version: $s";
+    newVersion = true;
     _ackAlert(context, s);
   }
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -38,6 +41,7 @@ void onLoad(var context) async {
   String userKey = config.userKey;
   String iv = config.iv;
   if (prefs.getString("code") != null) {
+    hasPrefs = true;
     String decryptedCode = await Cipher2.decryptAesCbc128Padding7(
         prefs.getString("code"), codeKey, iv);
     String decryptedUser = await Cipher2.decryptAesCbc128Padding7(
@@ -47,11 +51,14 @@ void onLoad(var context) async {
     codeController.text = decryptedCode;
     userController.text = decryptedUser;
     passController.text = decryptedPass;
-    auth(context);
+    if(newVersion == false){
+      auth(context,"onLoad");
+    }
   }
 }
 
-void auth(var context) async {
+void auth(var context,caller) async {
+  newVersion = false;
   Dialogs.showLoadingDialog(context, _keyLoader); //Not showing quickly enough
   await sleep1(); //So sleep for a second
   var connectivityResult = await (Connectivity().checkConnectivity());
@@ -136,7 +143,7 @@ void auth(var context) async {
   Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
   if (status == "OK") {
     try {
-      save(context);
+      save(context,"auth");
     } on PlatformException catch (e) {
       print(e.message);
       _ackAlert(context, e.message);
@@ -145,9 +152,12 @@ void auth(var context) async {
     _ackAlert(context, status);
   }
   isPressed = false;
+  if(caller == "_ackAlert"){
+    Navigator.of(context).pop();
+  }
 }
 
-void save(var context) async {
+void save(var context,caller) async {
   //Variables
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   //Inputs
@@ -179,6 +189,9 @@ void save(var context) async {
     await Navigator.pushNamed(context, MarksTab.tag);
   } on PlatformException catch (e) {
     print(e.message);
+  }
+  if(caller == "_ackAlert"){
+    Navigator.of(context).pop();
   }
   //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
   /*
@@ -248,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           if (!isPressed) {
             isPressed = true;
-            auth(context);
+            auth(context,"loginButton");
           }
           /*
           Navigator.of(context).pushNamed(HomePage.tag);
@@ -282,7 +295,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Future<void> _ackAlert(BuildContext context, String content) {
+Future<void> _ackAlert(BuildContext context, String content) async{
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -293,9 +306,12 @@ Future<void> _ackAlert(BuildContext context, String content) {
           FlatButton(
             child: Text('Ok'),
             onPressed: () {
-              Navigator.of(context).pop();
-              if (status == "OK") {
-                save(context);
+              if(newVersion == true && hasPrefs){
+                auth(context,"_ackAlert");
+              }else if (status == "OK") {
+                save(context,"_ackAlert");
+              }else{
+                Navigator.of(context).pop();
               }
             },
           ),
