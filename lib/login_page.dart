@@ -42,15 +42,19 @@ void onLoad(var context) async {
   String iv = config.iv;
   if (prefs.getString("code") != null) {
     hasPrefs = true;
-    String decryptedCode = await Cipher2.decryptAesCbc128Padding7(
+    try{
+      String decryptedCode = await Cipher2.decryptAesCbc128Padding7(
         prefs.getString("code"), codeKey, iv);
-    String decryptedUser = await Cipher2.decryptAesCbc128Padding7(
+      String decryptedUser = await Cipher2.decryptAesCbc128Padding7(
         prefs.getString("user"), userKey, iv);
-    String decryptedPass = await Cipher2.decryptAesCbc128Padding7(
+      String decryptedPass = await Cipher2.decryptAesCbc128Padding7(
         prefs.getString("password"), passKey, iv);
-    codeController.text = decryptedCode;
-    userController.text = decryptedUser;
-    passController.text = decryptedPass;
+      codeController.text = decryptedCode;
+      userController.text = decryptedUser;
+      passController.text = decryptedPass;
+    }on PlatformException catch(e){
+      _ackAlert(context, e.toString());
+    }
     if(newVersion == false){
       auth(context,"onLoad");
     }
