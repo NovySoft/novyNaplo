@@ -19,6 +19,7 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 * **package_info**: Ennek a segítségével nézi meg az applikáció saját verzióját
 * **flutter_spinkit**: A kis homokóráért felelős
 * **diacritic**: A magyar betűk angol megfelelőit tárolja
+* **dynamic_theme**: A sötét és fehér téma közt vált
 
 # Betűtípus
 * **Nunito**

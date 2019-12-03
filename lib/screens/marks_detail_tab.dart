@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'functions/widgets.dart';
-import 'functions/parseMarks.dart';
+import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
 
 /// Page shown when a card in the songs tab is tapped.
 ///

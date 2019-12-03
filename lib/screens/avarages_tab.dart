@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/config.dart';
-import 'package:novynaplo/marks_tab.dart';
+import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:flutter/services.dart';
-import 'package:novynaplo/login_page.dart';
+import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/functions/utils.dart';
-
 
 var subjectName = [];
 var subjectAvg = [];
@@ -51,6 +51,17 @@ class AvaragesTab extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              title: Text('Beállítások'),
+              leading: Icon(Icons.settings_applications),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, SettingsTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -66,9 +77,9 @@ class BodyLayout extends StatelessWidget {
   }
 }
 
-void setNumberValue(var a,subject){
+void setNumberValue(var a, subject) {
   //print("Compare: " +toEnglish(a.subject)+ " and " +toEnglish(subject)+ "value:"+ a.numberValue.toString());
-  if(toEnglish(a.subject) == toEnglish(subject)){
+  if (toEnglish(a.subject) == toEnglish(subject)) {
     tmpArray.add(a.numberValue);
     tmpI++;
   }
@@ -77,35 +88,35 @@ void setNumberValue(var a,subject){
 void setArrays(var n) {
   double avg = 0;
   subjectName.add(n.subject.toString());
-  if(n.ownValue == 0){
+  if (n.ownValue == 0) {
     var jegyek = parseAll(dJson);
     tmpArray = [];
     tmpI = 0;
-    jegyek.forEach(
-      (a) => setNumberValue(a,n.subject)
-    );
+    jegyek.forEach((a) => setNumberValue(a, n.subject));
     num sum = 0;
-    tmpArray.forEach((e){sum += e;});
-    if(sum == 0){
+    tmpArray.forEach((e) {
+      sum += e;
+    });
+    if (sum == 0) {
       subjectAvg.add("Nincs jegyed!");
       avg = 0;
-    }else{
-      subjectAvg.add((sum/tmpI).toString());
-      avg = sum/tmpI;
+    } else {
+      subjectAvg.add((sum / tmpI).toString());
+      avg = sum / tmpI;
     }
-  }else{
+  } else {
     subjectAvg.add(n.ownValue.toString());
     avg = n.ownValue;
   }
   subjectClassAvg.add(n.classValue.toString());
   subjectDiff.add(n.diff.toString());
-  if(avg < 2.5){
+  if (avg < 2.5) {
     avgColor.add(Colors.redAccent[700]);
-  }else if(avg < 3 && avg >= 2.5){
+  } else if (avg < 3 && avg >= 2.5) {
     avgColor.add(Colors.redAccent);
-  }else if(avg < 4 && avg >= 3){
+  } else if (avg < 4 && avg >= 3) {
     avgColor.add(Colors.yellow[800]);
-  }else{
+  } else {
     avgColor.add(Colors.green);
   }
 }
@@ -122,8 +133,10 @@ Widget avaragesList(BuildContext context) {
     itemCount: avarageCount,
     itemBuilder: (context, index) {
       return ListTile(
-          title: Text(subjectName[index], style: TextStyle(color: avgColor[index])),
-          trailing: Text(subjectAvg[index], style: TextStyle(color: avgColor[index])),
+        title:
+            Text(subjectName[index], style: TextStyle(color: avgColor[index])),
+        trailing:
+            Text(subjectAvg[index], style: TextStyle(color: avgColor[index])),
       );
     },
   );

@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'functions/parseMarks.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
 import 'login_page.dart';
 import 'package:novynaplo/config.dart';
-import 'package:novynaplo/avarages_tab.dart';
+import 'package:novynaplo/screens/avarages_tab.dart';
 
 import 'marks_detail_tab.dart';
-import 'functions/utils.dart';
-import 'functions/widgets.dart';
+import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
+
 SharedPreferences prefs;
-var apiResponse = dJson; 
+var apiResponse = dJson;
 var allParsed;
 
 class MarksTab extends StatefulWidget {
@@ -30,7 +33,7 @@ class MarksTab extends StatefulWidget {
   _MarksTabState createState() => _MarksTabState();
 }
 
-class _MarksTabState extends State<MarksTab>{
+class _MarksTabState extends State<MarksTab> {
   int itemsLength = markCount;
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -38,12 +41,12 @@ class _MarksTabState extends State<MarksTab>{
   List<String> markName;
 
   @override
-  void initState(){
+  void initState() {
     _setData();
     super.initState();
   }
 
-  void _setData(){
+  void _setData() {
     colors = getRandomColors(itemsLength);
     markName = parseMarks(apiResponse);
     allParsed = parseAll(apiResponse);
@@ -58,7 +61,7 @@ class _MarksTabState extends State<MarksTab>{
   }
 
   Widget _listBuilder(BuildContext context, int index) {
-                        if (index >= itemsLength) return null;
+    if (index >= itemsLength) return null;
 
     // Show a slightly different color palette. Show poppy-ier colors on iOS
     // due to lighter contrasting bars and tone it down on Android.
@@ -72,30 +75,31 @@ class _MarksTabState extends State<MarksTab>{
       child: Hero(
         tag: index,
         child: HeroAnimatingSongCard(
-          song: markName[index],
-          color: color,
-          heroAnimation: AlwaysStoppedAnimation(0),
-          onPressed: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(
-              builder: (context) => SongDetailTab(
-                mode: allParsed[index].mode,
-                theme: allParsed[index].theme,
-                weight: allParsed[index].weight,
-                date: allParsed[index].date,
-                createDate: allParsed[index].createDate,
-                teacher: allParsed[index].teacher,
-                subject: allParsed[index].subject,
-                numberValue: allParsed[index].numberValue,
-                value: allParsed[index].value,
-                formName: allParsed[index].formName,
-                form: allParsed[index].form,
-                id: index,
-                name: markName[index],
-                color: color,
-              ),
-            ),
-          ),
-        ),
+            song: markName[index],
+            color: color,
+            heroAnimation: AlwaysStoppedAnimation(0),
+            onPressed: () {
+              Navigator.of(context).push<void>(
+                MaterialPageRoute(
+                  builder: (context) => SongDetailTab(
+                    mode: allParsed[index].mode,
+                    theme: allParsed[index].theme,
+                    weight: allParsed[index].weight,
+                    date: allParsed[index].date,
+                    createDate: allParsed[index].createDate,
+                    teacher: allParsed[index].teacher,
+                    subject: allParsed[index].subject,
+                    numberValue: allParsed[index].numberValue,
+                    value: allParsed[index].value,
+                    formName: allParsed[index].formName,
+                    form: allParsed[index].form,
+                    id: index,
+                    name: markName[index],
+                    color: color,
+                  ),
+                ),
+              );
+            }),
       ),
     );
   }
@@ -118,9 +122,9 @@ class _MarksTabState extends State<MarksTab>{
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.grey),
-              child: Center(child:new Image.asset(menuLogo,fit: BoxFit.fill))
-              ),
+                decoration: BoxDecoration(color: Colors.grey),
+                child:
+                    Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
             ListTile(
               title: Text('Jegyek'),
               leading: Icon(Icons.create),
@@ -135,6 +139,17 @@ class _MarksTabState extends State<MarksTab>{
               onTap: () {
                 try {
                   Navigator.pushNamed(context, AvaragesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Beállítások'),
+              leading: Icon(Icons.settings_applications),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, SettingsTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

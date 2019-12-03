@@ -3,15 +3,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cipher2/cipher2.dart';
-import 'package:novynaplo/marks_tab.dart';
-import 'config.dart' as config;
+import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/functions/utils.dart';
-import 'functions/getVersion.dart';
-import 'functions/parseMarks.dart';
+import 'package:novynaplo/functions/getVersion.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -239,21 +240,24 @@ class _LoginPageState extends State<LoginPage> {
       controller: codeController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Iskola azonosító'),
+      decoration: InputDecoration(hintText: 'Iskola azonosító',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
     );
 
     final user = TextFormField(
       controller: userController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Felhasználónév'),
+      decoration: InputDecoration(hintText: 'Felhasználónév',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
     );
 
     final password = TextFormField(
       controller: passController,
       autofocus: false,
       obscureText: true,
-      decoration: InputDecoration(hintText: 'Jelszó'),
+      decoration: InputDecoration(hintText: 'Jelszó',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
     );
 
     final loginButton = Padding(

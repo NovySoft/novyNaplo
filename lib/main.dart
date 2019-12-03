@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:novynaplo/avarages_tab.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:novynaplo/functions/colorManager.dart';
 //import 'package:permission_handler/permission_handler.dart';
-import 'login_page.dart';
-import 'marks_tab.dart';
+import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/login_page.dart';
 
 
 void main() async {
@@ -16,62 +19,22 @@ class MyApp extends StatelessWidget {
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
     AvaragesTab.tag: (context) => AvaragesTab(),
+    SettingsTab.tag: (context) => SettingsTab(),
   };
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Novy Napló',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          dividerColor: Colors.black,
-          textTheme: TextTheme(
-            subhead: TextStyle(color: Colors.black),
-          ),
-          brightness: Brightness.light,
-          primarySwatch: Colors.lightBlue,
-          buttonColor: Colors.lightBlueAccent,
-          primaryColor: Colors.lightBlueAccent,
-          backgroundColor: Colors.white,
-          fontFamily: 'Nunito',
-          colorScheme: ColorScheme.light(),
-          hintColor: Colors.lightBlue,
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle: TextStyle(
-              color: Colors.blueAccent,
-            ),
-            fillColor: Colors.black,
-            hintStyle: TextStyle(color: Colors.black),
-            focusColor: Colors.orange,
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          )),
-      darkTheme: ThemeData(
-          dividerColor: Colors.orange,
-          textTheme: TextTheme(
-            subhead: TextStyle(color: Colors.orange),
-          ),
-          buttonColor: Colors.orange,
-          backgroundColor: Colors.black,
-          primarySwatch: Colors.orange,
-          primaryColor: Colors.orange,
-          brightness: Brightness.dark,
-          colorScheme: ColorScheme.dark(),
-          hintColor: Colors.red,
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle: TextStyle(
-              color: Colors.black,
-            ),
-            fillColor: Colors.black,
-            hintStyle: TextStyle(color: Colors.orange),
-            focusColor: Colors.orange,
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-            )),
-      home: LoginPage(),
-      routes: routes,
-    );
+    return new DynamicTheme(
+        defaultBrightness: Brightness.light,
+        data: (brightness) => ColorManager().getTheme(brightness),
+        themedWidgetBuilder: (context, theme) {
+          return MaterialApp(
+            theme: theme,
+            title: 'Novy Napló',
+            debugShowCheckedModeBanner: false,
+            home: LoginPage(),
+            routes: routes,
+          );
+        });
   }
 }
