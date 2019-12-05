@@ -1,4 +1,4 @@
-package novy.vip.novynotifier
+package novy.vip.novynaplo
 
 import android.os.Bundle
 
