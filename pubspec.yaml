@@ -35,6 +35,8 @@ dependencies:
   flutter_spinkit: any
   diacritic: any
   dynamic_theme: any
+  firebase_crashlytics: any
+  firebase_analytics: any
 
 flutter_icons:
   android: true

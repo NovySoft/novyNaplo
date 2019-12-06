@@ -29,9 +29,32 @@ if (keystorePropertiesFile.exists()) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    configurations.all {
+        resolutionStrategy {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'androidx.core') {
+                    details.useVersion "1.0.1"
+                }
+                if (details.requested.group == 'androidx.lifecycle') {
+                details.useVersion "2.0.0"
+                }
+                if (details.requested.group == 'androidx.versionedparcelable') {
+                    details.useVersion "1.0.0"
+                }
+                if (details.requested.group == 'androidx.fragment') {
+                    details.useVersion "1.0.0"
+                }
+                if (details.requested.group == 'androidx.appcompat') {
+                    details.useVersion "1.0.1"
+                }
+            }
+        }
+    }
     compileSdkVersion 28
 
     sourceSets {
@@ -77,4 +100,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
+    compile group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.10.1'
+    implementation 'com.google.firebase:firebase-perf:19.0.2'
 }
+
+apply plugin: 'com.google.gms.google-services'
