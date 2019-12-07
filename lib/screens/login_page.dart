@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -22,7 +23,7 @@ var status = "No status";
 var i = 0;
 var agent = config.currAgent;
 var response, token, dJson;
-int markCount,avarageCount = 0;
+int markCount,avarageCount,noticesCount = 0;
 bool gotToken;
 bool isPressed = false;
 bool newVersion = false;
@@ -42,6 +43,7 @@ void onLoad(var context) async {
   String userKey = config.userKey;
   String iv = config.iv;
   if (prefs.getString("code") != null) {
+    FirebaseAnalytics().logEvent(name: "login");
     hasPrefs = true;
     try{
       String decryptedCode = await Cipher2.decryptAesCbc128Padding7(
@@ -139,8 +141,10 @@ void auth(var context,caller) async {
         var eval = dJson["Evaluations"];
         if (markCount != 0) markCount = 0;
         if (avarageCount != 0) avarageCount = 0;
+        if (noticesCount != 0) noticesCount = 0;
         eval.forEach((element) => markCount += 1);
         avarageCount = countAvarages(dJson);
+        noticesCount = countNotices(dJson);
         //print(dJson);
       }
     }
@@ -186,6 +190,7 @@ void save(var context,caller) async {
     prefs.setString("password", encryptedPass);
     prefs.setString("code", encryptedCode);
     prefs.setString("user", encryptedUser);
+    FirebaseAnalytics().setUserProperty(name: "School",value: code);
   } on PlatformException catch (e) {
     print(e);
   }
@@ -270,6 +275,7 @@ class _LoginPageState extends State<LoginPage> {
           if (!isPressed) {
             isPressed = true;
             auth(context,"loginButton");
+            FirebaseAnalytics().logEvent(name: "sign_up");
           }
           /*
           Navigator.of(context).pushNamed(HomePage.tag);

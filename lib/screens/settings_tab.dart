@@ -1,7 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/functions/colorManager.dart';
 import 'package:novynaplo/config.dart';
 
@@ -51,6 +53,17 @@ class _SettingsTabState extends State<SettingsTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, AvaragesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Feljegyzések'),
+              leading: Icon(Icons.layers),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, NoticesTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }
@@ -111,8 +124,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             onChanged: (String value) {
               if(value == "Világos"){
                 ColorManager().changeBrightness(context,Brightness.light);
+                FirebaseAnalytics().setUserProperty(name: "Theme",value: "Bright");
               }else{
                 ColorManager().changeBrightness(context,Brightness.dark);
+                FirebaseAnalytics().setUserProperty(name: "Theme",value: "Dark");
               }
               setState(() {
                 dropDown = value;

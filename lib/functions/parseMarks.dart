@@ -48,3 +48,12 @@ int countAvarages(var input){
     );
   return count;
 }
+
+int countNotices(var input){
+  var count = 0;
+    var notices = input["Notes"];
+    notices.forEach(
+      (n) => count++
+    );
+  return count;
+}

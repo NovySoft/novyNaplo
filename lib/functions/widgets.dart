@@ -291,3 +291,58 @@ void showChoices(BuildContext context, List<String> choices) {
       assert(false, 'Unexpected platform $defaultTargetPlatform');
   }
 }
+
+class AnimatedNoticesCard extends StatelessWidget {
+  AnimatedNoticesCard(
+      {this.title,
+      this.color,
+      this.subTitle,
+      this.onPressed,
+      this.heroAnimation});
+
+  final String title, subTitle;
+  final Color color;
+  final Animation<double> heroAnimation;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(context) {
+    return PressableCard(
+      onPressed: heroAnimation.value == 0 ? onPressed : null,
+      color: color,
+      flattenAnimation: heroAnimation,
+      child: SizedBox(
+        height: 160,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 160,
+                color: Colors.black12,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(color: Colors.black, fontSize: 25.0),
+                      ),
+                      Text(
+                        subTitle,
+                        style: TextStyle(color: Colors.black54,fontSize: 20.0),
+                      ),
+                    ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

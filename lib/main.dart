@@ -9,6 +9,7 @@ import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     MarksTab.tag: (context) => MarksTab(),
     AvaragesTab.tag: (context) => AvaragesTab(),
     SettingsTab.tag: (context) => SettingsTab(),
+    NoticesTab.tag: (context) => NoticesTab(),
   };
 
   @override

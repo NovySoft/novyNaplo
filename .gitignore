@@ -79,3 +79,4 @@ lib/config-realese.dart
 android/app/google-services.json
 android/key.properties
 android/app/key.jks
+lib/empty.json

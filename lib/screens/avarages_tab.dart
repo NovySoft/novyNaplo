@@ -4,6 +4,7 @@ import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/functions/utils.dart';
 
@@ -49,6 +50,17 @@ class AvaragesTab extends StatelessWidget {
               leading: Icon(Icons.all_inclusive),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Feljegyzések'),
+              leading: Icon(Icons.layers),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, NoticesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
               },
             ),
             ListTile(
