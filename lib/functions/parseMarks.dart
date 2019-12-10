@@ -1,16 +1,20 @@
+import 'dart:core';
+import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'classManager.dart';
 var jegyek;
 var jegyArray = [];
 var atlagArray = [];
+var noticesArray = [];
 
 List<dynamic> parseAll(var input){
+  jegyArray = [];
   try{
     jegyek = input["Evaluations"];
     jegyArray = [];
     id = 0;
     jegyek.forEach(
-      (n) => jegyArray.add(set(n))
+      (n) => jegyArray.add(setEvals(n))
     );
   }on Error catch (e){
     return [e];
@@ -29,6 +33,7 @@ List<String> parseMarks(var input){
 }
 
 List<dynamic> parseAvarages(var input){
+  atlagArray = [];
   try{
     var atlagok = input["SubjectAverages"];
     atlagok.forEach(
@@ -56,4 +61,15 @@ int countNotices(var input){
       (n) => count++
     );
   return count;
+}
+
+List<dynamic> parseNotices(var input){
+  if(input["Notes"] != null) {
+    noticesArray = [];
+    var notices = input["Notes"];
+    notices.forEach(
+            (n) => noticesArray.add(setNotices(n))
+    );
+    return noticesArray;
+  }
 }

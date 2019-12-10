@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/getVersion.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 
 TextEditingController codeController =
@@ -145,6 +146,7 @@ void auth(var context,caller) async {
         eval.forEach((element) => markCount += 1);
         avarageCount = countAvarages(dJson);
         noticesCount = countNotices(dJson);
+        allParsedNotices = parseNotices(dJson);
         //print(dJson);
       }
     }

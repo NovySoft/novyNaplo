@@ -24,7 +24,7 @@ class Avarage{
   diff;
 }
 
-Evals set(var input){
+Evals setEvals(var input){
   Evals temp = new Evals();
   //Magatartas es Szorgalom
   if(input["Subject"] == null || input["Subject"] == ""){
@@ -99,5 +99,23 @@ Avarage setAvarage(var subject,ownValue,classValue,diff){
   temp.ownValue = ownValue;
   temp.classValue = classValue;
   temp.diff = diff;
+  return temp;
+}
+
+class Notices{
+  var title,
+  content,
+  teacher,
+  date,
+  subject;
+}
+
+Notices setNotices(var input){
+  Notices temp = new Notices();
+  temp.title = capitalize(input["Title"]);
+  temp.teacher = input["Teacher"];
+  temp.content = input["Content"];
+  temp.date = input["CreatingTime"];
+  temp.subject = ""; //TODO: assign subject to notice
   return temp;
 }

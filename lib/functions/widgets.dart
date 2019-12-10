@@ -324,17 +324,18 @@ class AnimatedNoticesCard extends StatelessWidget {
                 height: 160,
                 color: Colors.black12,
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
+                        textAlign: TextAlign.left,
                         style: TextStyle(color: Colors.black, fontSize: 25.0),
                       ),
                       Text(
                         subTitle,
+                        textAlign: TextAlign.left,
                         style: TextStyle(color: Colors.black54,fontSize: 20.0),
                       ),
                     ]),

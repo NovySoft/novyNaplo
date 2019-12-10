@@ -3,12 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/functions/colorManager.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/functions/utils.dart';
+var allParsedNotices;
+
+
 
 class NoticesTab extends StatefulWidget {
   static String tag = 'notices';
@@ -87,6 +92,7 @@ class _NoticesTabState extends State<NoticesTab> {
   @override
   void initState() {
     super.initState();
+    onInit();
   }
 }
 
@@ -94,6 +100,10 @@ Widget _noticesBuilder(BuildContext context, int index) {
   return SafeArea(
     top: false,
     bottom: false,
-    child: AnimatedNoticesCard(title: "TESZT",subTitle: "valami",color: Colors.red,heroAnimation: AlwaysStoppedAnimation(0)),
+    child: AnimatedNoticesCard(title: allParsedNotices[index].title,subTitle: allParsedNotices[index].teacher,color: getRandomColors(1)[0],heroAnimation: AlwaysStoppedAnimation(0)),
   );
+}
+
+void onInit(){
+  //TODO write this function
 }
