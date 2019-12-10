@@ -1,10 +1,22 @@
 # Novy Napló
+[![time tracker](https://wakatime.com/badge/github/Legolaszstudio/novynotifier.svg)](https://wakatime.com/badge/github/Legolaszstudio/novynotifier)
 
 Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense.
 
 **Jelenlegi funkciók:**
 * Jegyek megtekintése
 * Átlagok megtekintése
+
+**HAMAROSAN:**
+* Feljegyzések
+* Órarend
+* Házifeladat
+* Hiányzások
+* Grafikonok
+* Értesítések
+* Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
+* Támogatók oldal - **Gáti Úr** közreműködésével
+* Szuper egyedi és egyéni beállítások
 
 # Modulok
 * **Flutter:** Evvel a frameworkkel készült az applikáció
@@ -20,6 +32,9 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 * **flutter_spinkit**: A kis homokóráért felelős
 * **diacritic**: A magyar betűk angol megfelelőit tárolja
 * **dynamic_theme**: A sötét és fehér téma közt vált
+* **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
+* **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
+
 
 # Betűtípus
 * **Nunito**
