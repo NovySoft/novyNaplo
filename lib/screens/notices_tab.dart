@@ -8,11 +8,12 @@ import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 var allParsedNotices;
-
+var colors = getRandomColors(noticesCount);
 
 
 class NoticesTab extends StatefulWidget {
@@ -97,10 +98,30 @@ class _NoticesTabState extends State<NoticesTab> {
 }
 
 Widget _noticesBuilder(BuildContext context, int index) {
+  MaterialColor currColor = colors[index];
   return SafeArea(
     top: false,
     bottom: false,
-    child: AnimatedNoticesCard(title: allParsedNotices[index].title,subTitle: allParsedNotices[index].teacher,color: getRandomColors(1)[0],heroAnimation: AlwaysStoppedAnimation(0)),
+    child: AnimatedNoticesCard(
+        title: allParsedNotices[index].title,
+        subTitle: allParsedNotices[index].teacher,
+        color: currColor,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: () {
+        Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (context) => NoticeDetailTab(
+              id: index,
+              title: allParsedNotices[index].title,
+              teacher: allParsedNotices[index].teacher,
+              content: allParsedNotices[index].content,
+              date: allParsedNotices[index].date,
+              subject: allParsedNotices[index].subject,
+              color: currColor,
+            ),
+          ),
+        );
+      })
   );
 }
 

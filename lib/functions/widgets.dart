@@ -298,7 +298,7 @@ class AnimatedNoticesCard extends StatelessWidget {
       this.color,
       this.subTitle,
       this.onPressed,
-      this.heroAnimation});
+      this.heroAnimation,});
 
   final String title, subTitle;
   final Color color;
