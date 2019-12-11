@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 
 class NoticeDetailTab extends StatelessWidget {
@@ -20,6 +21,7 @@ class NoticeDetailTab extends StatelessWidget {
   final String subject;
   final MaterialColor color;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
@@ -47,6 +49,66 @@ class NoticeDetailTab extends StatelessWidget {
                 ),)
               ),
             ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                switch(index){
+                  case 0:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Szöveg:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            capitalize(content),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                  case 1:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Tanár:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            capitalize(teacher),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                  case 2:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Dátum:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            capitalize(date),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                }
+              }
+            )
+          )
             //Expanded()
           ]
         )
