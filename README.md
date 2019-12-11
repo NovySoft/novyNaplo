@@ -6,9 +6,10 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 **Jelenlegi funkciók:**
 * Jegyek megtekintése
 * Átlagok megtekintése
+* Feljegyzések megtekintése
 
 **HAMAROSAN:**
-* Feljegyzések
+* ~~Feljegyzések~~
 * Órarend
 * Házifeladat
 * Hiányzások
@@ -38,3 +39,15 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 
 # Betűtípus
 * **Nunito**
+
+# Ismert hibák:
+* **Valami was called on null** feltehetőleg parseolási hiba
+* **A betöltő homokóra beragad/rootAncestor hibák** feltehetőleg a bejelentkezés gomb véletlen megnyomása és az automata bejelentkezés konfliktusa miatt van ez a hiba
+* **_initialButtons == kPrimaryButton is not true** feltehtőleg a bejelentkezés gomb és az automata bejelentkezés konfliktusa miatt van ez a hiba
+* **Multiple widgets used the same GlobalKey** a loginPage és a MarksTab ugyanazt a GlobalKeyt használja
+* **A ticker was started twice.** jelenleg flutter framework hibának néz ki
+* **setCurrentScreen cannot be called with the same class and name** a feljegyzések menüpont hibája, egyértelműen az én kódomban van a hiba, csak még nem tudom, hogy hol
+
+
+* **Lassú betöltés/leragadás a homokóránál** vagy az előzőekben említett hiba miatt vagy a lassú krétás válasz miatt történik
+* **Hibás tanár/tantárgy név** az eredeti krétában van elírva a tanár/tantárgy neve, ez nem az applikáció hibája
