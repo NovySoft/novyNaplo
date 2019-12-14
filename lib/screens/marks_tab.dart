@@ -23,7 +23,6 @@ class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static const title = 'Jegyek';
   static const androidIcon = Icon(Icons.music_note);
-  static const iosIcon = Icon(CupertinoIcons.music_note);
 
   const MarksTab({Key key, this.androidDrawer}) : super(key: key);
 
