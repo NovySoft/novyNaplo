@@ -18,6 +18,7 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 * Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
 * Támogatók oldal - **Gáti Úr** közreműködésével
 * Szuper egyedi és egyéni beállítások
+* **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
 
 # Modulok
 * **Flutter:** Evvel a frameworkkel készült az applikáció
