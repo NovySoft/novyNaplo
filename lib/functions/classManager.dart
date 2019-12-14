@@ -1,4 +1,6 @@
+import 'package:novynaplo/screens/login_page.dart';
 import 'utils.dart';
+import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 var id = 0;
 
 class Evals{
@@ -116,6 +118,10 @@ Notices setNotices(var input){
   temp.teacher = input["Teacher"];
   temp.content = input["Content"];
   temp.date = input["CreatingTime"];
-  temp.subject = ""; //TODO: assign subject to notice
+  if(input["OsztalyCsoportUid"] == null){
+    temp.subject = null;
+  }else{
+    temp.subject = SubjectAssignHelper().assignSubject(dJson,input["OsztalyCsoportUid"],input["Type"],input["Content"]);
+  }
   return temp;
 }
