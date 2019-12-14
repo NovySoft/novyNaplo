@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 
-class ColorManager {
+class ThemeHelper {
   ThemeData getTheme(brightness) {
     if (brightness == Brightness.dark) {
       return new ThemeData(

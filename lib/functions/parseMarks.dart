@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'package:flutter/material.dart';
 import 'utils.dart';
 import 'classManager.dart';
 var jegyek;

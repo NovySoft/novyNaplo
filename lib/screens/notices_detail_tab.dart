@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/functions/widgets.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab(

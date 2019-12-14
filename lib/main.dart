@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:novynaplo/functions/colorManager.dart';
+import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -11,7 +11,7 @@ import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
-
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   Crashlytics.instance.enableInDevMode = true;
@@ -34,9 +34,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new DynamicTheme(
         defaultBrightness: Brightness.light,
-        data: (brightness) => ColorManager().getTheme(brightness),
+        data: (brightness) => ThemeHelper().getTheme(brightness),
         themedWidgetBuilder: (context, theme) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             theme: theme,
             title: 'Novy Napló',
             debugShowCheckedModeBanner: false,

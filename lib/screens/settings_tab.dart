@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:novynaplo/functions/colorManager.dart';
+import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/config.dart';
 
 String dropDown;
@@ -79,20 +79,20 @@ class _SettingsTabState extends State<SettingsTab> {
           ],
         ),
       ),
-      body: MyStatefulWidget(),
+      body: SettingsBody(),
     );
   }
 }
 
-//TODO RENAME CLASSES
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+
+class SettingsBody extends StatefulWidget {
+  SettingsBody({Key key}) : super(key: key);
 
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _SettingsBodyState createState() => _SettingsBodyState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _SettingsBodyState extends State<SettingsBody> {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).brightness == Brightness.light) {
@@ -123,10 +123,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             ],
             onChanged: (String value) {
               if(value == "Világos"){
-                ColorManager().changeBrightness(context,Brightness.light);
+                ThemeHelper().changeBrightness(context,Brightness.light);
                 FirebaseAnalytics().setUserProperty(name: "Theme",value: "Bright");
               }else{
-                ColorManager().changeBrightness(context,Brightness.dark);
+                ThemeHelper().changeBrightness(context,Brightness.dark);
                 FirebaseAnalytics().setUserProperty(name: "Theme",value: "Dark");
               }
               setState(() {

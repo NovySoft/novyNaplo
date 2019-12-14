@@ -14,7 +14,6 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:dynamic_theme/dynamic_theme.dart';
 
 SharedPreferences prefs;
 var apiResponse = dJson;
@@ -63,12 +62,7 @@ class _MarksTabState extends State<MarksTab> {
 
   Widget _listBuilder(BuildContext context, int index) {
     if (index >= itemsLength) return null;
-
-    // Show a slightly different color palette. Show poppy-ier colors on iOS
-    // due to lighter contrasting bars and tone it down on Android.
-    final color = defaultTargetPlatform == TargetPlatform.iOS
-        ? colors[index]
-        : colors[index].shade400;
+    final color = colors[index].shade400;
 
     return SafeArea(
       top: false,
@@ -105,18 +99,8 @@ class _MarksTabState extends State<MarksTab> {
     );
   }
 
-  // ===========================================================================
-  // Non-shared code below because:
-  // - Android and iOS have different scaffolds
-  // - There are differenc items in the app bar / nav bar
-  // - Android has a hamburger drawer, iOS has bottom tabs
-  // - The iOS nav bar is scrollable, Android is not
-  // - Pull-to-refresh works differently, and Android has a button to trigger it too
-  //
-  // And these are all design time choices that doesn't have a single 'right'
-  // answer.
-  // ===========================================================================
-  Widget _buildAndroid(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -188,33 +172,6 @@ class _MarksTabState extends State<MarksTab> {
           itemBuilder: _listBuilder,
         ),
       ),
-    );
-  }
-
-  Widget _buildIos(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        CupertinoSliverRefreshControl(
-          onRefresh: _refreshData,
-        ),
-        SliverSafeArea(
-          top: false,
-          sliver: SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(_listBuilder),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
     );
   }
 }

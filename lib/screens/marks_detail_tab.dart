@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/widgets.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
 
 /// Page shown when a card in the songs tab is tapped.
 ///
@@ -139,7 +138,7 @@ class SongDetailTab extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.yellow)),
+                                    color: Colors.yellow[800])),
                           );
                           break;
                         case 4:
@@ -191,7 +190,7 @@ class SongDetailTab extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.yellow)),
+                                  color: Colors.yellow[800])),
                         );
                       } else if (numberValue >= 40) {
                         return SizedBox(
@@ -250,7 +249,7 @@ class SongDetailTab extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.yellow)),
+                                    color: Colors.yellow[800])),
                           );
                           break;
                         case 4:
@@ -308,7 +307,7 @@ class SongDetailTab extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.yellow)),
+                                  color: Colors.yellow[800])),
                         );
                       } else if (numberValue >= 40) {
                         return SizedBox(

@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:cipher2/cipher2.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/config.dart' as config;
@@ -11,10 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/functions/getVersion.dart';
+import 'package:novynaplo/helpers/versionHelper.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:dynamic_theme/dynamic_theme.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -36,7 +35,7 @@ void onLoad(var context) async {
     String s = await getVersion();
     s = "New version: $s";
     newVersion = true;
-    _ackAlert(context, s);
+    AlertBox()._ackAlert(context, s);
   }
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String passKey = config.passKey;
@@ -57,7 +56,7 @@ void onLoad(var context) async {
       userController.text = decryptedUser;
       passController.text = decryptedPass;
     }on PlatformException catch(e){
-      _ackAlert(context, e.toString());
+      AlertBox()._ackAlert(context, e.toString());
     }
     if(newVersion == false){
       auth(context,"onLoad");
@@ -69,98 +68,32 @@ void auth(var context,caller) async {
   newVersion = false;
   Dialogs.showLoadingDialog(context, _keyLoader); //Not showing quickly enough
   await sleep1(); //So sleep for a second
-  var connectivityResult = await (Connectivity().checkConnectivity());
-  if (connectivityResult == ConnectivityResult.none) {
+  if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
     status = "No internet connection was detected";
   } else {
     String code = codeController.text;
     String user = userController.text;
     String pass = passController.text;
-    if (code == "" || user == "" || pass == "") {
-      status = "Hiányzó bemenet";
-    } else {
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'User-Agent': '$agent',
-      };
-
-      var data =
-          'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
-      try {
-        response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
-            headers: headers, body: data);
-        //print(response.body);
-        /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
-    var response = await http.get(url);*/
-        //print(response.body);
-        if (response.statusCode == 200) {
-          var parsedJson = json.decode(response.body);
-          //print('Response body: ${response.body}');
-          status = parsedJson['token_type'];
-          if (status == '' || status == null) {
-            if (parsedJson["error_description"] == '' ||
-                parsedJson["error_description"] == null) {
-              status = "Hibás felhasználónév/jelszó";
-            } else {
-              status = parsedJson["error_description"];
-            }
-          } else {
-            status = "OK";
-            token = parsedJson["access_token"];
-          }
-          //print(status);
-        } else if (response.statusCode == 401) {
-          var parsedJson = json.decode(response.body);
-          if (parsedJson["error_description"] == '' ||
-              parsedJson["error_description"] == null) {
-            status = "Hibás felhasználónév/jelszó";
-          } else {
-            status = parsedJson["error_description"];
-          }
-          //print('Response status: ${response.statusCode}');
-        } else {
-          status = 'post error: statusCode= ${response.statusCode}';
-          throw Exception('post error: statusCode= ${response.statusCode}');
-        }
-      } on SocketException {
-        status = "Rossz iskola azonosító";
-      }
-    }
+    status = await NetworkHelper().getToken(code, user, pass);
     if (status == "OK") {
-      var headers = {
-        'Authorization': 'Bearer $token',
-        'User-Agent': '$agent',
-      };
-
-      var res = await http.get(
-          'https://$code.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null',
-          headers: headers);
-      if (res.statusCode != 200)
-        throw Exception('get error: statusCode= ${res.statusCode}');
-      if (res.statusCode == 200) {
-        dJson = json.decode(res.body);
-        var eval = dJson["Evaluations"];
-        if (markCount != 0) markCount = 0;
-        if (avarageCount != 0) avarageCount = 0;
-        if (noticesCount != 0) noticesCount = 0;
-        eval.forEach((element) => markCount += 1);
-        avarageCount = countAvarages(dJson);
-        noticesCount = countNotices(dJson);
-        allParsedNotices = parseNotices(dJson);
-        //print(dJson);
-      }
+      await NetworkHelper().getStudentInfo(token, code);
     }
   }
-  Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+  try{
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+  } on NoSuchMethodError catch (e){
+    AlertBox()._ackAlert(context, e.toString());
+  }
+  
   if (status == "OK") {
     try {
       save(context,"auth");
     } on PlatformException catch (e) {
       print(e.message);
-      _ackAlert(context, e.message);
+      AlertBox()._ackAlert(context, e.message);
     }
   } else {
-    _ackAlert(context, status);
+    AlertBox()._ackAlert(context, status);
   }
   isPressed = false;
   if(caller == "_ackAlert"){
@@ -311,7 +244,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Future<void> _ackAlert(BuildContext context, String content) async{
+class AlertBox{
+  Future<void> _ackAlert(BuildContext context, String content) async{
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -335,4 +269,5 @@ Future<void> _ackAlert(BuildContext context, String content) async{
       );
     },
   );
+}
 }
