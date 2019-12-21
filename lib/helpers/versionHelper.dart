@@ -12,7 +12,7 @@ Future<String> getVersion() async {
   } else {
     try {
       var res = await http.get(
-          'https://raw.githubusercontent.com/Legolaszstudio/novynotifier/master/version.json');
+          'https://raw.githubusercontent.com/NovySoft/novyNaplo/master/version.json');
       if (res.statusCode != 200) return "false";
       var gitVersion = json.decode(res.body);
       gitVersion = gitVersion['version'];
