@@ -37,6 +37,7 @@ dependencies:
   dynamic_theme: any
   firebase_crashlytics: any
   firebase_analytics: any
+  charts_flutter: any
 
 flutter_icons:
   android: true

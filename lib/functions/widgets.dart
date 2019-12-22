@@ -354,3 +354,59 @@ class AnimatedNoticesCard extends StatelessWidget {
         });
   }
 }
+
+class AnimatedChartsCard extends StatelessWidget {
+  AnimatedChartsCard({
+    this.title,
+    this.color,
+    this.onPressed,
+    this.heroAnimation,
+  });
+
+  final String title;
+  final Color color;
+  final Animation<double> heroAnimation;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(context) {
+    return AnimatedBuilder(
+        animation: heroAnimation,
+        builder: (context, child) {
+          return PressableCard(
+            onPressed: heroAnimation.value == 0 ? onPressed : null,
+            color: color,
+            flattenAnimation: heroAnimation,
+            child: SizedBox(
+              height: 160,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 160,
+                      color: Colors.black12,
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 25.0),
+                            ),
+                          ]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}

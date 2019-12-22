@@ -1,7 +1,10 @@
 import 'dart:ffi';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
+import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -9,6 +12,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/screens/login_page.dart' as login;
+import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/functions/utils.dart';
 
 var agent = config.currAgent;
 var response;
@@ -75,7 +81,7 @@ class NetworkHelper {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
     };
-
+    
     var res = await http.get(
         'https://$code.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null',
         headers: headers);
@@ -91,6 +97,8 @@ class NetworkHelper {
       loginPage.avarageCount = countAvarages(loginPage.dJson);
       loginPage.noticesCount = countNotices(loginPage.dJson);
       noticesPage.allParsedNotices = parseNotices(loginPage.dJson);
+      chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
+      chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       //print(dJson);
     }
   }

@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:novynaplo/screens/charts_tab.dart';
 
 SharedPreferences prefs;
 var apiResponse = dJson;
@@ -134,6 +135,17 @@ class _MarksTabState extends State<MarksTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, NoticesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Grafikonok'),
+              leading: Icon(Icons.multiline_chart),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, ChartsTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

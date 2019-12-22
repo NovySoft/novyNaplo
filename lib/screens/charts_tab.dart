@@ -1,33 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/screens/charts_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
-var allParsedNotices;
-var colors = getRandomColors(noticesCount);
+var allParsedSubjects;
+var colors;
 
 
-class NoticesTab extends StatefulWidget {
-  static String tag = 'notices';
-  static const title = 'Feljegyzések';
+class ChartsTab extends StatefulWidget {
+  static String tag = 'charts';
+  static const title = 'Grafikonok';
 
   @override
-  _NoticesTabState createState() => _NoticesTabState();
+  _ChartsTabState createState() => _ChartsTabState();
 }
 
-class _NoticesTabState extends State<NoticesTab> {
+class _ChartsTabState extends State<ChartsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(NoticesTab.title),
+        title: Text(ChartsTab.title),
       ),
       drawer: Drawer(
         child: ListView(
@@ -63,18 +65,18 @@ class _NoticesTabState extends State<NoticesTab> {
               title: Text('Feljegyzések'),
               leading: Icon(Icons.layers),
               onTap: () {
-                Navigator.pop(context);
+                try {
+                  Navigator.pushNamed(context, NoticesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
               },
             ),
             ListTile(
               title: Text('Grafikonok'),
               leading: Icon(Icons.multiline_chart),
               onTap: () {
-                try {
-                  Navigator.pushNamed(context, ChartsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -92,9 +94,9 @@ class _NoticesTabState extends State<NoticesTab> {
         ),
       ),
       body: ListView.builder(
-        itemCount: noticesCount,
+        itemCount: allParsedSubjects.length,
         padding: EdgeInsets.symmetric(vertical: 12),
-        itemBuilder: _noticesBuilder,
+        itemBuilder: _chartsListBuilder,
       ),
     );
   }
@@ -102,38 +104,34 @@ class _NoticesTabState extends State<NoticesTab> {
   @override
   void initState() {
     super.initState();
-    onInit();
   }
 }
 
-Widget _noticesBuilder(BuildContext context, int index) {
+Widget _chartsListBuilder(BuildContext context, int index) {
   MaterialColor currColor = colors[index];
+  List<int> currSubjectMarks = [];
+  for(var n in allParsedSubjects[index]){
+    currSubjectMarks.add(int.parse(n.split(":")[1]));
+  }
   return SafeArea(
     top: false,
     bottom: false,
-    child: AnimatedNoticesCard(
-        title: allParsedNotices[index].title,
-        subTitle: allParsedNotices[index].teacher,
+    child: AnimatedChartsCard(
+        title: capitalize(allParsedSubjects[index][0].split(":")[0]),
         color: currColor,
         heroAnimation: AlwaysStoppedAnimation(0),
         onPressed: () {
         Navigator.of(context).push<void>(
           MaterialPageRoute(
-            builder: (context) => NoticeDetailTab(
+            builder: (context) => ChartsDetailTab(
               id: index,
-              title: allParsedNotices[index].title,
-              teacher: allParsedNotices[index].teacher,
-              content: allParsedNotices[index].content,
-              date: allParsedNotices[index].date,
-              subject: allParsedNotices[index].subject,
+              subject: capitalize(allParsedSubjects[index][0].split(":")[0]),
               color: currColor,
+              seriesList: createSubjectChart(currSubjectMarks),
+              animate: true,
             ),
           ),
         );
       })
   );
-}
-
-void onInit(){
-  //TODO write this function
 }

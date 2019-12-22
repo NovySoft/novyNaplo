@@ -29,6 +29,7 @@ bool isPressed = false;
 bool newVersion = false;
 bool hasPrefs = false;
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+String loadingText = "Kérlek várj...";
 
 void onLoad(var context) async {
   if (await getVersion() != "false") {

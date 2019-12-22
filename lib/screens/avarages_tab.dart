@@ -6,6 +6,7 @@ import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 
 var subjectName = [];
@@ -58,6 +59,17 @@ class AvaragesTab extends StatelessWidget {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, NoticesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Grafikonok'),
+              leading: Icon(Icons.multiline_chart),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, ChartsTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

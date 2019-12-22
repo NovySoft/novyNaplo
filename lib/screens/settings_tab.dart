@@ -6,6 +6,7 @@ import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/config.dart';
+import 'package:novynaplo/screens/charts_tab.dart';
 
 String dropDown;
 
@@ -64,6 +65,17 @@ class _SettingsTabState extends State<SettingsTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, NoticesTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Grafikonok'),
+              leading: Icon(Icons.multiline_chart),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, ChartsTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }
