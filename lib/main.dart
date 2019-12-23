@@ -4,7 +4,6 @@ import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-//import 'package:permission_handler/permission_handler.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';

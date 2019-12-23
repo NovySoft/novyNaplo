@@ -11,7 +11,7 @@ description: Novy&#x27;s Unofficial Ekreta Notification System
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.0.8
+version: 0.0.9
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
@@ -24,12 +24,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: any
   web_socket_channel: any
-  permission_handler: any
   http: any
   flutter_launcher_icons: any
   shared_preferences: any
   english_words: any
-  cipher2: any
+  encrypt: any
   connectivity: any
   package_info: any
   flutter_spinkit: any
@@ -38,6 +37,7 @@ dependencies:
   firebase_crashlytics: any
   firebase_analytics: any
   charts_flutter: any
+  firebase_performance: any
 
 flutter_icons:
   android: true

@@ -7,13 +7,14 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 * Jegyek megtekintése
 * Átlagok megtekintése
 * Feljegyzések megtekintése
+* Átlagok grafikonon való megtekintése
 
 **HAMAROSAN:**
 * ~~Feljegyzések~~
 * Órarend
 * Házifeladat
 * Hiányzások
-* Grafikonok
+* ~~Grafikonok~~
 * Értesítések
 * Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
 * Támogatók oldal - **Gáti Úr** közreműködésével

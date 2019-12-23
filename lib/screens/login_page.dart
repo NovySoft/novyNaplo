@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:cipher2/cipher2.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
@@ -28,8 +28,16 @@ bool gotToken;
 bool isPressed = false;
 bool newVersion = false;
 bool hasPrefs = false;
+bool isError = false;
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 String loadingText = "Kérlek várj...";
+
+var passKey = encrypt.Key.fromUtf8(config.passKey);
+var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+var userKey = encrypt.Key.fromUtf8(config.userKey);
+final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
 
 void onLoad(var context) async {
   if (await getVersion() != "false") {
@@ -39,24 +47,22 @@ void onLoad(var context) async {
     AlertBox()._ackAlert(context, s);
   }
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  String passKey = config.passKey;
-  String codeKey = config.codeKey;
-  String userKey = config.userKey;
-  String iv = config.iv;
   if (prefs.getString("code") != null) {
     FirebaseAnalytics().logEvent(name: "login");
     hasPrefs = true;
     try{
-      String decryptedCode = await Cipher2.decryptAesCbc128Padding7(
-        prefs.getString("code"), codeKey, iv);
-      String decryptedUser = await Cipher2.decryptAesCbc128Padding7(
-        prefs.getString("user"), userKey, iv);
-      String decryptedPass = await Cipher2.decryptAesCbc128Padding7(
-        prefs.getString("password"), passKey, iv);
+      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      String decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"),iv: iv);
+      String decryptedUser = userEncrypter.decrypt64(prefs.getString("user"),iv: iv);
+      String decryptedPass = userEncrypter.decrypt64(prefs.getString("password"),iv: iv);
       codeController.text = decryptedCode;
       userController.text = decryptedUser;
       passController.text = decryptedPass;
     }on PlatformException catch(e){
+      isError = true;
+      AlertBox()._ackAlert(context, e.toString());
+    }on NoSuchMethodError catch(e){
+      isError = true;
       AlertBox()._ackAlert(context, e.toString());
     }
     if(newVersion == false){
@@ -83,6 +89,7 @@ void auth(var context,caller) async {
   try{
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
   } on NoSuchMethodError catch (e){
+    isError = true;
     AlertBox()._ackAlert(context, e.toString());
   }
   
@@ -91,6 +98,7 @@ void auth(var context,caller) async {
       save(context,"auth");
     } on PlatformException catch (e) {
       print(e.message);
+      isError = true;
       AlertBox()._ackAlert(context, e.message);
     }
   } else {
@@ -103,38 +111,35 @@ void auth(var context,caller) async {
 }
 
 void save(var context,caller) async {
-  //Variables
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   //Inputs
-  String key = config.passKey;
-  String codeKey = config.codeKey;
-  String userKey = config.userKey;
   String code = codeController.text;
   String user = userController.text;
   String pass = passController.text;
   //Encryption
-  String iv = config.iv;
-  /*String nonce = await Cipher2
-      .generateNonce(); // generate a nonce for gcm mode we use later*/
+  final iv = encrypt.IV.fromLength(16);
+  prefs.setString("iv", iv.base64);
   try {
     String encryptedPass =
-        await Cipher2.encryptAesCbc128Padding7(pass, key, iv);
+        passEncrypter.encrypt(pass,iv: iv).base64;
     String encryptedUser =
-        await Cipher2.encryptAesCbc128Padding7(user, userKey, iv);
+        userEncrypter.encrypt(user,iv: iv).base64;
     String encryptedCode =
-        await Cipher2.encryptAesCbc128Padding7(code, codeKey, iv);
+        codeEncrypter.encrypt(code,iv: iv).base64;
     prefs.setString("password", encryptedPass);
     prefs.setString("code", encryptedCode);
     prefs.setString("user", encryptedUser);
     FirebaseAnalytics().setUserProperty(name: "School",value: code);
   } on PlatformException catch (e) {
-    print(e);
+    isError = true;
+    AlertBox()._ackAlert(context, e.message);
   }
 
   try {
     await Navigator.pushNamed(context, MarksTab.tag);
   } on PlatformException catch (e) {
-    print(e.message);
+    isError = true;
+    AlertBox()._ackAlert(context, e.message);
   }
   if(caller == "_ackAlert"){
     Navigator.of(context).pop();
@@ -257,7 +262,9 @@ class AlertBox{
           FlatButton(
             child: Text('Ok'),
             onPressed: () {
-              if(newVersion == true && hasPrefs){
+              if(isError){
+                Navigator.of(context).pop();
+              }else if(newVersion == true && hasPrefs){
                 auth(context,"_ackAlert");
               }else if (status == "OK") {
                 save(context,"_ackAlert");

@@ -6,14 +6,14 @@ import 'package:charts_flutter/flutter.dart' as charts;
 var axis = charts.NumericAxisSpec(
     renderSpec: charts.GridlineRendererSpec(
       labelStyle: charts.TextStyleSpec(
-          fontSize: 10, color: charts.MaterialPalette.white),
+          fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault,)
       //chnage white color as per your requirement.
     ));
 
 var axisTwo = charts.NumericAxisSpec(
     renderSpec: charts.SmallTickRendererSpec(
       labelStyle: charts.TextStyleSpec(
-          fontSize: 10, color: charts.MaterialPalette.white),
+          fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
       
       //chnage white color as per your requirement.
     ));
