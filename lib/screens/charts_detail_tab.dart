@@ -7,7 +7,6 @@ var axis = charts.NumericAxisSpec(
     renderSpec: charts.GridlineRendererSpec(
       labelStyle: charts.TextStyleSpec(
           fontSize: 10, color: charts.MaterialPalette.white),
-
       //chnage white color as per your requirement.
     ));
 
@@ -15,7 +14,7 @@ var axisTwo = charts.NumericAxisSpec(
     renderSpec: charts.SmallTickRendererSpec(
       labelStyle: charts.TextStyleSpec(
           fontSize: 10, color: charts.MaterialPalette.white),
-
+      
       //chnage white color as per your requirement.
     ));
 
@@ -62,20 +61,14 @@ class ChartsDetailTab extends StatelessWidget {
                   ),
                 )),
           ),
-          Expanded(
-            child:
-                /*charts.LineChart(seriesList,
-                animate: animate,
-                defaultRenderer:
-                    new charts.LineRendererConfig(includePoints: true)),
-                */
-                charts.LineChart(
+          new Expanded(
+            child: charts.LineChart(
               seriesList,
+              behaviors: [new charts.PanAndZoomBehavior()],
               animate: animate,
               domainAxis: axisTwo,
               primaryMeasureAxis: axis,
-              defaultRenderer:
-                  new charts.LineRendererConfig(includePoints: true),
+              defaultRenderer: new charts.LineRendererConfig(includePoints: true),
             ),
           )
         ]));

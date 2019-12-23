@@ -127,7 +127,7 @@ Widget _chartsListBuilder(BuildContext context, int index) {
               id: index,
               subject: capitalize(allParsedSubjects[index][0].split(":")[0]),
               color: currColor,
-              seriesList: createSubjectChart(currSubjectMarks),
+              seriesList: createSubjectChart(currSubjectMarks,index.toString()),
               animate: true,
             ),
           ),

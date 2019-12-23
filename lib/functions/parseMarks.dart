@@ -2,7 +2,7 @@ import 'dart:core';
 import 'utils.dart';
 import 'classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-var chartData = [new ChartPoints(0 , 0)];
+List<ChartPoints> chartData = [];
 var index,sum;
 var jegyek;
 var jegyArray = [];
@@ -74,14 +74,14 @@ List<String> parseSubjects(var input) {
   return subjectsArray;
 }
 
-List<charts.Series<ChartPoints, int>> createSubjectChart(List<int> input) {
-  chartData = [new ChartPoints(0 , 0)];
+List<charts.Series<ChartPoints, int>> createSubjectChart(List<int> input, String id) {
+  chartData = [];
   index = 1;
   sum = 0;
   input.forEach((n) => addChartPoints(n));
   return [
     new charts.Series<ChartPoints, int>(
-      id: 'SubjectChart',
+      id: id,
       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
       domainFn: (ChartPoints marks, _) => marks.count,
       measureFn: (ChartPoints marks, _) => marks.value,
@@ -99,7 +99,7 @@ class ChartPoints {
 
 void addChartPoints(var n){
   sum += n;
-  chartData.add(new ChartPoints(index,sum/index));
+  chartData.add(new ChartPoints(index-1,sum/index));
   index++;
 }
 
