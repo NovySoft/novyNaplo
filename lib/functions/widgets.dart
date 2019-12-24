@@ -161,6 +161,7 @@ class HeroAnimatingSongCard extends StatelessWidget {
           flattenAnimation: heroAnimation,
           child: SizedBox(
             height: 250,
+            width: double.infinity,
             child: Stack(
               alignment: Alignment.center,
               children: [

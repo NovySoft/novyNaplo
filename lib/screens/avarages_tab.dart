@@ -113,7 +113,7 @@ void setArrays(var n) {
   double avg = 0;
   subjectName.add(n.subject.toString());
   if (n.ownValue == 0) {
-    var jegyek = parseAll(dJson);
+    var jegyek = parseAllByDate(dJson);
     tmpArray = [];
     tmpI = 0;
     jegyek.forEach((a) => setNumberValue(a, n.subject));

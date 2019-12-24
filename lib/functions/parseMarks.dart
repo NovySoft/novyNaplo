@@ -2,16 +2,17 @@ import 'dart:core';
 import 'utils.dart';
 import 'classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+
 List<ChartPoints> chartData = [];
 var index,sum;
 var jegyek;
-var jegyArray = [];
+List<Evals> jegyArray = [];
 var atlagArray = [];
 var noticesArray = [];
 var stringEvals = [];
 var catIndex = 0;
 
-List<dynamic> parseAll(var input) {
+List<dynamic> parseAllByDate(var input) {
   jegyArray = [];
   try {
     jegyek = input["Evaluations"];
@@ -21,15 +22,36 @@ List<dynamic> parseAll(var input) {
   } on Error catch (e) {
     return [e];
   }
-  jegyArray.sort((a, b) => b.date.compareTo(a.date));
+  jegyArray.sort((a, b) => b.createDate.compareTo(a.createDate));
   return jegyArray;
 }
 
-List<String> parseMarks(var input) {
+List<dynamic> parseAllBySubject(var input){
+  jegyArray = [];
+  try {
+    jegyek = input["Evaluations"];
+    jegyArray = [];
+    id = 0;
+    jegyek.forEach((n) => jegyArray.add(setEvals(n)));
+  } on Error catch (e) {
+    return [e];
+  }
+  jegyArray = sortByDateAndSubject(jegyArray);
+  return jegyArray;
+}
+
+List<String> parseMarksByDate(var input) {
   List<String> evalArray = [];
-  var evalJegy = parseAll(input);
+  var evalJegy = parseAllByDate(input);
   if (evalJegy[0] == "Error") return ["Error"];
-  evalJegy.sort((a, b) => b.date.compareTo(a.date));
+  evalJegy.forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+  return evalArray;
+}
+
+List<String> parseMarksBySubject(var input) {
+  List<String> evalArray = [];
+  var evalJegy = parseAllBySubject(input);
+  if (evalJegy[0] == "Error") return ["Error"];
   evalJegy.forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
   return evalArray;
 }
@@ -108,7 +130,7 @@ void addChartPoints(var n){
 List<dynamic> categorizeSubjects(var input){
   catIndex = 0;
   var arrayIndex = 1;
-  var parsed = parseAll(input);
+  var parsed = parseAllByDate(input);
   var strings = [];
   var stringsTwo = [];
   var output = [[]];
@@ -138,4 +160,27 @@ List<dynamic> categorizeSubjects(var input){
     catIndex++;
   }
   return output;
+}
+
+List<dynamic> sortByDateAndSubject(List<dynamic> input){
+  input.sort((a, b) => a.subject.compareTo(b.subject));
+  int _currentIndex = 0;
+  String _beforeSubject = input[0].subject;
+  List<Evals> _output = [];
+  List<List<Evals>> _tempArray = [[]];
+  for(var n in input){
+    if(n.subject != _beforeSubject){
+      _currentIndex++;
+      _tempArray.add([]);
+      _beforeSubject = n.subject;
+    }
+    _tempArray[_currentIndex].add(n);
+  }
+  for(List<Evals> n in _tempArray){
+    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    for(var x in n){
+      _output.add(x);
+    }
+  }
+  return _output;
 }
