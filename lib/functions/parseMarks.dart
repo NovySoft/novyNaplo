@@ -21,6 +21,7 @@ List<dynamic> parseAll(var input) {
   } on Error catch (e) {
     return [e];
   }
+  jegyArray.sort((a, b) => b.date.compareTo(a.date));
   return jegyArray;
 }
 
@@ -28,6 +29,7 @@ List<String> parseMarks(var input) {
   List<String> evalArray = [];
   var evalJegy = parseAll(input);
   if (evalJegy[0] == "Error") return ["Error"];
+  evalJegy.sort((a, b) => b.date.compareTo(a.date));
   evalJegy.forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
   return evalArray;
 }
