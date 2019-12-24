@@ -29,14 +29,16 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 * **flutter_launcher_icons**: Az applikáció ikonjáért felel
 * **shared_preferences**: Az adatok tárolásáért felelős
 * **english_words**: Véleltlen angol szavakat generál
-* **cipher2**: Az adatok titkosításáért felel
+* **encrypt**: Az adatok titkosításáért felel
 * **connectivity**: Az internet elérhetőségét figyeli
 * **package_info**: Ennek a segítségével nézi meg az applikáció saját verzióját
 * **flutter_spinkit**: A kis homokóráért felelős
 * **diacritic**: A magyar betűk angol megfelelőit tárolja
 * **dynamic_theme**: A sötét és fehér téma közt vált
+* **charts_flutter**: A grafikonokat rajzolja ki
 * **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
 * **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
+* **firebase_performance**: Az internet lekérések sebbeségét figyeli
 
 
 # Betűtípus
