@@ -44,7 +44,7 @@ class SongDetailTab extends StatelessWidget {
         children: [
           Hero(
             tag: id,
-            child: HeroAnimatingSongCard(
+            child: HeroAnimatingMarksCard(
               song: name,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(1),
@@ -55,7 +55,7 @@ class SongDetailTab extends StatelessWidget {
             // It could either be specified here or in SongsTab.
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
-              return HeroAnimatingSongCard(
+              return HeroAnimatingMarksCard(
                 song: name,
                 color: color,
                 heroAnimation: animation,

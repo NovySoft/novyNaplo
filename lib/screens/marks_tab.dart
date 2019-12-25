@@ -75,7 +75,7 @@ class _MarksTabState extends State<MarksTab> {
         bottom: false,
         child: Hero(
           tag: index,
-          child: HeroAnimatingSongCard(
+          child: HeroAnimatingMarksCard(
               song: markNameByDate[index],
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
@@ -109,7 +109,7 @@ class _MarksTabState extends State<MarksTab> {
         if (defaultTargetPlatform == TargetPlatform.iOS) {
           return SizedBox(
             width: double.infinity,
-            height: 300,
+            height: 135,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +131,7 @@ class _MarksTabState extends State<MarksTab> {
                     bottom: false,
                     child: Hero(
                       tag: index,
-                      child: HeroAnimatingSongCard(
+                      child: HeroAnimatingSubjectsCard(
                           song: markNameBySubject[index],
                           color: color,
                           heroAnimation: AlwaysStoppedAnimation(0),
@@ -168,7 +168,7 @@ class _MarksTabState extends State<MarksTab> {
         } else {
           return SizedBox(
             width: double.infinity,
-            height: 300,
+            height: 135,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +191,7 @@ class _MarksTabState extends State<MarksTab> {
                     bottom: false,
                     child: Hero(
                       tag: index,
-                      child: HeroAnimatingSongCard(
+                      child: HeroAnimatingSubjectsCard(
                           song: markNameBySubject[index],
                           color: color,
                           heroAnimation: AlwaysStoppedAnimation(0),
@@ -227,37 +227,41 @@ class _MarksTabState extends State<MarksTab> {
           );
         }
       } else {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Hero(
-            tag: index,
-            child: HeroAnimatingSongCard(
-                song: markNameBySubject[index],
-                color: color,
-                heroAnimation: AlwaysStoppedAnimation(0),
-                onPressed: () {
-                  Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => SongDetailTab(
-                        mode: allParsedBySubject[index].mode,
-                        theme: allParsedBySubject[index].theme,
-                        weight: allParsedBySubject[index].weight,
-                        date: allParsedBySubject[index].date,
-                        createDate: allParsedBySubject[index].createDate,
-                        teacher: allParsedBySubject[index].teacher,
-                        subject: allParsedBySubject[index].subject,
-                        numberValue: allParsedBySubject[index].numberValue,
-                        value: allParsedBySubject[index].value,
-                        formName: allParsedBySubject[index].formName,
-                        form: allParsedBySubject[index].form,
-                        id: index,
-                        name: markNameBySubject[index],
-                        color: color,
+        return SizedBox(
+          width: double.infinity,
+          height: 106,
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Hero(
+              tag: index,
+              child: HeroAnimatingSubjectsCard(
+                  song: markNameBySubject[index],
+                  color: color,
+                  heroAnimation: AlwaysStoppedAnimation(0),
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      MaterialPageRoute(
+                        builder: (context) => SongDetailTab(
+                          mode: allParsedBySubject[index].mode,
+                          theme: allParsedBySubject[index].theme,
+                          weight: allParsedBySubject[index].weight,
+                          date: allParsedBySubject[index].date,
+                          createDate: allParsedBySubject[index].createDate,
+                          teacher: allParsedBySubject[index].teacher,
+                          subject: allParsedBySubject[index].subject,
+                          numberValue: allParsedBySubject[index].numberValue,
+                          value: allParsedBySubject[index].value,
+                          formName: allParsedBySubject[index].formName,
+                          form: allParsedBySubject[index].form,
+                          id: index,
+                          name: markNameBySubject[index],
+                          color: color,
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+            ),
           ),
         );
       }

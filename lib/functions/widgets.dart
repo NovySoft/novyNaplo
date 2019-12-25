@@ -133,8 +133,8 @@ class _PressableCardState extends State<PressableCard>
 ///
 /// This is an example of a custom widget that an app developer might create for
 /// use on both iOS and Android as part of their brand's unique design.
-class HeroAnimatingSongCard extends StatelessWidget {
-  HeroAnimatingSongCard(
+class HeroAnimatingMarksCard extends StatelessWidget {
+  HeroAnimatingMarksCard(
       {this.song, this.color, this.heroAnimation, this.onPressed});
 
   final String song;
@@ -409,5 +409,67 @@ class AnimatedChartsCard extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+
+class HeroAnimatingSubjectsCard extends StatelessWidget {
+  HeroAnimatingSubjectsCard(
+      {this.song, this.color, this.heroAnimation, this.onPressed});
+
+  final String song;
+  final Color color;
+  final Animation<double> heroAnimation;
+  final VoidCallback onPressed;
+
+  double get playButtonSize => 100 + 50 * heroAnimation.value;
+
+  @override
+  Widget build(context) {
+    // This is an inefficient usage of AnimatedBuilder since it's rebuilding
+    // the entire subtree instead of passing in a non-changing child and
+    // building a transition widget in between.
+    //
+    // Left simple in this demo because this card doesn't have any real inner
+    // content so this just rebuilds everything while animating.
+    return AnimatedBuilder(
+      animation: heroAnimation,
+      builder: (context, child) {
+        return PressableCard(
+          onPressed: heroAnimation.value == 0 ? onPressed : null,
+          color: color,
+          flattenAnimation: heroAnimation,
+          child: SizedBox(
+            height: 80,
+            width: double.infinity,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // The song title banner slides off in the hero animation.
+                Positioned(
+                  bottom: -80 * heroAnimation.value,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 80,
+                    color: Colors.black12,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      song,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 21,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

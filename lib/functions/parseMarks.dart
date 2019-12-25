@@ -177,7 +177,7 @@ List<dynamic> sortByDateAndSubject(List<dynamic> input){
     _tempArray[_currentIndex].add(n);
   }
   for(List<Evals> n in _tempArray){
-    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    n.sort((a, b) => b.createDate.compareTo(a.createDate));
     for(var x in n){
       _output.add(x);
     }

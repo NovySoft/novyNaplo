@@ -25,7 +25,7 @@ var agent = config.currAgent;
 var response, token, dJson;
 int markCount,avarageCount,noticesCount = 0;
 bool gotToken;
-bool isPressed = false;
+bool isPressed = true;
 bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
@@ -69,6 +69,7 @@ void onLoad(var context) async {
       auth(context,"onLoad");
     }
   }
+  isPressed = false;
 }
 
 void auth(var context,caller) async {
