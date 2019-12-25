@@ -46,9 +46,9 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 
 # Ismert hibák:
 * **Valami was called on null** feltehetőleg parseolási hiba
-* **A betöltő homokóra beragad/rootAncestor hibák** feltehetőleg a bejelentkezés gomb véletlen megnyomása és az automata bejelentkezés konfliktusa miatt van ez a hiba
+* ~~**A betöltő homokóra beragad/rootAncestor hibák** feltehetőleg a bejelentkezés gomb véletlen megnyomása és az automata bejelentkezés konfliktusa miatt van ez a hiba~~ Megjavítva: [c5d8f4d](https://github.com/NovySoft/novyNaplo/commit/c5d8f4dc18225fc848af0f70681b2d5ea9d88a0c)
 * **_initialButtons == kPrimaryButton is not true** feltehtőleg a bejelentkezés gomb és az automata bejelentkezés konfliktusa miatt van ez a hiba
-* **Multiple widgets used the same GlobalKey** a loginPage és a MarksTab ugyanazt a GlobalKeyt használja
+* ~~**Multiple widgets used the same GlobalKey** a loginPage és a MarksTab ugyanazt a GlobalKeyt használja~~ Megjavítva: [c5d8f4d](https://github.com/NovySoft/novyNaplo/commit/c5d8f4dc18225fc848af0f70681b2d5ea9d88a0c)
 * **A ticker was started twice.** jelenleg flutter framework hibának néz ki
 * **setCurrentScreen cannot be called with the same class and name** a feljegyzések menüpont hibája, egyértelműen az én kódomban van a hiba, csak még nem tudom, hogy hol
 
