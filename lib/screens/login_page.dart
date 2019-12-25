@@ -137,7 +137,7 @@ void save(var context,caller) async {
   }
 
   try {
-    await Navigator.pushNamed(context, MarksTab.tag);
+    Navigator.pushReplacementNamed(context, MarksTab.tag);
   } on PlatformException catch (e) {
     isError = true;
     AlertBox()._ackAlert(context, e.message);
