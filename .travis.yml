@@ -34,8 +34,7 @@ before_script:
 - unzip -qq sdk-tools-linux-4333796.zip -d android-sdk-tools
 - export PATH=`pwd`/android-sdk-tools/tools/bin:$PATH
 - mkdir -p $ANDROID_SDK_ROOT
-- yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository"
-  > /dev/null
+- yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository" > /dev/null
 - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
 - sdkmanager --list
 - git clone https://github.com/flutter/flutter.git -b stable --depth 1
@@ -44,11 +43,9 @@ script:
 - flutter doctor -v
 - flutter pub get
 - cd android
-- wget "$KEYPROPERTIES" 
-> /dev/null
+- wget "$KEYPROPERTIES" > /dev/null
 - cd app
-- wget "KEYJKS"
-> /dev/null
+- wget "KEYJKS" > /dev/null
 - cd /home/travis/build/NovySoft/novyNaplo
 - "./flutter/bin/flutter build apk"
 after_success:
