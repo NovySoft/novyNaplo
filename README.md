@@ -1,5 +1,6 @@
 # Novy Napló
 [![time tracker](https://wakatime.com/badge/github/NovySoft/novyNaplo.svg)](https://wakatime.com/badge/github/NovySoft/novyNaplo)
+[![Build Status](https://travis-ci.com/NovySoft/novyNaplo.svg?branch=master)](https://travis-ci.com/NovySoft/novyNaplo)
 
 Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense.
 

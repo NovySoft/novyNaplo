@@ -43,7 +43,13 @@ before_script:
 script:
 - flutter doctor -v
 - flutter pub get
-- pwd
+- cd android
+- wget "$KEYPROPERTIES" 
+> /dev/null
+- cd app
+- wget "KEYJKS"
+> /dev/null
+- cd /home/travis/build/NovySoft/novyNaplo
 - "./flutter/bin/flutter build apk"
 after_success:
 - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
