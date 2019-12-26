@@ -23,6 +23,7 @@ cache:
   - "$HOME/.pub-cache"
   - node_modules
 before_script:
+- sudo apt-get install tree
 - wget https://services.gradle.org/distributions/gradle-4.10.3-bin.zip
 - unzip -qq gradle-4.10.3-bin.zip
 - export GRADLE_HOME=`pwd`/gradle-4.10.3
@@ -43,9 +44,9 @@ script:
 - flutter doctor -v
 - flutter pub get
 - cd android
-- wget "$KEYPROPERTIES" > /dev/null
+- wget "$KEYPROPERTIES" -O key.properties > /dev/null
 - cd app
-- wget "$KEYJKS" > /dev/null
+- wget "$KEYJKS" -O key.jks > /dev/null
 - cd /home/travis/build/NovySoft/novyNaplo
 - tree
 - "./flutter/bin/flutter build apk"
