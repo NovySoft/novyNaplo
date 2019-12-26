@@ -9,6 +9,8 @@ env:
   - ANDROID_SDK_ROOT=/opt/android
   - secure: xitEwUvSNy537tr3DUq/lcuc6Vkw81Cg+7miECwm0tg0S8s5vn3ZMU0v9U9He+Y9r/S0asi3CNMO7x1pnPPAY9YXXsYn/DUULvPz99vMhamTZ905DMG5fAlyqxHwjZnp/CUYGibJdVvO1OkjXl5P4IR/uZxAGjSULhSEhbW0cXHtAvuJ5sVdAg3bIxu20pmzEK3vZzOoX/mfIRWk3mbIlPNv5IA/FGpnpUZLMl+nTD+mdmDpq0OEUgZLfLp7CYHzda9gBe6G/KH7gbjzS74Yb5E7UJlFhKjY7SwTPAnDfAAqDZm93JVlfI+pMFpWrtxA1xFQmWFIm3JDkeOIxeI09em0DqIRfgDRzch4LKc2O/BJg87lkevuuQ7yl4s2mBmXoaWi6kX+GTURyFnp+ogGIXmlyRrzLy+QgPcJFG6TA/wHOHhw4U7G8UnI5NTrz63lTALB3NL4nshIt+4tbcecyPWv3uP7nc5jILm7+lrC4c7GnwXJ0zQq6VkrchQ+Kl+a7NUUQpcXE/8b2i/nvUCqHBPKwHlwVhkhtIge+3e8LZmQkbRoUDxkkpALS1HSkePJMvbv/mznjy/hYuqxw2VoAPMZ+qSvqA674fYRA3GJp6l63d40vcjd1m2V3Y9Q87AdhBCJYnu/kRZQoj5E9h9ShYkD0zrKM2G71lCmmUgBCz8=
   - secure: DkJHr1zDkt5QMpzhw53utwryTucd73m6VnDnMvYhNma1272u4WdjODt4TNb4XS/340qoE2S59pP4IdACucbINmL5c2hqVvV43NMlE9aKSVUCkIdcDEAFxY561WfKBFqo18f/iPpMMW4pRj7INDs1usHkDbzLloG63elMWOygB2Bvig2lE6ztC+l7J7o+SKVrEFXRIjkfIwfx6dKCocQD6dZn+y5MDMsE7R+Z54VplZZNQ8nKZoIVSA38ZUmhBSqM47eKgZ+F/Z6KNx/C7GdSkIREze3+EeZ3zR9jxtUVH/m+iqWfLYlpiHt9gH3GlnqfUtR/LmQmt8UB0G5pmNrpo/YIDCY+HYMDgN4YJTLbPzWvfXosUtI6/FrAXxgUXuwhL8ASo3Xrvn+XgJBjKPKA0rGB7cy1i+iW2B5IweHbCBFpsYb+rEryt+X+h+GpK+DBJ0gVC4LcWQbJ6Q8aI0YA5Au8PudH9fhPKt2ahMKtT+xd75d7eFqnuHeSnnTN1Gy12Ix/ilxt7P+Tscgxvxl1NewWGKsBfsOdlbCDX3jFRG88fqOAmS46FT0fyzfzxtS2L8yKfI7mUZwilRJlyAfvO91S0IY8l5USIo0lF9nFHCk3mxzryp8O/HKomcHWTM063lDSl5DFkiIYAX89d5+3zhv6hssZkQR90sDjy3gmHAk=
+  - secure: sC/BXFIBBeOX5lZWzcMIr9z2MWhHxPr5qcthhm6iAvRpvqcAuPJYIv8AEWnROyD6ayMr/WTPWs+AtCktQcyoYiOntThcYCtCaytbp8wAyNPMQZIdoKHydPvNdGjdVWxTshl+CUYI86zglg/yA6FPWIVuxbnd6JA98sKSiKhvtnZdYfkKcPS1l4BNM5cSpcxGM3nOnd45L7/LPTEH8gYkGij5Ks/QM+WQQYIzYJIub+HteGc3/uFeUJ0lgx0gTMqpUh3mXXgd2of1zOXqpNQpc9qoXhne2h5yD1t3pPPEer98I2li0aenGl7tkCe8FDEQu5TsjsTzjxVhZaEn2o0hCZbgGin/fFqWEZOSn8MpkpgbTqywaAZVME1DhLVaINHy6NNZn4jTBAXyFLTzirwjFzwJTD2OEyqzLjoGvFdrHtg85T1AsAnJEf6ybpS4s0TYbAB+zNkIR9ER0Xzp0Pkk70DomXIe9+riVzWusy7t+CmwIkfHg13zM+2LOfe3wv2uiQEMCFz/uUK96R96h6/u8dBHzm9Jhm8L8GhUddtkhTE4n0KvvGRuGGF8rrLL4WQEEHYjHKzq1kW3UACCdaN8RUcA/aGknL4V+5+q6LlbIweDGHTU+sqamydQQs5rMRNCodpdTpfd/UnO8syzjXwtxl2Z5vYn3HBvXbcS4/i8UUA=
+  - secure: jwDAroFywHiCdq0x6LjwAGi6IECVX9zxjuVf4hBFKmJO/mhk+itkA+pAcdofKNJO5GI7hkqNG9Z8Ayy0hn+MnYo9ZzxjW5OdBoejsHdLvEkbEr2zfn03otPb5M0meqo0TZMbc1mtnnJnrQE/0prJPCLFNRHavRg7xlnoNxyBID8rpr5Yyc81Rc5Kk5+IYBoHlCbn40MSGZw/Jge2yLgbm3GYLXKC6PPPvRRGxoyx4arGqqpjURRex+tbxRsbZTgK4ry0jTISI5sl6Af91sHBmHHxteyU3HlvW/bB8XarO3I1dvFN3lqXg1SwlANGpgzQ0Tb+qSpjP2/jxR0LX2DxqdBeJbKnSc0G9SWCwJQbnmYdkR/h7OWmUwVXV8CIZDavy7A3EAXztvtLf1NLhfstKzOBq5yLyIm0lA9o1QJJrFJP4aQIMAoRYiet+p88ihhAQOsPy3Rma670D0rd97HGk1mEUUY8z3kq85wDPXwTWyQj46jheQMtNQgdOKldR5E4yeclq/AbBLfDiPPRynBU66VPjvLR2OvXPAVS5TF8Cznf2iA7vXu2C1ZqTxGtKHfEXtkr/0MEcyjJCT+TUopD+BgE6Add1Ey/KvZVCWy8kVGzWxuWl4kPUgYbu445ZX/A2ezZJ4lzE6KPl2eTYw9C03orYetR7qyG9+xVTxWCvUA=
 sudo: required
 addons:
   apt:
@@ -23,8 +25,7 @@ cache:
   - "$HOME/.pub-cache"
   - node_modules
 before_script:
-- sudo apt-get install tree
-- wget https://services.gradle.org/distributions/gradle-4.10.3-bin.zip
+- wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
 - unzip -qq gradle-4.10.3-bin.zip
 - export GRADLE_HOME=`pwd`/gradle-4.10.3
 - export PATH=$GRADLE_HOME/bin:$PATH
@@ -35,7 +36,8 @@ before_script:
 - unzip -qq sdk-tools-linux-4333796.zip -d android-sdk-tools
 - export PATH=`pwd`/android-sdk-tools/tools/bin:$PATH
 - mkdir -p $ANDROID_SDK_ROOT
-- yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository" > /dev/null
+- yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository"
+  > /dev/null
 - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
 - sdkmanager --list
 - git clone https://github.com/flutter/flutter.git -b stable --depth 1
@@ -48,10 +50,24 @@ script:
 - cd app
 - wget "$KEYJKS" -O key.jks > /dev/null
 - cd /home/travis/build/NovySoft/novyNaplo
-- tree
 - "./flutter/bin/flutter build apk"
 after_success:
 - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
 - export COMMITTER_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%cN"`
 - export COMMIT_SUBJECT=`git log -1 "$TRAVIS_COMMIT" --pretty="%s"`
 - export COMMIT_MESSAGE=`git log -1 "$TRAVIS_COMMIT" --pretty="%b"`
+before_deploy:
+- git config --local user.name "$GITUSER"
+- git config --local user.email "$GITEMAIL"
+- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+- git tag $TRAVIS_TAG
+deploy:
+  skip_cleanup: true
+  provider: releases
+  on:
+    tags: true
+  api_key:
+    secure: nrH0NT6zZPklkK20788D073/dWsG65/C3+wQRU039gOiIjoPHsbsWyvPww12CQ3d52GEOHfw9h36qTJXGtjaXQ0AvVboMD+gV9Kmtt5uPrnpuVhhKRAYV+jm56AEaLOJCDu8FoDBKheDsvZhObmwmk7l1fjSJyx7iEA0ztHrRrYNf8yGZ5Wtbz6FHn2s9b067Hk32W2TvROGBIBumtrlQLufM7XP6Up042X6DJfOVEcVgJ6peazSF/PT7WNZ/nymXav3xld94h0T787TSWB24/leCowlmiVLVCbYxWAX2TMgGZmhxHGwQK4nMAeHcVj/y2+hfBUjn1cGJXvMrK97N9cIhddOGFDl6QOp/rHzKg179ka/8jUnVhlONdfEd1+4HH4w0NhiSlguxtXa3nig/E0vvUNm+IS2faH9A6VReNtkyv7cWegE55ZZsCD8XZnq63jGb79WngyVzir7jlBpPQ2Lv8dwnja9/GHN4kSdLfOR0v2aklKFGWMy+TKqnW9GHclohl/n7lpURIlPDHjxP84BOEnnkgUv+N6Wzo8p9j77R7hm+m247muQkHU0xt2EybOF3faOfH+6HBxSJj30Dnff0W0JuqI3Oi8gZAn6EyLdRiAniUWmYReD7HjVRypdLaH8vkCrrfaqewIYOnrqPdtaSRxyZtJ5kfglbCrr4wI=
+  file: "/home/travis/build/NovySoft/novyNaplo/build/app/outputs/apk/release/app-release.apk"
+  on:
+    repo: NovySoft/novyNaplo
