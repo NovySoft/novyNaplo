@@ -26,8 +26,8 @@ cache:
   - node_modules
 before_script:
 - wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
-- unzip -qq gradle-4.10.3-bin.zip
-- export GRADLE_HOME=`pwd`/gradle-4.10.3
+- unzip -qq gradle-5.4.1-all.zip
+- export GRADLE_HOME=`pwd`/gradle-5.4.1
 - export PATH=$GRADLE_HOME/bin:$PATH
 - mkdir -p /home/travis/.android
 - echo 'count=0' > /home/travis/.android/repositories.cfg
