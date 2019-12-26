@@ -78,6 +78,9 @@ script:
   # (allows you to ensure, for each build, that Flutter is set up correctly.)
   - flutter doctor -v
 
+  # Run flutter get
+  - flutter pub get
+
   # Run Flutter build
   - ./flutter/bin/flutter build apk
 
