@@ -45,8 +45,9 @@ script:
 - cd android
 - wget "$KEYPROPERTIES" > /dev/null
 - cd app
-- wget "KEYJKS" > /dev/null
+- wget "$KEYJKS" > /dev/null
 - cd /home/travis/build/NovySoft/novyNaplo
+- tree
 - "./flutter/bin/flutter build apk"
 after_success:
 - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
