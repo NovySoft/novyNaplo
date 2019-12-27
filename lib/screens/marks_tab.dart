@@ -76,7 +76,7 @@ class _MarksTabState extends State<MarksTab> {
         child: Hero(
           tag: index,
           child: HeroAnimatingMarksCard(
-              song: markNameByDate[index],
+              title: markNameByDate[index],
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: () {
@@ -132,7 +132,7 @@ class _MarksTabState extends State<MarksTab> {
                     child: Hero(
                       tag: index,
                       child: HeroAnimatingSubjectsCard(
-                          song: markNameBySubject[index],
+                          title: markNameBySubject[index],
                           color: color,
                           heroAnimation: AlwaysStoppedAnimation(0),
                           onPressed: () {
@@ -192,7 +192,7 @@ class _MarksTabState extends State<MarksTab> {
                     child: Hero(
                       tag: index,
                       child: HeroAnimatingSubjectsCard(
-                          song: markNameBySubject[index],
+                          title: markNameBySubject[index],
                           color: color,
                           heroAnimation: AlwaysStoppedAnimation(0),
                           onPressed: () {
@@ -236,7 +236,7 @@ class _MarksTabState extends State<MarksTab> {
             child: Hero(
               tag: index,
               child: HeroAnimatingSubjectsCard(
-                  song: markNameBySubject[index],
+                  title: markNameBySubject[index],
                   color: color,
                   heroAnimation: AlwaysStoppedAnimation(0),
                   onPressed: () {

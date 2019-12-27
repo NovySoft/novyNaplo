@@ -49,6 +49,7 @@ script:
 - cd app
 - wget "$KEYJKS" -O key.jks &> /dev/null
 - cd /home/travis/build/NovySoft/novyNaplo
+-  "./flutter/bin/flutter test"
 - "./flutter/bin/flutter build apk"
 after_success:
 - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`

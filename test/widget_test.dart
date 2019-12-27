@@ -1,30 +1,91 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:test/test.dart' as test;
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/main.dart';
+import 'package:novynaplo/screens/charts_detail_tab.dart';
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  test.group('Widget tests', () {
+    testWidgets('HeroAnimatingSubjectsCard has a title',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(HeroAnimatingSubjectsCard(
+        title: 'Title',
+        color: Colors.red,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: () {
+          print("Pressed");
+        },
+      ));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Create the Finders.
+      final titleFinder = find.text('Title');
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      expect(titleFinder, findsOneWidget);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testWidgets('HeroAnimatingMarksCard has a title and icon',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(HeroAnimatingMarksCard(
+        title: 'Title',
+        color: Colors.red,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: () {
+          print("Pressed");
+        },
+      ));
+
+      // Create the Finders.
+      final titleFinder = find.text('Title');
+      final iconFinder = find.byIcon(Icons.create);
+      expect(titleFinder, findsOneWidget);
+      expect(iconFinder, findsOneWidget);
+    });
+
+    testWidgets('AnimatedNoticesCard has a title and a subtitle',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(AnimatedNoticesCard(
+        title: 'Title',
+        subTitle: 'Subtitle',
+        color: Colors.red,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: () {
+          print("Pressed");
+        },
+      ));
+
+      // Create the Finders.
+      final titleFinder = find.text('Title');
+      final subFinder = find.text('Subtitle');
+      expect(titleFinder, findsOneWidget);
+      expect(subFinder, findsOneWidget);
+    });
+
+    testWidgets('AnimatedChartsCard has a title',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(AnimatedChartsCard(
+        title: 'Title',
+        color: Colors.red,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: () {
+          print("Pressed");
+        },
+      ));
+
+      // Create the Finders.
+      final titleFinder = find.text('Title');
+      expect(titleFinder, findsOneWidget);
+    });
+
+    //TODO CHARTS WIDGET
   });
+}
+
+class ChartPoints {
+  var count;
+  var value;
+
+  ChartPoints(this.count, this.value);
 }

@@ -135,9 +135,9 @@ class _PressableCardState extends State<PressableCard>
 /// use on both iOS and Android as part of their brand's unique design.
 class HeroAnimatingMarksCard extends StatelessWidget {
   HeroAnimatingMarksCard(
-      {this.song, this.color, this.heroAnimation, this.onPressed});
+      {this.title, this.color, this.heroAnimation, this.onPressed});
 
-  final String song;
+  final String title;
   final Color color;
   final Animation<double> heroAnimation;
   final VoidCallback onPressed;
@@ -176,7 +176,8 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      song,
+                      title,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,
@@ -197,8 +198,12 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                       color: Colors.black12,
                     ),
                     alignment: Alignment.center,
-                    child: Icon(Icons.create,
-                        size: playButtonSize, color: Colors.black38),
+                    child: Icon(
+                      Icons.create,
+                      size: playButtonSize,
+                      color: Colors.black38,
+                      textDirection: TextDirection.ltr,
+                    ),
                   ),
                 ),
               ],
@@ -235,7 +240,10 @@ void showChoices(BuildContext context, List<String> choices) {
                   mainAxisSize: MainAxisSize.min,
                   children: List<Widget>.generate(choices.length, (index) {
                     return RadioListTile(
-                      title: Text(choices[index]),
+                      title: Text(
+                        choices[index],
+                        textDirection: TextDirection.ltr,
+                      ),
                       value: index,
                       groupValue: selectedRadio,
                       // ignore: avoid_types_on_closure_parameters
@@ -249,11 +257,17 @@ void showChoices(BuildContext context, List<String> choices) {
             ),
             actions: [
               FlatButton(
-                child: Text('OK'),
+                child: Text(
+                  'OK',
+                  textDirection: TextDirection.ltr,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               FlatButton(
-                child: Text('CANCEL'),
+                child: Text(
+                  'CANCEL',
+                  textDirection: TextDirection.ltr,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
@@ -276,6 +290,7 @@ void showChoices(BuildContext context, List<String> choices) {
                 return Center(
                   child: Text(
                     choices[index],
+                    textDirection: TextDirection.ltr,
                     style: TextStyle(
                       fontSize: 21,
                     ),
@@ -330,18 +345,21 @@ class AnimatedNoticesCard extends StatelessWidget {
                       color: Colors.black12,
                       alignment: Alignment.centerLeft,
                       child: Column(
+                          textDirection: TextDirection.ltr,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               title,
                               textAlign: TextAlign.left,
+                              textDirection: TextDirection.ltr,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 25.0),
                             ),
                             Text(
                               subTitle,
                               textAlign: TextAlign.left,
+                              textDirection: TextDirection.ltr,
                               style: TextStyle(
                                   color: Colors.black54, fontSize: 20.0),
                             ),
@@ -392,12 +410,14 @@ class AnimatedChartsCard extends StatelessWidget {
                       color: Colors.black12,
                       alignment: Alignment.centerLeft,
                       child: Column(
+                          textDirection: TextDirection.ltr,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               title,
                               textAlign: TextAlign.left,
+                              textDirection: TextDirection.ltr,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 25.0),
                             ),
@@ -412,12 +432,11 @@ class AnimatedChartsCard extends StatelessWidget {
   }
 }
 
-
 class HeroAnimatingSubjectsCard extends StatelessWidget {
   HeroAnimatingSubjectsCard(
-      {this.song, this.color, this.heroAnimation, this.onPressed});
+      {this.title, this.color, this.heroAnimation, this.onPressed});
 
-  final String song;
+  final String title;
   final Color color;
   final Animation<double> heroAnimation;
   final VoidCallback onPressed;
@@ -456,7 +475,8 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      song,
+                      title,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,

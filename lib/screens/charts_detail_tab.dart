@@ -3,23 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-var axis = charts.NumericAxisSpec(
-    renderSpec: charts.GridlineRendererSpec(
-      labelStyle: charts.TextStyleSpec(
-          fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault,)
-      //chnage white color as per your requirement.
-    ));
-
-var axisTwo = charts.NumericAxisSpec(
-    renderSpec: charts.SmallTickRendererSpec(
-      labelStyle: charts.TextStyleSpec(
-          fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
-      
-      //chnage white color as per your requirement.
-    ));
-
 class ChartsDetailTab extends StatelessWidget {
-  const ChartsDetailTab(
+  ChartsDetailTab(
       {this.subject,
       this.color,
       this.id,
@@ -33,6 +18,24 @@ class ChartsDetailTab extends StatelessWidget {
   final List<dynamic> avList;
   final List<charts.Series> seriesList;
   final bool animate;
+
+
+  final axis = charts.NumericAxisSpec(
+      renderSpec: charts.GridlineRendererSpec(
+          labelStyle: charts.TextStyleSpec(
+            fontSize: 10,
+            color: charts.MaterialPalette.blue.shadeDefault,
+          )
+      )
+  );
+
+  final axisTwo = charts.NumericAxisSpec(
+      renderSpec: charts.SmallTickRendererSpec(
+        labelStyle: charts.TextStyleSpec(
+          fontSize: 10, 
+          color: charts.MaterialPalette.blue.shadeDefault),
+      )
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +59,7 @@ class ChartsDetailTab extends StatelessWidget {
                 child: Center(
                   child: Text(
                     subject,
+                    textDirection: TextDirection.ltr,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 25),
                   ),
@@ -68,7 +72,8 @@ class ChartsDetailTab extends StatelessWidget {
               animate: animate,
               domainAxis: axisTwo,
               primaryMeasureAxis: axis,
-              defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+              defaultRenderer:
+                  new charts.LineRendererConfig(includePoints: true),
             ),
           )
         ]));
