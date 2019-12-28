@@ -3,6 +3,9 @@ const hookcord = require("hookcord");
 const Hook = new hookcord.Hook();
 //Get command line arguments
 var myArgs = process.argv.slice(2);
+var message = [];
+var commitMessage = "";
+var index = 0;
 console.log("myArgs: ", myArgs);
 //arg0: LoginID
 //arg1: Secret
@@ -10,6 +13,18 @@ console.log("myArgs: ", myArgs);
 //arg3: $TRAVIS_BUILD_WEB_URL/deploy url/error message
 //arg4: $TRAVIS_BUILD_NUMBER
 //arg5: Commit message
+
+myArgs.forEach(element => {
+  if(index>=5){
+    message.push(element);
+  }
+  index++;
+});
+
+message.forEach(element => {
+  let tempString = " " + element;
+  commitMessage += tempString;
+});
 
 //Get date
 var today = new Date();
@@ -126,7 +141,7 @@ if (myArgs[2] == "fail") {
           },
           {
             name: "Commit message:",
-            value: myArgs[5],
+            value: commitMessage,
           },
           {
             name: "URL + Build number:",
