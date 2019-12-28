@@ -27,11 +27,12 @@ cache:
   - node_modules
 install:
 - npm install
-- pwd
-- sudo apt-get install tree
-- tree
+- export COMMIT_MESSAGE="$(git log -1 "$TRAVIS_COMMIT" --pretty="%b")"
+- cd travis
 - node discord.js $DISCORDID $DISCORDSECRET starting $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $COMMIT_MESSAGE
+- cd /home/travis/build/NovySoft/novyNaplo
 before_script:
+- cd /home/travis/build/NovySoft/novyNaplo
 - wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
 - unzip -qq gradle-5.4.1-all.zip
 - export GRADLE_HOME=`pwd`/gradle-5.4.1
