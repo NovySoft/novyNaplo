@@ -130,7 +130,7 @@ if (myArgs[2] == "fail") {
           },
           {
             name: "URL + Build number:",
-            value: myArgs[3] + "(" + myArgs[4] + ")",
+            value: myArgs[3] + " (" + myArgs[4] + ")",
           },
           {
             name: "Date:",

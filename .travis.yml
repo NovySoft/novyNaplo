@@ -27,7 +27,7 @@ cache:
   - node_modules
 install:
 - npm install
-- export COMMIT_MESSAGE="$(git log -1 "$TRAVIS_COMMIT" --pretty="%b")"
+- export COMMIT_MESSAGE=`git log -1 "$TRAVIS_COMMIT" --pretty="%b"`
 - cd travis
 - node discord.js $DISCORDID $DISCORDSECRET starting $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $COMMIT_MESSAGE
 - cd /home/travis/build/NovySoft/novyNaplo
