@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ bool isPressed = true;
 bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
-final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+final GlobalKey<State> keyLoader = new GlobalKey<State>();
 String loadingText = "Kérlek várj...";
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -74,8 +75,14 @@ void onLoad(var context) async {
 
 void auth(var context,caller) async {
   newVersion = false;
-  Dialogs.showLoadingDialog(context, _keyLoader); //Not showing quickly enough
-  await sleep1(); //So sleep for a second
+  showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+              return MyDialog();
+        }
+   ); //Not showing quickly enough
+  await sleep1(); //So sleep for a second TODO FIX THIS
   if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
     status = "No internet connection was detected";
   } else {
@@ -88,7 +95,7 @@ void auth(var context,caller) async {
     }
   }
   try{
-    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+    Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
   } on NoSuchMethodError catch (e){
     isError = true;
     AlertBox()._ackAlert(context, e.toString());

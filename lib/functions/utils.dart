@@ -10,6 +10,8 @@ import 'dart:async';
 
 import 'package:diacritic/diacritic.dart';
 
+import 'package:novynaplo/screens/login_page.dart' as login;
+
 const _myListOfRandomColors = [
   Colors.red,
   Colors.blue,
@@ -82,37 +84,46 @@ String capitalizePair(WordPair pair) {
   return '${capitalize(pair.first)} ${capitalize(pair.second)}';
 }
 
-class Dialogs {
-  static Future<void> showLoadingDialog(
-      BuildContext context, GlobalKey key) async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return new WillPopScope(
-              onWillPop: () async => false,
-              child: SimpleDialog(
-                  key: key,
-                  backgroundColor: Colors.black54,
-                  children: <Widget>[
-                    Center(
-                      child: Column(children: [
-                        SpinKitPouringHourglass(color: Colors.lightBlueAccent),
-                        SizedBox(height: 10),
-                        Text(
-                          "Kérlek várj...",
-                          style: TextStyle(color: Colors.blueAccent),
-                        )
-                      ]),
-                    )
-                  ]));
-        });
+class MyDialog extends StatefulWidget {
+  @override
+  MyDialogState createState() => new MyDialogState();
+}
+
+class MyDialogState extends State<MyDialog> {
+  String loadingText = login.loadingText;
+  final GlobalKey<State> key = login.keyLoader;
+  @override
+  Widget build(BuildContext context) {
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: SimpleDialog(
+            key: key,
+            backgroundColor: Colors.black54,
+            children: <Widget>[
+              Center(
+                child: Column(children: [
+                  SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                  SizedBox(height: 10),
+                  Text(
+                    loadingText,
+                    style: TextStyle(color: Colors.blueAccent),
+                  )
+                ]),
+              )
+            ]));
+  }
+
+  callback(input) {
+    setState(() {
+      loadingText = input;
+    });
   }
 }
-Future sleep1() async{
+
+Future sleep1() async {
   return new Future.delayed(const Duration(seconds: 1), () => "1");
 }
 
-String toEnglish(var input){
+String toEnglish(var input) {
   return removeDiacritics(input.toString());
 }
