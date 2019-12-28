@@ -33,7 +33,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-android {
+androida {
     configurations.all {
         resolutionStrategy {
             resolutionStrategy.eachDependency { details ->

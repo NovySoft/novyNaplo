@@ -34,10 +34,5 @@ void main() {
       expect(login.loadingText.length, greaterThanOrEqualTo(1));
     });
 
-
-    test('This must fail', () {
-      expect(true, false);
-    });
-
   });
 }
