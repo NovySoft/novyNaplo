@@ -103,8 +103,8 @@ if (myArgs[2] == "fail") {
             value: "```SUCCESS!```"
           },
           {
-            name: "Deploy url:",
-            value: myArgs[3]
+            name: "New status:",
+            value: "```Starting deploy!```"
           },
           {
             name: "Date:",

@@ -61,10 +61,9 @@ script:
 - "./flutter/bin/flutter test"
 - "./flutter/bin/flutter build apk"
 after_success:
-- export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
-- export COMMITTER_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%cN"`
-- export COMMIT_SUBJECT=`git log -1 "$TRAVIS_COMMIT" --pretty="%s"`
-- export COMMIT_MESSAGE=`git log -1 "$TRAVIS_COMMIT" --pretty="%b"`
+- cd travis
+- node discord.js $DISCORDID $DISCORDSECRET success $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $GIT_MESSAGE
+- cd /home/travis/build/NovySoft/novyNaplo
 before_deploy:
 - git config --local user.name "$GITUSER"
 - git config --local user.email "$GITEMAIL"
