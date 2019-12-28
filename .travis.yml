@@ -27,8 +27,10 @@ cache:
   - node_modules
 install:
 - npm install
-- cd /home/travis/build/NovySoft/novyNaplo/.travis/
-- "1_before_script.sh"
+- pwd
+- sudo apt-get install tree
+- tree
+- node discord.js $DISCORDID $DISCORDSECRET starting $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $COMMIT_MESSAGE
 before_script:
 - wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
 - unzip -qq gradle-5.4.1-all.zip
