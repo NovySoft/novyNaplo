@@ -84,5 +84,9 @@ after_deploy:
 - cd travis
 - git fetch --tags
 - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-- node discord.js $DISCORDID $DISCORDSECRET deployed $TRAVIS_TAG $TRAVIS_BUILD_WEB_URL
+- node discord.js $DISCORDID $DISCORDSECRET deployed $TRAVIS_TAG $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER
+- cd /home/travis/build/NovySoft/novyNaplo
+after_failure:
+- cd travis
+- node discord.js $DISCORDID $DISCORDSECRET fail $STATUS_MESSAGE $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $TRAVIS_TEST_RESULT
 - cd /home/travis/build/NovySoft/novyNaplo

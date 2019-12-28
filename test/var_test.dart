@@ -35,5 +35,9 @@ void main() {
     });
 
 
+    test('This must fail', () {
+      expect(true, false);
+    });
+
   });
 }

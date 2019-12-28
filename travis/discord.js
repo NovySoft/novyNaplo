@@ -13,7 +13,8 @@ console.log("myArgs: ", myArgs);
 //arg2: fail/success/starting
 //arg3: $TRAVIS_BUILD_WEB_URL/deploy url/error message
 //arg4: $TRAVIS_BUILD_NUMBER/$TRAVIS_BUILD_WEB_URL
-//arg5: Commit message
+//arg5: Commit message/$TRAVIS_BUILD_NUMBER
+//arg6: $TRAVIS_TEST_RESULT
 
 if (myArgs[2] == "starting") {
   myArgs.forEach(element => {
@@ -68,8 +69,16 @@ if (myArgs[2] == "fail") {
             value: "```FAIL!```"
           },
           {
+            name: "Test result:",
+            value: myArgs[6]
+          },
+          {
             name: "Error:",
             value: myArgs[3]
+          },
+          {
+            name: "Travis url + build number:",
+            value: myArgs[4] + " (" + myArgs[5] + ")"
           },
           {
             name: "Date:",
@@ -107,6 +116,10 @@ if (myArgs[2] == "fail") {
           {
             name: "New status:",
             value: "```Starting deploy!```"
+          },
+          {
+            name: "URL + Build number:",
+            value: myArgs[3] + " (" + myArgs[4] + ")"
           },
           {
             name: "Date:",
@@ -188,8 +201,8 @@ if (myArgs[2] == "fail") {
             value: deployUrl
           },
           {
-            name: "Travis url:",
-            value: myArgs[4]
+            name: "Travis url + build number:",
+            value: myArgs[4] + " (" + myArgs[5] + ")"
           },
           {
             name: "Date:",
