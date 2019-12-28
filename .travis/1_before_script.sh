@@ -1,0 +1,6 @@
+#!/bin/bash
+TIMESTAMP=$(date -u +%FT%TZ)
+
+COMMIT_MESSAGE="$(git log -1 "$TRAVIS_COMMIT" --pretty="%b")"
+
+node discord.js $DISCORDID $DISCORDSECRET starting $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $COMMIT_MESSAGE

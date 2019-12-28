@@ -1,0 +1,27 @@
+{
+  "name": "novynaplo",
+  "version": "1.0.0",
+  "description": "Just my discord webhook for novyNaplo",
+  "main": "\\.travis\\utils\\discord.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "dependencies": {
+    "hookcord": "^2.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovySoft/novyNaplo.git"
+  },
+  "author": "Novotny Levente",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NovySoft/novyNaplo/issues"
+  },
+  "homepage": "https://github.com/NovySoft/novyNaplo#readme"
+}
