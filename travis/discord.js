@@ -69,7 +69,7 @@ if (myArgs[2] == "fail") {
             value: "```FAIL!```"
           },
           {
-            name: "Test result:",
+            name: "Test result (Error code):",
             value: myArgs[6]
           },
           {

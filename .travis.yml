@@ -88,5 +88,5 @@ after_deploy:
 - cd /home/travis/build/NovySoft/novyNaplo
 after_failure:
 - cd travis
-- node discord.js $DISCORDID $DISCORDSECRET fail $STATUS_MESSAGE $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $TRAVIS_TEST_RESULT
+- node discord.js $DISCORDID $DISCORDSECRET fail $TRAVIS_STATUS_MESSAGE $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $TRAVIS_TEST_RESULT
 - cd /home/travis/build/NovySoft/novyNaplo
