@@ -270,5 +270,5 @@ Hook.fire()
       })
       .catch((error) => {
         throw error;
-      }
+      })
   });
