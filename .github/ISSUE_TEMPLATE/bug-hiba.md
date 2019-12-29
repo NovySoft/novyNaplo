@@ -24,9 +24,9 @@ A hiba reprodukálásához való lépések:
 Ha lehetséges kérlek csatolj képeket a problémádról
 
 **Telefon:**
- - Eszköz: [pl. samsung galaxy j5 2017]
- - OS: [pl. android 9.0]
- - App Verzió [pl. v0.0.2]
+ - Eszköz: \[pl. samsung galaxy j5 2017]
+ - OS: \[pl. android 9.0]
+ - App Verzió: \[pl. v0.0.2]
 
 **Egyéb infó**
 Kiegészítő információ a hibádról

@@ -6,18 +6,18 @@ Javítás->hiba
 
 ## A változtatásról:
 
-- [ ] Bug fix (olyan, ami nem zavarja a jelenglegi funkciókat)
-- [ ] Új funkció (olyan, ami nem zavarja a jelenglegi funkciókat)
-- [ ] Olyan változtatás, ami a jelenlegi funkciókat zavarja/módosítja/felülírja
-- [ ] Ez a változtatás dokumentáció frissítést igényel
+- [  ] Bug fix (olyan, ami nem zavarja a jelenglegi funkciókat)
+- [  ] Új funkció (olyan, ami nem zavarja a jelenglegi funkciókat)
+- [  ] Olyan változtatás, ami a jelenlegi funkciókat zavarja/módosítja/felülírja
+- [  ] Ez a változtatás dokumentáció frissítést igényel
 
 # Hogyan volt tesztelve?
 
 Írd le milyen teszteket futtattál, bizonyos teszteknél adj meg pontos adatokat.
 
-- [ ] GitHub Actions/Workflow teszt
-- [ ] Android Studio teszt
-- [ ] Teljes flutter build/run
+- [  ] GitHub Actions/Workflow teszt
+- [  ] Android Studio teszt
+- [  ] Teljes flutter build/run
 
 **Teszt konfiguráció**:
 * Hardware: **PL: Emulator: Pixel 2 xl** vagy **PL: Samsung Galaxy J5 2017**

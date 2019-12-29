@@ -25,7 +25,7 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 *  Szuper egyedi és egyéni beállítások
 *  **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
 
-## Modulok:
+## Modulok
 *  **Flutter:** Evvel a frameworkkel készült az applikáció
 *  **cupertino_icons**: Az ios ikonokért felel
 *  **permission_handler**: A későbbiekben a jogokért fog felelni
@@ -44,10 +44,10 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 *  **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
 *  **firebase_performance**: Az internet lekérések sebbeségét figyeli
 
-## Betűtípus:
+## Betűtípus
 *  **Nunito**
 
-## Ismert hibák:
+## Ismert hibák
 *  **Valami was called on null** feltehetőleg parseolási hiba
 *  ~~**A betöltő homokóra beragad/rootAncestor hibák** feltehetőleg a bejelentkezés gomb véletlen megnyomása és az automata bejelentkezés konfliktusa miatt van ez a hiba~~ Megjavítva: [c5d8f4d](https://github.com/NovySoft/novyNaplo/commit/c5d8f4dc18225fc848af0f70681b2d5ea9d88a0c)
 *  **_initialButtons == kPrimaryButton is not true** feltehtőleg a bejelentkezés gomb és az automata bejelentkezés konfliktusa miatt van ez a hiba
