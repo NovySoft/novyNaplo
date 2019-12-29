@@ -29,7 +29,7 @@ install:
 - npm install
 - cd travis
 - export GIT_MESSAGE=`git log -1 --pretty=%B`
-- node discord.js $DISCORDID $DISCORDSECRET starting $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $GIT_MESSAGE
+- node discord.js starting
 - cd /home/travis/build/NovySoft/novyNaplo
 before_script:
 - cd /home/travis/build/NovySoft/novyNaplo
@@ -62,7 +62,7 @@ script:
 - "./flutter/bin/flutter build apk"
 after_success:
 - cd travis
-- node discord.js $DISCORDID $DISCORDSECRET success $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $GIT_MESSAGE
+- node discord.js success
 - cd /home/travis/build/NovySoft/novyNaplo
 before_deploy:
 - git config --local user.name "$GITUSER"
@@ -83,10 +83,9 @@ deploy:
 after_deploy:
 - cd travis
 - git fetch --tags
-- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-- node discord.js $DISCORDID $DISCORDSECRET deployed $TRAVIS_TAG $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER
+- node discord.js deployed
 - cd /home/travis/build/NovySoft/novyNaplo
 after_failure:
 - cd travis
-- node discord.js $DISCORDID $DISCORDSECRET fail FAIL $TRAVIS_BUILD_WEB_URL $TRAVIS_BUILD_NUMBER $TRAVIS_TEST_RESULT
+- node discord.js fail
 - cd /home/travis/build/NovySoft/novyNaplo

@@ -3,35 +3,20 @@ const hookcord = require("hookcord");
 const Hook = new hookcord.Hook();
 //Get command line arguments
 var myArgs = process.argv.slice(2);
-var message = [];
-var commitMessage = "";
-var deployUrl = "";
-var index = 0;
-console.log("myArgs: ", myArgs);
-//arg0: LoginID
-//arg1: Secret
-//arg2: fail/success/starting
-//arg3: $TRAVIS_BUILD_WEB_URL/deploy url/error message
-//arg4: $TRAVIS_BUILD_NUMBER/$TRAVIS_BUILD_WEB_URL
-//arg5: Commit message/$TRAVIS_BUILD_NUMBER
-//arg6: $TRAVIS_TEST_RESULT
+//arg0: fail/success/deployed/starting
+console.log("ENV variables:",process.env);
 
-if (myArgs[2] == "starting") {
-  myArgs.forEach(element => {
-    if (index >= 5) {
-      message.push(element);
-    }
-    index++;
-  });
+var loginID = process.env.DISCORDID;
+var secret = process.env.DISCORDSECRET;
+var travisBuildUrl = process.env.TRAVIS_BUILD_WEB_URL;
+var travisBuildNum = process.env.TRAVIS_BUILD_NUMBER;
+var gitMessage = process.env.GIT_MESSAGE;
+var travisBuildTag = process.env.TRAVIS_TAG;
+var travisBuildResult = process.env.TRAVIS_TEST_RESULT;
 
-  message.forEach(element => {
-    let tempString = " " + element;
-    commitMessage += tempString;
-  });
-}else if (myArgs[2] == "deployed") {
-  deployUrl = "https://github.com/NovySoft/novyNaplo/releases/tag/"
-  deployUrl += myArgs[3];
-}
+var deployUrl = "https://github.com/NovySoft/novyNaplo/releases/tag/";
+deployUrl += travisBuildTag;
+
 //Get date
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, "0");
@@ -40,10 +25,10 @@ var yyyy = today.getFullYear();
 today = yyyy + "/" + mm + "/" + dd;
 
 //Login with discord hook
-Hook.login(myArgs[0], myArgs[1]);
+Hook.login(loginID, secret);
 
 //Create payload
-if (myArgs[2] == "fail") {
+if (myArgs[0] == "fail") {
   Hook.setPayload({
     embeds: [
       {
@@ -70,15 +55,19 @@ if (myArgs[2] == "fail") {
           },
           {
             name: "Test result (Error code):",
-            value: myArgs[6]
+            value: travisBuildResult
           },
           {
             name: "Error:",
-            value: myArgs[3]
+            value: "```Unknown```"
           },
           {
             name: "Travis url + build number:",
-            value: myArgs[4] + " (" + myArgs[5] + ")"
+            value: travisBuildUrl + " (" + travisBuildNum + ")"
+          },
+          {
+            name: "Commit message:",
+            value: gitMessage
           },
           {
             name: "Date:",
@@ -88,7 +77,7 @@ if (myArgs[2] == "fail") {
       }
     ]
   });
-} else if (myArgs[2] == "success") {
+} else if (myArgs[0] == "success") {
   Hook.setPayload({
     embeds: [
       {
@@ -119,7 +108,11 @@ if (myArgs[2] == "fail") {
           },
           {
             name: "URL + Build number:",
-            value: myArgs[3] + " (" + myArgs[4] + ")"
+            value: travisBuildUrl + " (" + travisBuildNum + ")"
+          },
+          {
+            name: "Commit message:",
+            value: gitMessage
           },
           {
             name: "Date:",
@@ -129,7 +122,7 @@ if (myArgs[2] == "fail") {
       }
     ]
   });
-} else if (myArgs[2] == "starting") {
+} else if (myArgs[0] == "starting") {
   Hook.setPayload({
     embeds: [
       {
@@ -155,12 +148,12 @@ if (myArgs[2] == "fail") {
             value: "```Starting up!```"
           },
           {
-            name: "Commit message:",
-            value: commitMessage
+            name: "URL + Build number:",
+            value: travisBuildUrl + " (" + travisBuildNum + ")"
           },
           {
-            name: "URL + Build number:",
-            value: myArgs[3] + " (" + myArgs[4] + ")"
+            name: "Commit message:",
+            value: gitMessage
           },
           {
             name: "Date:",
@@ -170,7 +163,7 @@ if (myArgs[2] == "fail") {
       }
     ]
   });
-} else if (myArgs[2] == "deployed") {
+} else if (myArgs[0] == "deployed") {
   Hook.setPayload({
     embeds: [
       {
@@ -202,7 +195,11 @@ if (myArgs[2] == "fail") {
           },
           {
             name: "Travis url + build number:",
-            value: myArgs[4] + " (" + myArgs[5] + ")"
+            value: travisBuildUrl + " (" + travisBuildNum + ")"
+          },
+          {
+            name: "Commit message:",
+            value: gitMessage
           },
           {
             name: "Date:",
