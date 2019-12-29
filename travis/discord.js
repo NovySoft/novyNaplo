@@ -14,6 +14,7 @@ var gitBranch = process.env.TRAVIS_BRANCH;
 var travisBuildTag = process.env.TRAVIS_TAG;
 var travisBuildResult = process.env.TRAVIS_TEST_RESULT;
 var travisBuildTrigger = "```" + process.env.TRAVIS_EVENT_TYPE + "```";
+var travisBuildTrigger = null;
 
 if (gitBranch === "master") {
   var nextStatus = "```Starting deploy!```";
@@ -30,9 +31,6 @@ var dd = String(today.getDate()).padStart(2, "0");
 var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
 var yyyy = today.getFullYear();
 today = yyyy + "/" + mm + "/" + dd;
-
-//For testing
-today = null;
 
 //Login with discord hook
 Hook.login(loginID, secret);
