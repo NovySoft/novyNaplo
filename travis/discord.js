@@ -159,6 +159,10 @@ if (myArgs[0] === "fail") {
             value: travisBuildTrigger
           },
           {
+            name: "Branch:",
+            value: "```" + gitBranch + "```"
+          },
+          {
             name: "URL + Build number:",
             value: travisBuildUrl + " (" + travisBuildNum + ")"
           },
