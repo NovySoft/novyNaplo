@@ -4,15 +4,23 @@ const Hook = new hookcord.Hook();
 //Get command line arguments
 var myArgs = process.argv.slice(2);
 //arg0: fail/success/deployed/starting
-console.log("ENV variables:",process.env);
-
+//Get enviroment variables
 var loginID = process.env.DISCORDID;
 var secret = process.env.DISCORDSECRET;
 var travisBuildUrl = process.env.TRAVIS_BUILD_WEB_URL;
 var travisBuildNum = process.env.TRAVIS_BUILD_NUMBER;
 var gitMessage = process.env.GIT_MESSAGE;
+var gitBranch = process.env.TRAVIS_BRANCH;
 var travisBuildTag = process.env.TRAVIS_TAG;
 var travisBuildResult = process.env.TRAVIS_TEST_RESULT;
+var travisBuildTrigger = "```" + process.env.TRAVIS_EVENT_TYPE + "```";
+console.log(process.env);
+
+if (gitBranch === "master") {
+  var nextStatus = "```Starting deploy!```";
+} else {
+  var nextStatus = "```Finished, not going to deploy!```";
+}
 
 var deployUrl = "https://github.com/NovySoft/novyNaplo/releases/tag/";
 deployUrl += travisBuildTag;
@@ -28,7 +36,7 @@ today = yyyy + "/" + mm + "/" + dd;
 Hook.login(loginID, secret);
 
 //Create payload
-if (myArgs[0] == "fail") {
+if (myArgs[0] === "fail") {
   Hook.setPayload({
     embeds: [
       {
@@ -77,7 +85,7 @@ if (myArgs[0] == "fail") {
       }
     ]
   });
-} else if (myArgs[0] == "success") {
+} else if (myArgs[0] === "success") {
   Hook.setPayload({
     embeds: [
       {
@@ -104,7 +112,7 @@ if (myArgs[0] == "fail") {
           },
           {
             name: "New status:",
-            value: "```Starting deploy!```"
+            value: nextStatus
           },
           {
             name: "URL + Build number:",
@@ -122,7 +130,7 @@ if (myArgs[0] == "fail") {
       }
     ]
   });
-} else if (myArgs[0] == "starting") {
+} else if (myArgs[0] === "starting") {
   Hook.setPayload({
     embeds: [
       {
@@ -148,6 +156,10 @@ if (myArgs[0] == "fail") {
             value: "```Starting up!```"
           },
           {
+            name: "Triggered by:",
+            value: travisBuildTrigger
+          },
+          {
             name: "URL + Build number:",
             value: travisBuildUrl + " (" + travisBuildNum + ")"
           },
@@ -163,7 +175,7 @@ if (myArgs[0] == "fail") {
       }
     ]
   });
-} else if (myArgs[0] == "deployed") {
+} else if (myArgs[0] === "deployed") {
   Hook.setPayload({
     embeds: [
       {
@@ -199,7 +211,7 @@ if (myArgs[0] == "fail") {
           },
           {
             name: "Commit message:",
-            value: gitMessage
+            value: gitMessages
           },
           {
             name: "Date:",
@@ -212,9 +224,51 @@ if (myArgs[0] == "fail") {
 }
 
 Hook.fire()
-  .then(response_object => {
+  .then((response_object) => {
     console.log(response_object);
   })
-  .catch(error => {
-    throw error;
+  .catch((error) => {
+    Hook.setPayload({
+      embeds: [
+        {
+          color: 15158332,
+          title: "**Travis CI status:**",
+          footer: {
+            icon_url:
+              "https://cdn.discordapp.com/avatars/327050684044148736/71ae85a573690901d4fd07a0e452df19.png?size=128",
+            text: "Travis CI webhook by Novy"
+          },
+          thumbnail: {
+            url: "https://retohercules.com/images/cross-icon-png-14.png"
+            //https://bandat-nhontrach.com/images/green-check-mark-png-8.png
+          },
+          author: {
+            name: "Travis bot",
+            url: "https://travis-ci.com/NovySoft/novyNaplo",
+            icon_url: "https://travis-ci.com/images/logos/Tessa-pride.png"
+          },
+          fields: [
+            {
+              name: "Status:",
+              value: "```FAILED TO SEND DISCORD MESSAGE!```"
+            },
+            {
+              name: "Error:",
+              value: error
+            },
+            {
+              name: "Date:",
+              value: today
+            }
+          ]
+        }
+      ]
+    });
+    Hook.fire()
+      .then((response_object) => {
+        console.log(response_object);
+      })
+      .catch((error) => {
+        throw error;
+      }
   });
