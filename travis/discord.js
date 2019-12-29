@@ -255,7 +255,7 @@ Hook.fire()
             },
             {
               name: "Error:",
-              value: error
+              value: "Malformed input"
             },
             {
               name: "Date:",
