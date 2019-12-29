@@ -14,7 +14,6 @@ var gitBranch = process.env.TRAVIS_BRANCH;
 var travisBuildTag = process.env.TRAVIS_TAG;
 var travisBuildResult = process.env.TRAVIS_TEST_RESULT;
 var travisBuildTrigger = "```" + process.env.TRAVIS_EVENT_TYPE + "```";
-var travisBuildTrigger = null;
 
 if (gitBranch === "master") {
   var nextStatus = "```Starting deploy!```";
@@ -224,10 +223,10 @@ if (myArgs[0] === "fail") {
 }
 
 Hook.fire()
-  .then((response_object) => {
+  .then(response_object => {
     console.log(response_object);
   })
-  .catch((error) => {
+  .catch(error => {
     console.log(error);
     Hook.setPayload({
       embeds: [
@@ -266,10 +265,10 @@ Hook.fire()
       ]
     });
     Hook.fire()
-      .then((response_object) => {
+      .then(response_object => {
         console.log(response_object);
       })
-      .catch((error) => {
+      .catch(error => {
         throw error;
-      })
+      });
   });
