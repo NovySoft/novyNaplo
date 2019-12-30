@@ -12,6 +12,8 @@ import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:novynaplo/helpers/adHelper.dart';
 var allParsedSubjects;
 var colors;
 

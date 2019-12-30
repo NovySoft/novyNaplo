@@ -10,7 +10,6 @@ import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
-import 'package:novynaplo/functions/utils.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 

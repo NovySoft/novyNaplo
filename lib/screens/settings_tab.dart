@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/charts_tab.dart';

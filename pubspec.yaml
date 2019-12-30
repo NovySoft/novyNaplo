@@ -38,6 +38,7 @@ dependencies:
   firebase_analytics: any
   charts_flutter: any
   firebase_performance: any
+  firebase_admob: any
 
 flutter_icons:
   android: true

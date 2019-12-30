@@ -8,6 +8,8 @@ import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:novynaplo/helpers/adHelper.dart';
 
 var subjectName = [];
 var subjectAvg = [];

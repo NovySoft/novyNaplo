@@ -1,12 +1,12 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
-import 'login_page.dart';
+import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
-
-import 'marks_detail_tab.dart';
+import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
@@ -15,7 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
-
+import 'package:novynaplo/helpers/adHelper.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:novynaplo/config.dart' as config;
 SharedPreferences prefs;
 var apiResponse = dJson;
 var allParsedByDate, allParsedBySubject;
@@ -49,6 +51,13 @@ class _MarksTabState extends State<MarksTab> {
     _setData();
     super.initState();
   }
+  
+  @override
+  void dispose() {
+    smartSizeBanner.dispose();
+    super.dispose();
+  }
+
 
   void _setData() {
     colors = getRandomColors(itemsLength);
@@ -270,6 +279,11 @@ class _MarksTabState extends State<MarksTab> {
 
   @override
   Widget build(BuildContext context) {
+    smartSizeBanner.load();
+    /*smartSizeBanner.show(
+      anchorType: AnchorType.bottom,
+      anchorOffset: 50,
+    );*/
     return Scaffold(
       drawer: Drawer(
         child: ListView(

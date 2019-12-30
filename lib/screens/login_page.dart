@@ -1,20 +1,17 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/config.dart' as config;
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 TextEditingController codeController =
     TextEditingController(text: "klik035046001");
@@ -172,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     onLoad(context);
+    FirebaseAdMob.instance.initialize(appId: config.adMob);
   }
 
   @override

@@ -37,6 +37,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Novy Napló"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-6768960612393878~9133319992"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
