@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
@@ -16,7 +17,7 @@ import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/functions/utils.dart';
 
-var agent = config.currAgent;
+String agent = config.currAgent;
 var response;
 
 class NetworkHelper {
@@ -81,7 +82,7 @@ class NetworkHelper {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
     };
-    
+
     var res = await http.get(
         'https://$code.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null',
         headers: headers);
@@ -101,5 +102,32 @@ class NetworkHelper {
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       //print(dJson);
     }
+  }
+
+  Future<List<School>> getSchoolList() async {
+    List<School> tempList = [];
+    School tempSchool = new School();
+    var header = {
+      'User-Agent': '$agent',
+      'Content-Type': 'application/json',
+    };
+
+    var res = await http.get(
+        'https://www.e-szivacs.org/mirror/school-list.json',
+        headers: header);
+    if (res.statusCode != 200){
+      print(res.statusCode);
+    }
+    List<dynamic> responseJson = json.decode(utf8.decode(res.bodyBytes));
+    for(var n in responseJson){
+      tempSchool = new School();
+      tempSchool.id = n["InstituteId"];
+      tempSchool.name = n["Name"];
+      tempSchool.code = n["InstituteCode"];
+      tempSchool.url = n["Url"];
+      tempSchool.city = n["City"];
+      tempList.add(tempSchool);
+    }
+    return tempList;
   }
 }

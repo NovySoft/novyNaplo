@@ -11,17 +11,18 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
-TextEditingController codeController =
-    TextEditingController(text: "klik035046001");
+TextEditingController codeController = TextEditingController();
 TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
 var agent = config.currAgent;
-var response, token, dJson;
-int markCount,avarageCount,noticesCount = 0;
+var response, token, dJson, myDialogState;
+String selectedSchoolCode;
+int markCount, avarageCount, noticesCount = 0;
 bool gotToken;
 bool isPressed = true;
 bool newVersion = false;
@@ -29,6 +30,7 @@ bool hasPrefs = false;
 bool isError = false;
 final GlobalKey<State> keyLoader = new GlobalKey<State>();
 String loadingText = "Kérlek várj...";
+List<School> schoolList,searchList = [];
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -38,6 +40,12 @@ final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
 final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
 
 void onLoad(var context) async {
+  showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return MyDialog();
+      });
   if (await getVersion() != "false") {
     String s = await getVersion();
     s = "New version: $s";
@@ -48,37 +56,53 @@ void onLoad(var context) async {
   if (prefs.getString("code") != null) {
     FirebaseAnalytics().logEvent(name: "login");
     hasPrefs = true;
-    try{
+    try {
       final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      String decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"),iv: iv);
-      String decryptedUser = userEncrypter.decrypt64(prefs.getString("user"),iv: iv);
-      String decryptedPass = userEncrypter.decrypt64(prefs.getString("password"),iv: iv);
+      String decryptedCode =
+          codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+      String decryptedUser =
+          userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      String decryptedPass =
+          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       codeController.text = decryptedCode;
       userController.text = decryptedUser;
       passController.text = decryptedPass;
-    }on PlatformException catch(e){
+    } on PlatformException catch (e) {
       isError = true;
       AlertBox()._ackAlert(context, e.toString());
-    }on NoSuchMethodError catch(e){
+    } on NoSuchMethodError catch (e) {
       isError = true;
       AlertBox()._ackAlert(context, e.toString());
     }
-    if(newVersion == false){
-      auth(context,"onLoad");
+    if (newVersion == false) {
+      auth(context, "onLoad");
+    }
+  } else {
+    try {
+      schoolList = await NetworkHelper().getSchoolList();
+      for (var n in schoolList) {
+        searchList.add(n);
+      }
+      Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+    } on NoSuchMethodError catch (e) {
+      isError = true;
+      AlertBox()._ackAlert(context, e.toString());
     }
   }
   isPressed = false;
 }
 
-void auth(var context,caller) async {
+void auth(var context, caller) async {
   newVersion = false;
-  showDialog<void>(
+  if (caller != "onLoad") {
+    showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-              return MyDialog();
-        }
-   ); //Not showing quickly enough
+          return MyDialog();
+        });
+  }
+  //Not showing quickly enough
   await sleep1(); //So sleep for a second TODO FIX THIS
   if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
     status = "No internet connection was detected";
@@ -91,16 +115,16 @@ void auth(var context,caller) async {
       await NetworkHelper().getStudentInfo(token, code);
     }
   }
-  try{
+  try {
     Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-  } on NoSuchMethodError catch (e){
+  } on NoSuchMethodError catch (e) {
     isError = true;
     AlertBox()._ackAlert(context, e.toString());
   }
-  
+
   if (status == "OK") {
     try {
-      save(context,"auth");
+      save(context, "auth");
     } on PlatformException catch (e) {
       print(e.message);
       isError = true;
@@ -110,12 +134,12 @@ void auth(var context,caller) async {
     AlertBox()._ackAlert(context, status);
   }
   isPressed = false;
-  if(caller == "_ackAlert"){
+  if (caller == "_ackAlert") {
     Navigator.of(context).pop();
   }
 }
 
-void save(var context,caller) async {
+void save(var context, caller) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   //Inputs
   String code = codeController.text;
@@ -125,16 +149,13 @@ void save(var context,caller) async {
   final iv = encrypt.IV.fromLength(16);
   prefs.setString("iv", iv.base64);
   try {
-    String encryptedPass =
-        passEncrypter.encrypt(pass,iv: iv).base64;
-    String encryptedUser =
-        userEncrypter.encrypt(user,iv: iv).base64;
-    String encryptedCode =
-        codeEncrypter.encrypt(code,iv: iv).base64;
+    String encryptedPass = passEncrypter.encrypt(pass, iv: iv).base64;
+    String encryptedUser = userEncrypter.encrypt(user, iv: iv).base64;
+    String encryptedCode = codeEncrypter.encrypt(code, iv: iv).base64;
     prefs.setString("password", encryptedPass);
     prefs.setString("code", encryptedCode);
     prefs.setString("user", encryptedUser);
-    FirebaseAnalytics().setUserProperty(name: "School",value: code);
+    FirebaseAnalytics().setUserProperty(name: "School", value: code);
   } on PlatformException catch (e) {
     isError = true;
     AlertBox()._ackAlert(context, e.message);
@@ -146,7 +167,7 @@ void save(var context,caller) async {
     isError = true;
     AlertBox()._ackAlert(context, e.message);
   }
-  if(caller == "_ackAlert"){
+  if (caller == "_ackAlert") {
     Navigator.of(context).pop();
   }
   //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
@@ -165,11 +186,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  void showSelectDialog() {
+    setState(() {
+      showDialog<School>(
+          context: context,
+          builder: (BuildContext context) {
+            return new SchoolSelect();
+          }).then((dynamic) {
+        setState(() {});
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    onLoad(context);
     FirebaseAdMob.instance.initialize(appId: config.adMob);
+    WidgetsBinding.instance.addPostFrameCallback((_) => onLoad(context));
   }
 
   @override
@@ -190,26 +223,39 @@ class _LoginPageState extends State<LoginPage> {
 
     final code = TextFormField(
       controller: codeController,
+      onTap: () {
+        print("I'm here!!!");
+        showSelectDialog();
+      },
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Iskola azonosító',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
+      decoration: InputDecoration(
+        hintText: 'Iskola azonosító',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
     );
 
     final user = TextFormField(
       controller: userController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      decoration: InputDecoration(hintText: 'Felhasználónév',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
+      decoration: InputDecoration(
+        hintText: 'Felhasználónév',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
     );
 
     final password = TextFormField(
       controller: passController,
       autofocus: false,
       obscureText: true,
-      decoration: InputDecoration(hintText: 'Jelszó',contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),),
+      decoration: InputDecoration(
+        hintText: 'Jelszó',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
     );
 
     final loginButton = Padding(
@@ -221,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           if (!isPressed) {
             isPressed = true;
-            auth(context,"loginButton");
+            auth(context, "loginButton");
             FirebaseAnalytics().logEvent(name: "sign_up");
           }
           /*
@@ -256,32 +302,101 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class AlertBox{
-  Future<void> _ackAlert(BuildContext context, String content) async{
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Státusz'),
-        content: Text(content),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              if(isError){
-                Navigator.of(context).pop();
-              }else if(newVersion == true && hasPrefs){
-                auth(context,"_ackAlert");
-              }else if (status == "OK") {
-                save(context,"_ackAlert");
-              }else{
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-        ],
-      );
-    },
-  );
+class AlertBox {
+  Future<void> _ackAlert(BuildContext context, String content) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Státusz'),
+          content: Text(content),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                if (isError) {
+                  Navigator.of(context).pop();
+                } else if (newVersion == true && hasPrefs) {
+                  auth(context, "_ackAlert");
+                } else if (status == "OK") {
+                  save(context, "_ackAlert");
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+class SchoolSelect extends StatefulWidget {
+  @override
+  _SchoolSelectState createState() => new _SchoolSelectState();
+}
+
+class _SchoolSelectState extends State<SchoolSelect> {
+  Widget build(BuildContext context) {
+    return new SimpleDialog(
+      title: new Text("Iskola választó"),
+      contentPadding: const EdgeInsets.all(10.0),
+      children: <Widget>[
+        new Container(
+          child: new TextField(
+              maxLines: 1,
+              autofocus: true,
+              onChanged: (String search) {
+                setState(() {
+                  updateSearch(search);
+                });
+              }),
+          margin: new EdgeInsets.all(10.0),
+        ),
+        new Container(
+          child: searchList != null
+              ? new ListView.builder(
+                  itemBuilder: _itemBuilder,
+                  itemCount: searchList.length,
+                )
+              : new Container(),
+          width: 320.0,
+          height: 400.0,
+        )
+      ],
+    );
+  }
+
+  void updateSearch(String searchText) {
+    setState(() {
+      searchList = [];
+      for (var n in schoolList) {
+        searchList.add(n);
+      }
+    });
+
+    if (searchText != "") {
+      setState(() {
+        searchList.removeWhere((dynamic element) => !element.name
+            .toString()
+            .toLowerCase()
+            .contains(searchText.toLowerCase()));
+      });
+    }
+  }
+
+  Widget _itemBuilder(BuildContext context, int index) {
+    return ListTile(
+      title: new Text(searchList[index].name),
+      subtitle: new Text(searchList[index].code),
+      onTap: () {
+        setState(() {
+          selectedSchoolCode = searchList[index].code;
+          codeController.text = selectedSchoolCode;
+          Navigator.pop(context);
+        });
+      },
+    );
+  }
 }
