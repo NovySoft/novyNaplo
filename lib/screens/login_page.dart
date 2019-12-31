@@ -29,8 +29,11 @@ bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
 final GlobalKey<State> keyLoader = new GlobalKey<State>();
+final FocusNode _passFocus = FocusNode();
+final FocusNode _codeFocus = FocusNode();
+final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
-List<School> schoolList,searchList = [];
+List<School> schoolList, searchList = [];
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -222,10 +225,15 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final code = TextFormField(
+      focusNode: _codeFocus,
       controller: codeController,
       onTap: () {
         showSelectDialog();
       },
+      onChanged: (String input) {
+        showSelectDialog();
+      },
+      textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
       autofocus: false,
       decoration: InputDecoration(
@@ -233,9 +241,14 @@ class _LoginPageState extends State<LoginPage> {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
+      onFieldSubmitted: (String input) {
+        _codeFocus.unfocus();
+        FocusScope.of(context).requestFocus(_userFocus);
+      },
     );
 
     final user = TextFormField(
+      focusNode: _userFocus,
       controller: userController,
       keyboardType: TextInputType.text,
       autofocus: false,
@@ -244,9 +257,15 @@ class _LoginPageState extends State<LoginPage> {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (String input) {
+        _userFocus.unfocus();
+        FocusScope.of(context).requestFocus(_passFocus);
+      },
     );
 
     final password = TextFormField(
+      focusNode: _passFocus,
       controller: passController,
       autofocus: false,
       obscureText: true,
@@ -255,6 +274,15 @@ class _LoginPageState extends State<LoginPage> {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (term) {
+        _passFocus.unfocus();
+        if (!isPressed) {
+          isPressed = true;
+          auth(context, "loginButton");
+          FirebaseAnalytics().logEvent(name: "sign_up");
+        }
+      },
     );
 
     final loginButton = Padding(

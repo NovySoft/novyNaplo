@@ -196,6 +196,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
         FlatButton(
           child: Text('Igen'),
           onPressed: () async {
+            FirebaseAnalytics().logEvent(name: "sign_out");
             final SharedPreferences prefs =
                 await SharedPreferences.getInstance();
             prefs.clear();
