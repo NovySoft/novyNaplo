@@ -5,7 +5,7 @@
 [![HitCount](http://hits.dwyl.io/NovySoft/novyNaplo.svg)](http://hits.dwyl.io/NovySoft/novyNaplo)
 [![Discord](https://img.shields.io/discord/340112709628592139.svg)](http://discord.gg/rmjC4d4)
 
-Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense.
+Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
 
 **Jelenlegi funkciók:**
 *  Jegyek megtekintése
@@ -43,6 +43,7 @@ Novy Csodálatos pre-alpha verzióban lévő teljesen nem eredeti kréta kliense
 *  **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
 *  **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
 *  **firebase_performance**: Az internet lekérések sebbeségét figyeli
+*  **firebase_admob**: A későbbiekben reklámokat fog megjeleníteni, de **MÉG NINCS HASZNÁLATBAN**
 
 ## Betűtípus
 *  **Nunito**
