@@ -1,4 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:novynaplo/screens/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
@@ -97,7 +99,6 @@ class _SettingsTabState extends State<SettingsTab> {
   }
 }
 
-
 class SettingsBody extends StatefulWidget {
   SettingsBody({Key key}) : super(key: key);
 
@@ -115,41 +116,104 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 1,
+      itemCount: 2,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text("Téma:"),
-          trailing: DropdownButton<String>(
-            items: [
-              DropdownMenuItem(
-                value: "Sötét",
-                child: Text(
-                  "Sötét",
+        if (index == 0) {
+          return ListTile(
+            title: Text("Téma:"),
+            trailing: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: "Sötét",
+                  child: Text(
+                    "Sötét",
+                  ),
                 ),
-              ),
-              DropdownMenuItem(
-                value: "Világos",
-                child: Text(
-                  "Világos",
+                DropdownMenuItem(
+                  value: "Világos",
+                  child: Text(
+                    "Világos",
+                  ),
                 ),
+              ],
+              onChanged: (String value) {
+                if (value == "Világos") {
+                  ThemeHelper().changeBrightness(context, Brightness.light);
+                  FirebaseAnalytics()
+                      .setUserProperty(name: "Theme", value: "Bright");
+                } else {
+                  ThemeHelper().changeBrightness(context, Brightness.dark);
+                  FirebaseAnalytics()
+                      .setUserProperty(name: "Theme", value: "Dark");
+                }
+                setState(() {
+                  dropDown = value;
+                });
+              },
+              value: dropDown,
+            ),
+          );
+        } else {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
               ),
-            ],
-            onChanged: (String value) {
-              if(value == "Világos"){
-                ThemeHelper().changeBrightness(context,Brightness.light);
-                FirebaseAnalytics().setUserProperty(name: "Theme",value: "Bright");
-              }else{
-                ThemeHelper().changeBrightness(context,Brightness.dark);
-                FirebaseAnalytics().setUserProperty(name: "Theme",value: "Dark");
-              }
-              setState(() {
-                dropDown = value;
-              });
-            },
-            value: dropDown,
-          ),
-        );
+              onPressed: () {
+                showDialog<void>(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (_) {
+                      return LogOutDialog();
+                    });
+              },
+              padding: EdgeInsets.all(1),
+              child:
+                  Text('Kijelentkezés', style: TextStyle(color: Colors.black)),
+            ),
+          );
+        }
       },
+    );
+  }
+}
+
+class LogOutDialog extends StatefulWidget {
+  @override
+  _LogOutDialogState createState() => new _LogOutDialogState();
+}
+
+class _LogOutDialogState extends State<LogOutDialog> {
+  Widget build(BuildContext context) {
+    return new AlertDialog(
+      title: new Text("Kijelentkezés"),
+      content: Text(
+        "Biztosan ki szeretnél jelentkezni?",
+        textAlign: TextAlign.right,
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Igen'),
+          onPressed: () async {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+            prefs.clear();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => LoginPage()),
+              ModalRoute.withName('login-page'),
+            );
+          },
+        ),
+        FlatButton(
+          child: Text('Nem'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 }

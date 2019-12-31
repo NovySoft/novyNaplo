@@ -224,7 +224,6 @@ class _LoginPageState extends State<LoginPage> {
     final code = TextFormField(
       controller: codeController,
       onTap: () {
-        print("I'm here!!!");
         showSelectDialog();
       },
       keyboardType: TextInputType.text,
