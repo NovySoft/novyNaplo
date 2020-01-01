@@ -10,8 +10,25 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
+import 'dart:async';
 
 String dropDown;
+bool switchValue = true;
+String onOff = "ki";
+String turningOnOff =
+    "A reklámok kikapcsolásával elveszed a bevételem egy részét";
+const platform = const MethodChannel('consent.sdk/consent');
+Future<String> _setConsent(String input) async {
+  String result;
+  try {
+    result = await platform.invokeMethod('setConsent', <String, dynamic>{
+      'data': input,
+    });
+  } on PlatformException catch (e) {
+    result = "Failed: '${e.message}'.";
+  }
+  return result;
+}
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -75,7 +92,7 @@ class _SettingsTabState extends State<SettingsTab> {
             ),
             ListTile(
               title: Text('Grafikonok'),
-              leading: Icon(Icons.multiline_chart),
+              leading: Icon(Icons.timeline),
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);
@@ -116,7 +133,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 2,
+      itemCount: 3,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -153,14 +170,26 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: dropDown,
             ),
           );
-        } else {
+        } else if (index == 1) {
+          return ListTile(
+            title: Text("Reklámok"),
+            trailing: Switch(
+              onChanged: (bool isOn) {
+                setState(() {
+                  switchValue = isOn;
+                });
+              },
+              value: switchValue,
+            ),
+          );
+        } else if (index == 2) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
-              onPressed: () {
+              onPressed: () async {
                 showDialog<void>(
                     context: context,
                     barrierDismissible: true,
@@ -202,8 +231,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
             prefs.clear();
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LoginPage()),
+              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
               ModalRoute.withName('login-page'),
             );
           },
@@ -211,6 +239,35 @@ class _LogOutDialogState extends State<LogOutDialog> {
         FlatButton(
           child: Text('Nem'),
           onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class AdsDialog extends StatefulWidget {
+  @override
+  _AdsDialogState createState() => new _AdsDialogState();
+}
+
+class _AdsDialogState extends State<AdsDialog> {
+  Widget build(BuildContext context) {
+    return new AlertDialog(
+      title: new Text("Figyelmeztetés"),
+      content: SizedBox(
+        height: 100,
+        child: Text(
+          turningOnOff,
+          textAlign: TextAlign.right,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Ok'),
+          onPressed: () async {
             Navigator.of(context).pop();
           },
         ),

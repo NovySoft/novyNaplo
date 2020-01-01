@@ -69,7 +69,7 @@ class _NoticesTabState extends State<NoticesTab> {
             ),
             ListTile(
               title: Text('Grafikonok'),
-              leading: Icon(Icons.multiline_chart),
+              leading: Icon(Icons.timeline),
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);

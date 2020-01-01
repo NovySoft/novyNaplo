@@ -76,7 +76,7 @@ class _ChartsTabState extends State<ChartsTab> {
             ),
             ListTile(
               title: Text('Grafikonok'),
-              leading: Icon(Icons.multiline_chart),
+              leading: Icon(Icons.timeline),
               onTap: () {
                 Navigator.pop(context);
               },

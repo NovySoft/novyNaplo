@@ -11,6 +11,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
@@ -302,6 +303,17 @@ class _MarksTabState extends State<MarksTab> {
               },
             ),
             ListTile(
+              title: Text('Órarend'),
+              leading: Icon(Icons.today),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, TimetableTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
               title: Text('Átlagok'),
               leading: Icon(Icons.all_inclusive),
               onTap: () {
@@ -325,7 +337,7 @@ class _MarksTabState extends State<MarksTab> {
             ),
             ListTile(
               title: Text('Grafikonok'),
-              leading: Icon(Icons.multiline_chart),
+              leading: Icon(Icons.timeline),
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);

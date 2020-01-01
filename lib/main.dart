@@ -10,6 +10,8 @@ import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
+import 'package:flutter/services.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
     SettingsTab.tag: (context) => SettingsTab(),
     NoticesTab.tag: (context) => NoticesTab(),
     ChartsTab.tag: (context) => ChartsTab(),
+    TimetableTab.tag: (context) => TimetableTab(),
   };
 
   @override

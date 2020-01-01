@@ -466,7 +466,7 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
               children: [
                 // The song title banner slides off in the hero animation.
                 Positioned(
-                  bottom: -80 * heroAnimation.value,
+                  bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
@@ -477,6 +477,7 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
                     child: Text(
                       title,
                       textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,
