@@ -2,7 +2,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/config.dart' as config;
 
-BannerAd smartSizeBanner = BannerAd(
+BannerAd adBanner = BannerAd(
   adUnitId: config.bannerUnitId,
   size: AdSize.smartBanner,
   listener: (MobileAdEvent event) {

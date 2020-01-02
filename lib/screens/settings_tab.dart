@@ -1,5 +1,6 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,22 +14,7 @@ import 'package:novynaplo/screens/charts_tab.dart';
 import 'dart:async';
 
 String dropDown;
-bool switchValue = true;
-String onOff = "ki";
-String turningOnOff =
-    "A reklámok kikapcsolásával elveszed a bevételem egy részét";
-const platform = const MethodChannel('consent.sdk/consent');
-Future<String> _setConsent(String input) async {
-  String result;
-  try {
-    result = await platform.invokeMethod('setConsent', <String, dynamic>{
-      'data': input,
-    });
-  } on PlatformException catch (e) {
-    result = "Failed: '${e.message}'.";
-  }
-  return result;
-}
+bool switchValue = login.adsEnabled;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -124,6 +110,25 @@ class SettingsBody extends StatefulWidget {
 }
 
 class _SettingsBodyState extends State<SettingsBody> {
+  void _onLoad(var context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("ads") == null) {
+      prefs.setBool("ads", true);
+      showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return AdsDialog();
+          });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _onLoad(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).brightness == Brightness.light) {
@@ -174,10 +179,48 @@ class _SettingsBodyState extends State<SettingsBody> {
           return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
-              onChanged: (bool isOn) {
+              onChanged: (bool isOn) async{
+                final SharedPreferences prefs = await SharedPreferences.getInstance();
                 setState(() {
                   switchValue = isOn;
                 });
+                if (isOn) {
+                  FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
+                  prefs.setBool("ads", true);
+                  login.adsEnabled = true;
+                  showDialog<void>(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return AdsDialog();
+                      });
+                } else {
+                  FirebaseAnalytics()
+                      .setUserProperty(name: "Ads", value: "OFF");
+                  prefs.setBool("ads", false);
+                  login.adsEnabled = false;
+                  adBanner.dispose();
+                  showDialog<void>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (_) {
+                        return new AlertDialog(
+                          title: new Text("Reklámok"),
+                          content: Text(
+                            "A reklámok kikapcsolásához indítsd újra az applikációt",
+                            textAlign: TextAlign.left,
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('OK'),
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                }
               },
               value: switchValue,
             ),
@@ -219,7 +262,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
       title: new Text("Kijelentkezés"),
       content: Text(
         "Biztosan ki szeretnél jelentkezni?",
-        textAlign: TextAlign.right,
+        textAlign: TextAlign.left,
       ),
       actions: <Widget>[
         FlatButton(
@@ -231,7 +274,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
             prefs.clear();
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+              MaterialPageRoute(builder: (BuildContext context) => login.LoginPage()),
               ModalRoute.withName('login-page'),
             );
           },
@@ -255,19 +298,19 @@ class AdsDialog extends StatefulWidget {
 class _AdsDialogState extends State<AdsDialog> {
   Widget build(BuildContext context) {
     return new AlertDialog(
-      title: new Text("Figyelmeztetés"),
-      content: SizedBox(
-        height: 100,
-        child: Text(
-          turningOnOff,
-          textAlign: TextAlign.right,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+      title: new Text("Reklámok"),
+      content: Text(
+        "A reklámok bekapcsolásával elfogadod az Admob privacy policity és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel),és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
+        textAlign: TextAlign.left,
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text('Ok'),
+          child: Text('OK'),
           onPressed: () async {
+            adBanner.load();
+            adBanner.show(
+              anchorType: AnchorType.bottom,
+            );
             Navigator.of(context).pop();
           },
         ),

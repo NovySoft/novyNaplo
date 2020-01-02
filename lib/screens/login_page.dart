@@ -4,8 +4,9 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
-import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
@@ -28,12 +29,14 @@ bool isPressed = true;
 bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
+bool newUser = true;
 final GlobalKey<State> keyLoader = new GlobalKey<State>();
 final FocusNode _passFocus = FocusNode();
 final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
 List<School> schoolList, searchList = [];
+bool adsEnabled = true;
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -42,146 +45,6 @@ final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
 final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
 final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
 
-void onLoad(var context) async {
-  showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return MyDialog();
-      });
-  if (await getVersion() != "false") {
-    String s = await getVersion();
-    s = "New version: $s";
-    newVersion = true;
-    AlertBox()._ackAlert(context, s);
-  }
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.getString("code") != null) {
-    FirebaseAnalytics().logEvent(name: "login");
-    hasPrefs = true;
-    try {
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      String decryptedCode =
-          codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-      String decryptedUser =
-          userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-      String decryptedPass =
-          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      codeController.text = decryptedCode;
-      userController.text = decryptedUser;
-      passController.text = decryptedPass;
-    } on PlatformException catch (e) {
-      isError = true;
-      AlertBox()._ackAlert(context, e.toString());
-    } on NoSuchMethodError catch (e) {
-      isError = true;
-      AlertBox()._ackAlert(context, e.toString());
-    }
-    if (newVersion == false) {
-      auth(context, "onLoad");
-    }
-  } else {
-    try {
-      schoolList = await NetworkHelper().getSchoolList();
-      for (var n in schoolList) {
-        searchList.add(n);
-      }
-      Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-    } on NoSuchMethodError catch (e) {
-      isError = true;
-      AlertBox()._ackAlert(context, e.toString());
-    }
-  }
-  isPressed = false;
-}
-
-void auth(var context, caller) async {
-  newVersion = false;
-  if (caller != "onLoad") {
-    showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return MyDialog();
-        });
-  }
-  //Not showing quickly enough
-  await sleep1(); //So sleep for a second TODO FIX THIS
-  if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
-    status = "No internet connection was detected";
-  } else {
-    String code = codeController.text;
-    String user = userController.text;
-    String pass = passController.text;
-    status = await NetworkHelper().getToken(code, user, pass);
-    if (status == "OK") {
-      await NetworkHelper().getStudentInfo(token, code);
-    }
-  }
-  try {
-    Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-  } on NoSuchMethodError catch (e) {
-    isError = true;
-    AlertBox()._ackAlert(context, e.toString());
-  }
-
-  if (status == "OK") {
-    try {
-      save(context, "auth");
-    } on PlatformException catch (e) {
-      print(e.message);
-      isError = true;
-      AlertBox()._ackAlert(context, e.message);
-    }
-  } else {
-    AlertBox()._ackAlert(context, status);
-  }
-  isPressed = false;
-  if (caller == "_ackAlert") {
-    Navigator.of(context).pop();
-  }
-}
-
-void save(var context, caller) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //Inputs
-  String code = codeController.text;
-  String user = userController.text;
-  String pass = passController.text;
-  //Encryption
-  final iv = encrypt.IV.fromLength(16);
-  prefs.setString("iv", iv.base64);
-  try {
-    String encryptedPass = passEncrypter.encrypt(pass, iv: iv).base64;
-    String encryptedUser = userEncrypter.encrypt(user, iv: iv).base64;
-    String encryptedCode = codeEncrypter.encrypt(code, iv: iv).base64;
-    prefs.setString("password", encryptedPass);
-    prefs.setString("code", encryptedCode);
-    prefs.setString("user", encryptedUser);
-    FirebaseAnalytics().setUserProperty(name: "School", value: code);
-  } on PlatformException catch (e) {
-    isError = true;
-    AlertBox()._ackAlert(context, e.message);
-  }
-
-  try {
-    Navigator.pushReplacementNamed(context, MarksTab.tag);
-  } on PlatformException catch (e) {
-    isError = true;
-    AlertBox()._ackAlert(context, e.message);
-  }
-  if (caller == "_ackAlert") {
-    Navigator.of(context).pop();
-  }
-  //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
-  /*
-  print("prefs:");
-  print(prefs.getString("password"));
-  print(prefs.getString("code"));
-  print(prefs.getString("user"));
-  */
-}
-
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
   @override
@@ -189,6 +52,160 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  void onLoad(var context) async {
+    showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return MyDialog();
+        });
+    if (await getVersion() != "false") {
+      String s = await getVersion();
+      s = "New version: $s";
+      newVersion = true;
+      _ackAlert(context, s);
+    }
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("code") != null) {
+      if (prefs.getBool("ads")) {
+        adBanner.load();
+        adBanner.show(
+          anchorType: AnchorType.bottom,
+        );
+        adsEnabled = true;
+      } else {
+        adsEnabled = false;
+      }
+      newUser = false;
+      FirebaseAnalytics().logEvent(name: "login");
+      hasPrefs = true;
+      try {
+        final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+        String decryptedCode =
+            codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+        String decryptedUser =
+            userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+        String decryptedPass =
+            userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+        codeController.text = decryptedCode;
+        userController.text = decryptedUser;
+        passController.text = decryptedPass;
+      } on PlatformException catch (e) {
+        isError = true;
+        _ackAlert(context, e.toString());
+      } on NoSuchMethodError catch (e) {
+        isError = true;
+        _ackAlert(context, e.toString());
+      }
+      if (newVersion == false) {
+        auth(context, "onLoad");
+      }
+    } else {
+      try {
+        schoolList = await NetworkHelper().getSchoolList();
+        for (var n in schoolList) {
+          searchList.add(n);
+        }
+        Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+      } on NoSuchMethodError catch (e) {
+        isError = true;
+        _ackAlert(context, e.toString());
+      }
+    }
+    isPressed = false;
+  }
+
+  void auth(var context, caller) async {
+    newVersion = false;
+    if (caller != "onLoad") {
+      showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return MyDialog();
+          });
+    }
+    //Not showing quickly enough
+    await sleep1(); //So sleep for a second TODO FIX THIS
+    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+      status = "No internet connection was detected";
+    } else {
+      String code = codeController.text;
+      String user = userController.text;
+      String pass = passController.text;
+      status = await NetworkHelper().getToken(code, user, pass);
+      if (status == "OK") {
+        await NetworkHelper().getStudentInfo(token, code);
+      }
+    }
+    try {
+      Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+    } on NoSuchMethodError catch (e) {
+      isError = true;
+      _ackAlert(context, e.toString());
+    }
+
+    if (status == "OK") {
+      try {
+        save(context, "auth");
+      } on PlatformException catch (e) {
+        print(e.message);
+        isError = true;
+        _ackAlert(context, e.message);
+      }
+    } else {
+      _ackAlert(context, status);
+    }
+    isPressed = false;
+    if (caller == "_ackAlert") {
+      Navigator.of(context).pop();
+    }
+  }
+
+  void save(var context, caller) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Inputs
+    String code = codeController.text;
+    String user = userController.text;
+    String pass = passController.text;
+    //Encryption
+    final iv = encrypt.IV.fromLength(16);
+    prefs.setString("iv", iv.base64);
+    try {
+      String encryptedPass = passEncrypter.encrypt(pass, iv: iv).base64;
+      String encryptedUser = userEncrypter.encrypt(user, iv: iv).base64;
+      String encryptedCode = codeEncrypter.encrypt(code, iv: iv).base64;
+      prefs.setString("password", encryptedPass);
+      prefs.setString("code", encryptedCode);
+      prefs.setString("user", encryptedUser);
+      FirebaseAnalytics().setUserProperty(name: "School", value: code);
+    } on PlatformException catch (e) {
+      isError = true;
+      _ackAlert(context, e.message);
+    }
+
+    try {
+      if (newUser) {
+        Navigator.pushReplacementNamed(context, SettingsTab.tag);
+      } else {
+        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+      }
+    } on PlatformException catch (e) {
+      isError = true;
+      _ackAlert(context, e.message);
+    }
+    if (caller == "_ackAlert") {
+      Navigator.of(context).pop();
+    }
+    //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
+    /*
+  print("prefs:");
+  print(prefs.getString("password"));
+  print(prefs.getString("code"));
+  print(prefs.getString("user"));
+  */
+  }
+
   void showSelectDialog() {
     setState(() {
       showDialog<School>(
@@ -327,9 +344,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
 
-class AlertBox {
   Future<void> _ackAlert(BuildContext context, String content) async {
     return showDialog<void>(
       context: context,

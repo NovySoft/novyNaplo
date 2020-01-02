@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
@@ -19,12 +19,18 @@ import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/config.dart' as config;
-SharedPreferences prefs;
-var apiResponse = dJson;
+
+var apiResponse = login.dJson;
 var allParsedByDate, allParsedBySubject;
-int _selectedIndex = 0;
+int selectedIndex = 0;
 bool differenSubject = false;
 String subjectBefore = "";
+final List<Tab> markTabs = <Tab>[
+  Tab(text: 'Dátum szerint', icon: Icon(Icons.calendar_today)),
+  Tab(text: 'Tantárgy szerint', icon: Icon(Icons.view_list)),
+];
+String label, labelBefore;
+TabController _tabController;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -36,12 +42,14 @@ class MarksTab extends StatefulWidget {
   final Widget androidDrawer;
 
   @override
-  _MarksTabState createState() => _MarksTabState();
+  MarksTabState createState() => MarksTabState();
 }
 
-class _MarksTabState extends State<MarksTab> {
-  int itemsLength = markCount;
+class MarksTabState extends State<MarksTab>
+    with SingleTickerProviderStateMixin {
+  int itemsLength = login.markCount;
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
+  final _androidRefreshKeyTwo = GlobalKey<RefreshIndicatorState>();
 
   List<MaterialColor> colors;
   List<String> markNameByDate;
@@ -49,16 +57,16 @@ class _MarksTabState extends State<MarksTab> {
 
   @override
   void initState() {
+    _tabController = new TabController(vsync: this, length: 2);
     _setData();
     super.initState();
   }
-  
+
   @override
   void dispose() {
-    smartSizeBanner.dispose();
+    adBanner.dispose();
     super.dispose();
   }
-
 
   void _setData() {
     colors = getRandomColors(itemsLength);
@@ -76,215 +84,213 @@ class _MarksTabState extends State<MarksTab> {
     );
   }
 
-  Widget _listBuilder(BuildContext context, int index) {
+  Widget _dateListBuilder(BuildContext context, int index) {
     if (index >= itemsLength) return null;
     final color = colors[index].shade400;
-    if (_selectedIndex == 0) {
-      return SafeArea(
-        top: false,
-        bottom: false,
-        child: Hero(
-          tag: index,
-          child: HeroAnimatingMarksCard(
-              title: markNameByDate[index],
-              color: color,
-              heroAnimation: AlwaysStoppedAnimation(0),
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => SongDetailTab(
-                      mode: allParsedByDate[index].mode,
-                      theme: allParsedByDate[index].theme,
-                      weight: allParsedByDate[index].weight,
-                      date: allParsedByDate[index].date,
-                      createDate: allParsedByDate[index].createDate,
-                      teacher: allParsedByDate[index].teacher,
-                      subject: allParsedByDate[index].subject,
-                      numberValue: allParsedByDate[index].numberValue,
-                      value: allParsedByDate[index].value,
-                      formName: allParsedByDate[index].formName,
-                      form: allParsedByDate[index].form,
-                      id: index,
-                      name: markNameByDate[index],
-                      color: color,
-                    ),
-                  ),
-                );
-              }),
-        ),
-      );
-    } else {
-      if (subjectBefore != allParsedBySubject[index].subject) {
-        subjectBefore = allParsedBySubject[index].subject;
-        if (defaultTargetPlatform == TargetPlatform.iOS) {
-          return SizedBox(
-            width: double.infinity,
-            height: 135,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    capitalize(allParsedBySubject[index].subject) + ":",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 21,
-                    ),
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Hero(
+        tag: index,
+        child: HeroAnimatingMarksCard(
+            title: markNameByDate[index],
+            color: color,
+            heroAnimation: AlwaysStoppedAnimation(0),
+            onPressed: () {
+              Navigator.of(context).push<void>(
+                MaterialPageRoute(
+                  builder: (context) => SongDetailTab(
+                    mode: allParsedByDate[index].mode,
+                    theme: allParsedByDate[index].theme,
+                    weight: allParsedByDate[index].weight,
+                    date: allParsedByDate[index].date,
+                    createDate: allParsedByDate[index].createDate,
+                    teacher: allParsedByDate[index].teacher,
+                    subject: allParsedByDate[index].subject,
+                    numberValue: allParsedByDate[index].numberValue,
+                    value: allParsedByDate[index].value,
+                    formName: allParsedByDate[index].formName,
+                    form: allParsedByDate[index].form,
+                    id: index,
+                    name: markNameByDate[index],
+                    color: color,
                   ),
                 ),
-                Expanded(
-                  flex: 10,
-                  child: SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Hero(
-                      tag: index,
-                      child: HeroAnimatingSubjectsCard(
-                          title: markNameBySubject[index],
-                          color: color,
-                          heroAnimation: AlwaysStoppedAnimation(0),
-                          onPressed: () {
-                            Navigator.of(context).push<void>(
-                              MaterialPageRoute(
-                                builder: (context) => SongDetailTab(
-                                  mode: allParsedBySubject[index].mode,
-                                  theme: allParsedBySubject[index].theme,
-                                  weight: allParsedBySubject[index].weight,
-                                  date: allParsedBySubject[index].date,
-                                  createDate:
-                                      allParsedBySubject[index].createDate,
-                                  teacher: allParsedBySubject[index].teacher,
-                                  subject: allParsedBySubject[index].subject,
-                                  numberValue:
-                                      allParsedBySubject[index].numberValue,
-                                  value: allParsedBySubject[index].value,
-                                  formName: allParsedBySubject[index].formName,
-                                  form: allParsedBySubject[index].form,
-                                  id: index,
-                                  name: markNameBySubject[index],
-                                  color: color,
-                                ),
+              );
+            }),
+      ),
+    );
+  }
+
+  Widget _subjectListBuilder(BuildContext context, int index) {
+    if (index >= itemsLength) return null;
+    final color = colors[index].shade400;
+    if (subjectBefore != allParsedBySubject[index].subject) {
+      subjectBefore = allParsedBySubject[index].subject;
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        return SizedBox(
+          width: double.infinity,
+          height: 135,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: Text(
+                  capitalize(allParsedBySubject[index].subject) + ":",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 10,
+                child: SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: Hero(
+                    tag: index,
+                    child: HeroAnimatingSubjectsCard(
+                        title: markNameBySubject[index],
+                        color: color,
+                        heroAnimation: AlwaysStoppedAnimation(0),
+                        onPressed: () {
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (context) => SongDetailTab(
+                                mode: allParsedBySubject[index].mode,
+                                theme: allParsedBySubject[index].theme,
+                                weight: allParsedBySubject[index].weight,
+                                date: allParsedBySubject[index].date,
+                                createDate:
+                                    allParsedBySubject[index].createDate,
+                                teacher: allParsedBySubject[index].teacher,
+                                subject: allParsedBySubject[index].subject,
+                                numberValue:
+                                    allParsedBySubject[index].numberValue,
+                                value: allParsedBySubject[index].value,
+                                formName: allParsedBySubject[index].formName,
+                                form: allParsedBySubject[index].form,
+                                id: index,
+                                name: markNameBySubject[index],
+                                color: color,
                               ),
-                            );
-                          }),
-                    ),
+                            ),
+                          );
+                        }),
                   ),
                 ),
-              ],
-            ),
-          );
-        } else {
-          return SizedBox(
-            width: double.infinity,
-            height: 135,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 15.0),
-                  child: Text(
-                    capitalize(allParsedBySubject[index].subject) + ":",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 21,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 10,
-                  child: SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Hero(
-                      tag: index,
-                      child: HeroAnimatingSubjectsCard(
-                          title: markNameBySubject[index],
-                          color: color,
-                          heroAnimation: AlwaysStoppedAnimation(0),
-                          onPressed: () {
-                            Navigator.of(context).push<void>(
-                              MaterialPageRoute(
-                                builder: (context) => SongDetailTab(
-                                  mode: allParsedBySubject[index].mode,
-                                  theme: allParsedBySubject[index].theme,
-                                  weight: allParsedBySubject[index].weight,
-                                  date: allParsedBySubject[index].date,
-                                  createDate:
-                                      allParsedBySubject[index].createDate,
-                                  teacher: allParsedBySubject[index].teacher,
-                                  subject: allParsedBySubject[index].subject,
-                                  numberValue:
-                                      allParsedBySubject[index].numberValue,
-                                  value: allParsedBySubject[index].value,
-                                  formName: allParsedBySubject[index].formName,
-                                  form: allParsedBySubject[index].form,
-                                  id: index,
-                                  name: markNameBySubject[index],
-                                  color: color,
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
+              ),
+            ],
+          ),
+        );
       } else {
         return SizedBox(
           width: double.infinity,
-          height: 106,
-          child: SafeArea(
-            top: false,
-            bottom: false,
-            child: Hero(
-              tag: index,
-              child: HeroAnimatingSubjectsCard(
-                  title: markNameBySubject[index],
-                  color: color,
-                  heroAnimation: AlwaysStoppedAnimation(0),
-                  onPressed: () {
-                    Navigator.of(context).push<void>(
-                      MaterialPageRoute(
-                        builder: (context) => SongDetailTab(
-                          mode: allParsedBySubject[index].mode,
-                          theme: allParsedBySubject[index].theme,
-                          weight: allParsedBySubject[index].weight,
-                          date: allParsedBySubject[index].date,
-                          createDate: allParsedBySubject[index].createDate,
-                          teacher: allParsedBySubject[index].teacher,
-                          subject: allParsedBySubject[index].subject,
-                          numberValue: allParsedBySubject[index].numberValue,
-                          value: allParsedBySubject[index].value,
-                          formName: allParsedBySubject[index].formName,
-                          form: allParsedBySubject[index].form,
-                          id: index,
-                          name: markNameBySubject[index],
-                          color: color,
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+          height: 135,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Text(
+                  capitalize(allParsedBySubject[index].subject) + ":",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 10,
+                child: SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: Hero(
+                    tag: index,
+                    child: HeroAnimatingSubjectsCard(
+                        title: markNameBySubject[index],
+                        color: color,
+                        heroAnimation: AlwaysStoppedAnimation(0),
+                        onPressed: () {
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (context) => SongDetailTab(
+                                mode: allParsedBySubject[index].mode,
+                                theme: allParsedBySubject[index].theme,
+                                weight: allParsedBySubject[index].weight,
+                                date: allParsedBySubject[index].date,
+                                createDate:
+                                    allParsedBySubject[index].createDate,
+                                teacher: allParsedBySubject[index].teacher,
+                                subject: allParsedBySubject[index].subject,
+                                numberValue:
+                                    allParsedBySubject[index].numberValue,
+                                value: allParsedBySubject[index].value,
+                                formName: allParsedBySubject[index].formName,
+                                form: allParsedBySubject[index].form,
+                                id: index,
+                                name: markNameBySubject[index],
+                                color: color,
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        height: 106,
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Hero(
+            tag: index,
+            child: HeroAnimatingSubjectsCard(
+                title: markNameBySubject[index],
+                color: color,
+                heroAnimation: AlwaysStoppedAnimation(0),
+                onPressed: () {
+                  Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (context) => SongDetailTab(
+                        mode: allParsedBySubject[index].mode,
+                        theme: allParsedBySubject[index].theme,
+                        weight: allParsedBySubject[index].weight,
+                        date: allParsedBySubject[index].date,
+                        createDate: allParsedBySubject[index].createDate,
+                        teacher: allParsedBySubject[index].teacher,
+                        subject: allParsedBySubject[index].subject,
+                        numberValue: allParsedBySubject[index].numberValue,
+                        value: allParsedBySubject[index].value,
+                        formName: allParsedBySubject[index].formName,
+                        form: allParsedBySubject[index].form,
+                        id: index,
+                        name: markNameBySubject[index],
+                        color: color,
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    smartSizeBanner.load();
-    /*smartSizeBanner.show(
-      anchorType: AnchorType.bottom,
-      anchorOffset: 50,
-    );*/
+    adBanner.load();
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -302,7 +308,7 @@ class _MarksTabState extends State<MarksTab> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
+            /*ListTile(
               title: Text('Órarend'),
               leading: Icon(Icons.today),
               onTap: () {
@@ -312,7 +318,7 @@ class _MarksTabState extends State<MarksTab> {
                   print(e.message);
                 }
               },
-            ),
+            ),*/
             ListTile(
               title: Text('Átlagok'),
               leading: Icon(Icons.all_inclusive),
@@ -362,45 +368,36 @@ class _MarksTabState extends State<MarksTab> {
       ),
       appBar: AppBar(
         title: Text(MarksTab.title),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () async => await _androidRefreshKey.currentState.show(),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        key: _androidRefreshKey,
-        onRefresh: _refreshData,
-        child: ListView.builder(
-          itemCount: markCount,
-          padding: EdgeInsets.symmetric(vertical: 12),
-          itemBuilder: _listBuilder,
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: markTabs,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            title: Text('Dátum szerint'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_list),
-            title: Text('Tantárgy szerint'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+      body: TabBarView(
+          controller: _tabController,
+          children: markTabs.map((Tab tab) {
+            if (tab.text.toLowerCase() == "dátum szerint") {
+              return RefreshIndicator(
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: ListView.builder(
+                  itemCount: login.markCount,
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  itemBuilder: _dateListBuilder,
+                ),
+              );
+            }else{
+              return RefreshIndicator(
+                key: _androidRefreshKeyTwo,
+                onRefresh: _refreshData,
+                child: ListView.builder(
+                  itemCount: login.markCount,
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  itemBuilder: _subjectListBuilder,
+                ),
+              );
+            }
+          }).toList()),
     );
-  }
-
-  void _onItemTapped(int index) {
-    if (_selectedIndex != index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
   }
 }
