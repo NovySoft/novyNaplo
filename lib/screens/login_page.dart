@@ -235,9 +235,9 @@ class _LoginPageState extends State<LoginPage> {
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
-        backgroundColor: Colors.black,
-        radius: 55.0,
-        child: Image.asset('assets/home.png'),
+        backgroundColor: Colors.grey,
+        radius: 75.0,
+        child: Image.asset('assets/home.png')
       ),
     );
 
