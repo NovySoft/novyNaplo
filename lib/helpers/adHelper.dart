@@ -7,6 +7,7 @@ BannerAd adBanner = BannerAd(
   size: AdSize.smartBanner,
   listener: (MobileAdEvent event) {
     print("BannerAd event is $event");
-    FirebaseAnalytics().logEvent(name: event.toString());
+    if(event == MobileAdEvent.failedToLoad)
+      FirebaseAnalytics().logEvent(name: "AdFailed");
   },
 );

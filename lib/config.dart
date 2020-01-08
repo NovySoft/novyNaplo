@@ -18,3 +18,6 @@ String adMob = "ca-app-pub-6768960612393878~9133319992";
 String bannerUnitId = "ca-app-pub-6768960612393878/1881515932";
 //Test key: "ca-app-pub-3940256099942544/6300978111"
 //Production key: "ca-app-pub-6768960612393878/1881515932"
+
+//App version, so I can do special version names:
+String currentAppVersionCode = "v0.1.0.2";

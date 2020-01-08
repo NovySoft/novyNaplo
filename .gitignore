@@ -87,3 +87,4 @@ ios/Flutter/flutter_export_environment.sh
 #Testing files
 lib/empty.dart
 lib/empty.json
+lib/empty2.json

@@ -14,6 +14,7 @@ import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 TextEditingController codeController = TextEditingController();
 TextEditingController userController = TextEditingController();
@@ -59,11 +60,16 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) {
           return MyDialog();
         });
-    if (await getVersion() != "false") {
-      String s = await getVersion();
-      s = "New version: $s";
-      newVersion = true;
-      _ackAlert(context, s);
+    NewVersion newVerDetails = await getVersion();
+    if (newVerDetails.returnedAnything) {
+      if (config.currentAppVersionCode != newVerDetails.versionCode) {
+        await _newVersionAlert(
+            context,
+            newVerDetails.versionCode,
+            newVerDetails.releaseNotes,
+            newVerDetails.isBreaking,
+            newVerDetails.releaseLink);
+      }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString("code") != null) {
@@ -235,10 +241,9 @@ class _LoginPageState extends State<LoginPage> {
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
-        backgroundColor: Colors.grey,
-        radius: 75.0,
-        child: Image.asset('assets/home.png')
-      ),
+          backgroundColor: Colors.grey,
+          radius: 75.0,
+          child: Image.asset('assets/home.png')),
     );
 
     final code = TextFormField(
@@ -371,6 +376,47 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+  }
+
+  Future<void> _newVersionAlert(BuildContext context, String version,
+      String notes, bool isBreaking, String link) async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Új verzió: $version"),
+            content: SingleChildScrollView(
+              child: Column(
+                  children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  if (newVersion == true && hasPrefs) {
+                    auth(context, "_ackAlert");
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+              FlatButton(
+                child: Text('Frissítés'),
+                onPressed: () async {
+                  if (await canLaunch(link)) {
+                    await launch(link);
+                  } else {
+                    FirebaseAnalytics().logEvent(name: "LinkFail");
+                    throw 'Could not launch $link';
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
   }
 }
 

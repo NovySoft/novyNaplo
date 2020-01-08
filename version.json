@@ -1,3 +1,6 @@
 {
-    "version": "0.1.0"
+    "version": "v0.1.0.2",
+    "isBreaking": false,
+    "releaseNotes": "Új verzió frissítési módszer",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/v0.1.0.2"
 }

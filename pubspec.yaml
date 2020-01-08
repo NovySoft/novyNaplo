@@ -39,11 +39,19 @@ dependencies:
   charts_flutter: any
   firebase_performance: any
   firebase_admob: any
+  intl_translation: any
+  flutter_cupertino_localizations: any
+  url_launcher: any
 
 flutter_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
+
+flutter_localizations:
+  sdk: flutter
+
+
 
 
 dev_dependencies:
