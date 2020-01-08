@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "isBreaking": false,
+    "isBreaking": true,
     "releaseNotes": "Applikáció ikon csere",
     "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.0.1"
 }
