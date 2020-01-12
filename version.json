@@ -1,6 +1,6 @@
 {
-    "version": "teszt",
+    "version": "v0.1.0.2",
     "isBreaking": false,
-    "releaseNotes": "Ne nyomd meg a frissítés gombot",
-    "releaseLink": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    "releaseNotes": "Új verzió frissítési módszer",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/v0.1.0.2"
 }
