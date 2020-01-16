@@ -11,6 +11,7 @@ import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
 var allParsedNotices;
 var colors = getRandomColors(noticesCount);
 
@@ -44,6 +45,17 @@ class _NoticesTabState extends State<NoticesTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, MarksTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Órarend'),
+              leading: Icon(Icons.today),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, TimetableTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }
@@ -112,7 +124,7 @@ Widget _noticesBuilder(BuildContext context, int index) {
   return SafeArea(
     top: false,
     bottom: false,
-    child: AnimatedNoticesCard(
+    child: AnimatedTitleSubtitleCard(
         title: allParsedNotices[index].title,
         subTitle: allParsedNotices[index].teacher,
         color: currColor,

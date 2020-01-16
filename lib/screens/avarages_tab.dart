@@ -10,6 +10,7 @@ import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
 
 var subjectName = [];
 var subjectAvg = [];
@@ -43,6 +44,17 @@ class AvaragesTab extends StatelessWidget {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, MarksTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Órarend'),
+              leading: Icon(Icons.today),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, TimetableTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }
@@ -156,14 +168,18 @@ Widget avaragesList(BuildContext context) {
   parseAvarages(dJson).forEach((n) => setArrays(n));
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
-    itemCount: avarageCount,
+    itemCount: avarageCount + 1,
     itemBuilder: (context, index) {
-      return ListTile(
-        title:
-            Text(subjectName[index], style: TextStyle(color: avgColor[index])),
-        trailing:
-            Text(subjectAvg[index], style: TextStyle(color: avgColor[index])),
-      );
+      if (index >= avarageCount) {
+        return ListTile();
+      } else {
+        return ListTile(
+          title: Text(subjectName[index],
+              style: TextStyle(color: avgColor[index])),
+          trailing:
+              Text(subjectAvg[index], style: TextStyle(color: avgColor[index])),
+        );
+      }
     },
   );
 }

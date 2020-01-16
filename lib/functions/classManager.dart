@@ -133,3 +133,54 @@ class School{
   String url;
   String city;
 }
+
+class Lesson{
+  String subject;
+  String name;
+  String groupName;
+  String classroom;
+  String theme;
+  String teacher;
+  String deputyTeacherName;
+  List<dynamic> dogaNames; //Dynamic due to empty listes
+  int whichLesson;
+  int id;
+  int homeWorkId;
+  int groupID;
+  List<dynamic> dogaIds; //Dynamic due to empty listes
+  bool homeworkEnabled;
+  DateTime date;
+  DateTime startDate;
+  DateTime endDate;
+}
+
+Lesson setLesson(input){
+  var temp = new Lesson();
+  //INTs
+  temp.id = input["LessonId"];
+  temp.whichLesson = input["Count"];
+  temp.homeWorkId = input["Homework"];
+  temp.groupID = input["OsztalyCsoportId"];
+  //Strings
+  temp.groupName = input["ClassGroup"];
+  temp.subject = capitalize(input["Subject"]);
+  temp.name = capitalize(input["Nev"]);
+  if(input["ClassRoom"].toString().startsWith("I")){
+    temp.classroom = input["ClassRoom"];
+  }else{
+    temp.classroom = capitalize(input["ClassRoom"]);
+  }
+  temp.theme = input["Theme"];
+  temp.teacher = input["Teacher"];
+  temp.deputyTeacherName = input["DeputyTeacher"];
+  //DateTimes
+  temp.startDate = DateTime.parse(input["StartTime"]);
+  temp.endDate = DateTime.parse(input["EndTime"]);
+  temp.date = DateTime.parse(input["Date"]);
+  //Booleans
+  temp.homeworkEnabled = input["IsTanuloHaziFeladatEnabled"];
+  //Lists
+  temp.dogaIds = input["BejelentettSzamonkeresIdList"];
+  temp.dogaNames = []; //TODO EZT MEGCSINÁLNI 
+  return temp;
+}

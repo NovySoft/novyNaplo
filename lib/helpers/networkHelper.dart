@@ -6,6 +6,7 @@ import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
+import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -100,7 +101,7 @@ class NetworkHelper {
       noticesPage.allParsedNotices = parseNotices(loginPage.dJson);
       chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
-      //print(dJson);
+      timetablePage.lessonsList = await getWeekLessons(token, code);
     }
   }
 
@@ -115,11 +116,11 @@ class NetworkHelper {
     var res = await http.get(
         'https://www.e-szivacs.org/mirror/school-list.json',
         headers: header);
-    if (res.statusCode != 200){
+    if (res.statusCode != 200) {
       print(res.statusCode);
     }
     List<dynamic> responseJson = json.decode(utf8.decode(res.bodyBytes));
-    for(var n in responseJson){
+    for (var n in responseJson) {
       tempSchool = new School();
       tempSchool.id = n["InstituteId"];
       tempSchool.name = n["Name"];
@@ -129,5 +130,57 @@ class NetworkHelper {
       tempList.add(tempSchool);
     }
     return tempList;
+  }
+
+  Future<List<List<Lesson>>> getWeekLessons(token, code) async {
+    List<List<Lesson>> output = [];
+    for(var n = 0;n < 7;n++){
+      output.add([]);
+    }
+    //calculate when was monday this week
+    int monday = 1;
+    int sunday = 7;
+    DateTime now = new DateTime.now();
+
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+    }
+    String startDate = now.year.toString() + "-" + now.month.toString() + "-" + now.day.toString();
+    now = new DateTime.now();
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+    }
+    String endDate = now.year.toString() + "-" + now.month.toString() + "-" + now.day.toString();
+    //Make request
+    var header = {
+      'Authorization': 'Bearer $token',
+      'User-Agent': '$agent',
+      'Content-Type': 'application/json',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/Lesson?fromDate=$startDate&toDate=$endDate',
+        headers: header);
+    if (res.statusCode != 200) {
+      print(res.statusCode);
+    }
+    //Process response
+    var decoded = json.decode(res.body);
+    List<Lesson> tempLessonList = [];
+    for(var n in decoded){
+      tempLessonList.add(setLesson(n));
+    }
+    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+    int index = 0;
+    int beforeDay = tempLessonList[0].startDate.day;
+    //Just a matrix
+    for(var n in tempLessonList){
+      if(n.startDate.day != beforeDay){
+        index++;
+        beforeDay = n.startDate.day;
+      }
+      output[index].add(n);
+    }
+    return output;
   }
 }

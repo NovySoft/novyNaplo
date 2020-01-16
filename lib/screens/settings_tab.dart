@@ -1,6 +1,7 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
+import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,17 @@ class _SettingsTabState extends State<SettingsTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, MarksTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Órarend'),
+              leading: Icon(Icons.today),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, TimetableTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

@@ -11,11 +11,12 @@ Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
 *  Jegyek megtekintése
 *  Átlagok megtekintése
 *  Feljegyzések megtekintése
+*  Órarend megtekintése
 *  Átlagok grafikonon való megtekintése
 
 **HAMAROSAN:**
 *  ~~Feljegyzések~~
-*  Órarend
+*  ~~Órarend~~
 *  Házifeladat
 *  Hiányzások
 *  ~~Grafikonok~~

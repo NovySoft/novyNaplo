@@ -99,7 +99,7 @@ class MarksTabState extends State<MarksTab>
             onPressed: () {
               Navigator.of(context).push<void>(
                 MaterialPageRoute(
-                  builder: (context) => SongDetailTab(
+                  builder: (context) => MarksDetailTab(
                     mode: allParsedByDate[index].mode,
                     theme: allParsedByDate[index].theme,
                     weight: allParsedByDate[index].weight,
@@ -159,7 +159,7 @@ class MarksTabState extends State<MarksTab>
                         onPressed: () {
                           Navigator.of(context).push<void>(
                             MaterialPageRoute(
-                              builder: (context) => SongDetailTab(
+                              builder: (context) => MarksDetailTab(
                                 mode: allParsedBySubject[index].mode,
                                 theme: allParsedBySubject[index].theme,
                                 weight: allParsedBySubject[index].weight,
@@ -219,7 +219,7 @@ class MarksTabState extends State<MarksTab>
                         onPressed: () {
                           Navigator.of(context).push<void>(
                             MaterialPageRoute(
-                              builder: (context) => SongDetailTab(
+                              builder: (context) => MarksDetailTab(
                                 mode: allParsedBySubject[index].mode,
                                 theme: allParsedBySubject[index].theme,
                                 weight: allParsedBySubject[index].weight,
@@ -263,7 +263,7 @@ class MarksTabState extends State<MarksTab>
                 onPressed: () {
                   Navigator.of(context).push<void>(
                     MaterialPageRoute(
-                      builder: (context) => SongDetailTab(
+                      builder: (context) => MarksDetailTab(
                         mode: allParsedBySubject[index].mode,
                         theme: allParsedBySubject[index].theme,
                         weight: allParsedBySubject[index].weight,
@@ -308,7 +308,7 @@ class MarksTabState extends State<MarksTab>
                 Navigator.pop(context);
               },
             ),
-            /*ListTile(
+            ListTile(
               title: Text('Órarend'),
               leading: Icon(Icons.today),
               onTap: () {
@@ -318,7 +318,7 @@ class MarksTabState extends State<MarksTab>
                   print(e.message);
                 }
               },
-            ),*/
+            ),
             ListTile(
               title: Text('Átlagok'),
               leading: Icon(Icons.all_inclusive),

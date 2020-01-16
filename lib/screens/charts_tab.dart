@@ -14,6 +14,7 @@ import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
 var allParsedSubjects;
 var colors;
 
@@ -47,6 +48,17 @@ class _ChartsTabState extends State<ChartsTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, MarksTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Órarend'),
+              leading: Icon(Icons.today),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, TimetableTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

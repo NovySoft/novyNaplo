@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/widgets.dart';
 
-class SongDetailTab extends StatelessWidget {
-  const SongDetailTab(
+class MarksDetailTab extends StatelessWidget {
+  const MarksDetailTab(
       {this.numberValue,
       this.subject,
       this.id,
@@ -68,7 +68,7 @@ class SongDetailTab extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: 30,
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
@@ -362,7 +362,7 @@ class SongDetailTab extends StatelessWidget {
                     );
                     break;
                   default:
-                    break;
+                    return SizedBox(height: 18);
                 }
               },
             ),

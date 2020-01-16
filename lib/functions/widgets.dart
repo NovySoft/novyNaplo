@@ -308,8 +308,8 @@ void showChoices(BuildContext context, List<String> choices) {
   }
 }
 
-class AnimatedNoticesCard extends StatelessWidget {
-  AnimatedNoticesCard({
+class AnimatedTitleSubtitleCard extends StatelessWidget {
+  AnimatedTitleSubtitleCard({
     this.title,
     this.color,
     this.subTitle,

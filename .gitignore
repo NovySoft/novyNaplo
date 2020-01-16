@@ -40,6 +40,8 @@ lib/config-realese.dart
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+gradle.properties
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -84,7 +86,8 @@ ios/Flutter/flutter_export_environment.sh
 #Node stuff
 /node_modules
 
-#Testing files
+#Testing files They're not empty
 lib/empty.dart
 lib/empty.json
 lib/empty2.json
+lib/empty3.json

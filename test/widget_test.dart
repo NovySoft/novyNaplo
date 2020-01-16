@@ -46,7 +46,7 @@ void main() {
 
     testWidgets('AnimatedNoticesCard has a title and a subtitle',
         (WidgetTester tester) async {
-      await tester.pumpWidget(AnimatedNoticesCard(
+      await tester.pumpWidget(AnimatedTitleSubtitleCard(
         title: 'Title',
         subTitle: 'Subtitle',
         color: Colors.red,

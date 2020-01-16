@@ -127,7 +127,7 @@ void addChartPoints(var n){
   index++;
 }
 
-List<dynamic> categorizeSubjects(var input){
+List<dynamic> categorizeSubjects(var input){ //TODO rewrite with matrixes
   catIndex = 0;
   var arrayIndex = 1;
   var parsed = parseAllByDate(input);

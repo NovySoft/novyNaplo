@@ -36,7 +36,5 @@ Future<NewVersion> getVersion() async {
       output.returnedAnything = false;
       return output;
     }
-    output.returnedAnything = false;
-    return output;
   }
 }
