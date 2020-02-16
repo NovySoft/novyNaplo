@@ -13,8 +13,10 @@ import 'package:novynaplo/screens/charts_tab.dart';
 
 List<String> dropdownValues = [""];
 String dropdownValue = dropdownValues[0];
-List<Avarage> avarageList;
-int currentIndex = 0;
+List<CalculatorData> avarageList;
+var currentIndex = 0;
+var currCount = 0;
+var currSum; //TODO Extend to non 100% marks
 
 class CalculatorTab extends StatefulWidget {
   static String tag = 'calculator';
@@ -136,6 +138,8 @@ class CalculatorTabState extends State<CalculatorTab> {
               setState(() {
                 dropdownValue = newValue;
                 currentIndex = dropdownValues.indexOf(newValue);
+                currCount = avarageList[currentIndex].count;
+                currSum = avarageList[currentIndex].sum;
               });
             },
             items: dropdownValues.map<DropdownMenuItem<String>>((String value) {
@@ -148,7 +152,8 @@ class CalculatorTabState extends State<CalculatorTab> {
           alignment: Alignment(0, 0),
           margin: EdgeInsets.all(5),
         ),
-        Text(currentIndex.toString()),
+        Text("Jegyek száma: " + currCount.toString()),
+        Text("Jegyek összege: " + currSum.toString()),
       ],
     );
   }

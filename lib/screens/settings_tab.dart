@@ -12,6 +12,8 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 import 'dart:async';
 
 String dropDown;
@@ -94,6 +96,17 @@ class _SettingsTabState extends State<SettingsTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Jegyszámoló'),
+              leading: new Icon(MdiIcons.calculator),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, CalculatorTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

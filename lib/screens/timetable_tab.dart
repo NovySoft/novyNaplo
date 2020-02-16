@@ -11,6 +11,8 @@ import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 
 final List<Tab> days = <Tab>[
   Tab(text: 'Hétfő'),
@@ -90,6 +92,17 @@ class _TimetableTabState extends State<TimetableTab> {
                   onTap: () {
                     try {
                       Navigator.pushNamed(context, ChartsTab.tag);
+                    } on PlatformException catch (e) {
+                      print(e.message);
+                    }
+                  },
+                ),
+                ListTile(
+                  title: Text('Jegyszámoló'),
+                  leading: new Icon(MdiIcons.calculator),
+                  onTap: () {
+                    try {
+                      Navigator.pushNamed(context, CalculatorTab.tag);
                     } on PlatformException catch (e) {
                       print(e.message);
                     }

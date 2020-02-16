@@ -139,7 +139,7 @@ List<dynamic> categorizeSubjects(var input){ //TODO rewrite with matrixes
     var date = n.date.split("T")[0];
     var subject = n.subject;
     var value = n.numberValue;
-    if(n.form != "Percent"){
+    if(n.form != "Percent" && n.type != "HalfYear"){
       strings.add(subject + ":" + date + ":" + value.toString());
       stringsTwo.add(date + ":" + subject + ":" + value.toString());
     } 

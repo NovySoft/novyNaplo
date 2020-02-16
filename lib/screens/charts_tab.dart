@@ -15,6 +15,8 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 var allParsedSubjects;
 var colors;
 
@@ -91,6 +93,17 @@ class _ChartsTabState extends State<ChartsTab> {
               leading: Icon(Icons.timeline),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Jegyszámoló'),
+              leading: new Icon(MdiIcons.calculator),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, CalculatorTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
               },
             ),
             ListTile(

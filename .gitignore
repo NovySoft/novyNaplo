@@ -91,3 +91,4 @@ lib/empty.dart
 lib/empty.json
 lib/empty2.json
 lib/empty3.json
+ios/Flutter/flutter_export_environment.sh

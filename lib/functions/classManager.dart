@@ -185,3 +185,19 @@ Lesson setLesson(input){
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI 
   return temp;
 }
+
+class CalculatorData{
+  var value;
+  var sum;
+  int count;
+  String name;
+}
+
+CalculatorData setCalcData(value,name,count,sum){
+  CalculatorData temp = new CalculatorData();
+  temp.value = value;
+  temp.count = count;
+  temp.name = name;
+  temp.sum = sum;
+  return temp;
+}

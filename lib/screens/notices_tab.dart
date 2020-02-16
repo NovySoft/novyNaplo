@@ -12,6 +12,8 @@ import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 var allParsedNotices;
 var colors = getRandomColors(noticesCount);
 
@@ -85,6 +87,17 @@ class _NoticesTabState extends State<NoticesTab> {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Jegyszámoló'),
+              leading: new Icon(MdiIcons.calculator),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, CalculatorTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

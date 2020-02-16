@@ -191,8 +191,15 @@ void setUpCalculatorPage(var dJson){
   calculatorPage.avarageList = [];
   calculatorPage.dropdownValues = [];
   for(var n in dJson["SubjectAverages"]){
-    calculatorPage.avarageList.add(setAvarage(capitalize(n["Subject"]), n["Value"], n["ClassValue"], n["Difference"]));
+    calculatorPage.avarageList.add(setCalcData(n["Value"], n["Subject"], 0, 0));
     calculatorPage.dropdownValues.add(capitalize(n["Subject"]));
+  }
+  for(var n in dJson["Evaluations"]){
+    int indexA = calculatorPage.avarageList.indexWhere((a) => a.name == n["Subject"]);
+    if(indexA >= 0 && n["Type"] != "HalfYear" && n["Form"] != "Percent"){
+      calculatorPage.avarageList[indexA].count++;
+      calculatorPage.avarageList[indexA].sum += n["NumberValue"];
+    }
   }
   calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
 }

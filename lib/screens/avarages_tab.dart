@@ -11,7 +11,8 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 var subjectName = [];
 var subjectAvg = [];
 var subjectClassAvg = [];
@@ -84,6 +85,17 @@ class AvaragesTab extends StatelessWidget {
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Jegyszámoló'),
+              leading: new Icon(MdiIcons.calculator),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, CalculatorTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }
