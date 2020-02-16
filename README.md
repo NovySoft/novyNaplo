@@ -44,9 +44,17 @@ Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
 *  **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
 *  **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
 *  **firebase_performance**: Az internet lekérések sebbeségét figyeli
-*  **firebase_admob**: A későbbiekben reklámokat fog megjeleníteni, de **MÉG NINCS HASZNÁLATBAN**
+*  **firebase_admob**: Alsó reklám csík megjelnítése
+*  **admob_flutter**: Natív reklámok
+*  **material_design_icons_flutter**: Ikon kiegészítő csomag
 
-## Betűtípus
+## Felhasznált kódok:
+*  **Bejelentkezési oldal:** [https://github.com/putraxor/flutter-login-ui](https://github.com/putraxor/flutter-login-ui)
+*  **Háttér logika, néhány design ötlet:** [https://github.com/boapps/Szivacs-Naplo](https://github.com/boapps/Szivacs-Naplo)
+*  **Api lekérések:** [https://github.com/boapps/e-kreta-api-docs](https://github.com/boapps/e-kreta-api-docs)
+
+
+## Betűtípusok
 *  **Nunito**
 
 ## Ismert hibák

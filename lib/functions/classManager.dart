@@ -21,6 +21,7 @@ class Evals{
 
 class Avarage{
   var subject,
+  markCount,
   ownValue,
   classValue,
   diff;

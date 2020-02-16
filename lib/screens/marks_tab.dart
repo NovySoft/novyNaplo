@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
@@ -19,6 +20,7 @@ import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/config.dart' as config;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 var apiResponse = login.dJson;
 var allParsedByDate, allParsedBySubject;
@@ -347,6 +349,17 @@ class MarksTabState extends State<MarksTab>
               onTap: () {
                 try {
                   Navigator.pushNamed(context, ChartsTab.tag);
+                } on PlatformException catch (e) {
+                  print(e.message);
+                }
+              },
+            ),
+            ListTile(
+              title: Text('Jegyszámoló'),
+              leading: new Icon(MdiIcons.calculator),
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, CalculatorTab.tag);
                 } on PlatformException catch (e) {
                   print(e.message);
                 }

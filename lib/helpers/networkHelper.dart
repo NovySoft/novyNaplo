@@ -7,6 +7,7 @@ import 'package:novynaplo/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
+import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -102,6 +103,7 @@ class NetworkHelper {
       chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
+      setUpCalculatorPage(loginPage.dJson);
     }
   }
 
@@ -183,4 +185,14 @@ class NetworkHelper {
     }
     return output;
   }
+}
+
+void setUpCalculatorPage(var dJson){
+  calculatorPage.avarageList = [];
+  calculatorPage.dropdownValues = [];
+  for(var n in dJson["SubjectAverages"]){
+    calculatorPage.avarageList.add(setAvarage(capitalize(n["Subject"]), n["Value"], n["ClassValue"], n["Difference"]));
+    calculatorPage.dropdownValues.add(capitalize(n["Subject"]));
+  }
+  calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
 }

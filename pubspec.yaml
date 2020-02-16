@@ -42,6 +42,8 @@ dependencies:
   intl_translation: any
   flutter_cupertino_localizations: any
   url_launcher: any
+  material_design_icons_flutter: any
+  #admob_flutter: any
 
 flutter_icons:
   android: true
