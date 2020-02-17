@@ -17,6 +17,10 @@ List<CalculatorData> avarageList;
 var currentIndex = 0;
 var currCount = 0;
 var currSum; //TODO Extend to non 100% marks
+double elakErni = 5.0;
+double turesHatar = 1;
+String text1 = " ";
+String text2 = " ";
 
 class CalculatorTab extends StatefulWidget {
   static String tag = 'calculator';
@@ -27,6 +31,16 @@ class CalculatorTab extends StatefulWidget {
 }
 
 class CalculatorTabState extends State<CalculatorTab> {
+  @override
+  void initState() {
+    super.initState();
+    //Set dropdown to item 0
+    dropdownValue = dropdownValues[0];
+    currentIndex = dropdownValues.indexOf(dropdownValue);
+    currCount = avarageList[currentIndex].count;
+    currSum = avarageList[currentIndex].sum;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,8 +168,58 @@ class CalculatorTabState extends State<CalculatorTab> {
         ),
         Text("Jegyek száma: " + currCount.toString()),
         Text("Jegyek összege: " + currSum.toString()),
+        SizedBox(height: 20),
+        Text("Mit szeretnél elérni? $elakErni"),
+        Slider(
+          value: elakErni,
+          onChanged: (newValue) {
+            setState(() {
+              elakErni = newValue;
+            });
+          },
+          min: 1,
+          max: 5,
+          divisions: 40,
+          label: elakErni.toString(),
+        ),
+        Text("Hány jegy alatt szeretnéd elérni? $turesHatar"),
+        Slider(
+          value: turesHatar,
+          onChanged: (newValue) {
+            setState(() {
+              turesHatar = newValue.roundToDouble();
+            });
+          },
+          min: 1,
+          max: 10,
+          divisions: 10,
+          label: turesHatar.toString(),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.0),
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            onPressed: () {
+              setState(() {
+                reCalculate();
+              });
+            },
+            padding: EdgeInsets.all(12),
+            child: Text('Mehet', style: TextStyle(color: Colors.black)),
+          ),
+        ),
+         Text(text1),
       ],
     );
+  }
+}
+
+void reCalculate() {
+  text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
+  if(text1 != "Nem lehetséges"){
+    text1 = "Szerezz kb.: " + text1;
   }
 }
 
@@ -166,10 +230,17 @@ class CalculatorTabState extends State<CalculatorTab> {
 /// getEasiest(jegyekÖsszege,jegyekSzáma,mennyiJegyAlattt,elAkarÉrni)
 /// ```
 String getEasiest(num jegyek, jsz, th, elak) {
+  bool isInteger(num value) => value is int || value == value.roundToDouble();
   //jegyek = "jegyeid összege"
   //jsz = "jegyeid száma"
   //th = "mennyi jegy alatt akarod elérni?"
   //elak = "milyen átlagot akarsz elérni?"
+
+  if(jsz == 0 || jegyek == 0){
+    if(isInteger(elak)){
+      return "1 db $elak";
+    }
+  }
 
   var atlag = jegyek / jsz; //átlag
   var x = elak * jsz +
@@ -179,8 +250,6 @@ String getEasiest(num jegyek, jsz, th, elak) {
   var j2 = th *
       5; // rontásnál mennyi jegyet kell hozzáadni, hogy elérjük az adottátlagot
   var j1 = jegyek + j2 / jsz + th; // az átlag amit a rontásnál számolunk
-
-  bool isInteger(num value) => value is int || value == value.roundToDouble();
 
   if (!isInteger(x)) {
     x = x.round();
@@ -214,31 +283,31 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db kettes és $t db egyes";
+          return "$n db kettest és $t db egyest";
           break;
         case 2:
           while (t * 2 + n * 3 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db hármas és $t db kettes";
+          return "$n db hármast és $t db kettest";
           break;
         case 3:
           while (t * 3 + n * 4 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyes és $t db hármas";
+          return "$n db négyest és $t db hármast";
           break;
         case 4:
           while (t * 4 + n * 5 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyes és $t db ötös";
+          return "$n db négyest és $t db ötöst";
           break;
         case 5:
-          return "$th db ötös";
+          return "$th db ötöst";
           break;
         default:
           return "Nem lehetséges";
@@ -255,14 +324,14 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db kettes és $t db egyes";
+          return "$n db kettest és $t db egyest";
           break;
         case 2:
           while (t * 2 + n * 3 != j2) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db hármas és $t db kettes";
+          return "$n db hármast és $t db kettest";
           break;
         case 3:
           while (t * 3 + n * 4 != j2) {
@@ -275,7 +344,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyes és $t db ötös";
+          return "$n db négyest és $t db ötöst";
           break;
         default:
           return "Nem lehetséges";

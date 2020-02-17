@@ -13,6 +13,7 @@ Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
 *  Feljegyzések megtekintése
 *  Órarend megtekintése
 *  Átlagok grafikonon való megtekintése
+*  Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
 
 **HAMAROSAN:**
 *  ~~Feljegyzések~~
@@ -21,7 +22,7 @@ Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
 *  Hiányzások
 *  ~~Grafikonok~~
 *  Értesítések
-*  Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
+*  ~~Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével~~
 *  Támogatók oldal - **Gáti Úr** közreműködésével
 *  Szuper egyedi és egyéni beállítások
 *  **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
