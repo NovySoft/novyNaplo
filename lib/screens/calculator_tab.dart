@@ -168,6 +168,7 @@ class CalculatorTabState extends State<CalculatorTab> {
         ),
         Text("Jegyek száma: " + currCount.toString()),
         Text("Jegyek összege: " + currSum.toString()),
+        Text("Átlagod: " + (currSum / currCount).toString()),
         SizedBox(height: 20),
         Text("Mit szeretnél elérni? $elakErni"),
         Slider(
@@ -272,9 +273,9 @@ String getEasiest(num jegyek, jsz, th, elak) {
 
   num ww = num.parse(cc.substring(0, 1));
   num w = num.parse(c.substring(0, 1));
-
   if (elak >= atlag) {
     if (x - 5 * th > 0) {
+      print(1);
       return "Nem lehetséges";
     } else {
       switch (w) {
@@ -314,7 +315,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
           break;
       }
     }
-  } else {
+  }else{
     if (j2 - th < 0) {
       return "Nem lehetséges";
     } else {
@@ -338,6 +339,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
+          return "$n db négyest és $t db hármast";
           break;
         case 4:
           while (t * 4 + n * 5 != j2) {
@@ -352,7 +354,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
       }
     }
   }
-  return "Nem lehetséges";
+  return "Dead code";
 }
 
 /// How many 5's are needed to get to a specific avarage
