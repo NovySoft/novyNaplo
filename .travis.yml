@@ -32,9 +32,8 @@ install:
 - cd travis
 - export GIT_MESSAGE=`git log -1 --pretty=%B`
 - node discord.js starting
-- cd /home/travis/build/NovySoft/novyNaplo
+- cd -
 before_script:
-- cd /home/travis/build/NovySoft/novyNaplo
 - wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
 - unzip -qq gradle-5.4.1-all.zip
 - export GRADLE_HOME=`pwd`/gradle-5.4.1
@@ -59,13 +58,14 @@ script:
 - wget "$KEYPROPERTIES" -O key.properties &> /dev/null
 - cd app
 - wget "$KEYJKS" -O key.jks &> /dev/null
-- cd /home/travis/build/NovySoft/novyNaplo
+- cd -
+- cd -
 - "./flutter/bin/flutter test --verbose"
 - "./flutter/bin/flutter build apk --verbose"
 after_success:
 - cd travis
 - node discord.js success
-- cd /home/travis/build/NovySoft/novyNaplo
+- cd -
 before_deploy:
 - git config --local user.name "$GITUSER"
 - git config --local user.email "$GITEMAIL"
@@ -81,13 +81,13 @@ deploy:
     repo: NovySoft/novyNaplo
   token:
     secure: nrH0NT6zZPklkK20788D073/dWsG65/C3+wQRU039gOiIjoPHsbsWyvPww12CQ3d52GEOHfw9h36qTJXGtjaXQ0AvVboMD+gV9Kmtt5uPrnpuVhhKRAYV+jm56AEaLOJCDu8FoDBKheDsvZhObmwmk7l1fjSJyx7iEA0ztHrRrYNf8yGZ5Wtbz6FHn2s9b067Hk32W2TvROGBIBumtrlQLufM7XP6Up042X6DJfOVEcVgJ6peazSF/PT7WNZ/nymXav3xld94h0T787TSWB24/leCowlmiVLVCbYxWAX2TMgGZmhxHGwQK4nMAeHcVj/y2+hfBUjn1cGJXvMrK97N9cIhddOGFDl6QOp/rHzKg179ka/8jUnVhlONdfEd1+4HH4w0NhiSlguxtXa3nig/E0vvUNm+IS2faH9A6VReNtkyv7cWegE55ZZsCD8XZnq63jGb79WngyVzir7jlBpPQ2Lv8dwnja9/GHN4kSdLfOR0v2aklKFGWMy+TKqnW9GHclohl/n7lpURIlPDHjxP84BOEnnkgUv+N6Wzo8p9j77R7hm+m247muQkHU0xt2EybOF3faOfH+6HBxSJj30Dnff0W0JuqI3Oi8gZAn6EyLdRiAniUWmYReD7HjVRypdLaH8vkCrrfaqewIYOnrqPdtaSRxyZtJ5kfglbCrr4wI=
-  file: "/home/travis/build/NovySoft/novyNaplo/build/app/outputs/apk/release/app-release.apk"
+  file: "/build/ios/iphoneos/app.ipa"
 after_deploy:
 - cd travis
 - git fetch --tags
 - node discord.js deployed
-- cd /home/travis/build/NovySoft/novyNaplo
+- cd -
 after_failure:
 - cd travis
 - node discord.js fail
-- cd /home/travis/build/NovySoft/novyNaplo
+- cd -
