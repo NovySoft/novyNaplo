@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.2",
+    "version": "V0.1.2.1",
     "isBreaking": false,
-    "releaseNotes": "Bug fix, új drawer és jegycalc design",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.2"
+    "releaseNotes": "Bug fix",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.2.1"
 }

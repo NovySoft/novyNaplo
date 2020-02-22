@@ -132,7 +132,7 @@ class CalculatorTabState extends State<CalculatorTab> {
         SizedBox(height: 50,),
         Text(
           text1,
-          style: TextStyle(fontSize: 30),
+          style: TextStyle(fontSize: 20),
         ),
       ],
     );
@@ -189,12 +189,11 @@ String getEasiest(num jegyek, jsz, th, elak) {
 
   var t = th;
   var n = 0;
-  String c = (x / th).toString();
+  num c = x / th;
+  num cc = j2 / th;
 
-  String cc = (j2 / th).toString();
-
-  num ww = num.parse(cc.substring(0, 1));
-  num w = num.parse(c.substring(0, 1));
+  int ww = cc.toInt();
+  int w = c.toInt();
   if (elak >= atlag) {
     if (x - 5 * th > 0) {
       print(1);
