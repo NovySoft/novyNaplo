@@ -1,5 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,90 +39,7 @@ class _SettingsTabState extends State<SettingsTab> {
       appBar: AppBar(
         title: Text(SettingsTab.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: BoxDecoration(color: Colors.grey),
-                child:
-                    Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
-            ListTile(
-              title: Text('Jegyek'),
-              leading: Icon(Icons.create),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, MarksTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Órarend'),
-              leading: Icon(Icons.today),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, TimetableTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Átlagok'),
-              leading: Icon(Icons.all_inclusive),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, AvaragesTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Feljegyzések'),
-              leading: Icon(Icons.layers),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, NoticesTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Grafikonok'),
-              leading: Icon(Icons.timeline),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, ChartsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Jegyszámoló'),
-              leading: new Icon(MdiIcons.calculator),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, CalculatorTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Beállítások'),
-              leading: Icon(Icons.settings_applications),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: getDrawer(SettingsTab.tag,context),
       body: SettingsBody(),
     );
   }

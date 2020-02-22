@@ -3,6 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
@@ -44,90 +45,7 @@ class CalculatorTabState extends State<CalculatorTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: BoxDecoration(color: Colors.grey),
-                child:
-                    Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
-            ListTile(
-              title: Text('Jegyek'),
-              leading: Icon(Icons.create),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, MarksTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Órarend'),
-              leading: Icon(Icons.today),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, TimetableTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Átlagok'),
-              leading: Icon(Icons.all_inclusive),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, AvaragesTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Feljegyzések'),
-              leading: Icon(Icons.layers),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, NoticesTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Grafikonok'),
-              leading: Icon(Icons.timeline),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, ChartsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Jegyszámoló'),
-              leading: new Icon(MdiIcons.calculator),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Beállítások'),
-              leading: Icon(Icons.settings_applications),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, SettingsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: getDrawer(CalculatorTab.tag, context),
       appBar: AppBar(
         title: Text(CalculatorTab.title),
       ),
@@ -211,7 +129,11 @@ class CalculatorTabState extends State<CalculatorTab> {
             child: Text('Mehet', style: TextStyle(color: Colors.black)),
           ),
         ),
-         Text(text1),
+        SizedBox(height: 50,),
+        Text(
+          text1,
+          style: TextStyle(fontSize: 30),
+        ),
       ],
     );
   }
@@ -219,7 +141,7 @@ class CalculatorTabState extends State<CalculatorTab> {
 
 void reCalculate() {
   text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
-  if(text1 != "Nem lehetséges"){
+  if (text1 != "Nem lehetséges") {
     text1 = "Szerezz kb.: " + text1;
   }
 }
@@ -237,8 +159,8 @@ String getEasiest(num jegyek, jsz, th, elak) {
   //th = "mennyi jegy alatt akarod elérni?"
   //elak = "milyen átlagot akarsz elérni?"
 
-  if(jsz == 0 || jegyek == 0){
-    if(isInteger(elak)){
+  if (jsz == 0 || jegyek == 0) {
+    if (isInteger(elak)) {
       return "1 db $elak";
     }
   }
@@ -315,7 +237,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
           break;
       }
     }
-  }else{
+  } else {
     if (j2 - th < 0) {
       return "Nem lehetséges";
     } else {
