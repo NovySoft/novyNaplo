@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.1",
+    "version": "V0.1.2",
     "isBreaking": false,
-    "releaseNotes": "Órarend hozzáadva",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.1"
+    "releaseNotes": "Bug fix, új drawer és jegycalc design",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.2"
 }
