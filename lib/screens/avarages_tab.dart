@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/config.dart';
+import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/screens/login_page.dart';
@@ -31,90 +32,7 @@ class AvaragesTab extends StatelessWidget {
       appBar: AppBar(
         title: Text(AvaragesTab.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: BoxDecoration(color: Colors.grey),
-                child:
-                    Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
-            ListTile(
-              title: Text('Jegyek'),
-              leading: Icon(Icons.create),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, MarksTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Órarend'),
-              leading: Icon(Icons.today),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, TimetableTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Átlagok'),
-              leading: Icon(Icons.all_inclusive),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Feljegyzések'),
-              leading: Icon(Icons.layers),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, NoticesTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Grafikonok'),
-              leading: Icon(Icons.timeline),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, ChartsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Jegyszámoló'),
-              leading: new Icon(MdiIcons.calculator),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, CalculatorTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Beállítások'),
-              leading: Icon(Icons.settings_applications),
-              onTap: () {
-                try {
-                  Navigator.pushNamed(context, SettingsTab.tag);
-                } on PlatformException catch (e) {
-                  print(e.message);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: getDrawer(AvaragesTab.tag,context),
       body: BodyLayout(),
     );
   }

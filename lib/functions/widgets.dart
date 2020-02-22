@@ -1,6 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:novynaplo/screens/calculator_tab.dart';
+import 'package:novynaplo/config.dart';
+import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:flutter/services.dart';
+import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
+import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:novynaplo/screens/charts_tab.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -493,4 +506,123 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
       },
     );
   }
+}
+
+Widget getDrawer(String screen, BuildContext context) {
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+            decoration: BoxDecoration(color: Colors.grey),
+            child: Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
+        ListTile(
+          title: Text('Jegyek'),
+          leading: Icon(Icons.create),
+          onTap: () {
+            if (screen == MarksTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, MarksTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Órarend'),
+          leading: Icon(Icons.today),
+          onTap: () {
+            if (screen == TimetableTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, TimetableTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Átlagok'),
+          leading: Icon(Icons.all_inclusive),
+          onTap: () {
+            if (screen == AvaragesTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, AvaragesTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Feljegyzések'),
+          leading: Icon(Icons.layers),
+          onTap: () {
+            if (screen == NoticesTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, NoticesTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Grafikonok'),
+          leading: Icon(Icons.timeline),
+          onTap: () {
+            if (screen == ChartsTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, ChartsTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Jegyszámoló'),
+          leading: new Icon(MdiIcons.calculator),
+          onTap: () {
+            if (screen == CalculatorTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, CalculatorTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Beállítások'),
+          leading: Icon(Icons.settings_applications),
+          onTap: () {
+            if (screen == SettingsTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, SettingsTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        SizedBox(height: 200)
+      ],
+    ),
+  );
 }
