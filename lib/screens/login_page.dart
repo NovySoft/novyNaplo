@@ -31,12 +31,13 @@ bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
 bool newUser = true;
+bool listAvailable = true;
 final GlobalKey<State> keyLoader = new GlobalKey<State>();
 final FocusNode _passFocus = FocusNode();
 final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
-List<School> schoolList, searchList = [];
+var schoolList, searchList = [];
 bool adsEnabled = true;
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -60,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) {
           return MyDialog();
         });
+    await sleep1();
     NewVersion newVerDetails = await getVersion();
     if (newVerDetails.returnedAnything) {
       if (config.currentAppVersionCode != newVerDetails.versionCode) {
@@ -109,8 +111,13 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       try {
         schoolList = await NetworkHelper().getSchoolList();
-        for (var n in schoolList) {
-          searchList.add(n);
+        if (schoolList == "TIMEOUT") {
+          listAvailable = false;
+          await _timeoutAlert(context);
+        } else {
+          for (var n in schoolList) {
+            searchList.add(n);
+          }
         }
         Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
       } on NoSuchMethodError catch (e) {
@@ -250,10 +257,10 @@ class _LoginPageState extends State<LoginPage> {
       focusNode: _codeFocus,
       controller: codeController,
       onTap: () {
-        showSelectDialog();
+        if(listAvailable) showSelectDialog();
       },
       onChanged: (String input) {
-        showSelectDialog();
+        if(listAvailable) showSelectDialog();
       },
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
@@ -380,43 +387,65 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _newVersionAlert(BuildContext context, String version,
       String notes, bool isBreaking, String link) async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Új verzió: $version"),
-            content: SingleChildScrollView(
-              child: Column(
-                  children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  if (newVersion == true && hasPrefs) {
-                    auth(context, "_ackAlert");
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
-              FlatButton(
-                child: Text('Frissítés'),
-                onPressed: () async {
-                  if (await canLaunch(link)) {
-                    await launch(link);
-                  } else {
-                    FirebaseAnalytics().logEvent(name: "LinkFail");
-                    throw 'Could not launch $link';
-                  }
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Új verzió: $version"),
+          content: SingleChildScrollView(
+            child:
+                Column(children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                if (newVersion == true && hasPrefs) {
+                  auth(context, "_ackAlert");
+                } else {
                   Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+                }
+              },
+            ),
+            FlatButton(
+              child: Text('Frissítés'),
+              onPressed: () async {
+                if (await canLaunch(link)) {
+                  await launch(link);
+                } else {
+                  FirebaseAnalytics().logEvent(name: "LinkFail");
+                  throw 'Could not launch $link';
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  Future<void> _timeoutAlert(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Hiba: Kérés timeout"),
+          content: SingleChildScrollView(
+            child:
+                Column(children: <Widget>[Text("Hiba:"), Text("A kérésünkre nem kaptunk választ 10 másodperc után sem!"), Text("Manuális kód megadás szükséges!",style: TextStyle(fontWeight: FontWeight.bold),)]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

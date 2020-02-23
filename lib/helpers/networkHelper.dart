@@ -107,17 +107,27 @@ class NetworkHelper {
     }
   }
 
-  Future<List<School>> getSchoolList() async {
+  Future<dynamic> getSchoolList() async {
     List<School> tempList = [];
     School tempSchool = new School();
+    var client = http.Client();
     var header = {
       'User-Agent': '$agent',
       'Content-Type': 'application/json',
     };
-
-    var res = await http.get(
-        'https://www.e-szivacs.org/mirror/school-list.json',
-        headers: header);
+    var res;
+    try {
+      res = await client
+          .get('https://www.e-szivacs.org/mirror/school-list.json',
+              headers: header)
+          .timeout(const Duration(seconds: 10));
+    } on TimeoutException catch (_) {
+      print("TIMEOUT");
+      return "TIMEOUT";
+    } finally {
+      client.close();
+    }
+    await sleep1();
     if (res.statusCode != 200) {
       print(res.statusCode);
     }
@@ -136,7 +146,7 @@ class NetworkHelper {
 
   Future<List<List<Lesson>>> getWeekLessons(token, code) async {
     List<List<Lesson>> output = [];
-    for(var n = 0;n < 7;n++){
+    for (var n = 0; n < 7; n++) {
       output.add([]);
     }
     //calculate when was monday this week
@@ -147,12 +157,20 @@ class NetworkHelper {
     while (now.weekday != monday) {
       now = now.subtract(new Duration(days: 1));
     }
-    String startDate = now.year.toString() + "-" + now.month.toString() + "-" + now.day.toString();
+    String startDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
     now = new DateTime.now();
     while (now.weekday != sunday) {
       now = now.add(new Duration(days: 1));
     }
-    String endDate = now.year.toString() + "-" + now.month.toString() + "-" + now.day.toString();
+    String endDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
     //Make request
     var header = {
       'Authorization': 'Bearer $token',
@@ -169,15 +187,15 @@ class NetworkHelper {
     //Process response
     var decoded = json.decode(res.body);
     List<Lesson> tempLessonList = [];
-    for(var n in decoded){
+    for (var n in decoded) {
       tempLessonList.add(setLesson(n));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
     int beforeDay = tempLessonList[0].startDate.day;
     //Just a matrix
-    for(var n in tempLessonList){
-      if(n.startDate.day != beforeDay){
+    for (var n in tempLessonList) {
+      if (n.startDate.day != beforeDay) {
         index++;
         beforeDay = n.startDate.day;
       }
@@ -187,16 +205,17 @@ class NetworkHelper {
   }
 }
 
-void setUpCalculatorPage(var dJson){
+void setUpCalculatorPage(var dJson) {
   calculatorPage.avarageList = [];
   calculatorPage.dropdownValues = [];
-  for(var n in dJson["SubjectAverages"]){
+  for (var n in dJson["SubjectAverages"]) {
     calculatorPage.avarageList.add(setCalcData(n["Value"], n["Subject"], 0, 0));
     calculatorPage.dropdownValues.add(capitalize(n["Subject"]));
   }
-  for(var n in dJson["Evaluations"]){
-    int indexA = calculatorPage.avarageList.indexWhere((a) => a.name == n["Subject"]);
-    if(indexA >= 0 && n["Type"] != "HalfYear" && n["Form"] != "Percent"){
+  for (var n in dJson["Evaluations"]) {
+    int indexA =
+        calculatorPage.avarageList.indexWhere((a) => a.name == n["Subject"]);
+    if (indexA >= 0 && n["Type"] != "HalfYear" && n["Form"] != "Percent") {
       calculatorPage.avarageList[indexA].count++;
       calculatorPage.avarageList[indexA].sum += n["NumberValue"];
     }
