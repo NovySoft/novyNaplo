@@ -58,7 +58,7 @@ matrix:
         - mkdir android-sdk-tools
         - unzip -qq sdk-tools-linux-4333796.zip -d android-sdk-tools
         - export PATH=`pwd`/android-sdk-tools/tools/bin:$PATH
-        - mkdir -p $ANDROID_SDK_ROOT
+        - mkdir -p "$ANDROID_SDK_ROOT"
         - yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository"
           > /dev/null
         - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
@@ -80,7 +80,7 @@ matrix:
       language: generic
       osx_image: xcode8.3
       before_script:
-        - pip3 install six
+        - pip2 install six
         - brew update
         - brew install --HEAD libimobiledevice
         - brew install ideviceinstaller
