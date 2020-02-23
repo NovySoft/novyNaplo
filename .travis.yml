@@ -26,6 +26,8 @@ before_deploy:
   - cd .. 
   - zip -r app.ipa Payload 
   - popd
+  - echo $PWD
+  - ls
 deploy:
   cleanup: false
   skip_cleanup: true
