@@ -7,7 +7,8 @@ before_script:
  - brew unlink usbmuxd 
  - brew install --HEAD usbmuxd 
  - brew unlink usbmuxd 
- - brew link usbmuxd 
+ - brew link usbmuxd
+ - brew unlink libimobiledevice
  - brew install --HEAD libimobiledevice 
  - brew install ideviceinstaller 
  - brew install ios-deploy 
