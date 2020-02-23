@@ -1,7 +1,8 @@
 os: osx 
-language: generic 
+osx_image: xcode11.3
 before_script: 
  - brew update 
+ - brew install automake autoconf libtool wget libimobiledevice
  - brew install --HEAD usbmuxd 
  - brew unlink usbmuxd 
  - brew link usbmuxd 
