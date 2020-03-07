@@ -37,7 +37,8 @@ final FocusNode _passFocus = FocusNode();
 final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
-var schoolList, searchList = [];
+var searchList = [];
+var schoolList;
 bool adsEnabled = true;
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -59,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return MyDialog();
+          return SpinnerDialog();
         });
     await sleep1();
     NewVersion newVerDetails = await getVersion();
@@ -114,13 +115,33 @@ class _LoginPageState extends State<LoginPage> {
         if (schoolList == "TIMEOUT") {
           listAvailable = false;
           await _timeoutAlert(context);
+          try {
+            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+          } catch (e) {
+            isError = true;
+            _ackAlert(context, e.toString());
+          }
+        } else if (schoolList is int) {
+          listAvailable = false;
+          await _timeoutAlert(context);
+          try {
+            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+          } catch (e) {
+            isError = true;
+            _ackAlert(context, e.toString());
+          }
         } else {
           for (var n in schoolList) {
             searchList.add(n);
           }
+          try {
+            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+          } catch (e) {
+            isError = true;
+            _ackAlert(context, e.toString());
+          }
         }
-        Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-      } on NoSuchMethodError catch (e) {
+      } catch (e) {
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -135,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return MyDialog();
+            return SpinnerDialog();
           });
     }
     //Not showing quickly enough
@@ -153,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     try {
       Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-    } on NoSuchMethodError catch (e) {
+    } catch (e) {
       isError = true;
       _ackAlert(context, e.toString());
     }
@@ -257,10 +278,10 @@ class _LoginPageState extends State<LoginPage> {
       focusNode: _codeFocus,
       controller: codeController,
       onTap: () {
-        if(listAvailable) showSelectDialog();
+        if (listAvailable) showSelectDialog();
       },
       onChanged: (String input) {
-        if(listAvailable) showSelectDialog();
+        if (listAvailable) showSelectDialog();
       },
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
@@ -432,8 +453,14 @@ class _LoginPageState extends State<LoginPage> {
         return AlertDialog(
           title: Text("Hiba: Kérés timeout"),
           content: SingleChildScrollView(
-            child:
-                Column(children: <Widget>[Text("Hiba:"), Text("A kérésünkre nem kaptunk választ 10 másodperc után sem!"), Text("Manuális kód megadás szükséges!",style: TextStyle(fontWeight: FontWeight.bold),)]),
+            child: Column(children: <Widget>[
+              Text("Hiba:"),
+              Text("A kérésünkre nem kaptunk választ 10 másodperc után sem!"),
+              Text(
+                "Manuális kód megadás szükséges!",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )
+            ]),
           ),
           actions: <Widget>[
             FlatButton(

@@ -114,12 +114,12 @@ class NetworkHelper {
     var header = {
       'User-Agent': '$agent',
       'Content-Type': 'application/json',
+      'apiKey': '7856d350-1fda-45f5-822d-e1a2f3f1acf0',
     };
     var res;
     try {
       res = await client
-          .get('https://www.e-szivacs.org/mirror/school-list.json',
-              headers: header)
+          .get('https://api.novy.vip/schoolList.json', headers: header)
           .timeout(const Duration(seconds: 10));
     } on TimeoutException catch (_) {
       print("TIMEOUT");
@@ -130,6 +130,7 @@ class NetworkHelper {
     await sleep1();
     if (res.statusCode != 200) {
       print(res.statusCode);
+      return res.statusCode;
     }
     List<dynamic> responseJson = json.decode(utf8.decode(res.bodyBytes));
     for (var n in responseJson) {

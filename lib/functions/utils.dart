@@ -84,12 +84,12 @@ String capitalizePair(WordPair pair) {
   return '${capitalize(pair.first)} ${capitalize(pair.second)}';
 }
 
-class MyDialog extends StatefulWidget {
+class SpinnerDialog extends StatefulWidget {
   @override
-  MyDialogState createState() => new MyDialogState();
+  SpinnerDialogState createState() => new SpinnerDialogState();
 }
 
-class MyDialogState extends State<MyDialog> {
+class SpinnerDialogState extends State<SpinnerDialog> {
   String loadingText = login.loadingText;
   final GlobalKey<State> key = login.keyLoader;
   @override
