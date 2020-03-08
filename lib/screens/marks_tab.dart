@@ -87,6 +87,20 @@ class MarksTabState extends State<MarksTab>
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
+    String subtitle = "undefined";
+    if(login.markCardSubtitle == "Téma"){
+      subtitle = capitalize(allParsedByDate[index].theme);
+    }else if(login.markCardSubtitle == "Tanár"){
+      subtitle = allParsedByDate[index].teacher;
+    }else if(login.markCardSubtitle == "Súly"){
+      subtitle = allParsedByDate[index].weight;
+    }else if(login.markCardSubtitle == "Dátum"){
+      subtitle = allParsedByDate[index].createDate;
+    }
+    if(subtitle.length >= 38){
+      subtitle = subtitle.substring(0,35);
+      subtitle += "...";
+    }
     if (index >= itemsLength) return null;
     final color = colors[index].shade400;
     return SafeArea(
@@ -95,6 +109,7 @@ class MarksTabState extends State<MarksTab>
       child: Hero(
         tag: index,
         child: HeroAnimatingMarksCard(
+            subTitle: subtitle,//capitalize(allParsedByDate[index].theme),
             title: markNameByDate[index],
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
@@ -125,6 +140,24 @@ class MarksTabState extends State<MarksTab>
   }
 
   Widget _subjectListBuilder(BuildContext context, int index) {
+    String subtitle = "undefined";
+    if(login.markCardSubtitle == "Téma"){
+      if(allParsedBySubject[index].theme != null && allParsedBySubject[index].theme != "") subtitle = capitalize(allParsedBySubject[index].theme);
+      else subtitle = "Ismeretlen";
+    }else if(login.markCardSubtitle == "Tanár"){
+      subtitle = allParsedBySubject[index].teacher;
+    }else if(login.markCardSubtitle == "Súly"){
+      subtitle = allParsedBySubject[index].weight;
+    }else if(login.markCardSubtitle == "Dátum"){
+      subtitle = allParsedBySubject[index].createDate;
+    }
+    if(subtitle == ""){
+      subtitle = "Ismeretlen";
+    }
+    if(subtitle.length >= 38){
+      subtitle = subtitle.substring(0,35);
+      subtitle += "...";
+    }
     if (index >= itemsLength) return null;
     final color = colors[index].shade400;
     if (subjectBefore != allParsedBySubject[index].subject) {
@@ -155,6 +188,7 @@ class MarksTabState extends State<MarksTab>
                   child: Hero(
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
+                        subTitle: subtitle,
                         title: markNameBySubject[index],
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
@@ -215,6 +249,7 @@ class MarksTabState extends State<MarksTab>
                   child: Hero(
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
+                      subTitle: subtitle,
                         title: markNameBySubject[index],
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
@@ -259,6 +294,7 @@ class MarksTabState extends State<MarksTab>
           child: Hero(
             tag: index,
             child: HeroAnimatingSubjectsCard(
+                subTitle: subtitle,
                 title: markNameBySubject[index],
                 color: color,
                 heroAnimation: AlwaysStoppedAnimation(0),

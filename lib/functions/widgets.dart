@@ -148,9 +148,14 @@ class _PressableCardState extends State<PressableCard>
 /// use on both iOS and Android as part of their brand's unique design.
 class HeroAnimatingMarksCard extends StatelessWidget {
   HeroAnimatingMarksCard(
-      {this.title, this.color, this.heroAnimation, this.onPressed});
+      {this.title,
+      this.subTitle,
+      this.color,
+      this.heroAnimation,
+      this.onPressed});
 
   final String title;
+  final String subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final VoidCallback onPressed;
@@ -184,20 +189,34 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 80,
-                    color: Colors.black12,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      title,
-                      textDirection: TextDirection.ltr,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                      height: 80,
+                      color: Colors.black12,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            title,
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            subTitle,
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                              color: Colors.grey[800],
+                              fontSize: 21,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          )
+                        ],
+                      )),
                 ),
                 // The play button grows in the hero animation.
                 Padding(
@@ -447,8 +466,13 @@ class AnimatedChartsCard extends StatelessWidget {
 
 class HeroAnimatingSubjectsCard extends StatelessWidget {
   HeroAnimatingSubjectsCard(
-      {this.title, this.color, this.heroAnimation, this.onPressed});
+      {this.subTitle,
+      this.title,
+      this.color,
+      this.heroAnimation,
+      this.onPressed});
 
+  final String subTitle;
   final String title;
   final Color color;
   final Animation<double> heroAnimation;
@@ -487,15 +511,31 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
                     color: Colors.black12,
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      title,
-                      textDirection: TextDirection.ltr,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          title,
+                          textDirection: TextDirection.ltr,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 21,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          subTitle,
+                          textDirection: TextDirection.ltr,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: 21,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
