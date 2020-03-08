@@ -45,7 +45,6 @@ class MarksDetailTab extends StatelessWidget {
           Hero(
             tag: id,
             child: HeroAnimatingMarksCard(
-              subTitle: "",
               title: name,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(1),
@@ -57,7 +56,6 @@ class MarksDetailTab extends StatelessWidget {
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               return HeroAnimatingMarksCard(
-                subTitle: "",
                 title: name,
                 color: color,
                 heroAnimation: animation,

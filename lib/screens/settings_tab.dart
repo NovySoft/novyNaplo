@@ -9,7 +9,6 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 
 String dropDown;
-String dropDownTwo = login.markCardSubtitle;
 bool switchValue = login.adsEnabled;
 bool switchTwoValue = false;
 
@@ -74,7 +73,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 5,
+      itemCount: 4,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -113,48 +112,6 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 1) {
-          return ListTile(
-            title: Text("Jegy alcím:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Téma",
-                  child: Text(
-                    "Téma",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Tanár",
-                  child: Text(
-                    "Tanár",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Súly",
-                  child: Text(
-                    "Súly",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Dátum",
-                  child: Text(
-                    "Dátum",
-                  ),
-                ),
-              ],
-              onChanged: (String value) async{
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                prefs.setString("markCardSubtitle", value);
-                login.markCardSubtitle = value;
-                setState(() {
-                  dropDownTwo = value;
-                });
-              },
-              value: dropDownTwo,
-            ),
-          );
-        } else if (index == 2) {
           return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
@@ -205,7 +162,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: switchValue,
             ),
           );
-        } else if (index == 3) {
+        } else if (index == 2) {
           return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -237,7 +194,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: switchTwoValue,
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 3) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
