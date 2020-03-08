@@ -22,6 +22,7 @@ class TimetableDetailTab extends StatelessWidget {
           Hero(
             tag: id,
             child: HeroAnimatingMarksCard(
+              subTitle: "",
               title: lessonInfo.name,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(1),
@@ -29,6 +30,7 @@ class TimetableDetailTab extends StatelessWidget {
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               return HeroAnimatingMarksCard(
+                subTitle: "",
                 title: lessonInfo.name,
                 color: color,
                 heroAnimation: animation,
