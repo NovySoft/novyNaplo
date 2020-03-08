@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="novy.vip.novynaplo"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="preferExternal">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,6 +35,7 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
+        tools:replace="android:label"
         android:name="io.flutter.app.FlutterApplication"
         android:label="Novy Napló"
         android:icon="@mipmap/ic_launcher">

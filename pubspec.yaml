@@ -43,7 +43,7 @@ dependencies:
   flutter_cupertino_localizations: any
   url_launcher: any
   material_design_icons_flutter: any
-  #admob_flutter: any
+  background_fetch: any
 
 flutter_icons:
   android: true

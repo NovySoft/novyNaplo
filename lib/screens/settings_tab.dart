@@ -2,23 +2,15 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
-import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:novynaplo/screens/marks_tab.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
-import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
-import 'package:novynaplo/config.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/screens/calculator_tab.dart';
-import 'dart:async';
 
 String dropDown;
 bool switchValue = login.adsEnabled;
+bool switchTwoValue = false;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -39,7 +31,7 @@ class _SettingsTabState extends State<SettingsTab> {
       appBar: AppBar(
         title: Text(SettingsTab.title),
       ),
-      drawer: getDrawer(SettingsTab.tag,context),
+      drawer: getDrawer(SettingsTab.tag, context),
       body: SettingsBody(),
     );
   }
@@ -81,7 +73,8 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 3,
+      itemCount: 4,
+      // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -122,8 +115,9 @@ class _SettingsBodyState extends State<SettingsBody> {
           return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
-              onChanged: (bool isOn) async{
-                final SharedPreferences prefs = await SharedPreferences.getInstance();
+              onChanged: (bool isOn) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
                 setState(() {
                   switchValue = isOn;
                 });
@@ -169,6 +163,38 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 2) {
+          return ListTile(
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Háttérlekérések"),
+                Text("Értesítések"),
+              ],
+            ),
+            trailing: Switch(
+              onChanged: null,
+              /*
+              onChanged: (bool switchOn) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                setState(() {
+                  switchTwoValue = switchOn;
+                });
+                if (switchOn) {
+                  print("ON");
+                  FirebaseAnalytics().setUserProperty(name: "Notifications", value: "YES");
+                  prefs.setBool("Notifications", true);
+                } else {
+                  print("OFF");
+                  FirebaseAnalytics().setUserProperty(name: "Notifications", value: "NO");
+                  prefs.setBool("Notifications", false);
+                }
+              },*/
+              value: switchTwoValue,
+            ),
+          );
+        } else if (index == 3) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
@@ -217,7 +243,8 @@ class _LogOutDialogState extends State<LogOutDialog> {
             prefs.clear();
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => login.LoginPage()),
+              MaterialPageRoute(
+                  builder: (BuildContext context) => login.LoginPage()),
               ModalRoute.withName('login-page'),
             );
           },
