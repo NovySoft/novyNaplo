@@ -58,7 +58,6 @@ script:
  - cd app
  - wget "$KEYJKS" -O key.jks &> /dev/null
  - cd /home/travis/build/NovySoft/novyNaplo
- - "./flutter/bin/flutter test --verbose"
  - "./flutter/bin/flutter build apk --verbose"
 after_success:
  - cd travis
