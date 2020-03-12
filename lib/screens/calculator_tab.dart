@@ -258,7 +258,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyest és $t db ötöst";
+          return "$t db négyest és $n db ötöst";
           break;
         default:
           return "Nem lehetséges";

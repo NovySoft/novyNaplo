@@ -24,7 +24,6 @@ void main() async {
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  print(prefs.getBool("isNew"));
   if(prefs.getBool("isNew") == false){
     isNew = false;
   }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 PageController controller = PageController();
 var currentPageValue = 0.0;
@@ -13,6 +14,8 @@ double visibility = 0,
     secondVisibilityTwo = 0,
     thirdVisibility = 0,
     thirdVisibilityTwo = 0;
+
+SharedPreferences prefs;
 
 class WelcomeScreen extends StatefulWidget {
   static String tag = 'welcome';
@@ -48,6 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   void animate() async {
+    prefs = await SharedPreferences.getInstance();
     await sleep1();
     await sleep1();
     setState(() {
@@ -346,6 +350,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
+          prefs.setBool("isNew",false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
         },
         padding: EdgeInsets.all(12),
