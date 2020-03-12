@@ -78,6 +78,10 @@ flutter:
   assets:
     - images/novy.jpg
     - assets/home.png
+    - assets/error.png
+    - assets/git.png
+    - assets/firebase.png
+    - assets/admob.png
 
   fonts:
       - family: Nunito

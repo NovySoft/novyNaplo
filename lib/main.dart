@@ -12,13 +12,22 @@ import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
+import 'package:novynaplo/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
+bool isNew = true;
 
 void main() async {
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  print(prefs.getBool("isNew"));
+  if(prefs.getBool("isNew") == false){
+    isNew = false;
+  }
   runApp(MyApp());
   /*Map<PermissionGroup, PermissionStatus> permissions =
       await PermissionHandler().requestPermissions([PermissionGroup.contacts]);*/
@@ -47,7 +56,7 @@ class MyApp extends StatelessWidget {
             theme: theme,
             title: 'Novy Napló',
             debugShowCheckedModeBanner: false,
-            home: LoginPage(),
+            home: isNew ? WelcomeScreen() : LoginPage(),
             routes: routes,
             navigatorObservers: [
               FirebaseAnalyticsObserver(analytics: analytics),

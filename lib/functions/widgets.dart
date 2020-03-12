@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';

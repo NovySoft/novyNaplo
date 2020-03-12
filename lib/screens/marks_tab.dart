@@ -1,26 +1,13 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
-import 'package:novynaplo/config.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
-import 'package:flutter/services.dart';
-import 'package:novynaplo/screens/timetable_tab.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:novynaplo/screens/settings_tab.dart';
-import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:novynaplo/config.dart' as config;
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 var apiResponse = login.dJson;
 var allParsedByDate, allParsedBySubject;
@@ -89,7 +76,6 @@ class MarksTabState extends State<MarksTab>
   Widget _dateListBuilder(BuildContext context, int index) {
     String subtitle = "undefined";
     if (login.markCardSubtitle == "Téma") {
-      print(allParsedByDate[index].theme);
       if (allParsedByDate[index].theme != null &&
           allParsedByDate[index].theme != "")
         subtitle = capitalize(allParsedByDate[index].theme);

@@ -1,19 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:novynaplo/helpers/adHelper.dart';
-import 'package:novynaplo/screens/marks_tab.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
-import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
-import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/screens/timetable_tab.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/screens/calculator_tab.dart';
 var allParsedNotices;
 var colors = getRandomColors(noticesCount);
 

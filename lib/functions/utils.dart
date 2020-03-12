@@ -124,6 +124,10 @@ Future sleep1() async {
   return new Future.delayed(const Duration(seconds: 1), () => "1");
 }
 
+Future sleep2() async {
+  return new Future.delayed(const Duration(milliseconds: 500), () => "500");
+}
+
 String toEnglish(var input) {
   return removeDiacritics(input.toString());
 }

@@ -1,4 +1,3 @@
-import 'package:novynaplo/config.dart' as config;
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

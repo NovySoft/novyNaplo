@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:novynaplo/config.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
-import 'package:flutter/services.dart';
-import 'package:novynaplo/screens/marks_tab.dart';
-import 'package:novynaplo/screens/timetable_tab.dart';
-import 'package:novynaplo/screens/settings_tab.dart';
-import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
 
 List<String> dropdownValues = [""];
 String dropdownValue = dropdownValues[0];

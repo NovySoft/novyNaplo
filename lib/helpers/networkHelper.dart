@@ -1,22 +1,16 @@
-import 'dart:ffi';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/functions/classManager.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
 import 'package:novynaplo/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
-import 'package:novynaplo/screens/login_page.dart' as login;
-import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/functions/utils.dart';
 
 String agent = config.currAgent;
