@@ -217,7 +217,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyest és $t db ötöst";
+          return "$t db négyest és $n db ötöst";
           break;
         case 5:
           return "$th db ötöst";
