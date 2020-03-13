@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
@@ -243,6 +242,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 child: Text(
                   "Ez az alkalmazás még csak BÉTA változat!",
                   style: TextStyle(fontSize: 32),
+                  textAlign: TextAlign.center,
                 ),
               )),
           SizedBox(
@@ -254,6 +254,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               child: Center(
                 child: Text(
                     "Az alkalmazás több hibát is tartalmazhat, ezeket a novynaplo@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24)),
               )),
           SizedBox(
@@ -310,6 +311,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 child: Text(
                   "Harmadik felek és adatgyűjtés",
                   style: TextStyle(fontSize: 32),
+                  textAlign: TextAlign.center,
                 ),
               )),
           SizedBox(
@@ -350,7 +352,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          prefs.setBool("isNew",false);
+          prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
         },
         padding: EdgeInsets.all(12),
