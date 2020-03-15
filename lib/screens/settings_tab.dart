@@ -9,9 +9,10 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 
 String dropDown;
-String dropDownTwo = login.markCardSubtitle;
-bool switchValue = login.adsEnabled;
-bool switchTwoValue = false;
+String markDropdown = login.markCardSubtitle;
+String lessonDropdown = login.lessonCardSubtitle;
+bool adsSwitch = login.adsEnabled;
+bool notificationSwitch = false;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -74,7 +75,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 5,
+      itemCount: 6,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -148,19 +149,67 @@ class _SettingsBodyState extends State<SettingsBody> {
                   ),
                 ),
               ],
-              onChanged: (String value) async{
+              onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.setString("markCardSubtitle", value);
                 login.markCardSubtitle = value;
                 setState(() {
-                  dropDownTwo = value;
+                  markDropdown = value;
                 });
               },
-              value: dropDownTwo,
+              value: markDropdown,
             ),
           );
         } else if (index == 2) {
+          return ListTile(
+            title: Text("Órarend alcím:"),
+            trailing: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: "Tanterem",
+                  child: Text(
+                    "Tanterem",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Óra témája",
+                  child: Text(
+                    "Óra témája",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Tanár",
+                  child: Text(
+                    "Tanár",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Kezdés-Bejezés",
+                  child: Text(
+                    "Kezdés-Bejezés",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Időtartam",
+                  child: Text(
+                    "Időtartam",
+                  ),
+                ),
+              ],
+              onChanged: (String value) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                prefs.setString("lessonCardSubtitle", value);
+                login.lessonCardSubtitle = value;
+                setState(() {
+                  lessonDropdown = value;
+                });
+              },
+              value: lessonDropdown,
+            ),
+          );
+        } else if (index == 3) {
           return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
@@ -168,7 +217,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 setState(() {
-                  switchValue = isOn;
+                  adsSwitch = isOn;
                 });
                 if (isOn) {
                   FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
@@ -208,10 +257,10 @@ class _SettingsBodyState extends State<SettingsBody> {
                       });
                 }
               },
-              value: switchValue,
+              value: adsSwitch,
             ),
           );
-        } else if (index == 3) {
+        } else if (index == 4) {
           return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -240,10 +289,10 @@ class _SettingsBodyState extends State<SettingsBody> {
                   prefs.setBool("Notifications", false);
                 }
               },*/
-              value: switchTwoValue,
+              value: notificationSwitch,
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 5) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(

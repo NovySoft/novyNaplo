@@ -38,6 +38,7 @@ final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
 String markCardSubtitle;
+String lessonCardSubtitle;
 var searchList = [];
 var schoolList;
 bool adsEnabled = true;
@@ -76,10 +77,12 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.getString("markCardSubtitle") == null){
+    if (prefs.getString("markCardSubtitle") == null || prefs.getString("lessonCardSubtitle") == null) {
       markCardSubtitle = "Téma";
-    }else{
+      lessonCardSubtitle = "Tanterem";
+    }else {
       markCardSubtitle = prefs.getString("markCardSubtitle");
+      lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
     }
     if (prefs.getString("code") != null) {
       if (prefs.getBool("ads")) {

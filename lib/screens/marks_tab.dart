@@ -161,7 +161,7 @@ class MarksTabState extends State<MarksTab>
       String seconds = allParsedByDate[index].createDate.second.toString();
       subtitle = "$year-$month-$day $hour:$minutes:$seconds";
     }
-    if (subtitle == "") {
+    if (subtitle == "" || subtitle == null) {
       subtitle = "Ismeretlen";
     }
     if (subtitle.length >= 38) {
