@@ -5,7 +5,7 @@
 [![HitCount](http://hits.dwyl.io/NovySoft/novyNaplo.svg)](http://hits.dwyl.io/NovySoft/novyNaplo)
 [![Discord](https://img.shields.io/discord/340112709628592139.svg)](http://discord.gg/rmjC4d4)
 
-Novy Csodálatos alpha verzióban lévő teljesen nem eredeti kréta kliense.
+Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 **Jelenlegi funkciók:**
 *  Jegyek megtekintése
