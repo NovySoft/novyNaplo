@@ -136,9 +136,15 @@ class _SettingsBodyState extends State<SettingsBody> {
                   ),
                 ),
                 DropdownMenuItem(
-                  value: "Dátum",
+                  value: "Egyszerűsített Dátum",
                   child: Text(
-                    "Dátum",
+                    "Egyszerűsített Dátum",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Pontos Dátum",
+                  child: Text(
+                    "Pontos Dátum",
                   ),
                 ),
               ],

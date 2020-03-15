@@ -1,42 +1,41 @@
 import 'package:novynaplo/screens/login_page.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
+
 var id = 0;
 
-class Evals{
+class Evals {
   var formName,
-  form,
-  id,
-  value,
-  numberValue,
-  teacher,
-  type,
-  subject,
-  theme,
-  mode,
-  weight,
-  date,
-  createDate;
+      form,
+      id,
+      value,
+      numberValue,
+      teacher,
+      type,
+      subject,
+      theme,
+      mode,
+      weight;
+  String dateString;
+  String createDateString;
+  DateTime createDate;
+  DateTime date;
 }
 
-class Avarage{
-  var subject,
-  markCount,
-  ownValue,
-  classValue,
-  diff;
+class Avarage {
+  var subject, markCount, ownValue, classValue, diff;
 }
 
-Evals setEvals(var input){
+Evals setEvals(var input) {
   Evals temp = new Evals();
   //Magatartas es Szorgalom
-  if(input["Subject"] == null || input["Subject"] == ""){
+  if (input["Subject"] == null || input["Subject"] == "") {
     temp.subject = input["Jelleg"]["Nev"];
-  }else{
+  } else {
     temp.subject = input["Subject"];
   }
   //Magatartas es Szorgalom integer
-  if(input["NumberValue"] == 0 && input["Form"] != "Percent"){
+  if (input["NumberValue"] == 0 && input["Form"] != "Percent") {
     switch (input["Value"]) {
       case "Rossz":
         temp.numberValue = 2;
@@ -54,35 +53,37 @@ Evals setEvals(var input){
         temp.numberValue = 0;
         break;
     }
-  }else{
+  } else {
     temp.numberValue = input["NumberValue"];
   }
   //Ertekeles temaja
-  if(input["Theme"] == null || input["Theme"] == ""){
-    if(input["Mode"] != null){
+  if (input["Theme"] == null || input["Theme"] == "") {
+    if (input["Mode"] != null) {
       temp.theme = input["Mode"];
-    }else{
+    } else {
       //There is no other option than typeName
       temp.theme = input["TypeName"];
     }
-  }else{
+  } else {
     temp.theme = input["Theme"];
   }
   //Ertekeles modja
-  if(input["Mode"] == null || input["Mode"] == ""){
+  if (input["Mode"] == null || input["Mode"] == "") {
     temp.mode = input["TypeName"];
-  }else{
+  } else {
     temp.mode = input["Mode"];
   }
   //Ertekeles sulya
-  if(input["Weight"] == null || input["Weight"] == "" || input["Weight"] == "-"){
-    if(input["Form"] != "Percent"){
+  if (input["Weight"] == null ||
+      input["Weight"] == "" ||
+      input["Weight"] == "-") {
+    if (input["Form"] != "Percent") {
       temp.weight = "100%";
-    }else{
+    } else {
       temp.weight = "0%";
     }
     //feltehetoleg 100%osan beleszámít, pl a szorgalomnal is igy van
-  }else{
+  } else {
     temp.weight = input["Weight"];
   }
   temp.id = id++;
@@ -91,12 +92,14 @@ Evals setEvals(var input){
   temp.form = input["Form"];
   temp.teacher = input["Teacher"];
   temp.type = input["Type"];
-  temp.date = input["Date"];
-  temp.createDate = input["CreatingTime"];
+  temp.dateString = input["Date"];
+  temp.createDateString = input["CreatingTime"];
+  temp.createDate = DateTime.parse(input["CreatingTime"]);
+  temp.date = DateTime.parse(input["Date"]);
   return temp;
 }
 
-Avarage setAvarage(var subject,ownValue,classValue,diff){
+Avarage setAvarage(var subject, ownValue, classValue, diff) {
   Avarage temp = new Avarage();
   temp.subject = capitalize(subject);
   temp.ownValue = ownValue;
@@ -105,29 +108,26 @@ Avarage setAvarage(var subject,ownValue,classValue,diff){
   return temp;
 }
 
-class Notices{
-  var title,
-  content,
-  teacher,
-  date,
-  subject;
+class Notices {
+  var title, content, teacher, dateString, subject;
 }
 
-Notices setNotices(var input){
+Notices setNotices(var input) {
   Notices temp = new Notices();
   temp.title = capitalize(input["Title"]);
   temp.teacher = input["Teacher"];
   temp.content = input["Content"];
-  temp.date = input["CreatingTime"];
-  if(input["OsztalyCsoportUid"] == null){
+  temp.dateString = input["CreatingTime"];
+  if (input["OsztalyCsoportUid"] == null) {
     temp.subject = null;
-  }else{
-    temp.subject = SubjectAssignHelper().assignSubject(dJson,input["OsztalyCsoportUid"],input["Type"],input["Content"]);
+  } else {
+    temp.subject = SubjectAssignHelper().assignSubject(
+        dJson, input["OsztalyCsoportUid"], input["Type"], input["Content"]);
   }
   return temp;
 }
 
-class School{
+class School {
   int id;
   String name;
   String code;
@@ -135,7 +135,7 @@ class School{
   String city;
 }
 
-class Lesson{
+class Lesson {
   String subject;
   String name;
   String groupName;
@@ -155,7 +155,7 @@ class Lesson{
   DateTime endDate;
 }
 
-Lesson setLesson(input){
+Lesson setLesson(input) {
   var temp = new Lesson();
   //INTs
   temp.id = input["LessonId"];
@@ -166,9 +166,9 @@ Lesson setLesson(input){
   temp.groupName = input["ClassGroup"];
   temp.subject = capitalize(input["Subject"]);
   temp.name = capitalize(input["Nev"]);
-  if(input["ClassRoom"].toString().startsWith("I")){
+  if (input["ClassRoom"].toString().startsWith("I")) {
     temp.classroom = input["ClassRoom"];
-  }else{
+  } else {
     temp.classroom = capitalize(input["ClassRoom"]);
   }
   temp.theme = input["Theme"];
@@ -182,18 +182,18 @@ Lesson setLesson(input){
   temp.homeworkEnabled = input["IsTanuloHaziFeladatEnabled"];
   //Lists
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
-  temp.dogaNames = []; //TODO EZT MEGCSINÁLNI 
+  temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
   return temp;
 }
 
-class CalculatorData{
+class CalculatorData {
   var value;
   var sum;
   int count;
   String name;
 }
 
-CalculatorData setCalcData(value,name,count,sum){
+CalculatorData setCalcData(value, name, count, sum) {
   CalculatorData temp = new CalculatorData();
   temp.value = value;
   temp.count = count;

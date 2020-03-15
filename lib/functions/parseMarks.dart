@@ -4,7 +4,7 @@ import 'classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 List<ChartPoints> chartData = [];
-var index,sum;
+var index, sum;
 var jegyek;
 List<Evals> jegyArray = [];
 var atlagArray = [];
@@ -22,11 +22,11 @@ List<dynamic> parseAllByDate(var input) {
   } on Error catch (e) {
     return [e];
   }
-  jegyArray.sort((a, b) => b.createDate.compareTo(a.createDate));
+  jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
   return jegyArray;
 }
 
-List<dynamic> parseAllBySubject(var input){
+List<dynamic> parseAllBySubject(var input) {
   jegyArray = [];
   try {
     jegyek = input["Evaluations"];
@@ -98,7 +98,8 @@ List<String> parseSubjects(var input) {
   return subjectsArray;
 }
 
-List<charts.Series<ChartPoints, int>> createSubjectChart(List<int> input, String id) {
+List<charts.Series<ChartPoints, int>> createSubjectChart(
+    List<int> input, String id) {
   chartData = [];
   index = 1;
   sum = 0;
@@ -121,13 +122,14 @@ class ChartPoints {
   ChartPoints(this.count, this.value);
 }
 
-void addChartPoints(var n){
+void addChartPoints(var n) {
   sum += n;
-  chartData.add(new ChartPoints(index-1,sum/index));
+  chartData.add(new ChartPoints(index - 1, sum / index));
   index++;
 }
 
-List<dynamic> categorizeSubjects(var input){ //TODO rewrite with matrixes
+List<dynamic> categorizeSubjects(var input) {
+  //TODO rewrite with matrixes
   catIndex = 0;
   var arrayIndex = 1;
   var parsed = parseAllByDate(input);
@@ -135,23 +137,25 @@ List<dynamic> categorizeSubjects(var input){ //TODO rewrite with matrixes
   var stringsTwo = [];
   var output = [[]];
   String subJect = ""; //will store temp data
-  for(var n in parsed){
-    var date = n.date.split("T")[0];
+  for (var n in parsed) {
+    var date = n.dateString.split("T")[0];
     var subject = n.subject;
     var value = n.numberValue;
-    if((n.form != "Percent" && n.type != "HalfYear") || subject == "Magatartas" || subject == "Szorgalom"){
+    if ((n.form != "Percent" && n.type != "HalfYear") ||
+        subject == "Magatartas" ||
+        subject == "Szorgalom") {
       strings.add(subject + ":" + date + ":" + value.toString());
       stringsTwo.add(date + ":" + subject + ":" + value.toString());
     }
   }
   strings.sort();
   stringsTwo.sort();
-  for(var n in stringsTwo){
+  for (var n in stringsTwo) {
     output[0].add("Összesített átlag:" + n.split(":")[2]);
   }
   output.add([]);
-  for(var n in strings){
-    if(catIndex != 0 && subJect != n.split(":")[0]){
+  for (var n in strings) {
+    if (catIndex != 0 && subJect != n.split(":")[0]) {
       output.add([]);
       arrayIndex++;
     }
@@ -162,23 +166,23 @@ List<dynamic> categorizeSubjects(var input){ //TODO rewrite with matrixes
   return output;
 }
 
-List<dynamic> sortByDateAndSubject(List<dynamic> input){
+List<dynamic> sortByDateAndSubject(List<dynamic> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
   String _beforeSubject = input[0].subject;
   List<Evals> _output = [];
   List<List<Evals>> _tempArray = [[]];
-  for(var n in input){
-    if(n.subject != _beforeSubject){
+  for (var n in input) {
+    if (n.subject != _beforeSubject) {
       _currentIndex++;
       _tempArray.add([]);
       _beforeSubject = n.subject;
     }
     _tempArray[_currentIndex].add(n);
   }
-  for(List<Evals> n in _tempArray){
-    n.sort((a, b) => b.createDate.compareTo(a.createDate));
-    for(var x in n){
+  for (List<Evals> n in _tempArray) {
+    n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+    for (var x in n) {
       _output.add(x);
     }
   }

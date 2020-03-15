@@ -44,6 +44,7 @@ dependencies:
   url_launcher: any
   material_design_icons_flutter: any
   background_fetch: any
+  sqflite: any
 
 flutter_icons:
   android: true

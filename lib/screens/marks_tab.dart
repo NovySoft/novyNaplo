@@ -85,8 +85,16 @@ class MarksTabState extends State<MarksTab>
       subtitle = allParsedByDate[index].teacher;
     } else if (login.markCardSubtitle == "Súly") {
       subtitle = allParsedByDate[index].weight;
-    } else if (login.markCardSubtitle == "Dátum") {
-      subtitle = allParsedByDate[index].createDate;
+    } else if (login.markCardSubtitle == "Pontos Dátum") {
+      subtitle = allParsedByDate[index].createDateString;
+    } else if (login.markCardSubtitle == "Egyszerűsített Dátum") {
+      String year = allParsedByDate[index].createDate.year.toString();
+      String month = allParsedByDate[index].createDate.month.toString();
+      String day = allParsedByDate[index].createDate.day.toString();
+      String hour = allParsedByDate[index].createDate.hour.toString();
+      String minutes = allParsedByDate[index].createDate.minute.toString();
+      String seconds = allParsedByDate[index].createDate.second.toString();
+      subtitle = "$year-$month-$day $hour:$minutes:$seconds";
     }
     if (subtitle.length >= 38) {
       subtitle = subtitle.substring(0, 35);
@@ -111,8 +119,8 @@ class MarksTabState extends State<MarksTab>
                     mode: allParsedByDate[index].mode,
                     theme: allParsedByDate[index].theme,
                     weight: allParsedByDate[index].weight,
-                    date: allParsedByDate[index].date,
-                    createDate: allParsedByDate[index].createDate,
+                    date: allParsedByDate[index].dateString,
+                    createDate: allParsedByDate[index].createDateString,
                     teacher: allParsedByDate[index].teacher,
                     subject: allParsedByDate[index].subject,
                     numberValue: allParsedByDate[index].numberValue,
@@ -142,8 +150,16 @@ class MarksTabState extends State<MarksTab>
       subtitle = allParsedBySubject[index].teacher;
     } else if (login.markCardSubtitle == "Súly") {
       subtitle = allParsedBySubject[index].weight;
-    } else if (login.markCardSubtitle == "Dátum") {
-      subtitle = allParsedBySubject[index].createDate;
+    } else if (login.markCardSubtitle == "Pontos Dátum") {
+      subtitle = allParsedBySubject[index].createDateString;
+    } else if (login.markCardSubtitle == "Egyszerűsített Dátum") {
+      String year = allParsedByDate[index].createDate.year.toString();
+      String month = allParsedByDate[index].createDate.month.toString();
+      String day = allParsedByDate[index].createDate.day.toString();
+      String hour = allParsedByDate[index].createDate.hour.toString();
+      String minutes = allParsedByDate[index].createDate.minute.toString();
+      String seconds = allParsedByDate[index].createDate.second.toString();
+      subtitle = "$year-$month-$day $hour:$minutes:$seconds";
     }
     if (subtitle == "") {
       subtitle = "Ismeretlen";
@@ -193,9 +209,9 @@ class MarksTabState extends State<MarksTab>
                                 mode: allParsedBySubject[index].mode,
                                 theme: allParsedBySubject[index].theme,
                                 weight: allParsedBySubject[index].weight,
-                                date: allParsedBySubject[index].date,
+                                date: allParsedBySubject[index].dateString,
                                 createDate:
-                                    allParsedBySubject[index].createDate,
+                                    allParsedBySubject[index].createDateString,
                                 teacher: allParsedBySubject[index].teacher,
                                 subject: allParsedBySubject[index].subject,
                                 numberValue:
@@ -254,9 +270,9 @@ class MarksTabState extends State<MarksTab>
                                 mode: allParsedBySubject[index].mode,
                                 theme: allParsedBySubject[index].theme,
                                 weight: allParsedBySubject[index].weight,
-                                date: allParsedBySubject[index].date,
+                                date: allParsedBySubject[index].dateString,
                                 createDate:
-                                    allParsedBySubject[index].createDate,
+                                    allParsedBySubject[index].createDateString,
                                 teacher: allParsedBySubject[index].teacher,
                                 subject: allParsedBySubject[index].subject,
                                 numberValue:
@@ -299,8 +315,8 @@ class MarksTabState extends State<MarksTab>
                         mode: allParsedBySubject[index].mode,
                         theme: allParsedBySubject[index].theme,
                         weight: allParsedBySubject[index].weight,
-                        date: allParsedBySubject[index].date,
-                        createDate: allParsedBySubject[index].createDate,
+                        date: allParsedBySubject[index].dateString,
+                        createDate: allParsedBySubject[index].createDateString,
                         teacher: allParsedBySubject[index].teacher,
                         subject: allParsedBySubject[index].subject,
                         numberValue: allParsedBySubject[index].numberValue,
