@@ -79,17 +79,34 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("markCardSubtitle") == null || prefs.getString("lessonCardSubtitle") == null) {
+    if (prefs.getString("markCardSubtitle") == null) {
       markCardSubtitle = "Téma";
-      markCardConstColor = "Green";
-      lessonCardSubtitle = "Tanterem";
-      markCardTheme = "Véletlenszerű";
-    }else {
+    }else{
       markCardSubtitle = prefs.getString("markCardSubtitle");
-      lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
-      markCardTheme = prefs.getString("markCardTheme");
+    }
+
+    if(prefs.getString("markCardConstColor") == null){
+      markCardConstColor = "Green";
+    }else{
       markCardConstColor = prefs.getString("markCardConstColor");
     }
+
+    if(prefs.getString("lessonCardSubtitle") == null){
+      lessonCardSubtitle = "Tanterem";
+    }else{
+      lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
+    }
+
+    if(prefs.getString("markCardTheme") == null){
+      markCardTheme = "Véletlenszerű";
+    }else{
+      markCardTheme = prefs.getString("markCardTheme");
+    }
+    //DONT DELETE, FOR TESTING USE ONLY
+    /*print("subtitle:" + markCardSubtitle);
+    print("constColor:" + markCardConstColor);
+    print("lesson card:" + lessonCardSubtitle);
+    print("mark theme:" + markCardTheme);*/
     if (prefs.getString("code") != null) {
       if (prefs.getBool("ads")) {
         adBanner.load();
