@@ -10,7 +10,7 @@ class TimetableDetailTab extends StatelessWidget {
   });
 
   final Lesson lessonInfo;
-  final MaterialColor color;
+  final Color color;
   Widget _buildBody() {
     return SafeArea(
       bottom: false,

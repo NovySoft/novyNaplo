@@ -207,7 +207,7 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                             subTitle,
                             textDirection: TextDirection.ltr,
                             style: TextStyle(
-                              color: Colors.grey[800],
+                              color: Colors.black,
                               fontSize: 21,
                               fontWeight: FontWeight.normal,
                             ),
@@ -527,7 +527,7 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
                           textDirection: TextDirection.ltr,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            color: Colors.grey[800],
+                            color: Colors.black,
                             fontSize: 21,
                             fontWeight: FontWeight.normal,
                           ),

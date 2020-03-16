@@ -39,6 +39,8 @@ final FocusNode _userFocus = FocusNode();
 String loadingText = "Kérlek várj...";
 String markCardSubtitle;
 String lessonCardSubtitle;
+String markCardTheme;
+String markCardConstColor;
 var searchList = [];
 var schoolList;
 bool adsEnabled = true;
@@ -79,10 +81,14 @@ class _LoginPageState extends State<LoginPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString("markCardSubtitle") == null || prefs.getString("lessonCardSubtitle") == null) {
       markCardSubtitle = "Téma";
+      markCardConstColor = "Green";
       lessonCardSubtitle = "Tanterem";
+      markCardTheme = "Véletlenszerű";
     }else {
       markCardSubtitle = prefs.getString("markCardSubtitle");
       lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
+      markCardTheme = prefs.getString("markCardTheme");
+      markCardConstColor = prefs.getString("markCardConstColor");
     }
     if (prefs.getString("code") != null) {
       if (prefs.getBool("ads")) {
@@ -222,6 +228,7 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("code", encryptedCode);
       prefs.setString("user", encryptedUser);
       FirebaseAnalytics().setUserProperty(name: "School", value: code);
+      FirebaseAnalytics().setUserProperty(name: "Version", value: config.currentAppVersionCode);
     } on PlatformException catch (e) {
       isError = true;
       _ackAlert(context, e.message);

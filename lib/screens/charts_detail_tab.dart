@@ -13,7 +13,7 @@ class ChartsDetailTab extends StatelessWidget {
 
   final int id;
   final String subject;
-  final MaterialColor color;
+  final Color color;
   final List<dynamic> avList;
   final List<charts.Series> seriesList;
   final bool animate;

@@ -39,7 +39,7 @@ class _ChartsTabState extends State<ChartsTab> {
 }
 
 Widget _chartsListBuilder(BuildContext context, int index) {
-  MaterialColor currColor = colors[index];
+  Color currColor = colors[index];
   List<int> currSubjectMarks = [];
   for(var n in allParsedSubjects[index]){
     currSubjectMarks.add(int.parse(n.split(":")[1]));

@@ -55,7 +55,7 @@ android {
             }
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

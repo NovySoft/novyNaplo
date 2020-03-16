@@ -40,7 +40,7 @@ class _NoticesTabState extends State<NoticesTab> {
 }
 
 Widget _noticesBuilder(BuildContext context, int index) {
-  MaterialColor currColor = colors[index];
+  Color currColor = colors[index];
   return SafeArea(
       top: false,
       bottom: false,

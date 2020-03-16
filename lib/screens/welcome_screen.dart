@@ -187,6 +187,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 child: Text(
                   "Üdv a Novy Naplóban!",
                   style: TextStyle(fontSize: 32),
+                  textAlign: TextAlign.center,
                 ),
               )),
           SizedBox(

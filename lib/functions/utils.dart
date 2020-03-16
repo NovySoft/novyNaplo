@@ -62,8 +62,8 @@ String generateRandomHeadline() {
   return null;
 }
 
-List<MaterialColor> getRandomColors(int amount) {
-  return List<MaterialColor>.generate(amount, (index) {
+List<Color> getRandomColors(int amount) {
+  return List<Color>.generate(amount, (index) {
     return _myListOfRandomColors[_random.nextInt(_myListOfRandomColors.length)];
     //return _myListOfRandomColors[2];
   });

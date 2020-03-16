@@ -16,7 +16,7 @@ final List<Tab> days = <Tab>[
 ];
 
 List<List<Lesson>> lessonsList;
-List<MaterialColor> colors = getRandomColors(15);
+List<Color> colors = getRandomColors(15);
 
 class TimetableTab extends StatefulWidget {
   static String tag = 'timetable';

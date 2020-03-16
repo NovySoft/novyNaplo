@@ -19,7 +19,7 @@ class NoticeDetailTab extends StatelessWidget {
   final String teacher;
   final String date;
   final String subject;
-  final MaterialColor color;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

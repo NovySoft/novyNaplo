@@ -11,8 +11,11 @@ import 'package:novynaplo/helpers/themeHelper.dart';
 String dropDown;
 String markDropdown = login.markCardSubtitle;
 String lessonDropdown = login.lessonCardSubtitle;
+String markThemeDropdown = login.markCardTheme;
+String constColorDropdown = login.markCardConstColor;
 bool adsSwitch = login.adsEnabled;
 bool notificationSwitch = false;
+int indexModifier = 0;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -58,6 +61,15 @@ class _SettingsBodyState extends State<SettingsBody> {
             return AdsDialog();
           });
     }
+    if (login.markCardTheme == "Egyszínű") {
+      setState(() {
+        indexModifier = 1;
+      });
+    } else {
+      setState(() {
+        indexModifier = 0;
+      });
+    }
   }
 
   @override
@@ -75,7 +87,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 6,
+      itemCount: 7 + indexModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -211,6 +223,166 @@ class _SettingsBodyState extends State<SettingsBody> {
           );
         } else if (index == 3) {
           return ListTile(
+            title: Text("Jegykártya színtéma:"),
+            trailing: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: "Véletlenszerű",
+                  child: Text(
+                    "Véletlenszerű",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Értékelés nagysága",
+                  child: Text(
+                    "Értékelés nagysága",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Egyszínű",
+                  child: Text(
+                    "Egyszínű",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Színátmenetes",
+                  child: Text(
+                    "Színátmenetes",
+                  ),
+                ),
+              ],
+              onChanged: (String value) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                prefs.setString("markCardTheme", value);
+                login.markCardTheme = value;
+                setState(() {
+                  markThemeDropdown = value;
+                });
+                if (value == "Egyszínű") {
+                  setState(() {
+                    indexModifier = 1;
+                  });
+                } else {
+                  setState(() {
+                    indexModifier = 0;
+                  });
+                }
+              },
+              value: markThemeDropdown,
+            ),
+          );
+        } else if (indexModifier == 1 && index == 4) {
+          return ListTile(
+            title: Text("Jegykártyák színe:"),
+            trailing: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: "Red",
+                  child: Text(
+                    "Piros",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Green",
+                  child: Text(
+                    "Zöld",
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "lightGreenAccent400",
+                  child: Text(
+                    "Világos zöld",
+                    style: TextStyle(color: Colors.lightGreenAccent[400]),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Lime",
+                  child: Text(
+                    "Lime",
+                    style: TextStyle(color: Colors.lime),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Blue",
+                  child: Text(
+                    "Kék",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "LightBlue",
+                  child: Text(
+                    "Világos kék",
+                    style: TextStyle(color: Colors.lightBlue),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Teal",
+                  child: Text(
+                    "Zöldes kék",
+                    style: TextStyle(color: Colors.teal),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Indigo",
+                  child: Text(
+                    "Indigó kék",
+                    style: TextStyle(color: Colors.indigo),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Yellow",
+                  child: Text(
+                    "Sárga",
+                    style: TextStyle(color: Colors.yellow),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Orange",
+                  child: Text(
+                    "Narancs",
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "DeepOrange",
+                  child: Text(
+                    "Sötét narancs",
+                    style: TextStyle(color: Colors.deepOrange),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Pink",
+                  child: Text(
+                    "Rózsaszín",
+                    style: TextStyle(color: Colors.pink),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Purple",
+                  child: Text(
+                    "Lila",
+                    style: TextStyle(color: Colors.purple),
+                  ),
+                ),
+              ],
+              onChanged: (String value) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                prefs.setString("markCardConstColor", value);
+                login.markCardConstColor = value;
+                setState(() {
+                  constColorDropdown = value;
+                });
+              },
+              value: constColorDropdown,
+            ),
+          );
+        } else if (index == 4 + indexModifier) {
+          return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
               onChanged: (bool isOn) async {
@@ -260,7 +432,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: adsSwitch,
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 5 + indexModifier) {
           return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -292,7 +464,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: notificationSwitch,
             ),
           );
-        } else if (index == 5) {
+        } else if (index == 6 + indexModifier) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(

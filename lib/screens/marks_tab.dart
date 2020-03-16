@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -40,7 +41,7 @@ class MarksTabState extends State<MarksTab>
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
   final _androidRefreshKeyTwo = GlobalKey<RefreshIndicatorState>();
 
-  List<MaterialColor> colors;
+  List<dynamic> colors;
   List<String> markNameByDate;
   List<String> markNameBySubject;
 
@@ -101,7 +102,52 @@ class MarksTabState extends State<MarksTab>
       subtitle += "...";
     }
     if (index >= itemsLength) return null;
-    final color = colors[index].shade400;
+    var color;
+    if (login.markCardTheme == "Véletlenszerű") {
+      color = colors[index].shade400;
+    } else if (login.markCardTheme == "Értékelés nagysága") {
+      if (allParsedByDate[index].form == "Percent") {
+        if (allParsedByDate[index].numberValue >= 90) {
+          color = Colors.green;
+        } else if (allParsedByDate[index].numberValue >= 75) {
+          color = Colors.lightGreen;
+        } else if (allParsedByDate[index].numberValue >= 60) {
+          color = Colors.yellow[800];
+        } else if (allParsedByDate[index].numberValue >= 40) {
+          color = Colors.deepOrange;
+        } else {
+          color = Colors.red[900];
+        }
+      } else {
+        switch (allParsedByDate[index].numberValue) {
+          case 5:
+            color = Colors.green;
+            break;
+          case 4:
+            color = Colors.lightGreen;
+            break;
+          case 3:
+            color = Colors.yellow[800];
+            break;
+          case 2:
+            color = Colors.deepOrange;
+            break;
+          case 1:
+            color = Colors.red[900];
+            break;
+          default:
+            color = Colors.purple;
+            break;
+        }
+      }
+    } else if (login.markCardTheme == "Egyszínű") {
+      color = ThemeHelper().stringToColor(login.markCardConstColor);
+    } else if (login.markCardTheme == "Színátmenetes") {
+      color = ThemeHelper().myGradientList[
+          (ThemeHelper().myGradientList.length - index - 1).abs()];
+    } else {
+      color = Colors.red;
+    }
     return SafeArea(
       top: false,
       bottom: false,
@@ -153,12 +199,12 @@ class MarksTabState extends State<MarksTab>
     } else if (login.markCardSubtitle == "Pontos Dátum") {
       subtitle = allParsedBySubject[index].createDateString;
     } else if (login.markCardSubtitle == "Egyszerűsített Dátum") {
-      String year = allParsedByDate[index].createDate.year.toString();
-      String month = allParsedByDate[index].createDate.month.toString();
-      String day = allParsedByDate[index].createDate.day.toString();
-      String hour = allParsedByDate[index].createDate.hour.toString();
-      String minutes = allParsedByDate[index].createDate.minute.toString();
-      String seconds = allParsedByDate[index].createDate.second.toString();
+      String year = allParsedBySubject[index].createDate.year.toString();
+      String month = allParsedBySubject[index].createDate.month.toString();
+      String day = allParsedBySubject[index].createDate.day.toString();
+      String hour = allParsedBySubject[index].createDate.hour.toString();
+      String minutes = allParsedBySubject[index].createDate.minute.toString();
+      String seconds = allParsedBySubject[index].createDate.second.toString();
       subtitle = "$year-$month-$day $hour:$minutes:$seconds";
     }
     if (subtitle == "" || subtitle == null) {
@@ -169,7 +215,52 @@ class MarksTabState extends State<MarksTab>
       subtitle += "...";
     }
     if (index >= itemsLength) return null;
-    final color = colors[index].shade400;
+    var color;
+    if (login.markCardTheme == "Véletlenszerű") {
+      color = colors[index].shade400;
+    } else if (login.markCardTheme == "Értékelés nagysága") {
+      if (allParsedBySubject[index].form == "Percent") {
+        if (allParsedBySubject[index].numberValue >= 90) {
+          color = Colors.green;
+        } else if (allParsedBySubject[index].numberValue >= 75) {
+          color = Colors.lightGreen;
+        } else if (allParsedBySubject[index].numberValue >= 60) {
+          color = Colors.yellow[800];
+        } else if (allParsedBySubject[index].numberValue >= 40) {
+          color = Colors.deepOrange;
+        } else {
+          color = Colors.red[900];
+        }
+      } else {
+        switch (allParsedBySubject[index].numberValue) {
+          case 5:
+            color = Colors.green;
+            break;
+          case 4:
+            color = Colors.lightGreen;
+            break;
+          case 3:
+            color = Colors.yellow[800];
+            break;
+          case 2:
+            color = Colors.deepOrange;
+            break;
+          case 1:
+            color = Colors.red[900];
+            break;
+          default:
+            color = Colors.purple;
+            break;
+        }
+      }
+    } else if (login.markCardTheme == "Egyszínű") {
+      color = ThemeHelper().stringToColor(login.markCardConstColor);
+    } else if (login.markCardTheme == "Színátmenetes") {
+      color = ThemeHelper().myGradientList[
+          (ThemeHelper().myGradientList.length - index - 1).abs()];
+    } else {
+      color = Colors.red;
+    }
     if (subjectBefore != allParsedBySubject[index].subject) {
       subjectBefore = allParsedBySubject[index].subject;
       if (defaultTargetPlatform == TargetPlatform.iOS) {
