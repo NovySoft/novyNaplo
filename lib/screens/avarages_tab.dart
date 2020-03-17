@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/widgets.dart';
-import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/functions/utils.dart';
+
 var subjectName = [];
 var subjectAvg = [];
 var subjectClassAvg = [];
@@ -21,7 +22,7 @@ class AvaragesTab extends StatelessWidget {
       appBar: AppBar(
         title: Text(AvaragesTab.title),
       ),
-      drawer: getDrawer(AvaragesTab.tag,context),
+      drawer: getDrawer(AvaragesTab.tag, context),
       body: BodyLayout(),
     );
   }
@@ -45,8 +46,8 @@ void setNumberValue(var a, subject) {
 void setArrays(var n) {
   double avg = 0;
   subjectName.add(n.subject.toString());
-  if (n.ownValue == 0) {
-    var jegyek = parseAllByDate(dJson);
+  if (n.ownValue == 0 || n.ownValue == null) {
+    var jegyek = parseAllByDate(login.dJson);
     tmpArray = [];
     tmpI = 0;
     jegyek.forEach((a) => setNumberValue(a, n.subject));
@@ -67,7 +68,9 @@ void setArrays(var n) {
   }
   subjectClassAvg.add(n.classValue.toString());
   subjectDiff.add(n.diff.toString());
-  if (avg < 2.5) {
+  if (avg == null) {
+    avgColor.add(Colors.red);
+  } else if (avg < 2.5) {
     avgColor.add(Colors.redAccent[700]);
   } else if (avg < 3 && avg >= 2.5) {
     avgColor.add(Colors.redAccent);
@@ -84,12 +87,12 @@ Widget avaragesList(BuildContext context) {
   subjectClassAvg = [];
   subjectDiff = [];
   avgColor = [];
-  parseAvarages(dJson).forEach((n) => setArrays(n));
+  parseAvarages(login.avJson).forEach((n) => setArrays(n));
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
-    itemCount: avarageCount + 1,
+    itemCount: login.avarageCount + 1,
     itemBuilder: (context, index) {
-      if (index >= avarageCount) {
+      if (index >= login.avarageCount) {
         return ListTile();
       } else {
         return ListTile(

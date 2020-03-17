@@ -80,7 +80,7 @@ class NetworkHelper {
     };
 
     var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null',
+        'https://$code.e-kreta.hu/mapi/api/v1/StudentAmi?fromDate=null&toDate=null',
         headers: headers);
     if (res.statusCode != 200)
       throw Exception('get error: statusCode= ${res.statusCode}');
@@ -90,14 +90,33 @@ class NetworkHelper {
       if (loginPage.markCount != 0) loginPage.markCount = 0;
       if (loginPage.avarageCount != 0) loginPage.avarageCount = 0;
       if (loginPage.noticesCount != 0) loginPage.noticesCount = 0;
+      await getAvarages(token,code);
       eval.forEach((element) => loginPage.markCount += 1);
-      loginPage.avarageCount = countAvarages(loginPage.dJson);
       loginPage.noticesCount = countNotices(loginPage.dJson);
       noticesPage.allParsedNotices = parseNotices(loginPage.dJson);
       chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
-      setUpCalculatorPage(loginPage.dJson);
+      setUpCalculatorPage(loginPage.dJson,loginPage.avJson);
+    }
+  }
+
+  Future<void> getAvarages(var token,code) async{
+    print("here we are");
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'User-Agent': '$agent',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/TantargyiAtlagAmi',
+        headers: headers);
+    if (res.statusCode != 200)
+      throw Exception('get error: statusCode= ${res.statusCode}');
+    if (res.statusCode == 200) {
+      var bodyJson = json.decode(res.body);
+      loginPage.avJson = bodyJson;
+      loginPage.avarageCount = countAvarages(bodyJson);
     }
   }
 
@@ -174,7 +193,7 @@ class NetworkHelper {
     };
 
     var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/Lesson?fromDate=$startDate&toDate=$endDate',
+        'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
         headers: header);
     if (res.statusCode != 200) {
       print(res.statusCode);
@@ -200,10 +219,10 @@ class NetworkHelper {
   }
 }
 
-void setUpCalculatorPage(var dJson) {
+void setUpCalculatorPage(var dJson, avJson) {
   calculatorPage.avarageList = [];
   calculatorPage.dropdownValues = [];
-  for (var n in dJson["SubjectAverages"]) {
+  for (var n in avJson) {
     calculatorPage.avarageList.add(setCalcData(n["Value"], n["Subject"], 0, 0));
     calculatorPage.dropdownValues.add(capitalize(n["Subject"]));
   }

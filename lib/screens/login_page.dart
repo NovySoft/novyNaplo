@@ -22,7 +22,7 @@ TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
 var agent = config.currAgent;
-var response, token, dJson, myDialogState;
+var response, token, dJson, myDialogState, avJson;
 String selectedSchoolCode;
 int markCount, avarageCount, noticesCount = 0;
 bool gotToken;

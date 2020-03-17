@@ -59,8 +59,7 @@ List<String> parseMarksBySubject(var input) {
 List<dynamic> parseAvarages(var input) {
   atlagArray = [];
   try {
-    var atlagok = input["SubjectAverages"];
-    atlagok.forEach((n) => atlagArray.add(setAvarage(
+    input.forEach((n) => atlagArray.add(setAvarage(
         n["Subject"], n["Value"], n["classValue"], n["Difference"])));
   } on Error catch (e) {
     return [e.toString()];
@@ -70,8 +69,9 @@ List<dynamic> parseAvarages(var input) {
 
 int countAvarages(var input) {
   var count = 0;
-  var atlagok = input["SubjectAverages"];
-  atlagok.forEach((n) => count++);
+  for (var n in input) {
+    count++;
+  }
   return count;
 }
 
