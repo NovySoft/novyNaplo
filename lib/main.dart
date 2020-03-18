@@ -15,6 +15,7 @@ import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novynaplo/screens/loading_screen.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
             theme: theme,
             title: 'Novy Napló',
             debugShowCheckedModeBanner: false,
-            home: isNew ? WelcomeScreen() : LoginPage(),
+            home: isNew ? WelcomeScreen() : LoadingPage(),
             routes: routes,
             navigatorObservers: [
               FirebaseAnalyticsObserver(analytics: analytics),

@@ -45,6 +45,7 @@ dependencies:
   material_design_icons_flutter: any
   background_fetch: any
   sqflite: any
+  animations: any
 
 flutter_icons:
   android: true

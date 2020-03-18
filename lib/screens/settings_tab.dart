@@ -362,6 +362,13 @@ class _SettingsBodyState extends State<SettingsBody> {
                   ),
                 ),
                 DropdownMenuItem(
+                  value: "LightPink",
+                  child: Text(
+                    "Világos Rózsaszín",
+                    style: TextStyle(color: Colors.pink[300]),
+                  ),
+                ),
+                DropdownMenuItem(
                   value: "Purple",
                   child: Text(
                     "Lila",

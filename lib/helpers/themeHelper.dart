@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:animations/animations.dart';
 
 class ThemeHelper {
   List<Color> myGradientList = [
@@ -90,6 +91,12 @@ class ThemeHelper {
   ThemeData getTheme(brightness) {
     if (brightness == Brightness.dark) {
       return new ThemeData(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+            },
+          ),
           sliderTheme: SliderThemeData(
               activeTickMarkColor: Colors.orange,
               valueIndicatorColor: Colors.black,
@@ -120,6 +127,12 @@ class ThemeHelper {
           ));
     } else {
       return new ThemeData(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+            },
+          ),
           sliderTheme: SliderThemeData(
               activeTickMarkColor: Colors.black,
               valueIndicatorColor: Colors.black,
@@ -196,6 +209,9 @@ class ThemeHelper {
         break;
       case "Purple":
         return Colors.purple;
+        break;
+      case "LightPink":
+        return Colors.pink[300];
         break;
       default:
         return Colors.transparent;

@@ -387,7 +387,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         ),
         loginButton,
         SizedBox(
-          height: 10,
+          height: 75,
         ),
       ],
     ));

@@ -102,7 +102,6 @@ class NetworkHelper {
   }
 
   Future<void> getAvarages(var token,code) async{
-    print("here we are");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
