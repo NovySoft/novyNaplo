@@ -3,7 +3,8 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/timetable_detail_tab.dart';
-import 'package:novynaplo/screens/login_page.dart' as login;
+//import 'package:novynaplo/screens/globals_page.dart' as globals;
+import 'package:novynaplo/global.dart' as globals;
 
 final List<Tab> days = <Tab>[
   Tab(text: 'Hétfő'),
@@ -85,18 +86,18 @@ class _TimetableTabState extends State<TimetableTab> {
 Widget _timetableBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[0].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[0][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[0][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[0][index].teacher != null ||
           lessonsList[0][index].teacher != "") {
         subtitle = lessonsList[0][index].teacher;
       } else {
         subtitle = lessonsList[0][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[0][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[0][index].startDate.minute.toString() + "0";
@@ -114,7 +115,7 @@ Widget _timetableBuilder(BuildContext context, int index) {
       String end =
           lessonsList[0][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[0][index]
           .endDate
           .difference(lessonsList[0][index].startDate)
@@ -157,18 +158,18 @@ Widget _timetableBuilder(BuildContext context, int index) {
 Widget _timetableTwoBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[1].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[1][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[1][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[1][index].teacher != null ||
           lessonsList[1][index].teacher != "") {
         subtitle = lessonsList[1][index].teacher;
       } else {
         subtitle = lessonsList[1][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[1][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[1][index].startDate.minute.toString() + "0";
@@ -186,7 +187,7 @@ Widget _timetableTwoBuilder(BuildContext context, int index) {
       String end =
           lessonsList[1][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[1][index]
           .endDate
           .difference(lessonsList[1][index].startDate)
@@ -229,18 +230,18 @@ Widget _timetableTwoBuilder(BuildContext context, int index) {
 Widget _timetableThreeBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[2].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[2][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[2][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[2][index].teacher != null ||
           lessonsList[2][index].teacher != "") {
         subtitle = lessonsList[2][index].teacher;
       } else {
         subtitle = lessonsList[2][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[2][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[2][index].startDate.minute.toString() + "0";
@@ -258,7 +259,7 @@ Widget _timetableThreeBuilder(BuildContext context, int index) {
       String end =
           lessonsList[2][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[2][index]
           .endDate
           .difference(lessonsList[2][index].startDate)
@@ -301,18 +302,18 @@ Widget _timetableThreeBuilder(BuildContext context, int index) {
 Widget _timetableFourBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[3].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[3][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[3][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[3][index].teacher != null ||
           lessonsList[3][index].teacher != "") {
         subtitle = lessonsList[3][index].teacher;
       } else {
         subtitle = lessonsList[3][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[3][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[3][index].startDate.minute.toString() + "0";
@@ -330,7 +331,7 @@ Widget _timetableFourBuilder(BuildContext context, int index) {
       String end =
           lessonsList[3][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[3][index]
           .endDate
           .difference(lessonsList[3][index].startDate)
@@ -373,18 +374,18 @@ Widget _timetableFourBuilder(BuildContext context, int index) {
 Widget _timetableFiveBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[4].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[4][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[4][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[4][index].teacher != null ||
           lessonsList[4][index].teacher != "") {
         subtitle = lessonsList[4][index].teacher;
       } else {
         subtitle = lessonsList[4][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[4][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[4][index].startDate.minute.toString() + "0";
@@ -402,7 +403,7 @@ Widget _timetableFiveBuilder(BuildContext context, int index) {
       String end =
           lessonsList[4][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[4][index]
           .endDate
           .difference(lessonsList[4][index].startDate)
@@ -445,18 +446,18 @@ Widget _timetableFiveBuilder(BuildContext context, int index) {
 Widget _timetableSixBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[5].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[5][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[5][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[5][index].teacher != null ||
           lessonsList[5][index].teacher != "") {
         subtitle = lessonsList[5][index].teacher;
       } else {
         subtitle = lessonsList[5][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[5][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[5][index].startDate.minute.toString() + "0";
@@ -474,7 +475,7 @@ Widget _timetableSixBuilder(BuildContext context, int index) {
       String end =
           lessonsList[5][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[5][index]
           .endDate
           .difference(lessonsList[5][index].startDate)
@@ -517,18 +518,18 @@ Widget _timetableSixBuilder(BuildContext context, int index) {
 Widget _timetableSevenBuilder(BuildContext context, int index) {
   String subtitle = "undefined";
   if (!(index >= lessonsList[6].length)) {
-    if (login.lessonCardSubtitle == "Tanterem") {
+    if (globals.lessonCardSubtitle == "Tanterem") {
       subtitle = lessonsList[6][index].classroom;
-    } else if (login.lessonCardSubtitle == "Óra témája") {
+    } else if (globals.lessonCardSubtitle == "Óra témája") {
       subtitle = lessonsList[6][index].theme;
-    } else if (login.lessonCardSubtitle == "Tanár") {
+    } else if (globals.lessonCardSubtitle == "Tanár") {
       if (lessonsList[6][index].teacher != null ||
           lessonsList[6][index].teacher != "") {
         subtitle = lessonsList[6][index].teacher;
       } else {
         subtitle = lessonsList[6][index].deputyTeacherName;
       }
-    } else if (login.lessonCardSubtitle == "Kezdés-Bejezés") {
+    } else if (globals.lessonCardSubtitle == "Kezdés-Bejezés") {
       String startMinutes;
       if (lessonsList[6][index].startDate.minute.toString().startsWith("0")) {
         startMinutes = lessonsList[6][index].startDate.minute.toString() + "0";
@@ -546,7 +547,7 @@ Widget _timetableSevenBuilder(BuildContext context, int index) {
       String end =
           lessonsList[6][index].endDate.hour.toString() + ":" + endMinutes;
       subtitle = "$start-$end";
-    } else if (login.lessonCardSubtitle == "Időtartam") {
+    } else if (globals.lessonCardSubtitle == "Időtartam") {
       String diff = lessonsList[6][index]
           .endDate
           .difference(lessonsList[6][index].startDate)

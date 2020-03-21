@@ -6,6 +6,8 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
@@ -22,29 +24,19 @@ TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
 var agent = config.currAgent;
-var response, token, dJson, myDialogState, avJson;
 String selectedSchoolCode;
-int markCount, avarageCount, noticesCount = 0;
 bool gotToken;
 bool isPressed = true;
 bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
-bool newUser = true;
 bool listAvailable = true;
 final GlobalKey<State> keyLoader = new GlobalKey<State>();
 final FocusNode _passFocus = FocusNode();
 final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
-String loadingText = "Kérlek várj...";
-String markCardSubtitle;
-String lessonCardSubtitle;
-String markCardTheme;
-String markCardConstColor;
 var searchList = [];
 var schoolList;
-bool adsEnabled = true;
-
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
 var userKey = encrypt.Key.fromUtf8(config.userKey);
@@ -79,45 +71,53 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("markCardSubtitle") == null) {
-      markCardSubtitle = "Téma";
-    }else{
-      markCardSubtitle = prefs.getString("markCardSubtitle");
+    if (prefs.getString("markCardSubtitle") == null &&
+        globals.markCardSubtitle == null) {
+      globals.markCardSubtitle = "Téma";
+      prefs.setString("markCardSubtitle", "Téma");
+    } else if (globals.markCardSubtitle == null) {
+      globals.markCardSubtitle = prefs.getString("markCardSubtitle");
     }
 
-    if(prefs.getString("markCardConstColor") == null){
-      markCardConstColor = "Green";
-    }else{
-      markCardConstColor = prefs.getString("markCardConstColor");
+    if (prefs.getString("markCardConstColor") == null &&
+        globals.markCardConstColor == null) {
+      globals.markCardConstColor = "Green";
+      prefs.setString("markCardConstColor", "Green");
+    } else if (globals.markCardConstColor == null) {
+      globals.markCardConstColor = prefs.getString("markCardConstColor");
     }
 
-    if(prefs.getString("lessonCardSubtitle") == null){
-      lessonCardSubtitle = "Tanterem";
-    }else{
-      lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
+    if (prefs.getString("lessonCardSubtitle") == null &&
+        globals.lessonCardSubtitle == null) {
+      globals.lessonCardSubtitle = "Tanterem";
+      prefs.setString("lessonCardSubtitle", "Tanterem");
+    } else if (globals.lessonCardSubtitle == null) {
+      globals.lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
     }
 
-    if(prefs.getString("markCardTheme") == null){
-      markCardTheme = "Véletlenszerű";
-    }else{
-      markCardTheme = prefs.getString("markCardTheme");
+    if (prefs.getString("markCardTheme") == null &&
+        globals.markCardTheme == null) {
+      globals.markCardTheme = "Véletlenszerű";
+      prefs.setString("markCardTheme", "Véletlenszerű");
+    } else if (globals.markCardTheme == null) {
+      globals.markCardTheme = prefs.getString("markCardTheme");
     }
     //DONT DELETE, FOR TESTING USE ONLY
     /*print("subtitle:" + markCardSubtitle);
     print("constColor:" + markCardConstColor);
     print("lesson card:" + lessonCardSubtitle);
     print("mark theme:" + markCardTheme);*/
-    if (prefs.getString("code") != null) {
+    if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
       if (prefs.getBool("ads")) {
         adBanner.load();
         adBanner.show(
           anchorType: AnchorType.bottom,
         );
-        adsEnabled = true;
+        globals.adsEnabled = true;
       } else {
-        adsEnabled = false;
+        globals.adsEnabled = false;
       }
-      newUser = false;
+      main.isNew = false;
       FirebaseAnalytics().logEvent(name: "login");
       hasPrefs = true;
       try {
@@ -182,6 +182,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void auth(var context, caller) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isNew",false);
+    globals.adsEnabled = false;
+    prefs.setBool("ads", false);
     newVersion = false;
     if (caller != "onLoad") {
       showDialog<void>(
@@ -201,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
       String pass = passController.text;
       status = await NetworkHelper().getToken(code, user, pass);
       if (status == "OK") {
-        await NetworkHelper().getStudentInfo(token, code);
+        await NetworkHelper().getStudentInfo(globals.token, code);
       }
     }
     try {
@@ -245,16 +249,19 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("code", encryptedCode);
       prefs.setString("user", encryptedUser);
       FirebaseAnalytics().setUserProperty(name: "School", value: code);
-      FirebaseAnalytics().setUserProperty(name: "Version", value: config.currentAppVersionCode);
+      FirebaseAnalytics().setUserProperty(
+          name: "Version", value: config.currentAppVersionCode);
     } on PlatformException catch (e) {
       isError = true;
       _ackAlert(context, e.message);
     }
 
     try {
-      if (newUser) {
+      if (main.isNew) {
+        if(globals.adsEnabled == null) globals.adsEnabled = false;
         Navigator.pushReplacementNamed(context, SettingsTab.tag);
       } else {
+        if(globals.adsEnabled == null) globals.adsEnabled = false;
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       }
     } on PlatformException catch (e) {

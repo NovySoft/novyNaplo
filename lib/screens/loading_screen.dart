@@ -13,9 +13,8 @@ import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:novynaplo/screens/login_page.dart' as loginPage;
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
@@ -94,7 +93,7 @@ class _LoadingPageState extends State<LoadingPage> {
         response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
             headers: headers, body: data);
         //print(response.body);
-        /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
+        /*var url = 'https://novy.vip/api/globals.php?code=$code&user=$user&pass=$pass';
     var response = await http.get(url);*/
         //print(response.body);
         if (response.statusCode == 200) {
@@ -112,7 +111,7 @@ class _LoadingPageState extends State<LoadingPage> {
               return parsedJson["error_description"];
             }
           } else {
-            loginPage.token = parsedJson["access_token"];
+            globals.token = parsedJson["access_token"];
             return "OK";
           }
           //print(status);
@@ -152,19 +151,19 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = "Jegyek dekódolása";
       });
-      loginPage.dJson = json.decode(res.body);
-      var eval = loginPage.dJson["Evaluations"];
-      if (loginPage.markCount != 0) loginPage.markCount = 0;
-      if (loginPage.avarageCount != 0) loginPage.avarageCount = 0;
-      if (loginPage.noticesCount != 0) loginPage.noticesCount = 0;
+      globals.dJson = json.decode(res.body);
+      var eval = globals.dJson["Evaluations"];
+      if (globals.markCount != 0) globals.markCount = 0;
+      if (globals.avarageCount != 0) globals.avarageCount = 0;
+      if (globals.noticesCount != 0) globals.noticesCount = 0;
       await getAvarages(token, code);
-      eval.forEach((element) => loginPage.markCount += 1);
-      loginPage.noticesCount = countNotices(loginPage.dJson);
-      noticesPage.allParsedNotices = parseNotices(loginPage.dJson);
-      chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
+      eval.forEach((element) => globals.markCount += 1);
+      globals.noticesCount = countNotices(globals.dJson);
+      noticesPage.allParsedNotices = parseNotices(globals.dJson);
+      chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
-      setUpCalculatorPage(loginPage.dJson, loginPage.avJson);
+      setUpCalculatorPage(globals.dJson, globals.avJson);
     }
   }
 
@@ -187,8 +186,8 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = "Átlagok dekódolása";
       });
       var bodyJson = json.decode(res.body);
-      loginPage.avJson = bodyJson;
-      loginPage.avarageCount = countAvarages(bodyJson);
+      globals.avJson = bodyJson;
+      globals.avarageCount = countAvarages(bodyJson);
     }
   }
 
@@ -277,46 +276,56 @@ class _LoadingPageState extends State<LoadingPage> {
             newVerDetails.releaseLink);
       }
     }
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-    decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-    decryptedPass =
-        userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
     setState(() {
       loadingText = "Addatok olvasása a memóriából";
     });
-    if (prefs.getString("markCardSubtitle") == null) {
-      login.markCardSubtitle = "Téma";
-    } else {
-      login.markCardSubtitle = prefs.getString("markCardSubtitle");
-    }
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedPass =
+          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+      if (prefs.getString("markCardSubtitle") == null) {
+        globals.markCardSubtitle = "Téma";
+      } else {
+        globals.markCardSubtitle = prefs.getString("markCardSubtitle");
+      }
 
-    if (prefs.getString("markCardConstColor") == null) {
-      login.markCardConstColor = "Green";
-    } else {
-      login.markCardConstColor = prefs.getString("markCardConstColor");
-    }
+      if (prefs.getString("markCardConstColor") == null) {
+        globals.markCardConstColor = "Green";
+      } else {
+        globals.markCardConstColor = prefs.getString("markCardConstColor");
+      }
 
-    if (prefs.getString("lessonCardSubtitle") == null) {
-      login.lessonCardSubtitle = "Tanterem";
-    } else {
-      login.lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
-    }
+      if (prefs.getString("lessonCardSubtitle") == null) {
+        globals.lessonCardSubtitle = "Tanterem";
+      } else {
+        globals.lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
+      }
 
-    if (prefs.getString("markCardTheme") == null) {
-      login.markCardTheme = "Véletlenszerű";
-    } else {
-      login.markCardTheme = prefs.getString("markCardTheme");
-    }
-    if (prefs.getBool("ads")) {
-      adBanner.load();
-      adBanner.show(
-        anchorType: AnchorType.bottom,
-      );
-      login.adsEnabled = true;
-    } else {
-      login.adsEnabled = false;
+      if (prefs.getString("markCardTheme") == null) {
+        globals.markCardTheme = "Véletlenszerű";
+      } else {
+        globals.markCardTheme = prefs.getString("markCardTheme");
+      }
+      if (prefs.getBool("ads") != null) {
+        if (prefs.getBool("ads")) {
+          adBanner.load();
+          adBanner.show(
+            anchorType: AnchorType.bottom,
+          );
+          globals.adsEnabled = true;
+        } else {
+          globals.adsEnabled = false;
+        }
+      } else {
+        globals.adsEnabled = false;
+      }
+      print("ads" + globals.adsEnabled.toString());
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újra telepítése");
     }
     auth(context);
   }
@@ -327,17 +336,17 @@ class _LoadingPageState extends State<LoadingPage> {
     } else {
       status = await getToken(decryptedCode, decryptedUser, decryptedPass);
       if (status == "OK") {
-        await getStudentInfo(login.token, decryptedCode);
+        await getStudentInfo(globals.token, decryptedCode);
       }
     }
     if (status == "OK") {
       try {
         save(context);
       } on PlatformException catch (e) {
-        _ackAlert(context, e.message);
+        await _ackAlert(context, e.message);
       }
     } else {
-      _ackAlert(context, status);
+      await _ackAlert(context, status);
     }
   }
 

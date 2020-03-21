@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/global.dart' as globals;
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 
@@ -123,7 +123,7 @@ Notices setNotices(var input) {
     temp.subject = null;
   } else {
     temp.subject = SubjectAssignHelper().assignSubject(
-        dJson, input["OsztalyCsoportUid"], input["Type"], input["Content"]);
+        globals.dJson, input["OsztalyCsoportUid"], input["Type"], input["Content"]);
   }
   return temp;
 }

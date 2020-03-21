@@ -187,7 +187,6 @@ String getEasiest(num jegyek, jsz, th, elak) {
   int w = c.toInt();
   if (elak >= atlag) {
     if (x - 5 * th > 0) {
-      print(1);
       return "Nem lehetséges";
     } else {
       switch (w) {

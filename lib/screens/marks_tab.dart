@@ -3,14 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
-import 'package:novynaplo/screens/login_page.dart' as login;
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
 import 'package:novynaplo/helpers/adHelper.dart';
 
-var apiResponse = login.dJson;
 var allParsedByDate, allParsedBySubject;
 int selectedIndex = 0;
 bool differenSubject = false;
@@ -37,7 +36,7 @@ class MarksTab extends StatefulWidget {
 
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
-  int itemsLength = login.markCount;
+  int itemsLength = globals.markCount;
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
   final _androidRefreshKeyTwo = GlobalKey<RefreshIndicatorState>();
 
@@ -47,6 +46,7 @@ class MarksTabState extends State<MarksTab>
 
   @override
   void initState() {
+    print("INITSTATE");
     _tabController = new TabController(vsync: this, length: 2);
     _setData();
     super.initState();
@@ -59,11 +59,11 @@ class MarksTabState extends State<MarksTab>
   }
 
   void _setData() {
-    colors = getRandomColors(itemsLength);
-    markNameByDate = parseMarksByDate(apiResponse);
-    allParsedByDate = parseAllByDate(apiResponse);
-    markNameBySubject = parseMarksBySubject(apiResponse);
-    allParsedBySubject = parseAllBySubject(apiResponse);
+    colors = getRandomColors(globals.markCount);
+    markNameByDate = parseMarksByDate(globals.dJson);
+    allParsedByDate = parseAllByDate(globals.dJson);
+    markNameBySubject = parseMarksBySubject(globals.dJson);
+    allParsedBySubject = parseAllBySubject(globals.dJson);
   }
 
   Future<void> _refreshData() {
@@ -76,19 +76,19 @@ class MarksTabState extends State<MarksTab>
 
   Widget _dateListBuilder(BuildContext context, int index) {
     String subtitle = "undefined";
-    if (login.markCardSubtitle == "Téma") {
+    if (globals.markCardSubtitle == "Téma") {
       if (allParsedByDate[index].theme != null &&
           allParsedByDate[index].theme != "")
         subtitle = capitalize(allParsedByDate[index].theme);
       else
         subtitle = "Ismeretlen";
-    } else if (login.markCardSubtitle == "Tanár") {
+    } else if (globals.markCardSubtitle == "Tanár") {
       subtitle = allParsedByDate[index].teacher;
-    } else if (login.markCardSubtitle == "Súly") {
+    } else if (globals.markCardSubtitle == "Súly") {
       subtitle = allParsedByDate[index].weight;
-    } else if (login.markCardSubtitle == "Pontos Dátum") {
+    } else if (globals.markCardSubtitle == "Pontos Dátum") {
       subtitle = allParsedByDate[index].createDateString;
-    } else if (login.markCardSubtitle == "Egyszerűsített Dátum") {
+    } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
       String year = allParsedByDate[index].createDate.year.toString();
       String month = allParsedByDate[index].createDate.month.toString();
       String day = allParsedByDate[index].createDate.day.toString();
@@ -103,9 +103,9 @@ class MarksTabState extends State<MarksTab>
     }
     if (index >= itemsLength) return null;
     var color;
-    if (login.markCardTheme == "Véletlenszerű") {
+    if (globals.markCardTheme == "Véletlenszerű") {
       color = colors[index].shade400;
-    } else if (login.markCardTheme == "Értékelés nagysága") {
+    } else if (globals.markCardTheme == "Értékelés nagysága") {
       if (allParsedByDate[index].form == "Percent") {
         if (allParsedByDate[index].numberValue >= 90) {
           color = Colors.green;
@@ -140,9 +140,9 @@ class MarksTabState extends State<MarksTab>
             break;
         }
       }
-    } else if (login.markCardTheme == "Egyszínű") {
-      color = ThemeHelper().stringToColor(login.markCardConstColor);
-    } else if (login.markCardTheme == "Színátmenetes") {
+    } else if (globals.markCardTheme == "Egyszínű") {
+      color = ThemeHelper().stringToColor(globals.markCardConstColor);
+    } else if (globals.markCardTheme == "Színátmenetes") {
       color = ThemeHelper().myGradientList[
           (ThemeHelper().myGradientList.length - index - 1).abs()];
     } else {
@@ -186,19 +186,19 @@ class MarksTabState extends State<MarksTab>
 
   Widget _subjectListBuilder(BuildContext context, int index) {
     String subtitle = "undefined";
-    if (login.markCardSubtitle == "Téma") {
+    if (globals.markCardSubtitle == "Téma") {
       if (allParsedBySubject[index].theme != null &&
           allParsedBySubject[index].theme != "")
         subtitle = capitalize(allParsedBySubject[index].theme);
       else
         subtitle = "Ismeretlen";
-    } else if (login.markCardSubtitle == "Tanár") {
+    } else if (globals.markCardSubtitle == "Tanár") {
       subtitle = allParsedBySubject[index].teacher;
-    } else if (login.markCardSubtitle == "Súly") {
+    } else if (globals.markCardSubtitle == "Súly") {
       subtitle = allParsedBySubject[index].weight;
-    } else if (login.markCardSubtitle == "Pontos Dátum") {
+    } else if (globals.markCardSubtitle == "Pontos Dátum") {
       subtitle = allParsedBySubject[index].createDateString;
-    } else if (login.markCardSubtitle == "Egyszerűsített Dátum") {
+    } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
       String year = allParsedBySubject[index].createDate.year.toString();
       String month = allParsedBySubject[index].createDate.month.toString();
       String day = allParsedBySubject[index].createDate.day.toString();
@@ -216,9 +216,9 @@ class MarksTabState extends State<MarksTab>
     }
     if (index >= itemsLength) return null;
     var color;
-    if (login.markCardTheme == "Véletlenszerű") {
+    if (globals.markCardTheme == "Véletlenszerű") {
       color = colors[index].shade400;
-    } else if (login.markCardTheme == "Értékelés nagysága") {
+    } else if (globals.markCardTheme == "Értékelés nagysága") {
       if (allParsedBySubject[index].form == "Percent") {
         if (allParsedBySubject[index].numberValue >= 90) {
           color = Colors.green;
@@ -253,9 +253,9 @@ class MarksTabState extends State<MarksTab>
             break;
         }
       }
-    } else if (login.markCardTheme == "Egyszínű") {
-      color = ThemeHelper().stringToColor(login.markCardConstColor);
-    } else if (login.markCardTheme == "Színátmenetes") {
+    } else if (globals.markCardTheme == "Egyszínű") {
+      color = ThemeHelper().stringToColor(globals.markCardConstColor);
+    } else if (globals.markCardTheme == "Színátmenetes") {
       color = ThemeHelper().myGradientList[
           (ThemeHelper().myGradientList.length - index - 1).abs()];
     } else {
@@ -447,7 +447,7 @@ class MarksTabState extends State<MarksTab>
                 key: _androidRefreshKey,
                 onRefresh: _refreshData,
                 child: ListView.builder(
-                  itemCount: login.markCount,
+                  itemCount: globals.markCount,
                   padding: EdgeInsets.symmetric(vertical: 12),
                   itemBuilder: _dateListBuilder,
                 ),
@@ -457,7 +457,7 @@ class MarksTabState extends State<MarksTab>
                 key: _androidRefreshKeyTwo,
                 onRefresh: _refreshData,
                 child: ListView.builder(
-                  itemCount: login.markCount,
+                  itemCount: globals.markCount,
                   padding: EdgeInsets.symmetric(vertical: 12),
                   itemBuilder: _subjectListBuilder,
                 ),

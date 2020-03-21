@@ -1,6 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:novynaplo/functions/classManager.dart';
-import 'package:novynaplo/screens/login_page.dart' as loginPage;
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
@@ -51,7 +51,7 @@ class NetworkHelper {
               return parsedJson["error_description"];
             }
           } else {
-            loginPage.token = parsedJson["access_token"];
+            globals.token = parsedJson["access_token"];
             return "OK";
           }
           //print(status);
@@ -85,19 +85,19 @@ class NetworkHelper {
     if (res.statusCode != 200)
       throw Exception('get error: statusCode= ${res.statusCode}');
     if (res.statusCode == 200) {
-      loginPage.dJson = json.decode(res.body);
-      var eval = loginPage.dJson["Evaluations"];
-      if (loginPage.markCount != 0) loginPage.markCount = 0;
-      if (loginPage.avarageCount != 0) loginPage.avarageCount = 0;
-      if (loginPage.noticesCount != 0) loginPage.noticesCount = 0;
+      globals.dJson = json.decode(res.body);
+      var eval = globals.dJson["Evaluations"];
+      if (globals.markCount != 0) globals.markCount = 0;
+      if (globals.avarageCount != 0) globals.avarageCount = 0;
+      if (globals.noticesCount != 0) globals.noticesCount = 0;
       await getAvarages(token,code);
-      eval.forEach((element) => loginPage.markCount += 1);
-      loginPage.noticesCount = countNotices(loginPage.dJson);
-      noticesPage.allParsedNotices = parseNotices(loginPage.dJson);
-      chartsPage.allParsedSubjects = categorizeSubjects(loginPage.dJson);
+      eval.forEach((element) => globals.markCount += 1);
+      globals.noticesCount = countNotices(globals.dJson);
+      noticesPage.allParsedNotices = parseNotices(globals.dJson);
+      chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
-      setUpCalculatorPage(loginPage.dJson,loginPage.avJson);
+      setUpCalculatorPage(globals.dJson,globals.avJson);
     }
   }
 
@@ -114,8 +114,8 @@ class NetworkHelper {
       throw Exception('get error: statusCode= ${res.statusCode}');
     if (res.statusCode == 200) {
       var bodyJson = json.decode(res.body);
-      loginPage.avJson = bodyJson;
-      loginPage.avarageCount = countAvarages(bodyJson);
+      globals.avJson = bodyJson;
+      globals.avarageCount = countAvarages(bodyJson);
     }
   }
 

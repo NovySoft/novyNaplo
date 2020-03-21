@@ -1,7 +1,9 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/login_page.dart' as login;
+import 'package:novynaplo/main.dart' as main;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,11 +11,11 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 
 String dropDown;
-String markDropdown = login.markCardSubtitle;
-String lessonDropdown = login.lessonCardSubtitle;
-String markThemeDropdown = login.markCardTheme;
-String constColorDropdown = login.markCardConstColor;
-bool adsSwitch = login.adsEnabled;
+String markDropdown = globals.markCardSubtitle;
+String lessonDropdown = globals.lessonCardSubtitle;
+String markThemeDropdown = globals.markCardTheme;
+String constColorDropdown = globals.markCardConstColor;
+bool adsSwitch = globals.adsEnabled;
 bool notificationSwitch = false;
 int indexModifier = 0;
 
@@ -52,7 +54,12 @@ class SettingsBody extends StatefulWidget {
 class _SettingsBodyState extends State<SettingsBody> {
   void _onLoad(var context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool("ads") == null) {
+    if (main.isNew) {
+      main.isNew = false;
+      setState(() {
+        adsSwitch = true;
+        globals.adsEnabled = true;
+      });
       prefs.setBool("ads", true);
       showDialog<void>(
           context: context,
@@ -61,7 +68,7 @@ class _SettingsBodyState extends State<SettingsBody> {
             return AdsDialog();
           });
     }
-    if (login.markCardTheme == "Egyszínű") {
+    if (globals.markCardTheme == "Egyszínű") {
       setState(() {
         indexModifier = 1;
       });
@@ -165,7 +172,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.setString("markCardSubtitle", value);
-                login.markCardSubtitle = value;
+                globals.markCardSubtitle = value;
                 setState(() {
                   markDropdown = value;
                 });
@@ -213,7 +220,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.setString("lessonCardSubtitle", value);
-                login.lessonCardSubtitle = value;
+                globals.lessonCardSubtitle = value;
                 setState(() {
                   lessonDropdown = value;
                 });
@@ -255,7 +262,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.setString("markCardTheme", value);
-                login.markCardTheme = value;
+                globals.markCardTheme = value;
                 setState(() {
                   markThemeDropdown = value;
                 });
@@ -380,7 +387,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.setString("markCardConstColor", value);
-                login.markCardConstColor = value;
+                globals.markCardConstColor = value;
                 setState(() {
                   constColorDropdown = value;
                 });
@@ -401,7 +408,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 if (isOn) {
                   FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
                   prefs.setBool("ads", true);
-                  login.adsEnabled = true;
+                  globals.adsEnabled = true;
                   showDialog<void>(
                       context: context,
                       barrierDismissible: false,
@@ -412,7 +419,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                   FirebaseAnalytics()
                       .setUserProperty(name: "Ads", value: "OFF");
                   prefs.setBool("ads", false);
-                  login.adsEnabled = false;
+                  globals.adsEnabled = false;
                   adBanner.dispose();
                   showDialog<void>(
                       context: context,
@@ -515,9 +522,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
           child: Text('Igen'),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            prefs.clear();
+            globals.resetAllGlobals();
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -554,6 +559,7 @@ class _AdsDialogState extends State<AdsDialog> {
         FlatButton(
           child: Text('OK'),
           onPressed: () async {
+            globals.adsEnabled = true;
             adBanner.load();
             adBanner.show(
               anchorType: AnchorType.bottom,

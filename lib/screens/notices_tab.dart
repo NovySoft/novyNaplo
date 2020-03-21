@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 var allParsedNotices;
-var colors = getRandomColors(noticesCount);
+var colors = getRandomColors(globals.noticesCount);
 
 class NoticesTab extends StatefulWidget {
   static String tag = 'notices';
@@ -25,7 +25,7 @@ class _NoticesTabState extends State<NoticesTab> {
       ),
       drawer: getDrawer(NoticesTab.tag, context),
       body: ListView.builder(
-        itemCount: noticesCount,
+        itemCount: globals.noticesCount,
         padding: EdgeInsets.symmetric(vertical: 12),
         itemBuilder: _noticesBuilder,
       ),

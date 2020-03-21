@@ -14,8 +14,6 @@ double visibility = 0,
     thirdVisibility = 0,
     thirdVisibilityTwo = 0;
 
-SharedPreferences prefs;
-
 class WelcomeScreen extends StatefulWidget {
   static String tag = 'welcome';
   static const title = 'Hello';
@@ -50,7 +48,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   void animate() async {
-    prefs = await SharedPreferences.getInstance();
     await sleep1();
     await sleep1();
     setState(() {
@@ -352,7 +349,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
+        onPressed: () async{
+          var prefs = await SharedPreferences.getInstance();
           prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
         },

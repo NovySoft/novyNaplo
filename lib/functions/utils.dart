@@ -12,6 +12,8 @@ import 'package:diacritic/diacritic.dart';
 
 import 'package:novynaplo/screens/login_page.dart' as login;
 
+import 'package:novynaplo/global.dart' as globals;
+
 const _myListOfRandomColors = [
   Colors.red,
   Colors.blue,
@@ -90,7 +92,7 @@ class SpinnerDialog extends StatefulWidget {
 }
 
 class SpinnerDialogState extends State<SpinnerDialog> {
-  String loadingText = login.loadingText;
+  String loadingText = globals.loadingText;
   final GlobalKey<State> key = login.keyLoader;
   @override
   Widget build(BuildContext context) {

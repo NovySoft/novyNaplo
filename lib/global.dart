@@ -1,0 +1,30 @@
+//Variables used globally;
+//Session
+import 'package:shared_preferences/shared_preferences.dart';
+
+var dJson; //Student JSON
+var avJson; //Avarage JSON
+var token; //Bearer token from api
+int avarageCount; //How many subjects do we have
+int markCount; //How many marks do we have
+int noticesCount; //How many notices do we have
+//"Permanent"
+String markCardSubtitle; //Marks subtitle
+String markCardTheme; //Marks color theme
+String markCardConstColor; //If theme is constant what color is it
+String lessonCardSubtitle; //Lesson card's subtitle
+String loadingText = "Kérlek várj..."; //Betöltő szöveg
+bool adsEnabled; //Do we have to show ads
+
+void resetAllGlobals() async{
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString("code",null);
+  prefs.clear();
+  prefs.setBool("ads",adsEnabled);
+  dJson = null;
+  avJson = null;
+  token = null;
+  avarageCount = null;
+  markCount = null;
+  noticesCount = null;
+}

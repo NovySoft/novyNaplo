@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/widgets.dart';
-import 'package:novynaplo/screens/login_page.dart' as login;
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/functions/utils.dart';
 
@@ -47,7 +47,7 @@ void setArrays(var n) {
   double avg = 0;
   subjectName.add(n.subject.toString());
   if (n.ownValue == 0 || n.ownValue == null) {
-    var jegyek = parseAllByDate(login.dJson);
+    var jegyek = parseAllByDate(globals.dJson);
     tmpArray = [];
     tmpI = 0;
     jegyek.forEach((a) => setNumberValue(a, n.subject));
@@ -87,12 +87,12 @@ Widget avaragesList(BuildContext context) {
   subjectClassAvg = [];
   subjectDiff = [];
   avgColor = [];
-  parseAvarages(login.avJson).forEach((n) => setArrays(n));
+  parseAvarages(globals.avJson).forEach((n) => setArrays(n));
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
-    itemCount: login.avarageCount + 1,
+    itemCount: globals.avarageCount + 1,
     itemBuilder: (context, index) {
-      if (index >= login.avarageCount) {
+      if (index >= globals.avarageCount) {
         return ListTile();
       } else {
         return ListTile(
