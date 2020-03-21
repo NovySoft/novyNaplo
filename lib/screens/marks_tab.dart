@@ -46,7 +46,6 @@ class MarksTabState extends State<MarksTab>
 
   @override
   void initState() {
-    print("INITSTATE");
     _tabController = new TabController(vsync: this, length: 2);
     _setData();
     super.initState();
@@ -58,7 +57,7 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  void _setData() {
+  void _setData() async{
     colors = getRandomColors(globals.markCount);
     markNameByDate = parseMarksByDate(globals.dJson);
     allParsedByDate = parseAllByDate(globals.dJson);

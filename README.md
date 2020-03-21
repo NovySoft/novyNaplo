@@ -48,6 +48,10 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 *  **firebase_admob**: Alsó reklám csík megjelnítése
 *  **admob_flutter**: Natív reklámok
 *  **material_design_icons_flutter**: Ikon kiegészítő csomag
+*  **background_fetch**: Háttér lekérések
+*  **sqflite**: Kliens oldali sql (adattárolás)
+*  **animations**: Animációk kezelése
+*  **flutter_html**: Html objektumok megjelenítése (Házifeladat)
 
 ## Felhasznált kódok:
 *  **Bejelentkezési oldal:** [https://github.com/putraxor/flutter-login-ui](https://github.com/putraxor/flutter-login-ui)

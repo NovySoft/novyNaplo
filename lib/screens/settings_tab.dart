@@ -479,25 +479,34 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 6 + indexModifier) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              onPressed: () async {
-                showDialog<void>(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (_) {
-                      return LogOutDialog();
-                    });
-              },
-              padding: EdgeInsets.all(1),
-              child:
-                  Text('Kijelentkezés', style: TextStyle(color: Colors.black)),
-            ),
-          );
+          return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      onPressed: () async {
+                        showDialog<void>(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (_) {
+                              return LogOutDialog();
+                            });
+                      },
+                      padding: EdgeInsets.all(1),
+                      child: Text('Kijelentkezés',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 75,
+                  )
+                ],
+              );
         }
       },
     );

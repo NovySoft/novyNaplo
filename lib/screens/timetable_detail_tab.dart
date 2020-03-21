@@ -1,9 +1,16 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class TimetableDetailTab extends StatelessWidget {
+Timer timer;
+
+class TimetableDetailTab extends StatefulWidget {
   const TimetableDetailTab({
     this.lessonInfo,
     this.color,
@@ -11,6 +18,20 @@ class TimetableDetailTab extends StatelessWidget {
 
   final Lesson lessonInfo;
   final Color color;
+
+  @override
+  _TimetableDetailTabState createState() => _TimetableDetailTabState();
+}
+
+class _TimetableDetailTabState extends State<TimetableDetailTab> {
+  @override
+  void dispose() {
+    if (timer != null) {
+      timer.cancel();
+    }
+    super.dispose();
+  }
+
   Widget _buildBody() {
     return SafeArea(
       bottom: false,
@@ -23,16 +44,16 @@ class TimetableDetailTab extends StatelessWidget {
             tag: id,
             child: HeroAnimatingMarksCard(
               subTitle: "",
-              title: lessonInfo.name,
-              color: color,
+              title: widget.lessonInfo.name,
+              color: widget.color,
               heroAnimation: AlwaysStoppedAnimation(1),
             ),
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               return HeroAnimatingMarksCard(
                 subTitle: "",
-                title: lessonInfo.name,
-                color: color,
+                title: widget.lessonInfo.name,
+                color: widget.color,
                 heroAnimation: animation,
               );
             },
@@ -61,35 +82,35 @@ class TimetableDetailTab extends StatelessWidget {
                     break;
                   case 1:
                     return SizedBox(
-                      child: Text("Az óra neve: " + lessonInfo.name,
+                      child: Text("Az óra neve: " + widget.lessonInfo.name,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 2:
                     return SizedBox(
-                      child: Text("Óra témája: " + lessonInfo.theme,
+                      child: Text("Óra témája: " + widget.lessonInfo.theme,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 3:
                     return SizedBox(
-                      child: Text("Tantárgy: " + lessonInfo.subject,
+                      child: Text("Tantárgy: " + widget.lessonInfo.subject,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 4:
                     return SizedBox(
-                      child: Text("Terem: " + lessonInfo.classroom,
+                      child: Text("Terem: " + widget.lessonInfo.classroom,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 5:
                     return SizedBox(
-                      child: Text("Tanár: " + lessonInfo.teacher,
+                      child: Text("Tanár: " + widget.lessonInfo.teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -98,17 +119,17 @@ class TimetableDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "Helyettesítő Tanár (ha van): " +
-                              lessonInfo.deputyTeacherName,
+                              widget.lessonInfo.deputyTeacherName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 7:
-                    String date = lessonInfo.date.year.toString() +
+                    String date = widget.lessonInfo.date.year.toString() +
                         "-" +
-                        lessonInfo.date.month.toString() +
+                        widget.lessonInfo.date.month.toString() +
                         "-" +
-                        lessonInfo.date.day.toString();
+                        widget.lessonInfo.date.day.toString();
                     return SizedBox(
                       child: Text("Dátum: " + date,
                           style: TextStyle(
@@ -117,25 +138,30 @@ class TimetableDetailTab extends StatelessWidget {
                     break;
                   case 8:
                     String startMinutes;
-                    if (lessonInfo.startDate.minute
+                    if (widget.lessonInfo.startDate.minute
                         .toString()
                         .startsWith("0")) {
                       startMinutes =
-                          lessonInfo.startDate.minute.toString() + "0";
+                          widget.lessonInfo.startDate.minute.toString() + "0";
                     } else {
-                      startMinutes = lessonInfo.startDate.minute.toString();
+                      startMinutes =
+                          widget.lessonInfo.startDate.minute.toString();
                     }
                     String endMinutes;
-                    if (lessonInfo.endDate.minute.toString().startsWith("0")) {
-                      endMinutes = lessonInfo.endDate.minute.toString() + "0";
+                    if (widget.lessonInfo.endDate.minute
+                        .toString()
+                        .startsWith("0")) {
+                      endMinutes =
+                          widget.lessonInfo.endDate.minute.toString() + "0";
                     } else {
-                      endMinutes = lessonInfo.endDate.minute.toString();
+                      endMinutes = widget.lessonInfo.endDate.minute.toString();
                     }
-                    String start = lessonInfo.startDate.hour.toString() +
+                    String start = widget.lessonInfo.startDate.hour.toString() +
                         ":" +
                         startMinutes;
-                    String end =
-                        lessonInfo.endDate.hour.toString() + ":" + endMinutes;
+                    String end = widget.lessonInfo.endDate.hour.toString() +
+                        ":" +
+                        endMinutes;
                     return SizedBox(
                       child: Text("Kezdés-befejezés: " + start + " - " + end,
                           style: TextStyle(
@@ -143,8 +169,8 @@ class TimetableDetailTab extends StatelessWidget {
                     );
                     break;
                   case 9:
-                    Duration diff =
-                        lessonInfo.endDate.difference(lessonInfo.startDate);
+                    Duration diff = widget.lessonInfo.endDate
+                        .difference(widget.lessonInfo.startDate);
                     return SizedBox(
                       child: Text(
                           "Időtartam: " + diff.inMinutes.toString() + " perc",
@@ -154,11 +180,118 @@ class TimetableDetailTab extends StatelessWidget {
                     break;
                   case 10:
                     return SizedBox(
-                      child: Text(
-                          "Osztály: " + lessonInfo.groupName,
+                      child: Text("Osztály: " + widget.lessonInfo.groupName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
+                    break;
+                  case 11:
+                    if (widget.lessonInfo.homework.content == null) {
+                      return SizedBox(
+                        child: Text("Házifeladat: NINCS",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                    } else {
+                      return SizedBox(
+                          child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 18),
+                            Text("Házifeladat: ",
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold)),
+                            Html(
+                              data: widget.lessonInfo.homework.content,
+                              customTextStyle:
+                                  (dom.Node node, TextStyle baseStyle) {
+                                if (node is dom.Element) {
+                                  return baseStyle
+                                      .merge(TextStyle(fontSize: 20));
+                                }
+                                return baseStyle;
+                              },
+                              onLinkTap: (url) async {
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                } else {
+                                  FirebaseAnalytics()
+                                      .logEvent(name: "LinkFail");
+                                  throw 'Could not launch $url';
+                                }
+                              },
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                      ));
+                    }
+                    break;
+                  case 12:
+                    if (widget.lessonInfo.homework.content == null) {
+                      return SizedBox(height: 18);
+                    } else {
+                      String due = widget.lessonInfo.homework.dueDate.year
+                              .toString() +
+                          "-" +
+                          widget.lessonInfo.homework.dueDate.month.toString() +
+                          "-" +
+                          widget.lessonInfo.homework.dueDate.day.toString() +
+                          " " +
+                          widget.lessonInfo.homework.dueDate.hour.toString() +
+                          ":" +
+                          widget.lessonInfo.homework.dueDate.minute.toString();
+                      Duration left = widget.lessonInfo.homework.dueDate
+                          .difference(DateTime.now());
+                      String leftHours =
+                          (left.inMinutes / 60).toStringAsFixed(0);
+                      String leftMins =
+                          (left.inMinutes % 60).toStringAsFixed(0);
+                      String leftString = "$leftHours órád és $leftMins perced";
+                      bool dueOver = false;
+                      if (left.inMinutes / 60 < 0) {
+                        dueOver = true;
+                      }
+                      timer =
+                          new Timer.periodic(new Duration(minutes: 1), (time) {
+                        if (!mounted) {
+                          timer.cancel();
+                        } else {
+                          setState(() {
+                            left = widget.lessonInfo.homework.dueDate
+                                .difference(DateTime.now());
+                            leftHours =
+                                (left.inMinutes / 60).toStringAsFixed(0);
+                            leftMins = (left.inMinutes % 60).toStringAsFixed(0);
+                            leftString = "$leftHours órád és $leftMins perced";
+                            if (left.inMinutes / 60 < 0) {
+                              dueOver = true;
+                            } else {
+                              dueOver = false;
+                            }
+                          });
+                        }
+                      });
+                      if (dueOver) {
+                        return SizedBox(
+                          child: Text(
+                              "Házifeladat határideje: " +
+                                  due +
+                                  " (határidőn túl)",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.red)),
+                        );
+                      } else {
+                        return SizedBox(
+                          child: Text(
+                              "Házifeladat határideje: " +
+                                  due +
+                                  " (van még: $leftString)",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        );
+                      }
+                    }
                     break;
                   default:
                     return SizedBox(height: 18);
@@ -174,7 +307,7 @@ class TimetableDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(lessonInfo.name)),
+      appBar: AppBar(title: Text(widget.lessonInfo.name)),
       body: _buildBody(),
     );
   }

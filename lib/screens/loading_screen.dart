@@ -76,188 +76,211 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future<String> getToken(code, user, pass) async {
-    if (code == "" || user == "" || pass == "") {
-      return "Hiányzó bemenet";
-    } else {
-      setState(() {
-        loadingText = "Token lekérése";
-      });
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'User-Agent': '$agent',
-      };
+    try {
+      if (code == "" || user == "" || pass == "") {
+        return "Hiányzó bemenet";
+      } else {
+        setState(() {
+          loadingText = "Token lekérése";
+        });
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'User-Agent': '$agent',
+        };
 
-      var data =
-          'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
-      try {
-        response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
-            headers: headers, body: data);
-        //print(response.body);
-        /*var url = 'https://novy.vip/api/globals.php?code=$code&user=$user&pass=$pass';
+        var data =
+            'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
+        try {
+          response = await http.post(
+              'https://$code.e-kreta.hu/idp/api/v1/Token',
+              headers: headers,
+              body: data);
+          //print(response.body);
+          /*var url = 'https://novy.vip/api/globals.php?code=$code&user=$user&pass=$pass';
     var response = await http.get(url);*/
-        //print(response.body);
-        if (response.statusCode == 200) {
-          setState(() {
-            loadingText = "Token dekódolása";
-          });
-          var parsedJson = json.decode(response.body);
-          //print('Response body: ${response.body}');
-          var status = parsedJson['token_type'];
-          if (status == '' || status == null) {
+          //print(response.body);
+          if (response.statusCode == 200) {
+            setState(() {
+              loadingText = "Token dekódolása";
+            });
+            var parsedJson = json.decode(response.body);
+            //print('Response body: ${response.body}');
+            var status = parsedJson['token_type'];
+            if (status == '' || status == null) {
+              if (parsedJson["error_description"] == '' ||
+                  parsedJson["error_description"] == null) {
+                return "Hibás felhasználónév/jelszó";
+              } else {
+                return parsedJson["error_description"];
+              }
+            } else {
+              globals.token = parsedJson["access_token"];
+              return "OK";
+            }
+            //print(status);
+          } else if (response.statusCode == 401) {
+            var parsedJson = json.decode(response.body);
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
               return "Hibás felhasználónév/jelszó";
             } else {
               return parsedJson["error_description"];
             }
+            //print('Response status: ${response.statusCode}');
           } else {
-            globals.token = parsedJson["access_token"];
-            return "OK";
+            throw Exception('post error: statusCode= ${response.statusCode}');
           }
-          //print(status);
-        } else if (response.statusCode == 401) {
-          var parsedJson = json.decode(response.body);
-          if (parsedJson["error_description"] == '' ||
-              parsedJson["error_description"] == null) {
-            return "Hibás felhasználónév/jelszó";
-          } else {
-            return parsedJson["error_description"];
-          }
-          //print('Response status: ${response.statusCode}');
-        } else {
-          throw Exception('post error: statusCode= ${response.statusCode}');
+        } on SocketException {
+          return "Rossz iskola azonosító";
         }
-      } on SocketException {
-        return "Rossz iskola azonosító";
       }
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
     }
   }
 
   Future<void> getStudentInfo(token, code) async {
-    setState(() {
-      loadingText = "Jegyek lekérése";
-    });
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-    };
-
-    var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/StudentAmi?fromDate=null&toDate=null',
-        headers: headers);
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    if (res.statusCode == 200) {
+    try {
       setState(() {
-        loadingText = "Jegyek dekódolása";
+        loadingText = "Jegyek lekérése";
       });
-      globals.dJson = json.decode(res.body);
-      var eval = globals.dJson["Evaluations"];
-      if (globals.markCount != 0) globals.markCount = 0;
-      if (globals.avarageCount != 0) globals.avarageCount = 0;
-      if (globals.noticesCount != 0) globals.noticesCount = 0;
-      await getAvarages(token, code);
-      eval.forEach((element) => globals.markCount += 1);
-      globals.noticesCount = countNotices(globals.dJson);
-      noticesPage.allParsedNotices = parseNotices(globals.dJson);
-      chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
-      chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
-      timetablePage.lessonsList = await getWeekLessons(token, code);
-      setUpCalculatorPage(globals.dJson, globals.avJson);
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/StudentAmi?fromDate=null&toDate=null',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {
+          loadingText = "Jegyek dekódolása";
+        });
+        globals.dJson = json.decode(res.body);
+        var eval = globals.dJson["Evaluations"];
+        if (globals.markCount != 0) globals.markCount = 0;
+        if (globals.avarageCount != 0) globals.avarageCount = 0;
+        if (globals.noticesCount != 0) globals.noticesCount = 0;
+        await getAvarages(token, code);
+        eval.forEach((element) => globals.markCount += 1);
+        globals.noticesCount = countNotices(globals.dJson);
+        noticesPage.allParsedNotices = parseNotices(globals.dJson);
+        chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
+        chartsPage.colors =
+            getRandomColors(chartsPage.allParsedSubjects.length);
+        timetablePage.lessonsList = await getWeekLessons(token, code);
+        setUpCalculatorPage(globals.dJson, globals.avJson);
+      }
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
     }
   }
 
   Future<void> getAvarages(var token, code) async {
-    setState(() {
-      loadingText = "Átlagok lekérése";
-    });
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-    };
-
-    var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/TantargyiAtlagAmi',
-        headers: headers);
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    if (res.statusCode == 200) {
+    try {
       setState(() {
-        loadingText = "Átlagok dekódolása";
+        loadingText = "Átlagok lekérése";
       });
-      var bodyJson = json.decode(res.body);
-      globals.avJson = bodyJson;
-      globals.avarageCount = countAvarages(bodyJson);
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/TantargyiAtlagAmi',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {
+          loadingText = "Átlagok dekódolása";
+        });
+        var bodyJson = json.decode(res.body);
+        globals.avJson = bodyJson;
+        globals.avarageCount = countAvarages(bodyJson);
+      }
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
     }
   }
 
   Future<List<List<Lesson>>> getWeekLessons(token, code) async {
-    setState(() {
-      loadingText = "Órarend előkészítése";
-    });
-    List<List<Lesson>> output = [];
-    for (var n = 0; n < 7; n++) {
-      output.add([]);
-    }
-    //calculate when was monday this week
-    int monday = 1;
-    int sunday = 7;
-    DateTime now = new DateTime.now();
-
-    while (now.weekday != monday) {
-      now = now.subtract(new Duration(days: 1));
-    }
-    String startDate = now.year.toString() +
-        "-" +
-        now.month.toString() +
-        "-" +
-        now.day.toString();
-    now = new DateTime.now();
-    while (now.weekday != sunday) {
-      now = now.add(new Duration(days: 1));
-    }
-    String endDate = now.year.toString() +
-        "-" +
-        now.month.toString() +
-        "-" +
-        now.day.toString();
-    //Make request
-    var header = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-      'Content-Type': 'application/json',
-    };
-    setState(() {
-      loadingText = "Órarend lekérése";
-    });
-
-    var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
-        headers: header);
-    if (res.statusCode != 200) {
-      print(res.statusCode);
-    }
-    //Process response
-    var decoded = json.decode(res.body);
-    setState(() {
-      loadingText = "Órarend dekódolása";
-    });
-    List<Lesson> tempLessonList = [];
-    for (var n in decoded) {
-      tempLessonList.add(setLesson(n));
-    }
-    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
-    int index = 0;
-    int beforeDay = tempLessonList[0].startDate.day;
-    //Just a matrix
-    for (var n in tempLessonList) {
-      if (n.startDate.day != beforeDay) {
-        index++;
-        beforeDay = n.startDate.day;
+    try {
+      setState(() {
+        loadingText = "Órarend előkészítése";
+      });
+      List<List<Lesson>> output = [];
+      for (var n = 0; n < 7; n++) {
+        output.add([]);
       }
-      output[index].add(n);
+      //calculate when was monday this week
+      int monday = 1;
+      int sunday = 7;
+      DateTime now = new DateTime.now();
+
+      while (now.weekday != monday) {
+        now = now.subtract(new Duration(days: 1));
+      }
+      String startDate = now.year.toString() +
+          "-" +
+          now.month.toString() +
+          "-" +
+          now.day.toString();
+      now = new DateTime.now();
+      while (now.weekday != sunday) {
+        now = now.add(new Duration(days: 1));
+      }
+      String endDate = now.year.toString() +
+          "-" +
+          now.month.toString() +
+          "-" +
+          now.day.toString();
+      //Make request
+      var header = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+        'Content-Type': 'application/json',
+      };
+      setState(() {
+        loadingText = "Órarend lekérése";
+      });
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
+          headers: header);
+      if (res.statusCode != 200) {
+        print(res.statusCode);
+      }
+      //Process response
+      var decoded = json.decode(res.body);
+      setState(() {
+        loadingText = "Órarend dekódolása";
+      });
+      List<Lesson> tempLessonList = [];
+      for (var n in decoded) {
+        tempLessonList.add(await setLesson(n, token, code));
+      }
+      tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+      int index = 0;
+      int beforeDay = tempLessonList[0].startDate.day;
+      //Just a matrix
+      for (var n in tempLessonList) {
+        if (n.startDate.day != beforeDay) {
+          index++;
+          beforeDay = n.startDate.day;
+        }
+        output[index].add(n);
+      }
+      return output;
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
     }
-    return output;
   }
   //NETWORK END
 
@@ -322,7 +345,7 @@ class _LoadingPageState extends State<LoadingPage> {
       } else {
         globals.adsEnabled = false;
       }
-      print("ads" + globals.adsEnabled.toString());
+      //print("ads" + globals.adsEnabled.toString());
     } catch (e) {
       await _ackAlert(context,
           "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újra telepítése");
@@ -331,22 +354,27 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   void auth(var context) async {
-    if (await isNetworkAvailable() == ConnectivityResult.none) {
-      status = "No internet connection was detected";
-    } else {
-      status = await getToken(decryptedCode, decryptedUser, decryptedPass);
+    try {
+      if (await isNetworkAvailable() == ConnectivityResult.none) {
+        status = "No internet connection was detected";
+      } else {
+        status = await getToken(decryptedCode, decryptedUser, decryptedPass);
+        if (status == "OK") {
+          await getStudentInfo(globals.token, decryptedCode);
+        }
+      }
       if (status == "OK") {
-        await getStudentInfo(globals.token, decryptedCode);
+        try {
+          save(context);
+        } on PlatformException catch (e) {
+          await _ackAlert(context, e.message);
+        }
+      } else {
+        await _ackAlert(context, status);
       }
-    }
-    if (status == "OK") {
-      try {
-        save(context);
-      } on PlatformException catch (e) {
-        await _ackAlert(context, e.message);
-      }
-    } else {
-      await _ackAlert(context, status);
+    } catch (e) {
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
     }
   }
 

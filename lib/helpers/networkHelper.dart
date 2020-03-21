@@ -90,18 +90,18 @@ class NetworkHelper {
       if (globals.markCount != 0) globals.markCount = 0;
       if (globals.avarageCount != 0) globals.avarageCount = 0;
       if (globals.noticesCount != 0) globals.noticesCount = 0;
-      await getAvarages(token,code);
+      await getAvarages(token, code);
       eval.forEach((element) => globals.markCount += 1);
       globals.noticesCount = countNotices(globals.dJson);
       noticesPage.allParsedNotices = parseNotices(globals.dJson);
       chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
       chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
-      setUpCalculatorPage(globals.dJson,globals.avJson);
+      setUpCalculatorPage(globals.dJson, globals.avJson);
     }
   }
 
-  Future<void> getAvarages(var token,code) async{
+  Future<void> getAvarages(var token, code) async {
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -201,7 +201,7 @@ class NetworkHelper {
     var decoded = json.decode(res.body);
     List<Lesson> tempLessonList = [];
     for (var n in decoded) {
-      tempLessonList.add(setLesson(n));
+      tempLessonList.add(await setLesson(n, token, code));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
@@ -234,4 +234,31 @@ void setUpCalculatorPage(var dJson, avJson) {
     }
   }
   calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
+}
+
+Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
+  var header = {
+    'Authorization': 'Bearer $token',
+    'User-Agent': '$agent',
+    'Content-Type': 'application/json',
+  };
+
+  var res = await http.get(
+      'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
+      headers: header);
+  if (res.statusCode != 200) {
+    print(res.statusCode);
+    return new Homework();
+  }
+  //Process response
+  var decoded = json.decode(res.body);
+  Homework temp = new Homework();
+  temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
+  temp.id = decoded["Id"];
+  temp.subject = capitalize(decoded["Tantargy"]);
+  temp.teacher = decoded["Rogzito"];
+  temp.content = decoded["Szoveg"];
+  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
+  temp.dueDate = DateTime.parse(decoded["Hatarido"]);
+  return temp;
 }

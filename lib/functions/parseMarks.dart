@@ -88,6 +88,8 @@ List<dynamic> parseNotices(var input) {
     var notices = input["Notes"];
     notices.forEach((n) => noticesArray.add(setNotices(n)));
     return noticesArray;
+  }else{
+    return null;
   }
 }
 

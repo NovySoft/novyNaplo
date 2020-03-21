@@ -46,6 +46,7 @@ dependencies:
   background_fetch: any
   sqflite: any
   animations: any
+  flutter_html: any
 
 flutter_icons:
   android: true

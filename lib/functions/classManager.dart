@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 
@@ -148,21 +148,24 @@ class Lesson {
   int whichLesson;
   int id;
   int homeWorkId;
+  int teacherHomeworkId;
   int groupID;
   List<dynamic> dogaIds; //Dynamic due to empty listes
   bool homeworkEnabled;
   DateTime date;
   DateTime startDate;
   DateTime endDate;
+  Homework homework;
 }
 
-Lesson setLesson(input) {
+Future<Lesson> setLesson(var input,token,code) async{
   var temp = new Lesson();
   //INTs
   temp.id = input["LessonId"];
   temp.whichLesson = input["Count"];
   temp.homeWorkId = input["Homework"];
   temp.groupID = input["OsztalyCsoportId"];
+  temp.teacherHomeworkId = input["TeacherHomeworkId"];
   //Strings
   temp.groupName = input["ClassGroup"];
   temp.subject = capitalize(input["Subject"]);
@@ -184,6 +187,11 @@ Lesson setLesson(input) {
   //Lists
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
+  if(temp.teacherHomeworkId != null){
+    temp.homework = await setTeacherHomework(temp.teacherHomeworkId,token,code);
+  }else{
+    temp.homework = new Homework();
+  }
   return temp;
 }
 
@@ -201,4 +209,14 @@ CalculatorData setCalcData(value, name, count, sum) {
   temp.name = name;
   temp.sum = sum;
   return temp;
+}
+
+class Homework{
+  int id;
+  int classGroupId;
+  String subject;
+  String teacher;
+  String content;
+  DateTime givenUp;
+  DateTime dueDate;
 }
