@@ -16,7 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
-import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
+import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/functions/parseMarks.dart';
@@ -168,9 +168,9 @@ class _LoadingPageState extends State<LoadingPage> {
         eval.forEach((element) => globals.markCount += 1);
         globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = parseNotices(globals.dJson);
-        chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
-        chartsPage.colors =
-            getRandomColors(chartsPage.allParsedSubjects.length);
+        statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
+        statisticsPage.colors =
+            getRandomColors(statisticsPage.allParsedSubjects.length);
         timetablePage.lessonsList = await getWeekLessons(token, code);
         setUpCalculatorPage(globals.dJson, globals.avJson);
       }
@@ -259,7 +259,7 @@ class _LoadingPageState extends State<LoadingPage> {
       //Process response
       var decoded = json.decode(res.body);
       setState(() {
-        loadingText = "Órarend dekódolása";
+        loadingText = "Órarend dekódolása\nHázifeladatok lekérése";
       });
       List<Lesson> tempLessonList = [];
       for (var n in decoded) {
@@ -339,7 +339,9 @@ class _LoadingPageState extends State<LoadingPage> {
             anchorType: AnchorType.bottom,
           );
           globals.adsEnabled = true;
+          globals.adModifier = 1;
         } else {
+          globals.adModifier = 0;
           globals.adsEnabled = false;
         }
       } else {

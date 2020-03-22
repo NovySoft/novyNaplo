@@ -26,6 +26,14 @@ const _myListOfRandomColors = [
   Colors.lime,
   Colors.pink,
   Colors.orange,
+  Colors.lightBlue,
+  Colors.lightGreen,
+  Colors.cyan,
+  Colors.purple,
+  Colors.deepPurple,
+  Colors.amberAccent,
+  Colors.limeAccent,
+  Colors.tealAccent
 ];
 
 final _random = Random();

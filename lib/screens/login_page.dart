@@ -113,8 +113,10 @@ class _LoginPageState extends State<LoginPage> {
         adBanner.show(
           anchorType: AnchorType.bottom,
         );
+        globals.adModifier = 1;
         globals.adsEnabled = true;
       } else {
+        globals.adModifier = 0;
         globals.adsEnabled = false;
       }
       main.isNew = false;
@@ -186,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
     prefs.setBool("isNew",false);
     globals.adsEnabled = false;
     prefs.setBool("ads", false);
+    globals.adModifier = 0;
     newVersion = false;
     if (caller != "onLoad") {
       showDialog<void>(
@@ -258,10 +261,16 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       if (main.isNew) {
-        if(globals.adsEnabled == null) globals.adsEnabled = false;
+        if(globals.adsEnabled == null){
+          globals.adsEnabled = false;
+          globals.adModifier = 0;
+        } 
         Navigator.pushReplacementNamed(context, SettingsTab.tag);
       } else {
-        if(globals.adsEnabled == null) globals.adsEnabled = false;
+        if(globals.adsEnabled == null){
+          globals.adsEnabled = false;
+          globals.adModifier = 0;
+        } 
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       }
     } on PlatformException catch (e) {

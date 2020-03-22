@@ -2,7 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
-import 'package:novynaplo/screens/charts_tab.dart' as chartsPage;
+import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/functions/parseMarks.dart';
@@ -94,8 +94,8 @@ class NetworkHelper {
       eval.forEach((element) => globals.markCount += 1);
       globals.noticesCount = countNotices(globals.dJson);
       noticesPage.allParsedNotices = parseNotices(globals.dJson);
-      chartsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
-      chartsPage.colors = getRandomColors(chartsPage.allParsedSubjects.length);
+      statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
+      statisticsPage.colors = getRandomColors(statisticsPage.allParsedSubjects.length);
       timetablePage.lessonsList = await getWeekLessons(token, code);
       setUpCalculatorPage(globals.dJson, globals.avJson);
     }

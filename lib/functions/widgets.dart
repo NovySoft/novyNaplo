@@ -10,7 +10,7 @@ import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:novynaplo/screens/charts_tab.dart';
+import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 /// A simple widget that builds different things on different platforms.
@@ -427,7 +427,7 @@ class AnimatedChartsCard extends StatelessWidget {
             color: color,
             flattenAnimation: heroAnimation,
             child: SizedBox(
-              height: 160,
+              height: 100,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -436,7 +436,7 @@ class AnimatedChartsCard extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Container(
-                      height: 160,
+                      height: 100,
                       color: Colors.black12,
                       alignment: Alignment.centerLeft,
                       child: Column(
@@ -630,14 +630,14 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Grafikonok'),
-          leading: Icon(Icons.timeline),
+          title: Text('Statisztika'),
+          leading: Icon(MdiIcons.chartScatterPlotHexbin),
           onTap: () {
-            if (screen == ChartsTab.tag) {
+            if (screen == StatisticsTab.tag) {
               Navigator.pop(context);
             } else {
               try {
-                Navigator.pushNamed(context, ChartsTab.tag);
+                Navigator.pushNamed(context, StatisticsTab.tag);
               } on PlatformException catch (e) {
                 print(e.message);
               }

@@ -3,7 +3,6 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/timetable_detail_tab.dart';
-//import 'package:novynaplo/screens/globals_page.dart' as globals;
 import 'package:novynaplo/global.dart' as globals;
 
 final List<Tab> days = <Tab>[
@@ -40,40 +39,40 @@ class _TimetableTabState extends State<TimetableTab> {
           body: TabBarView(
               children: days.map((Tab tab) {
             String label = tab.text;
-            //Itemcount + 1 because we need one beacuse of the ads
+            //Itemcount globals.adModifier because we need one beacuse of the ads
             if (label == "Hétfő") {
               return ListView.builder(
-                itemCount: lessonsList[0].length + 1,
+                itemCount: lessonsList[0].length + globals.adModifier,
                 itemBuilder: _timetableBuilder,
               );
             } else if (label == "Kedd") {
               return ListView.builder(
-                itemCount: lessonsList[1].length + 1,
+                itemCount: lessonsList[1].length  + globals.adModifier,
                 itemBuilder: _timetableTwoBuilder,
               );
             } else if (label == "Szerda") {
               return ListView.builder(
-                itemCount: lessonsList[2].length + 1,
+                itemCount: lessonsList[2].length + globals.adModifier,
                 itemBuilder: _timetableThreeBuilder,
               );
             } else if (label == "Csütörtök") {
               return ListView.builder(
-                itemCount: lessonsList[3].length + 1,
+                itemCount: lessonsList[3].length + globals.adModifier,
                 itemBuilder: _timetableFourBuilder,
               );
             } else if (label == "Péntek") {
               return ListView.builder(
-                itemCount: lessonsList[4].length + 1,
+                itemCount: lessonsList[4].length + globals.adModifier,
                 itemBuilder: _timetableFiveBuilder,
               );
             } else if (label == "Szombat") {
               return ListView.builder(
-                itemCount: lessonsList[5].length + 1,
+                itemCount: lessonsList[5].length + globals.adModifier,
                 itemBuilder: _timetableSixBuilder,
               );
             } else if (label == "Vasárnap") {
               return ListView.builder(
-                itemCount: lessonsList[6].length + 1,
+                itemCount: lessonsList[6].length + globals.adModifier,
                 itemBuilder: _timetableSevenBuilder,
               );
             } else

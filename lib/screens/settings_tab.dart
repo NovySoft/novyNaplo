@@ -59,6 +59,7 @@ class _SettingsBodyState extends State<SettingsBody> {
       setState(() {
         adsSwitch = true;
         globals.adsEnabled = true;
+        globals.adModifier = 1;
       });
       prefs.setBool("ads", true);
       showDialog<void>(
@@ -409,6 +410,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                   FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
                   prefs.setBool("ads", true);
                   globals.adsEnabled = true;
+                  globals.adModifier = 1;
                   showDialog<void>(
                       context: context,
                       barrierDismissible: false,
@@ -420,6 +422,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                       .setUserProperty(name: "Ads", value: "OFF");
                   prefs.setBool("ads", false);
                   globals.adsEnabled = false;
+                  globals.adModifier = 0;
                   adBanner.dispose();
                   showDialog<void>(
                       context: context,

@@ -90,7 +90,7 @@ Widget avaragesList(BuildContext context) {
   parseAvarages(globals.avJson).forEach((n) => setArrays(n));
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
-    itemCount: globals.avarageCount + 1,
+    itemCount: globals.avarageCount + globals.adModifier,
     itemBuilder: (context, index) {
       if (index >= globals.avarageCount) {
         return ListTile();

@@ -34,7 +34,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
 
   Widget _body() {
     return ListView.builder(
-      itemCount: globals.globalHomework.length + 1,
+      itemCount: globals.globalHomework.length + globals.adModifier,
       itemBuilder: _listBuilder,
     );
   }
