@@ -16,6 +16,7 @@ import 'package:novynaplo/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/loading_screen.dart';
+import 'package:novynaplo/screens/homework_tab.dart';
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
     ChartsTab.tag: (context) => ChartsTab(),
     TimetableTab.tag: (context) => TimetableTab(),
     CalculatorTab.tag: (context) => CalculatorTab(),
+    HomeworkTab.tag: (context) => HomeworkTab(),
   };
 
   @override

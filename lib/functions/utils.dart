@@ -196,3 +196,30 @@ int getMonthLength(int input, bool isLeap) {
       return 0;
   }
 }
+
+String parseIntToWeekdayString(int input){
+  switch(input){
+    case 1:
+      return "Hétfő";
+      break;
+    case 2:
+      return "Kedd";
+      break;
+    case 3:
+      return "Szerda";
+      break;
+    case 4:
+      return "Csütörtök";
+      break;
+    case 5:
+      return "Péntek";
+      break;
+    case 6:
+      return "Szombat";
+      break;
+    case 7:
+      return "Vasárnap";
+      break;
+  }
+  return null;
+}

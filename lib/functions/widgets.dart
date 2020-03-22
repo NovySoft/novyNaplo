@@ -5,6 +5,7 @@ import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:flutter/services.dart';
+import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
@@ -361,7 +362,7 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
             color: color,
             flattenAnimation: heroAnimation,
             child: SizedBox(
-              height: 160,
+              height: 120,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -370,7 +371,7 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Container(
-                      height: 160,
+                      height: 120,
                       color: Colors.black12,
                       alignment: Alignment.centerLeft,
                       child: Column(
@@ -584,6 +585,21 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
+          title: Text('Házifeladatok'),
+          leading: Icon(MdiIcons.bagPersonalOutline),
+          onTap: () {
+            if (screen == HomeworkTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, HomeworkTab.tag);
+              } on PlatformException catch (e) {
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
           title: Text('Átlagok'),
           leading: Icon(Icons.all_inclusive),
           onTap: () {
@@ -658,7 +674,7 @@ Widget getDrawer(String screen, BuildContext context) {
             }
           },
         ),
-        SizedBox(height: 200)
+        SizedBox(height: 250)
       ],
     ),
   );

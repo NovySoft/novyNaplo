@@ -1,13 +1,14 @@
+import 'package:novynaplo/functions/classManager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //Variables used globally;
 //Session
-import 'package:shared_preferences/shared_preferences.dart';
-
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 var token; //Bearer token from api
 int avarageCount; //How many subjects do we have
 int markCount; //How many marks do we have
 int noticesCount; //How many notices do we have
+List<Homework> globalHomework = []; //Global homework
 //"Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme

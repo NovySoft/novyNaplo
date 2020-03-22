@@ -260,5 +260,7 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   temp.content = decoded["Szoveg"];
   temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
   temp.dueDate = DateTime.parse(decoded["Hatarido"]);
+  globals.globalHomework.add(temp);
+  globals.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;
 }
