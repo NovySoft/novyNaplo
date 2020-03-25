@@ -176,9 +176,9 @@ void getPieChart(var input) {
   int index = 0;
   String name = "";
   for (var n in input) {
-    if(n[0].split(":")[0].toLowerCase().startsWith("magyar")){
+    if (n[0].split(":")[0].toLowerCase().startsWith("magyar")) {
       name = n[0].split(":")[0].split(" ")[1];
-    }else{
+    } else {
       name = n[0].split(":")[0];
     }
     if (index != 0) {
@@ -199,6 +199,47 @@ void getPieChart(var input) {
       // Set a label accessor to control the text of the arc label.
       labelAccessorFn: (stats.LinearPiData row, _) =>
           '${row.name}: ${row.value}',
+    )
+  ];
+}
+
+void getBarChart(input) {
+  List<stats.MarkForBars> data = [
+    //WARN do not modify order!
+    new stats.MarkForBars('1es', 0), //0 
+    new stats.MarkForBars('2es', 0), //1
+    new stats.MarkForBars('3as', 0), //2
+    new stats.MarkForBars('4es', 0), //3
+    new stats.MarkForBars('5ös', 0), //4
+  ];
+  for (var n in input[0]) {
+    switch(int.parse(n.split(":")[1])){
+      case 5:
+        data[4].count++;
+        break;
+      case 4:
+        data[3].count++;
+        break;
+      case 3:
+        data[2].count++;
+        break;
+      case 2:
+        data[1].count++;
+        break;
+      case 1:
+        data[0].count++;
+        break;
+    }
+  }
+  stats.howManyFromMarks = [
+    new charts.Series<stats.MarkForBars, String>(
+      id: 'count',
+      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      domainFn: (stats.MarkForBars count, _) => count.name,
+      measureFn: (stats.MarkForBars count, _) => count.count,
+      data: data,
+      labelAccessorFn: (stats.MarkForBars count, _) =>
+          ('${count.count.toString()}db'),
     )
   ];
 }

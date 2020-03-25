@@ -22,6 +22,7 @@ AV globalAllSubjectAv = new AV();
 AV worstSubjectAv = new AV();
 AV bestSubjectAv = new AV();
 List<charts.Series> pieList;
+List<charts.Series<dynamic, String>> howManyFromMarks;
 
 //Classes used by charts
 class AV {
@@ -37,6 +38,13 @@ class LinearPiData {
   final String name;
 
   LinearPiData(this.id, this.value, this.name);
+}
+
+class MarkForBars {
+  final String name;
+  int count;
+
+  MarkForBars(this.name, this.count);
 }
 
 class StatisticsTab extends StatefulWidget {
@@ -70,6 +78,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                 getAllSubjectsAv(allParsedSubjects);
                 getWorstAndBest(allParsedSubjects);
                 getPieChart(allParsedSubjects);
+                getBarChart(allParsedSubjects);
                 if (globalAllSubjectAv.diffSinceLast == 0) {
                   avColor = Colors.orange;
                   avIcon = Icon(
@@ -117,18 +126,18 @@ class _StatisticsTabState extends State<StatisticsTab>
               final axis = charts.NumericAxisSpec(
                   renderSpec: charts.GridlineRendererSpec(
                       labelStyle: charts.TextStyleSpec(
-                fontSize: 10,
+                fontSize: 15,
                 color: charts.MaterialPalette.blue.shadeDefault,
               )));
 
               final axisTwo = charts.NumericAxisSpec(
                   renderSpec: charts.SmallTickRendererSpec(
                 labelStyle: charts.TextStyleSpec(
-                    fontSize: 10,
+                    fontSize: 15,
                     color: charts.MaterialPalette.blue.shadeDefault),
               ));
               return ListView.builder(
-                itemCount: 8,
+                itemCount: 11,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
@@ -155,7 +164,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                       break;
                     case 1:
                       return SizedBox(
-                        height: 25,
+                        height: 75,
                       );
                       break;
                     case 2:
@@ -224,12 +233,16 @@ class _StatisticsTabState extends State<StatisticsTab>
                       break;
                     case 6:
                       return Center(
-                        child: Text("Jegyek száma bizonyos tantárgyakból:",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                        child: Text(
+                          "Jegyek száma bizonyos tantárgyakból:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       );
                       break;
                     case 7:
                       return SizedBox(
-                          height: 500,
+                          height: 400,
                           width: double.infinity,
                           child: new charts.PieChart(
                             pieList,
@@ -241,6 +254,51 @@ class _StatisticsTabState extends State<StatisticsTab>
                                           charts.ArcLabelPosition.inside)
                                 ]),
                           ));
+                      break;
+                    case 8:
+                      return SizedBox(
+                        height: 25,
+                      );
+                      break;
+                    case 9:
+                      return Center(
+                        child: Text(
+                          "Bizonyos jegyek száma:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                      break;
+                    case 10:
+                      return SizedBox(
+                        height: 400,
+                        width: double.infinity,
+                        child: charts.BarChart(
+                          howManyFromMarks,
+                          animate: true,
+                          domainAxis: new charts.OrdinalAxisSpec(
+                              renderSpec: charts.SmallTickRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                            fontSize: 15,
+                            color: charts.MaterialPalette.blue.shadeDefault,
+                          ))),
+                          primaryMeasureAxis: new charts.NumericAxisSpec(
+                              renderSpec: charts.GridlineRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                            fontSize: 15,
+                            color: charts.MaterialPalette.blue.shadeDefault,
+                          ))),
+                          defaultRenderer: new charts.BarRendererConfig(
+                              barRendererDecorator:
+                                  new charts.BarLabelDecorator<String>(
+                                      insideLabelStyleSpec:
+                                          new charts.TextStyleSpec(
+                                              color: charts
+                                                  .MaterialPalette.white)),
+                              cornerStrategy:
+                                  const charts.ConstCornerStrategy(30)),
+                        ),
+                      );
                       break;
                   }
                 },
