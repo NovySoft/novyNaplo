@@ -10,7 +10,8 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'dart:math';
-
+//TODO fix weights
+//TODO DO NOT DEPLOY TO PRODUCTION BEFORE FIX!!!
 var allParsedSubjects;
 var colors;
 final List<Tab> statTabs = <Tab>[
@@ -143,25 +144,42 @@ class _StatisticsTabState extends State<StatisticsTab>
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
                     case 0:
-                      return SizedBox(
-                        height: 500,
-                        child: charts.NumericComboChart(
-                          createAllSubjectChartData(allParsedSubjects),
-                          animate: globals.chartAnimations,
-                          domainAxis: axisTwo,
-                          primaryMeasureAxis: axis,
-                          // Configure the default renderer as a line renderer. This will be used
-                          // for any series that does not define a rendererIdKey.
-                          defaultRenderer: new charts.LineRendererConfig(
-                              includePoints: true),
-                          behaviors: [
-                            new charts.SeriesLegend(
-                              position: charts.BehaviorPosition.end,
-                            ),
-                            new charts.PanAndZoomBehavior()
-                          ],
-                        ),
-                      );
+                      if (globals.statChart == "Mindent") {
+                        return SizedBox(
+                          height: 500,
+                          child: charts.NumericComboChart(
+                            createAllSubjectChartData(allParsedSubjects),
+                            animate: globals.chartAnimations,
+                            domainAxis: axisTwo,
+                            primaryMeasureAxis: axis,
+                            // Configure the default renderer as a line renderer. This will be used
+                            // for any series that does not define a rendererIdKey.
+                            defaultRenderer: new charts.LineRendererConfig(
+                                includePoints: true),
+                            behaviors: [
+                              new charts.SeriesLegend(
+                                position: charts.BehaviorPosition.end,
+                              ),
+                              new charts.PanAndZoomBehavior()
+                            ],
+                          ),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 400,
+                          child: charts.LineChart(
+                            createOsszesitett(allParsedSubjects),
+                            animate: globals.chartAnimations,
+                            domainAxis: axisTwo,
+                            primaryMeasureAxis: axis,
+                            // Configure the default renderer as a line renderer. This will be used
+                            // for any series that does not define a rendererIdKey.
+                            defaultRenderer: new charts.LineRendererConfig(
+                                includePoints: true),
+                            behaviors: [new charts.PanAndZoomBehavior()],
+                          ),
+                        );
+                      }
                       break;
                     case 1:
                       return SizedBox(
@@ -271,7 +289,8 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 10:
-                      if (DynamicTheme.of(context).brightness == Brightness.dark) {
+                      if (DynamicTheme.of(context).brightness ==
+                          Brightness.dark) {
                         return SizedBox(
                           height: 400,
                           width: double.infinity,
@@ -305,7 +324,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                                     const charts.ConstCornerStrategy(30)),
                           ),
                         );
-                      }else{
+                      } else {
                         return SizedBox(
                           height: 400,
                           width: double.infinity,
@@ -342,7 +361,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                       }
                       break;
                     default:
-                      return SizedBox(height: 150,);
+                      return SizedBox(
+                        height: 150,
+                      );
                       break;
                   }
                 },
@@ -371,7 +392,8 @@ Widget _chartsListBuilder(BuildContext context, int index) {
   Color currColor = colors[index];
   List<double> currSubjectMarks = [];
   for (var n in allParsedSubjects[index]) {
-    currSubjectMarks.add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
+    currSubjectMarks
+        .add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
   }
   return SafeArea(
       top: false,
@@ -385,8 +407,7 @@ Widget _chartsListBuilder(BuildContext context, int index) {
               MaterialPageRoute(
                 builder: (context) => ChartsDetailTab(
                   id: index,
-                  subject:
-                      capitalize(allParsedSubjects[index][0].subject),
+                  subject: capitalize(allParsedSubjects[index][0].subject),
                   color: currColor,
                   seriesList:
                       createSubjectChart(currSubjectMarks, index.toString()),

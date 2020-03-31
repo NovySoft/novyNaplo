@@ -25,6 +25,30 @@ var chartColorList = [
   charts.MaterialPalette.teal.shadeDefault,
 ];
 
+dynamic createOsszesitett(var allParsedInput) {
+  double sum = 0, index = 0;
+  var tempList = [];
+  for (var n in allParsedInput) {
+    for (var y in n) {
+      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+      index++;
+      tempList.add(sum / index);
+    }
+  }
+  List<LinearMarkChartData> tempListTwo = [];
+  index = 0;
+  for (var n in tempList) {
+    tempListTwo.add(new LinearMarkChartData(index.toInt(), n, id: "Minden"));
+    index++;
+  }
+  return [new charts.Series<LinearMarkChartData, int>(
+      id: tempListTwo[0].id,
+      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
+      data: tempListTwo)];
+}
+
 List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     var allParsedInput) {
   var linearMarkDataList = [];

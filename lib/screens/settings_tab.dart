@@ -11,6 +11,7 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 
 String dropDown;
+String statDropDown = globals.statChart;
 String markDropdown = globals.markCardSubtitle;
 String lessonDropdown = globals.lessonCardSubtitle;
 String markThemeDropdown = globals.markCardTheme;
@@ -96,7 +97,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 8 + indexModifier,
+      itemCount: 9 + indexModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -397,7 +398,37 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: constColorDropdown,
             ),
           );
-        } else if (index == 4 + indexModifier) {
+        }else if (index == 4 + indexModifier) {
+          return ListTile(
+            title: Text("Statisztika mutató:"),
+            trailing: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: "Mindent",
+                  child: Text(
+                    "Mindent",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Összesített",
+                  child: Text(
+                    "Összesített",
+                  ),
+                ),
+              ],
+              onChanged: (String value) async{
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                setState(() {
+                  prefs.setString("statChart", value);
+                  globals.statChart = value;
+                  statDropDown = value;
+                });
+              },
+              value: statDropDown,
+            ),
+          );
+        } else if (index == 5 + indexModifier) {
           return ListTile(
             title: Text("Reklámok"),
             trailing: Switch(
@@ -450,7 +481,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: adsSwitch,
             ),
           );
-        } else if (index == 5 + indexModifier) {
+        } else if (index == 6 + indexModifier) {
           return ListTile(
             title: Text("Chart animációk:"),
             trailing: Switch(
@@ -472,7 +503,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: animationSwitch,
             ),
           );
-        }else if (index == 6 + indexModifier) {
+        }else if (index == 7 + indexModifier) {
           return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -504,7 +535,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: notificationSwitch,
             ),
           );
-        } else if (index == 7 + indexModifier) {
+        } else if (index == 8 + indexModifier) {
           return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

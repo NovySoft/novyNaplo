@@ -366,6 +366,15 @@ class _LoadingPageState extends State<LoadingPage> {
       } else if (globals.chartAnimations == null) {
         globals.chartAnimations = prefs.getBool("chartAnimations");
       }
+
+      if (prefs.getString("statChart") == null &&
+          globals.statChart == null) {
+        globals.statChart = "Mindent";
+        prefs.setString("statChart", "Mindent");
+      } else if (globals.statChart == null) {
+        globals.statChart = prefs.getString("statChart");
+      }
+      
       if (prefs.getBool("ads") != null) {
         if (prefs.getBool("ads")) {
           adBanner.load();
