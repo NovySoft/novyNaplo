@@ -102,6 +102,14 @@ class _LoginPageState extends State<LoginPage> {
     } else if (globals.markCardTheme == null) {
       globals.markCardTheme = prefs.getString("markCardTheme");
     }
+
+    if (prefs.getBool("chartAnimations") == null &&
+        globals.chartAnimations == null) {
+      globals.chartAnimations = true;
+      prefs.setBool("chartAnimations", true);
+    } else if (globals.chartAnimations == null) {
+      globals.chartAnimations = prefs.getBool("chartAnimations");
+    }
     //DONT DELETE, FOR TESTING USE ONLY
     /*print("subtitle:" + markCardSubtitle);
     print("constColor:" + markCardConstColor);

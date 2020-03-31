@@ -79,7 +79,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   void getToken(code, user, pass) async {
     tokenIndex++;
-    print("TOKEN");
     try {
       if (code == "" || user == "" || pass == "") {
         afterTokenGrab(context, "Hiányzó bemenet");
@@ -104,7 +103,6 @@ class _LoadingPageState extends State<LoadingPage> {
               loadingText = "Token dekódolása";
             });
             var parsedJson = json.decode(response.body);
-            print('Response body: ${response.body}');
             var status = parsedJson['token_type'];
             if (status == '' || status == null) {
               if (parsedJson["error_description"] == '' ||
@@ -359,6 +357,14 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.markCardTheme = "Véletlenszerű";
       } else {
         globals.markCardTheme = prefs.getString("markCardTheme");
+      }
+
+      if (prefs.getBool("chartAnimations") == null &&
+          globals.chartAnimations == null) {
+        globals.chartAnimations = true;
+        prefs.setBool("chartAnimations", true);
+      } else if (globals.chartAnimations == null) {
+        globals.chartAnimations = prefs.getBool("chartAnimations");
       }
       if (prefs.getBool("ads") != null) {
         if (prefs.getBool("ads")) {

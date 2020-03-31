@@ -16,6 +16,7 @@ String markCardConstColor; //If theme is constant what color is it
 String lessonCardSubtitle; //Lesson card's subtitle
 String loadingText = "Kérlek várj..."; //Betöltő szöveg
 bool adsEnabled; //Do we have to show ads
+bool chartAnimations; //Do we need to animate the charts
 int adModifier = 0;
 
 void resetAllGlobals() async{

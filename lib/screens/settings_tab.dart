@@ -16,6 +16,7 @@ String lessonDropdown = globals.lessonCardSubtitle;
 String markThemeDropdown = globals.markCardTheme;
 String constColorDropdown = globals.markCardConstColor;
 bool adsSwitch = globals.adsEnabled;
+bool animationSwitch = globals.chartAnimations;
 bool notificationSwitch = false;
 int indexModifier = 0;
 
@@ -95,7 +96,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 7 + indexModifier,
+      itemCount: 8 + indexModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -451,6 +452,28 @@ class _SettingsBodyState extends State<SettingsBody> {
           );
         } else if (index == 5 + indexModifier) {
           return ListTile(
+            title: Text("Chart animációk:"),
+            trailing: Switch(
+              onChanged: (bool switchOn) async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                setState(() {
+                  animationSwitch = switchOn;
+                  globals.chartAnimations = switchOn;
+                });
+                if (switchOn) {
+                  FirebaseAnalytics().setUserProperty(name: "Animations", value: "YES");
+                  prefs.setBool("chartAnimations", true);
+                } else {
+                  FirebaseAnalytics().setUserProperty(name: "Animations", value: "NO");
+                  prefs.setBool("chartAnimations", false);
+                }
+              },
+              value: animationSwitch,
+            ),
+          );
+        }else if (index == 6 + indexModifier) {
+          return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,7 +504,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: notificationSwitch,
             ),
           );
-        } else if (index == 6 + indexModifier) {
+        } else if (index == 7 + indexModifier) {
           return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

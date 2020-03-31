@@ -138,7 +138,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     color: charts.MaterialPalette.blue.shadeDefault),
               ));
               return ListView.builder(
-                itemCount: 11,
+                itemCount: 11 + globals.adModifier,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
@@ -147,7 +147,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         height: 500,
                         child: charts.NumericComboChart(
                           createAllSubjectChartData(allParsedSubjects),
-                          animate: true,
+                          animate: globals.chartAnimations,
                           domainAxis: axisTwo,
                           primaryMeasureAxis: axis,
                           // Configure the default renderer as a line renderer. This will be used
@@ -247,7 +247,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                           width: double.infinity,
                           child: new charts.PieChart(
                             pieList,
-                            animate: true,
+                            animate: globals.chartAnimations,
                             defaultRenderer: new charts.ArcRendererConfig(
                                 arcRendererDecorators: [
                                   new charts.ArcLabelDecorator(
@@ -277,7 +277,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                           width: double.infinity,
                           child: charts.BarChart(
                             howManyFromMarks,
-                            animate: true,
+                            animate: globals.chartAnimations,
                             domainAxis: new charts.OrdinalAxisSpec(
                                 renderSpec: charts.SmallTickRendererSpec(
                                     labelStyle: charts.TextStyleSpec(
@@ -311,7 +311,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                           width: double.infinity,
                           child: charts.BarChart(
                             howManyFromMarks,
-                            animate: true,
+                            animate: globals.chartAnimations,
                             domainAxis: new charts.OrdinalAxisSpec(
                                 renderSpec: charts.SmallTickRendererSpec(
                                     labelStyle: charts.TextStyleSpec(
@@ -340,6 +340,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                           ),
                         );
                       }
+                      break;
+                    default:
+                      return SizedBox(height: 150,);
                       break;
                   }
                 },
@@ -387,7 +390,7 @@ Widget _chartsListBuilder(BuildContext context, int index) {
                   color: currColor,
                   seriesList:
                       createSubjectChart(currSubjectMarks, index.toString()),
-                  animate: true,
+                  animate: globals.chartAnimations,
                 ),
               ),
             );

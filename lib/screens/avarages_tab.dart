@@ -93,7 +93,9 @@ Widget avaragesList(BuildContext context) {
     itemCount: globals.avarageCount + globals.adModifier,
     itemBuilder: (context, index) {
       if (index >= globals.avarageCount) {
-        return ListTile();
+        return ListTile(
+          title: SizedBox(height: 100,),
+        );
       } else {
         return ListTile(
           title: Text(subjectName[index],
