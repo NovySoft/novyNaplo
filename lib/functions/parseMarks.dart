@@ -88,7 +88,7 @@ List<dynamic> parseNotices(var input) {
     var notices = input["Notes"];
     notices.forEach((n) => noticesArray.add(setNotices(n)));
     return noticesArray;
-  }else{
+  } else {
     return null;
   }
 }
@@ -101,7 +101,7 @@ List<String> parseSubjects(var input) {
 }
 
 List<charts.Series<ChartPoints, int>> createSubjectChart(
-    List<int> input, String id) {
+    List<double> input, String id) {
   chartData = [];
   index = 1;
   sum = 0;
@@ -130,42 +130,35 @@ void addChartPoints(var n) {
   index++;
 }
 
+//USED BY STATISTICS
 List<dynamic> categorizeSubjects(var input) {
-  //TODO rewrite with matrixes
-  catIndex = 0;
-  var arrayIndex = 1;
-  var parsed = parseAllByDate(input);
-  var strings = [];
-  var stringsTwo = [];
-  var output = [[]];
-  String subJect = ""; //will store temp data
+  var parsed = input["Evaluations"];
+  List<Evals> jegyArray = [];
+  List<List<Evals>> jegyMatrix = [[]];
+  var output = [];
   for (var n in parsed) {
-    var date = n.dateString.split("T")[0];
-    var subject = n.subject;
-    var value = n.numberValue;
+    jegyArray.add(setEvals(n));
+  }
+  jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
+  String lastString = "";
+  for (var n in jegyArray) {
     if ((n.form != "Percent" && n.type != "HalfYear") ||
-        subject == "Magatartas" ||
-        subject == "Szorgalom") {
-      strings.add(subject + ":" + date + ":" + value.toString());
-      stringsTwo.add(date + ":" + subject + ":" + value.toString());
+        n.subject == "Magatartas" ||
+        n.subject == "Szorgalom") {
+      if (n.subject != lastString) {
+        jegyMatrix.add([]);
+        lastString = n.subject;
+      }
+      jegyMatrix.last.add(n);
     }
   }
-  strings.sort();
-  stringsTwo.sort();
-  for (var n in stringsTwo) {
-    output[0].add("Összesített átlag:" + n.split(":")[2]);
+  jegyMatrix.removeAt(0);
+  int index = 0;
+  for(var n in jegyMatrix){
+    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    index++;
   }
-  output.add([]);
-  for (var n in strings) {
-    if (catIndex != 0 && subJect != n.split(":")[0]) {
-      output.add([]);
-      arrayIndex++;
-    }
-    output[arrayIndex].add(n.split(":")[0] + ":" + n.split(":")[2]);
-    subJect = n.split(":")[0];
-    catIndex++;
-  }
-  return output;
+  return jegyMatrix;
 }
 
 List<dynamic> sortByDateAndSubject(List<dynamic> input) {

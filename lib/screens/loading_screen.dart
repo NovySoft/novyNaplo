@@ -37,6 +37,8 @@ String decryptedCode,
 var status;
 String agent = config.currAgent;
 var response;
+bool hasError = false;
+int tokenIndex = 0;
 
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
@@ -75,10 +77,12 @@ class _LoadingPageState extends State<LoadingPage> {
     return await (Connectivity().checkConnectivity());
   }
 
-  Future<String> getToken(code, user, pass) async {
+  void getToken(code, user, pass) async {
+    tokenIndex++;
+    print("TOKEN");
     try {
       if (code == "" || user == "" || pass == "") {
-        return "Hiányzó bemenet";
+        afterTokenGrab(context, "Hiányzó bemenet");
       } else {
         setState(() {
           loadingText = "Token lekérése";
@@ -95,48 +99,72 @@ class _LoadingPageState extends State<LoadingPage> {
               'https://$code.e-kreta.hu/idp/api/v1/Token',
               headers: headers,
               body: data);
-          //print(response.body);
-          /*var url = 'https://novy.vip/api/globals.php?code=$code&user=$user&pass=$pass';
-    var response = await http.get(url);*/
-          //print(response.body);
           if (response.statusCode == 200) {
             setState(() {
               loadingText = "Token dekódolása";
             });
             var parsedJson = json.decode(response.body);
-            //print('Response body: ${response.body}');
+            print('Response body: ${response.body}');
             var status = parsedJson['token_type'];
             if (status == '' || status == null) {
               if (parsedJson["error_description"] == '' ||
                   parsedJson["error_description"] == null) {
-                return "Hibás felhasználónév/jelszó";
+                afterTokenGrab(context, "Hibás felhasználónév/jelszó");
               } else {
-                return parsedJson["error_description"];
+                afterTokenGrab(context, parsedJson["error_description"]);
               }
             } else {
               globals.token = parsedJson["access_token"];
-              return "OK";
+              afterTokenGrab(context, "OK");
             }
             //print(status);
           } else if (response.statusCode == 401) {
             var parsedJson = json.decode(response.body);
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
-              return "Hibás felhasználónév/jelszó";
+              afterTokenGrab(context, "Hibás felhasználónév/jelszó");
             } else {
-              return parsedJson["error_description"];
+              afterTokenGrab(context, parsedJson["error_description"]);
             }
             //print('Response status: ${response.statusCode}');
           } else {
-            throw Exception('post error: statusCode= ${response.statusCode}');
+            _ackAlert(
+                context, 'post error: statusCode= ${response.statusCode}');
           }
         } on SocketException {
-          return "Rossz iskola azonosító";
+          afterTokenGrab(context, "Rossz iskola azonosító");
         }
       }
     } catch (e) {
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
+      setState(() {
+        loadingText = "Hiba a tokennel való lekérés közben\nÚjra próbálkozás";
+      });
+      var client = http.Client();
+      var header = {
+        'User-Agent': '$agent',
+        'Content-Type': 'application/json',
+      };
+      var res;
+      try {
+        setState(() {
+          loadingText = "Újra kezdés!";
+        });
+        res = await client.get('https://api.novy.vip/kretaHeader.json',
+            headers: header);
+        if (res.statusCode == 200) {
+          agent = json.decode(res.body)["header"];
+          config.currAgent = agent = json.decode(res.body)["header"];
+          if (tokenIndex < 3) {
+            getToken(code, user, pass);
+          } else {
+            _ackAlert(
+                context, "Nincs válasz a krétától!\nPróbáld újra később!");
+          }
+        }
+      } catch (e) {
+        _ackAlert(
+            context, "Nincs válasz a novy API-tól!\nPróbáld újra később!");
+      }
     }
   }
 
@@ -176,7 +204,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e) {
       await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
   }
 
@@ -205,7 +233,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e) {
       await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
   }
 
@@ -279,7 +307,7 @@ class _LoadingPageState extends State<LoadingPage> {
       return output;
     } catch (e) {
       await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
   }
   //NETWORK END
@@ -355,28 +383,42 @@ class _LoadingPageState extends State<LoadingPage> {
     auth(context);
   }
 
-  void auth(var context) async {
-    try {
-      if (await isNetworkAvailable() == ConnectivityResult.none) {
-        status = "No internet connection was detected";
-      } else {
-        status = await getToken(decryptedCode, decryptedUser, decryptedPass);
-        if (status == "OK") {
-          await getStudentInfo(globals.token, decryptedCode);
-        }
-      }
+  void afterTokenGrab(var context, String status) async {
+    if (status == "OK") {
+      await getStudentInfo(globals.token, decryptedCode);
       if (status == "OK") {
         try {
           save(context);
         } on PlatformException catch (e) {
-          await _ackAlert(context, e.message);
+          await _ackAlert(context,
+              "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
         }
       } else {
-        await _ackAlert(context, status);
+        if (status != null) {
+          await _ackAlert(
+              context,
+              "HTTP hiba: " +
+                  status.toString() +
+                  "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+        } else {
+          await _ackAlert(context,
+              "Ismeretlen HTTP hiba\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+          return;
+        }
+      }
+    }
+  }
+
+  void auth(var context) async {
+    try {
+      if (await isNetworkAvailable() == ConnectivityResult.none) {
+        afterTokenGrab(context, "No internet connection was detected");
+      } else {
+        getToken(decryptedCode, decryptedUser, decryptedPass);
       }
     } catch (e) {
       await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újra indítása\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel");
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
   }
 
@@ -387,7 +429,13 @@ class _LoadingPageState extends State<LoadingPage> {
     FirebaseAnalytics().setUserProperty(name: "School", value: decryptedCode);
     FirebaseAnalytics()
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
-    Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+    if (hasError) {
+      setState(() {
+        loadingText = "Hiba történt\nKérem indítsa újra az applikációt!";
+      });
+    } else {
+      Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+    }
   }
 
   @override
@@ -479,6 +527,7 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> _ackAlert(BuildContext context, String content) async {
+    hasError = true;
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

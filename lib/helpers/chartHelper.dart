@@ -31,12 +31,11 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
   List<dynamic> subjectMarks = [];
   int index = 0;
   for (var y in allParsedInput) {
-    if (index != 0) {
-      subjectMarks.add([]);
-      subjectMarks[index - 1].add(y[0].split(":")[0]);
-      for (var n in y) {
-        subjectMarks[index - 1].add(int.parse(n.split(":")[1]));
-      }
+    subjectMarks.add([]);
+    subjectMarks[index].add(y[0].subject);
+    for (var n in y) {
+      subjectMarks[index]
+          .add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
     }
     index++;
   }
@@ -51,7 +50,7 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
 List<LinearMarkChartData> makeChartPoints(var list) {
   List<LinearMarkChartData> returnList = [];
   int locIndex = 0;
-  int sum = 0;
+  double sum = 0;
   for (var n in list) {
     if (locIndex != 0) {
       sum += n;
@@ -120,48 +119,49 @@ int getRandomBetween(int min, int max) {
 }
 
 void getAllSubjectsAv(input) {
-  int index = 1;
-  int sum = 0;
-  for (var n in input[0]) {
-    sum += int.parse(n.split(":")[1]);
-    stats.globalAllSubjectAv.value = sum / index;
-    if (index == input[0].length - 1) {
-      stats.globalAllSubjectAv.diffSinceLast = sum / index;
+  int index = 0, sum = 0, tempIndex = 0;
+  double tempValue = 0;
+  for (var n in input) {
+    tempIndex = 0;
+    for (var y in n) {
+      tempIndex++;
+      sum += y.numberValue;
+      index++;
+      stats.globalAllSubjectAv.value = sum / index;
+      if (tempIndex == n.length - 1) {
+        tempValue = sum / index;
+      }
     }
-    index++;
   }
-  stats.globalAllSubjectAv.diffSinceLast =
-      (stats.globalAllSubjectAv.diffSinceLast - sum / (index - 1)) * -1;
+  stats.globalAllSubjectAv.diffSinceLast = (tempValue - (sum / index)) * -1;
 }
 
 void getWorstAndBest(input) {
-  //TODO extend to on 100% marks
   List<stats.AV> tempList = [];
-  stats.AV temp = new stats.AV();
-  int index = 1;
-  int sum = 0;
+  double sum = 0;
+  int index = 0;
   for (var n in input) {
-    index = 1;
+    index = 0;
     sum = 0;
+    stats.AV temp = new stats.AV();
     for (var y in n) {
-      sum += int.parse(y.split(":")[1]);
-      temp.subject = y.split(":")[0];
-      temp.value = sum / index;
+      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+      index++;
       if (index == n.length - 1) {
         temp.diffSinceLast = sum / index;
       }
-      index++;
     }
-    temp.count = index;
-    temp.diffSinceLast = (temp.diffSinceLast - sum / (index - 1)) * -1;
+    temp.value = sum / index;
+    temp.count = index.toInt();
+    temp.subject = n[0].subject;
+    temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
-    temp = new stats.AV();
   }
   tempList.sort((a, b) =>
       b.value.toStringAsFixed(3).compareTo(a.value.toStringAsFixed(3)));
   stats.worstSubjectAv = tempList.last;
-  double curValue = tempList[0].value;
   index = 0;
+  double curValue = tempList[0].value;
   List<stats.AV> tempListTwo = [];
   while (curValue == tempList[index].value) {
     tempListTwo.add(tempList[index]);
@@ -176,10 +176,10 @@ void getPieChart(var input) {
   int index = 0;
   String name = "";
   for (var n in input) {
-    if (n[0].split(":")[0].toLowerCase().startsWith("magyar")) {
-      name = n[0].split(":")[0].split(" ")[1];
+    if (n[0].subject.startsWith("magyar")) {
+      name = n[0].subject.split(" ")[1];
     } else {
-      name = n[0].split(":")[0];
+      name = n[0].subject;
     }
     if (index != 0) {
       tempData.add(new stats.LinearPiData(index, n.length, name));
@@ -206,29 +206,31 @@ void getPieChart(var input) {
 void getBarChart(input) {
   List<stats.MarkForBars> data = [
     //WARN do not modify order!
-    new stats.MarkForBars('1es', 0), //0 
+    new stats.MarkForBars('1es', 0), //0
     new stats.MarkForBars('2es', 0), //1
     new stats.MarkForBars('3as', 0), //2
     new stats.MarkForBars('4es', 0), //3
     new stats.MarkForBars('5ös', 0), //4
   ];
-  for (var n in input[0]) {
-    switch(int.parse(n.split(":")[1])){
-      case 5:
-        data[4].count++;
-        break;
-      case 4:
-        data[3].count++;
-        break;
-      case 3:
-        data[2].count++;
-        break;
-      case 2:
-        data[1].count++;
-        break;
-      case 1:
-        data[0].count++;
-        break;
+  for (var n in input) {
+    for (var y in n) {
+      switch (y.numberValue) {
+        case 5:
+          data[4].count++;
+          break;
+        case 4:
+          data[3].count++;
+          break;
+        case 3:
+          data[2].count++;
+          break;
+        case 2:
+          data[1].count++;
+          break;
+        case 1:
+          data[0].count++;
+          break;
+      }
     }
   }
   stats.howManyFromMarks = [

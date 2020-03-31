@@ -1,3 +1,4 @@
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -270,35 +271,75 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 10:
-                      return SizedBox(
-                        height: 400,
-                        width: double.infinity,
-                        child: charts.BarChart(
-                          howManyFromMarks,
-                          animate: true,
-                          domainAxis: new charts.OrdinalAxisSpec(
-                              renderSpec: charts.SmallTickRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                            fontSize: 15,
-                            color: charts.MaterialPalette.blue.shadeDefault,
-                          ))),
-                          primaryMeasureAxis: new charts.NumericAxisSpec(
-                              renderSpec: charts.GridlineRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                            fontSize: 15,
-                            color: charts.MaterialPalette.blue.shadeDefault,
-                          ))),
-                          defaultRenderer: new charts.BarRendererConfig(
-                              barRendererDecorator:
-                                  new charts.BarLabelDecorator<String>(
-                                      insideLabelStyleSpec:
-                                          new charts.TextStyleSpec(
-                                              color: charts
-                                                  .MaterialPalette.white)),
-                              cornerStrategy:
-                                  const charts.ConstCornerStrategy(30)),
-                        ),
-                      );
+                      if (DynamicTheme.of(context).brightness == Brightness.dark) {
+                        return SizedBox(
+                          height: 400,
+                          width: double.infinity,
+                          child: charts.BarChart(
+                            howManyFromMarks,
+                            animate: true,
+                            domainAxis: new charts.OrdinalAxisSpec(
+                                renderSpec: charts.SmallTickRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            primaryMeasureAxis: new charts.NumericAxisSpec(
+                                renderSpec: charts.GridlineRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            defaultRenderer: new charts.BarRendererConfig(
+                                barRendererDecorator:
+                                    new charts.BarLabelDecorator<String>(
+                                        insideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.white),
+                                        outsideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.white)),
+                                cornerStrategy:
+                                    const charts.ConstCornerStrategy(30)),
+                          ),
+                        );
+                      }else{
+                        return SizedBox(
+                          height: 400,
+                          width: double.infinity,
+                          child: charts.BarChart(
+                            howManyFromMarks,
+                            animate: true,
+                            domainAxis: new charts.OrdinalAxisSpec(
+                                renderSpec: charts.SmallTickRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            primaryMeasureAxis: new charts.NumericAxisSpec(
+                                renderSpec: charts.GridlineRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            defaultRenderer: new charts.BarRendererConfig(
+                                barRendererDecorator:
+                                    new charts.BarLabelDecorator<String>(
+                                        insideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.white),
+                                        outsideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.black)),
+                                cornerStrategy:
+                                    const charts.ConstCornerStrategy(30)),
+                          ),
+                        );
+                      }
                       break;
                   }
                 },
@@ -325,15 +366,15 @@ Widget _chartsListBuilder(BuildContext context, int index) {
     return SizedBox(height: 100);
   }
   Color currColor = colors[index];
-  List<int> currSubjectMarks = [];
+  List<double> currSubjectMarks = [];
   for (var n in allParsedSubjects[index]) {
-    currSubjectMarks.add(int.parse(n.split(":")[1]));
+    currSubjectMarks.add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
   }
   return SafeArea(
       top: false,
       bottom: false,
       child: AnimatedChartsCard(
-          title: capitalize(allParsedSubjects[index][0].split(":")[0]),
+          title: capitalize(allParsedSubjects[index][0].subject),
           color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: () {
@@ -342,7 +383,7 @@ Widget _chartsListBuilder(BuildContext context, int index) {
                 builder: (context) => ChartsDetailTab(
                   id: index,
                   subject:
-                      capitalize(allParsedSubjects[index][0].split(":")[0]),
+                      capitalize(allParsedSubjects[index][0].subject),
                   color: currColor,
                   seriesList:
                       createSubjectChart(currSubjectMarks, index.toString()),

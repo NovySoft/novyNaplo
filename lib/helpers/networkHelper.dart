@@ -126,7 +126,6 @@ class NetworkHelper {
     var header = {
       'User-Agent': '$agent',
       'Content-Type': 'application/json',
-      'apiKey': '7856d350-1fda-45f5-822d-e1a2f3f1acf0',
     };
     var res;
     try {
