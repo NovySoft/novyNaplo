@@ -57,7 +57,7 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  void _setData() async{
+  void _setData(){
     colors = getRandomColors(globals.markCount);
     markNameByDate = parseMarksByDate(globals.dJson);
     allParsedByDate = parseAllByDate(globals.dJson);
@@ -66,6 +66,7 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _refreshData() {
+    //TODO actually do the refresh
     return Future.delayed(
       // This is just an arbitrary delay that simulates some network activity.
       const Duration(seconds: 2),

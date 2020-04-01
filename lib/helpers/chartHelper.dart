@@ -31,7 +31,7 @@ dynamic createOsszesitett(var allParsedInput) {
   for (var n in allParsedInput) {
     for (var y in n) {
       sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-      index++;
+      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
       tempList.add(sum / index);
     }
   }
@@ -143,14 +143,14 @@ int getRandomBetween(int min, int max) {
 }
 
 void getAllSubjectsAv(input) {
-  int index = 0, sum = 0, tempIndex = 0;
+  double index = 0, sum = 0, tempIndex = 0;
   double tempValue = 0;
   for (var n in input) {
     tempIndex = 0;
     for (var y in n) {
       tempIndex++;
-      sum += y.numberValue;
-      index++;
+      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
       stats.globalAllSubjectAv.value = sum / index;
       if (tempIndex == n.length - 1) {
         tempValue = sum / index;
@@ -162,15 +162,14 @@ void getAllSubjectsAv(input) {
 
 void getWorstAndBest(input) {
   List<stats.AV> tempList = [];
-  double sum = 0;
-  int index = 0;
+  double sum = 0,index = 0;
   for (var n in input) {
     index = 0;
     sum = 0;
     stats.AV temp = new stats.AV();
     for (var y in n) {
       sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-      index++;
+      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
       if (index == n.length - 1) {
         temp.diffSinceLast = sum / index;
       }
@@ -187,8 +186,8 @@ void getWorstAndBest(input) {
   index = 0;
   double curValue = tempList[0].value;
   List<stats.AV> tempListTwo = [];
-  while (curValue == tempList[index].value) {
-    tempListTwo.add(tempList[index]);
+  while (curValue == tempList[index.toInt()].value) {
+    tempListTwo.add(tempList[index.toInt()]);
     index++;
   }
   tempListTwo.sort((a, b) => b.count.compareTo(a.count));

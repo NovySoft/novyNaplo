@@ -15,6 +15,7 @@ import 'package:novynaplo/functions/utils.dart';
 
 String agent = config.currAgent;
 var response;
+int tokenIndex = 0;
 
 class NetworkHelper {
   Future<ConnectivityResult> isNetworkAvailable() async {
@@ -22,53 +23,75 @@ class NetworkHelper {
   }
 
   Future<String> getToken(code, user, pass) async {
-    if (code == "" || user == "" || pass == "") {
-      return "Hiányzó bemenet";
-    } else {
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'User-Agent': '$agent',
-      };
+    tokenIndex++;
+    try {
+      if (code == "" || user == "" || pass == "") {
+        return "Hiányzó bemenet";
+      } else {
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'User-Agent': '$agent',
+        };
 
-      var data =
-          'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
-      try {
-        response = await http.post('https://$code.e-kreta.hu/idp/api/v1/Token',
-            headers: headers, body: data);
-        //print(response.body);
-        /*var url = 'https://novy.vip/api/login.php?code=$code&user=$user&pass=$pass';
-    var response = await http.get(url);*/
-        //print(response.body);
-        if (response.statusCode == 200) {
-          var parsedJson = json.decode(response.body);
-          //print('Response body: ${response.body}');
-          var status = parsedJson['token_type'];
-          if (status == '' || status == null) {
+        var data =
+            'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
+        try {
+          response = await http.post(
+              'https://$code.e-kreta.hu/idp/api/v1/Token',
+              headers: headers,
+              body: data);
+          if (response.statusCode == 200) {
+            var parsedJson = json.decode(response.body);
+            var status = parsedJson['token_type'];
+            if (status == '' || status == null) {
+              if (parsedJson["error_description"] == '' ||
+                  parsedJson["error_description"] == null) {
+                return "Hibás felhasználónév/jelszó";
+              } else {
+                return parsedJson["error_description"];
+              }
+            } else {
+              globals.token = parsedJson["access_token"];
+              return "OK";
+            }
+            //print(status);
+          } else if (response.statusCode == 401) {
+            var parsedJson = json.decode(response.body);
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
               return "Hibás felhasználónév/jelszó";
             } else {
               return parsedJson["error_description"];
             }
+            //print('Response status: ${response.statusCode}');
           } else {
-            globals.token = parsedJson["access_token"];
-            return "OK";
+            return 'post error: statusCode= ${response.statusCode}';
           }
-          //print(status);
-        } else if (response.statusCode == 401) {
-          var parsedJson = json.decode(response.body);
-          if (parsedJson["error_description"] == '' ||
-              parsedJson["error_description"] == null) {
-            return "Hibás felhasználónév/jelszó";
-          } else {
-            return parsedJson["error_description"];
-          }
-          //print('Response status: ${response.statusCode}');
-        } else {
-          throw Exception('post error: statusCode= ${response.statusCode}');
+        } on SocketException {
+          return "Rossz iskola azonosító";
         }
-      } on SocketException {
-        return "Rossz iskola azonosító";
+      }
+    } catch (e) {
+      var client = http.Client();
+      var header = {
+        'User-Agent': '$agent',
+        'Content-Type': 'application/json',
+      };
+      var res;
+      try {
+        res = await client.get('https://api.novy.vip/kretaHeader.json',
+            headers: header);
+        if (res.statusCode == 200) {
+          agent = json.decode(res.body)["header"];
+          config.currAgent = agent = json.decode(res.body)["header"];
+          if (tokenIndex < 3) {
+            getToken(code, user, pass);
+          } else {
+            return "Nincs válasz a krétától!\nPróbáld újra később!";
+          }
+        }
+      } catch (e) {
+        return "Nincs válasz a novy API-tól!\nPróbáld újra később!";
       }
     }
   }

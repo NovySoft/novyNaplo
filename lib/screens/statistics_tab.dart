@@ -10,8 +10,6 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'dart:math';
-//TODO fix weights
-//TODO DO NOT DEPLOY TO PRODUCTION BEFORE FIX!!!
 var allParsedSubjects;
 var colors;
 final List<Tab> statTabs = <Tab>[
