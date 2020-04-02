@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/loading_screen.dart';
+import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
@@ -57,7 +60,7 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  void _setData(){
+  void _setData() {
     colors = getRandomColors(globals.markCount);
     markNameByDate = parseMarksByDate(globals.dJson);
     allParsedByDate = parseAllByDate(globals.dJson);
@@ -65,12 +68,18 @@ class MarksTabState extends State<MarksTab>
     allParsedBySubject = parseAllBySubject(globals.dJson);
   }
 
-  Future<void> _refreshData() {
-    //TODO actually do the refresh
+  Future<void> _refreshData(){
     return Future.delayed(
-      // This is just an arbitrary delay that simulates some network activity.
-      const Duration(seconds: 2),
-      () => setState(() => _setData()),
+        const Duration(seconds: 1),
+        () async{
+          var status = await NetworkHelper().getToken(decryptedCode, decryptedUser, decryptedPass);
+          if(status == "OK"){
+            await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
+            setState(() {
+              _setData();
+            });
+          }
+        }
     );
   }
 
