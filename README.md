@@ -18,13 +18,13 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 **HAMAROSAN:**
 *  ~~Feljegyzések~~
 *  ~~Órarend~~
-*  Házifeladat
+*  ~~Házifeladat~~
 *  Hiányzások
 *  ~~Grafikonok~~
 *  Értesítések
 *  ~~Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével~~
 *  Támogatók oldal - **Gáti Úr** közreműködésével
-*  Szuper egyedi és egyéni beállítások
+*  Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)
 *  **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
 
 ## Modulok
@@ -63,11 +63,8 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 *  **Nunito**
 
 ## Ismert hibák
-*  **Valami was called on null** feltehetőleg parseolási hiba
-*  ~~**A betöltő homokóra beragad/rootAncestor hibák** feltehetőleg a bejelentkezés gomb véletlen megnyomása és az automata bejelentkezés konfliktusa miatt van ez a hiba~~ Megjavítva: [c5d8f4d](https://github.com/NovySoft/novyNaplo/commit/c5d8f4dc18225fc848af0f70681b2d5ea9d88a0c)
-*  **_initialButtons == kPrimaryButton is not true** feltehtőleg a bejelentkezés gomb és az automata bejelentkezés konfliktusa miatt van ez a hiba
-*  ~~**Multiple widgets used the same GlobalKey** a loginPage és a MarksTab ugyanazt a GlobalKeyt használja~~ Megjavítva: [c5d8f4d](https://github.com/NovySoft/novyNaplo/commit/c5d8f4dc18225fc848af0f70681b2d5ea9d88a0c)
-*  **A ticker was started twice.** jelenleg flutter framework hibának néz ki
-*  **setCurrentScreen cannot be called with the same class and name** a feljegyzések menüpont hibája, egyértelműen az én kódomban van a hiba, csak még nem tudom, hogy hol
-*  **Lassú betöltés/leragadás a homokóránál** vagy az előzőekben említett hiba miatt vagy a lassú krétás válasz miatt történik
+*  **A ticker was started twice.** jelenleg flutter framework hibának néz ki (Animációs framework)
+*  **Lassú betöltés/leragadás a homokóránál** a lassú krétás válasz miatt történik (amennyiben nem, akkor hibakódot kell látnod)
 *  **Hibás tanár/tantárgy név** az eredeti krétában van elírva a tanár/tantárgy neve, ez nem az applikáció hibája
+*  **Tantárgy nézet bugos**, szétesnek és/vagy összekeverednek a tárgyak.
+*  **Sárgával alá van húzva a szöveg** hibás animációk miatt van. (Már dolgozok rajta)
