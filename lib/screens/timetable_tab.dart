@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -41,36 +42,57 @@ class _TimetableTabState extends State<TimetableTab> {
             String label = tab.text;
             //Itemcount globals.adModifier because we need one beacuse of the ads
             if (label == "Hétfő") {
+              if (lessonsList[0].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[0].length + globals.adModifier,
                 itemBuilder: _timetableBuilder,
               );
             } else if (label == "Kedd") {
+              if (lessonsList[1].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
-                itemCount: lessonsList[1].length  + globals.adModifier,
+                itemCount: lessonsList[1].length + globals.adModifier,
                 itemBuilder: _timetableTwoBuilder,
               );
             } else if (label == "Szerda") {
+              if (lessonsList[2].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[2].length + globals.adModifier,
                 itemBuilder: _timetableThreeBuilder,
               );
             } else if (label == "Csütörtök") {
+              if (lessonsList[3].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[3].length + globals.adModifier,
                 itemBuilder: _timetableFourBuilder,
               );
             } else if (label == "Péntek") {
+              if (lessonsList[4].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[4].length + globals.adModifier,
                 itemBuilder: _timetableFiveBuilder,
               );
             } else if (label == "Szombat") {
+              if (lessonsList[5].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[5].length + globals.adModifier,
                 itemBuilder: _timetableSixBuilder,
               );
             } else if (label == "Vasárnap") {
+              if (lessonsList[6].length == 0) {
+                return noLesson();
+              }
               return ListView.builder(
                 itemCount: lessonsList[6].length + globals.adModifier,
                 itemBuilder: _timetableSevenBuilder,
@@ -136,7 +158,8 @@ Widget _timetableBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[0][index].homework.content != null,
             title: lessonsList[0][index].name,
             subTitle: subtitle, //lessonsList[0][index].classroom,
             color: colors[index],
@@ -208,9 +231,10 @@ Widget _timetableTwoBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[1][index].homework.content != null,
             title: lessonsList[1][index].name,
-            subTitle: subtitle,//lessonsList[1][index].classroom,
+            subTitle: subtitle, //lessonsList[1][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -280,9 +304,10 @@ Widget _timetableThreeBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[2][index].homework.content != null,
             title: lessonsList[2][index].name,
-            subTitle: subtitle,//lessonsList[2][index].classroom,
+            subTitle: subtitle, //lessonsList[2][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -352,9 +377,10 @@ Widget _timetableFourBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[3][index].homework.content != null,
             title: lessonsList[3][index].name,
-            subTitle: subtitle,//lessonsList[3][index].classroom,
+            subTitle: subtitle, //lessonsList[3][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -424,9 +450,10 @@ Widget _timetableFiveBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[4][index].homework.content != null,
             title: lessonsList[4][index].name,
-            subTitle: subtitle,//lessonsList[4][index].classroom,
+            subTitle: subtitle, //lessonsList[4][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -496,9 +523,10 @@ Widget _timetableSixBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[5][index].homework.content != null,
             title: lessonsList[5][index].name,
-            subTitle: subtitle,//lessonsList[5][index].classroom,
+            subTitle: subtitle, //lessonsList[5][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -568,9 +596,10 @@ Widget _timetableSevenBuilder(BuildContext context, int index) {
     return SafeArea(
         top: false,
         bottom: false,
-        child: AnimatedTitleSubtitleCard(
+        child: TimetableCard(
+            hasHomework: lessonsList[6][index].homework.content != null,
             title: lessonsList[6][index].name,
-            subTitle: subtitle,//lessonsList[6][index].classroom,
+            subTitle: subtitle, //lessonsList[6][index].classroom,
             color: colors[index],
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: () {
@@ -584,4 +613,15 @@ Widget _timetableSevenBuilder(BuildContext context, int index) {
               );
             }));
   }
+}
+
+Widget noLesson() {
+  return Center(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    Icon(
+      MdiIcons.emoticonHappyOutline,
+      size: 50,
+    ),
+    Text("Nincs órád!")
+  ]));
 }

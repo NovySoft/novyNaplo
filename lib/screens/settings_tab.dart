@@ -560,7 +560,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                     ),
                   ),
                   SizedBox(
-                    height: 75,
+                    height: 100,
                   )
                 ],
               );
