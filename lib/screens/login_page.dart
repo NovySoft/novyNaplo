@@ -71,45 +71,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("markCardSubtitle") == null &&
-        globals.markCardSubtitle == null) {
-      globals.markCardSubtitle = "Téma";
-      prefs.setString("markCardSubtitle", "Téma");
-    } else if (globals.markCardSubtitle == null) {
-      globals.markCardSubtitle = prefs.getString("markCardSubtitle");
-    }
-
-    if (prefs.getString("markCardConstColor") == null &&
-        globals.markCardConstColor == null) {
-      globals.markCardConstColor = "Green";
-      prefs.setString("markCardConstColor", "Green");
-    } else if (globals.markCardConstColor == null) {
-      globals.markCardConstColor = prefs.getString("markCardConstColor");
-    }
-
-    if (prefs.getString("lessonCardSubtitle") == null &&
-        globals.lessonCardSubtitle == null) {
-      globals.lessonCardSubtitle = "Tanterem";
-      prefs.setString("lessonCardSubtitle", "Tanterem");
-    } else if (globals.lessonCardSubtitle == null) {
-      globals.lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
-    }
-
-    if (prefs.getString("markCardTheme") == null &&
-        globals.markCardTheme == null) {
-      globals.markCardTheme = "Véletlenszerű";
-      prefs.setString("markCardTheme", "Véletlenszerű");
-    } else if (globals.markCardTheme == null) {
-      globals.markCardTheme = prefs.getString("markCardTheme");
-    }
-
-    if (prefs.getBool("chartAnimations") == null &&
-        globals.chartAnimations == null) {
-      globals.chartAnimations = true;
-      prefs.setBool("chartAnimations", true);
-    } else if (globals.chartAnimations == null) {
-      globals.chartAnimations = prefs.getBool("chartAnimations");
-    }
+    globals.setGlobals();
     //DONT DELETE, FOR TESTING USE ONLY
     /*print("subtitle:" + markCardSubtitle);
     print("constColor:" + markCardConstColor);
@@ -141,10 +103,7 @@ class _LoginPageState extends State<LoginPage> {
         codeController.text = decryptedCode;
         userController.text = decryptedUser;
         passController.text = decryptedPass;
-      } on PlatformException catch (e) {
-        isError = true;
-        _ackAlert(context, e.toString());
-      } on NoSuchMethodError catch (e) {
+      } catch (e) {
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -193,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void auth(var context, caller) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isNew",false);
+    prefs.setBool("isNew", false);
     globals.adsEnabled = false;
     prefs.setBool("ads", false);
     globals.adModifier = 0;
@@ -215,6 +174,9 @@ class _LoginPageState extends State<LoginPage> {
       String user = userController.text;
       String pass = passController.text;
       status = await NetworkHelper().getToken(code, user, pass);
+      //TODO fix this buggy garbage
+      if(status == null) status = await NetworkHelper().getToken(code, user, pass);
+      if(status == null) status = await NetworkHelper().getToken(code, user, pass);
       if (status == "OK") {
         await NetworkHelper().getStudentInfo(globals.token, code);
       }
@@ -229,13 +191,14 @@ class _LoginPageState extends State<LoginPage> {
     if (status == "OK") {
       try {
         save(context, "auth");
-      } on PlatformException catch (e) {
-        print(e.message);
+      } catch (e) {
         isError = true;
         _ackAlert(context, e.message);
       }
     } else {
-      _ackAlert(context, status);
+      if (status != null) _ackAlert(context, status);
+      if (status == null)
+        _ackAlert(context, "Ismeretlen hiba történt\nPróbáld újra később!");
     }
     isPressed = false;
     if (caller == "_ackAlert") {
@@ -262,26 +225,26 @@ class _LoginPageState extends State<LoginPage> {
       FirebaseAnalytics().setUserProperty(name: "School", value: code);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
-    } on PlatformException catch (e) {
+    } catch (e) {
       isError = true;
       _ackAlert(context, e.message);
     }
 
     try {
       if (main.isNew) {
-        if(globals.adsEnabled == null){
+        if (globals.adsEnabled == null) {
           globals.adsEnabled = false;
           globals.adModifier = 0;
-        } 
+        }
         Navigator.pushReplacementNamed(context, SettingsTab.tag);
       } else {
-        if(globals.adsEnabled == null){
+        if (globals.adsEnabled == null) {
           globals.adsEnabled = false;
           globals.adModifier = 0;
-        } 
+        }
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       }
-    } on PlatformException catch (e) {
+    } catch (e) {
       isError = true;
       _ackAlert(context, e.message);
     }
@@ -436,6 +399,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _ackAlert(BuildContext context, String content) async {
+    if(content == null) content = "Ismeretlen hiba történt\nPróbáld újra később";
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

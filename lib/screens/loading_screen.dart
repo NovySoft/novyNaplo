@@ -335,46 +335,7 @@ class _LoadingPageState extends State<LoadingPage> {
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
           userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      if (prefs.getString("markCardSubtitle") == null) {
-        globals.markCardSubtitle = "Téma";
-      } else {
-        globals.markCardSubtitle = prefs.getString("markCardSubtitle");
-      }
-
-      if (prefs.getString("markCardConstColor") == null) {
-        globals.markCardConstColor = "Green";
-      } else {
-        globals.markCardConstColor = prefs.getString("markCardConstColor");
-      }
-
-      if (prefs.getString("lessonCardSubtitle") == null) {
-        globals.lessonCardSubtitle = "Tanterem";
-      } else {
-        globals.lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
-      }
-
-      if (prefs.getString("markCardTheme") == null) {
-        globals.markCardTheme = "Véletlenszerű";
-      } else {
-        globals.markCardTheme = prefs.getString("markCardTheme");
-      }
-
-      if (prefs.getBool("chartAnimations") == null &&
-          globals.chartAnimations == null) {
-        globals.chartAnimations = true;
-        prefs.setBool("chartAnimations", true);
-      } else if (globals.chartAnimations == null) {
-        globals.chartAnimations = prefs.getBool("chartAnimations");
-      }
-
-      if (prefs.getString("statChart") == null &&
-          globals.statChart == null) {
-        globals.statChart = "Mindent";
-        prefs.setString("statChart", "Mindent");
-      } else if (globals.statChart == null) {
-        globals.statChart = prefs.getString("statChart");
-      }
-      
+      globals.setGlobals();
       if (prefs.getBool("ads") != null) {
         if (prefs.getBool("ads")) {
           adBanner.load();
@@ -392,8 +353,9 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       //print("ads" + globals.adsEnabled.toString());
     } catch (e) {
+      globals.resetAllGlobals();
       await _ackAlert(context,
-          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újra telepítése");
+          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása\nMemória törölve...");
     }
     auth(context);
   }
