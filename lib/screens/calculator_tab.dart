@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 
@@ -31,7 +32,6 @@ class CalculatorTabState extends State<CalculatorTab> {
     currentIndex = 0;
     currCount = avarageList[0].count;
     currSum = avarageList[0].sum;
-    print(avarageList[0].count);
   }
 
   @override
@@ -76,8 +76,10 @@ class CalculatorTabState extends State<CalculatorTab> {
           alignment: Alignment(0, 0),
           margin: EdgeInsets.all(5),
         ),
-        Text("Jegyek száma (súlyozva): " + currCount.toString()),
         Text("Jegyek összege (súlyozva): " + currSum.toString()),
+        Icon(MdiIcons.division),
+        Text("Jegyek száma (súlyozva): " + currCount.toString()),
+        Icon(MdiIcons.equal),
         Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3)),
         SizedBox(height: 20),
         Text("Mit szeretnél elérni? $elakErni"),
@@ -121,7 +123,9 @@ class CalculatorTabState extends State<CalculatorTab> {
             child: Text('Mehet', style: TextStyle(color: Colors.black)),
           ),
         ),
-        SizedBox(height: 50,),
+        SizedBox(
+          height: 50,
+        ),
         Text(
           text1,
           style: TextStyle(fontSize: 20),

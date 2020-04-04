@@ -256,8 +256,6 @@ void setUpCalculatorPage(List<List<Evals>> input) {
     temp.sum = sum;
     calculatorPage.avarageList.add(temp);
   }
-  for (var n in calculatorPage.avarageList)
-    print(n.sum.toString() + " " + n.count.toString());
   if (calculatorPage.dropdownValues[0] != null)
     calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
   else

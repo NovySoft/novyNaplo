@@ -213,8 +213,8 @@ class MarksTabState extends State<MarksTab>
     if (subtitle == "" || subtitle == null) {
       subtitle = "Ismeretlen";
     }
-    if (subtitle.length >= 38) {
-      subtitle = subtitle.substring(0, 35);
+    if (subtitle.length >= 30) {
+      subtitle = subtitle.substring(0, 27);
       subtitle += "...";
     }
     if (index >= itemsLength) return null;
