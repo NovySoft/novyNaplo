@@ -49,6 +49,7 @@ class MarksDetailTab extends StatelessWidget {
               title: name,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(1),
+              onPressed: null,
             ),
             // This app uses a flightShuttleBuilder to specify the exact widget
             // to build while the hero transition is mid-flight.

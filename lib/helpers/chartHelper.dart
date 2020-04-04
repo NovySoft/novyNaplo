@@ -54,12 +54,18 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
   var linearMarkDataList = [];
   List<dynamic> subjectMarks = [];
   int index = 0;
+  double numVal = 0;
+  double oszto = 0;
   for (var y in allParsedInput) {
+    numVal = 0;
+    oszto = 0;
     subjectMarks.add([]);
     subjectMarks[index].add(y[0].subject);
     for (var n in y) {
+      numVal += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+      oszto += 1 * double.parse(n.weight.split("%")[0]) / 100;
       subjectMarks[index]
-          .add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
+          .add(numVal / oszto);
     }
     index++;
   }
@@ -74,12 +80,10 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
 List<LinearMarkChartData> makeChartPoints(var list) {
   List<LinearMarkChartData> returnList = [];
   int locIndex = 0;
-  double sum = 0;
   for (var n in list) {
     if (locIndex != 0) {
-      sum += n;
       returnList.add(
-          new LinearMarkChartData(locIndex - 1, sum / locIndex, id: list[0]));
+          new LinearMarkChartData(locIndex - 1, n, id: list[0]));
     }
     locIndex++;
   }
@@ -163,16 +167,19 @@ void getAllSubjectsAv(input) {
 void getWorstAndBest(input) {
   List<stats.AV> tempList = [];
   double sum = 0,index = 0;
+  int listIndex = 0;
   for (var n in input) {
     index = 0;
     sum = 0;
+    listIndex = 1;
     stats.AV temp = new stats.AV();
     for (var y in n) {
       sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
       index += 1 * double.parse(y.weight.split("%")[0]) / 100;
-      if (index == n.length - 1) {
+      if (listIndex == n.length - 1) {
         temp.diffSinceLast = sum / index;
       }
+      listIndex++;
     }
     temp.value = sum / index;
     temp.count = index.toInt();
@@ -186,10 +193,12 @@ void getWorstAndBest(input) {
   index = 0;
   double curValue = tempList[0].value;
   List<stats.AV> tempListTwo = [];
-  while (curValue == tempList[index.toInt()].value) {
-    tempListTwo.add(tempList[index.toInt()]);
-    index++;
-  }
+  if(tempList.length > 1)
+    while (curValue == tempList[index.toInt()].value) {
+      tempListTwo.add(tempList[index.toInt()]);
+      index++;
+    }
+  else tempListTwo.add(tempList[0]);
   tempListTwo.sort((a, b) => b.count.compareTo(a.count));
   stats.bestSubjectAv = tempListTwo[0];
 }
@@ -204,9 +213,7 @@ void getPieChart(var input) {
     } else {
       name = n[0].subject;
     }
-    if (index != 0) {
-      tempData.add(new stats.LinearPiData(index, n.length, name));
-    }
+    tempData.add(new stats.LinearPiData(index, n.length, name));
     index++;
   }
   tempData.sort((a, b) => a.value.compareTo(b.value));

@@ -69,20 +69,18 @@ class MarksTabState extends State<MarksTab>
     allParsedBySubject = parseAllBySubject(globals.dJson);
   }
 
-  Future<void> _refreshData(){
+  Future<void> _refreshData() {
     FirebaseAnalytics().logEvent(name: "RefreshData");
-    return Future.delayed(
-        const Duration(seconds: 1),
-        () async{
-          var status = await NetworkHelper().getToken(decryptedCode, decryptedUser, decryptedPass);
-          if(status == "OK"){
-            await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
-            setState(() {
-              _setData();
-            });
-          }
-        }
-    );
+    return Future.delayed(const Duration(seconds: 1), () async {
+      var status = await NetworkHelper()
+          .getToken(decryptedCode, decryptedUser, decryptedPass);
+      if (status == "OK") {
+        await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
+        setState(() {
+          _setData();
+        });
+      }
+    });
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
@@ -163,35 +161,29 @@ class MarksTabState extends State<MarksTab>
       top: false,
       bottom: false,
       child: Hero(
-        tag: index,
-        child: HeroAnimatingMarksCard(
+          tag: index,
+          child: HeroAnimatingMarksCard(
             subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
             title: markNameByDate[index],
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                MaterialPageRoute(
-                  builder: (context) => MarksDetailTab(
-                    mode: allParsedByDate[index].mode,
-                    theme: allParsedByDate[index].theme,
-                    weight: allParsedByDate[index].weight,
-                    date: allParsedByDate[index].dateString,
-                    createDate: allParsedByDate[index].createDateString,
-                    teacher: allParsedByDate[index].teacher,
-                    subject: allParsedByDate[index].subject,
-                    numberValue: allParsedByDate[index].numberValue,
-                    value: allParsedByDate[index].value,
-                    formName: allParsedByDate[index].formName,
-                    form: allParsedByDate[index].form,
-                    id: index,
-                    name: markNameByDate[index],
-                    color: color,
-                  ),
-                ),
-              );
-            }),
-      ),
+            onPressed: MarksDetailTab(
+              mode: allParsedByDate[index].mode,
+              theme: allParsedByDate[index].theme,
+              weight: allParsedByDate[index].weight,
+              date: allParsedByDate[index].dateString,
+              createDate: allParsedByDate[index].createDateString,
+              teacher: allParsedByDate[index].teacher,
+              subject: allParsedByDate[index].subject,
+              numberValue: allParsedByDate[index].numberValue,
+              value: allParsedByDate[index].value,
+              formName: allParsedByDate[index].formName,
+              form: allParsedByDate[index].form,
+              id: index,
+              name: markNameByDate[index],
+              color: color,
+            ),
+          )),
     );
   }
 

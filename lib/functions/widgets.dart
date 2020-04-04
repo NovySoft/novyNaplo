@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -156,92 +157,168 @@ class HeroAnimatingMarksCard extends StatelessWidget {
   final String subTitle;
   final Color color;
   final Animation<double> heroAnimation;
-  final VoidCallback onPressed;
+  final Widget onPressed;
 
   double get playButtonSize => 100 + 50 * heroAnimation.value;
 
   @override
   Widget build(context) {
-    // This is an inefficient usage of AnimatedBuilder since it's rebuilding
-    // the entire subtree instead of passing in a non-changing child and
-    // building a transition widget in between.
-    //
-    // Left simple in this demo because this card doesn't have any real inner
-    // content so this just rebuilds everything while animating.
-    return AnimatedBuilder(
-      animation: heroAnimation,
-      builder: (context, child) {
-        return PressableCard(
-          onPressed: heroAnimation.value == 0 ? onPressed : null,
+    double subTitleSize = 80;
+    if(subTitle.length > 30){
+      subTitleSize = 100;
+    }
+    if (onPressed != null)
+      return PressableCard(
+          onPressed: null,
           color: color,
           flattenAnimation: heroAnimation,
           child: SizedBox(
             height: 250,
             width: double.infinity,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // The song title banner slides off in the hero animation.
-                Positioned(
-                  bottom: -80 * heroAnimation.value,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                      height: 80,
-                      color: Colors.black12,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            title,
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 21,
-                              fontWeight: FontWeight.w500,
+            child: Container(
+              color: color,
+              child: OpenContainer(
+                closedShape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(12)),
+                openShape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(1)),
+                transitionDuration: Duration(milliseconds: 550),
+                openColor: color,
+                closedColor: color,
+                closedBuilder:
+                  (BuildContext context, VoidCallback openContainer) {
+                return Container(
+                    color: color,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // The song title banner slides off in the hero animation.
+                        Positioned(
+                          bottom: -80 * heroAnimation.value,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              height: subTitleSize,
+                              color: Colors.black12,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    title,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    subTitle,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
+                              )),
+                        ),
+                        // The play button grows in the hero animation.
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 45) *
+                              (1 - heroAnimation.value),
+                          child: Container(
+                            height: playButtonSize,
+                            width: playButtonSize,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black12,
+                            ),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.create,
+                              size: playButtonSize,
+                              color: Colors.black38,
+                              textDirection: TextDirection.ltr,
                             ),
                           ),
-                          Text(
-                            subTitle,
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 21,
-                              fontWeight: FontWeight.normal,
+                        ),
+                      ],
+                    ));
+              }, openBuilder:
+                  (BuildContext context, VoidCallback openContainer) {
+                return onPressed;
+              }),
+            ),
+          ));
+    else
+      return SizedBox(
+          height: 250,
+          width: double.infinity,
+          child: Container(
+              color: color,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // The song title banner slides off in the hero animation.
+                  Positioned(
+                    bottom: -80 * heroAnimation.value,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                        height: 80,
+                        color: Colors.black12,
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              title,
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          )
-                        ],
-                      )),
-                ),
-                // The play button grows in the hero animation.
-                Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 45) * (1 - heroAnimation.value),
-                  child: Container(
-                    height: playButtonSize,
-                    width: playButtonSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black12,
-                    ),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.create,
-                      size: playButtonSize,
-                      color: Colors.black38,
-                      textDirection: TextDirection.ltr,
+                            Text(
+                              subTitle,
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 21,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
+                  // The play button grows in the hero animation.
+                  Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 45) * (1 - heroAnimation.value),
+                    child: Container(
+                      height: playButtonSize,
+                      width: playButtonSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black12,
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.create,
+                        size: playButtonSize,
+                        color: Colors.black38,
+                        textDirection: TextDirection.ltr,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                ],
+              )));
   }
 }
 

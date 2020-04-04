@@ -86,8 +86,9 @@ ios/Flutter/flutter_export_environment.sh
 #Node stuff
 /node_modules
 
-#Testing files They're not empty
+#Testing files They're not empty, it's my stupid naming scheme
 lib/empty.dart
 lib/empty.json
 lib/empty2.json
 lib/empty3.json
+empty.json

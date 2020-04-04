@@ -388,11 +388,6 @@ Widget _chartsListBuilder(BuildContext context, int index) {
     return SizedBox(height: 100);
   }
   Color currColor = colors[index];
-  List<double> currSubjectMarks = [];
-  for (var n in allParsedSubjects[index]) {
-    currSubjectMarks
-        .add(n.numberValue * double.parse(n.weight.split("%")[0]) / 100);
-  }
   return SafeArea(
       top: false,
       bottom: false,
@@ -408,7 +403,7 @@ Widget _chartsListBuilder(BuildContext context, int index) {
                   subject: capitalize(allParsedSubjects[index][0].subject),
                   color: currColor,
                   seriesList:
-                      createSubjectChart(currSubjectMarks, index.toString()),
+                      createSubjectChart(allParsedSubjects[index], index.toString()),
                   animate: globals.chartAnimations,
                 ),
               ),

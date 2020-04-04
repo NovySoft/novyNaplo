@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 
-List<String> dropdownValues = [""];
+List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
-List<CalculatorData> avarageList;
+List<CalculatorData> avarageList = [];
 var currentIndex = 0;
-var currCount = 0;
-var currSum; //TODO Extend to non 100% marks
+num currCount;
+num currSum;
 double elakErni = 5.0;
 double turesHatar = 1;
 String text1 = " ";
@@ -28,9 +28,10 @@ class CalculatorTabState extends State<CalculatorTab> {
     super.initState();
     //Set dropdown to item 0
     dropdownValue = dropdownValues[0];
-    currentIndex = dropdownValues.indexOf(dropdownValue);
-    currCount = avarageList[currentIndex].count;
-    currSum = avarageList[currentIndex].sum;
+    currentIndex = 0;
+    currCount = avarageList[0].count;
+    currSum = avarageList[0].sum;
+    print(avarageList[0].count);
   }
 
   @override
@@ -75,9 +76,9 @@ class CalculatorTabState extends State<CalculatorTab> {
           alignment: Alignment(0, 0),
           margin: EdgeInsets.all(5),
         ),
-        Text("Jegyek száma: " + currCount.toString()),
-        Text("Jegyek összege: " + currSum.toString()),
-        Text("Átlagod: " + (currSum / currCount).toString()),
+        Text("Jegyek száma (súlyozva): " + currCount.toString()),
+        Text("Jegyek összege (súlyozva): " + currSum.toString()),
+        Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3)),
         SizedBox(height: 20),
         Text("Mit szeretnél elérni? $elakErni"),
         Slider(

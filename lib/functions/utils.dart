@@ -87,6 +87,7 @@ List<String> getRandomNames(int amount) {
 }
 
 String capitalize(String word) {
+  if(word == null) return "";
   return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
 }
 

@@ -101,11 +101,17 @@ List<String> parseSubjects(var input) {
 }
 
 List<charts.Series<ChartPoints, int>> createSubjectChart(
-    List<double> input, String id) {
+    List<Evals> input, String id) {
   chartData = [];
-  index = 1;
-  sum = 0;
-  input.forEach((n) => addChartPoints(n));
+  double sum = 0;
+  double index = 0;
+  int listArray = 0;
+  for(var n in input){
+      sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+      index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+      chartData.add(new ChartPoints(listArray,sum / index));
+      listArray++;
+  }
   return [
     new charts.Series<ChartPoints, int>(
       id: id,
@@ -122,12 +128,6 @@ class ChartPoints {
   var value;
 
   ChartPoints(this.count, this.value);
-}
-
-void addChartPoints(var n) {
-  sum += n;
-  chartData.add(new ChartPoints(index - 1, sum / index));
-  index++;
 }
 
 //USED BY STATISTICS

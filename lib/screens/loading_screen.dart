@@ -48,26 +48,30 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
   //Network start
-  void setUpCalculatorPage(var dJson, avJson) {
+  void setUpCalculatorPage(List<List<Evals>> input) {
     setState(() {
       loadingText = "Jegyszámoló beállítása";
     });
-    calculatorPage.avarageList = [];
-    calculatorPage.dropdownValues = [];
-    for (var n in avJson) {
-      calculatorPage.avarageList
-          .add(setCalcData(n["Value"], n["Subject"], 0, 0));
-      calculatorPage.dropdownValues.add(capitalize(n["Subject"]));
-    }
-    for (var n in dJson["Evaluations"]) {
-      int indexA =
-          calculatorPage.avarageList.indexWhere((a) => a.name == n["Subject"]);
-      if (indexA >= 0 && n["Type"] != "HalfYear" && n["Form"] != "Percent") {
-        calculatorPage.avarageList[indexA].count++;
-        calculatorPage.avarageList[indexA].sum += n["NumberValue"];
+    double sum, index;
+    for (var n in input) {
+      calculatorPage.dropdownValues.add(capitalize(n[0].subject));
+      sum = 0;
+      index = 0;
+      for (var y in n) {
+        sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+        index += 1 * double.parse(y.weight.split("%")[0]) / 100;
       }
+      CalculatorData temp = new CalculatorData();
+      temp.count = index;
+      temp.sum = sum;
+      calculatorPage.avarageList.add(temp);
     }
-    calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
+    for (var n in calculatorPage.avarageList)
+      print(n.sum.toString() + " " + n.count.toString());
+    if (calculatorPage.dropdownValues[0] != null)
+      calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
+    else
+      calculatorPage.dropdownValue = "Az lehet, hogy még nincs jegyed?";
   }
 
   Future<ConnectivityResult> isNetworkAvailable() async {
@@ -198,7 +202,7 @@ class _LoadingPageState extends State<LoadingPage> {
         statisticsPage.colors =
             getRandomColors(statisticsPage.allParsedSubjects.length);
         timetablePage.lessonsList = await getWeekLessons(token, code);
-        setUpCalculatorPage(globals.dJson, globals.avJson);
+        setUpCalculatorPage(statisticsPage.allParsedSubjects);
       }
     } catch (e) {
       await _ackAlert(context,
