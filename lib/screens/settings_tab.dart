@@ -1,5 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/login_page.dart' as login;
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 String dropDown;
 String statDropDown = globals.statChart;
@@ -97,7 +99,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 9 + indexModifier,
+      itemCount: 11 + indexModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -398,7 +400,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               value: constColorDropdown,
             ),
           );
-        }else if (index == 4 + indexModifier) {
+        } else if (index == 4 + indexModifier) {
           return ListTile(
             title: Text("Statisztika mutató:"),
             trailing: DropdownButton<String>(
@@ -416,7 +418,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                   ),
                 ),
               ],
-              onChanged: (String value) async{
+              onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 setState(() {
@@ -493,17 +495,19 @@ class _SettingsBodyState extends State<SettingsBody> {
                   globals.chartAnimations = switchOn;
                 });
                 if (switchOn) {
-                  FirebaseAnalytics().setUserProperty(name: "Animations", value: "YES");
+                  FirebaseAnalytics()
+                      .setUserProperty(name: "Animations", value: "YES");
                   prefs.setBool("chartAnimations", true);
                 } else {
-                  FirebaseAnalytics().setUserProperty(name: "Animations", value: "NO");
+                  FirebaseAnalytics()
+                      .setUserProperty(name: "Animations", value: "NO");
                   prefs.setBool("chartAnimations", false);
                 }
               },
               value: animationSwitch,
             ),
           );
-        }else if (index == 7 + indexModifier) {
+        } else if (index == 7 + indexModifier) {
           return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -536,34 +540,67 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 8 + indexModifier) {
-          return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      onPressed: () async {
-                        showDialog<void>(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (_) {
-                              return LogOutDialog();
-                            });
-                      },
-                      padding: EdgeInsets.all(1),
-                      child: Text('Kijelentkezés',
-                          style: TextStyle(color: Colors.black)),
-                    ),
+          return ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  SizedBox(
-                    height: 100,
-                  )
-                ],
-              );
+                  onPressed: () async {
+                    String link =
+                        "https://github.com/NovySoft/novyNaplo/issues/new/choose";
+                    if (await canLaunch(link)) {
+                      await launch(link);
+                    } else {
+                      FirebaseAnalytics().logEvent(name: "LinkFail");
+                      throw 'Could not launch $link';
+                    }
+                  },
+                  padding: EdgeInsets.all(1),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.bug_report),
+                        Text('Bug report (Github)',
+                            style: TextStyle(color: Colors.black))
+                      ]),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 9 + indexModifier) {
+          return ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  onPressed: () async {
+                    showDialog<void>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (_) {
+                          return LogOutDialog();
+                        });
+                  },
+                  padding: EdgeInsets.all(1),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(MdiIcons.logout),
+                        Text('Kijelentkezés',
+                            style: TextStyle(color: Colors.black))
+                      ]),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return SizedBox(height: 75);
         }
       },
     );
