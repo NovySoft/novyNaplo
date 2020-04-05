@@ -57,20 +57,15 @@ class _HomeworkTabState extends State<HomeworkTab> {
           top: false,
           bottom: false,
           child: AnimatedTitleSubtitleCard(
-              title: globals.globalHomework[index].subject,
-              subTitle: subTitle, //lessonsList[0][index].classroom,
+            title: globals.globalHomework[index].subject,
+            subTitle: subTitle, //lessonsList[0][index].classroom,
+            color: colors[index],
+            heroAnimation: AlwaysStoppedAnimation(0),
+            onPressed: HomeworkDetailTab(
               color: colors[index],
-              heroAnimation: AlwaysStoppedAnimation(0),
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  MaterialPageRoute(
-                    builder: (context) => HomeworkDetailTab(
-                      color: colors[index],
-                      hwInfo: globals.globalHomework[index],
-                    ),
-                  ),
-                );
-              }));
+              hwInfo: globals.globalHomework[index],
+            ),
+          ));
     }
   }
 }

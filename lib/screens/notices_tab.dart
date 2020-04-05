@@ -50,25 +50,20 @@ Widget _noticesBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: AnimatedTitleSubtitleCard(
+          title: allParsedNotices[index].title,
+          subTitle: allParsedNotices[index].teacher,
+          color: currColor,
+          heroAnimation: AlwaysStoppedAnimation(0),
+          onPressed: NoticeDetailTab(
+            id: index,
             title: allParsedNotices[index].title,
-            subTitle: allParsedNotices[index].teacher,
+            teacher: allParsedNotices[index].teacher,
+            content: allParsedNotices[index].content,
+            date: allParsedNotices[index].dateString,
+            subject: allParsedNotices[index].subject,
             color: currColor,
-            heroAnimation: AlwaysStoppedAnimation(0),
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                MaterialPageRoute(
-                  builder: (context) => NoticeDetailTab(
-                    id: index,
-                    title: allParsedNotices[index].title,
-                    teacher: allParsedNotices[index].teacher,
-                    content: allParsedNotices[index].content,
-                    date: allParsedNotices[index].dateString,
-                    subject: allParsedNotices[index].subject,
-                    color: currColor,
-                  ),
-                ),
-              );
-            }));
+          ),
+        ));
   }
 }
 

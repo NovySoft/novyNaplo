@@ -290,37 +290,30 @@ class MarksTabState extends State<MarksTab>
                   top: false,
                   bottom: false,
                   child: Hero(
-                    tag: index,
-                    child: HeroAnimatingSubjectsCard(
+                      tag: index,
+                      child: HeroAnimatingSubjectsCard(
                         subTitle: subtitle,
                         title: markNameBySubject[index],
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
-                        onPressed: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute(
-                              builder: (context) => MarksDetailTab(
-                                mode: allParsedBySubject[index].mode,
-                                theme: allParsedBySubject[index].theme,
-                                weight: allParsedBySubject[index].weight,
-                                date: allParsedBySubject[index].dateString,
-                                createDate:
-                                    allParsedBySubject[index].createDateString,
-                                teacher: allParsedBySubject[index].teacher,
-                                subject: allParsedBySubject[index].subject,
-                                numberValue:
-                                    allParsedBySubject[index].numberValue,
-                                value: allParsedBySubject[index].value,
-                                formName: allParsedBySubject[index].formName,
-                                form: allParsedBySubject[index].form,
-                                id: index,
-                                name: markNameBySubject[index],
-                                color: color,
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
+                        onPressed: MarksDetailTab(
+                          mode: allParsedBySubject[index].mode,
+                          theme: allParsedBySubject[index].theme,
+                          weight: allParsedBySubject[index].weight,
+                          date: allParsedBySubject[index].dateString,
+                          createDate:
+                              allParsedBySubject[index].createDateString,
+                          teacher: allParsedBySubject[index].teacher,
+                          subject: allParsedBySubject[index].subject,
+                          numberValue: allParsedBySubject[index].numberValue,
+                          value: allParsedBySubject[index].value,
+                          formName: allParsedBySubject[index].formName,
+                          form: allParsedBySubject[index].form,
+                          id: index,
+                          name: markNameBySubject[index],
+                          color: color,
+                        ),
+                      )),
                 ),
               ),
             ],
@@ -353,34 +346,27 @@ class MarksTabState extends State<MarksTab>
                   child: Hero(
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
-                        subTitle: subtitle,
-                        title: markNameBySubject[index],
+                      subTitle: subtitle,
+                      title: markNameBySubject[index],
+                      color: color,
+                      heroAnimation: AlwaysStoppedAnimation(0),
+                      onPressed: MarksDetailTab(
+                        mode: allParsedBySubject[index].mode,
+                        theme: allParsedBySubject[index].theme,
+                        weight: allParsedBySubject[index].weight,
+                        date: allParsedBySubject[index].dateString,
+                        createDate: allParsedBySubject[index].createDateString,
+                        teacher: allParsedBySubject[index].teacher,
+                        subject: allParsedBySubject[index].subject,
+                        numberValue: allParsedBySubject[index].numberValue,
+                        value: allParsedBySubject[index].value,
+                        formName: allParsedBySubject[index].formName,
+                        form: allParsedBySubject[index].form,
+                        id: index,
+                        name: markNameBySubject[index],
                         color: color,
-                        heroAnimation: AlwaysStoppedAnimation(0),
-                        onPressed: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute(
-                              builder: (context) => MarksDetailTab(
-                                mode: allParsedBySubject[index].mode,
-                                theme: allParsedBySubject[index].theme,
-                                weight: allParsedBySubject[index].weight,
-                                date: allParsedBySubject[index].dateString,
-                                createDate:
-                                    allParsedBySubject[index].createDateString,
-                                teacher: allParsedBySubject[index].teacher,
-                                subject: allParsedBySubject[index].subject,
-                                numberValue:
-                                    allParsedBySubject[index].numberValue,
-                                value: allParsedBySubject[index].value,
-                                formName: allParsedBySubject[index].formName,
-                                form: allParsedBySubject[index].form,
-                                id: index,
-                                name: markNameBySubject[index],
-                                color: color,
-                              ),
-                            ),
-                          );
-                        }),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -398,32 +384,27 @@ class MarksTabState extends State<MarksTab>
           child: Hero(
             tag: index,
             child: HeroAnimatingSubjectsCard(
-                subTitle: subtitle,
-                title: markNameBySubject[index],
+              subTitle: subtitle,
+              title: markNameBySubject[index],
+              color: color,
+              heroAnimation: AlwaysStoppedAnimation(0),
+              onPressed: MarksDetailTab(
+                mode: allParsedBySubject[index].mode,
+                theme: allParsedBySubject[index].theme,
+                weight: allParsedBySubject[index].weight,
+                date: allParsedBySubject[index].dateString,
+                createDate: allParsedBySubject[index].createDateString,
+                teacher: allParsedBySubject[index].teacher,
+                subject: allParsedBySubject[index].subject,
+                numberValue: allParsedBySubject[index].numberValue,
+                value: allParsedBySubject[index].value,
+                formName: allParsedBySubject[index].formName,
+                form: allParsedBySubject[index].form,
+                id: index,
+                name: markNameBySubject[index],
                 color: color,
-                heroAnimation: AlwaysStoppedAnimation(0),
-                onPressed: () {
-                  Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (context) => MarksDetailTab(
-                        mode: allParsedBySubject[index].mode,
-                        theme: allParsedBySubject[index].theme,
-                        weight: allParsedBySubject[index].weight,
-                        date: allParsedBySubject[index].dateString,
-                        createDate: allParsedBySubject[index].createDateString,
-                        teacher: allParsedBySubject[index].teacher,
-                        subject: allParsedBySubject[index].subject,
-                        numberValue: allParsedBySubject[index].numberValue,
-                        value: allParsedBySubject[index].value,
-                        formName: allParsedBySubject[index].formName,
-                        form: allParsedBySubject[index].form,
-                        id: index,
-                        name: markNameBySubject[index],
-                        color: color,
-                      ),
-                    ),
-                  );
-                }),
+              ),
+            ),
           ),
         ),
       );

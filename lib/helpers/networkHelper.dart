@@ -243,6 +243,9 @@ class NetworkHelper {
 
 void setUpCalculatorPage(List<List<Evals>> input) {
   double sum, index;
+  calculatorPage.dropdownValues = [];
+  calculatorPage.dropdownValue = "";
+  calculatorPage.avarageList = [];
   for (var n in input) {
     calculatorPage.dropdownValues.add(capitalize(n[0].subject));
     sum = 0;

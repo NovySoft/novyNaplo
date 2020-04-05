@@ -52,6 +52,9 @@ class _LoadingPageState extends State<LoadingPage> {
     setState(() {
       loadingText = "Jegyszámoló beállítása";
     });
+    calculatorPage.dropdownValues = [];
+    calculatorPage.dropdownValue = "";
+    calculatorPage.avarageList = [];
     double sum, index;
     for (var n in input) {
       calculatorPage.dropdownValues.add(capitalize(n[0].subject));

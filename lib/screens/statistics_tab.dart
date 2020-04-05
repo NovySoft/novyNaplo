@@ -10,6 +10,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'dart:math';
+
 var allParsedSubjects;
 var colors;
 final List<Tab> statTabs = <Tab>[
@@ -392,21 +393,16 @@ Widget _chartsListBuilder(BuildContext context, int index) {
       top: false,
       bottom: false,
       child: AnimatedChartsCard(
-          title: capitalize(allParsedSubjects[index][0].subject),
+        title: capitalize(allParsedSubjects[index][0].subject),
+        color: currColor,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: ChartsDetailTab(
+          id: index,
+          subject: capitalize(allParsedSubjects[index][0].subject),
           color: currColor,
-          heroAnimation: AlwaysStoppedAnimation(0),
-          onPressed: () {
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => ChartsDetailTab(
-                  id: index,
-                  subject: capitalize(allParsedSubjects[index][0].subject),
-                  color: currColor,
-                  seriesList:
-                      createSubjectChart(allParsedSubjects[index], index.toString()),
-                  animate: globals.chartAnimations,
-                ),
-              ),
-            );
-          }));
+          seriesList:
+              createSubjectChart(allParsedSubjects[index], index.toString()),
+          animate: globals.chartAnimations,
+        ),
+      ));
 }

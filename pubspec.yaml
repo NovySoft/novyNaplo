@@ -46,6 +46,7 @@ dependencies:
   sqflite: any
   animations: any
   flutter_html: any
+  customgauge: any
 
 flutter_icons:
   android: true
