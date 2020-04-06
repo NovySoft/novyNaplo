@@ -1,8 +1,9 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class NewVersion{
+class NewVersion {
   String versionCode;
   String releaseNotes;
   String releaseLink;
@@ -20,10 +21,10 @@ Future<NewVersion> getVersion() async {
     try {
       var res = await http.get(
           'https://raw.githubusercontent.com/NovySoft/novyNaplo/master/version.json');
-      if (res.statusCode != 200){
+      if (res.statusCode != 200) {
         output.returnedAnything = false;
         return output;
-      } 
+      }
       var gitJson = json.decode(res.body);
       output.versionCode = gitJson['version'];
       output.releaseNotes = gitJson['releaseNotes'];
@@ -31,7 +32,8 @@ Future<NewVersion> getVersion() async {
       output.isBreaking = gitJson['isBreaking'];
       output.returnedAnything = true;
       return output;
-    } catch (exception) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getVersion');
       output.returnedAnything = false;
       return output;
     }

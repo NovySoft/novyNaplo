@@ -1,4 +1,5 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
@@ -71,7 +72,7 @@ class NetworkHelper {
           return "Rossz iskola azonosító";
         }
       }
-    } catch (e) {
+    } catch (e, s) {
       var client = http.Client();
       var header = {
         'User-Agent': '$agent',
@@ -87,10 +88,12 @@ class NetworkHelper {
           if (tokenIndex < 3) {
             getToken(code, user, pass);
           } else {
+            Crashlytics.instance.recordError(e, s, context: 'getToken');
             return "Nincs válasz a krétától!\nPróbáld újra később!";
           }
         }
-      } catch (e) {
+      } catch (e, s) {
+        Crashlytics.instance.recordError(e, s, context: 'getToken');
         return "Nincs válasz a novy API-tól!\nPróbáld újra később!";
       }
     }

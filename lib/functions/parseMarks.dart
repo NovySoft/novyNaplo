@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 import 'utils.dart';
 import 'classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -19,7 +21,8 @@ List<dynamic> parseAllByDate(var input) {
     jegyArray = [];
     id = 0;
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
-  } on Error catch (e) {
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
     return [e];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
@@ -33,7 +36,8 @@ List<dynamic> parseAllBySubject(var input) {
     jegyArray = [];
     id = 0;
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
-  } on Error catch (e) {
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');
     return [e];
   }
   jegyArray = sortByDateAndSubject(jegyArray);
@@ -61,7 +65,8 @@ List<dynamic> parseAvarages(var input) {
   try {
     input.forEach((n) => atlagArray.add(setAvarage(
         n["Subject"], n["Value"], n["classValue"], n["Difference"])));
-  } on Error catch (e) {
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [e.toString()];
   }
   return atlagArray;
@@ -106,11 +111,11 @@ List<charts.Series<ChartPoints, int>> createSubjectChart(
   double sum = 0;
   double index = 0;
   int listArray = 0;
-  for(var n in input){
-      sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
-      index += 1 * double.parse(n.weight.split("%")[0]) / 100;
-      chartData.add(new ChartPoints(listArray,sum / index));
-      listArray++;
+  for (var n in input) {
+    sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+    index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+    chartData.add(new ChartPoints(listArray, sum / index));
+    listArray++;
   }
   return [
     new charts.Series<ChartPoints, int>(
@@ -154,7 +159,7 @@ List<dynamic> categorizeSubjects(var input) {
   }
   jegyMatrix.removeAt(0);
   int index = 0;
-  for(var n in jegyMatrix){
+  for (var n in jegyMatrix) {
     n.sort((a, b) => a.createDate.compareTo(b.createDate));
     index++;
   }

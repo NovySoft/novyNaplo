@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
@@ -18,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/helpers/chartHelper.dart' as chart;
+
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
@@ -27,12 +29,12 @@ void main() async {
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(prefs.getBool("isNew") == false){
+  if (prefs.getBool("isNew") == false) {
     isNew = false;
   }
-  runApp(MyApp());
-  /*Map<PermissionGroup, PermissionStatus> permissions =
-      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);*/
+  runZoned(() {
+    runApp(MyApp());
+  }, onError: Crashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {

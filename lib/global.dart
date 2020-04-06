@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,12 +37,15 @@ void resetAllGlobals() async {
 
 void setGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if(prefs.getBool("ads") != null) Crashlytics.instance.setString("markCardSubtitle", markCardSubtitle);
+
   if (prefs.getString("markCardSubtitle") == null && markCardSubtitle == null) {
     markCardSubtitle = "Téma";
     prefs.setString("markCardSubtitle", "Téma");
   } else if (markCardSubtitle == null) {
     markCardSubtitle = prefs.getString("markCardSubtitle");
   }
+  Crashlytics.instance.setString("markCardSubtitle", markCardSubtitle);
 
   if (prefs.getString("markCardConstColor") == null &&
       markCardConstColor == null) {
@@ -50,6 +54,7 @@ void setGlobals() async {
   } else if (markCardConstColor == null) {
     markCardConstColor = prefs.getString("markCardConstColor");
   }
+  Crashlytics.instance.setString("markCardConstColor", markCardConstColor);
 
   if (prefs.getString("lessonCardSubtitle") == null &&
       lessonCardSubtitle == null) {
@@ -58,6 +63,7 @@ void setGlobals() async {
   } else if (lessonCardSubtitle == null) {
     lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
   }
+  Crashlytics.instance.setString("lessonCardSubtitle", lessonCardSubtitle);
 
   if (prefs.getString("markCardTheme") == null && markCardTheme == null) {
     markCardTheme = "Véletlenszerű";
@@ -65,6 +71,7 @@ void setGlobals() async {
   } else if (markCardTheme == null) {
     markCardTheme = prefs.getString("markCardTheme");
   }
+  Crashlytics.instance.setString("markCardTheme", markCardTheme);
 
   if (prefs.getString("statChart") == null && statChart == null) {
     statChart = "Mindent";
@@ -72,6 +79,7 @@ void setGlobals() async {
   } else if (statChart == null) {
     statChart = prefs.getString("statChart");
   }
+  Crashlytics.instance.setString("statChart", statChart);
 
   if (prefs.getBool("chartAnimations") == null && chartAnimations == null) {
     chartAnimations = true;
@@ -79,4 +87,5 @@ void setGlobals() async {
   } else if (chartAnimations == null) {
     chartAnimations = prefs.getBool("chartAnimations");
   }
+  Crashlytics.instance.setBool("ChartAnimations", chartAnimations);
 }

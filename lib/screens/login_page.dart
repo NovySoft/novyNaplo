@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -52,6 +53,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   void onLoad(var context) async {
+    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -78,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
     print("lesson card:" + lessonCardSubtitle);
     print("mark theme:" + markCardTheme);*/
     if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
+      Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
       if (prefs.getBool("ads")) {
         adBanner.load();
         adBanner.show(
@@ -103,7 +106,8 @@ class _LoginPageState extends State<LoginPage> {
         codeController.text = decryptedCode;
         userController.text = decryptedUser;
         passController.text = decryptedPass;
-      } catch (e) {
+      } catch (e, s) {
+        Crashlytics.instance.recordError(e, s, context: 'onLoad-login');
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -118,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
           await _timeoutAlert(context);
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-          } catch (e) {
+          } catch (e, s) {
+            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
@@ -127,7 +132,8 @@ class _LoginPageState extends State<LoginPage> {
           await _timeoutAlert(context);
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-          } catch (e) {
+          } catch (e, s) {
+            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
@@ -137,12 +143,14 @@ class _LoginPageState extends State<LoginPage> {
           }
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-          } catch (e) {
+          } catch (e, s) {
+            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
         }
-      } catch (e) {
+      } catch (e, s) {
+        Crashlytics.instance.recordError(e, s, context: 'navigator-login');
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -151,39 +159,43 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void auth(var context, caller) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isNew", false);
-    globals.adsEnabled = false;
-    prefs.setBool("ads", false);
-    globals.adModifier = 0;
-    newVersion = false;
-    if (caller != "onLoad") {
-      showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return SpinnerDialog();
-          });
-    }
-    //Not showing quickly enough
-    await sleep1(); //So sleep for a second TODO FIX THIS
-    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
-      status = "No internet connection was detected";
-    } else {
-      String code = codeController.text;
-      String user = userController.text;
-      String pass = passController.text;
-      status = await NetworkHelper().getToken(code, user, pass);
-      //TODO fix this buggy garbage
-      if(status == null) status = await NetworkHelper().getToken(code, user, pass);
-      if(status == null) status = await NetworkHelper().getToken(code, user, pass);
-      if (status == "OK") {
-        await NetworkHelper().getStudentInfo(globals.token, code);
-      }
-    }
     try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool("isNew", false);
+      globals.adsEnabled = false;
+      prefs.setBool("ads", false);
+      globals.adModifier = 0;
+      newVersion = false;
+      if (caller != "onLoad") {
+        showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return SpinnerDialog();
+            });
+      }
+      //Not showing quickly enough
+      await sleep1(); //So sleep for a second TODO FIX THIS
+      if (await NetworkHelper().isNetworkAvailable() ==
+          ConnectivityResult.none) {
+        status = "No internet connection was detected";
+      } else {
+        String code = codeController.text;
+        String user = userController.text;
+        String pass = passController.text;
+        status = await NetworkHelper().getToken(code, user, pass);
+        //TODO fix this buggy garbage
+        if (status == null)
+          status = await NetworkHelper().getToken(code, user, pass);
+        if (status == null)
+          status = await NetworkHelper().getToken(code, user, pass);
+        if (status == "OK") {
+          await NetworkHelper().getStudentInfo(globals.token, code);
+        }
+      }
       Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'auth-login');
       isError = true;
       _ackAlert(context, e.toString());
     }
@@ -191,7 +203,8 @@ class _LoginPageState extends State<LoginPage> {
     if (status == "OK") {
       try {
         save(context, "auth");
-      } catch (e) {
+      } catch (e, s) {
+        Crashlytics.instance.recordError(e, s, context: 'save-login');
         isError = true;
         _ackAlert(context, e.message);
       }
@@ -225,7 +238,8 @@ class _LoginPageState extends State<LoginPage> {
       FirebaseAnalytics().setUserProperty(name: "School", value: code);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'encrypt-login');
       isError = true;
       _ackAlert(context, e.message);
     }
@@ -244,7 +258,9 @@ class _LoginPageState extends State<LoginPage> {
         }
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       }
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance
+          .recordError(e, s, context: 'navigatorReplacement-login');
       isError = true;
       _ackAlert(context, e.message);
     }
@@ -399,7 +415,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _ackAlert(BuildContext context, String content) async {
-    if(content == null) content = "Ismeretlen hiba történt\nPróbáld újra később";
+    if (content == null)
+      content = "Ismeretlen hiba történt\nPróbáld újra később";
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -125,10 +126,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                   ThemeHelper().changeBrightness(context, Brightness.light);
                   FirebaseAnalytics()
                       .setUserProperty(name: "Theme", value: "Bright");
+                  Crashlytics.instance.setString("Theme", "Bright");
                 } else {
                   ThemeHelper().changeBrightness(context, Brightness.dark);
                   FirebaseAnalytics()
                       .setUserProperty(name: "Theme", value: "Dark");
+                  Crashlytics.instance.setString("Theme", "Dark");
                 }
                 setState(() {
                   dropDown = value;
@@ -176,6 +179,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
+                Crashlytics.instance.setString("markCardSubtitle", value);
                 prefs.setString("markCardSubtitle", value);
                 globals.markCardSubtitle = value;
                 setState(() {
@@ -224,6 +228,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
+                Crashlytics.instance.setString("lessonCardSubtitle", value);
                 prefs.setString("lessonCardSubtitle", value);
                 globals.lessonCardSubtitle = value;
                 setState(() {
@@ -266,6 +271,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
+                Crashlytics.instance.setString("markCardTheme", value);    
                 prefs.setString("markCardTheme", value);
                 globals.markCardTheme = value;
                 setState(() {
@@ -391,6 +397,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
+                Crashlytics.instance.setString("markCardConstColor", value);
                 prefs.setString("markCardConstColor", value);
                 globals.markCardConstColor = value;
                 setState(() {
@@ -422,6 +429,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 setState(() {
+                  Crashlytics.instance.setString("statChart", value);
                   prefs.setString("statChart", value);
                   globals.statChart = value;
                   statDropDown = value;
@@ -440,6 +448,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 setState(() {
                   adsSwitch = isOn;
                 });
+                Crashlytics.instance.setBool("Ads", isOn);
                 if (isOn) {
                   FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
                   prefs.setBool("ads", true);
@@ -494,13 +503,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                   animationSwitch = switchOn;
                   globals.chartAnimations = switchOn;
                 });
+                Crashlytics.instance.setBool("ChartAnimations", switchOn);
                 if (switchOn) {
                   FirebaseAnalytics()
-                      .setUserProperty(name: "Animations", value: "YES");
+                      .setUserProperty(name: "ChartAnimations", value: "YES");
                   prefs.setBool("chartAnimations", true);
                 } else {
                   FirebaseAnalytics()
-                      .setUserProperty(name: "Animations", value: "NO");
+                      .setUserProperty(name: "ChartAnimations", value: "NO");
                   prefs.setBool("chartAnimations", false);
                 }
               },

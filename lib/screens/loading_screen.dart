@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -138,7 +139,7 @@ class _LoadingPageState extends State<LoadingPage> {
           afterTokenGrab(context, "Rossz iskola azonosító");
         }
       }
-    } catch (e) {
+    } catch (e, s) {
       setState(() {
         loadingText = "Hiba a tokennel való lekérés közben\nÚjra próbálkozás";
       });
@@ -160,11 +161,13 @@ class _LoadingPageState extends State<LoadingPage> {
           if (tokenIndex < 3) {
             getToken(code, user, pass);
           } else {
+            Crashlytics.instance.recordError(e, s, context: 'getToken');
             _ackAlert(
                 context, "Nincs válasz a krétától!\nPróbáld újra később!");
           }
         }
-      } catch (e) {
+      } catch (e, s) {
+        Crashlytics.instance.recordError(e, s, context: 'getToken');
         _ackAlert(
             context, "Nincs válasz a novy API-tól!\nPróbáld újra később!");
       }
@@ -205,7 +208,8 @@ class _LoadingPageState extends State<LoadingPage> {
         timetablePage.lessonsList = await getWeekLessons(token, code);
         setUpCalculatorPage(statisticsPage.allParsedSubjects);
       }
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getStudentInfo');
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -234,7 +238,8 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.avJson = bodyJson;
         globals.avarageCount = countAvarages(bodyJson);
       }
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getAvarages');
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -308,7 +313,8 @@ class _LoadingPageState extends State<LoadingPage> {
         output[index].add(n);
       }
       return output;
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getWeekLessons');
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -316,6 +322,7 @@ class _LoadingPageState extends State<LoadingPage> {
   //NETWORK END
 
   void onLoad(var context) async {
+    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     NewVersion newVerDetails = await getVersion();
     if (newVerDetails.returnedAnything) {
       if (config.currentAppVersionCode != newVerDetails.versionCode) {
@@ -342,6 +349,7 @@ class _LoadingPageState extends State<LoadingPage> {
           userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       globals.setGlobals();
       if (prefs.getBool("ads") != null) {
+        Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
         if (prefs.getBool("ads")) {
           adBanner.load();
           adBanner.show(
@@ -357,7 +365,8 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.adsEnabled = false;
       }
       //print("ads" + globals.adsEnabled.toString());
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'onLoad-prefs');
       globals.resetAllGlobals();
       await _ackAlert(context,
           "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása\nMemória törölve...");
@@ -371,7 +380,8 @@ class _LoadingPageState extends State<LoadingPage> {
       if (status == "OK") {
         try {
           save(context);
-        } on PlatformException catch (e) {
+        } catch (e, s) {
+          Crashlytics.instance.recordError(e, s, context: 'afterTokenGrab');
           await _ackAlert(context,
               "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
         }
@@ -398,7 +408,8 @@ class _LoadingPageState extends State<LoadingPage> {
       } else {
         getToken(decryptedCode, decryptedUser, decryptedPass);
       }
-    } catch (e) {
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'auth');
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
