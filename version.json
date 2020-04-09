@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.3.9",
+    "version": "V0.1.3.9+HOTFIX",
     "isBreaking": false,
-    "releaseNotes": "Bejelentkezés bugfix",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.3.9"
+    "releaseNotes": "Jegyszámoló és statisztika patch",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.3.9%2BHOTFIX"
 }

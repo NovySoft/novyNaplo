@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
-import 'dart:math';
 
 //TODO optimize this entire thing
 class LinearMarkChartData {
@@ -41,12 +42,14 @@ dynamic createOsszesitett(var allParsedInput) {
     tempListTwo.add(new LinearMarkChartData(index.toInt(), n, id: "Minden"));
     index++;
   }
-  return [new charts.Series<LinearMarkChartData, int>(
-      id: tempListTwo[0].id,
-      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-      domainFn: (LinearMarkChartData marks, _) => marks.count,
-      measureFn: (LinearMarkChartData marks, _) => marks.value,
-      data: tempListTwo)];
+  return [
+    new charts.Series<LinearMarkChartData, int>(
+        id: tempListTwo[0].id,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (LinearMarkChartData marks, _) => marks.count,
+        measureFn: (LinearMarkChartData marks, _) => marks.value,
+        data: tempListTwo)
+  ];
 }
 
 List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
@@ -64,8 +67,7 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     for (var n in y) {
       numVal += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
       oszto += 1 * double.parse(n.weight.split("%")[0]) / 100;
-      subjectMarks[index]
-          .add(numVal / oszto);
+      subjectMarks[index].add(numVal / oszto);
     }
     index++;
   }
@@ -82,8 +84,7 @@ List<LinearMarkChartData> makeChartPoints(var list) {
   int locIndex = 0;
   for (var n in list) {
     if (locIndex != 0) {
-      returnList.add(
-          new LinearMarkChartData(locIndex - 1, n, id: list[0]));
+      returnList.add(new LinearMarkChartData(locIndex - 1, n, id: list[0]));
     }
     locIndex++;
   }
@@ -166,12 +167,16 @@ void getAllSubjectsAv(input) {
 
 void getWorstAndBest(input) {
   List<stats.AV> tempList = [];
-  double sum = 0,index = 0;
+  double sum = 0, index = 0;
   int listIndex = 0;
   for (var n in input) {
     index = 0;
     sum = 0;
-    listIndex = 1;
+    if (n.length == 1) {
+      listIndex = 0;
+    } else {
+      listIndex = 1;
+    }
     stats.AV temp = new stats.AV();
     for (var y in n) {
       sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
@@ -193,12 +198,13 @@ void getWorstAndBest(input) {
   index = 0;
   double curValue = tempList[0].value;
   List<stats.AV> tempListTwo = [];
-  if(tempList.length > 1)
+  if (tempList.length > 1)
     while (curValue == tempList[index.toInt()].value) {
       tempListTwo.add(tempList[index.toInt()]);
       index++;
     }
-  else tempListTwo.add(tempList[0]);
+  else
+    tempListTwo.add(tempList[0]);
   tempListTwo.sort((a, b) => b.count.compareTo(a.count));
   stats.bestSubjectAv = tempListTwo[0];
 }
