@@ -117,7 +117,10 @@ class NetworkHelper {
       if (globals.avarageCount != 0) globals.avarageCount = 0;
       if (globals.noticesCount != 0) globals.noticesCount = 0;
       await getAvarages(token, code);
-      eval.forEach((element) => globals.markCount += 1);
+      if (eval != null)
+        globals.markCount = eval.length;
+      else
+        globals.markCount = 0;
       globals.noticesCount = countNotices(globals.dJson);
       noticesPage.allParsedNotices = parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
@@ -231,38 +234,44 @@ class NetworkHelper {
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
-    int beforeDay = tempLessonList[0].startDate.day;
-    //Just a matrix
-    for (var n in tempLessonList) {
-      if (n.startDate.day != beforeDay) {
-        index++;
-        beforeDay = n.startDate.day;
+    if (tempLessonList != null) {
+      if (tempLessonList.length != 0) {
+        int beforeDay = tempLessonList[0].startDate.day;
+        //Just a matrix
+        for (var n in tempLessonList) {
+          if (n.startDate.day != beforeDay) {
+            index++;
+            beforeDay = n.startDate.day;
+          }
+          output[index].add(n);
+        }
       }
-      output[index].add(n);
     }
     return output;
   }
 }
 
 void setUpCalculatorPage(List<List<Evals>> input) {
-  double sum, index;
   calculatorPage.dropdownValues = [];
   calculatorPage.dropdownValue = "";
   calculatorPage.avarageList = [];
-  for (var n in input) {
-    calculatorPage.dropdownValues.add(capitalize(n[0].subject));
-    sum = 0;
-    index = 0;
-    for (var y in n) {
-      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+  if (input != null && input != [[]] && input.length != 1) {
+    double sum, index;
+    for (var n in input) {
+      calculatorPage.dropdownValues.add(capitalize(n[0].subject));
+      sum = 0;
+      index = 0;
+      for (var y in n) {
+        sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+        index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+      }
+      CalculatorData temp = new CalculatorData();
+      temp.count = index;
+      temp.sum = sum;
+      calculatorPage.avarageList.add(temp);
     }
-    CalculatorData temp = new CalculatorData();
-    temp.count = index;
-    temp.sum = sum;
-    calculatorPage.avarageList.add(temp);
   }
-  if (calculatorPage.dropdownValues[0] != null)
+  if (calculatorPage.dropdownValues.length != 0)
     calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
   else
     calculatorPage.dropdownValue = "Az lehet, hogy még nincs jegyed?";

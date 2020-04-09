@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
@@ -24,14 +25,30 @@ class CalculatorTab extends StatefulWidget {
 }
 
 class CalculatorTabState extends State<CalculatorTab> {
+  Widget noMarks() {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(
+        MdiIcons.emoticonSadOutline,
+        size: 50,
+      ),
+      Text(
+        "Nincs még jegyed!",
+        textAlign: TextAlign.center,
+      )
+    ]));
+  }
+
   @override
   void initState() {
     super.initState();
     //Set dropdown to item 0
-    dropdownValue = dropdownValues[0];
-    currentIndex = 0;
-    currCount = avarageList[0].count;
-    currSum = avarageList[0].sum;
+    if (globals.markCount != 0) {
+      dropdownValue = dropdownValues[0];
+      currentIndex = 0;
+      currCount = avarageList[0].count;
+      currSum = avarageList[0].sum;
+    }
   }
 
   @override
@@ -46,92 +63,97 @@ class CalculatorTabState extends State<CalculatorTab> {
   }
 
   Widget _calculatorBody() {
-    return Column(
-      children: <Widget>[
-        Container(
-          child: DropdownButton<String>(
-            value: dropdownValue,
-            icon: Icon(Icons.arrow_downward),
-            iconSize: 24,
-            elevation: 16,
-            underline: Container(
-              color: Theme.of(context).accentColor,
-              height: 2,
+    if (globals.markCount == 0) {
+      return noMarks();
+    } else {
+      return Column(
+        children: <Widget>[
+          Container(
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              icon: Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              underline: Container(
+                color: Theme.of(context).accentColor,
+                height: 2,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                  currentIndex = dropdownValues.indexOf(newValue);
+                  currCount = avarageList[currentIndex].count;
+                  currSum = avarageList[currentIndex].sum;
+                });
+              },
+              items:
+                  dropdownValues.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-            onChanged: (String newValue) {
+            alignment: Alignment(0, 0),
+            margin: EdgeInsets.all(5),
+          ),
+          Text("Jegyek összege (súlyozva): " + currSum.toString()),
+          Icon(MdiIcons.division),
+          Text("Jegyek száma (súlyozva): " + currCount.toString()),
+          Icon(MdiIcons.equal),
+          Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3)),
+          SizedBox(height: 20),
+          Text("Mit szeretnél elérni? $elakErni"),
+          Slider(
+            value: elakErni,
+            onChanged: (newValue) {
               setState(() {
-                dropdownValue = newValue;
-                currentIndex = dropdownValues.indexOf(newValue);
-                currCount = avarageList[currentIndex].count;
-                currSum = avarageList[currentIndex].sum;
+                elakErni = newValue;
               });
             },
-            items: dropdownValues.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+            min: 1,
+            max: 5,
+            divisions: 40,
+            label: elakErni.toString(),
           ),
-          alignment: Alignment(0, 0),
-          margin: EdgeInsets.all(5),
-        ),
-        Text("Jegyek összege (súlyozva): " + currSum.toString()),
-        Icon(MdiIcons.division),
-        Text("Jegyek száma (súlyozva): " + currCount.toString()),
-        Icon(MdiIcons.equal),
-        Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3)),
-        SizedBox(height: 20),
-        Text("Mit szeretnél elérni? $elakErni"),
-        Slider(
-          value: elakErni,
-          onChanged: (newValue) {
-            setState(() {
-              elakErni = newValue;
-            });
-          },
-          min: 1,
-          max: 5,
-          divisions: 40,
-          label: elakErni.toString(),
-        ),
-        Text("Hány jegy alatt szeretnéd elérni? $turesHatar"),
-        Slider(
-          value: turesHatar,
-          onChanged: (newValue) {
-            setState(() {
-              turesHatar = newValue.roundToDouble();
-            });
-          },
-          min: 1,
-          max: 10,
-          divisions: 10,
-          label: turesHatar.toString(),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 1.0),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            onPressed: () {
+          Text("Hány jegy alatt szeretnéd elérni? $turesHatar"),
+          Slider(
+            value: turesHatar,
+            onChanged: (newValue) {
               setState(() {
-                reCalculate();
+                turesHatar = newValue.roundToDouble();
               });
             },
-            padding: EdgeInsets.all(12),
-            child: Text('Mehet', style: TextStyle(color: Colors.black)),
+            min: 1,
+            max: 10,
+            divisions: 10,
+            label: turesHatar.toString(),
           ),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Text(
-          text1,
-          style: TextStyle(fontSize: 20),
-        ),
-      ],
-    );
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 1.0),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              onPressed: () {
+                setState(() {
+                  reCalculate();
+                });
+              },
+              padding: EdgeInsets.all(12),
+              child: Text('Mehet', style: TextStyle(color: Colors.black)),
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Text(
+            text1,
+            style: TextStyle(fontSize: 20),
+          ),
+        ],
+      );
+    }
   }
 }
 

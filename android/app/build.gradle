@@ -68,6 +68,7 @@ android {
     defaultConfig {
         applicationId "novy.vip.novynaplo"
         minSdkVersion 21
+        compileSdkVersion 28
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

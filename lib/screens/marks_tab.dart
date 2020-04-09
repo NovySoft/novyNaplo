@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
@@ -426,27 +427,49 @@ class MarksTabState extends State<MarksTab>
           controller: _tabController,
           children: markTabs.map((Tab tab) {
             if (tab.text.toLowerCase() == "dátum szerint") {
-              return RefreshIndicator(
-                key: _androidRefreshKey,
-                onRefresh: _refreshData,
-                child: ListView.builder(
-                  itemCount: globals.markCount,
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  itemBuilder: _dateListBuilder,
-                ),
-              );
+              if (globals.markCount == 0) {
+                return noMarks();
+              } else {
+                return RefreshIndicator(
+                  key: _androidRefreshKey,
+                  onRefresh: _refreshData,
+                  child: ListView.builder(
+                    itemCount: globals.markCount,
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    itemBuilder: _dateListBuilder,
+                  ),
+                );
+              }
             } else {
-              return RefreshIndicator(
-                key: _androidRefreshKeyTwo,
-                onRefresh: _refreshData,
-                child: ListView.builder(
-                  itemCount: globals.markCount,
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  itemBuilder: _subjectListBuilder,
-                ),
-              );
+              if (globals.markCount == 0) {
+                return noMarks();
+              } else {
+                return RefreshIndicator(
+                  key: _androidRefreshKeyTwo,
+                  onRefresh: _refreshData,
+                  child: ListView.builder(
+                    itemCount: globals.markCount,
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    itemBuilder: _subjectListBuilder,
+                  ),
+                );
+              }
             }
           }).toList()),
     );
+  }
+
+  Widget noMarks() {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(
+        MdiIcons.emoticonSadOutline,
+        size: 50,
+      ),
+      Text(
+        "Nincs még jegyed!",
+        textAlign: TextAlign.center,
+      )
+    ]));
   }
 }

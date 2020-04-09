@@ -1,9 +1,10 @@
 import 'dart:core';
+
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-import 'utils.dart';
 import 'classManager.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'utils.dart';
 
 List<ChartPoints> chartData = [];
 var index, sum;
@@ -23,7 +24,7 @@ List<dynamic> parseAllByDate(var input) {
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
-    return [e];
+    return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
   return jegyArray;
@@ -38,7 +39,7 @@ List<dynamic> parseAllBySubject(var input) {
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');
-    return [e];
+    return [];
   }
   jegyArray = sortByDateAndSubject(jegyArray);
   return jegyArray;
@@ -46,17 +47,25 @@ List<dynamic> parseAllBySubject(var input) {
 
 List<String> parseMarksByDate(var input) {
   List<String> evalArray = [];
-  var evalJegy = parseAllByDate(input);
-  if (evalJegy[0] == "Error") return ["Error"];
-  evalJegy.forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+  if (input != null) {
+    var evalJegy = parseAllByDate(input);
+    if (evalJegy.length == 0) return [];
+    if (evalJegy[0] == "Error") return ["Error"];
+    evalJegy
+        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+  }
   return evalArray;
 }
 
 List<String> parseMarksBySubject(var input) {
   List<String> evalArray = [];
-  var evalJegy = parseAllBySubject(input);
-  if (evalJegy[0] == "Error") return ["Error"];
-  evalJegy.forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+  if (input != null) {
+    var evalJegy = parseAllBySubject(input);
+    if (evalJegy.length == 0) return [];
+    if (evalJegy[0] == "Error") return ["Error"];
+    evalJegy
+        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+  }
   return evalArray;
 }
 
@@ -67,32 +76,34 @@ List<dynamic> parseAvarages(var input) {
         n["Subject"], n["Value"], n["classValue"], n["Difference"])));
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
-    return [e.toString()];
+    return [];
   }
   return atlagArray;
 }
 
 int countAvarages(var input) {
   var count = 0;
-  count = input.length;
+  if (input != null) count = input.length;
   return count;
 }
 
 int countNotices(var input) {
-  var count = 0;
-  var notices = input["Notes"];
-  count = notices.length;
+  int count = 0;
+  if (input != null && input["Notes"] != null) {
+    var notices = input["Notes"];
+    count = notices.length;
+  }
   return count;
 }
 
 List<dynamic> parseNotices(var input) {
-  if (input["Notes"] != null) {
+  if (input != null && input["Notes"] != null) {
     noticesArray = [];
     var notices = input["Notes"];
     notices.forEach((n) => noticesArray.add(setNotices(n)));
     return noticesArray;
   } else {
-    return null;
+    return [];
   }
 }
 
@@ -138,27 +149,29 @@ List<dynamic> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];
   List<List<Evals>> jegyMatrix = [[]];
-  for (var n in parsed) {
-    jegyArray.add(setEvals(n));
-  }
-  jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
-  String lastString = "";
-  for (var n in jegyArray) {
-    if ((n.form != "Percent" && n.type != "HalfYear") ||
-        n.subject == "Magatartas" ||
-        n.subject == "Szorgalom") {
-      if (n.subject != lastString) {
-        jegyMatrix.add([]);
-        lastString = n.subject;
-      }
-      jegyMatrix.last.add(n);
+  if (input != [] && input != null && parsed != null && parsed != []) {
+    for (var n in parsed) {
+      jegyArray.add(setEvals(n));
     }
-  }
-  jegyMatrix.removeAt(0);
-  int index = 0;
-  for (var n in jegyMatrix) {
-    n.sort((a, b) => a.createDate.compareTo(b.createDate));
-    index++;
+    jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
+    String lastString = "";
+    for (var n in jegyArray) {
+      if ((n.form != "Percent" && n.type != "HalfYear") ||
+          n.subject == "Magatartas" ||
+          n.subject == "Szorgalom") {
+        if (n.subject != lastString) {
+          jegyMatrix.add([]);
+          lastString = n.subject;
+        }
+        jegyMatrix.last.add(n);
+      }
+    }
+    jegyMatrix.removeAt(0);
+    int index = 0;
+    for (var n in jegyMatrix) {
+      n.sort((a, b) => a.createDate.compareTo(b.createDate));
+      index++;
+    }
   }
   return jegyMatrix;
 }
@@ -166,21 +179,25 @@ List<dynamic> categorizeSubjects(var input) {
 List<dynamic> sortByDateAndSubject(List<dynamic> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
-  String _beforeSubject = input[0].subject;
   List<Evals> _output = [];
-  List<List<Evals>> _tempArray = [[]];
-  for (var n in input) {
-    if (n.subject != _beforeSubject) {
-      _currentIndex++;
-      _tempArray.add([]);
-      _beforeSubject = n.subject;
-    }
-    _tempArray[_currentIndex].add(n);
-  }
-  for (List<Evals> n in _tempArray) {
-    n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-    for (var x in n) {
-      _output.add(x);
+  if (input != null) {
+    if (input.length != 0) {
+      String _beforeSubject = input[0].subject;
+      List<List<Evals>> _tempArray = [[]];
+      for (var n in input) {
+        if (n.subject != _beforeSubject) {
+          _currentIndex++;
+          _tempArray.add([]);
+          _beforeSubject = n.subject;
+        }
+        _tempArray[_currentIndex].add(n);
+      }
+      for (List<Evals> n in _tempArray) {
+        n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+        for (var x in n) {
+          _output.add(x);
+        }
+      }
     }
   }
   return _output;

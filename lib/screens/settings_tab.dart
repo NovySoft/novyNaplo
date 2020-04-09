@@ -23,6 +23,12 @@ bool adsSwitch = globals.adsEnabled;
 bool animationSwitch = globals.chartAnimations;
 bool notificationSwitch = false;
 int indexModifier = 0;
+/*final Email email = Email(
+  body: "<h1 id='-rd-le-a-hib-t'>Írd le a hibát</h1><p>Egy egyszerű, de részletes leírása a hibának</p><p><strong>Hogyan reprodukáljuk</strong>A hiba reprodukálásához való lépések:</p><ol><li>Menjünk &#39;...&#39;</li><li>Nyomjunk &#39;....&#39;</li><li>Tekerjünk le &#39;....&#39;</li><li>Meglátjuk a hibát</li></ol><p><strong>Elvárt viselkedés</strong>Írd le, hogy mit vártál, minek kéne történnie.</p><p><strong>Képernyőképek</strong>Ha lehetséges kérlek csatolj képeket a problémádról</p><p><strong>Telefon:</strong></p><ul><li>Eszköz: [pl. samsung galaxy j5 2017]</li><li>OS: [pl. android 9.0]</li><li>App Verzió: [pl. v0.0.2]</li></ul><p><strong>Egyéb infó</strong>Kiegészítő információ a hibádról</p>",
+  subject: 'Bug report',
+  recipients: ['novynaplo@gmail.com'],
+  isHTML: true,
+);*/
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -271,7 +277,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               onChanged: (String value) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
-                Crashlytics.instance.setString("markCardTheme", value);    
+                Crashlytics.instance.setString("markCardTheme", value);
                 prefs.setString("markCardTheme", value);
                 globals.markCardTheme = value;
                 setState(() {
@@ -552,7 +558,30 @@ class _SettingsBodyState extends State<SettingsBody> {
         } else if (index == 8 + indexModifier) {
           return ListTile(
             title: Center(
-              child: Padding(
+                child: Column(children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  onPressed: () async {
+                    await _ackAlert(context,"Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                  },
+                  padding: EdgeInsets.all(1),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(MdiIcons.emailSend),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Bug report (Email)',
+                            style: TextStyle(color: Colors.black))
+                      ]),
+                ),
+              ),
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(
@@ -573,12 +602,15 @@ class _SettingsBodyState extends State<SettingsBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.bug_report),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Text('Bug report (Github)',
                             style: TextStyle(color: Colors.black))
                       ]),
                 ),
               ),
-            ),
+            ])),
           );
         } else if (index == 9 + indexModifier) {
           return ListTile(
@@ -602,6 +634,9 @@ class _SettingsBodyState extends State<SettingsBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(MdiIcons.logout),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Text('Kijelentkezés',
                             style: TextStyle(color: Colors.black))
                       ]),
@@ -684,3 +719,23 @@ class _AdsDialogState extends State<AdsDialog> {
     );
   }
 }
+
+Future<void> _ackAlert(BuildContext context, String content) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Státusz'),
+          content: Text(content),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }

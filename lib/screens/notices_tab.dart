@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -24,11 +25,7 @@ class _NoticesTabState extends State<NoticesTab> {
         title: Text(NoticesTab.title),
       ),
       drawer: getDrawer(NoticesTab.tag, context),
-      body: ListView.builder(
-        itemCount: globals.noticesCount + globals.adModifier,
-        padding: EdgeInsets.symmetric(vertical: 12),
-        itemBuilder: _noticesBuilder,
-      ),
+      body: _body(context),
     );
   }
 
@@ -37,6 +34,32 @@ class _NoticesTabState extends State<NoticesTab> {
     super.initState();
     onInit();
   }
+}
+
+Widget _body(BuildContext context) {
+  if (globals.noticesCount == 0) {
+    return noNotice();
+  } else {
+    return ListView.builder(
+      itemCount: globals.noticesCount + globals.adModifier,
+      padding: EdgeInsets.symmetric(vertical: 12),
+      itemBuilder: _noticesBuilder,
+    );
+  }
+}
+
+Widget noNotice() {
+  return Center(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    Icon(
+      MdiIcons.emoticonHappyOutline,
+      size: 50,
+    ),
+    Text(
+      "Nincs még feljegyzésed!",
+      textAlign: TextAlign.center,
+    )
+  ]));
 }
 
 Widget _noticesBuilder(BuildContext context, int index) {

@@ -10,7 +10,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/chartHelper.dart';
 
-var allParsedSubjects;
+var allParsedSubjects = [];
 var colors;
 final List<Tab> statTabs = <Tab>[
   Tab(text: 'Általános', icon: Icon(MdiIcons.chartScatterPlotHexbin)),
@@ -71,6 +71,7 @@ class _StatisticsTabState extends State<StatisticsTab>
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
+            if (globals.markCount == 0) return noMarks();
             if (tab.text.toLowerCase() == "általános") {
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
@@ -381,27 +382,41 @@ class _StatisticsTabState extends State<StatisticsTab>
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
   }
-}
 
-Widget _chartsListBuilder(BuildContext context, int index) {
-  if (index >= allParsedSubjects.length) {
-    return SizedBox(height: 100);
+  Widget noMarks() {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(
+        MdiIcons.emoticonSadOutline,
+        size: 50,
+      ),
+      Text(
+        "Nincs még jegyed!\nNem tudunk statisztikát mutatni",
+        textAlign: TextAlign.center,
+      )
+    ]));
   }
-  Color currColor = colors[index];
-  return SafeArea(
-      top: false,
-      bottom: false,
-      child: AnimatedChartsCard(
-        title: capitalize(allParsedSubjects[index][0].subject),
-        color: currColor,
-        heroAnimation: AlwaysStoppedAnimation(0),
-        onPressed: ChartsDetailTab(
-          id: index,
-          subject: capitalize(allParsedSubjects[index][0].subject),
+
+  Widget _chartsListBuilder(BuildContext context, int index) {
+    if (index >= allParsedSubjects.length) {
+      return SizedBox(height: 100);
+    }
+    Color currColor = colors[index];
+    return SafeArea(
+        top: false,
+        bottom: false,
+        child: AnimatedChartsCard(
+          title: capitalize(allParsedSubjects[index][0].subject),
           color: currColor,
-          seriesList:
-              createSubjectChart(allParsedSubjects[index], index.toString()),
-          animate: globals.chartAnimations,
-        ),
-      ));
+          heroAnimation: AlwaysStoppedAnimation(0),
+          onPressed: ChartsDetailTab(
+            id: index,
+            subject: capitalize(allParsedSubjects[index][0].subject),
+            color: currColor,
+            seriesList:
+                createSubjectChart(allParsedSubjects[index], index.toString()),
+            animate: globals.chartAnimations,
+          ),
+        ));
+  }
 }

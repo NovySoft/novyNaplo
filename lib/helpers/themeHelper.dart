@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:animations/animations.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ThemeHelper {
   List<Color> myGradientList = [
@@ -89,6 +90,11 @@ class ThemeHelper {
   ];
 
   ThemeData getTheme(brightness) {
+    if (brightness == Brightness.dark) {
+      Crashlytics.instance.setString("Theme", "Dark");
+    } else {
+      Crashlytics.instance.setString("Theme", "Bright");
+    }
     if (brightness == Brightness.dark) {
       return new ThemeData(
           pageTransitionsTheme: PageTransitionsTheme(
