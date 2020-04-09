@@ -321,7 +321,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               child: Center(
                 child: Text(
                     "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. \nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
-                    style: TextStyle(fontSize: 24)),
+                    style: TextStyle(fontSize: 24),
+                    textAlign: TextAlign.center,),
               )),
           SizedBox(
             height: 25,

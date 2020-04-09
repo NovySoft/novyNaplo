@@ -55,7 +55,7 @@ class _LoadingPageState extends State<LoadingPage> {
     calculatorPage.dropdownValues = [];
     calculatorPage.dropdownValue = "";
     calculatorPage.avarageList = [];
-    if (input != null && input != [[]] && input.length != 1) {
+    if (input != null && input != [[]]) {
       double sum, index;
       for (var n in input) {
         calculatorPage.dropdownValues.add(capitalize(n[0].subject));
