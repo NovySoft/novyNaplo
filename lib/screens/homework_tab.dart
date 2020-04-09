@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -33,10 +34,14 @@ class _HomeworkTabState extends State<HomeworkTab> {
   }
 
   Widget _body() {
-    return ListView.builder(
-      itemCount: globals.globalHomework.length + globals.adModifier,
-      itemBuilder: _listBuilder,
-    );
+    if (globals.globalHomework.length == 0) {
+      return noHomework();
+    } else {
+      return ListView.builder(
+        itemCount: globals.globalHomework.length + globals.adModifier,
+        itemBuilder: _listBuilder,
+      );
+    }
   }
 
   Widget _listBuilder(BuildContext context, int index) {
@@ -67,5 +72,16 @@ class _HomeworkTabState extends State<HomeworkTab> {
             ),
           ));
     }
+  }
+
+  Widget noHomework() {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(
+        MdiIcons.emoticonHappyOutline,
+        size: 50,
+      ),
+      Text("Nincs házifeladat!\n(Jelenleg csak a mostani hétre feladott leckét tudom mutatni)",textAlign: TextAlign.center,)
+    ]));
   }
 }

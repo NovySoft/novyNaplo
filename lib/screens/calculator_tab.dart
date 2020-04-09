@@ -270,7 +270,6 @@ String getEasiest(num jegyek, jsz, th, elak) {
       }
     }
   }
-  return "Dead code";
 }
 
 /// How many 5's are needed to get to a specific avarage

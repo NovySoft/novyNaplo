@@ -74,16 +74,14 @@ List<dynamic> parseAvarages(var input) {
 
 int countAvarages(var input) {
   var count = 0;
-  for (var n in input) {
-    count++;
-  }
+  count = input.length;
   return count;
 }
 
 int countNotices(var input) {
   var count = 0;
   var notices = input["Notes"];
-  notices.forEach((n) => count++);
+  count = notices.length;
   return count;
 }
 
@@ -140,7 +138,6 @@ List<dynamic> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];
   List<List<Evals>> jegyMatrix = [[]];
-  var output = [];
   for (var n in parsed) {
     jegyArray.add(setEvals(n));
   }

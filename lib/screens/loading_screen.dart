@@ -9,7 +9,6 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -303,14 +302,16 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
       int index = 0;
-      int beforeDay = tempLessonList[0].startDate.day;
-      //Just a matrix
-      for (var n in tempLessonList) {
-        if (n.startDate.day != beforeDay) {
-          index++;
-          beforeDay = n.startDate.day;
+      if (tempLessonList.length != 0) {
+        int beforeDay = tempLessonList[0].startDate.day;
+        //Just a matrix
+        for (var n in tempLessonList) {
+          if (n.startDate.day != beforeDay) {
+            index++;
+            beforeDay = n.startDate.day;
+          }
+          output[index].add(n);
         }
-        output[index].add(n);
       }
       return output;
     } catch (e, s) {

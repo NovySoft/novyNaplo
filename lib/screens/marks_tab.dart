@@ -7,7 +7,6 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/loading_screen.dart';
-import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
