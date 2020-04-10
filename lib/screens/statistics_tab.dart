@@ -23,7 +23,7 @@ AV worstSubjectAv = new AV();
 AV bestSubjectAv = new AV();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
-
+double sizedBoxHeight = 75;
 //Classes used by charts
 class AV {
   double value;
@@ -72,6 +72,11 @@ class _StatisticsTabState extends State<StatisticsTab>
           controller: _tabController,
           children: statTabs.map((Tab tab) {
             if (globals.markCount == 0) return noMarks();
+            if (allParsedSubjects.length > 15){
+              sizedBoxHeight = ((allParsedSubjects.length - 15) * 23).toDouble(); 
+            }else{
+              sizedBoxHeight = 0;
+            }
             if (tab.text.toLowerCase() == "általános") {
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
@@ -145,7 +150,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     case 0:
                       if (globals.statChart == "Mindent") {
                         return SizedBox(
-                          height: 500,
+                          height: 500 + sizedBoxHeight,
                           child: charts.NumericComboChart(
                             createAllSubjectChartData(allParsedSubjects),
                             animate: globals.chartAnimations,

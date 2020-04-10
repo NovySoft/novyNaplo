@@ -25,7 +25,8 @@ final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
 
 void main() async {
-  Crashlytics.instance.enableInDevMode = true;
+  //Change to true if needed
+  Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();

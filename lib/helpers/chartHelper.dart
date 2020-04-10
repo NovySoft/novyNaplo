@@ -83,7 +83,7 @@ List<LinearMarkChartData> makeChartPoints(var list) {
   List<LinearMarkChartData> returnList = [];
   int locIndex = 0;
   for (var n in list) {
-    if (locIndex != 0) {
+    if (locIndex != 0 && !n.isNaN) {
       returnList.add(new LinearMarkChartData(locIndex - 1, n, id: list[0]));
     }
     locIndex++;
@@ -91,7 +91,8 @@ List<LinearMarkChartData> makeChartPoints(var list) {
   return returnList;
 }
 
-List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(input) {
+List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(var input) {
+  input.removeWhere((item) => item.length == 0 || item == []);
   List<charts.Series<LinearMarkChartData, int>> returnList = [];
   List<LinearMarkChartData> tempList = [];
   var chartTempList = [
@@ -196,15 +197,17 @@ void getWorstAndBest(input) {
       b.value.toStringAsFixed(3).compareTo(a.value.toStringAsFixed(3)));
   stats.worstSubjectAv = tempList.last;
   index = 0;
-  double curValue = tempList[0].value;
   List<stats.AV> tempListTwo = [];
-  if (tempList.length > 1)
+  tempList.removeWhere((item) => item.value == double.nan || item.value.isNaN);
+  double curValue = tempList[0].value;
+  if (tempList.length > 1) {
     while (curValue == tempList[index.toInt()].value) {
       tempListTwo.add(tempList[index.toInt()]);
       index++;
     }
-  else
+  } else {
     tempListTwo.add(tempList[0]);
+  }
   tempListTwo.sort((a, b) => b.count.compareTo(a.count));
   stats.bestSubjectAv = tempListTwo[0];
 }
