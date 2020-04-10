@@ -23,12 +23,6 @@ bool adsSwitch = globals.adsEnabled;
 bool animationSwitch = globals.chartAnimations;
 bool notificationSwitch = false;
 int indexModifier = 0;
-/*final Email email = Email(
-  body: "<h1 id='-rd-le-a-hib-t'>Írd le a hibát</h1><p>Egy egyszerű, de részletes leírása a hibának</p><p><strong>Hogyan reprodukáljuk</strong>A hiba reprodukálásához való lépések:</p><ol><li>Menjünk &#39;...&#39;</li><li>Nyomjunk &#39;....&#39;</li><li>Tekerjünk le &#39;....&#39;</li><li>Meglátjuk a hibát</li></ol><p><strong>Elvárt viselkedés</strong>Írd le, hogy mit vártál, minek kéne történnie.</p><p><strong>Képernyőképek</strong>Ha lehetséges kérlek csatolj képeket a problémádról</p><p><strong>Telefon:</strong></p><ul><li>Eszköz: [pl. samsung galaxy j5 2017]</li><li>OS: [pl. android 9.0]</li><li>App Verzió: [pl. v0.0.2]</li></ul><p><strong>Egyéb infó</strong>Kiegészítő információ a hibádról</p>",
-  subject: 'Bug report',
-  recipients: ['novynaplo@gmail.com'],
-  isHTML: true,
-);*/
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -106,425 +100,64 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 11 + indexModifier,
+      itemCount: 6,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
-            title: Text("Téma:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Sötét",
-                  child: Text(
-                    "Sötét",
-                  ),
+            title: Center(
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                DropdownMenuItem(
-                  value: "Világos",
-                  child: Text(
-                    "Világos",
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UIsettings()),
+                  );
+                },
+                padding: EdgeInsets.all(1),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Icon(
+                    MdiIcons.televisionGuide,
+                    color: Colors.black,
                   ),
-                ),
-              ],
-              onChanged: (String value) {
-                if (value == "Világos") {
-                  ThemeHelper().changeBrightness(context, Brightness.light);
-                  FirebaseAnalytics()
-                      .setUserProperty(name: "Theme", value: "Bright");
-                  Crashlytics.instance.setString("Theme", "Bright");
-                } else {
-                  ThemeHelper().changeBrightness(context, Brightness.dark);
-                  FirebaseAnalytics()
-                      .setUserProperty(name: "Theme", value: "Dark");
-                  Crashlytics.instance.setString("Theme", "Dark");
-                }
-                setState(() {
-                  dropDown = value;
-                });
-              },
-              value: dropDown,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('UI beállítások', style: TextStyle(color: Colors.black))
+                ]),
+              ),
             ),
           );
         } else if (index == 1) {
           return ListTile(
-            title: Text("Jegy alcím:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Téma",
-                  child: Text(
-                    "Téma",
-                  ),
+            title: Center(
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                DropdownMenuItem(
-                  value: "Tanár",
-                  child: Text(
-                    "Tanár",
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MarksTabSettings()),
+                  );
+                },
+                padding: EdgeInsets.all(1),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Icon(Icons.create, color: Colors.black),
+                  SizedBox(
+                    width: 10,
                   ),
-                ),
-                DropdownMenuItem(
-                  value: "Súly",
-                  child: Text(
-                    "Súly",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Egyszerűsített Dátum",
-                  child: Text(
-                    "Egyszerűsített Dátum",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Pontos Dátum",
-                  child: Text(
-                    "Pontos Dátum",
-                  ),
-                ),
-              ],
-              onChanged: (String value) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                Crashlytics.instance.setString("markCardSubtitle", value);
-                prefs.setString("markCardSubtitle", value);
-                globals.markCardSubtitle = value;
-                setState(() {
-                  markDropdown = value;
-                });
-              },
-              value: markDropdown,
+                  Text('Jegyek oldal beállításai',
+                      style: TextStyle(color: Colors.black))
+                ]),
+              ),
             ),
           );
-        } else if (index == 2) {
-          return ListTile(
-            title: Text("Órarend alcím:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Tanterem",
-                  child: Text(
-                    "Tanterem",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Óra témája",
-                  child: Text(
-                    "Óra témája",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Tanár",
-                  child: Text(
-                    "Tanár",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Kezdés-Bejezés",
-                  child: Text(
-                    "Kezdés-Bejezés",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Időtartam",
-                  child: Text(
-                    "Időtartam",
-                  ),
-                ),
-              ],
-              onChanged: (String value) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                Crashlytics.instance.setString("lessonCardSubtitle", value);
-                prefs.setString("lessonCardSubtitle", value);
-                globals.lessonCardSubtitle = value;
-                setState(() {
-                  lessonDropdown = value;
-                });
-              },
-              value: lessonDropdown,
-            ),
-          );
-        } else if (index == 3) {
-          return ListTile(
-            title: Text("Jegykártya színtéma:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Véletlenszerű",
-                  child: Text(
-                    "Véletlenszerű",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Értékelés nagysága",
-                  child: Text(
-                    "Értékelés nagysága",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Egyszínű",
-                  child: Text(
-                    "Egyszínű",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Színátmenetes",
-                  child: Text(
-                    "Színátmenetes",
-                  ),
-                ),
-              ],
-              onChanged: (String value) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                Crashlytics.instance.setString("markCardTheme", value);
-                prefs.setString("markCardTheme", value);
-                globals.markCardTheme = value;
-                setState(() {
-                  markThemeDropdown = value;
-                });
-                if (value == "Egyszínű") {
-                  setState(() {
-                    indexModifier = 1;
-                  });
-                } else {
-                  setState(() {
-                    indexModifier = 0;
-                  });
-                }
-              },
-              value: markThemeDropdown,
-            ),
-          );
-        } else if (indexModifier == 1 && index == 4) {
-          return ListTile(
-            title: Text("Jegykártyák színe:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Red",
-                  child: Text(
-                    "Piros",
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Green",
-                  child: Text(
-                    "Zöld",
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "lightGreenAccent400",
-                  child: Text(
-                    "Világos zöld",
-                    style: TextStyle(color: Colors.lightGreenAccent[400]),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Lime",
-                  child: Text(
-                    "Lime",
-                    style: TextStyle(color: Colors.lime),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Blue",
-                  child: Text(
-                    "Kék",
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "LightBlue",
-                  child: Text(
-                    "Világos kék",
-                    style: TextStyle(color: Colors.lightBlue),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Teal",
-                  child: Text(
-                    "Zöldes kék",
-                    style: TextStyle(color: Colors.teal),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Indigo",
-                  child: Text(
-                    "Indigó kék",
-                    style: TextStyle(color: Colors.indigo),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Yellow",
-                  child: Text(
-                    "Sárga",
-                    style: TextStyle(color: Colors.yellow),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Orange",
-                  child: Text(
-                    "Narancs",
-                    style: TextStyle(color: Colors.orange),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "DeepOrange",
-                  child: Text(
-                    "Sötét narancs",
-                    style: TextStyle(color: Colors.deepOrange),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Pink",
-                  child: Text(
-                    "Rózsaszín",
-                    style: TextStyle(color: Colors.pink),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "LightPink",
-                  child: Text(
-                    "Világos Rózsaszín",
-                    style: TextStyle(color: Colors.pink[300]),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Purple",
-                  child: Text(
-                    "Lila",
-                    style: TextStyle(color: Colors.purple),
-                  ),
-                ),
-              ],
-              onChanged: (String value) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                Crashlytics.instance.setString("markCardConstColor", value);
-                prefs.setString("markCardConstColor", value);
-                globals.markCardConstColor = value;
-                setState(() {
-                  constColorDropdown = value;
-                });
-              },
-              value: constColorDropdown,
-            ),
-          );
-        } else if (index == 4 + indexModifier) {
-          return ListTile(
-            title: Text("Statisztika mutató:"),
-            trailing: DropdownButton<String>(
-              items: [
-                DropdownMenuItem(
-                  value: "Mindent",
-                  child: Text(
-                    "Mindent",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "Összesített",
-                  child: Text(
-                    "Összesített",
-                  ),
-                ),
-              ],
-              onChanged: (String value) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                setState(() {
-                  Crashlytics.instance.setString("statChart", value);
-                  prefs.setString("statChart", value);
-                  globals.statChart = value;
-                  statDropDown = value;
-                });
-              },
-              value: statDropDown,
-            ),
-          );
-        } else if (index == 5 + indexModifier) {
-          return ListTile(
-            title: Text("Reklámok"),
-            trailing: Switch(
-              onChanged: (bool isOn) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                setState(() {
-                  adsSwitch = isOn;
-                });
-                Crashlytics.instance.setBool("Ads", isOn);
-                if (isOn) {
-                  FirebaseAnalytics().setUserProperty(name: "Ads", value: "ON");
-                  prefs.setBool("ads", true);
-                  globals.adsEnabled = true;
-                  globals.adModifier = 1;
-                  showDialog<void>(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return AdsDialog();
-                      });
-                } else {
-                  FirebaseAnalytics()
-                      .setUserProperty(name: "Ads", value: "OFF");
-                  prefs.setBool("ads", false);
-                  globals.adsEnabled = false;
-                  globals.adModifier = 0;
-                  adBanner.dispose();
-                  showDialog<void>(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (_) {
-                        return new AlertDialog(
-                          title: new Text("Reklámok"),
-                          content: Text(
-                            "A reklámok kikapcsolásához indítsd újra az applikációt",
-                            textAlign: TextAlign.left,
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('OK'),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                }
-              },
-              value: adsSwitch,
-            ),
-          );
-        } else if (index == 6 + indexModifier) {
-          return ListTile(
-            title: Text("Chart animációk:"),
-            trailing: Switch(
-              onChanged: (bool switchOn) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                setState(() {
-                  animationSwitch = switchOn;
-                  globals.chartAnimations = switchOn;
-                });
-                Crashlytics.instance.setBool("ChartAnimations", switchOn);
-                if (switchOn) {
-                  FirebaseAnalytics()
-                      .setUserProperty(name: "ChartAnimations", value: "YES");
-                  prefs.setBool("chartAnimations", true);
-                } else {
-                  FirebaseAnalytics()
-                      .setUserProperty(name: "ChartAnimations", value: "NO");
-                  prefs.setBool("chartAnimations", false);
-                }
-              },
-              value: animationSwitch,
-            ),
-          );
-        } else if (index == 7 + indexModifier) {
-          return ListTile(
+          /*return ListTile(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -534,8 +167,6 @@ class _SettingsBodyState extends State<SettingsBody> {
               ],
             ),
             trailing: Switch(
-              onChanged: null,
-              /*
               onChanged: (bool switchOn) async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
@@ -551,11 +182,65 @@ class _SettingsBodyState extends State<SettingsBody> {
                   FirebaseAnalytics().setUserProperty(name: "Notifications", value: "NO");
                   prefs.setBool("Notifications", false);
                 }
-              },*/
+              },
               value: notificationSwitch,
             ),
+          );*/
+        } else if (index == 2) {
+          return ListTile(
+            title: Center(
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TimetableSettings()),
+                  );
+                },
+                padding: EdgeInsets.all(1),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Icon(Icons.today, color: Colors.black),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Órarend beállításai',
+                      style: TextStyle(color: Colors.black))
+                ]),
+              ),
+            ),
           );
-        } else if (index == 8 + indexModifier) {
+        } else if (index == 3) {
+          return ListTile(
+            title: Center(
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StatisticSettings()),
+                  );
+                },
+                padding: EdgeInsets.all(1),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Icon(MdiIcons.chartScatterPlotHexbin, color: Colors.black),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Statisztika oldal beállításai',
+                      style: TextStyle(color: Colors.black))
+                ]),
+              ),
+            ),
+          );
+        } else if (index == 4) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -566,13 +251,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   onPressed: () async {
-                    await _ackAlert(context,"Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                    await _ackAlert(context,
+                        "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
                   },
                   padding: EdgeInsets.all(1),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(MdiIcons.emailSend),
+                        Icon(MdiIcons.emailSend, color: Colors.black),
                         SizedBox(
                           width: 10,
                         ),
@@ -601,7 +287,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.bug_report),
+                        Icon(Icons.bug_report, color: Colors.black),
                         SizedBox(
                           width: 10,
                         ),
@@ -612,7 +298,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 9 + indexModifier) {
+        } else if (index == 5) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -633,7 +319,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(MdiIcons.logout),
+                        Icon(MdiIcons.logout, color: Colors.black),
                         SizedBox(
                           width: 10,
                         ),
@@ -648,6 +334,559 @@ class _SettingsBodyState extends State<SettingsBody> {
           return SizedBox(height: 75);
         }
       },
+    );
+  }
+}
+
+class TimetableSettings extends StatefulWidget {
+  @override
+  _TimetableSettingsState createState() => _TimetableSettingsState();
+}
+
+class _TimetableSettingsState extends State<TimetableSettings> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Órarend beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Text("Órarend alcím:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Tanterem",
+                        child: Text(
+                          "Tanterem",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Óra témája",
+                        child: Text(
+                          "Óra témája",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Tanár",
+                        child: Text(
+                          "Tanár",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Kezdés-Bejezés",
+                        child: Text(
+                          "Kezdés-Bejezés",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Időtartam",
+                        child: Text(
+                          "Időtartam",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      Crashlytics.instance
+                          .setString("lessonCardSubtitle", value);
+                      prefs.setString("lessonCardSubtitle", value);
+                      globals.lessonCardSubtitle = value;
+                      setState(() {
+                        lessonDropdown = value;
+                      });
+                    },
+                    value: lessonDropdown,
+                  ),
+                );
+                break;
+              default:
+            }
+          }),
+    );
+  }
+}
+
+class MarksTabSettings extends StatefulWidget {
+  @override
+  _MarksTabSettingsState createState() => _MarksTabSettingsState();
+}
+
+class _MarksTabSettingsState extends State<MarksTabSettings> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Jegyek oldal beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 2 + indexModifier,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 1:
+                return ListTile(
+                  title: Text("Jegykártya színtéma:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Véletlenszerű",
+                        child: Text(
+                          "Véletlenszerű",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Értékelés nagysága",
+                        child: Text(
+                          "Értékelés nagysága",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Egyszínű",
+                        child: Text(
+                          "Egyszínű",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Színátmenetes",
+                        child: Text(
+                          "Színátmenetes",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      Crashlytics.instance.setString("markCardTheme", value);
+                      prefs.setString("markCardTheme", value);
+                      globals.markCardTheme = value;
+                      setState(() {
+                        markThemeDropdown = value;
+                      });
+                      if (value == "Egyszínű") {
+                        setState(() {
+                          indexModifier = 1;
+                        });
+                      } else {
+                        setState(() {
+                          indexModifier = 0;
+                        });
+                      }
+                    },
+                    value: markThemeDropdown,
+                  ),
+                );
+                break;
+              case 0:
+                return ListTile(
+                  title: Text("Jegy alcím:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Téma",
+                        child: Text(
+                          "Téma",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Tanár",
+                        child: Text(
+                          "Tanár",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Súly",
+                        child: Text(
+                          "Súly",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Egyszerűsített Dátum",
+                        child: Text(
+                          "Egyszerűsített Dátum",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Pontos Dátum",
+                        child: Text(
+                          "Pontos Dátum",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      Crashlytics.instance.setString("markCardSubtitle", value);
+                      prefs.setString("markCardSubtitle", value);
+                      globals.markCardSubtitle = value;
+                      setState(() {
+                        markDropdown = value;
+                      });
+                    },
+                    value: markDropdown,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text("Jegykártyák színe:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Red",
+                        child: Text(
+                          "Piros",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Green",
+                        child: Text(
+                          "Zöld",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "lightGreenAccent400",
+                        child: Text(
+                          "Világos zöld",
+                          style: TextStyle(color: Colors.lightGreenAccent[400]),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Lime",
+                        child: Text(
+                          "Lime",
+                          style: TextStyle(color: Colors.lime),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Blue",
+                        child: Text(
+                          "Kék",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "LightBlue",
+                        child: Text(
+                          "Világos kék",
+                          style: TextStyle(color: Colors.lightBlue),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Teal",
+                        child: Text(
+                          "Zöldes kék",
+                          style: TextStyle(color: Colors.teal),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Indigo",
+                        child: Text(
+                          "Indigó kék",
+                          style: TextStyle(color: Colors.indigo),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Yellow",
+                        child: Text(
+                          "Sárga",
+                          style: TextStyle(color: Colors.yellow),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Orange",
+                        child: Text(
+                          "Narancs",
+                          style: TextStyle(color: Colors.orange),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "DeepOrange",
+                        child: Text(
+                          "Sötét narancs",
+                          style: TextStyle(color: Colors.deepOrange),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Pink",
+                        child: Text(
+                          "Rózsaszín",
+                          style: TextStyle(color: Colors.pink),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "LightPink",
+                        child: Text(
+                          "Világos Rózsaszín",
+                          style: TextStyle(color: Colors.pink[300]),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Purple",
+                        child: Text(
+                          "Lila",
+                          style: TextStyle(color: Colors.purple),
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      Crashlytics.instance
+                          .setString("markCardConstColor", value);
+                      prefs.setString("markCardConstColor", value);
+                      globals.markCardConstColor = value;
+                      setState(() {
+                        constColorDropdown = value;
+                      });
+                    },
+                    value: constColorDropdown,
+                  ),
+                );
+                break;
+              default:
+            }
+          }),
+    );
+  }
+}
+
+class UIsettings extends StatefulWidget {
+  @override
+  _UIsettingsState createState() => _UIsettingsState();
+}
+
+class _UIsettingsState extends State<UIsettings> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("UI beállításaok"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Text("Téma:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Sötét",
+                        child: Text(
+                          "Sötét",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Világos",
+                        child: Text(
+                          "Világos",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) {
+                      if (value == "Világos") {
+                        ThemeHelper()
+                            .changeBrightness(context, Brightness.light);
+                        FirebaseAnalytics()
+                            .setUserProperty(name: "Theme", value: "Bright");
+                        Crashlytics.instance.setString("Theme", "Bright");
+                      } else {
+                        ThemeHelper()
+                            .changeBrightness(context, Brightness.dark);
+                        FirebaseAnalytics()
+                            .setUserProperty(name: "Theme", value: "Dark");
+                        Crashlytics.instance.setString("Theme", "Dark");
+                      }
+                      setState(() {
+                        dropDown = value;
+                      });
+                    },
+                    value: dropDown,
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Text("Reklámok"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        adsSwitch = isOn;
+                      });
+                      Crashlytics.instance.setBool("Ads", isOn);
+                      if (isOn) {
+                        FirebaseAnalytics()
+                            .setUserProperty(name: "Ads", value: "ON");
+                        prefs.setBool("ads", true);
+                        globals.adsEnabled = true;
+                        globals.adModifier = 1;
+                        showDialog<void>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) {
+                              return AdsDialog();
+                            });
+                      } else {
+                        FirebaseAnalytics()
+                            .setUserProperty(name: "Ads", value: "OFF");
+                        prefs.setBool("ads", false);
+                        globals.adsEnabled = false;
+                        globals.adModifier = 0;
+                        adBanner.dispose();
+                        showDialog<void>(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (_) {
+                              return new AlertDialog(
+                                title: new Text("Reklámok"),
+                                content: Text(
+                                  "A reklámok kikapcsolásához indítsd újra az applikációt",
+                                  textAlign: TextAlign.left,
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('OK'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      }
+                    },
+                    value: adsSwitch,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text("Chart animációk:"),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        animationSwitch = switchOn;
+                        globals.chartAnimations = switchOn;
+                      });
+                      Crashlytics.instance.setBool("ChartAnimations", switchOn);
+                      if (switchOn) {
+                        FirebaseAnalytics().setUserProperty(
+                            name: "ChartAnimations", value: "YES");
+                        prefs.setBool("chartAnimations", true);
+                      } else {
+                        FirebaseAnalytics().setUserProperty(
+                            name: "ChartAnimations", value: "NO");
+                        prefs.setBool("chartAnimations", false);
+                      }
+                    },
+                    value: animationSwitch,
+                  ),
+                );
+                break;
+              default:
+            }
+          }),
+    );
+  }
+}
+
+class StatisticSettings extends StatefulWidget {
+  @override
+  _StatisticSettingsState createState() => _StatisticSettingsState();
+}
+
+class _StatisticSettingsState extends State<StatisticSettings> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Statisztika oldal beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Text("Statisztika mutató:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Mindent",
+                        child: Text(
+                          "Mindent",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Összesített",
+                        child: Text(
+                          "Összesített",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        Crashlytics.instance.setString("statChart", value);
+                        prefs.setString("statChart", value);
+                        globals.statChart = value;
+                        statDropDown = value;
+                      });
+                    },
+                    value: statDropDown,
+                  ),
+                );
+                break;
+              default:
+            }
+          }),
     );
   }
 }
@@ -721,21 +960,21 @@ class _AdsDialogState extends State<AdsDialog> {
 }
 
 Future<void> _ackAlert(BuildContext context, String content) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Státusz'),
-          content: Text(content),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Státusz'),
+        content: Text(content),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
