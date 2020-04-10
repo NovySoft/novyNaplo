@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "362994109207-t8k5firkkfi37uvlj87lf3k4tutuc8v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "novy.vip.novynaplo",
+            "certificate_hash": "656746372d8c5962ce32a9b13544f94c7e4401f5"
+          }
+        },
+        {
           "client_id": "362994109207-e088g67ke3u740sdlm7s0jgrmblh5m01.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -33,7 +41,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-6768960612393878~9133319992"
     }
   ],
   "configuration_version": "1"
