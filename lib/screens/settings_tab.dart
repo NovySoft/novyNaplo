@@ -106,55 +106,44 @@ class _SettingsBodyState extends State<SettingsBody> {
         if (index == 0) {
           return ListTile(
             title: Center(
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UIsettings()),
-                  );
-                },
-                padding: EdgeInsets.all(1),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(
+              child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UIsettings()),
+                    );
+                  },
+                  icon: Icon(
                     MdiIcons.televisionGuide,
                     color: Colors.black,
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('UI beállítások', style: TextStyle(color: Colors.black))
-                ]),
-              ),
+                  label: Text('UI beállítások',
+                      style: TextStyle(color: Colors.black))),
             ),
           );
         } else if (index == 1) {
           return ListTile(
             title: Center(
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MarksTabSettings()),
-                  );
-                },
-                padding: EdgeInsets.all(1),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.create, color: Colors.black),
-                  SizedBox(
-                    width: 10,
+              child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  Text('Jegyek oldal beállításai',
-                      style: TextStyle(color: Colors.black))
-                ]),
-              ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MarksTabSettings()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.create,
+                    color: Colors.black,
+                  ),
+                  label: Text('Jegyek oldal beállításai',
+                      style: TextStyle(color: Colors.black))),
             ),
           );
           /*return ListTile(
@@ -189,55 +178,40 @@ class _SettingsBodyState extends State<SettingsBody> {
         } else if (index == 2) {
           return ListTile(
             title: Center(
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TimetableSettings()),
-                  );
-                },
-                padding: EdgeInsets.all(1),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.today, color: Colors.black),
-                  SizedBox(
-                    width: 10,
+              child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  Text('Órarend beállításai',
-                      style: TextStyle(color: Colors.black))
-                ]),
-              ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TimetableSettings()),
+                    );
+                  },
+                  icon: Icon(Icons.today, color: Colors.black),
+                  label: Text('Órarend beállításai',
+                      style: TextStyle(color: Colors.black))),
             ),
           );
         } else if (index == 3) {
           return ListTile(
             title: Center(
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StatisticSettings()),
-                  );
-                },
-                padding: EdgeInsets.all(1),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(MdiIcons.chartScatterPlotHexbin, color: Colors.black),
-                  SizedBox(
-                    width: 10,
+              child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  Text('Statisztika oldal beállításai',
-                      style: TextStyle(color: Colors.black))
-                ]),
-              ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StatisticSettings()),
+                    );
+                  },
+                  icon: Icon(MdiIcons.chartScatterPlotHexbin,
+                      color: Colors.black),
+                  label: Text('Statisztika oldal beállításai',
+                      style: TextStyle(color: Colors.black))),
             ),
           );
         } else if (index == 4) {
@@ -246,55 +220,37 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: Column(children: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    await _ackAlert(context,
-                        "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
-                  },
-                  padding: EdgeInsets.all(1),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(MdiIcons.emailSend, color: Colors.black),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Bug report (Email)',
-                            style: TextStyle(color: Colors.black))
-                      ]),
-                ),
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      await _ackAlert(context,
+                          "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                    },
+                    icon: Icon(MdiIcons.emailSend, color: Colors.black),
+                    label: Text('Bug report (Email)',
+                        style: TextStyle(color: Colors.black))),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    String link =
-                        "https://github.com/NovySoft/novyNaplo/issues/new/choose";
-                    if (await canLaunch(link)) {
-                      await launch(link);
-                    } else {
-                      FirebaseAnalytics().logEvent(name: "LinkFail");
-                      throw 'Could not launch $link';
-                    }
-                  },
-                  padding: EdgeInsets.all(1),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.bug_report, color: Colors.black),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Bug report (Github)',
-                            style: TextStyle(color: Colors.black))
-                      ]),
-                ),
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      String link =
+                          "https://github.com/NovySoft/novyNaplo/issues/new/choose";
+                      if (await canLaunch(link)) {
+                        await launch(link);
+                      } else {
+                        FirebaseAnalytics().logEvent(name: "LinkFail");
+                        throw 'Could not launch $link';
+                      }
+                    },
+                    icon: Icon(Icons.bug_report, color: Colors.black),
+                    label: Text('Bug report (Github)',
+                        style: TextStyle(color: Colors.black))),
               ),
             ])),
           );
@@ -303,30 +259,21 @@ class _SettingsBodyState extends State<SettingsBody> {
             title: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    showDialog<void>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (_) {
-                          return LogOutDialog();
-                        });
-                  },
-                  padding: EdgeInsets.all(1),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(MdiIcons.logout, color: Colors.black),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Kijelentkezés',
-                            style: TextStyle(color: Colors.black))
-                      ]),
-                ),
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      showDialog<void>(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (_) {
+                            return LogOutDialog();
+                          });
+                    },
+                    icon: Icon(MdiIcons.logout, color: Colors.black),
+                    label: Text('Kijelentkezés',
+                        style: TextStyle(color: Colors.black))),
               ),
             ),
           );

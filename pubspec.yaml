@@ -47,6 +47,7 @@ dependencies:
   animations: any
   flutter_html: any
   customgauge: any
+  flutter_slidable: any
 
 flutter_icons:
   android: true
