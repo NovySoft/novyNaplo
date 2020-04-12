@@ -2,11 +2,12 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
@@ -25,13 +26,17 @@ final List<Tab> calcTabs = <Tab>[
 ];
 List<VirtualMarks> virtualMarks = [];
 int radioGroup = 5;
-TextEditingController weightController = TextEditingController();
-TextEditingController countController = TextEditingController();
+TextEditingController weightController = TextEditingController(text: "100");
+TextEditingController countController = TextEditingController(text: "1");
+final FocusNode _weightFocus = FocusNode();
+final FocusNode _countFocus = FocusNode();
+final _formKey = GlobalKey<FormState>();
+final SlidableController slidableController = SlidableController();
 
 class VirtualMarks {
   int count;
   int numberValue;
-  int percentage;
+  int weight;
 }
 
 class CalculatorTab extends StatefulWidget {
@@ -44,6 +49,296 @@ class CalculatorTab extends StatefulWidget {
 
 class CalculatorTabState extends State<CalculatorTab>
     with SingleTickerProviderStateMixin {
+  Future<void> cardModal(
+      {BuildContext context, bool isEditing, int index}) async {
+    if (isEditing) {
+      weightController.text = virtualMarks[index].weight.toString();
+      countController.text = virtualMarks[index].count.toString();
+      radioGroup = virtualMarks[index].numberValue;
+    } else {
+      weightController.text = "100";
+      countController.text = "1";
+      radioGroup = 5;
+    }
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title:
+                Text(isEditing ? 'Jegy szerkesztése' : 'Új jegy hozzáadása:'),
+            content: SizedBox(
+                height: 400,
+                width: 400,
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            value: 5,
+                            groupValue: radioGroup,
+                            onChanged: (index) {
+                              setState(() {
+                                radioGroup = index;
+                              });
+                            },
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text("5-ös")
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            value: 4,
+                            groupValue: radioGroup,
+                            onChanged: (index) {
+                              setState(() {
+                                radioGroup = index;
+                              });
+                            },
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text("4-es")
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            value: 3,
+                            groupValue: radioGroup,
+                            onChanged: (index) {
+                              setState(() {
+                                radioGroup = index;
+                              });
+                            },
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text("3-as")
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            value: 2,
+                            groupValue: radioGroup,
+                            onChanged: (index) {
+                              setState(() {
+                                radioGroup = index;
+                              });
+                            },
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text("2-es")
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            value: 1,
+                            groupValue: radioGroup,
+                            onChanged: (index) {
+                              setState(() {
+                                radioGroup = index;
+                              });
+                            },
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text("1-es")
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 200,
+                            child: TextFormField(
+                              focusNode: _weightFocus,
+                              controller: weightController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Ezt nem hagyhatod üresen';
+                                }
+                                if (int.parse(value) > 1000 ||
+                                    int.parse(value) <= 0) {
+                                  return "Az értéknek 1 és 1000 között kell lenie";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Súlyozás",
+                                icon: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Icon(MdiIcons.brightnessPercent)
+                                  ],
+                                ),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (String input) {
+                                if (_formKey.currentState.validate()) {
+                                  _weightFocus.unfocus();
+                                  FocusScope.of(context)
+                                      .requestFocus(_countFocus);
+                                }
+                              },
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                "%",
+                                style: TextStyle(fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 200,
+                            child: TextFormField(
+                              focusNode: _countFocus,
+                              controller: countController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Ezt nem hagyhatod üresen';
+                                }
+                                if (int.parse(value) > 100 ||
+                                    int.parse(value) <= 0) {
+                                  return "Az értéknek 1 és 100 között kell lenie";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Darab",
+                                icon: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Icon(MdiIcons.counter)
+                                  ],
+                                ),
+                              ),
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (String input) {
+                                if (_formKey.currentState.validate()) {
+                                  _countFocus.unfocus();
+                                }
+                              },
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                "db",
+                                style: TextStyle(fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Mégse'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    if (isEditing) {
+                      VirtualMarks temp = new VirtualMarks();
+                      temp.count = int.parse(countController.text);
+                      temp.weight = int.parse(weightController.text);
+                      temp.numberValue = radioGroup;
+                      editVirtualMark(
+                        input: temp,
+                        index: index
+                      );
+                    } else {
+                      VirtualMarks temp = new VirtualMarks();
+                      temp.count = int.parse(countController.text);
+                      temp.weight = int.parse(weightController.text);
+                      temp.numberValue = radioGroup;
+                      addNewVirtualMark(temp);
+                    }
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
   Widget noMarks() {
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -96,8 +391,7 @@ class CalculatorTabState extends State<CalculatorTab>
                     Column(mainAxisAlignment: MainAxisAlignment.end, children: [
                   FloatingActionButton(
                     onPressed: () {
-                      radioGroup = 5;
-                      onActionButtonPressed(context);
+                      cardModal(context: context, isEditing: false);
                     },
                     backgroundColor:
                         DynamicTheme.of(context).brightness == Brightness.dark
@@ -124,232 +418,18 @@ class CalculatorTabState extends State<CalculatorTab>
     );
   }
 
-  void onActionButtonPressed(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
-            title: Text('Új jegy hozzáadása:'),
-            content: SizedBox(
-              height: 400,
-              width: 400,
-              child: ListView(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Radio(
-                        value: 5,
-                        groupValue: radioGroup,
-                        onChanged: (index) {
-                          setState(() {
-                            radioGroup = index;
-                          });
-                          print(index);
-                        },
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text("5-ös")
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Radio(
-                        value: 4,
-                        groupValue: radioGroup,
-                        onChanged: (index) {
-                          setState(() {
-                            radioGroup = index;
-                          });
-                          print(index);
-                        },
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text("4-es")
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Radio(
-                        value: 3,
-                        groupValue: radioGroup,
-                        onChanged: (index) {
-                          setState(() {
-                            radioGroup = index;
-                          });
-                          print(index);
-                        },
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text("3-as")
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Radio(
-                        value: 2,
-                        groupValue: radioGroup,
-                        onChanged: (index) {
-                          setState(() {
-                            radioGroup = index;
-                          });
-                          print(index);
-                        },
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text("2-es")
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Radio(
-                        value: 1,
-                        groupValue: radioGroup,
-                        onChanged: (index) {
-                          setState(() {
-                            radioGroup = index;
-                          });
-                          print(index);
-                        },
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text("1-es")
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                            controller: weightController,
-                            initialValue: "100",
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                              labelText: "Súlyozás",
-                              icon: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Icon(MdiIcons.brightnessPercent)
-                                ],
-                              ),
-                            )),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            "%",
-                            style: TextStyle(fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                            controller: countController,
-                            initialValue: "1",
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                              labelText: "Darab",
-                              icon: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Icon(MdiIcons.counter)
-                                ],
-                              ),
-                            )),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            "db",
-                            style: TextStyle(fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Mégse'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
-      },
-    );
+  void addNewVirtualMark(VirtualMarks input) {
+    setState(() {
+      virtualMarks.add(input);
+    });
+  }
+
+  void editVirtualMark({VirtualMarks input, int index}) {
+    setState(() {
+      virtualMarks[index].weight = input.weight;
+      virtualMarks[index].count = input.count;
+      virtualMarks[index].numberValue = input.numberValue;
+    });
   }
 
   Widget _whatIfBody() {
@@ -416,38 +496,88 @@ class CalculatorTabState extends State<CalculatorTab>
                     shrinkWrap: true,
                     itemCount: virtualMarks.length,
                     itemBuilder: (context, index) {
+                      String countText = "";
+                      String numVal = "";
+                      Color numValColor = Colors.green;
+                      if (virtualMarks[index].count > 9) {
+                        countText = virtualMarks[index].count.toString();
+                      } else {
+                        countText = virtualMarks[index].count.toString() + "DB";
+                      }
+                      switch (virtualMarks[index].numberValue) {
+                        case 1:
+                          numVal = "1-es";
+                          numValColor = Colors.red[900];
+                          break;
+                        case 2:
+                          numVal = "2-es";
+                          numValColor = Colors.red[400];
+                          break;
+                        case 3:
+                          numVal = "3-as";
+                          numValColor = Colors.orange;
+                          break;
+                        case 4:
+                          numVal = "4-es";
+                          numValColor = Colors.lightGreen;
+                          break;
+                        case 5:
+                          numVal = "5-ös";
+                          numValColor = Colors.green;
+                          break;
+                        default:
+                      }
                       return Slidable(
+                        controller: slidableController,
                         actionPane: SlidableBehindActionPane(),
                         actionExtentRatio: 0.25,
                         child: Container(
-                          color: Colors.grey, //COLOR OF CARD
+                          color: numValColor, //COLOR OF CARD
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.indigoAccent,
-                              child: Text('1DB'),
+                              child: Text(countText),
                               foregroundColor: Colors.black, //TEXT COLOR
                             ),
                             title: Text(
-                              '5ös',
-                              style: TextStyle(fontSize: 17),
+                              numVal,
+                              style:
+                                  TextStyle(fontSize: 17, color: Colors.black),
                             ),
-                            subtitle: Text('200%'),
+                            subtitle: Text(
+                                virtualMarks[index].weight.toString() + "%"),
                           ),
                         ),
                         actions: <Widget>[
                           IconSlideAction(
                             closeOnTap: false,
                             caption: '-1',
-                            color: Colors.blue,
+                            color: virtualMarks[index].count > 1
+                                ? Colors.blue
+                                : Colors.grey,
                             icon: MdiIcons.minus,
-                            onTap: () => print("igen"),
+                            onTap: () {
+                              if (virtualMarks[index].count > 1) {
+                                setState(() {
+                                  virtualMarks[index].count -= 1;
+                                });
+                              }
+                            },
                           ),
                           IconSlideAction(
                             closeOnTap: false,
                             caption: '+1',
-                            color: Colors.red,
+                            color: virtualMarks[index].count < 100
+                                ? Colors.red
+                                : Colors.grey,
                             icon: MdiIcons.plus,
-                            onTap: () => print("igen"),
+                            onTap: () {
+                              if (virtualMarks[index].count < 100) {
+                                setState(() {
+                                  virtualMarks[index].count += 1;
+                                });
+                              }
+                            },
                           ),
                         ],
                         secondaryActions: <Widget>[
@@ -455,13 +585,24 @@ class CalculatorTabState extends State<CalculatorTab>
                             caption: 'Szerkesztés',
                             color: Colors.black45,
                             icon: Icons.create,
-                            onTap: () => print("igen"),
+                            onTap: () async {
+                              await cardModal(
+                                context: context,
+                                isEditing: true,
+                                index: index,
+                              );
+                            },
                           ),
                           IconSlideAction(
                             caption: 'Törlés',
                             color: Colors.red,
                             icon: Icons.delete,
-                            onTap: () => print("igen"),
+                            onTap: () async {
+                              await sleep(480);
+                              setState(() {
+                                virtualMarks.removeAt(index);
+                              });
+                            },
                           ),
                         ],
                       );

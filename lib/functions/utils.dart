@@ -131,6 +131,10 @@ class SpinnerDialogState extends State<SpinnerDialog> {
   }
 }
 
+Future sleep(int millis) async {
+  return new Future.delayed(Duration(milliseconds: millis), () => "1");
+}
+
 Future sleep1() async {
   return new Future.delayed(const Duration(seconds: 1), () => "1");
 }
