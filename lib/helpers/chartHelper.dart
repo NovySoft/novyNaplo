@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/screens/calculator_tab.dart' as calc;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 
 //TODO optimize this entire thing
@@ -151,6 +154,7 @@ int getRandomBetween(int min, int max) {
 void getAllSubjectsAv(input) {
   double index = 0, sum = 0, tempIndex = 0;
   double tempValue = 0;
+  stats.globalAllSubjectAv.count = 0;
   for (var n in input) {
     tempIndex = 0;
     for (var y in n) {
@@ -163,6 +167,7 @@ void getAllSubjectsAv(input) {
       }
     }
   }
+  stats.globalAllSubjectAv.count = index;
   stats.globalAllSubjectAv.diffSinceLast = (tempValue - (sum / index)) * -1;
 }
 
@@ -188,7 +193,7 @@ void getWorstAndBest(input) {
       listIndex++;
     }
     temp.value = sum / index;
-    temp.count = index.toInt();
+    temp.count = index.toDouble();
     temp.subject = n[0].subject;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);

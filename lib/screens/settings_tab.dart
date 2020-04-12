@@ -23,6 +23,7 @@ bool adsSwitch = globals.adsEnabled;
 bool animationSwitch = globals.chartAnimations;
 bool notificationSwitch = false;
 int indexModifier = 0;
+bool shouldCollapseSwitch = globals.shouldVirtualMarksCollapse;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -100,50 +101,58 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 6,
+      itemCount: 7 + globals.adModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
             title: Center(
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => UIsettings()),
-                    );
-                  },
-                  icon: Icon(
-                    MdiIcons.televisionGuide,
-                    color: Colors.black,
-                  ),
-                  label: Text('UI beállítások',
-                      style: TextStyle(color: Colors.black))),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UIsettings()),
+                      );
+                    },
+                    icon: Icon(
+                      MdiIcons.televisionGuide,
+                      color: Colors.black,
+                    ),
+                    label: Text('UI beállítások',
+                        style: TextStyle(color: Colors.black))),
+              ),
             ),
           );
         } else if (index == 1) {
           return ListTile(
             title: Center(
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MarksTabSettings()),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.create,
-                    color: Colors.black,
-                  ),
-                  label: Text('Jegyek oldal beállításai',
-                      style: TextStyle(color: Colors.black))),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MarksTabSettings()),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.create,
+                      color: Colors.black,
+                    ),
+                    label: Text('Jegyek oldal beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
             ),
           );
           /*return ListTile(
@@ -178,107 +187,147 @@ class _SettingsBodyState extends State<SettingsBody> {
         } else if (index == 2) {
           return ListTile(
             title: Center(
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TimetableSettings()),
-                    );
-                  },
-                  icon: Icon(Icons.today, color: Colors.black),
-                  label: Text('Órarend beállításai',
-                      style: TextStyle(color: Colors.black))),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TimetableSettings()),
+                      );
+                    },
+                    icon: Icon(Icons.today, color: Colors.black),
+                    label: Text('Órarend beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
             ),
           );
         } else if (index == 3) {
           return ListTile(
             title: Center(
-              child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StatisticSettings()),
-                    );
-                  },
-                  icon: Icon(MdiIcons.chartScatterPlotHexbin,
-                      color: Colors.black),
-                  label: Text('Statisztika oldal beállításai',
-                      style: TextStyle(color: Colors.black))),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StatisticSettings()),
+                      );
+                    },
+                    icon: Icon(MdiIcons.chartScatterPlotHexbin,
+                        color: Colors.black),
+                    label: Text('Statisztika oldal beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
             ),
           );
         } else if (index == 4) {
           return ListTile(
             title: Center(
-                child: Column(children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
                 child: RaisedButton.icon(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
                     onPressed: () async {
-                      await _ackAlert(context,
-                          "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CalculatorSettings()),
+                      );
                     },
-                    icon: Icon(MdiIcons.emailSend, color: Colors.black),
-                    label: Text('Bug report (Email)',
-                        style: TextStyle(color: Colors.black))),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    onPressed: () async {
-                      String link =
-                          "https://github.com/NovySoft/novyNaplo/issues/new/choose";
-                      if (await canLaunch(link)) {
-                        await launch(link);
-                      } else {
-                        FirebaseAnalytics().logEvent(name: "LinkFail");
-                        throw 'Could not launch $link';
-                      }
-                    },
-                    icon: Icon(Icons.bug_report, color: Colors.black),
-                    label: Text('Bug report (Github)',
-                        style: TextStyle(color: Colors.black))),
-              ),
-            ])),
-          );
-        } else if (index == 5) {
-          return ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    onPressed: () async {
-                      showDialog<void>(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (_) {
-                            return LogOutDialog();
-                          });
-                    },
-                    icon: Icon(MdiIcons.logout, color: Colors.black),
-                    label: Text('Kijelentkezés',
+                    icon: Icon(MdiIcons.calculator, color: Colors.black),
+                    label: Text('Jegyszámoló oldal beállításai',
                         style: TextStyle(color: Colors.black))),
               ),
             ),
           );
+        } else if (index == 5) {
+          return ListTile(
+            title: Center(
+                child: Column(children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await _ackAlert(context,
+                              "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                        },
+                        icon: Icon(MdiIcons.emailSend, color: Colors.black),
+                        label: Text('Bug report (Email)',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          String link =
+                              "https://github.com/NovySoft/novyNaplo/issues/new/choose";
+                          if (await canLaunch(link)) {
+                            await launch(link);
+                          } else {
+                            FirebaseAnalytics().logEvent(name: "LinkFail");
+                            throw 'Could not launch $link';
+                          }
+                        },
+                        icon: Icon(Icons.bug_report, color: Colors.black),
+                        label: Text('Bug report (Github)',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+            ])),
+          );
+        } else if (index == 6) {
+          return ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          showDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (_) {
+                                return LogOutDialog();
+                              });
+                        },
+                        icon: Icon(MdiIcons.logout, color: Colors.black),
+                        label: Text('Kijelentkezés',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+            ),
+          );
         } else {
-          return SizedBox(height: 75);
+          return SizedBox(height: 100);
         }
       },
     );
@@ -828,6 +877,59 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       });
                     },
                     value: statDropDown,
+                  ),
+                );
+                break;
+              default:
+            }
+          }),
+    );
+  }
+}
+
+class CalculatorSettings extends StatefulWidget {
+  @override
+  _CalculatorSettingsState createState() => _CalculatorSettingsState();
+}
+
+class _CalculatorSettingsState extends State<CalculatorSettings> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Jegyszámoló oldal beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Text("Virtuális jegyek összevonása"),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        shouldCollapseSwitch = switchOn;
+                        globals.shouldVirtualMarksCollapse = switchOn;
+                      });
+                      prefs.setBool("shouldVirtualMarksCollapse", switchOn);
+                      Crashlytics.instance
+                          .setBool("shouldVirtualMarksCollapse", switchOn);
+                    },
+                    value: shouldCollapseSwitch,
                   ),
                 );
                 break;

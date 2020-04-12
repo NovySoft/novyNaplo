@@ -5,9 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+import 'package:charts_flutter/flutter.dart' as charts;
 
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
@@ -19,6 +23,7 @@ double elakErni = 5.0;
 double turesHatar = 1;
 String text1 = " ";
 String text2 = " ";
+double tantargyiAtlagUtanna = 0;
 TabController _tabController;
 final List<Tab> calcTabs = <Tab>[
   Tab(text: 'Jegyszámoló', icon: Icon(MdiIcons.calculator)),
@@ -32,6 +37,22 @@ final FocusNode _weightFocus = FocusNode();
 final FocusNode _countFocus = FocusNode();
 final _formKey = GlobalKey<FormState>();
 final SlidableController slidableController = SlidableController();
+List<Evals> currentSubject = [];
+final axis = charts.NumericAxisSpec(
+    renderSpec: charts.GridlineRendererSpec(
+        labelStyle: charts.TextStyleSpec(
+  fontSize: 10,
+  color: charts.MaterialPalette.blue.shadeDefault,
+)));
+
+final axisTwo = charts.NumericAxisSpec(
+    renderSpec: charts.SmallTickRendererSpec(
+  labelStyle: charts.TextStyleSpec(
+      fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
+));
+Color afterAvCol;
+Widget afterAvIcon;
+String afterAvDiff;
 
 class VirtualMarks {
   int count;
@@ -317,10 +338,7 @@ class CalculatorTabState extends State<CalculatorTab>
                       temp.count = int.parse(countController.text);
                       temp.weight = int.parse(weightController.text);
                       temp.numberValue = radioGroup;
-                      editVirtualMark(
-                        input: temp,
-                        index: index
-                      );
+                      editVirtualMark(input: temp, index: index);
                     } else {
                       VirtualMarks temp = new VirtualMarks();
                       temp.count = int.parse(countController.text);
@@ -361,7 +379,9 @@ class CalculatorTabState extends State<CalculatorTab>
       currentIndex = 0;
       currCount = avarageList[0].count;
       currSum = avarageList[0].sum;
+      currentSubject = stats.allParsedSubjects[0];
     }
+    getAllSubjectsAv(stats.allParsedSubjects);
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
   }
@@ -418,10 +438,39 @@ class CalculatorTabState extends State<CalculatorTab>
     );
   }
 
+  //If we have a same mark, then just increase the count
   void addNewVirtualMark(VirtualMarks input) {
-    setState(() {
-      virtualMarks.add(input);
-    });
+    if (globals.shouldVirtualMarksCollapse) {
+      int existIndex = virtualMarks.indexWhere((n) {
+        return n == input ||
+            (n.numberValue == input.numberValue && n.weight == input.weight);
+      });
+      if (existIndex == -1 || virtualMarks[existIndex].count == 100) {
+        existIndex = virtualMarks.lastIndexWhere((n) {
+          return n == input ||
+              (n.numberValue == input.numberValue && n.weight == input.weight);
+        });
+      }
+      if (existIndex == -1 || virtualMarks[existIndex].count >= 100) {
+        setState(() {
+          virtualMarks.add(input);
+        });
+      } else if (virtualMarks[existIndex].count + input.count > 100) {
+        input.count = (input.count + virtualMarks[existIndex].count) - 100;
+        setState(() {
+          virtualMarks[existIndex].count = 100;
+          virtualMarks.add(input);
+        });
+      } else {
+        setState(() {
+          virtualMarks[existIndex].count += input.count;
+        });
+      }
+    } else {
+      setState(() {
+        virtualMarks.add(input);
+      });
+    }
   }
 
   void editVirtualMark({VirtualMarks input, int index}) {
@@ -429,6 +478,34 @@ class CalculatorTabState extends State<CalculatorTab>
       virtualMarks[index].weight = input.weight;
       virtualMarks[index].count = input.count;
       virtualMarks[index].numberValue = input.numberValue;
+    });
+  }
+
+  void setAvAfter(double input) {
+    if (currSum / currCount == input) {
+      afterAvCol = Colors.yellow;
+      afterAvDiff = "0";
+      afterAvIcon = Icon(
+        Icons.linear_scale,
+        color: Colors.yellow,
+      );
+    } else if (currSum / currCount > input) {
+      afterAvCol = Colors.red;
+      afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
+      afterAvIcon = Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.red,
+      );
+    } else {
+      afterAvCol = Colors.green;
+      afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
+      afterAvIcon = Icon(
+        Icons.keyboard_arrow_up,
+        color: Colors.green,
+      );
+    }
+    setState(() {
+      tantargyiAtlagUtanna = input;
     });
   }
 
@@ -455,10 +532,12 @@ class CalculatorTabState extends State<CalculatorTab>
                     color: Theme.of(context).accentColor,
                     height: 2,
                   ),
-                  onChanged: (String newValue) {
+                  onChanged: (String newValue) async {
                     setState(() {
                       dropdownValue = newValue;
                       currentIndex = dropdownValues.indexOf(newValue);
+                      currentSubject = stats
+                          .allParsedSubjects[currentIndex]; //INDEX 0 = OLDEST
                       currCount = avarageList[currentIndex].count;
                       currSum = avarageList[currentIndex].sum;
                     });
@@ -483,131 +562,233 @@ class CalculatorTabState extends State<CalculatorTab>
           SizedBox(
             height: 50,
           ),
-          Text(
-            "Húzd el a kártyákat az akciókhoz\nVagy a plusz gombbal adj hozzá kártyákat",
-            textAlign: TextAlign.center,
-          ),
           DecoratedBox(
-              decoration: new BoxDecoration(border: Border.all()),
-              child: SizedBox(
-                height: 400,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: virtualMarks.length,
-                    itemBuilder: (context, index) {
-                      String countText = "";
-                      String numVal = "";
-                      Color numValColor = Colors.green;
-                      if (virtualMarks[index].count > 9) {
-                        countText = virtualMarks[index].count.toString();
-                      } else {
-                        countText = virtualMarks[index].count.toString() + "DB";
-                      }
-                      switch (virtualMarks[index].numberValue) {
-                        case 1:
-                          numVal = "1-es";
-                          numValColor = Colors.red[900];
-                          break;
-                        case 2:
-                          numVal = "2-es";
-                          numValColor = Colors.red[400];
-                          break;
-                        case 3:
-                          numVal = "3-as";
-                          numValColor = Colors.orange;
-                          break;
-                        case 4:
-                          numVal = "4-es";
-                          numValColor = Colors.lightGreen;
-                          break;
-                        case 5:
-                          numVal = "5-ös";
-                          numValColor = Colors.green;
-                          break;
-                        default:
-                      }
-                      return Slidable(
-                        controller: slidableController,
-                        actionPane: SlidableBehindActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: Container(
-                          color: numValColor, //COLOR OF CARD
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.indigoAccent,
-                              child: Text(countText),
-                              foregroundColor: Colors.black, //TEXT COLOR
-                            ),
-                            title: Text(
-                              numVal,
-                              style:
-                                  TextStyle(fontSize: 17, color: Colors.black),
-                            ),
-                            subtitle: Text(
-                                virtualMarks[index].weight.toString() + "%"),
-                          ),
-                        ),
-                        actions: <Widget>[
-                          IconSlideAction(
-                            closeOnTap: false,
-                            caption: '-1',
-                            color: virtualMarks[index].count > 1
-                                ? Colors.blue
-                                : Colors.grey,
-                            icon: MdiIcons.minus,
-                            onTap: () {
-                              if (virtualMarks[index].count > 1) {
-                                setState(() {
-                                  virtualMarks[index].count -= 1;
-                                });
-                              }
-                            },
-                          ),
-                          IconSlideAction(
-                            closeOnTap: false,
-                            caption: '+1',
-                            color: virtualMarks[index].count < 100
-                                ? Colors.red
-                                : Colors.grey,
-                            icon: MdiIcons.plus,
-                            onTap: () {
-                              if (virtualMarks[index].count < 100) {
-                                setState(() {
-                                  virtualMarks[index].count += 1;
-                                });
-                              }
-                            },
-                          ),
-                        ],
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Szerkesztés',
-                            color: Colors.black45,
-                            icon: Icons.create,
-                            onTap: () async {
+            decoration: new BoxDecoration(border: Border.all()),
+            child: SizedBox(
+              height: 300,
+              child: virtualMarks.length != 0
+                  ? ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: virtualMarks.length,
+                      itemBuilder: (context, index) {
+                        String countText = "";
+                        String numVal = "";
+                        Color numValColor = Colors.green;
+                        if (virtualMarks[index].count > 9) {
+                          countText = virtualMarks[index].count.toString();
+                        } else {
+                          countText =
+                              virtualMarks[index].count.toString() + "DB";
+                        }
+                        switch (virtualMarks[index].numberValue) {
+                          case 1:
+                            numVal = "1-es";
+                            numValColor = Colors.red[900];
+                            break;
+                          case 2:
+                            numVal = "2-es";
+                            numValColor = Colors.red[400];
+                            break;
+                          case 3:
+                            numVal = "3-as";
+                            numValColor = Colors.orange;
+                            break;
+                          case 4:
+                            numVal = "4-es";
+                            numValColor = Colors.lightGreen;
+                            break;
+                          case 5:
+                            numVal = "5-ös";
+                            numValColor = Colors.green;
+                            break;
+                          default:
+                        }
+                        return Slidable(
+                          controller: slidableController,
+                          actionPane: SlidableBehindActionPane(),
+                          actionExtentRatio: 0.25,
+                          child: GestureDetector(
+                            onLongPress: () async {
                               await cardModal(
                                 context: context,
                                 isEditing: true,
                                 index: index,
                               );
                             },
-                          ),
-                          IconSlideAction(
-                            caption: 'Törlés',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () async {
-                              await sleep(480);
+                            onDoubleTap: () async {
                               setState(() {
                                 virtualMarks.removeAt(index);
                               });
                             },
+                            child: Container(
+                              color: numValColor, //COLOR OF CARD
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.indigoAccent,
+                                  child: Text(countText),
+                                  foregroundColor: Colors.black, //TEXT COLOR
+                                ),
+                                title: Text(
+                                  numVal,
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.black),
+                                ),
+                                subtitle: Text(
+                                    virtualMarks[index].weight.toString() +
+                                        "%"),
+                              ),
+                            ),
                           ),
-                        ],
-                      );
-                    }),
-              )),
+                          actions: <Widget>[
+                            IconSlideAction(
+                              closeOnTap: false,
+                              caption: '-1',
+                              color: virtualMarks[index].count > 1
+                                  ? Colors.blue
+                                  : Colors.grey,
+                              icon: MdiIcons.minus,
+                              onTap: () {
+                                if (virtualMarks[index].count > 1) {
+                                  setState(() {
+                                    virtualMarks[index].count -= 1;
+                                  });
+                                }
+                              },
+                            ),
+                            IconSlideAction(
+                              closeOnTap: false,
+                              caption: '+1',
+                              color: virtualMarks[index].count < 100
+                                  ? Colors.red
+                                  : Colors.grey,
+                              icon: MdiIcons.plus,
+                              onTap: () {
+                                if (virtualMarks[index].count < 100) {
+                                  setState(() {
+                                    virtualMarks[index].count += 1;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                          secondaryActions: <Widget>[
+                            IconSlideAction(
+                              caption: 'Szerkesztés',
+                              color: Colors.black45,
+                              icon: Icons.create,
+                              onTap: () async {
+                                await cardModal(
+                                  context: context,
+                                  isEditing: true,
+                                  index: index,
+                                );
+                              },
+                            ),
+                            IconSlideAction(
+                              caption: 'Törlés',
+                              color: Colors.red,
+                              icon: Icons.delete,
+                              onTap: () async {
+                                await sleep(480);
+                                setState(() {
+                                  virtualMarks.removeAt(index);
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      })
+                  : Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Icon(
+                            MdiIcons.emoticonSadOutline,
+                            size: 50,
+                          ),
+                          Text(
+                            "Nincs még virtuális jegyed!",
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "A plusz gombbal adj hozzá párat!",
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "A kártyákat alrébb húzva érheted el majd a beállításokat!",
+                            textAlign: TextAlign.center,
+                          )
+                        ])),
+            ),
+          ),
+          Center(
+            child: RaisedButton.icon(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    virtualMarks = [];
+                  });
+                },
+                icon: Icon(
+                  MdiIcons.delete,
+                  color: Colors.black,
+                ),
+                label: Text('Összes törlése',
+                    style: TextStyle(color: Colors.black))),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 500,
+            child: new charts.NumericComboChart(
+              createWhatIfChartAndMarks(
+                defaultValues: currentSubject,
+                id: "whatIfChart",
+                virtualValues: virtualMarks,
+              ),
+              behaviors: [new charts.PanAndZoomBehavior()],
+              animate: false,
+              domainAxis: axisTwo,
+              primaryMeasureAxis: axis,
+              defaultRenderer:
+                  new charts.LineRendererConfig(includePoints: true),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            dropdownValue +
+                " átlag előtte: " +
+                (currSum / currCount).toStringAsFixed(3),
+            textAlign: TextAlign.start,
+            style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Row(
+            children: [
+              Text(
+                dropdownValue +
+                    " átlag utánna: " +
+                    tantargyiAtlagUtanna.toStringAsFixed(3),
+                textAlign: TextAlign.start,
+                style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              afterAvIcon,
+              Text(
+                afterAvDiff,
+                style: TextStyle(color: afterAvCol),
+              )
+            ],
+          ),
+          globals.adsEnabled
+              ? SizedBox(
+                  height: 100,
+                )
+              : SizedBox(height: 0),
         ],
       ),
     );
@@ -633,6 +814,7 @@ class CalculatorTabState extends State<CalculatorTab>
                 setState(() {
                   dropdownValue = newValue;
                   currentIndex = dropdownValues.indexOf(newValue);
+                  currentSubject = stats.allParsedSubjects[currentIndex];
                   currCount = avarageList[currentIndex].count;
                   currSum = avarageList[currentIndex].sum;
                 });
@@ -705,6 +887,55 @@ class CalculatorTabState extends State<CalculatorTab>
         ],
       );
     }
+  }
+
+  List<charts.Series<ChartPoints, int>> createWhatIfChartAndMarks(
+      {List<Evals> defaultValues,
+      List<VirtualMarks> virtualValues,
+      String id}) {
+    List<ChartPoints> primaryChartData = [];
+    List<ChartPoints> secondaryChartData = [];
+    double sum = 0;
+    double index = 0;
+    double virtualSum = 0;
+    double virtualIndex = 0;
+    int listArray = 0;
+    for (var n in defaultValues) {
+      sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+      index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+      primaryChartData.add(new ChartPoints(listArray, sum / index));
+      listArray++;
+    }
+    secondaryChartData.add(new ChartPoints(listArray - 1, sum / index));
+    for (var n in virtualValues) {
+      for (var i = 0; i < n.count; i++) {
+        sum += n.numberValue * n.weight / 100;
+        virtualSum += n.numberValue * n.weight / 100;
+        index += 1 * n.weight / 100;
+        virtualIndex += 1 * n.weight / 100;
+        secondaryChartData.add(new ChartPoints(listArray, sum / index));
+        listArray++;
+      }
+    }
+    //ONLY WORKS WHEN SETSTATE IS OUTSIDE OF THIS FUNCTION
+    //STRANGE..
+    setAvAfter((currSum + virtualSum) / (currCount + virtualIndex));
+    return [
+      new charts.Series<ChartPoints, int>(
+        id: id + "secondary",
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        domainFn: (ChartPoints marks, _) => marks.count,
+        measureFn: (ChartPoints marks, _) => marks.value,
+        data: secondaryChartData,
+      ),
+      new charts.Series<ChartPoints, int>(
+        id: id,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (ChartPoints marks, _) => marks.count,
+        measureFn: (ChartPoints marks, _) => marks.value,
+        data: primaryChartData,
+      )
+    ];
   }
 }
 

@@ -29,7 +29,7 @@ class AV {
   double value;
   double diffSinceLast;
   String subject = "";
-  int count = 0;
+  double count = 0;
 }
 
 class LinearPiData {

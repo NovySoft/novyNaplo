@@ -21,6 +21,7 @@ String loadingText = "Kérlek várj..."; //Betöltő szöveg
 String statChart; //Mit kell a statisztikánál mutatni
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
+bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 int adModifier = 0;
 
 void resetAllGlobals() async {
@@ -38,7 +39,18 @@ void resetAllGlobals() async {
 
 void setGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(prefs.getBool("ads") != null) Crashlytics.instance.setString("markCardSubtitle", markCardSubtitle);
+  if (prefs.getBool("ads") != null) {
+    Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+  }
+
+  if (prefs.getBool("shouldVirtualMarksCollapse") == null) {
+    shouldVirtualMarksCollapse = false;
+    prefs.setBool("shouldVirtualMarksCollapse", false);
+  } else if (markCardSubtitle == null) {
+    shouldVirtualMarksCollapse = prefs.getBool("shouldVirtualMarksCollapse");
+  }
+  Crashlytics.instance
+      .setBool("shouldVirtualMarksCollapse", shouldVirtualMarksCollapse);
 
   if (prefs.getString("markCardSubtitle") == null && markCardSubtitle == null) {
     markCardSubtitle = "Téma";
