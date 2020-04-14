@@ -24,6 +24,7 @@ AV bestSubjectAv = new AV();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
 double sizedBoxHeight = 75;
+
 //Classes used by charts
 class AV {
   double value;
@@ -72,9 +73,10 @@ class _StatisticsTabState extends State<StatisticsTab>
           controller: _tabController,
           children: statTabs.map((Tab tab) {
             if (globals.markCount == 0) return noMarks();
-            if (allParsedSubjects.length > 15){
-              sizedBoxHeight = ((allParsedSubjects.length - 15) * 23).toDouble(); 
-            }else{
+            if (allParsedSubjects.length > 15) {
+              sizedBoxHeight =
+                  ((allParsedSubjects.length - 15) * 23).toDouble();
+            } else {
               sizedBoxHeight = 0;
             }
             if (tab.text.toLowerCase() == "általános") {
@@ -212,6 +214,26 @@ class _StatisticsTabState extends State<StatisticsTab>
                       return Row(
                         children: <Widget>[
                           Text(
+                            "Legjobb (" + bestSubjectAv.subject + ")",
+                            textAlign: TextAlign.start,
+                            style: new TextStyle(color: Colors.green),
+                          ),
+                          Text(
+                            " átlag: " + bestSubjectAv.value.toStringAsFixed(3),
+                            textAlign: TextAlign.start,
+                          ),
+                          bestAvIcon,
+                          Text(
+                            bestSubjectAv.diffSinceLast.toStringAsFixed(3),
+                            style: TextStyle(color: bestAvColor),
+                          ),
+                        ],
+                      );
+                      break;
+                    case 4:
+                      return Row(
+                        children: <Widget>[
+                          Text(
                             "Legroszabb (" + worstSubjectAv.subject + ")",
                             textAlign: TextAlign.start,
                             style: new TextStyle(color: Colors.red),
@@ -226,26 +248,6 @@ class _StatisticsTabState extends State<StatisticsTab>
                             worstSubjectAv.diffSinceLast.toStringAsFixed(3),
                             style: TextStyle(color: worstAvColor),
                           )
-                        ],
-                      );
-                      break;
-                    case 4:
-                      return Row(
-                        children: <Widget>[
-                          Text(
-                            "Legjobb (" + bestSubjectAv.subject + ")",
-                            textAlign: TextAlign.start,
-                            style: new TextStyle(color: Colors.green),
-                          ),
-                          Text(
-                            " átlag: " + bestSubjectAv.value.toStringAsFixed(3),
-                            textAlign: TextAlign.start,
-                          ),
-                          bestAvIcon,
-                          Text(
-                            bestSubjectAv.diffSinceLast.toStringAsFixed(3),
-                            style: TextStyle(color: bestAvColor),
-                          ),
                         ],
                       );
                       break;
