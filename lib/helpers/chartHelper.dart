@@ -1,12 +1,10 @@
 import 'dart:math';
 
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:novynaplo/functions/classManager.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
-import 'package:novynaplo/screens/calculator_tab.dart' as calc;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 
 //TODO optimize this entire thing
+//TODO IT uses more memory and cpu than it really needs to
 class LinearMarkChartData {
   final int count;
   final double value;
@@ -200,11 +198,12 @@ void getWorstAndBest(input) {
   }
   tempList.sort((a, b) =>
       b.value.toStringAsFixed(3).compareTo(a.value.toStringAsFixed(3)));
-  stats.worstSubjectAv = tempList.last;
   index = 0;
   List<stats.AV> tempListTwo = [];
   tempList.removeWhere((item) => item.value == double.nan || item.value.isNaN);
   double curValue = tempList[0].value;
+  stats.worstSubjectAv = tempList.last;
+  stats.allSubjectsAv = tempList;
   if (tempList.length > 1) {
     while (curValue == tempList[index.toInt()].value) {
       tempListTwo.add(tempList[index.toInt()]);
@@ -214,6 +213,8 @@ void getWorstAndBest(input) {
     tempListTwo.add(tempList[0]);
   }
   tempListTwo.sort((a, b) => b.count.compareTo(a.count));
+  stats.allSubjectsAv.removeLast();
+  stats.allSubjectsAv.removeWhere((item) => item == tempListTwo[0]);
   stats.bestSubjectAv = tempListTwo[0];
 }
 

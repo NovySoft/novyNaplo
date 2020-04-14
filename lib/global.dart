@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +21,8 @@ String statChart; //Mit kell a statisztikánál mutatni
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
+bool showAllAvsInStats =
+    false; //Show all avarages or just the best and the worst?
 int adModifier = 0;
 
 void resetAllGlobals() async {
@@ -43,10 +44,18 @@ void setGlobals() async {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
   }
 
+  if (prefs.getBool("showAllAvsInStats") == null) {
+    showAllAvsInStats = false;
+    prefs.setBool("showAllAvsInStats", false);
+  } else {
+    showAllAvsInStats = prefs.getBool("showAllAvsInStats");
+  }
+  Crashlytics.instance.setBool("showAllAvsInStats", showAllAvsInStats);
+
   if (prefs.getBool("shouldVirtualMarksCollapse") == null) {
     shouldVirtualMarksCollapse = false;
     prefs.setBool("shouldVirtualMarksCollapse", false);
-  } else if (markCardSubtitle == null) {
+  } else {
     shouldVirtualMarksCollapse = prefs.getBool("shouldVirtualMarksCollapse");
   }
   Crashlytics.instance

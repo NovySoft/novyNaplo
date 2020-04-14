@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:animations/animations.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class ThemeHelper {

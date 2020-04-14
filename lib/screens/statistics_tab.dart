@@ -24,6 +24,7 @@ AV bestSubjectAv = new AV();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
 double sizedBoxHeight = 75;
+List<AV> allSubjectsAv = [];
 
 //Classes used by charts
 class AV {
@@ -214,13 +215,14 @@ class _StatisticsTabState extends State<StatisticsTab>
                       return Row(
                         children: <Widget>[
                           Text(
-                            "Legjobb (" + bestSubjectAv.subject + ")",
+                            "Legjobb (" + bestSubjectAv.subject + ") átlag: ",
                             textAlign: TextAlign.start,
                             style: new TextStyle(color: Colors.green),
                           ),
                           Text(
-                            " átlag: " + bestSubjectAv.value.toStringAsFixed(3),
+                            bestSubjectAv.value.toStringAsFixed(3),
                             textAlign: TextAlign.start,
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           bestAvIcon,
                           Text(
@@ -231,25 +233,107 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 4:
-                      return Row(
-                        children: <Widget>[
-                          Text(
-                            "Legroszabb (" + worstSubjectAv.subject + ")",
-                            textAlign: TextAlign.start,
-                            style: new TextStyle(color: Colors.red),
-                          ),
-                          Text(
-                            " átlag: " +
-                                worstSubjectAv.value.toStringAsFixed(3),
-                            textAlign: TextAlign.start,
-                          ),
-                          worstAvIcon,
-                          Text(
-                            worstSubjectAv.diffSinceLast.toStringAsFixed(3),
-                            style: TextStyle(color: worstAvColor),
-                          )
-                        ],
-                      );
+                      if (globals.showAllAvsInStats) {
+                        return Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: allSubjectsAv.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Color diffColor;
+                                Widget diffIcon;
+                                if (allSubjectsAv[index].diffSinceLast == 0) {
+                                  diffColor = Colors.orange;
+                                  diffIcon = Icon(
+                                    Icons.linear_scale,
+                                    color: diffColor,
+                                  );
+                                } else if (allSubjectsAv[index].diffSinceLast <
+                                    0) {
+                                  diffColor = Colors.red;
+                                  diffIcon = Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: diffColor,
+                                  );
+                                } else if (allSubjectsAv[index].diffSinceLast >
+                                    0) {
+                                  diffColor = Colors.green;
+                                  diffIcon = Icon(
+                                    Icons.keyboard_arrow_up,
+                                    color: diffColor,
+                                  );
+                                }
+                                return Row(
+                                  children: <Widget>[
+                                    Text(
+                                      capitalize(allSubjectsAv[index].subject) +
+                                          ": ",
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Text(
+                                      allSubjectsAv[index]
+                                          .value
+                                          .toStringAsFixed(3),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    diffIcon,
+                                    Text(
+                                      allSubjectsAv[index]
+                                          .diffSinceLast
+                                          .toStringAsFixed(3),
+                                      style: TextStyle(color: diffColor),
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  "Legroszabb (" +
+                                      worstSubjectAv.subject +
+                                      ") átlag: ",
+                                  textAlign: TextAlign.start,
+                                  style: new TextStyle(color: Colors.red),
+                                ),
+                                Text(
+                                  worstSubjectAv.value.toStringAsFixed(3),
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                worstAvIcon,
+                                Text(
+                                  worstSubjectAv.diffSinceLast
+                                      .toStringAsFixed(3),
+                                  style: TextStyle(color: worstAvColor),
+                                )
+                              ],
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          children: <Widget>[
+                            Text(
+                              "Legroszabb (" + worstSubjectAv.subject + ")",
+                              textAlign: TextAlign.start,
+                              style: new TextStyle(color: Colors.red),
+                            ),
+                            Text(
+                              " átlag: " +
+                                  worstSubjectAv.value.toStringAsFixed(3),
+                              textAlign: TextAlign.start,
+                            ),
+                            worstAvIcon,
+                            Text(
+                              worstSubjectAv.diffSinceLast.toStringAsFixed(3),
+                              style: TextStyle(color: worstAvColor),
+                            )
+                          ],
+                        );
+                      }
                       break;
                     case 5:
                       return SizedBox(

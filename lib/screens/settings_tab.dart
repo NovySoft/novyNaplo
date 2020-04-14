@@ -24,6 +24,7 @@ bool animationSwitch = globals.chartAnimations;
 bool notificationSwitch = false;
 int indexModifier = 0;
 bool shouldCollapseSwitch = globals.shouldVirtualMarksCollapse;
+bool showAllAvsInStatsSwitch = globals.showAllAvsInStats;
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -845,7 +846,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 1,
+          itemCount: 2,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -877,6 +878,25 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       });
                     },
                     value: statDropDown,
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Text("Összes átlag mutatása:"),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        showAllAvsInStatsSwitch = switchOn;
+                        globals.showAllAvsInStats = switchOn;
+                      });
+                      prefs.setBool("showAllAvsInStats", switchOn);
+                      Crashlytics.instance
+                          .setBool("showAllAvsInStats", switchOn);
+                    },
+                    value: showAllAvsInStatsSwitch,
                   ),
                 );
                 break;
