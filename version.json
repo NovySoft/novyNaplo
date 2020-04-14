@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.3.9+HOTFIX",
+    "version": "V0.1.4",
     "isBreaking": false,
-    "releaseNotes": "Jegyszámoló és statisztika patch",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.3.9%2BHOTFIX"
+    "releaseNotes": "Statisztika list túlcsordulás megjavítva\nÚj beállítások menü\nStatisztika összes tárgy mutatása\nMi van ha...",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4"
 }

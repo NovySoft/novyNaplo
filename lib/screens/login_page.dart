@@ -360,6 +360,7 @@ class _LoginPageState extends State<LoginPage> {
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
+      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (term) {
         _passFocus.unfocus();
@@ -527,6 +528,7 @@ class _SchoolSelectState extends State<SchoolSelect> {
       children: <Widget>[
         new Container(
           child: new TextField(
+              keyboardType: TextInputType.text,
               maxLines: 1,
               autofocus: true,
               onChanged: (String search) {

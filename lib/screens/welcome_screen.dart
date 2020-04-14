@@ -320,9 +320,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                    "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. \nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
-                    style: TextStyle(fontSize: 24),
-                    textAlign: TextAlign.center,),
+                  "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. \nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+                  style: TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                ),
               )),
           SizedBox(
             height: 25,
@@ -350,7 +351,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () async{
+        onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
           prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
@@ -381,6 +382,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             name: "Stackoverflow", job: "Informatika problémák megoldása :)"),
         PeopleCard(
             name: "Sokan Mások...", job: "Finanszírozás\nTesztelés\nÖtletek"),
+        Column(
+          children: <Widget>[
+            Text(
+              "TE",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Text(
+              "Nekünk minden felhasználó értékes!",
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+          ],
+        ),
         SizedBox(
           height: 15,
         ),
