@@ -18,6 +18,7 @@ String markCardConstColor; //If theme is constant what color is it
 String lessonCardSubtitle; //Lesson card's subtitle
 String loadingText = "Kérlek várj..."; //Betöltő szöveg
 String statChart; //Mit kell a statisztikánál mutatni
+String howManyGraph; //What should we show? A pie- or a bar-chart
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
@@ -29,7 +30,7 @@ int extraSpaceUnderStat = 0; //How many extra padding do we need?
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("code", null);
-  prefs.clear();
+  await prefs.clear();
   prefs.setBool("ads", adsEnabled);
   dJson = null;
   avJson = null;
@@ -44,6 +45,14 @@ void setGlobals() async {
   if (prefs.getBool("ads") != null) {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
   }
+
+  if (prefs.getString("howManyGraph") == null) {
+    howManyGraph = "Kör diagram";
+    prefs.setString("howManyGraph",howManyGraph);
+  } else {
+    howManyGraph = prefs.getString("howManyGraph");
+  }
+  Crashlytics.instance.setString("howManyGraph", howManyGraph);
 
   if (prefs.getInt("extraSpaceUnderStat") != null) {
     extraSpaceUnderStat = prefs.getInt("extraSpaceUnderStat");

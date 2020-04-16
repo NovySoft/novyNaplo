@@ -23,6 +23,7 @@ AV worstSubjectAv = new AV();
 AV bestSubjectAv = new AV();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
+List<charts.Series<dynamic, String>> howManyFromSpecific;
 double sizedBoxHeight = 75;
 List<AV> allSubjectsAv = [];
 
@@ -86,7 +87,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               setState(() {
                 getAllSubjectsAv(allParsedSubjects);
                 getWorstAndBest(allParsedSubjects);
-                getPieChart(allParsedSubjects);
+                getPieChartOrBarChart(allParsedSubjects);
                 getBarChart(allParsedSubjects);
                 if (globalAllSubjectAv.diffSinceLast == 0) {
                   avColor = Colors.orange;
@@ -153,7 +154,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                     case 0:
                       if (globals.statChart == "Mindent") {
                         return SizedBox(
-                          height: 500 + sizedBoxHeight + globals.extraSpaceUnderStat,
+                          height: 500 +
+                              sizedBoxHeight +
+                              globals.extraSpaceUnderStat,
                           child: charts.NumericComboChart(
                             createAllSubjectChartData(allParsedSubjects),
                             animate: globals.chartAnimations,
@@ -343,26 +346,64 @@ class _StatisticsTabState extends State<StatisticsTab>
                     case 6:
                       return Center(
                         child: Text(
-                          "Jegyek száma bizonyos tantárgyakból:",
+                          globals.howManyGraph == "Kör diagram"
+                              ? "Jegyek száma bizonyos tantárgyakból:"
+                              : "Jegyek számának eloszlása:",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       );
                       break;
                     case 7:
-                      return SizedBox(
+                      if (globals.howManyGraph == "Kör diagram") {
+                        return SizedBox(
+                            height: 400,
+                            width: double.infinity,
+                            child: new charts.PieChart(
+                              pieList,
+                              animate: globals.chartAnimations,
+                              defaultRenderer: new charts.ArcRendererConfig(
+                                  arcRendererDecorators: [
+                                    new charts.ArcLabelDecorator(
+                                        labelPosition:
+                                            charts.ArcLabelPosition.inside)
+                                  ]),
+                            ));
+                      } else {
+                        return SizedBox(
                           height: 400,
                           width: double.infinity,
-                          child: new charts.PieChart(
-                            pieList,
+                          child: charts.BarChart(
+                            howManyFromSpecific,
                             animate: globals.chartAnimations,
-                            defaultRenderer: new charts.ArcRendererConfig(
-                                arcRendererDecorators: [
-                                  new charts.ArcLabelDecorator(
-                                      labelPosition:
-                                          charts.ArcLabelPosition.inside)
-                                ]),
-                          ));
+                            domainAxis: new charts.OrdinalAxisSpec(
+                                renderSpec: charts.SmallTickRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            primaryMeasureAxis: new charts.NumericAxisSpec(
+                                renderSpec: charts.GridlineRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                              fontSize: 15,
+                              color: charts.MaterialPalette.blue.shadeDefault,
+                            ))),
+                            defaultRenderer: new charts.BarRendererConfig(
+                                barRendererDecorator:
+                                    new charts.BarLabelDecorator<String>(
+                                        insideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.white),
+                                        outsideLabelStyleSpec:
+                                            new charts.TextStyleSpec(
+                                                color: charts
+                                                    .MaterialPalette.white)),
+                                cornerStrategy:
+                                    const charts.ConstCornerStrategy(30)),
+                          ),
+                        );
+                      }
                       break;
                     case 8:
                       return SizedBox(
@@ -379,6 +420,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 10:
+                      //TODO refactor with conditionals
                       if (DynamicTheme.of(context).brightness ==
                           Brightness.dark) {
                         return SizedBox(

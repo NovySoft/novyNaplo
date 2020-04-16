@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4",
+    "version": "V0.1.4.1",
     "isBreaking": false,
-    "releaseNotes": "Statisztika list túlcsordulás megjavítva\nÚj beállítások menü\nStatisztika összes tárgy mutatása\nMi van ha...",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4"
+    "releaseNotes": "Új beállítások a statisztika oldalhoz (szöveg összecsúszásának megjavításához)",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.1"
 }

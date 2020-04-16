@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 final _formKey = GlobalKey<FormState>();
 String dropDown;
 String statDropDown = globals.statChart;
+String howManyGraphDropDown = globals.howManyGraph;
 String markDropdown = globals.markCardSubtitle;
 String lessonDropdown = globals.lessonCardSubtitle;
 String markThemeDropdown = globals.markCardTheme;
@@ -849,7 +850,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3,
+          itemCount: 4,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -886,6 +887,38 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 1:
                 return ListTile(
+                  title: Text("Jegyek számának mutatója:"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "Kör diagram",
+                        child: Text(
+                          "Kör diagram",
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Oszlop diagram",
+                        child: Text(
+                          "Oszlop diagram",
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        Crashlytics.instance.setString("howManyGraph", value);
+                        prefs.setString("howManyGraph", value);
+                        globals.howManyGraph = value;
+                        howManyGraphDropDown = value;
+                      });
+                    },
+                    value: howManyGraphDropDown,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
                   title: Text("Összes átlag mutatása:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
@@ -903,7 +936,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 2:
+              case 3:
                 return ListTile(
                   title: Text("Grafikon alatti extra hely (1-500px):"),
                   trailing: SizedBox(

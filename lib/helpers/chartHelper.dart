@@ -218,7 +218,7 @@ void getWorstAndBest(input) {
   stats.bestSubjectAv = tempListTwo[0];
 }
 
-void getPieChart(var input) {
+void getPieChartOrBarChart(var input) {
   List<stats.LinearPiData> tempData = [];
   int index = 0;
   String name = "";
@@ -244,6 +244,17 @@ void getPieChart(var input) {
       // Set a label accessor to control the text of the arc label.
       labelAccessorFn: (stats.LinearPiData row, _) =>
           '${row.name}: ${row.value}',
+    )
+  ];
+  stats.howManyFromSpecific = [
+    new charts.Series<stats.LinearPiData, String>(
+      id: 'howManyFromSpecific',
+      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      domainFn: (stats.LinearPiData count, _) => count.id.toString(),
+      measureFn: (stats.LinearPiData count, _) => count.value,
+      data: tempData,
+      labelAccessorFn: (stats.LinearPiData count, _) =>
+          ('${count.value}'),
     )
   ];
 }
