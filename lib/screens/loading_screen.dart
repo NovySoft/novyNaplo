@@ -427,8 +427,10 @@ class _LoadingPageState extends State<LoadingPage> {
       loadingText = "Mindjárt megvagyunk!";
     });
     FirebaseAnalytics().setUserProperty(name: "School", value: decryptedCode);
+    Crashlytics.instance.setString("School", decryptedCode);
     FirebaseAnalytics()
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
+    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     if (hasError) {
       setState(() {
         loadingText = "Hiba történt\nKérem indítsa újra az applikációt!";

@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class MarksTabState extends State<MarksTab>
 
   Future<void> _refreshData() {
     FirebaseAnalytics().logEvent(name: "RefreshData");
+    Crashlytics.instance.log("RefreshData");
     return Future.delayed(const Duration(seconds: 1), () async {
       var status = await NetworkHelper()
           .getToken(decryptedCode, decryptedUser, decryptedPass);

@@ -236,8 +236,10 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("code", encryptedCode);
       prefs.setString("user", encryptedUser);
       FirebaseAnalytics().setUserProperty(name: "School", value: code);
+      Crashlytics.instance.setString("School", code);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
+      Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'encrypt-login');
       isError = true;
