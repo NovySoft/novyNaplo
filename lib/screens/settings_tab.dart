@@ -13,6 +13,7 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+final _formKey = GlobalKey<FormState>();
 String dropDown;
 String statDropDown = globals.statChart;
 String markDropdown = globals.markCardSubtitle;
@@ -25,6 +26,8 @@ bool notificationSwitch = false;
 int indexModifier = 0;
 bool shouldCollapseSwitch = globals.shouldVirtualMarksCollapse;
 bool showAllAvsInStatsSwitch = globals.showAllAvsInStats;
+TextEditingController extraSpaceUnderStatController =
+    TextEditingController(text: globals.extraSpaceUnderStat.toString());
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -846,7 +849,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 2,
+          itemCount: 3,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -897,6 +900,47 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                           .setBool("showAllAvsInStats", switchOn);
                     },
                     value: showAllAvsInStatsSwitch,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text("Grafikon alatti extra hely (1-500px):"),
+                  trailing: SizedBox(
+                    width: 50,
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: extraSpaceUnderStatController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Ezt nem hagyhatod üresen';
+                          }
+                          if (int.parse(value) > 500 || int.parse(value) <= 0) {
+                            return "Az értéknek 1 és 500 között kell lenie";
+                          }
+                          return null;
+                        },
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (String input) async {
+                          if (_formKey.currentState.validate()) {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            setState(() {
+                              globals.extraSpaceUnderStat = int.parse(input);
+                            });
+                            prefs.setInt(
+                                "extraSpaceUnderStat", int.parse(input));
+                            Crashlytics.instance.setInt(
+                                "extraSpaceUnderStat", int.parse(input));
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 );
                 break;

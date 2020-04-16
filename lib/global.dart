@@ -24,6 +24,7 @@ bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 bool showAllAvsInStats =
     false; //Show all avarages or just the best and the worst?
 int adModifier = 0;
+int extraSpaceUnderStat = 0; //How many extra padding do we need?
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,6 +44,11 @@ void setGlobals() async {
   if (prefs.getBool("ads") != null) {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
   }
+
+  if (prefs.getInt("extraSpaceUnderStat") != null) {
+    extraSpaceUnderStat = prefs.getInt("extraSpaceUnderStat");
+  }
+  Crashlytics.instance.setInt("extraSpaceUnderStat", extraSpaceUnderStat);
 
   if (prefs.getBool("showAllAvsInStats") == null) {
     showAllAvsInStats = false;

@@ -153,7 +153,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     case 0:
                       if (globals.statChart == "Mindent") {
                         return SizedBox(
-                          height: 500 + sizedBoxHeight,
+                          height: 500 + sizedBoxHeight + globals.extraSpaceUnderStat,
                           child: charts.NumericComboChart(
                             createAllSubjectChartData(allParsedSubjects),
                             animate: globals.chartAnimations,
