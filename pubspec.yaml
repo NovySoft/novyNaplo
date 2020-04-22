@@ -30,7 +30,6 @@ dependencies:
   english_words: any
   encrypt: any
   connectivity: any
-  package_info: any
   flutter_spinkit: any
   diacritic: any
   dynamic_theme: any
@@ -48,6 +47,7 @@ dependencies:
   flutter_html: any
   customgauge: any
   flutter_slidable: any
+  flutter_local_notifications: any
 
 flutter_icons:
   android: true
