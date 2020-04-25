@@ -17,7 +17,6 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:novynaplo/main.dart' as main;
 
 final _formKey = GlobalKey<FormState>();
 final _formKeyTwo = GlobalKey<FormState>();
