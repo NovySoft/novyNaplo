@@ -97,10 +97,13 @@ matrix:
       os: osx
       language: generic
       osx_image: xcode9.2
+      addons:
+        homebrew:
+          packages:
+          - libimobiledevice
+          - ideviceinstaller
+          - ios-deploy
       before_script:
-        - brew install --HEAD libimobiledevice --verbose
-        - brew install ideviceinstaller --verbose
-        - brew install ios-deploy --verbose
         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
       script:
         - ./flutter/bin/flutter -v build ios --no-codesign
