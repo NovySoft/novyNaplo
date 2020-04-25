@@ -96,7 +96,7 @@ matrix:
     - name: Build an ipa to test ios integrity
       os: osx
       language: generic
-      osx_image: xcode9.2
+      osx_image: xcode11.3
       addons:
         homebrew:
           packages:
