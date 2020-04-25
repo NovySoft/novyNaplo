@@ -95,7 +95,7 @@ matrix:
 
     - name: Build an ipa to test ios integrity
       os: osx
-      language: generic
+      language: python
       osx_image: xcode8.3
       before_script:
         - pip install six
