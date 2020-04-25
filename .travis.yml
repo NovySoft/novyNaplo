@@ -107,5 +107,6 @@ matrix:
         - ./flutter/bin/flutter -v build ios --no-codesign
       cache:
         directories:
+          - /usr/local/Homebrew
           - "$HOME/Library/Caches/Homebrew"
           - "$HOME/.pub-cache"
