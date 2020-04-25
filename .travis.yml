@@ -29,6 +29,7 @@ matrix:
         - "$HOME/.pub-cache"
         - node_modules
     install:
+      - echo install
       - npm install
       - cd travis
       - export GIT_MESSAGE=`git log -1 --pretty=%B`
