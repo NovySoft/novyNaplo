@@ -18,6 +18,7 @@ class AvaragesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(AvaragesTab.title),
@@ -31,6 +32,7 @@ class AvaragesTab extends StatelessWidget {
 class BodyLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return avaragesList(context);
   }
 }

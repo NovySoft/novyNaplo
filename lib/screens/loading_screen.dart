@@ -454,6 +454,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(

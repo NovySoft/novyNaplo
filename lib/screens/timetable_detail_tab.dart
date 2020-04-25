@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 Timer timer;
 
@@ -306,6 +307,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(title: Text(widget.lessonInfo.name)),
       body: _buildBody(),

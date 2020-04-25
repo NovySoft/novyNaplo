@@ -62,6 +62,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(StatisticsTab.title),

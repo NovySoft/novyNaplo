@@ -5,6 +5,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:novynaplo/global.dart' as globals;
+
 
 Timer timer;
 
@@ -23,6 +25,7 @@ class HomeworkDetailTab extends StatefulWidget {
 
 class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(),
       body: _body(),

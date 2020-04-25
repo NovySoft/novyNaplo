@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/global.dart' as globals;
+
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab(
@@ -381,6 +383,7 @@ class MarksDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(title: Text(name)),
       body: _buildBody(),

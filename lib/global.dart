@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,8 +25,13 @@ bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 bool showAllAvsInStats =
     false; //Show all avarages or just the best and the worst?
+bool backgroundFetch = false; //Should we fetch data in the background?
+bool backgroundFetchCanWakeUpPhone =
+    true; //Should we wake the phone up to fetch data?
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
+int fetchPeriod = 60; //After how many minutes should we fetch the new data?
+BuildContext globalContext; //Yes this is a global context variable
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -46,9 +52,22 @@ void setGlobals() async {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
   }
 
+  fetchPeriod =
+      prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
+  backgroundFetch = prefs.getBool("backgroundFetch") == null
+      ? false
+      : prefs.getBool("backgroundFetch");
+  Crashlytics.instance.setBool("backgroundFetch", backgroundFetch);
+  backgroundFetchCanWakeUpPhone =
+      prefs.getBool("backgroundFetchCanWakeUpPhone") == null
+          ? true
+          : prefs.getBool("backgroundFetchCanWakeUpPhone");
+  Crashlytics.instance
+      .setBool("backgroundFetchCanWakeUpPhone", backgroundFetchCanWakeUpPhone);
+
   if (prefs.getString("howManyGraph") == null) {
     howManyGraph = "Kör diagram";
-    prefs.setString("howManyGraph",howManyGraph);
+    prefs.setString("howManyGraph", howManyGraph);
   } else {
     howManyGraph = prefs.getString("howManyGraph");
   }

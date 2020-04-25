@@ -48,6 +48,7 @@ dependencies:
   customgauge: any
   flutter_slidable: any
   flutter_local_notifications: any
+  android_alarm_manager: any
 
 flutter_icons:
   android: true

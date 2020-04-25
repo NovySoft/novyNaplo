@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novynaplo/global.dart' as globals;
+
 
 PageController controller = PageController();
 var currentPageValue = 0.0;
@@ -42,6 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       body: welcomeBody(),
     );
@@ -420,6 +423,7 @@ class PeopleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Column(
       children: <Widget>[
         Text(

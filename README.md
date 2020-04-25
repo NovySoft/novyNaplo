@@ -58,6 +58,10 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 * **sqflite**: Kliens oldali sql (adattárolás)
 * **animations**: Animációk kezelése
 * **flutter_html**: Html objektumok megjelenítése (Házifeladat)
+* **flutter_slidable**: A húzható kártyák
+* **customgauge**: A kis sebbeség óra szerüség
+* **flutter_local_notifications**: Értesítések küldése
+* **android_alarm_manager**: Háttér lekérések időzítése
 
 ## Felhasznált kódok
 

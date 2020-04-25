@@ -105,6 +105,7 @@ class SpinnerDialogState extends State<SpinnerDialog> {
   final GlobalKey<State> key = login.keyLoader;
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return new WillPopScope(
         onWillPop: () async => false,
         child: SimpleDialog(

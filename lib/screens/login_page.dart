@@ -304,6 +304,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -524,6 +525,7 @@ class SchoolSelect extends StatefulWidget {
 
 class _SchoolSelectState extends State<SchoolSelect> {
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return new SimpleDialog(
       title: new Text("Iskola választó"),
       contentPadding: const EdgeInsets.all(10.0),

@@ -27,6 +27,7 @@ class TimetableTab extends StatefulWidget {
 
 class _TimetableTabState extends State<TimetableTab> {
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return DefaultTabController(
       length: 7,
       child: Scaffold(

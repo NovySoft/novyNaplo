@@ -415,6 +415,7 @@ class MarksTabState extends State<MarksTab>
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     adBanner.load();
     return Scaffold(
       drawer: getDrawer(MarksTab.tag, context),

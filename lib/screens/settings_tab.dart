@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/login_page.dart' as login;
@@ -12,8 +16,11 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:novynaplo/main.dart' as main;
 
 final _formKey = GlobalKey<FormState>();
+final _formKeyTwo = GlobalKey<FormState>();
 String dropDown;
 String statDropDown = globals.statChart;
 String howManyGraphDropDown = globals.howManyGraph;
@@ -29,6 +36,8 @@ bool shouldCollapseSwitch = globals.shouldVirtualMarksCollapse;
 bool showAllAvsInStatsSwitch = globals.showAllAvsInStats;
 TextEditingController extraSpaceUnderStatController =
     TextEditingController(text: globals.extraSpaceUnderStat.toString());
+TextEditingController fetchPeriodController =
+    TextEditingController(text: globals.fetchPeriod.toString());
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
@@ -45,6 +54,7 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(SettingsTab.title),
@@ -99,6 +109,7 @@ class _SettingsBodyState extends State<SettingsBody> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     if (Theme.of(context).brightness == Brightness.light) {
       dropDown = "Világos";
     } else {
@@ -106,7 +117,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 7 + globals.adModifier,
+      itemCount: 8 + globals.adModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -262,6 +273,36 @@ class _SettingsBodyState extends State<SettingsBody> {
         } else if (index == 5) {
           return ListTile(
             title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NetworkAndNotificationSettings()),
+                      );
+                    },
+                    icon: Row(
+                      children: <Widget>[
+                        Icon(MdiIcons.accessPointNetwork, color: Colors.black),
+                        SizedBox(width: 2),
+                        Icon(MdiIcons.bellRing, color: Colors.black),
+                      ],
+                    ),
+                    label: Text('Hálozat és értesítés beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
+            ),
+          );
+        } else if (index == 6) {
+          return ListTile(
+            title: Center(
                 child: Column(children: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -305,7 +346,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 6) {
+        } else if (index == 7) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -347,6 +388,7 @@ class TimetableSettings extends StatefulWidget {
 class _TimetableSettingsState extends State<TimetableSettings> {
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Órarend beállításai"),
@@ -432,6 +474,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Jegyek oldal beállításai"),
@@ -688,6 +731,7 @@ class _UIsettingsState extends State<UIsettings> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("UI beállításaok"),
@@ -844,6 +888,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Statisztika oldal beállításai"),
@@ -1002,6 +1047,7 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Jegyszámoló oldal beállításai"),
@@ -1044,6 +1090,7 @@ class LogOutDialog extends StatefulWidget {
 
 class _LogOutDialogState extends State<LogOutDialog> {
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return new AlertDialog(
       title: new Text("Kijelentkezés"),
       content: Text(
@@ -1082,6 +1129,7 @@ class AdsDialog extends StatefulWidget {
 
 class _AdsDialogState extends State<AdsDialog> {
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return new AlertDialog(
       title: new Text("Reklámok"),
       content: Text(
@@ -1123,4 +1171,222 @@ Future<void> _ackAlert(BuildContext context, String content) async {
       );
     },
   );
+}
+
+class NetworkAndNotificationSettings extends StatefulWidget {
+  @override
+  _NetworkAndNotificationSettingsState createState() =>
+      _NetworkAndNotificationSettingsState();
+}
+
+class _NetworkAndNotificationSettingsState
+    extends State<NetworkAndNotificationSettings> {
+  @override
+  Widget build(BuildContext context) {
+    globals.globalContext = context;
+    globals.globalContext = context;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Hálózat és értesítés beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 2 + (globals.backgroundFetch ? 2 : 0),
+          // ignore: missing_return
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            //TODO group notifications
+                            var vibrationPattern = new Int64List(4);
+                            vibrationPattern[0] = 0;
+                            vibrationPattern[1] = 1000;
+                            vibrationPattern[2] = 5000;
+                            vibrationPattern[3] = 2000;
+                            var androidPlatformChannelSpecifics =
+                                new AndroidNotificationDetails(
+                              'novynaplo01',
+                              'novynaplo',
+                              'Channel for sending novyNaplo notifications',
+                              importance: Importance.Max,
+                              priority: Priority.High,
+                              vibrationPattern: vibrationPattern,
+                              color: const Color.fromARGB(255, 255, 165, 0),
+                              visibility: NotificationVisibility.Public,
+                              ledColor: Colors.orange,
+                              ledOnMs: 1000,
+                              ledOffMs: 1000,
+                              enableLights: true,
+                            );
+                            var iOSPlatformChannelSpecifics =
+                                new IOSNotificationDetails();
+                            var platformChannelSpecifics =
+                                new NotificationDetails(
+                                    androidPlatformChannelSpecifics,
+                                    iOSPlatformChannelSpecifics);
+                            await main.flutterLocalNotificationsPlugin.show(
+                              1,
+                              'Teszt értesítés',
+                              'Így fog kinézni egy értesítés...',
+                              platformChannelSpecifics,
+                              payload: 'teszt',
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Text("Háttér lekérések"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        globals.backgroundFetch = isOn;
+                        prefs.setBool("backgroundFetch", isOn);
+                        Crashlytics.instance.setBool("backgroundFetch", isOn);
+                      });
+                      if (isOn) {
+                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                        Crashlytics.instance.log(
+                            "Canceled alarm: " + main.fetchAlarmID.toString());
+                        await sleep(1500);
+                        main.fetchAlarmID++;
+                        await AndroidAlarmManager.periodic(
+                          Duration(minutes: globals.fetchPeriod),
+                          main.fetchAlarmID,
+                          main.getMarksInBackground,
+                          wakeup: globals.backgroundFetchCanWakeUpPhone,
+                          rescheduleOnReboot:
+                              globals.backgroundFetchCanWakeUpPhone,
+                        );
+                      } else {
+                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                        Crashlytics.instance.log(
+                            "Canceled alarm: " + main.fetchAlarmID.toString());
+                        await sleep(1500);
+                        main.fetchAlarmID++;
+                      }
+                    },
+                    value: globals.backgroundFetch,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text("Automatikus lekérések időköze (30-500perc):"),
+                  trailing: SizedBox(
+                    width: 50,
+                    child: Form(
+                      key: _formKeyTwo,
+                      child: TextFormField(
+                        controller: fetchPeriodController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Ezt nem hagyhatod üresen';
+                          }
+                          if (int.parse(value) > 500 || int.parse(value) < 30) {
+                            return "Az értéknek 30 és 500 között kell lenie";
+                          }
+                          return null;
+                        },
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (String input) async {
+                          if (_formKeyTwo.currentState.validate()) {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setInt("fetchPeriod", int.parse(input));
+                            globals.fetchPeriod = int.parse(input);
+                            await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                            Crashlytics.instance.log("Canceled alarm: " +
+                                main.fetchAlarmID.toString());
+                            await sleep(1500);
+                            main.fetchAlarmID++;
+                            await AndroidAlarmManager.periodic(
+                              Duration(minutes: globals.fetchPeriod),
+                              main.fetchAlarmID,
+                              main.getMarksInBackground,
+                              wakeup: globals.backgroundFetchCanWakeUpPhone,
+                              rescheduleOnReboot:
+                                  globals.backgroundFetchCanWakeUpPhone,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                );
+                break;
+              case 3:
+                return ListTile(
+                  title: Text("A lekérés felkeltheti a telefont (ajánlott)"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        globals.backgroundFetchCanWakeUpPhone = isOn;
+                        prefs.setBool("backgroundFetchCanWakeUpPhone", isOn);
+                        Crashlytics.instance
+                            .setBool("backgroundFetchCanWakeUpPhone", isOn);
+                      });
+                      if (isOn) {
+                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                        Crashlytics.instance.log(
+                            "Canceled alarm: " + main.fetchAlarmID.toString());
+                        await sleep(1500);
+                        main.fetchAlarmID++;
+                        await AndroidAlarmManager.periodic(
+                          Duration(minutes: globals.fetchPeriod),
+                          main.fetchAlarmID,
+                          main.getMarksInBackground,
+                          wakeup: globals.backgroundFetchCanWakeUpPhone,
+                          rescheduleOnReboot:
+                              globals.backgroundFetchCanWakeUpPhone,
+                        );
+                      } else {
+                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                        Crashlytics.instance.log(
+                            "Canceled alarm: " + main.fetchAlarmID.toString());
+                        await sleep(1500);
+                        main.fetchAlarmID++;
+                        await AndroidAlarmManager.periodic(
+                          Duration(minutes: globals.fetchPeriod),
+                          main.fetchAlarmID,
+                          main.getMarksInBackground,
+                          wakeup: globals.backgroundFetchCanWakeUpPhone,
+                          rescheduleOnReboot:
+                              globals.backgroundFetchCanWakeUpPhone,
+                        );
+                      }
+                    },
+                    value: globals.backgroundFetchCanWakeUpPhone,
+                  ),
+                );
+                break;
+            }
+          }),
+    );
+  }
 }

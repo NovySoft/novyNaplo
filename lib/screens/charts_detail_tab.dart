@@ -29,6 +29,7 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {
       textCol = Colors.green;
