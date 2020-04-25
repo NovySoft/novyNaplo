@@ -153,6 +153,7 @@ class NoticeDetailTab extends StatelessWidget {
                         }
                         break;
                     }
+                    return SizedBox(height:10,width:10);
                   }))
           //Expanded()
         ]));

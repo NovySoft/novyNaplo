@@ -97,6 +97,7 @@ class NetworkHelper {
         return "Nincs válasz a novy API-tól!\nPróbáld újra később!";
       }
     }
+    return "Error";
   }
 
   Future<void> getStudentInfo(token, code) async {

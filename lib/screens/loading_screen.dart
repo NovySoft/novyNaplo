@@ -325,6 +325,7 @@ class _LoadingPageState extends State<LoadingPage> {
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
+    return [];
   }
   //NETWORK END
 

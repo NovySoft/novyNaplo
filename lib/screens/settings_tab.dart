@@ -450,6 +450,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                 break;
               default:
             }
+            return SizedBox(height: 10, width: 10);
           }),
     );
   }
@@ -706,6 +707,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 );
                 break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
           }),
     );
@@ -863,6 +865,7 @@ class _UIsettingsState extends State<UIsettings> {
                 );
                 break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
           }),
     );
@@ -1022,6 +1025,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 );
                 break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
           }),
     );
@@ -1076,6 +1080,7 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
                 );
                 break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
           }),
     );
@@ -1385,6 +1390,7 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
             }
+            return SizedBox(height: 10, width: 10);
           }),
     );
   }
