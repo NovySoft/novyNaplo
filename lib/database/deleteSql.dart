@@ -18,4 +18,5 @@ Future<void> clearAllTables() async {
   db.delete("Evals");
   db.delete("Avarage");
   db.delete("Notices");
+  db.delete("Homework");
 }
