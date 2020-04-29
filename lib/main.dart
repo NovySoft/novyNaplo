@@ -122,7 +122,6 @@ class MyApp extends StatelessWidget {
   Future selectNotification(String payload) async {
     if (payload != null && payload != "teszt" && payload is String) {
       print(payload);
-      //TODO MAKE THE ACTUAL PAYLOAD HANDLING HERE
       showDialog<void>(
         context: globals.globalContext,
         builder: (BuildContext context) {
@@ -141,6 +140,8 @@ class MyApp extends StatelessWidget {
         },
       );
     } else {
+      print(Navigator.of(globals.globalContext).widget.key);
+      //! TODO: fix showing on loading screen
       showDialog<void>(
         context: globals.globalContext,
         builder: (BuildContext context) {
