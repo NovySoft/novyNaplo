@@ -42,7 +42,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Hero(
-            tag: id,
+            tag: widget.lessonInfo.id,
             child: HeroAnimatingMarksCard(
               subTitle: "",
               title: widget.lessonInfo.name,

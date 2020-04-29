@@ -20,7 +20,6 @@ List<dynamic> parseAllByDate(var input) {
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    id = 0;
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
@@ -35,7 +34,6 @@ List<dynamic> parseAllBySubject(var input) {
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    id = 0;
     jegyek.forEach((n) => jegyArray.add(setEvals(n)));
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');

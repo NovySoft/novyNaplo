@@ -3,8 +3,6 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 
-var id = 0;
-
 class Evals {
   var formName,
       form,
@@ -21,10 +19,31 @@ class Evals {
   String createDateString;
   DateTime createDate;
   DateTime date;
+  int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'formName': formName,
+      'form': form,
+      'value': value,
+      'numberValue': numberValue,
+      'teacher': teacher,
+      'type': type,
+      'subject': subject,
+      'theme': theme,
+      'mode': mode,
+      'weight': weight,
+      'dateString': dateString,
+      'createDateString': createDateString,
+    };
+  }
 }
 
 class Avarage {
   var subject, markCount, ownValue, classValue, diff;
+  int databaseId;
 }
 
 Evals setEvals(var input) {
@@ -87,7 +106,7 @@ Evals setEvals(var input) {
   } else {
     temp.weight = input["Weight"];
   }
-  temp.id = id++;
+  temp.id = input["EvaluationId"]; //We see no use for this, because we use databaseIDs most of the times
   temp.value = input["Value"];
   temp.formName = input["FormName"];
   temp.form = input["Form"];
@@ -111,6 +130,7 @@ Avarage setAvarage(var subject, ownValue, classValue, diff) {
 
 class Notices {
   var title, content, teacher, dateString, subject;
+  int databaseId;
 }
 
 Notices setNotices(var input) {
@@ -122,8 +142,8 @@ Notices setNotices(var input) {
   if (input["OsztalyCsoportUid"] == null) {
     temp.subject = null;
   } else {
-    temp.subject = SubjectAssignHelper().assignSubject(
-        globals.dJson, input["OsztalyCsoportUid"], input["Type"], input["Content"]);
+    temp.subject = SubjectAssignHelper().assignSubject(globals.dJson,
+        input["OsztalyCsoportUid"], input["Type"], input["Content"]);
   }
   return temp;
 }
@@ -156,9 +176,10 @@ class Lesson {
   DateTime startDate;
   DateTime endDate;
   Homework homework;
+  int databaseId;
 }
 
-Future<Lesson> setLesson(var input,token,code) async{
+Future<Lesson> setLesson(var input, token, code) async {
   var temp = new Lesson();
   //INTs
   temp.id = input["LessonId"];
@@ -187,9 +208,10 @@ Future<Lesson> setLesson(var input,token,code) async{
   //Lists
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
-  if(temp.teacherHomeworkId != null){
-    temp.homework = await setTeacherHomework(temp.teacherHomeworkId,token,code);
-  }else{
+  if (temp.teacherHomeworkId != null) {
+    temp.homework =
+        await setTeacherHomework(temp.teacherHomeworkId, token, code);
+  } else {
     temp.homework = new Homework();
   }
   return temp;
@@ -202,7 +224,7 @@ class CalculatorData {
   String name;
 }
 
-class Homework{
+class Homework {
   int id;
   int classGroupId;
   String subject;
@@ -210,4 +232,5 @@ class Homework{
   String content;
   DateTime givenUp;
   DateTime dueDate;
+  int databaseId;
 }

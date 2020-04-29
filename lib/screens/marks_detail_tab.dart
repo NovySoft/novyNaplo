@@ -1,25 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
-
+import 'package:novynaplo/database/insertSql.dart';
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab(
-      {this.numberValue,
-      this.subject,
-      this.id,
-      this.name,
-      this.color,
-      this.theme,
-      this.teacher,
-      this.createDate,
-      this.date,
-      this.mode,
-      this.weight,
-      this.value,
-      this.form,
-      this.formName});
+    this.eval, {
+    this.numberValue,
+    this.subject,
+    this.id,
+    this.name,
+    this.color,
+    this.theme,
+    this.teacher,
+    this.createDate,
+    this.date,
+    this.mode,
+    this.weight,
+    this.value,
+    this.form,
+    this.formName,
+  });
 
   final int id;
   final String name;
@@ -35,6 +38,7 @@ class MarksDetailTab extends StatelessWidget {
   final String createDate;
   final int numberValue;
   final Color color;
+  final Evals eval;
 
   Widget _buildBody() {
     return SafeArea(

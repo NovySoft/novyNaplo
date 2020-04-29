@@ -23,6 +23,7 @@ import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/database/mainSql.dart' as mainSql;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -40,6 +41,7 @@ void main() async {
     isNew = false;
   }
   runZoned(() async {
+    mainSql.initDatabase();
     runApp(MyApp());
     globals.fetchPeriod = prefs.getInt("fetchPeriod");
     globals.backgroundFetchCanWakeUpPhone =
@@ -120,6 +122,7 @@ class MyApp extends StatelessWidget {
   }
 
   Future selectNotification(String payload) async {
+    if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
     if (payload != null && payload != "teszt" && payload is String) {
       print(payload);
       showDialog<void>(
@@ -140,8 +143,6 @@ class MyApp extends StatelessWidget {
         },
       );
     } else {
-      //print(Navigator.of(globals.globalContext).widget.key);
-      //! TODO: fix showing on loading screen
       showDialog<void>(
         context: globals.globalContext,
         builder: (BuildContext context) {

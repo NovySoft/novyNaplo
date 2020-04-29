@@ -170,6 +170,7 @@ class MarksTabState extends State<MarksTab>
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: MarksDetailTab(
+              allParsedByDate[index],
               mode: allParsedByDate[index].mode,
               theme: allParsedByDate[index].theme,
               weight: allParsedByDate[index].weight,
@@ -299,6 +300,7 @@ class MarksTabState extends State<MarksTab>
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
                         onPressed: MarksDetailTab(
+                          allParsedByDate[index],
                           mode: allParsedBySubject[index].mode,
                           theme: allParsedBySubject[index].theme,
                           weight: allParsedBySubject[index].weight,
@@ -353,6 +355,7 @@ class MarksTabState extends State<MarksTab>
                       color: color,
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
+                        allParsedByDate[index],
                         mode: allParsedBySubject[index].mode,
                         theme: allParsedBySubject[index].theme,
                         weight: allParsedBySubject[index].weight,
@@ -391,6 +394,7 @@ class MarksTabState extends State<MarksTab>
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
+                allParsedByDate[index],
                 mode: allParsedBySubject[index].mode,
                 theme: allParsedBySubject[index].theme,
                 weight: allParsedBySubject[index].weight,
