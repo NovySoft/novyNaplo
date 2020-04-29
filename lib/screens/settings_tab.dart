@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/database/getSql.dart';
+import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -117,7 +116,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 8 + globals.adModifier,
+      itemCount: 9 + globals.adModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -131,9 +130,6 @@ class _SettingsBodyState extends State<SettingsBody> {
                       borderRadius: BorderRadius.circular(24),
                     ),
                     onPressed: () async {
-                      for (var n in await getAllEvals()){
-                        print(n.subject);
-                      };
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => UIsettings()),
@@ -306,6 +302,29 @@ class _SettingsBodyState extends State<SettingsBody> {
         } else if (index == 6) {
           return ListTile(
             title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DatabaseSettings()),
+                      );
+                    },
+                    icon: Icon(MdiIcons.databaseEdit, color: Colors.black),
+                    label: Text('Adatbázis beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
+            ),
+          );
+        } else if (index == 7) {
+          return ListTile(
+            title: Center(
                 child: Column(children: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -349,7 +368,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 7) {
+        } else if (index == 8) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -1192,7 +1211,6 @@ class _NetworkAndNotificationSettingsState
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Hálózat és értesítés beállításai"),
@@ -1395,6 +1413,108 @@ class _NetworkAndNotificationSettingsState
                 break;
             }
             return SizedBox(height: 10, width: 10);
+          }),
+    );
+  }
+}
+
+class DatabaseSettings extends StatefulWidget {
+  @override
+  _DatabaseSettingsState createState() => _DatabaseSettingsState();
+}
+
+class _DatabaseSettingsState extends State<DatabaseSettings> {
+  @override
+  Widget build(BuildContext context) {
+    globals.globalContext = context;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Adatbázis beállításai"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "SQLITE adatbázis",
+                          style: new TextStyle(fontSize: 30),
+                        ),
+                        Text(
+                          "Csak haladóknak",
+                          style: new TextStyle(fontSize: 20, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: new Text("Törlés"),
+                                  content: Text(
+                                    "Biztosan ki szeretnéd törölni az adatbázisokat?\nEz nem fordítható vissza",
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Igen',
+                                          style: TextStyle(color: Colors.red)),
+                                      onPressed: () async {
+                                        FirebaseAnalytics()
+                                            .logEvent(name: "clear_database");
+                                        Crashlytics.instance
+                                            .log("clear_database");
+                                        await clearAllTables();
+                                        Navigator.of(context).pop();
+                                        _ackAlert(context,
+                                            "Adatbázis sikeresen törölve");
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('Nem'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.databaseRemove,
+                            color: Colors.black,
+                          ),
+                          label: Text('Táblák kiürítése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              default:
+                return SizedBox(height: 10, width: 10);
+                break;
+            }
           }),
     );
   }
