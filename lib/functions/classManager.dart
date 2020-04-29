@@ -42,8 +42,18 @@ class Evals {
 }
 
 class Avarage {
-  var subject, markCount, ownValue, classValue, diff;
+  var subject, ownValue, classValue, diff;
   int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'subject': subject,
+      'ownValue': ownValue,
+      'classValue': classValue,
+      'diff': diff
+    };
+  }
 }
 
 Evals setEvals(var input) {
@@ -106,7 +116,8 @@ Evals setEvals(var input) {
   } else {
     temp.weight = input["Weight"];
   }
-  temp.id = input["EvaluationId"]; //We see no use for this, because we use databaseIDs most of the times
+  temp.id = input[
+      "EvaluationId"]; //We see no use for this, because we use databaseIDs most of the times
   temp.value = input["Value"];
   temp.formName = input["FormName"];
   temp.form = input["Form"];
@@ -130,7 +141,21 @@ Avarage setAvarage(var subject, ownValue, classValue, diff) {
 
 class Notices {
   var title, content, teacher, dateString, subject;
+  DateTime date;
   int databaseId;
+  int id;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'title': title,
+      'content': content,
+      'teacher': teacher,
+      'dateString': dateString,
+      'subject': subject,
+    };
+  }
 }
 
 Notices setNotices(var input) {
@@ -139,6 +164,8 @@ Notices setNotices(var input) {
   temp.teacher = input["Teacher"];
   temp.content = input["Content"];
   temp.dateString = input["CreatingTime"];
+  temp.date = DateTime.parse(input["CreatingTime"]);
+  temp.id = input["NoteId"];
   if (input["OsztalyCsoportUid"] == null) {
     temp.subject = null;
   } else {
@@ -176,7 +203,6 @@ class Lesson {
   DateTime startDate;
   DateTime endDate;
   Homework homework;
-  int databaseId;
 }
 
 Future<Lesson> setLesson(var input, token, code) async {
@@ -230,7 +256,36 @@ class Homework {
   String subject;
   String teacher;
   String content;
+  String givenUpString;
+  String dueDateString;
   DateTime givenUp;
   DateTime dueDate;
   int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'classGroupId': classGroupId,
+      'subject': subject,
+      'teacher': teacher,
+      'content': content,
+      'givenUpString': givenUpString,
+      'dueDateString': dueDateString,
+    };
+  }
+}
+
+Homework setHomework(var decoded) {
+  Homework temp = new Homework();
+  temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
+  temp.id = decoded["Id"];
+  temp.subject = capitalize(decoded["Tantargy"]);
+  temp.teacher = decoded["Rogzito"];
+  temp.content = decoded["Szoveg"];
+  temp.givenUpString = decoded["FeladasDatuma"];
+  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
+  temp.dueDateString = decoded["Hatarido"];
+  temp.dueDate = DateTime.parse(decoded["Hatarido"]);
+  return temp;
 }

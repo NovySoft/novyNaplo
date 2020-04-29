@@ -294,14 +294,7 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   }
   //Process response
   var decoded = json.decode(res.body);
-  Homework temp = new Homework();
-  temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
-  temp.id = decoded["Id"];
-  temp.subject = capitalize(decoded["Tantargy"]);
-  temp.teacher = decoded["Rogzito"];
-  temp.content = decoded["Szoveg"];
-  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
-  temp.dueDate = DateTime.parse(decoded["Hatarido"]);
+  Homework temp = setHomework(decoded);
   globals.globalHomework.add(temp);
   globals.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;

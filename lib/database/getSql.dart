@@ -28,6 +28,67 @@ Future<List<Evals>> getAllEvals() async {
     temp.databaseId = maps[i]['databaseId'];
     temp.dateString = maps[i]['dateString'];
     temp.createDateString = maps[i]['createDateString'];
+    temp.date = DateTime.parse(temp.dateString);
+    temp.createDate = DateTime.parse(temp.createDateString);
+    return temp;
+  });
+}
+
+Future<List<Notices>> getAllNotices() async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Notices');
+
+  return List.generate(maps.length, (i) {
+    Notices temp = new Notices();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.title = maps[i]['title'];
+    temp.content = maps[i]['content'];
+    temp.teacher = maps[i]['teacher'];
+    temp.dateString = maps[i]['dateString'];
+    temp.subject = maps[i]['subject'];
+    temp.date = DateTime.parse(temp.dateString);
+    return temp;
+  });
+}
+
+Future<List<Avarage>> getAllAvarages() async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Avarage');
+
+  return List.generate(maps.length, (i) {
+    Avarage temp = new Avarage();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.subject = maps[i]['subject'];
+    temp.ownValue = maps[i]['ownValue'];
+    temp.classValue = maps[i]['classValue'];
+    temp.diff = maps[i]['diff'];
+    return temp;
+  });
+}
+
+Future<List<Homework>> getAllHomework() async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Homework');
+
+  return List.generate(maps.length, (i) {
+    Homework temp = new Homework();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.classGroupId = maps[i]['classGroupId'];
+    temp.subject = maps[i]['subject'];
+    temp.teacher = maps[i]['teacher'];
+    temp.content = maps[i]['content'];
+    temp.givenUpString = maps[i]['givenUpString'];
+    temp.dueDateString = maps[i]['dueDateString'];
+    temp.givenUp = DateTime.parse(temp.givenUpString);
+    temp.dueDate = DateTime.parse(temp.dueDateString);
     return temp;
   });
 }

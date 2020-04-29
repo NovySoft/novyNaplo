@@ -1,4 +1,3 @@
-import 'package:novynaplo/database/getSql.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
@@ -15,8 +14,17 @@ void initDatabase() async {
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
-      return db.execute(
+      db.execute(
         "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,numberValue INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT)",
+      );
+      db.execute(
+        "CREATE TABLE Avarage (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,classValue REAL,diff REAL)",
+      );
+      db.execute(
+        "CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,id INTEGER,title TEXT,content TEXT,teacher TEXT,dateString TEXT,subject TEXT)",
+      );
+      db.execute(
+        "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT)",
       );
     },
     // Set the version. This executes the onCreate function and provides a
