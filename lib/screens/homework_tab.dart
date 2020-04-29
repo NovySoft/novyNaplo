@@ -45,6 +45,9 @@ class _HomeworkTabState extends State<HomeworkTab> {
     }
   }
 
+  //! RangeError (index): Invalid value: Not in range 0..2, inclusive: 3
+  //* https://console.firebase.google.com/u/0/project/novynaplo-152ec/crashlytics/app/android:novy.vip.novynaplo/issues/ca148d2a3483e9406fcf6a792d14aec6
+  //TODO Megjavítani, a felhasználó nem tapasztalt hibát
   Widget _listBuilder(BuildContext context, int index) {
     if (index >= globals.globalHomework.length) {
       return SizedBox(

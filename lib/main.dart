@@ -29,7 +29,6 @@ FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
-BuildContext mainContext;
 
 void main() async {
   //Change to true if needed
@@ -43,6 +42,10 @@ void main() async {
   runZoned(() async {
     runApp(MyApp());
     globals.fetchPeriod = prefs.getInt("fetchPeriod");
+    globals.backgroundFetchCanWakeUpPhone =
+        prefs.getBool("backgroundFetchCanWakeUpPhone") == null
+            ? true
+            : prefs.getBool("backgroundFetchCanWakeUpPhone");
     if (prefs.getBool("backgroundFetch")) {
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
@@ -81,7 +84,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    mainContext = context;
     initializeNotifications();
     return new DynamicTheme(
         defaultBrightness: Brightness.dark,
@@ -111,19 +113,41 @@ class MyApp extends StatelessWidget {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
+    NotificationAppLaunchDetails notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    print(notificationAppLaunchDetails.didNotificationLaunchApp);
+    print(notificationAppLaunchDetails.payload);
   }
 
   Future selectNotification(String payload) async {
-    if (payload != null && payload != "teszt") {
+    if (payload != null && payload != "teszt" && payload is String) {
       print(payload);
       //TODO MAKE THE ACTUAL PAYLOAD HANDLING HERE
+      showDialog<void>(
+        context: globals.globalContext,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Értesítés'),
+            content: Text(payload),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     } else {
       showDialog<void>(
         context: globals.globalContext,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Státusz'),
-            content: Text("Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
+            content: Text(
+                "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
