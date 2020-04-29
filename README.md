@@ -75,7 +75,7 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 ## Ismert hibák
 
-* **A ticker was started twice.** ~~jelenleg flutter framework hibának néz ki (Animációs framework)~~ NEM AZ, tényleg kétszer idítok el valahol egy tickert
+* **A ticker was started twice.** ~~jelenleg flutter framework hibának néz ki (Animációs framework)~~ NEM AZ, tényleg kétszer indítok el valahol egy tickert
 * **Lassú betöltés/leragadás a homokóránál** a lassú krétás válasz miatt történik (amennyiben nem, akkor hibakódot kell látnod)
 * **Hibás tanár/tantárgy név** az eredeti krétában van elírva a tanár/tantárgy neve, ez nem az applikáció hibája
 * **Tantárgy nézet bugos**, szétesnek és/vagy összekeverednek a tárgyak.
