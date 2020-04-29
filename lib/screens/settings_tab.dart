@@ -5,6 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -130,6 +131,9 @@ class _SettingsBodyState extends State<SettingsBody> {
                       borderRadius: BorderRadius.circular(24),
                     ),
                     onPressed: () async {
+                      for (var n in await getAllEvals()){
+                        print(n.subject);
+                      };
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => UIsettings()),

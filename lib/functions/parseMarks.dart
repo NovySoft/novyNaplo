@@ -20,7 +20,9 @@ List<dynamic> parseAllByDate(var input) {
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    jegyek.forEach((n) => jegyArray.add(setEvals(n)));
+    for (var n in jegyek) {
+      jegyArray.add(setEvals(n));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
     return [];
@@ -34,7 +36,9 @@ List<dynamic> parseAllBySubject(var input) {
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    jegyek.forEach((n) => jegyArray.add(setEvals(n)));
+    for (var n in jegyek) {
+      jegyArray.add(setEvals(n));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');
     return [];
@@ -49,8 +53,9 @@ List<String> parseMarksByDate(var input) {
     var evalJegy = parseAllByDate(input);
     if (evalJegy.length == 0) return [];
     if (evalJegy[0] == "Error") return ["Error"];
-    evalJegy
-        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+    for (var n in evalJegy) {
+      evalArray.add(capitalize(n.subject + " " + n.value));
+    }
   }
   return evalArray;
 }
@@ -61,8 +66,9 @@ List<String> parseMarksBySubject(var input) {
     var evalJegy = parseAllBySubject(input);
     if (evalJegy.length == 0) return [];
     if (evalJegy[0] == "Error") return ["Error"];
-    evalJegy
-        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+    for (var n in evalJegy) {
+      evalArray.add(capitalize(n.subject + " " + n.value));
+    }
   }
   return evalArray;
 }
@@ -70,8 +76,10 @@ List<String> parseMarksBySubject(var input) {
 List<dynamic> parseAvarages(var input) {
   atlagArray = [];
   try {
-    input.forEach((n) => atlagArray.add(setAvarage(
-        n["Subject"], n["Value"], n["classValue"], n["Difference"])));
+    for (var n in input) {
+      atlagArray.add(setAvarage(
+          n["Subject"], n["Value"], n["classValue"], n["Difference"]));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
@@ -98,7 +106,9 @@ List<dynamic> parseNotices(var input) {
   if (input != null && input["Notes"] != null) {
     noticesArray = [];
     var notices = input["Notes"];
-    notices.forEach((n) => noticesArray.add(setNotices(n)));
+    for (var n in notices) {
+      noticesArray.add(setNotices(n));
+    }
     return noticesArray;
   } else {
     return [];
@@ -108,7 +118,9 @@ List<dynamic> parseNotices(var input) {
 List<String> parseSubjects(var input) {
   List<String> subjectsArray = [];
   var subjects = input["SubjectAverages"];
-  subjects.forEach((n) => subjectsArray.add(capitalize(n["Subject"])));
+  for (var n in subjects) {
+    subjectsArray.add(capitalize(n["Subject"]));
+  }
   return subjectsArray;
 }
 

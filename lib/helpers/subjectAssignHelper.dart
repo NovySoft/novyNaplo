@@ -9,7 +9,9 @@ class SubjectAssignHelper {
       finalSubject = capitalize(content.split(" ")[0]);
     } else {
       var groups = dJson["OsztalyCsoportok"];
-      groups.forEach((n) => _compare(n, subjectUid));
+      for (var n in groups) {
+        _compare(n, subjectUid);
+      }
     }
     return finalSubject;
   }

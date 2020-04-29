@@ -52,11 +52,13 @@ void setArrays(var n) {
     var jegyek = parseAllByDate(globals.dJson);
     tmpArray = [];
     tmpI = 0;
-    jegyek.forEach((a) => setNumberValue(a, n.subject));
+    for (var a in jegyek) {
+      setNumberValue(a, n.subject);
+    }
     num sum = 0;
-    tmpArray.forEach((e) {
+    for (var e in tmpArray) {
       sum += e;
-    });
+    }
     if (sum == 0) {
       subjectAvg.add("Nincs jegyed!");
       avg = 0;
@@ -89,14 +91,18 @@ Widget avaragesList(BuildContext context) {
   subjectClassAvg = [];
   subjectDiff = [];
   avgColor = [];
-  parseAvarages(globals.avJson).forEach((n) => setArrays(n));
+  for (var n in parseAvarages(globals.avJson)) {
+    setArrays(n);
+  }
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
     itemCount: globals.avarageCount + globals.adModifier,
     itemBuilder: (context, index) {
       if (index >= globals.avarageCount) {
         return ListTile(
-          title: SizedBox(height: 100,),
+          title: SizedBox(
+            height: 100,
+          ),
         );
       } else {
         return ListTile(
