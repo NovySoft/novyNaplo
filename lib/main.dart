@@ -140,7 +140,7 @@ class MyApp extends StatelessWidget {
         },
       );
     } else {
-      print(Navigator.of(globals.globalContext).widget.key);
+      //print(Navigator.of(globals.globalContext).widget.key);
       //! TODO: fix showing on loading screen
       showDialog<void>(
         context: globals.globalContext,
