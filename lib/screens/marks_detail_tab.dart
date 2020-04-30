@@ -41,7 +41,6 @@ class MarksDetailTab extends StatelessWidget {
   final Evals eval;
 
   Widget _buildBody() {
-    insertEval(eval);
     return SafeArea(
       bottom: false,
       left: false,

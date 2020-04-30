@@ -6,6 +6,7 @@ import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -295,7 +296,7 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   //Process response
   var decoded = json.decode(res.body);
   Homework temp = setHomework(decoded);
-  globals.globalHomework.add(temp);
-  globals.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
+  homeworkPage.globalHomework.add(temp);
+  homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;
 }

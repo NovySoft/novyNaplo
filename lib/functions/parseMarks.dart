@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/insertSql.dart';
 
 import 'classManager.dart';
 import 'utils.dart';
@@ -17,6 +18,7 @@ var catIndex = 0;
 
 List<dynamic> parseAllByDate(var input) {
   jegyArray = [];
+  //! TODO fix this duplicate code
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
@@ -28,11 +30,15 @@ List<dynamic> parseAllByDate(var input) {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+  for(var n in jegyArray){
+    insertEval(n);
+  }
   return jegyArray;
 }
 
 List<dynamic> parseAllBySubject(var input) {
   jegyArray = [];
+  //! TODO fix this duplicate code
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
@@ -124,6 +130,9 @@ List<String> parseSubjects(var input) {
   return subjectsArray;
 }
 
+
+//TODO move this code to the chartHelper file
+//!FROM here
 List<charts.Series<ChartPoints, int>> createSubjectChart(
     List<Evals> input, String id) {
   chartData = [];
@@ -153,8 +162,10 @@ class ChartPoints {
 
   ChartPoints(this.count, this.value);
 }
+//!TO here
 
-//USED BY STATISTICS
+//TODO probably we should move this to somewhere else
+//*USED BY STATISTICS
 List<dynamic> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];

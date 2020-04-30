@@ -84,5 +84,6 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 ## Kód íráshoz használt pluginok
 
-* [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
-* [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode)
+* [WakaTime](https://wakatime.com/) Ajánlott a letöltése, így összegezni tudjuk, hogy mennyi fölösleges órát tölttöttünk kód írással ;)
+* [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments) Az én kis komment kiemelő pluginom, mert különböző kommenteket különböztetek meg
+* [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode) Egy kis kód kiegesztő plugin, ajánlom a használatát
