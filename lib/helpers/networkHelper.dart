@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
@@ -296,6 +297,8 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   //Process response
   var decoded = json.decode(res.body);
   Homework temp = setHomework(decoded);
+  //*Add it to the database
+  insertHomework(temp);
   homeworkPage.globalHomework.add(temp);
   homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;

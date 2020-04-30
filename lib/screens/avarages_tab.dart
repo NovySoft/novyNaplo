@@ -85,6 +85,7 @@ void setArrays(var n) {
   }
 }
 
+//TODO refactor to parse avarages before the rendering process
 Widget avaragesList(BuildContext context) {
   subjectName = [];
   subjectAvg = [];

@@ -30,9 +30,6 @@ List<dynamic> parseAllByDate(var input) {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-  for(var n in jegyArray){
-    insertEval(n);
-  }
   return jegyArray;
 }
 

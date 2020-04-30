@@ -1,3 +1,4 @@
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
@@ -127,6 +128,8 @@ Evals setEvals(var input) {
   temp.createDateString = input["CreatingTime"];
   temp.createDate = DateTime.parse(input["CreatingTime"]);
   temp.date = DateTime.parse(input["Date"]);
+  //*Add it to the database
+  insertEval(temp);
   return temp;
 }
 
@@ -136,6 +139,8 @@ Avarage setAvarage(var subject, ownValue, classValue, diff) {
   temp.ownValue = ownValue;
   temp.classValue = classValue;
   temp.diff = diff;
+  //*Add it to the database
+  insertAvarage(temp);
   return temp;
 }
 
@@ -172,6 +177,8 @@ Notices setNotices(var input) {
     temp.subject = SubjectAssignHelper().assignSubject(globals.dJson,
         input["OsztalyCsoportUid"], input["Type"], input["Content"]);
   }
+  //*Add it to the database
+  insertNotices(temp);
   return temp;
 }
 
