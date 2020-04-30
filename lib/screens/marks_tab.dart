@@ -25,6 +25,9 @@ final List<Tab> markTabs = <Tab>[
 ];
 String label, labelBefore;
 TabController _tabController;
+List<dynamic> colors;
+List<String> markNameByDate;
+List<String> markNameBySubject;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -44,10 +47,6 @@ class MarksTabState extends State<MarksTab>
   int itemsLength = globals.markCount;
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
   final _androidRefreshKeyTwo = GlobalKey<RefreshIndicatorState>();
-
-  List<dynamic> colors;
-  List<String> markNameByDate;
-  List<String> markNameBySubject;
 
   @override
   void initState() {

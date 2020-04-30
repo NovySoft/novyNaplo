@@ -5,7 +5,11 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:collection/collection.dart';
 
+Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
+
+//*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval) async {
   // Get a reference to the database.
@@ -20,7 +24,6 @@ Future<void> insertEval(Evals eval) async {
             element.form == eval.form);
   });
   if (matchedEvals.length == 0) {
-    eval.databaseId = null;
     await db.insert(
       'Evals',
       eval.toMap(),
@@ -29,13 +32,11 @@ Future<void> insertEval(Evals eval) async {
   } else {
     for (var n in matchedEvals) {
       //!Update didn't work so we delete and create a new one
-      //TODO this isn't the best solution, but it works for now. FIX it later
       if (n.numberValue != eval.numberValue ||
           n.theme != eval.theme ||
           n.dateString != eval.dateString ||
           n.weight != eval.weight) {
         deleteFromDb(n.databaseId, "Evals");
-        n.databaseId = null;
         insertEval(eval);
       }
     }
@@ -51,7 +52,6 @@ Future<void> insertHomework(Homework hw) async {
     return (element.id == hw.id && element.subject == hw.subject);
   });
   if (matchedHw.length == 0) {
-    hw.databaseId = null;
     await db.insert(
       'Homework',
       hw.toMap(),
@@ -62,7 +62,6 @@ Future<void> insertHomework(Homework hw) async {
       //!Update didn't work so we delete and create a new one
       if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
         deleteFromDb(n.databaseId, "Homework");
-        n.databaseId = null;
         insertHomework(hw);
       }
     }
@@ -78,7 +77,6 @@ Future<void> insertNotices(Notices notice) async {
     return (element.title == notice.title || element.id == notice.id);
   });
   if (matchedNotices.length == 0) {
-    notice.databaseId = null;
     await db.insert(
       'Notices',
       notice.toMap(),
@@ -89,7 +87,6 @@ Future<void> insertNotices(Notices notice) async {
       //!Update didn't work so we delete and create a new one
       if (n.title != notice.title || n.content != notice.content) {
         deleteFromDb(n.databaseId, "Notices");
-        n.databaseId = null;
         insertNotices(notice);
       }
     }
@@ -101,14 +98,11 @@ Future<void> insertAvarage(Avarage avarage) async {
   final Database db = await mainSql.database;
   await sleep1();
   List<Avarage> allAv = await getAllAvarages();
-  print("Call db on AV");
 
   var matchedAv = allAv.where((element) {
     return (element.subject == avarage.subject);
   });
   if (matchedAv.length == 0) {
-    print("INSERT AV");
-    avarage.databaseId = null;
     await db.insert(
       'Avarage',
       avarage.toMap(),
@@ -120,11 +114,174 @@ Future<void> insertAvarage(Avarage avarage) async {
       if (n.diff != avarage.diff ||
           n.ownValue != avarage.ownValue ||
           n.classValue != avarage.classValue) {
-        print("UPDATE AV");
         deleteFromDb(n.databaseId, "Avarage");
-        n.databaseId = null;
         insertAvarage(avarage);
       }
     }
   }
+}
+
+//*Batch inserts
+// A function that inserts multiple evals into the database
+Future<void> batchInsertEval(List<Evals> evalList) async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  //Get all evals, and see whether we should be just replacing
+  List<Evals> allEvals = await getAllEvals();
+  for (var eval in evalList) {
+    var matchedEvals = allEvals.where(
+      (element) {
+        return (element.id == eval.id && element.form == eval.form) ||
+            (element.subject == eval.subject &&
+                element.id == eval.id &&
+                element.form == eval.form);
+      },
+    );
+    if (matchedEvals.length == 0) {
+      batch.insert(
+        'Evals',
+        eval.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedEvals) {
+        //!Update didn't work so we delete and create a new one
+        if ((n.numberValue != eval.numberValue ||
+                n.theme != eval.theme ||
+                n.dateString != eval.dateString ||
+                n.weight != eval.weight) &&
+            n.id == eval.id) {
+          batch.delete(
+            "Evals",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Evals',
+            eval.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  print("INSERTED EVAL BATCH");
+}
+
+Future<void> batchInsertHomework(List<Homework> hwList) async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Homework> allHw = await getAllHomework();
+  for (var hw in hwList) {
+    var matchedHw = allHw.where((element) {
+      return (element.id == hw.id && element.subject == hw.subject);
+    });
+    if (matchedHw.length == 0) {
+      batch.insert(
+        'Homework',
+        hw.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedHw) {
+        //!Update didn't work so we delete and create a new one
+        if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
+          batch.delete(
+            "Homework",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Homework',
+            hw.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+}
+
+Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Avarage> allAv = await getAllAvarages();
+  for (var avarage in avarageList) {
+    var matchedAv = allAv.where((element) {
+      return (element.subject == avarage.subject);
+    });
+    if (matchedAv.length == 0) {
+      batch.insert(
+        'Avarage',
+        avarage.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedAv) {
+        //!Update didn't work so we delete and create a new one
+        if (n.diff != avarage.diff ||
+            n.ownValue != avarage.ownValue ||
+            n.classValue != avarage.classValue) {
+          batch.delete(
+            "Avarage",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Avarage',
+            avarage.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+}
+
+Future<void> batchInsertNotices(List<Notices> noticeList) async {
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Notices> allNotices = await getAllNotices();
+  for (var notice in noticeList) {
+    var matchedNotices = allNotices.where((element) {
+      return (element.title == notice.title || element.id == notice.id);
+    });
+    if (matchedNotices.length == 0) {
+      batch.insert(
+        'Notices',
+        notice.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedNotices) {
+        //!Update didn't work so we delete and create a new one
+        if ((n.title != notice.title || n.content != notice.content) &&
+            n.id == notice.id) {
+          batch.delete(
+            "Notices",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Notices',
+            notice.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  print("BATCH INSERTED NOTICES");
 }

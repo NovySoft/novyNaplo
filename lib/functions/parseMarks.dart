@@ -1,9 +1,7 @@
 import 'dart:core';
-
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/insertSql.dart';
-
 import 'classManager.dart';
 import 'utils.dart';
 
@@ -11,8 +9,6 @@ List<ChartPoints> chartData = [];
 var index, sum;
 var jegyek;
 List<Evals> jegyArray = [];
-var atlagArray = [];
-var noticesArray = [];
 var stringEvals = [];
 var catIndex = 0;
 
@@ -30,6 +26,7 @@ List<dynamic> parseAllByDate(var input) {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+  batchInsertEval(jegyArray);
   return jegyArray;
 }
 
@@ -76,8 +73,8 @@ List<String> parseMarksBySubject(var input) {
   return evalArray;
 }
 
-List<dynamic> parseAvarages(var input) {
-  atlagArray = [];
+List<Avarage> parseAvarages(var input) {
+  List<Avarage> atlagArray = [];
   try {
     for (var n in input) {
       atlagArray.add(setAvarage(
@@ -87,13 +84,8 @@ List<dynamic> parseAvarages(var input) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
   }
+  batchInsertAvarage(atlagArray);
   return atlagArray;
-}
-
-int countAvarages(var input) {
-  var count = 0;
-  if (input != null) count = input.length;
-  return count;
 }
 
 int countNotices(var input) {
@@ -105,13 +97,14 @@ int countNotices(var input) {
   return count;
 }
 
-List<dynamic> parseNotices(var input) {
+List<Notices> parseNotices(var input) {
   if (input != null && input["Notes"] != null) {
-    noticesArray = [];
+    List<Notices> noticesArray = [];
     var notices = input["Notes"];
     for (var n in notices) {
       noticesArray.add(setNotices(n));
     }
+    batchInsertNotices(noticesArray);
     return noticesArray;
   } else {
     return [];
@@ -126,7 +119,6 @@ List<String> parseSubjects(var input) {
   }
   return subjectsArray;
 }
-
 
 //TODO move this code to the chartHelper file
 //!FROM here

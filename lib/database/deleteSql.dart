@@ -15,8 +15,10 @@ Future<void> deleteFromDb(int databaseId, String table) async {
 Future<void> clearAllTables() async {
   // Get a reference to the database.
   final db = await mainSql.database;
-  db.delete("Evals");
-  db.delete("Avarage");
-  db.delete("Notices");
-  db.delete("Homework");
+  final batch = db.batch();
+  batch.delete("Evals");
+  batch.delete("Avarage");
+  batch.delete("Notices");
+  batch.delete("Homework");
+  await batch.commit();
 }
