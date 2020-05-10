@@ -304,7 +304,8 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   var decoded = json.decode(res.body);
   Homework temp = setHomework(decoded);
   //*Add it to the database
-  insertHomework(temp);
+  //TODO batchify
+  await insertHomework(temp);
   homeworkPage.globalHomework.add(temp);
   homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;
