@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
-
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab(
@@ -19,9 +19,11 @@ class MarksDetailTab extends StatelessWidget {
       this.weight,
       this.value,
       this.form,
-      this.formName});
+      this.formName,
+      this.eval});
 
   final int id;
+  final Evals eval;
   final String name;
   final String theme;
   final String weight;
@@ -44,28 +46,13 @@ class MarksDetailTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Hero(
-            tag: id,
-            child: HeroAnimatingMarksCard(
-              subTitle: "",
-              title: name,
-              color: color,
-              heroAnimation: AlwaysStoppedAnimation(1),
-              onPressed: null,
-            ),
-            // This app uses a flightShuttleBuilder to specify the exact widget
-            // to build while the hero transition is mid-flight.
-            //
-            // It could either be specified here or in SongsTab.
-            flightShuttleBuilder: (context, animation, flightDirection,
-                fromHeroContext, toHeroContext) {
-              return HeroAnimatingMarksCard(
-                subTitle: "",
-                title: name,
-                color: color,
-                heroAnimation: animation,
-              );
-            },
+          HeroAnimatingMarksCard(
+            eval: eval,
+            subTitle: "",
+            title: name,
+            color: color,
+            heroAnimation: AlwaysStoppedAnimation(1),
+            onPressed: null,
           ),
           Divider(
             height: 0,

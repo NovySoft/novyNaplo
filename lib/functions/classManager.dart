@@ -2,6 +2,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
+import 'package:flutter/material.dart';
 
 var id = 0;
 
@@ -21,6 +22,7 @@ class Evals {
   String createDateString;
   DateTime createDate;
   DateTime date;
+  IconData icon;
 }
 
 class Avarage {
@@ -35,6 +37,8 @@ Evals setEvals(var input) {
   } else {
     temp.subject = input["Subject"];
   }
+  //Icon
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
   //Magatartas es Szorgalom integer
   if (input["NumberValue"] == 0 && input["Form"] != "Percent") {
     switch (input["Value"]) {
@@ -122,8 +126,8 @@ Notices setNotices(var input) {
   if (input["OsztalyCsoportUid"] == null) {
     temp.subject = null;
   } else {
-    temp.subject = SubjectAssignHelper().assignSubject(
-        globals.dJson, input["OsztalyCsoportUid"], input["Type"], input["Content"]);
+    temp.subject = SubjectAssignHelper().assignSubject(globals.dJson,
+        input["OsztalyCsoportUid"], input["Type"], input["Content"]);
   }
   return temp;
 }
@@ -158,7 +162,7 @@ class Lesson {
   Homework homework;
 }
 
-Future<Lesson> setLesson(var input,token,code) async{
+Future<Lesson> setLesson(var input, token, code) async {
   var temp = new Lesson();
   //INTs
   temp.id = input["LessonId"];
@@ -187,9 +191,10 @@ Future<Lesson> setLesson(var input,token,code) async{
   //Lists
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
-  if(temp.teacherHomeworkId != null){
-    temp.homework = await setTeacherHomework(temp.teacherHomeworkId,token,code);
-  }else{
+  if (temp.teacherHomeworkId != null) {
+    temp.homework =
+        await setTeacherHomework(temp.teacherHomeworkId, token, code);
+  } else {
     temp.homework = new Homework();
   }
   return temp;
@@ -202,7 +207,7 @@ class CalculatorData {
   String name;
 }
 
-class Homework{
+class Homework {
   int id;
   int classGroupId;
   String subject;

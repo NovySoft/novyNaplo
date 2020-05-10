@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:english_words/english_words.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 //Loading widget:
@@ -9,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
 
 import 'package:diacritic/diacritic.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:novynaplo/screens/login_page.dart' as login;
 
@@ -87,7 +89,7 @@ List<String> getRandomNames(int amount) {
 }
 
 String capitalize(String word) {
-  if(word == null) return "";
+  if (word == null) return "";
   return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
 }
 
@@ -211,8 +213,8 @@ int getMonthLength(int input, bool isLeap) {
   }
 }
 
-String parseIntToWeekdayString(int input){
-  switch(input){
+String parseIntToWeekdayString(int input) {
+  switch (input) {
     case 1:
       return "Hétfő";
       break;
@@ -236,4 +238,82 @@ String parseIntToWeekdayString(int input){
       break;
   }
   return null;
+}
+
+IconData parseSubjectToIcon({@required String subject}) {
+  if (subject.toLowerCase().contains("gazdaság")) {
+    return MdiIcons.cashMultiple;
+  }
+  if ((subject.toLowerCase().contains("etika") ||
+          subject.toLowerCase().contains("erkölcs"))) {
+    return MdiIcons.headHeart;
+  }
+  if (subject.toLowerCase().contains("hit")) {
+    return MdiIcons.shieldCross;
+  }
+  if (subject.toLowerCase().contains("magatartas") ||
+      subject.toLowerCase().contains("magatartás")) {
+    return MdiIcons.handHeart;
+  }
+  if (subject.toLowerCase().contains("szorgalom")) {
+    return MdiIcons.teach;
+  }
+  if (subject.toLowerCase().contains("irodalom")) {
+    return MdiIcons.notebookMultiple;
+  }
+  if (subject.toLowerCase().contains("nyelvtan") ||
+      subject.toLowerCase().contains("magyar nyelv")) {
+    return MdiIcons.alphabetical;
+  }
+  if (subject.toLowerCase().contains("ének") ||
+      subject.toLowerCase().contains("zene")) {
+    return MdiIcons.musicClefTreble;
+  }
+  if (subject.toLowerCase().contains("testnevelés") ||
+      subject.toLowerCase().contains("tesi")) {
+    return MdiIcons.soccer;
+  }
+  if (subject.toLowerCase().contains("vizuális kultúra") ||
+      (subject.toLowerCase().contains("rajz") &&
+          !subject.toLowerCase().contains("föld"))) {
+    return MdiIcons.palette;
+  }
+  if ((subject.toLowerCase().contains("német") ||
+          subject.toLowerCase().contains("francia") ||
+          subject.toLowerCase().contains("idegen") ||
+          subject.toLowerCase().contains("nyelv") ||
+          subject.toLowerCase().contains("angol") ||
+          subject.toLowerCase().contains("english")) &&
+      !subject.toLowerCase().contains("magyar")) {
+    return MdiIcons.translate;
+  }
+  if (subject.toLowerCase().contains("történelem")) {
+    return MdiIcons.history;
+  }
+  if (subject.toLowerCase().contains("földrajz")) {
+    return MdiIcons.mapCheck;
+  }
+  if (subject.toLowerCase().contains("biológia")) {
+    return MdiIcons.dna;
+  }
+  if (subject.toLowerCase().contains("kémia")) {
+    return MdiIcons.beakerCheck;
+  }
+  if (subject.toLowerCase().contains("fizika")) {
+    return MdiIcons.atom;
+  }
+  if (subject.toLowerCase().contains("informatika") ||
+      subject.toLowerCase().contains("távközlés")) {
+    return MdiIcons.desktopTowerMonitor;
+  }
+  if (subject.toLowerCase().contains("matek") ||
+      subject.toLowerCase().contains("matematika")) {
+    return MdiIcons.androidStudio;
+  }
+  //LogUnkown subject so I can add that later
+  FirebaseAnalytics().logEvent(
+    name: "UnkownSubject",
+    parameters: {"subject": subject},
+  );
+  return Icons.create;
 }

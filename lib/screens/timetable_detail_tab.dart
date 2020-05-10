@@ -15,10 +15,12 @@ class TimetableDetailTab extends StatefulWidget {
   const TimetableDetailTab({
     this.lessonInfo,
     this.color,
+    this.eval
   });
 
   final Lesson lessonInfo;
   final Color color;
+  final Evals eval;
 
   @override
   _TimetableDetailTabState createState() => _TimetableDetailTabState();
@@ -44,6 +46,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
           Hero(
             tag: id,
             child: HeroAnimatingMarksCard(
+              eval: widget.eval,
               subTitle: "",
               title: widget.lessonInfo.name,
               color: widget.color,
@@ -52,6 +55,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
             flightShuttleBuilder: (context, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               return HeroAnimatingMarksCard(
+                eval: widget.eval,
                 subTitle: "",
                 title: widget.lessonInfo.name,
                 color: widget.color,

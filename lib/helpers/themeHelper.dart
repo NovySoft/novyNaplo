@@ -89,6 +89,7 @@ class ThemeHelper {
   ];
 
   ThemeData getTheme(brightness) {
+    //TODO fix this deprecated garbage
     if (brightness == Brightness.dark) {
       Crashlytics.instance.setString("Theme", "Dark");
     } else {

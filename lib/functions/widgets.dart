@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
@@ -151,13 +152,15 @@ class HeroAnimatingMarksCard extends StatelessWidget {
       this.subTitle,
       this.color,
       this.heroAnimation,
-      this.onPressed});
+      this.onPressed,
+      this.eval});
 
   final String title;
   final String subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
+  final Evals eval;
 
   double get playButtonSize => 100 + 50 * heroAnimation.value;
 
@@ -232,20 +235,11 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(bottom: 45) *
                                   (1 - heroAnimation.value),
-                              child: Container(
-                                height: playButtonSize,
-                                width: playButtonSize,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black12,
-                                ),
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.create,
-                                  size: playButtonSize,
-                                  color: Colors.black38,
-                                  textDirection: TextDirection.ltr,
-                                ),
+                              child: Icon(
+                                eval.icon,
+                                size: playButtonSize,
+                                color: Colors.black38,
+                                textDirection: TextDirection.ltr,
                               ),
                             ),
                           ],
@@ -266,59 +260,11 @@ class HeroAnimatingMarksCard extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned(
-                    bottom: -80 * heroAnimation.value,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                        height: 80,
-                        color: Colors.black12,
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              title,
-                              textDirection: TextDirection.ltr,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 21,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              subTitle,
-                              textDirection: TextDirection.ltr,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 21,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            )
-                          ],
-                        )),
-                  ),
-                  // The play button grows in the hero animation.
-                  Padding(
-                    padding:
-                        EdgeInsets.only(bottom: 45) * (1 - heroAnimation.value),
-                    child: Container(
-                      height: playButtonSize,
-                      width: playButtonSize,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black12,
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.create,
-                        size: playButtonSize,
-                        color: Colors.black38,
-                        textDirection: TextDirection.ltr,
-                      ),
-                    ),
+                  Icon(
+                    eval.icon,
+                    size: playButtonSize,
+                    color: Colors.black38,
+                    textDirection: TextDirection.ltr,
                   ),
                 ],
               )));
