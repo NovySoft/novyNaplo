@@ -12,7 +12,7 @@ List<Evals> jegyArray = [];
 var stringEvals = [];
 var catIndex = 0;
 
-List<dynamic> parseAllByDate(var input) {
+Future<List<dynamic>> parseAllByDate(var input) async{
   jegyArray = [];
   //! TODO fix this duplicate code
   try {
@@ -26,7 +26,7 @@ List<dynamic> parseAllByDate(var input) {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-  batchInsertEval(jegyArray);
+  await batchInsertEval(jegyArray);
   return jegyArray;
 }
 
@@ -47,10 +47,10 @@ List<dynamic> parseAllBySubject(var input) {
   return jegyArray;
 }
 
-List<String> parseMarksByDate(var input) {
+Future<List<String>> parseMarksByDate(var input) async{
   List<String> evalArray = [];
   if (input != null) {
-    var evalJegy = parseAllByDate(input);
+    var evalJegy = await parseAllByDate(input);
     if (evalJegy.length == 0) return [];
     if (evalJegy[0] == "Error") return ["Error"];
     for (var n in evalJegy) {

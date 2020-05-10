@@ -9,6 +9,7 @@ import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -124,6 +125,11 @@ class NetworkHelper {
         globals.markCount = eval.length;
       else
         globals.markCount = 0;
+      marksPage.colors = getRandomColors(globals.markCount);
+      marksPage.markNameByDate = await parseMarksByDate(globals.dJson);
+      marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
+      marksPage.markNameBySubject = parseMarksBySubject(globals.dJson);
+      marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
       globals.noticesCount = countNotices(globals.dJson);
       noticesPage.allParsedNotices = parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);

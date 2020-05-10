@@ -123,6 +123,7 @@ Future<void> insertAvarage(Avarage avarage) async {
 
 //*Batch inserts
 // A function that inserts multiple evals into the database
+//!This thing double inserts
 Future<void> batchInsertEval(List<Evals> evalList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
