@@ -250,15 +250,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: null,
-                    /*() async {
+                    onPressed: () async {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 NetworkAndNotificationSettings()),
                       );
-                    },*/
+                    },
                     icon: Row(
                       children: <Widget>[
                         Icon(MdiIcons.accessPointNetwork, color: Colors.black),

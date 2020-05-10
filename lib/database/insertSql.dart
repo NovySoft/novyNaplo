@@ -175,7 +175,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
     }
   }
   await batch.commit();
-  print("INSERTED EVAL BATCH");
+  //print("INSERTED EVAL BATCH");
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
@@ -293,5 +293,5 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
     }
   }
   await batch.commit();
-  print("BATCH INSERTED NOTICES");
+  //print("BATCH INSERTED NOTICES");
 }

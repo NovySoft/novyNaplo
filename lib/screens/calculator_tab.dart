@@ -787,9 +787,9 @@ class CalculatorTabState extends State<CalculatorTab>
           ),
           globals.adsEnabled
               ? SizedBox(
-                  height: 100,
+                  height: 150,
                 )
-              : SizedBox(height: 0),
+              : SizedBox(height: 100),
         ],
       ),
     );
@@ -884,6 +884,9 @@ class CalculatorTabState extends State<CalculatorTab>
           Text(
             text1,
             style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 150,
           ),
         ],
       );
