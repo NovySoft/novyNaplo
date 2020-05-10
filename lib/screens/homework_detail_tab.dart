@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:novynaplo/global.dart' as globals;
 
-
 Timer timer;
 
 class HomeworkDetailTab extends StatefulWidget {
@@ -139,6 +138,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
                               Text(
                                 "Házifeladat határideje: ",
                                 textAlign: TextAlign.left,
@@ -158,6 +158,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
                               Text(
                                 "Házifeladat határideje: ",
                                 textAlign: TextAlign.left,
@@ -187,6 +188,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 15),
                             Text(
                               "Házifeladat feladva: ",
                               textAlign: TextAlign.left,
@@ -205,6 +207,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: 15),
                             Text(
                               "Házifeladatot feladta:",
                               textAlign: TextAlign.left,
@@ -219,7 +222,9 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         );
                         break;
                       default:
-                        return SizedBox(height: 50,);
+                        return SizedBox(
+                          height: 50,
+                        );
                     }
                   }))
           //Expanded()

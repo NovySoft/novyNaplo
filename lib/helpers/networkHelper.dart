@@ -126,9 +126,7 @@ class NetworkHelper {
       else
         globals.markCount = 0;
       marksPage.colors = getRandomColors(globals.markCount);
-      marksPage.markNameByDate = await parseMarksByDate(globals.dJson);
       marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
-      marksPage.markNameBySubject = parseMarksBySubject(globals.dJson);
       marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
       globals.noticesCount = countNotices(globals.dJson);
       noticesPage.allParsedNotices = await parseNotices(globals.dJson);

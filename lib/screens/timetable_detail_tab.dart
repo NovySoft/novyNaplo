@@ -46,7 +46,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HeroAnimatingMarksCard(
-            icon: icon,
+            eval: null,
+            iconData: icon,
             subTitle: "",
             title: widget.lessonInfo.name,
             color: widget.color,

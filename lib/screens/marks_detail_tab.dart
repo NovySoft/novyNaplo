@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/insertSql.dart';
@@ -49,7 +50,8 @@ class MarksDetailTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HeroAnimatingMarksCard(
-            icon: eval.icon,
+            eval: null,
+            iconData: eval.icon == null ? parseSubjectToIcon(subject: eval.subject) : eval.icon,
             subTitle: "",
             title: name,
             color: color,

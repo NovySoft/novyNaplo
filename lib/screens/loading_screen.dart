@@ -21,10 +21,12 @@ import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/database/getSql.dart';
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -205,9 +207,7 @@ class _LoadingPageState extends State<LoadingPage> {
         else
           globals.markCount = 0;
         marksPage.colors = getRandomColors(globals.markCount);
-        marksPage.markNameByDate = await parseMarksByDate(globals.dJson);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
-        marksPage.markNameBySubject = parseMarksBySubject(globals.dJson);
         marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
         globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
@@ -335,33 +335,57 @@ class _LoadingPageState extends State<LoadingPage> {
   }
   //NETWORK END
 
+  //Runs after initState
   void onLoad(var context) async {
-    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-    NewVersion newVerDetails = await getVersion();
-    if (newVerDetails.returnedAnything) {
-      if (config.currentAppVersionCode != newVerDetails.versionCode) {
-        setState(() {
-          loadingText = "Verzió ellenőrzése";
-        });
-        await _newVersionAlert(
-            context,
-            newVerDetails.versionCode,
-            newVerDetails.releaseNotes,
-            newVerDetails.isBreaking,
-            newVerDetails.releaseLink);
-      }
-    }
-    setState(() {
-      loadingText = "Addatok olvasása a memóriából";
-    });
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
+      globals.setGlobals();
+      setState(() {
+        loadingText = "Verzió ellenőrzése";
+      });
+      Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+      NewVersion newVerDetails = await getVersion();
+      if (newVerDetails.returnedAnything) {
+        if (config.currentAppVersionCode != newVerDetails.versionCode) {
+          await _newVersionAlert(
+              context,
+              newVerDetails.versionCode,
+              newVerDetails.releaseNotes,
+              newVerDetails.isBreaking,
+              newVerDetails.releaseLink);
+        }
+      }
+      //If we have prefetched data
+      if (prefs.getBool("backgroundFetch")) {
+        print("BACKGROUNGDATA");
+        setState(() {
+          loadingText = "Adatok olvasása az adatbázisból";
+        });
+        //MARKS
+        List<Evals> tempEvals = await getAllEvals();
+        globals.markCount = tempEvals.length;
+        marksPage.colors = getRandomColors(globals.markCount);
+        marksPage.allParsedByDate = tempEvals;
+        marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+        marksPage.allParsedByDate
+            .sort((a, b) => b.createDateString.compareTo(a.createDateString));
+        //Homework
+        homeworkPage.globalHomework = await getAllHomework();
+        homeworkPage.globalHomework
+            .sort((a, b) => b.givenUp.compareTo(a.givenUp));
+        //Notices
+        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+        return;
+      }
+      //If we don't have prefetched data
+      setState(() {
+        loadingText = "Addatok olvasása a memóriából";
+      });
       final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
           userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      globals.setGlobals();
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
         if (prefs.getBool("ads")) {
@@ -380,10 +404,9 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'onLoad-prefs');
-      globals.resetAllGlobals();
+      Crashlytics.instance.recordError(e, s, context: 'onLoad');
       await _ackAlert(context,
-          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása\nMemória törölve...");
+          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása");
     }
     auth(context);
   }

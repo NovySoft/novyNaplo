@@ -47,32 +47,6 @@ List<dynamic> parseAllBySubject(var input) {
   return jegyArray;
 }
 
-Future<List<String>> parseMarksByDate(var input) async{
-  List<String> evalArray = [];
-  if (input != null) {
-    var evalJegy = await parseAllByDate(input);
-    if (evalJegy.length == 0) return [];
-    if (evalJegy[0] == "Error") return ["Error"];
-    for (var n in evalJegy) {
-      evalArray.add(capitalize(n.subject + " " + n.value));
-    }
-  }
-  return evalArray;
-}
-
-List<String> parseMarksBySubject(var input) {
-  List<String> evalArray = [];
-  if (input != null) {
-    var evalJegy = parseAllBySubject(input);
-    if (evalJegy.length == 0) return [];
-    if (evalJegy[0] == "Error") return ["Error"];
-    for (var n in evalJegy) {
-      evalArray.add(capitalize(n.subject + " " + n.value));
-    }
-  }
-  return evalArray;
-}
-
 Future<List<Avarage>> parseAvarages(var input) async{
   List<Avarage> atlagArray = [];
   try {

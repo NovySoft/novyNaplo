@@ -51,6 +51,11 @@ class _HomeworkTabState extends State<HomeworkTab> {
   //* https://console.firebase.google.com/u/0/project/novynaplo-152ec/crashlytics/app/android:novy.vip.novynaplo/issues/ca148d2a3483e9406fcf6a792d14aec6
   //TODO Megjavítani, a felhasználó nem tapasztalt hibát
   Widget _listBuilder(BuildContext context, int index) {
+    bool dueOver = false;
+    var left = globalHomework[index].dueDate.difference(DateTime.now());
+    if (left.inMinutes / 60 < 0) {
+      dueOver = true;
+    }
     if (index >= globalHomework.length) {
       return SizedBox(
         height: 100,
@@ -62,12 +67,12 @@ class _HomeworkTabState extends State<HomeworkTab> {
           "-" +
           globalHomework[index].givenUp.day.toString() +
           " " +
-          parseIntToWeekdayString(
-              globalHomework[index].givenUp.weekday);
+          parseIntToWeekdayString(globalHomework[index].givenUp.weekday);
       return SafeArea(
           top: false,
           bottom: false,
-          child: AnimatedTitleSubtitleCard(
+          child: AnimatedHomeworkCard(
+            dueOver: dueOver,
             title: globalHomework[index].subject,
             subTitle: subTitle, //lessonsList[0][index].classroom,
             color: colors[index],
@@ -87,7 +92,10 @@ class _HomeworkTabState extends State<HomeworkTab> {
         MdiIcons.emoticonHappyOutline,
         size: 50,
       ),
-      Text("Nincs házifeladat!\n(Jelenleg csak a mostani hétre feladott leckét tudom mutatni)",textAlign: TextAlign.center,)
+      Text(
+        "Nincs házifeladat!\n(Jelenleg csak a mostani hétre feladott leckét tudom mutatni)",
+        textAlign: TextAlign.center,
+      )
     ]));
   }
 }

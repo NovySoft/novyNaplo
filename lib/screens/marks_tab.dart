@@ -4,18 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
 import 'package:novynaplo/helpers/adHelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-var allParsedByDate, allParsedBySubject;
+List<Evals> allParsedByDate, allParsedBySubject;
 int selectedIndex = 0;
 bool differenSubject = false;
 String subjectBefore = "";
@@ -26,8 +29,6 @@ final List<Tab> markTabs = <Tab>[
 String label, labelBefore;
 TabController _tabController;
 List<dynamic> colors;
-List<String> markNameByDate;
-List<String> markNameBySubject;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -60,11 +61,9 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  void _setData() async{
+  void _setData() async {
     colors = getRandomColors(globals.markCount);
-    markNameByDate = await parseMarksByDate(globals.dJson);
     allParsedByDate = await parseAllByDate(globals.dJson);
-    markNameBySubject = parseMarksBySubject(globals.dJson);
     allParsedBySubject = parseAllBySubject(globals.dJson);
   }
 
@@ -72,6 +71,12 @@ class MarksTabState extends State<MarksTab>
     FirebaseAnalytics().logEvent(name: "RefreshData");
     Crashlytics.instance.log("RefreshData");
     return Future.delayed(const Duration(seconds: 1), () async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedPass =
+          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       var status = await NetworkHelper()
           .getToken(decryptedCode, decryptedUser, decryptedPass);
       if (status == "OK") {
@@ -163,9 +168,10 @@ class MarksTabState extends State<MarksTab>
       child: Hero(
           tag: index,
           child: HeroAnimatingMarksCard(
-            icon: allParsedByDate[index].icon,
+            eval: allParsedByDate[index],
+            iconData: allParsedByDate[index].icon,
             subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
-            title: markNameByDate[index],
+            title: capitalize(allParsedByDate[index].subject + " " + allParsedByDate[index].value),
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: MarksDetailTab(
@@ -183,7 +189,7 @@ class MarksTabState extends State<MarksTab>
               formName: allParsedByDate[index].formName,
               form: allParsedByDate[index].form,
               id: index,
-              name: markNameByDate[index],
+              name: capitalize(allParsedByDate[index].subject + " " + allParsedByDate[index].value),
               color: color,
             ),
           )),
@@ -296,7 +302,7 @@ class MarksTabState extends State<MarksTab>
                       tag: index,
                       child: HeroAnimatingSubjectsCard(
                         subTitle: subtitle,
-                        title: markNameBySubject[index],
+                        title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
                         onPressed: MarksDetailTab(
@@ -314,7 +320,7 @@ class MarksTabState extends State<MarksTab>
                           formName: allParsedBySubject[index].formName,
                           form: allParsedBySubject[index].form,
                           id: index,
-                          name: markNameBySubject[index],
+                          name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
                           color: color,
                         ),
                       )),
@@ -351,7 +357,7 @@ class MarksTabState extends State<MarksTab>
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
                       subTitle: subtitle,
-                      title: markNameBySubject[index],
+                      title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
                       color: color,
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
@@ -368,7 +374,7 @@ class MarksTabState extends State<MarksTab>
                         formName: allParsedBySubject[index].formName,
                         form: allParsedBySubject[index].form,
                         id: index,
-                        name: markNameBySubject[index],
+                        name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
                         color: color,
                       ),
                     ),
@@ -390,7 +396,7 @@ class MarksTabState extends State<MarksTab>
             tag: index,
             child: HeroAnimatingSubjectsCard(
               subTitle: subtitle,
-              title: markNameBySubject[index],
+              title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
@@ -407,7 +413,7 @@ class MarksTabState extends State<MarksTab>
                 formName: allParsedBySubject[index].formName,
                 form: allParsedBySubject[index].form,
                 id: index,
-                name: markNameBySubject[index],
+                name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
                 color: color,
               ),
             ),
