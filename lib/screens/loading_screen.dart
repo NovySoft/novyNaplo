@@ -357,11 +357,13 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       //If we have prefetched data
       if (prefs.getBool("backgroundFetch")) {
-        print("BACKGROUNGDATA");
         setState(() {
           loadingText = "Adatok olvasása az adatbázisból";
         });
         //MARKS
+        setState(() {
+          loadingText = "Jegyek olvasása az adatbázisból";
+        });
         List<Evals> tempEvals = await getAllEvals();
         globals.markCount = tempEvals.length;
         marksPage.colors = getRandomColors(globals.markCount);
@@ -370,10 +372,25 @@ class _LoadingPageState extends State<LoadingPage> {
         marksPage.allParsedByDate
             .sort((a, b) => b.createDateString.compareTo(a.createDateString));
         //Homework
+        setState(() {
+          loadingText = "Házifeladat olvasása az adatbázisból";
+        });
         homeworkPage.globalHomework = await getAllHomework();
         homeworkPage.globalHomework
             .sort((a, b) => b.givenUp.compareTo(a.givenUp));
         //Notices
+        setState(() {
+          loadingText = "Feljegyzések olvasása az adatbázisból";
+        });
+        noticesPage.allParsedNotices = await getAllNotices();
+        //Avarages
+        setState(() {
+          loadingText = "Átlagok olvasása az adatbázisból";
+        });
+        avaragesPage.avarageList = await getAllAvarages();
+        setState(() {
+          loadingText = "Mindjárt kész!";
+        });
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
         return;
       }

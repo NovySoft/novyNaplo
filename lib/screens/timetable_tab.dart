@@ -16,7 +16,7 @@ final List<Tab> days = <Tab>[
   Tab(text: 'Vasárnap'),
 ];
 
-List<List<Lesson>> lessonsList;
+List<List<Lesson>> lessonsList = [];
 List<Color> colors = getRandomColors(15);
 
 class TimetableTab extends StatefulWidget {
@@ -42,6 +42,9 @@ class _TimetableTabState extends State<TimetableTab> {
               children: days.map((Tab tab) {
             String label = tab.text;
             //Itemcount globals.adModifier because we need one beacuse of the ads
+            if (lessonsList.length == 0) {
+              return noLesson();
+            }
             if (label == "Hétfő") {
               if (lessonsList[0].length == 0) {
                 return noLesson();

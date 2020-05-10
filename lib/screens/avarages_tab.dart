@@ -30,14 +30,25 @@ class BodyLayout extends StatelessWidget {
   }
 }
 
-//TODO refactor to parse avarages before the rendering process
 Widget avaragesList(BuildContext context) {
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(),
     itemCount: avarageList.length + globals.adModifier,
     itemBuilder: (context, index) {
-      //*Make the colors here
       Color avgColor = Colors.red;
+      if (avarageList[index].ownValue == null) {
+        avgColor = (Colors.red);
+      } else if (avarageList[index].ownValue < 2.5) {
+        avgColor = (Colors.redAccent[700]);
+      } else if (avarageList[index].ownValue < 3 &&
+          avarageList[index].ownValue >= 2.5) {
+        avgColor = (Colors.redAccent);
+      } else if (avarageList[index].ownValue < 4 &&
+          avarageList[index].ownValue >= 3) {
+        avgColor = (Colors.yellow[800]);
+      } else {
+        avgColor = (Colors.green);
+      }
       if (index >= avarageList.length) {
         return ListTile(
           title: SizedBox(
@@ -48,8 +59,8 @@ Widget avaragesList(BuildContext context) {
         return ListTile(
           title: Text(avarageList[index].subject,
               style: TextStyle(color: avgColor)),
-          trailing:
-              Text(avarageList[index].ownValue, style: TextStyle(color: avgColor)),
+          trailing: Text(avarageList[index].ownValue.toString(),
+              style: TextStyle(color: avgColor)),
         );
       }
     },
