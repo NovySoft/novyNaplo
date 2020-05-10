@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
@@ -5,6 +6,7 @@ import 'package:novynaplo/functions/classManager.dart';
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
+  Crashlytics.instance.log("getAllEvals");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -35,6 +37,7 @@ Future<List<Evals>> getAllEvals() async {
 }
 
 Future<List<Notices>> getAllNotices() async {
+  Crashlytics.instance.log("getAllNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -55,6 +58,7 @@ Future<List<Notices>> getAllNotices() async {
 }
 
 Future<List<Avarage>> getAllAvarages() async {
+  Crashlytics.instance.log("getAllAvarages");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -72,6 +76,7 @@ Future<List<Avarage>> getAllAvarages() async {
 }
 
 Future<List<Homework>> getAllHomework() async {
+  Crashlytics.instance.log("getAllHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 

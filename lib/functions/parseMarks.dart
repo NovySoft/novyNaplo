@@ -73,7 +73,7 @@ List<String> parseMarksBySubject(var input) {
   return evalArray;
 }
 
-List<Avarage> parseAvarages(var input) {
+Future<List<Avarage>> parseAvarages(var input) async{
   List<Avarage> atlagArray = [];
   try {
     for (var n in input) {
@@ -84,7 +84,7 @@ List<Avarage> parseAvarages(var input) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
   }
-  batchInsertAvarage(atlagArray);
+  await batchInsertAvarage(atlagArray);
   return atlagArray;
 }
 
@@ -97,14 +97,14 @@ int countNotices(var input) {
   return count;
 }
 
-List<Notices> parseNotices(var input) {
+Future<List<Notices>> parseNotices(var input) async{
   if (input != null && input["Notes"] != null) {
     List<Notices> noticesArray = [];
     var notices = input["Notes"];
     for (var n in notices) {
       noticesArray.add(setNotices(n));
     }
-    batchInsertNotices(noticesArray);
+    await batchInsertNotices(noticesArray);
     return noticesArray;
   } else {
     return [];

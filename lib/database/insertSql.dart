@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -12,6 +13,7 @@ Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval) async {
+  Crashlytics.instance.log("insertSingleEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -44,6 +46,7 @@ Future<void> insertEval(Evals eval) async {
 }
 
 Future<void> insertHomework(Homework hw) async {
+  Crashlytics.instance.log("insertSingleHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -69,6 +72,7 @@ Future<void> insertHomework(Homework hw) async {
 }
 
 Future<void> insertNotices(Notices notice) async {
+  Crashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -94,6 +98,7 @@ Future<void> insertNotices(Notices notice) async {
 }
 
 Future<void> insertAvarage(Avarage avarage) async {
+  Crashlytics.instance.log("insertSingleAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -125,6 +130,7 @@ Future<void> insertAvarage(Avarage avarage) async {
 // A function that inserts multiple evals into the database
 //!This thing double inserts
 Future<void> batchInsertEval(List<Evals> evalList) async {
+  Crashlytics.instance.log("batchInsertEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -173,6 +179,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
+  Crashlytics.instance.log("batchInsertHomework");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -210,6 +217,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
 }
 
 Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
+  Crashlytics.instance.log("batchInsertAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -249,6 +257,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
 }
 
 Future<void> batchInsertNotices(List<Notices> noticeList) async {
+  Crashlytics.instance.log("batchInsertNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();

@@ -131,7 +131,7 @@ class NetworkHelper {
       marksPage.markNameBySubject = parseMarksBySubject(globals.dJson);
       marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
       globals.noticesCount = countNotices(globals.dJson);
-      noticesPage.allParsedNotices = parseNotices(globals.dJson);
+      noticesPage.allParsedNotices = await parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
       statisticsPage.colors =
           getRandomColors(statisticsPage.allParsedSubjects.length);
@@ -154,7 +154,7 @@ class NetworkHelper {
     if (res.statusCode == 200) {
       var bodyJson = json.decode(res.body);
       globals.avJson = bodyJson;
-      avaragesPage.avarageList = parseAvarages(globals.avJson);
+      avaragesPage.avarageList = await parseAvarages(globals.avJson);
     }
   }
 
