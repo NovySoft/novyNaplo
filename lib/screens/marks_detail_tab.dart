@@ -39,7 +39,6 @@ class MarksDetailTab extends StatelessWidget {
   final String createDate;
   final int numberValue;
   final Color color;
-  final Evals eval;
 
   Widget _buildBody() {
     return SafeArea(
