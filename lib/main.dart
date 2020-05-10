@@ -44,6 +44,7 @@ void main() async {
     mainSql.initDatabase();
     runApp(MyApp());
     globals.fetchPeriod = prefs.getInt("fetchPeriod");
+    if (prefs.getBool("backgroundFetch")) {
     globals.backgroundFetchCanWakeUpPhone =
         prefs.getBool("backgroundFetchCanWakeUpPhone") == null
             ? true

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
@@ -12,13 +13,11 @@ import 'package:novynaplo/global.dart' as globals;
 Timer timer;
 
 class TimetableDetailTab extends StatefulWidget {
-  const TimetableDetailTab({
-    this.lessonInfo,
-    this.color,
-  });
+  const TimetableDetailTab({this.lessonInfo, this.color, @required this.icon});
 
   final Lesson lessonInfo;
   final Color color;
+  final IconData icon;
 
   @override
   _TimetableDetailTabState createState() => _TimetableDetailTabState();
@@ -34,6 +33,11 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   }
 
   Widget _buildBody() {
+    IconData icon = widget.icon;
+    //!This is stupid, but this is the only way it works
+    if (widget.icon == null || icon == null) {
+      icon = parseSubjectToIcon(subject: widget.lessonInfo.subject);
+    }
     return SafeArea(
       bottom: false,
       left: false,
@@ -41,23 +45,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Hero(
-            tag: widget.lessonInfo.id,
-            child: HeroAnimatingMarksCard(
-              subTitle: "",
-              title: widget.lessonInfo.name,
-              color: widget.color,
-              heroAnimation: AlwaysStoppedAnimation(1),
-            ),
-            flightShuttleBuilder: (context, animation, flightDirection,
-                fromHeroContext, toHeroContext) {
-              return HeroAnimatingMarksCard(
-                subTitle: "",
-                title: widget.lessonInfo.name,
-                color: widget.color,
-                heroAnimation: animation,
-              );
-            },
+          HeroAnimatingMarksCard(
+            icon: icon,
+            subTitle: "",
+            title: widget.lessonInfo.name,
+            color: widget.color,
+            heroAnimation: AlwaysStoppedAnimation(1),
           ),
           Divider(
             height: 0,
@@ -280,7 +273,9 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                   due +
                                   " (határidőn túl)",
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.red)),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red)),
                         );
                       } else {
                         return SizedBox(

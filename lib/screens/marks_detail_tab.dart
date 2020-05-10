@@ -8,24 +8,24 @@ import 'package:novynaplo/database/insertSql.dart';
 //TODO refactor to only use this.eval instead of all this bs
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab(
-    this.eval, {
-    this.numberValue,
-    this.subject,
-    this.id,
-    this.name,
-    this.color,
-    this.theme,
-    this.teacher,
-    this.createDate,
-    this.date,
-    this.mode,
-    this.weight,
-    this.value,
-    this.form,
-    this.formName,
-  });
+      {this.numberValue,
+      this.subject,
+      this.id,
+      this.name,
+      this.color,
+      this.theme,
+      this.teacher,
+      this.createDate,
+      this.date,
+      this.mode,
+      this.weight,
+      this.value,
+      this.form,
+      this.formName,
+      this.eval});
 
   final int id;
+  final Evals eval;
   final String name;
   final String theme;
   final String weight;
@@ -49,28 +49,13 @@ class MarksDetailTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Hero(
-            tag: id,
-            child: HeroAnimatingMarksCard(
-              subTitle: "",
-              title: name,
-              color: color,
-              heroAnimation: AlwaysStoppedAnimation(1),
-              onPressed: null,
-            ),
-            // This app uses a flightShuttleBuilder to specify the exact widget
-            // to build while the hero transition is mid-flight.
-            //
-            // It could either be specified here or in SongsTab.
-            flightShuttleBuilder: (context, animation, flightDirection,
-                fromHeroContext, toHeroContext) {
-              return HeroAnimatingMarksCard(
-                subTitle: "",
-                title: name,
-                color: color,
-                heroAnimation: animation,
-              );
-            },
+          HeroAnimatingMarksCard(
+            icon: eval.icon,
+            subTitle: "",
+            title: name,
+            color: color,
+            heroAnimation: AlwaysStoppedAnimation(1),
+            onPressed: null,
           ),
           Divider(
             height: 0,

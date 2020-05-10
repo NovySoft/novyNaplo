@@ -160,12 +160,14 @@ Widget _timetableBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[0][index].homework.icon,
           hasHomework: lessonsList[0][index].homework.content != null,
           title: lessonsList[0][index].name,
           subTitle: subtitle, //lessonsList[0][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[0][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[0][index],
           ),
@@ -228,12 +230,14 @@ Widget _timetableTwoBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[1][index].homework.icon,
           hasHomework: lessonsList[1][index].homework.content != null,
           title: lessonsList[1][index].name,
           subTitle: subtitle, //lessonsList[1][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[1][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[1][index],
           ),
@@ -296,12 +300,14 @@ Widget _timetableThreeBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[2][index].homework.icon,
           hasHomework: lessonsList[2][index].homework.content != null,
           title: lessonsList[2][index].name,
           subTitle: subtitle, //lessonsList[2][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[2][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[2][index],
           ),
@@ -364,12 +370,14 @@ Widget _timetableFourBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[3][index].homework.icon,
           hasHomework: lessonsList[3][index].homework.content != null,
           title: lessonsList[3][index].name,
           subTitle: subtitle, //lessonsList[3][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[3][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[3][index],
           ),
@@ -432,12 +440,14 @@ Widget _timetableFiveBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[4][index].homework.icon,
           hasHomework: lessonsList[4][index].homework.content != null,
           title: lessonsList[4][index].name,
           subTitle: subtitle, //lessonsList[4][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[4][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[4][index],
           ),
@@ -500,12 +510,14 @@ Widget _timetableSixBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[5][index].homework.icon,
           hasHomework: lessonsList[5][index].homework.content != null,
           title: lessonsList[5][index].name,
           subTitle: subtitle, //lessonsList[5][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[5][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[5][index],
           ),
@@ -568,12 +580,14 @@ Widget _timetableSevenBuilder(BuildContext context, int index) {
         top: false,
         bottom: false,
         child: TimetableCard(
+          iconData: lessonsList[6][index].homework.icon,
           hasHomework: lessonsList[6][index].homework.content != null,
           title: lessonsList[6][index].name,
           subTitle: subtitle, //lessonsList[6][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: TimetableDetailTab(
+            icon: lessonsList[6][index].homework.icon,
             color: colors[index],
             lessonInfo: lessonsList[6][index],
           ),

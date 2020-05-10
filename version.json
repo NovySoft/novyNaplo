@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.1",
+    "version": "V0.1.4.2",
     "isBreaking": false,
-    "releaseNotes": "Új beállítások a statisztika oldalhoz (szöveg összecsúszásának megjavításához)",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.1"
+    "releaseNotes": "Tantárgy ikonok (végre)",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.2"
 }

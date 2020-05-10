@@ -170,35 +170,6 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-          /*return ListTile(
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text("Háttérlekérések"),
-                Text("Értesítések"),
-              ],
-            ),
-            trailing: Switch(
-              onChanged: (bool switchOn) async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                setState(() {
-                  switchTwoValue = switchOn;
-                });
-                if (switchOn) {
-                  print("ON");
-                  FirebaseAnalytics().setUserProperty(name: "Notifications", value: "YES");
-                  prefs.setBool("Notifications", true);
-                } else {
-                  print("OFF");
-                  FirebaseAnalytics().setUserProperty(name: "Notifications", value: "NO");
-                  prefs.setBool("Notifications", false);
-                }
-              },
-              value: notificationSwitch,
-            ),
-          );*/
         } else if (index == 2) {
           return ListTile(
             title: Center(
@@ -279,14 +250,15 @@ class _SettingsBodyState extends State<SettingsBody> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: () async {
+                    onPressed: null,
+                    /*() async {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 NetworkAndNotificationSettings()),
                       );
-                    },
+                    },*/
                     icon: Row(
                       children: <Widget>[
                         Icon(MdiIcons.accessPointNetwork, color: Colors.black),

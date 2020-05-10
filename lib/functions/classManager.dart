@@ -2,6 +2,8 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
+import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/utils.dart';
 
 class Evals {
   var formName,
@@ -19,6 +21,7 @@ class Evals {
   String createDateString;
   DateTime createDate;
   DateTime date;
+  IconData icon;
   int databaseId;
 
   Map<String, dynamic> toMap() {
@@ -64,6 +67,8 @@ Evals setEvals(var input) {
   } else {
     temp.subject = input["Subject"];
   }
+  //Icon
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
   //Magatartas es Szorgalom integer
   if (input["NumberValue"] == 0 && input["Form"] != "Percent") {
     switch (input["Value"]) {
@@ -260,6 +265,7 @@ class Homework {
   String dueDateString;
   DateTime givenUp;
   DateTime dueDate;
+  IconData icon;
   int databaseId;
 
   Map<String, dynamic> toMap() {
@@ -281,6 +287,7 @@ Homework setHomework(var decoded) {
   temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
   temp.id = decoded["Id"];
   temp.subject = capitalize(decoded["Tantargy"]);
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
   temp.teacher = decoded["Rogzito"];
   temp.content = decoded["Szoveg"];
   temp.givenUpString = decoded["FeladasDatuma"];

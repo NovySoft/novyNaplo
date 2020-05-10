@@ -164,12 +164,14 @@ class MarksTabState extends State<MarksTab>
       child: Hero(
           tag: index,
           child: HeroAnimatingMarksCard(
+            icon: allParsedByDate[index].icon,
             subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
             title: markNameByDate[index],
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: MarksDetailTab(
-              allParsedByDate[index],
+              //TODO refactor this shit
+              eval: allParsedByDate[index],
               mode: allParsedByDate[index].mode,
               theme: allParsedByDate[index].theme,
               weight: allParsedByDate[index].weight,
@@ -299,7 +301,7 @@ class MarksTabState extends State<MarksTab>
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
                         onPressed: MarksDetailTab(
-                          allParsedByDate[index],
+                          eval: allParsedBySubject[index],
                           mode: allParsedBySubject[index].mode,
                           theme: allParsedBySubject[index].theme,
                           weight: allParsedBySubject[index].weight,
@@ -354,7 +356,7 @@ class MarksTabState extends State<MarksTab>
                       color: color,
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
-                        allParsedByDate[index],
+                        eval: allParsedBySubject[index],
                         mode: allParsedBySubject[index].mode,
                         theme: allParsedBySubject[index].theme,
                         weight: allParsedBySubject[index].weight,
@@ -393,7 +395,7 @@ class MarksTabState extends State<MarksTab>
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
-                allParsedByDate[index],
+                eval: allParsedBySubject[index],
                 mode: allParsedBySubject[index].mode,
                 theme: allParsedBySubject[index].theme,
                 weight: allParsedBySubject[index].weight,
