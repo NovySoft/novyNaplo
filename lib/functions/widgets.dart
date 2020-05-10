@@ -153,14 +153,14 @@ class HeroAnimatingMarksCard extends StatelessWidget {
       this.color,
       this.heroAnimation,
       this.onPressed,
-      this.eval});
+      this.icon});
 
   final String title;
   final String subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
-  final Evals eval;
+  final IconData icon;
 
   double get playButtonSize => 100 + 50 * heroAnimation.value;
 
@@ -236,7 +236,7 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                               padding: EdgeInsets.only(bottom: 45) *
                                   (1 - heroAnimation.value),
                               child: Icon(
-                                eval.icon,
+                                icon,
                                 size: playButtonSize,
                                 color: Colors.black38,
                                 textDirection: TextDirection.ltr,
@@ -261,7 +261,7 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Icon(
-                    eval.icon,
+                    icon,
                     size: playButtonSize,
                     color: Colors.black38,
                     textDirection: TextDirection.ltr,
@@ -448,20 +448,21 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
 }
 
 class TimetableCard extends StatelessWidget {
-  TimetableCard({
-    this.title,
-    this.color,
-    this.subTitle,
-    this.onPressed,
-    this.heroAnimation,
-    this.hasHomework,
-  });
+  TimetableCard(
+      {this.title,
+      this.color,
+      this.subTitle,
+      this.onPressed,
+      this.heroAnimation,
+      this.hasHomework,
+      @required this.iconData});
 
   final String title, subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
   final bool hasHomework;
+  final IconData iconData;
 
   @override
   Widget build(context) {

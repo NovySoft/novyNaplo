@@ -298,6 +298,7 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
   temp.id = decoded["Id"];
   temp.subject = capitalize(decoded["Tantargy"]);
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
   temp.teacher = decoded["Rogzito"];
   temp.content = decoded["Szoveg"];
   temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);

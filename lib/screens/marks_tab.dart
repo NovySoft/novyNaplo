@@ -165,7 +165,7 @@ class MarksTabState extends State<MarksTab>
       child: Hero(
           tag: index,
           child: HeroAnimatingMarksCard(
-            eval: allParsedByDate[index],
+            icon: allParsedByDate[index].icon,
             subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
             title: markNameByDate[index],
             color: color,

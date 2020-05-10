@@ -215,4 +215,5 @@ class Homework {
   String content;
   DateTime givenUp;
   DateTime dueDate;
+  IconData icon;
 }

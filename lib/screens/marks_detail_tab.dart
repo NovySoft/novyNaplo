@@ -47,7 +47,7 @@ class MarksDetailTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HeroAnimatingMarksCard(
-            eval: eval,
+            icon: eval.icon,
             subTitle: "",
             title: name,
             color: color,
