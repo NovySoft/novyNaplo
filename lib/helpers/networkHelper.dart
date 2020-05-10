@@ -1,11 +1,14 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
+import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -115,7 +118,6 @@ class NetworkHelper {
       globals.dJson = json.decode(res.body);
       var eval = globals.dJson["Evaluations"];
       if (globals.markCount != 0) globals.markCount = 0;
-      if (globals.avarageCount != 0) globals.avarageCount = 0;
       if (globals.noticesCount != 0) globals.noticesCount = 0;
       await getAvarages(token, code);
       if (eval != null)
@@ -146,7 +148,7 @@ class NetworkHelper {
     if (res.statusCode == 200) {
       var bodyJson = json.decode(res.body);
       globals.avJson = bodyJson;
-      globals.avarageCount = countAvarages(bodyJson);
+      avaragesPage.avarageList = parseAvarages(globals.avJson);
     }
   }
 
@@ -294,16 +296,10 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   }
   //Process response
   var decoded = json.decode(res.body);
-  Homework temp = new Homework();
-  temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
-  temp.id = decoded["Id"];
-  temp.subject = capitalize(decoded["Tantargy"]);
-  temp.icon = parseSubjectToIcon(subject: temp.subject);
-  temp.teacher = decoded["Rogzito"];
-  temp.content = decoded["Szoveg"];
-  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
-  temp.dueDate = DateTime.parse(decoded["Hatarido"]);
-  globals.globalHomework.add(temp);
-  globals.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
+  Homework temp = setHomework(decoded);
+  //*Add it to the database
+  insertHomework(temp);
+  homeworkPage.globalHomework.add(temp);
+  homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
   return temp;
 }

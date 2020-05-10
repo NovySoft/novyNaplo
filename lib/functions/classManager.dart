@@ -3,8 +3,7 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 import 'package:flutter/material.dart';
-
-var id = 0;
+import 'package:novynaplo/functions/utils.dart';
 
 class Evals {
   var formName,
@@ -23,10 +22,41 @@ class Evals {
   DateTime createDate;
   DateTime date;
   IconData icon;
+  int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'formName': formName,
+      'form': form,
+      'value': value,
+      'numberValue': numberValue,
+      'teacher': teacher,
+      'type': type,
+      'subject': subject,
+      'theme': theme,
+      'mode': mode,
+      'weight': weight,
+      'dateString': dateString,
+      'createDateString': createDateString,
+    };
+  }
 }
 
 class Avarage {
-  var subject, markCount, ownValue, classValue, diff;
+  var subject, ownValue, classValue, diff;
+  int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'subject': subject,
+      'ownValue': ownValue,
+      'classValue': classValue,
+      'diff': diff
+    };
+  }
 }
 
 Evals setEvals(var input) {
@@ -91,7 +121,8 @@ Evals setEvals(var input) {
   } else {
     temp.weight = input["Weight"];
   }
-  temp.id = id++;
+  temp.id = input[
+      "EvaluationId"]; //We see no use for this, because we use databaseIDs most of the times
   temp.value = input["Value"];
   temp.formName = input["FormName"];
   temp.form = input["Form"];
@@ -115,6 +146,21 @@ Avarage setAvarage(var subject, ownValue, classValue, diff) {
 
 class Notices {
   var title, content, teacher, dateString, subject;
+  DateTime date;
+  int databaseId;
+  int id;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'title': title,
+      'content': content,
+      'teacher': teacher,
+      'dateString': dateString,
+      'subject': subject,
+    };
+  }
 }
 
 Notices setNotices(var input) {
@@ -123,6 +169,8 @@ Notices setNotices(var input) {
   temp.teacher = input["Teacher"];
   temp.content = input["Content"];
   temp.dateString = input["CreatingTime"];
+  temp.date = DateTime.parse(input["CreatingTime"]);
+  temp.id = input["NoteId"];
   if (input["OsztalyCsoportUid"] == null) {
     temp.subject = null;
   } else {
@@ -213,7 +261,38 @@ class Homework {
   String subject;
   String teacher;
   String content;
+  String givenUpString;
+  String dueDateString;
   DateTime givenUp;
   DateTime dueDate;
   IconData icon;
+  int databaseId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'classGroupId': classGroupId,
+      'subject': subject,
+      'teacher': teacher,
+      'content': content,
+      'givenUpString': givenUpString,
+      'dueDateString': dueDateString,
+    };
+  }
+}
+
+Homework setHomework(var decoded) {
+  Homework temp = new Homework();
+  temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
+  temp.id = decoded["Id"];
+  temp.subject = capitalize(decoded["Tantargy"]);
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
+  temp.teacher = decoded["Rogzito"];
+  temp.content = decoded["Szoveg"];
+  temp.givenUpString = decoded["FeladasDatuma"];
+  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
+  temp.dueDateString = decoded["Hatarido"];
+  temp.dueDate = DateTime.parse(decoded["Hatarido"]);
+  return temp;
 }

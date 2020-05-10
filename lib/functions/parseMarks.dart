@@ -1,8 +1,7 @@
 import 'dart:core';
-
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-
+import 'package:novynaplo/database/insertSql.dart';
 import 'classManager.dart';
 import 'utils.dart';
 
@@ -10,33 +9,36 @@ List<ChartPoints> chartData = [];
 var index, sum;
 var jegyek;
 List<Evals> jegyArray = [];
-var atlagArray = [];
-var noticesArray = [];
 var stringEvals = [];
 var catIndex = 0;
 
 List<dynamic> parseAllByDate(var input) {
   jegyArray = [];
+  //! TODO fix this duplicate code
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    id = 0;
-    jegyek.forEach((n) => jegyArray.add(setEvals(n)));
+    for (var n in jegyek) {
+      jegyArray.add(setEvals(n));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+  batchInsertEval(jegyArray);
   return jegyArray;
 }
 
 List<dynamic> parseAllBySubject(var input) {
   jegyArray = [];
+  //! TODO fix this duplicate code
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
-    id = 0;
-    jegyek.forEach((n) => jegyArray.add(setEvals(n)));
+    for (var n in jegyek) {
+      jegyArray.add(setEvals(n));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');
     return [];
@@ -51,8 +53,9 @@ List<String> parseMarksByDate(var input) {
     var evalJegy = parseAllByDate(input);
     if (evalJegy.length == 0) return [];
     if (evalJegy[0] == "Error") return ["Error"];
-    evalJegy
-        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+    for (var n in evalJegy) {
+      evalArray.add(capitalize(n.subject + " " + n.value));
+    }
   }
   return evalArray;
 }
@@ -63,28 +66,26 @@ List<String> parseMarksBySubject(var input) {
     var evalJegy = parseAllBySubject(input);
     if (evalJegy.length == 0) return [];
     if (evalJegy[0] == "Error") return ["Error"];
-    evalJegy
-        .forEach((n) => evalArray.add(capitalize(n.subject + " " + n.value)));
+    for (var n in evalJegy) {
+      evalArray.add(capitalize(n.subject + " " + n.value));
+    }
   }
   return evalArray;
 }
 
-List<dynamic> parseAvarages(var input) {
-  atlagArray = [];
+List<Avarage> parseAvarages(var input) {
+  List<Avarage> atlagArray = [];
   try {
-    input.forEach((n) => atlagArray.add(setAvarage(
-        n["Subject"], n["Value"], n["classValue"], n["Difference"])));
+    for (var n in input) {
+      atlagArray.add(setAvarage(
+          n["Subject"], n["Value"], n["classValue"], n["Difference"]));
+    }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
   }
+  batchInsertAvarage(atlagArray);
   return atlagArray;
-}
-
-int countAvarages(var input) {
-  var count = 0;
-  if (input != null) count = input.length;
-  return count;
 }
 
 int countNotices(var input) {
@@ -96,11 +97,14 @@ int countNotices(var input) {
   return count;
 }
 
-List<dynamic> parseNotices(var input) {
+List<Notices> parseNotices(var input) {
   if (input != null && input["Notes"] != null) {
-    noticesArray = [];
+    List<Notices> noticesArray = [];
     var notices = input["Notes"];
-    notices.forEach((n) => noticesArray.add(setNotices(n)));
+    for (var n in notices) {
+      noticesArray.add(setNotices(n));
+    }
+    batchInsertNotices(noticesArray);
     return noticesArray;
   } else {
     return [];
@@ -110,10 +114,14 @@ List<dynamic> parseNotices(var input) {
 List<String> parseSubjects(var input) {
   List<String> subjectsArray = [];
   var subjects = input["SubjectAverages"];
-  subjects.forEach((n) => subjectsArray.add(capitalize(n["Subject"])));
+  for (var n in subjects) {
+    subjectsArray.add(capitalize(n["Subject"]));
+  }
   return subjectsArray;
 }
 
+//TODO move this code to the chartHelper file
+//!FROM here
 List<charts.Series<ChartPoints, int>> createSubjectChart(
     List<Evals> input, String id) {
   chartData = [];
@@ -143,8 +151,10 @@ class ChartPoints {
 
   ChartPoints(this.count, this.value);
 }
+//!TO here
 
-//USED BY STATISTICS
+//TODO probably we should move this to somewhere else
+//*USED BY STATISTICS
 List<dynamic> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];

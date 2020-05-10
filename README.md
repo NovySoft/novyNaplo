@@ -75,7 +75,7 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 ## Ismert hibák
 
-* **A ticker was started twice.** ~~jelenleg flutter framework hibának néz ki (Animációs framework)~~ NEM AZ, tényleg kétszer idítok el valahol egy tickert
+* **A ticker was started twice.** ~~jelenleg flutter framework hibának néz ki (Animációs framework)~~ NEM AZ, tényleg kétszer indítok el valahol egy tickert
 * **Lassú betöltés/leragadás a homokóránál** a lassú krétás válasz miatt történik (amennyiben nem, akkor hibakódot kell látnod)
 * **Hibás tanár/tantárgy név** az eredeti krétában van elírva a tanár/tantárgy neve, ez nem az applikáció hibája
 * **Tantárgy nézet bugos**, szétesnek és/vagy összekeverednek a tárgyak.
@@ -84,5 +84,6 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 ## Kód íráshoz használt pluginok
 
-* [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
-* [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode)
+* [WakaTime](https://wakatime.com/) Ajánlott a letöltése, így összegezni tudjuk, hogy mennyi fölösleges órát tölttöttünk kód írással ;)
+* [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments) Az én kis komment kiemelő pluginom, mert különböző kommenteket különböztetek meg
+* [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode) Egy kis kód kiegesztő plugin, ajánlom a használatát

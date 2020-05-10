@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/database/insertSql.dart';
 
+//TODO refactor to only use this.eval instead of all this bs
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab(
       {this.numberValue,
@@ -37,6 +39,7 @@ class MarksDetailTab extends StatelessWidget {
   final String createDate;
   final int numberValue;
   final Color color;
+  final Evals eval;
 
   Widget _buildBody() {
     return SafeArea(
@@ -92,12 +95,19 @@ class MarksDetailTab extends StatelessWidget {
                     break;
                   case 3:
                     return SizedBox(
-                      child: Text("Értékelés típusa: " + formName,
+                      child: Text("Jegy típusa: " + eval.mode.toString(),
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 4:
+                    return SizedBox(
+                      child: Text("Értékelés típusa: " + formName,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 5:
                     if (form == "Mark" ||
                         form == "Diligence" ||
                         form == "Deportment") {
@@ -205,7 +215,7 @@ class MarksDetailTab extends StatelessWidget {
                       );
                     }
                     break;
-                  case 5:
+                  case 6:
                     if (form == "Mark" ||
                         form == "Diligence" ||
                         form == "Deportment") {
@@ -325,28 +335,28 @@ class MarksDetailTab extends StatelessWidget {
                       );
                     }
                     break;
-                  case 6:
+                  case 7:
                     return SizedBox(
                       child: Text("Súly: " + weight,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
-                  case 7:
+                  case 8:
                     return SizedBox(
                       child: Text("Tanár: " + teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
-                  case 8:
+                  case 9:
                     return SizedBox(
                       child: Text("Beírás dátuma: " + date,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
-                  case 9:
+                  case 10:
                     return SizedBox(
                       child: Text("Létrehozás dátuma: " + createDate,
                           style: TextStyle(

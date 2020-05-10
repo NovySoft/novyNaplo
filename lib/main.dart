@@ -23,13 +23,13 @@ import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/database/mainSql.dart' as mainSql;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
-BuildContext mainContext;
 
 void main() async {
   //Change to true if needed
@@ -41,9 +41,15 @@ void main() async {
     isNew = false;
   }
   runZoned(() async {
+    mainSql.initDatabase();
     runApp(MyApp());
     globals.fetchPeriod = prefs.getInt("fetchPeriod");
-    /*if (prefs.getBool("backgroundFetch")) {
+    if (prefs.getBool("backgroundFetch")) {
+    globals.backgroundFetchCanWakeUpPhone =
+        prefs.getBool("backgroundFetchCanWakeUpPhone") == null
+            ? true
+            : prefs.getBool("backgroundFetchCanWakeUpPhone");
+    if (prefs.getBool("backgroundFetch")) {
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
       await sleep(1000);
@@ -54,7 +60,7 @@ void main() async {
         wakeup: globals.backgroundFetchCanWakeUpPhone,
         rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
       );
-    }*/
+    }
   }, onError: Crashlytics.instance.recordError);
 }
 
@@ -81,7 +87,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    mainContext = context;
     initializeNotifications();
     return new DynamicTheme(
         defaultBrightness: Brightness.dark,
@@ -111,19 +116,41 @@ class MyApp extends StatelessWidget {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
+    NotificationAppLaunchDetails notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    print(notificationAppLaunchDetails.didNotificationLaunchApp);
+    print(notificationAppLaunchDetails.payload);
   }
 
   Future selectNotification(String payload) async {
-    if (payload != null && payload != "teszt") {
+    if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
+    if (payload != null && payload != "teszt" && payload is String) {
       print(payload);
-      //TODO MAKE THE ACTUAL PAYLOAD HANDLING HERE
+      showDialog<void>(
+        context: globals.globalContext,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Értesítés'),
+            content: Text(payload),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     } else {
       showDialog<void>(
         context: globals.globalContext,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Státusz'),
-            content: Text("Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
+            content: Text(
+                "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
