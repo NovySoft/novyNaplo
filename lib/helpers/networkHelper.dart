@@ -307,7 +307,18 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   //*Add it to the database
   //TODO batchify
   await insertHomework(temp);
-  homeworkPage.globalHomework.add(temp);
-  homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
+  //Find the same ids
+  var matchedIds = homeworkPage.globalHomework.where((element) {
+    return element.id == temp.id;
+  });
+  if (matchedIds.length == 0) {
+    homeworkPage.globalHomework.add(temp);
+  } else {
+    var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+      return element.id == temp.id;
+    });
+    homeworkPage.globalHomework[matchedindex] = temp;
+  }
+  homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
   return temp;
 }

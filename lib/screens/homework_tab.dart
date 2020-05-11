@@ -61,13 +61,13 @@ class _HomeworkTabState extends State<HomeworkTab> {
         height: 100,
       );
     } else {
-      String subTitle = globalHomework[index].givenUp.year.toString() +
+      String subTitle = "Határidő: " + globalHomework[index].dueDate.year.toString() +
           "-" +
-          globalHomework[index].givenUp.month.toString() +
+          globalHomework[index].dueDate.month.toString() +
           "-" +
-          globalHomework[index].givenUp.day.toString() +
+          globalHomework[index].dueDate.day.toString() +
           " " +
-          parseIntToWeekdayString(globalHomework[index].givenUp.weekday);
+          parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
       return SafeArea(
           top: false,
           bottom: false,

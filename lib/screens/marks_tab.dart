@@ -10,6 +10,7 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -52,6 +53,12 @@ class MarksTabState extends State<MarksTab>
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (globals.backgroundFetch && !globals.didFetch) {
+        globals.didFetch = true;
+        _androidRefreshKey.currentState?.show();
+      }
+    });
     super.initState();
   }
 
@@ -67,25 +74,36 @@ class MarksTabState extends State<MarksTab>
     allParsedBySubject = parseAllBySubject(globals.dJson);
   }
 
-  Future<void> _refreshData() {
+  Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
     Crashlytics.instance.log("RefreshData");
-    return Future.delayed(const Duration(seconds: 1), () async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //TODO fix this
+    //!It only works when i put his ting here
+    var decryptedPass, decryptedUser, decryptedCode, status;
+    for (var i = 0; i < 2; i++) {
       final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      var passKey = encrypt.Key.fromUtf8(config.passKey);
+      var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+      var userKey = encrypt.Key.fromUtf8(config.userKey);
+      final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+      final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+      final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
-          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      var status = await NetworkHelper()
+          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+      status = await NetworkHelper()
           .getToken(decryptedCode, decryptedUser, decryptedPass);
-      if (status == "OK") {
-        await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
-        setState(() {
-          _setData();
-        });
-      }
-    });
+    }
+    if (status == "OK") {
+      await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
+      setState(() {
+        _setData();
+      });
+    } else {
+      print(status);
+    }
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
@@ -171,7 +189,9 @@ class MarksTabState extends State<MarksTab>
             eval: allParsedByDate[index],
             iconData: allParsedByDate[index].icon,
             subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
-            title: capitalize(allParsedByDate[index].subject + " " + allParsedByDate[index].value),
+            title: capitalize(allParsedByDate[index].subject +
+                " " +
+                allParsedByDate[index].value),
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: MarksDetailTab(
@@ -189,7 +209,9 @@ class MarksTabState extends State<MarksTab>
               formName: allParsedByDate[index].formName,
               form: allParsedByDate[index].form,
               id: index,
-              name: capitalize(allParsedByDate[index].subject + " " + allParsedByDate[index].value),
+              name: capitalize(allParsedByDate[index].subject +
+                  " " +
+                  allParsedByDate[index].value),
               color: color,
             ),
           )),
@@ -302,7 +324,9 @@ class MarksTabState extends State<MarksTab>
                       tag: index,
                       child: HeroAnimatingSubjectsCard(
                         subTitle: subtitle,
-                        title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+                        title: capitalize(allParsedBySubject[index].subject) +
+                            " " +
+                            allParsedBySubject[index].value,
                         color: color,
                         heroAnimation: AlwaysStoppedAnimation(0),
                         onPressed: MarksDetailTab(
@@ -320,7 +344,9 @@ class MarksTabState extends State<MarksTab>
                           formName: allParsedBySubject[index].formName,
                           form: allParsedBySubject[index].form,
                           id: index,
-                          name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+                          name: capitalize(allParsedBySubject[index].subject) +
+                              " " +
+                              allParsedBySubject[index].value,
                           color: color,
                         ),
                       )),
@@ -357,7 +383,9 @@ class MarksTabState extends State<MarksTab>
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
                       subTitle: subtitle,
-                      title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+                      title: capitalize(allParsedBySubject[index].subject) +
+                          " " +
+                          allParsedBySubject[index].value,
                       color: color,
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
@@ -374,7 +402,9 @@ class MarksTabState extends State<MarksTab>
                         formName: allParsedBySubject[index].formName,
                         form: allParsedBySubject[index].form,
                         id: index,
-                        name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+                        name: capitalize(allParsedBySubject[index].subject) +
+                            " " +
+                            allParsedBySubject[index].value,
                         color: color,
                       ),
                     ),
@@ -396,7 +426,9 @@ class MarksTabState extends State<MarksTab>
             tag: index,
             child: HeroAnimatingSubjectsCard(
               subTitle: subtitle,
-              title: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+              title: capitalize(allParsedBySubject[index].subject) +
+                  " " +
+                  allParsedBySubject[index].value,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
@@ -413,7 +445,9 @@ class MarksTabState extends State<MarksTab>
                 formName: allParsedBySubject[index].formName,
                 form: allParsedBySubject[index].form,
                 id: index,
-                name: capitalize(allParsedBySubject[index].subject) + " "  + allParsedBySubject[index].value,
+                name: capitalize(allParsedBySubject[index].subject) +
+                    " " +
+                    allParsedBySubject[index].value,
                 color: color,
               ),
             ),
@@ -445,7 +479,9 @@ class MarksTabState extends State<MarksTab>
               } else {
                 return RefreshIndicator(
                   key: _androidRefreshKey,
-                  onRefresh: _refreshData,
+                  onRefresh: () async {
+                    await _refreshData();
+                  },
                   child: ListView.builder(
                     itemCount: globals.markCount,
                     padding: EdgeInsets.symmetric(vertical: 12),
@@ -459,7 +495,9 @@ class MarksTabState extends State<MarksTab>
               } else {
                 return RefreshIndicator(
                   key: _androidRefreshKeyTwo,
-                  onRefresh: _refreshData,
+                  onRefresh: () async {
+                    await _refreshData();
+                  },
                   child: ListView.builder(
                     itemCount: globals.markCount,
                     padding: EdgeInsets.symmetric(vertical: 12),

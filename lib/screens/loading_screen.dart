@@ -360,7 +360,7 @@ class _LoadingPageState extends State<LoadingPage> {
         }
       }
       //If we have prefetched data
-      if (prefs.getBool("backgroundFetch")) {
+      if (prefs.getBool("backgroundFetch") || prefs.getBool("offlineModeDb")) {
         setState(() {
           loadingText = "Adatok olvasása az adatbázisból";
         });
@@ -400,17 +400,22 @@ class _LoadingPageState extends State<LoadingPage> {
         setState(() {
           loadingText = "Órarend olvasása az adatbázisból";
         });
-        timetablePage.lessonsList = getWeekLessonsFromLessons(await getAllTimetable());
+        timetablePage.lessonsList =
+            getWeekLessonsFromLessons(await getAllTimetable());
         //Sort
         marksPage.allParsedByDate
             .sort((a, b) => b.createDateString.compareTo(a.createDateString));
         setState(() {
           loadingText = "Mindjárt kész!";
         });
-        if (tempEvals.length != 0 &&
-            homeworkPage.globalHomework.length != 0 &&
-            noticesPage.allParsedNotices.length != 0 &&
-            avaragesPage.avarageList.length != 0) {
+        //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
+        if ((tempEvals.length != 0 &&
+                homeworkPage.globalHomework.length != 0 &&
+                noticesPage.allParsedNotices.length != 0 &&
+                avaragesPage.avarageList.length != 0 &&
+                timetablePage.lessonsList.length != 0) ||
+            await Connectivity().checkConnectivity() ==
+                ConnectivityResult.none) {
           Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
           return;
         }

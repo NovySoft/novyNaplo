@@ -1204,6 +1204,7 @@ class _NetworkAndNotificationSettingsState
                           ),
                           onPressed: () async {
                             //TODO group notifications
+                            //TODO move this to a different file
                             var vibrationPattern = new Int64List(4);
                             vibrationPattern[0] = 0;
                             vibrationPattern[1] = 1000;

@@ -232,7 +232,7 @@ class Lesson {
       'teacherHomeworkId': teacherHomeworkId,
       'groupID': groupID,
       'dogaIds': json.encode(dogaIds),
-      'homeworkEnabled': homeworkEnabled,
+      'homeworkEnabled': homeworkEnabled ? 1 : 0,
       'date': dateString,
       'startDate': startDateString,
       'endDate': endDateString,
