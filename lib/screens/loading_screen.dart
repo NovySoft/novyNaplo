@@ -417,6 +417,7 @@ class _LoadingPageState extends State<LoadingPage> {
             await Connectivity().checkConnectivity() ==
                 ConnectivityResult.none) {
           Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+          FirebaseAnalytics().logEvent(name: "login");
           return;
         }
       }
@@ -510,6 +511,7 @@ class _LoadingPageState extends State<LoadingPage> {
       });
     } else {
       Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+      FirebaseAnalytics().logEvent(name: "login");
     }
   }
 
