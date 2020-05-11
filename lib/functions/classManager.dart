@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
@@ -189,6 +191,7 @@ class School {
 }
 
 class Lesson {
+  int databaseId;
   String subject;
   String name;
   String groupName;
@@ -205,9 +208,36 @@ class Lesson {
   List<dynamic> dogaIds; //Dynamic due to empty listes
   bool homeworkEnabled;
   DateTime date;
+  String dateString;
   DateTime startDate;
+  String startDateString;
   DateTime endDate;
+  String endDateString;
   Homework homework;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'theme': theme,
+      'subject': subject,
+      'teacher': teacher,
+      'name': name,
+      'groupName': groupName,
+      'classroom': classroom,
+      'deputyTeacherName': deputyTeacherName,
+      'dogaNames': json.encode(dogaNames),
+      'whichLesson': whichLesson,
+      'homeWorkId': homeWorkId,
+      'teacherHomeworkId': teacherHomeworkId,
+      'groupID': groupID,
+      'dogaIds': json.encode(dogaIds),
+      'homeworkEnabled': homeworkEnabled,
+      'date': dateString,
+      'startDate': startDateString,
+      'endDate': endDateString,
+    };
+  }
 }
 
 Future<Lesson> setLesson(var input, token, code) async {

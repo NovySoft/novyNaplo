@@ -211,3 +211,24 @@ List<dynamic> sortByDateAndSubject(List<dynamic> input) {
   }
   return _output;
 }
+
+List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
+  List<Lesson> tempLessonList = lessons;
+  List<List<Lesson>> output = [];
+  tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+  int index = 0;
+  if (tempLessonList != null) {
+    if (tempLessonList.length != 0) {
+      int beforeDay = tempLessonList[0].startDate.day;
+      //Just a matrix
+      for (var n in tempLessonList) {
+        if (n.startDate.day != beforeDay) {
+          index++;
+          beforeDay = n.startDate.day;
+        }
+        output[index].add(n);
+      }
+    }
+  }
+  return output;
+}

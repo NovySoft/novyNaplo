@@ -128,7 +128,6 @@ Future<void> insertAvarage(Avarage avarage) async {
 
 //*Batch inserts
 // A function that inserts multiple evals into the database
-//!This thing double inserts
 Future<void> batchInsertEval(List<Evals> evalList) async {
   Crashlytics.instance.log("batchInsertEval");
   // Get a reference to the database.
@@ -294,4 +293,57 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
   }
   await batch.commit();
   //print("BATCH INSERTED NOTICES");
+}
+
+Future<void> batchInsertLessons(List<Lesson> lessonList) async {
+  Crashlytics.instance.log("batchInsertEval");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  //Get all evals, and see whether we should be just replacing
+  List<Lesson> allTimetable = await getAllTimetable();
+  for (var lesson in lessonList) {
+    var matchedLessons = allTimetable.where(
+      (element) {
+        return (element.id == lesson.id && element.subject == lesson.subject);
+      },
+    );
+    if (matchedLessons.length == 0) {
+      batch.insert(
+        'Timetable',
+        lesson.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedLessons) {
+        //!Update didn't work so we delete and create a new one
+        if ((n.theme != lesson.theme ||
+                n.teacher != lesson.teacher ||
+                n.dateString != lesson.dateString ||
+                n.deputyTeacherName != lesson.deputyTeacherName ||
+                n.name != lesson.name ||
+                n.classroom != lesson.classroom ||
+                n.homeWorkId != lesson.homeWorkId ||
+                n.teacherHomeworkId != lesson.teacherHomeworkId ||
+                n.dogaIds != lesson.dogaIds ||
+                n.startDateString != lesson.startDateString ||
+                n.endDateString != lesson.endDateString) &&
+            n.id == lesson.id) {
+          batch.delete(
+            "Timetable",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Timetable',
+            lesson.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  //print("INSERTED EVAL BATCH");
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -94,6 +96,45 @@ Future<List<Homework>> getAllHomework() async {
     temp.dueDateString = maps[i]['dueDateString'];
     temp.givenUp = DateTime.parse(temp.givenUpString);
     temp.dueDate = DateTime.parse(temp.dueDateString);
+    return temp;
+  });
+}
+
+Future<List<Lesson>> getAllTimetable() async {
+  Crashlytics.instance.log("getAllTimetable");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Timetable');
+
+  return List.generate(maps.length, (i) {
+    Lesson temp = new Lesson();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.theme = maps[i]['theme'];
+    temp.subject = maps[i]['subject'];
+    temp.teacher = maps[i]['teacher'];
+    temp.name = maps[i]['name'];
+    temp.groupName = maps[i]['groupName'];
+    temp.classroom = maps[i]['classroom'];
+    temp.deputyTeacherName = maps[i]['deputyTeacherName'];
+    temp.dogaNames = json.decode(maps[i]['dogaNames']);
+    temp.whichLesson = maps[i]['whichLesson'];
+    temp.homeWorkId = maps[i]['homeWorkId'];
+    temp.teacherHomeworkId = maps[i]['teacherHomeworkId'];
+    temp.groupID = maps[i]['groupID'];
+    temp.dogaIds = json.decode(maps[i]['dogaIds']);
+    temp.homeworkEnabled = maps[i]['homeworkEnabled'];
+
+    temp.dateString = maps[i]['date'];
+    temp.date = DateTime.parse(temp.dateString);
+
+    temp.startDateString = maps[i]['startDate'];
+    temp.startDate = DateTime.parse(temp.startDateString);
+
+    temp.endDateString = maps[i]['endDate'];
+    temp.endDate = DateTime.parse(temp.endDateString);
+    //TODO homework
     return temp;
   });
 }

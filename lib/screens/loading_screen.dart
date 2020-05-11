@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
@@ -307,6 +308,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = "Órarend dekódolása\nHázifeladatok lekérése";
       });
       List<Lesson> tempLessonList = [];
+      List<Lesson> tempLessonListForDB = [];
       for (var n in decoded) {
         tempLessonList.add(await setLesson(n, token, code));
       }
@@ -322,7 +324,9 @@ class _LoadingPageState extends State<LoadingPage> {
               beforeDay = n.startDate.day;
             }
             output[index].add(n);
+            tempLessonListForDB.add(n);
           }
+          await batchInsertLessons(tempLessonListForDB);
         }
       }
       return output;
@@ -398,8 +402,13 @@ class _LoadingPageState extends State<LoadingPage> {
         setState(() {
           loadingText = "Mindjárt kész!";
         });
-        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
-        return;
+        if (tempEvals.length != 0 &&
+            homeworkPage.globalHomework.length != 0 &&
+            noticesPage.allParsedNotices.length != 0 &&
+            avaragesPage.avarageList.length != 0) {
+          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+          return;
+        }
       }
       //If we don't have prefetched data
       setState(() {

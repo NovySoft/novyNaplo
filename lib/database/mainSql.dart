@@ -3,7 +3,6 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 
-
 Future<Database> database;
 
 void initDatabase() async {
@@ -28,6 +27,9 @@ void initDatabase() async {
       );
       db.execute(
         "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT)",
+      );
+      db.execute(
+        "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT);",
       );
     },
     // Set the version. This executes the onCreate function and provides a

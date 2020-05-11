@@ -236,6 +236,7 @@ class NetworkHelper {
     //Process response
     var decoded = json.decode(res.body);
     List<Lesson> tempLessonList = [];
+    List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
       tempLessonList.add(await setLesson(n, token, code));
     }
@@ -251,7 +252,9 @@ class NetworkHelper {
             beforeDay = n.startDate.day;
           }
           output[index].add(n);
+          tempLessonListForDB.add(n);
         }
+        await batchInsertLessons(tempLessonListForDB);
       }
     }
     return output;
