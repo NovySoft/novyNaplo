@@ -427,7 +427,7 @@ class CalculatorTabState extends State<CalculatorTab>
                           height: 90,
                         )
                       : SizedBox(
-                          height: 0,
+                          height: 15,
                         ),
                 ]),
                 floatingActionButtonLocation:

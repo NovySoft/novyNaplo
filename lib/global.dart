@@ -46,6 +46,8 @@ void setGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("ads") != null) {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+    adsEnabled = prefs.getBool("ads");
+    if (adsEnabled) adModifier = 1;
   }
 
   fetchPeriod =

@@ -369,8 +369,6 @@ class _LoadingPageState extends State<LoadingPage> {
         marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = tempEvals;
         marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
-        marksPage.allParsedByDate
-            .sort((a, b) => b.createDateString.compareTo(a.createDateString));
         //Homework
         setState(() {
           loadingText = "Házifeladat olvasása az adatbázisból";
@@ -388,6 +386,15 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "Átlagok olvasása az adatbázisból";
         });
         avaragesPage.avarageList = await getAllAvarages();
+        //Statisztika
+        statisticsPage.allParsedSubjects =
+            categorizeSubjectsFromEvals(marksPage.allParsedByDate);
+        statisticsPage.colors =
+            getRandomColors(statisticsPage.allParsedSubjects.length);
+        setUpCalculatorPage(statisticsPage.allParsedSubjects);
+        //Sort
+        marksPage.allParsedByDate
+            .sort((a, b) => b.createDateString.compareTo(a.createDateString));
         setState(() {
           loadingText = "Mindjárt kész!";
         });
