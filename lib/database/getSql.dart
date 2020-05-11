@@ -107,7 +107,7 @@ Future<List<Lesson>> getAllTimetable() async {
 
   final List<Map<String, dynamic>> maps = await db.query('Timetable');
 
-  return List.generate(maps.length, (i) {
+  List<Lesson> outputTempList = List.generate(maps.length, (i) {
     Lesson temp = new Lesson();
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
@@ -124,7 +124,7 @@ Future<List<Lesson>> getAllTimetable() async {
     temp.teacherHomeworkId = maps[i]['teacherHomeworkId'];
     temp.groupID = maps[i]['groupID'];
     temp.dogaIds = json.decode(maps[i]['dogaIds']);
-    temp.homeworkEnabled = maps[i]['homeworkEnabled'];
+    temp.homeworkEnabled = maps[i]['homeworkEnabled'] == 0 ? false : true;
 
     temp.dateString = maps[i]['date'];
     temp.date = DateTime.parse(temp.dateString);
@@ -134,7 +134,32 @@ Future<List<Lesson>> getAllTimetable() async {
 
     temp.endDateString = maps[i]['endDate'];
     temp.endDate = DateTime.parse(temp.endDateString);
-    //TODO homework
     return temp;
   });
+  for (var n in outputTempList) {
+    if (n.teacherHomeworkId != null) {
+      n.homework = await getHomeworkById(n.teacherHomeworkId);
+    } else if (n.homeWorkId != null) {
+      n.homework = await getHomeworkById(n.homeWorkId);
+    }
+  }
+  return outputTempList;
+}
+
+Future<Homework> getHomeworkById(int id) async {
+  final Database db = await mainSql.database;
+  var answer = await db.rawQuery(
+      "select * from Homework where id = ? or databaseId = ?;", [id, id]);
+  Homework output = new Homework();
+  output.databaseId = answer[0]['databaseId'];
+  output.id = answer[0]['id'];
+  output.classGroupId = answer[0]['classGroupId'];
+  output.subject = answer[0]['subject'];
+  output.teacher = answer[0]['teacher'];
+  output.content = answer[0]['content'];
+  output.givenUpString = answer[0]['givenUpString'];
+  output.dueDateString = answer[0]['dueDateString'];
+  output.givenUp = DateTime.parse(output.givenUpString);
+  output.dueDate = DateTime.parse(output.dueDateString);
+  return output;
 }

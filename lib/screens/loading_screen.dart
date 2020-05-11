@@ -396,6 +396,11 @@ class _LoadingPageState extends State<LoadingPage> {
         statisticsPage.colors =
             getRandomColors(statisticsPage.allParsedSubjects.length);
         setUpCalculatorPage(statisticsPage.allParsedSubjects);
+        //Timetable
+        setState(() {
+          loadingText = "Órarend olvasása az adatbázisból";
+        });
+        timetablePage.lessonsList = getWeekLessonsFromLessons(await getAllTimetable());
         //Sort
         marksPage.allParsedByDate
             .sort((a, b) => b.createDateString.compareTo(a.createDateString));

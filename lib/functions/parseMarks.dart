@@ -213,8 +213,9 @@ List<dynamic> sortByDateAndSubject(List<dynamic> input) {
 }
 
 List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
+  if (lessons == null) return [];
   List<Lesson> tempLessonList = lessons;
-  List<List<Lesson>> output = [];
+  List<List<Lesson>> output = [[], [], [], [], [], [], []];
   tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
   int index = 0;
   if (tempLessonList != null) {

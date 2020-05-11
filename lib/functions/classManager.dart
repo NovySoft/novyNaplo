@@ -213,7 +213,7 @@ class Lesson {
   String startDateString;
   DateTime endDate;
   String endDateString;
-  Homework homework;
+  Homework homework = new Homework();
 
   Map<String, dynamic> toMap() {
     return {
@@ -264,6 +264,10 @@ Future<Lesson> setLesson(var input, token, code) async {
   temp.startDate = DateTime.parse(input["StartTime"]);
   temp.endDate = DateTime.parse(input["EndTime"]);
   temp.date = DateTime.parse(input["Date"]);
+  //Datetime sttring
+  temp.startDateString = input["StartTime"];
+  temp.endDateString = input["EndTime"];
+  temp.dateString = input["Date"];
   //Booleans
   temp.homeworkEnabled = input["IsTanuloHaziFeladatEnabled"];
   //Lists
