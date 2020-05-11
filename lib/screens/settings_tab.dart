@@ -1131,7 +1131,7 @@ class _AdsDialogState extends State<AdsDialog> {
     return new AlertDialog(
       title: new Text("Reklámok"),
       content: Text(
-        "A reklámok bekapcsolásával elfogadod az Admob privacy policity és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel),és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
+        "A reklámok bekapcsolásával elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
         textAlign: TextAlign.left,
       ),
       actions: <Widget>[
@@ -1153,6 +1153,7 @@ class _AdsDialogState extends State<AdsDialog> {
 
 Future<void> _ackAlert(BuildContext context, String content) async {
   return showDialog<void>(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -1262,6 +1263,14 @@ class _NetworkAndNotificationSettingsState
                         Crashlytics.instance.setBool("backgroundFetch", isOn);
                       });
                       if (isOn) {
+                        if (globals.offlineModeDb == false) {
+                          await _ackAlert(
+                            context,
+                            "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+                          );
+                          globals.offlineModeDb = true;
+                          prefs.setBool("offlineModeDb", true);
+                        }
                         await AndroidAlarmManager.cancel(main.fetchAlarmID);
                         Crashlytics.instance.log(
                             "Canceled alarm: " + main.fetchAlarmID.toString());
@@ -1396,8 +1405,11 @@ class DatabaseSettings extends StatefulWidget {
 }
 
 class _DatabaseSettingsState extends State<DatabaseSettings> {
+  bool dbSwitch = globals.offlineModeDb;
+
   @override
   Widget build(BuildContext context) {
+    dbSwitch = globals.offlineModeDb;
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
@@ -1405,7 +1417,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 2,
+          itemCount: 3,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -1427,6 +1439,29 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                 );
                 break;
               case 1:
+                return ListTile(
+                  title: Text("Adatbázis használata\n(Offline mód)"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        dbSwitch = isOn;
+                        globals.offlineModeDb = isOn;
+                      });
+                      if(!isOn && globals.backgroundFetch){
+                        _ackAlert(context, "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket!");
+                        globals.backgroundFetch = false;
+                        prefs.setBool("backgroundFetch",false);
+                      }
+                      prefs.setBool("offlineModeDb", isOn);
+                      Crashlytics.instance.setBool("offlineModeDb", isOn);
+                    },
+                    value: dbSwitch,
+                  ),
+                );
+                break;
+              case 2:
                 return ListTile(
                   title: Center(
                     child: SizedBox(
