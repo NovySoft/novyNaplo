@@ -43,25 +43,24 @@ void main() async {
   runZoned(() async {
     mainSql.initDatabase();
     runApp(MyApp());
-    globals.fetchPeriod = prefs.getInt("fetchPeriod");
+    globals.fetchPeriod =
+        prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
     globals.backgroundFetch = prefs.getBool("backgroundFetch");
-    if (prefs.getBool("backgroundFetch")) {
+    if (globals.backgroundFetch == null ? false : globals.backgroundFetch) {
       globals.backgroundFetchCanWakeUpPhone =
           prefs.getBool("backgroundFetchCanWakeUpPhone") == null
               ? true
               : prefs.getBool("backgroundFetchCanWakeUpPhone");
-      if (prefs.getBool("backgroundFetch")) {
-        await AndroidAlarmManager.initialize();
-        await AndroidAlarmManager.cancel(fetchAlarmID);
-        await sleep(1000);
-        await AndroidAlarmManager.periodic(
-          Duration(minutes: globals.fetchPeriod),
-          fetchAlarmID,
-          getMarksInBackground,
-          wakeup: globals.backgroundFetchCanWakeUpPhone,
-          rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
-        );
-      }
+      await AndroidAlarmManager.initialize();
+      await AndroidAlarmManager.cancel(fetchAlarmID);
+      await sleep(1000);
+      await AndroidAlarmManager.periodic(
+        Duration(minutes: globals.fetchPeriod),
+        fetchAlarmID,
+        getMarksInBackground,
+        wakeup: globals.backgroundFetchCanWakeUpPhone,
+        rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
+      );
     }
   }, onError: Crashlytics.instance.recordError);
 }

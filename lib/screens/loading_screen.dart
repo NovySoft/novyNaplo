@@ -360,7 +360,7 @@ class _LoadingPageState extends State<LoadingPage> {
         }
       }
       //If we have prefetched data
-      if (prefs.getBool("backgroundFetch") || prefs.getBool("offlineModeDb")) {
+      if (globals.backgroundFetch || globals.offlineModeDb) {
         setState(() {
           loadingText = "Adatok olvasása az adatbázisból";
         });
@@ -379,7 +379,7 @@ class _LoadingPageState extends State<LoadingPage> {
         });
         homeworkPage.globalHomework = await getAllHomework();
         homeworkPage.globalHomework
-            .sort((a, b) => b.givenUp.compareTo(a.givenUp));
+            .sort((a, b) => a.dueDate.compareTo(b.dueDate));
         //Notices
         setState(() {
           loadingText = "Feljegyzések olvasása az adatbázisból";
@@ -547,6 +547,16 @@ class _LoadingPageState extends State<LoadingPage> {
               child: Text(
                 "Üdv a Novy Naplóban!",
                 style: TextStyle(fontSize: 28),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Center(
+              child: Text(
+                "Ver: " + config.currentAppVersionCode,
+                style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -54,7 +54,8 @@ class MarksTabState extends State<MarksTab>
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (globals.backgroundFetch && !globals.didFetch) {
+      if ((globals.backgroundFetch || globals.offlineModeDb) &&
+          !globals.didFetch) {
         globals.didFetch = true;
         _androidRefreshKey.currentState?.show();
       }
