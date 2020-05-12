@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -433,7 +434,11 @@ class _LoadingPageState extends State<LoadingPage> {
                 timetablePage.lessonsList.length != 0) ||
             await Connectivity().checkConnectivity() ==
                 ConnectivityResult.none) {
-          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+          if (globals.notificationAppLaunchDetails.didNotificationLaunchApp &&
+              globals.notificationAppLaunchDetails.payload != "teszt") {
+          } else {
+            Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+          }
           FirebaseAnalytics().logEvent(name: "login");
           return;
         }
@@ -520,7 +525,9 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     FirebaseAdMob.instance.initialize(appId: config.adMob);
-    WidgetsBinding.instance.addPostFrameCallback((_) => onLoad(context));
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      onLoad(context);
+    });
   }
 
   @override

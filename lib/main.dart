@@ -41,6 +41,7 @@ void main() async {
   }
   runZoned(() async {
     mainSql.initDatabase();
+    await notifications.setupNotifications();
     runApp(MyApp());
     globals.fetchPeriod =
         prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
@@ -87,7 +88,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    notifications.setupNotifications();
     return new DynamicTheme(
       defaultBrightness: Brightness.dark,
       data: (brightness) => ThemeHelper().getTheme(brightness),

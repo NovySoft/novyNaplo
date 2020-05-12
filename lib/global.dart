@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //Variables used globally;
@@ -30,7 +31,8 @@ int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
 BuildContext globalContext; //Yes this is a global context variable
-bool didFetch = false;
+bool didFetch = false; //True if we fetched the data, false if we didn't
+NotificationAppLaunchDetails notificationAppLaunchDetails;
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
