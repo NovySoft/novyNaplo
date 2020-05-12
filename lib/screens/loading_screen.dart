@@ -201,13 +201,8 @@ class _LoadingPageState extends State<LoadingPage> {
         });
         globals.dJson = json.decode(res.body);
         var eval = globals.dJson["Evaluations"];
-        if (globals.markCount != 0) globals.markCount = 0;
-        if (globals.noticesCount != 0) globals.noticesCount = 0;
         await getAvarages(token, code);
-        if (eval != null)
-          globals.markCount = eval.length;
-        else
-          globals.markCount = 0;
+        globals.markCount = eval.length;
         marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
         marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
@@ -525,7 +520,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     FirebaseAdMob.instance.initialize(appId: config.adMob);
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       onLoad(context);
     });
   }

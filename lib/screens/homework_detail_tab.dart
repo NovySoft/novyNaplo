@@ -46,7 +46,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                   child: Text(
                     widget.hwInfo.subject,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 25, color: Colors.black),
                   ),
                 )),
           ),

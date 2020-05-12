@@ -1,7 +1,12 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
+import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
+import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 
 //TODO group notifications
 //TODO move this to a different file
@@ -55,13 +60,35 @@ Future<void> setupNotifications() async {
 Future selectNotification(String payload) async {
   if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
   if (payload != null && payload != "teszt" && payload is String) {
-    print(payload);
+    globals.payloadId = int.parse(payload.split(" ")[1]);
+    switch (payload.split(" ")[0]) {
+      case "marks":
+        Navigator.of(globals.globalContext).pushNamed(marksTab.MarksTab.tag);
+        return;
+        break;
+      case "hw":
+        Navigator.of(globals.globalContext)
+            .pushNamed(homeworkTab.HomeworkTab.tag);
+        return;
+        break;
+      case "notice":
+        Navigator.of(globals.globalContext)
+            .pushNamed(noticeTab.NoticesTab.tag);
+        return;
+        break;
+      case "timetable":
+        Navigator.of(globals.globalContext)
+            .pushNamed(timetableTab.TimetableTab.tag);
+        return;
+        break;
+    }
+    Crashlytics.instance.log("Unkown payload: " + payload);
     showDialog<void>(
       context: globals.globalContext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Értesítés'),
-          content: Text(payload),
+          content: Text("Ismeretlen payload:\n" + payload),
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),

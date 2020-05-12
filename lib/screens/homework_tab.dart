@@ -20,7 +20,37 @@ class HomeworkTab extends StatefulWidget {
 class _HomeworkTabState extends State<HomeworkTab> {
   @override
   void initState() {
-    colors = getRandomColors(globalHomework.length);
+    if (colors.length == 0 || colors == [])
+      colors = getRandomColors(globalHomework.length);
+    if (globals.payloadId != -1) {
+      int tempindex = globalHomework.indexWhere(
+        (element) {
+          return element.id == globals.payloadId;
+        },
+      );
+      Homework tempHw = globalHomework.firstWhere(
+        (element) {
+          return element.id == globals.payloadId;
+        },
+        orElse: () {
+          return new Homework();
+        },
+      );
+      //Evals tempEval = allParsedByDate[0];
+      if (tempHw.id != null)
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeworkDetailTab(
+                hwInfo: tempHw,
+                color: colors[tempindex],
+              ),
+            ),
+          );
+        });
+      globals.payloadId = -1;
+    }
     super.initState();
   }
 
@@ -47,9 +77,6 @@ class _HomeworkTabState extends State<HomeworkTab> {
     }
   }
 
-  //! RangeError (index): Invalid value: Not in range 0..2, inclusive: 3
-  //* https://console.firebase.google.com/u/0/project/novynaplo-152ec/crashlytics/app/android:novy.vip.novynaplo/issues/ca148d2a3483e9406fcf6a792d14aec6
-  //TODO Megjavítani, a felhasználó nem tapasztalt hibát
   Widget _listBuilder(BuildContext context, int index) {
     if (index >= globalHomework.length) {
       return SizedBox(

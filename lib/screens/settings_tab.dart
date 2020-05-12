@@ -17,9 +17,13 @@ import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/homework_tab.dart';
+import 'package:novynaplo/screens/notices_tab.dart';
+import 'package:novynaplo/screens/timetable_tab.dart';
 
-final _formKey = GlobalKey<FormState>();
-final _formKeyTwo = GlobalKey<FormState>();
+final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
+final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
 String dropDown;
 String statDropDown = globals.statChart;
 String howManyGraphDropDown = globals.howManyGraph;
@@ -1189,7 +1193,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 2 + (globals.backgroundFetch ? 2 : 0),
+          itemCount: 6 + (globals.backgroundFetch ? 2 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1204,7 +1208,8 @@ class _NetworkAndNotificationSettingsState
                             borderRadius: BorderRadius.circular(24),
                           ),
                           onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin.show(
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
                               1,
                               'Teszt értesítés',
                               'Így fog kinézni egy értesítés...',
@@ -1223,6 +1228,129 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 1:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt jegy értesítés',
+                              'Új jegyek...',
+                              notifications.platformChannelSpecifics,
+                              payload:
+                                  'marks ' + allParsedByDate[0].id.toString(),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt jegy értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt értesítés',
+                              'Új lecke...',
+                              notifications.platformChannelSpecifics,
+                              payload: 'hw ' + globalHomework[0].id.toString(),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt házifeladat értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 3:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt értesítés',
+                              'Új feljegyzés...',
+                              notifications.platformChannelSpecifics,
+                              payload:
+                                  'notice ' + allParsedNotices[0].id.toString(),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt feljegyzés értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 4:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt értesítés',
+                              'Új óra...',
+                              notifications.platformChannelSpecifics,
+                              payload:
+                                  'timetable ' + lessonsList[0][0].id.toString(),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt órarend értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 5:
                 return ListTile(
                   title: Text("Háttér lekérések"),
                   trailing: Switch(
@@ -1268,7 +1396,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 2:
+              case 6:
                 return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
@@ -1317,7 +1445,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 3:
+              case 7:
                 return ListTile(
                   title: Text("A lekérés felkeltheti a telefont (ajánlott)"),
                   trailing: Switch(
@@ -1421,10 +1549,11 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                         dbSwitch = isOn;
                         globals.offlineModeDb = isOn;
                       });
-                      if(!isOn && globals.backgroundFetch){
-                        _ackAlert(context, "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket!");
+                      if (!isOn && globals.backgroundFetch) {
+                        _ackAlert(context,
+                            "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket!");
                         globals.backgroundFetch = false;
-                        prefs.setBool("backgroundFetch",false);
+                        prefs.setBool("backgroundFetch", false);
                       }
                       prefs.setBool("offlineModeDb", isOn);
                       Crashlytics.instance.setBool("offlineModeDb", isOn);

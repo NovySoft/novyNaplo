@@ -63,7 +63,9 @@ Future<void> insertHomework(Homework hw) async {
   } else {
     for (var n in matchedHw) {
       //!Update didn't work so we delete and create a new one
-      if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
+      if (n.content != hw.content ||
+          n.dueDateString != hw.dueDateString ||
+          n.givenUpString != hw.givenUpString) {
         deleteFromDb(n.databaseId, "Homework");
         insertHomework(hw);
       }
@@ -197,7 +199,9 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
     } else {
       for (var n in matchedHw) {
         //!Update didn't work so we delete and create a new one
-        if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
+        if (n.content != hw.content ||
+            n.dueDateString != hw.dueDateString ||
+            n.givenUpString != hw.givenUpString) {
           batch.delete(
             "Homework",
             where: "databaseId = ?",

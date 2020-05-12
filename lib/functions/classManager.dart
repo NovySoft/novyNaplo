@@ -10,7 +10,6 @@ import 'package:novynaplo/functions/utils.dart';
 class Evals {
   var formName,
       form,
-      id,
       value,
       numberValue,
       teacher,
@@ -25,6 +24,7 @@ class Evals {
   DateTime date;
   IconData icon;
   int databaseId;
+  int id;
 
   Map<String, dynamic> toMap() {
     return {
@@ -324,8 +324,8 @@ Homework setHomework(var decoded) {
   temp.icon = parseSubjectToIcon(subject: temp.subject);
   temp.teacher = decoded["Rogzito"];
   temp.content = decoded["Szoveg"];
-  temp.givenUpString = decoded["FeladasDatuma"];
-  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
+  temp.givenUpString = decoded["RogzitesIdopontja"];
+  temp.givenUp = DateTime.parse(decoded["RogzitesIdopontja"]);
   temp.dueDateString = decoded["Hatarido"];
   temp.dueDate = DateTime.parse(decoded["Hatarido"]);
   return temp;

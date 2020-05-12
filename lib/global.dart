@@ -32,7 +32,8 @@ int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
-NotificationAppLaunchDetails notificationAppLaunchDetails;
+NotificationAppLaunchDetails notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
+int payloadId = -1;
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();

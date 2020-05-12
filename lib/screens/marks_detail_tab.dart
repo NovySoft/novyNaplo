@@ -51,7 +51,9 @@ class MarksDetailTab extends StatelessWidget {
         children: [
           HeroAnimatingMarksCard(
             eval: null,
-            iconData: eval.icon == null ? parseSubjectToIcon(subject: eval.subject) : eval.icon,
+            iconData: eval.icon == null
+                ? parseSubjectToIcon(subject: eval.subject)
+                : eval.icon,
             subTitle: "",
             title: name,
             color: color,

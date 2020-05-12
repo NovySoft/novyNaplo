@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
     this.title,
@@ -47,7 +46,7 @@ class NoticeDetailTab extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 25, color: Colors.black),
                   ),
                 )),
           ),
@@ -61,6 +60,7 @@ class NoticeDetailTab extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
                               Text(
                                 "Szöveg:",
                                 textAlign: TextAlign.left,
@@ -80,6 +80,7 @@ class NoticeDetailTab extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
                               Text(
                                 "Tanár:",
                                 textAlign: TextAlign.left,
@@ -88,7 +89,7 @@ class NoticeDetailTab extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                capitalize(teacher),
+                                teacher,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(fontSize: 20.0),
                               ),
@@ -99,6 +100,7 @@ class NoticeDetailTab extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 15),
                               Text(
                                 "Dátum:",
                                 textAlign: TextAlign.left,
@@ -119,6 +121,7 @@ class NoticeDetailTab extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 15),
                                 Text(
                                   "Tantárgy:",
                                   textAlign: TextAlign.left,
@@ -137,6 +140,7 @@ class NoticeDetailTab extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height: 15),
                                 Text(
                                   "Tantárgy:",
                                   textAlign: TextAlign.left,
@@ -153,7 +157,7 @@ class NoticeDetailTab extends StatelessWidget {
                         }
                         break;
                     }
-                    return SizedBox(height:10,width:10);
+                    return SizedBox(height: 10, width: 10);
                   }))
           //Expanded()
         ]));

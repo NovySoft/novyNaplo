@@ -53,6 +53,48 @@ class MarksTabState extends State<MarksTab>
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
+    if (globals.payloadId != -1) {
+      int tempindex = allParsedByDate.indexWhere(
+        (element) {
+          return element.id == globals.payloadId;
+        },
+      );
+      Evals tempEval = allParsedByDate.firstWhere(
+        (element) {
+          return element.id == globals.payloadId;
+        },
+        orElse: () {
+          return new Evals();
+        },
+      );
+      //Evals tempEval = allParsedByDate[0];
+      if (tempEval.id != null)
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MarksDetailTab(
+                eval: tempEval,
+                mode: tempEval.mode,
+                theme: tempEval.theme,
+                weight: tempEval.weight,
+                date: tempEval.dateString,
+                createDate: tempEval.createDateString,
+                teacher: tempEval.teacher,
+                subject: tempEval.subject,
+                numberValue: tempEval.numberValue,
+                value: tempEval.value,
+                formName: tempEval.formName,
+                form: tempEval.form,
+                id: index,
+                name: capitalize(tempEval.subject + " " + tempEval.value),
+                color: colors[tempindex],
+              ),
+            ),
+          );
+        });
+      globals.payloadId = -1;
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if ((globals.backgroundFetch || globals.offlineModeDb) &&
           !globals.didFetch) {
@@ -461,7 +503,6 @@ class MarksTabState extends State<MarksTab>
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    adBanner.load();
     return Scaffold(
       drawer: getDrawer(MarksTab.tag, context),
       appBar: AppBar(
