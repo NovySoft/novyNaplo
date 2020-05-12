@@ -51,17 +51,18 @@ class _HomeworkTabState extends State<HomeworkTab> {
   //* https://console.firebase.google.com/u/0/project/novynaplo-152ec/crashlytics/app/android:novy.vip.novynaplo/issues/ca148d2a3483e9406fcf6a792d14aec6
   //TODO Megjavítani, a felhasználó nem tapasztalt hibát
   Widget _listBuilder(BuildContext context, int index) {
-    bool dueOver = false;
-    var left = globalHomework[index].dueDate.difference(DateTime.now());
-    if (left.inMinutes / 60 < 0) {
-      dueOver = true;
-    }
     if (index >= globalHomework.length) {
       return SizedBox(
         height: 100,
       );
     } else {
-      String subTitle = "Határidő: " + globalHomework[index].dueDate.year.toString() +
+      bool dueOver = false;
+      var left = globalHomework[index].dueDate.difference(DateTime.now());
+      if (left.inMinutes / 60 < 0) {
+        dueOver = true;
+      }
+      String subTitle = "Határidő: " +
+          globalHomework[index].dueDate.year.toString() +
           "-" +
           globalHomework[index].dueDate.month.toString() +
           "-" +
