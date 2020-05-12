@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 
-//TODO group notifications
 Int64List vibrationPattern;
 var androidPlatformChannelSpecifics;
 var iOSPlatformChannelSpecifics;
@@ -78,6 +78,11 @@ Future selectNotification(String payload) async {
       case "timetable":
         Navigator.of(globals.globalContext)
             .pushNamed(timetableTab.TimetableTab.tag);
+        return;
+        break;
+      case "avarage":
+        Navigator.of(globals.globalContext)
+            .pushNamed(AvaragesTab.tag);
         return;
         break;
     }

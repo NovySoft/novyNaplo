@@ -446,7 +446,7 @@ class _LoadingPageState extends State<LoadingPage> {
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
-          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');

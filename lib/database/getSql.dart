@@ -151,6 +151,7 @@ Future<Homework> getHomeworkById(int id) async {
   var answer = await db.rawQuery(
       "select * from Homework where id = ? or databaseId = ?;", [id, id]);
   Homework output = new Homework();
+  if(answer.length == 0) return output;
   output.databaseId = answer[0]['databaseId'];
   output.id = answer[0]['id'];
   output.classGroupId = answer[0]['classGroupId'];

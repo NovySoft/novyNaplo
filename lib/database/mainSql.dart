@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 
 Future<Database> database;
 
-void initDatabase() async {
+Future<void> initDatabase() async {
 // Open the database and store the reference.
   database = openDatabase(
     // Set the path to the database. Note: Using the `join` function from the
