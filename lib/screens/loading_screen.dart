@@ -359,6 +359,23 @@ class _LoadingPageState extends State<LoadingPage> {
               newVerDetails.releaseLink);
         }
       }
+      //Load ADS
+      if (prefs.getBool("ads") != null) {
+        Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+        if (prefs.getBool("ads")) {
+          adBanner.load();
+          adBanner.show(
+            anchorType: AnchorType.bottom,
+          );
+          globals.adsEnabled = true;
+          globals.adModifier = 1;
+        } else {
+          globals.adModifier = 0;
+          globals.adsEnabled = false;
+        }
+      } else {
+        globals.adsEnabled = false;
+      }
       //If we have prefetched data
       if (globals.backgroundFetch || globals.offlineModeDb) {
         setState(() {
@@ -430,22 +447,6 @@ class _LoadingPageState extends State<LoadingPage> {
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
           userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      if (prefs.getBool("ads") != null) {
-        Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
-        if (prefs.getBool("ads")) {
-          adBanner.load();
-          adBanner.show(
-            anchorType: AnchorType.bottom,
-          );
-          globals.adsEnabled = true;
-          globals.adModifier = 1;
-        } else {
-          globals.adModifier = 0;
-          globals.adsEnabled = false;
-        }
-      } else {
-        globals.adsEnabled = false;
-      }
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');
