@@ -68,9 +68,14 @@ void backgroundFetch() async {
   );
   platformChannelSpecificsSendNotif =
       new NotificationDetails(sendNotification, iOSPlatformChannelSpecifics);
-  if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-    return;
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+    return;
+  }
+  if (prefs.getBool("backgroundFetchOnCellular") == false &&
+      await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
+    return;
+  }
   var initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = IOSInitializationSettings();
@@ -281,8 +286,8 @@ Future<void> batchInsertAvarageAndNotif(List<Avarage> avarageList) async {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           double diffValue = avarage.ownValue - n.ownValue;
-          String diff = diffValue < 0
-              ? ("-${diffValue.toString()}")
+          String diff = diffValue > 0
+              ? ("+${diffValue.toString()}")
               : diffValue.toString();
           await flutterLocalNotificationsPlugin.show(
             notifId,

@@ -11,6 +11,8 @@ import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
@@ -110,7 +112,7 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  void _setData() async {
+  Future<void> _setData() async {
     colors = getRandomColors(globals.markCount);
     allParsedByDate = await parseAllByDate(globals.dJson);
     allParsedBySubject = parseAllBySubject(globals.dJson);
@@ -119,6 +121,12 @@ class MarksTabState extends State<MarksTab>
   Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
     Crashlytics.instance.log("RefreshData");
+    await notifications.flutterLocalNotificationsPlugin.show(
+      -111,
+      'Adatok lekérése',
+      'Éppen zajlik az adatok lekérése...',
+      platformChannelSpecificsGetNotif,
+    );
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     //TODO fix this
     //!It only works when i put his ting here
@@ -140,12 +148,16 @@ class MarksTabState extends State<MarksTab>
     }
     if (status == "OK") {
       await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
+      await _setData();
       setState(() {
-        _setData();
+        colors = colors;
+        allParsedByDate = allParsedByDate;
+        allParsedBySubject = allParsedBySubject;
       });
     } else {
       print(status);
     }
+    await notifications.flutterLocalNotificationsPlugin.cancel(-111);
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {

@@ -1194,7 +1194,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 6 + (globals.backgroundFetch ? 2 : 0),
+          itemCount: 6 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1399,6 +1399,24 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 6:
                 return ListTile(
+                  title: Text("Háttér lekérések mobilnetről"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        globals.backgroundFetchOnCellular = isOn;
+                        prefs.setBool("backgroundFetchOnCellular", isOn);
+                        Crashlytics.instance
+                            .setBool("backgroundFetchOnCellular", isOn);
+                      });
+                    },
+                    value: globals.backgroundFetchOnCellular,
+                  ),
+                );
+                break;
+              case 7:
+                return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
                     width: 50,
@@ -1446,7 +1464,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 7:
+              case 8:
                 return ListTile(
                   title: Text("A lekérés felkeltheti a telefont (ajánlott)"),
                   trailing: Switch(
