@@ -11,7 +11,6 @@ import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
-import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';

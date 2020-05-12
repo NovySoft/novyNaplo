@@ -69,14 +69,6 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                               ),
                               Html(
                                 data: widget.hwInfo.content,
-                                customTextStyle:
-                                    (dom.Node node, TextStyle baseStyle) {
-                                  if (node is dom.Element) {
-                                    return baseStyle
-                                        .merge(TextStyle(fontSize: 20));
-                                  }
-                                  return baseStyle;
-                                },
                                 onLinkTap: (url) async {
                                   if (await canLaunch(url)) {
                                     await launch(url);

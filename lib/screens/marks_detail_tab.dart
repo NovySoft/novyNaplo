@@ -4,7 +4,6 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/database/insertSql.dart';
 
 //TODO refactor to only use this.eval instead of all this bs
 class MarksDetailTab extends StatelessWidget {

@@ -24,6 +24,8 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
+    as backgroundFetchHelper;
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -57,19 +59,12 @@ void main() async {
       await AndroidAlarmManager.periodic(
         Duration(minutes: globals.fetchPeriod),
         fetchAlarmID,
-        getMarksInBackground,
+        backgroundFetchHelper.backgroundFetch,
         wakeup: globals.backgroundFetchCanWakeUpPhone,
         rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
       );
     }
   }, onError: Crashlytics.instance.recordError);
-}
-
-void getMarksInBackground() {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  print(
-      "[$now] Hello, world! isolate=$isolateId function='$getMarksInBackground'");
 }
 
 class MyApp extends StatelessWidget {

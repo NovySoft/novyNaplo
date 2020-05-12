@@ -9,7 +9,6 @@ import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 
 //TODO group notifications
-//TODO move this to a different file
 Int64List vibrationPattern;
 var androidPlatformChannelSpecifics;
 var iOSPlatformChannelSpecifics;
@@ -20,7 +19,7 @@ Future<void> setupNotifications() async {
   vibrationPattern = new Int64List(4);
   vibrationPattern[0] = 0;
   vibrationPattern[1] = 1000;
-  vibrationPattern[2] = 300;
+  vibrationPattern[2] = 500;
   vibrationPattern[3] = 1000;
   androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     'novynaplo01',

@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -21,6 +20,8 @@ import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
+import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
+    as backgroundFetchHelper;
 
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
 final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
@@ -1336,8 +1337,8 @@ class _NetworkAndNotificationSettingsState
                               'Teszt értesítés',
                               'Új óra...',
                               notifications.platformChannelSpecifics,
-                              payload:
-                                  'timetable ' + lessonsList[0][0].id.toString(),
+                              payload: 'timetable ' +
+                                  lessonsList[0][0].id.toString(),
                             );
                           },
                           icon: Icon(
@@ -1379,7 +1380,7 @@ class _NetworkAndNotificationSettingsState
                         await AndroidAlarmManager.periodic(
                           Duration(minutes: globals.fetchPeriod),
                           main.fetchAlarmID,
-                          main.getMarksInBackground,
+                          backgroundFetchHelper.backgroundFetch,
                           wakeup: globals.backgroundFetchCanWakeUpPhone,
                           rescheduleOnReboot:
                               globals.backgroundFetchCanWakeUpPhone,
@@ -1433,7 +1434,7 @@ class _NetworkAndNotificationSettingsState
                             await AndroidAlarmManager.periodic(
                               Duration(minutes: globals.fetchPeriod),
                               main.fetchAlarmID,
-                              main.getMarksInBackground,
+                              backgroundFetchHelper.backgroundFetch,
                               wakeup: globals.backgroundFetchCanWakeUpPhone,
                               rescheduleOnReboot:
                                   globals.backgroundFetchCanWakeUpPhone,
@@ -1467,7 +1468,7 @@ class _NetworkAndNotificationSettingsState
                         await AndroidAlarmManager.periodic(
                           Duration(minutes: globals.fetchPeriod),
                           main.fetchAlarmID,
-                          main.getMarksInBackground,
+                          backgroundFetchHelper.backgroundFetch,
                           wakeup: globals.backgroundFetchCanWakeUpPhone,
                           rescheduleOnReboot:
                               globals.backgroundFetchCanWakeUpPhone,
@@ -1481,7 +1482,7 @@ class _NetworkAndNotificationSettingsState
                         await AndroidAlarmManager.periodic(
                           Duration(minutes: globals.fetchPeriod),
                           main.fetchAlarmID,
-                          main.getMarksInBackground,
+                          backgroundFetchHelper.backgroundFetch,
                           wakeup: globals.backgroundFetchCanWakeUpPhone,
                           rescheduleOnReboot:
                               globals.backgroundFetchCanWakeUpPhone,
