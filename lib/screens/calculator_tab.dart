@@ -566,7 +566,7 @@ class CalculatorTabState extends State<CalculatorTab>
           DecoratedBox(
             decoration: new BoxDecoration(border: Border.all()),
             child: SizedBox(
-              height: 300,
+              height: 250,
               child: virtualMarks.length != 0
                   ? ListView.builder(
                       scrollDirection: Axis.vertical,
