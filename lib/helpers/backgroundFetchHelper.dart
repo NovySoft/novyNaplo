@@ -123,9 +123,10 @@ void backgroundFetch() async {
         headers: headers);
     if (res.statusCode == 200) {
       globals.dJson = json.decode(res.body);
-      await parseAllByDateFetch(globals.dJson);
-      await getAvaragesFetch(token, decryptedCode);
-      await parseNoticesFetch(globals.dJson);
+      await parseAllByDateFetch(globals.dJson); //Evals
+      await getAvaragesFetch(token, decryptedCode); //Avarages
+      await parseNoticesFetch(globals.dJson); //Notices
+      await getWeekLessonsFetch(token, decryptedCode); //Homework and Timetable
     }
   }
   await flutterLocalNotificationsPlugin.cancel(111);
@@ -371,4 +372,148 @@ Future<void> batchInsertNoticesAndNotif(List<Notices> noticeList) async {
   }
   await batch.commit();
   //print("BATCH INSERTED NOTICES");
+}
+
+Future<List<List<Lesson>>> getWeekLessonsFetch(token, code) async {
+  List<List<Lesson>> output = [];
+  for (var n = 0; n < 7; n++) {
+    output.add([]);
+  }
+  //calculate when was monday this week
+  int monday = 1;
+  int sunday = 7;
+  DateTime now = new DateTime.now();
+
+  while (now.weekday != monday) {
+    now = now.subtract(new Duration(days: 1));
+  }
+  String startDate = now.year.toString() +
+      "-" +
+      now.month.toString() +
+      "-" +
+      now.day.toString();
+  now = new DateTime.now();
+  while (now.weekday != sunday) {
+    now = now.add(new Duration(days: 1));
+  }
+  String endDate = now.year.toString() +
+      "-" +
+      now.month.toString() +
+      "-" +
+      now.day.toString();
+  //Make request
+  var header = {
+    'Authorization': 'Bearer $token',
+    'User-Agent': '$agent',
+    'Content-Type': 'application/json',
+  };
+
+  var res = await http.get(
+      'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
+      headers: header);
+  if (res.statusCode != 200) {
+    print(res.statusCode);
+  }
+  //Process response
+  var decoded = json.decode(res.body);
+  List<Lesson> tempLessonList = [];
+  List<Lesson> tempLessonListForDB = [];
+  for (var n in decoded) {
+    tempLessonList.add(await setLesson(n, token, code));
+  }
+  tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+  int index = 0;
+  if (tempLessonList != null) {
+    if (tempLessonList.length != 0) {
+      int beforeDay = tempLessonList[0].startDate.day;
+      //Just a matrix
+      for (var n in tempLessonList) {
+        if (n.startDate.day != beforeDay) {
+          index++;
+          beforeDay = n.startDate.day;
+        }
+        output[index].add(n);
+        tempLessonListForDB.add(n);
+      }
+      await batchInsertLessonsAndNotif(tempLessonListForDB);
+    }
+  }
+  return output;
+}
+
+Future<void> batchInsertLessonsAndNotif(List<Lesson> lessonList) async {
+  Crashlytics.instance.log("batchInsertEvalAndNotif");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  //Get all evals, and see whether we should be just replacing
+  List<Lesson> allTimetable = await getAllTimetable();
+  for (var lesson in lessonList) {
+    var matchedLessons = allTimetable.where(
+      (element) {
+        return (element.id == lesson.id && element.subject == lesson.subject);
+      },
+    );
+    if (matchedLessons.length == 0) {
+      batch.insert(
+        'Timetable',
+        lesson.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedLessons) {
+        //!Update didn't work so we delete and create a new one
+        if (n.theme != lesson.theme ||
+            n.teacher != lesson.teacher ||
+            n.dateString != lesson.dateString ||
+            n.deputyTeacherName != lesson.deputyTeacherName ||
+            n.name != lesson.name ||
+            n.classroom != lesson.classroom ||
+            n.homeWorkId != lesson.homeWorkId ||
+            n.teacherHomeworkId != lesson.teacherHomeworkId ||
+            json.encode(n.dogaIds) != json.encode(lesson.dogaIds) ||
+            n.startDateString != lesson.startDateString ||
+            n.endDateString != lesson.endDateString) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          print(
+              "n.startDateString != lesson.startDateString ${n.startDateString != lesson.startDateString}");
+          print(
+              "n.endDateString != lesson.endDateString ${n.endDateString != lesson.endDateString}");
+          batch.delete(
+            "Timetable",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Timetable',
+            lesson.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          String subTitle = "";
+          if (lesson.theme != null && lesson.theme != "") {
+            subTitle = lesson.theme;
+          } else if (lesson.teacher != null && lesson.teacher != "") {
+            subTitle = lesson.teacher;
+          } else if (lesson.deputyTeacherName != null &&
+              lesson.deputyTeacherName != "") {
+            subTitle = lesson.deputyTeacherName;
+          } else {
+            subTitle = lesson.classroom;
+          }
+          await flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Módusolt tanóra: ' +
+                capitalize(lesson.subject) +
+                " (${parseIntToWeekdayString(lesson.date.weekday)})",
+            subTitle,
+            platformChannelSpecificsSendNotif,
+            payload: "timetable " + lesson.id.toString(),
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  //print("INSERTED EVAL BATCH");
 }
