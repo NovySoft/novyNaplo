@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -1204,39 +1204,11 @@ class _NetworkAndNotificationSettingsState
                             borderRadius: BorderRadius.circular(24),
                           ),
                           onPressed: () async {
-                            //TODO group notifications
-                            //TODO move this to a different file
-                            var vibrationPattern = new Int64List(4);
-                            vibrationPattern[0] = 0;
-                            vibrationPattern[1] = 1000;
-                            vibrationPattern[2] = 5000;
-                            vibrationPattern[3] = 2000;
-                            var androidPlatformChannelSpecifics =
-                                new AndroidNotificationDetails(
-                              'novynaplo01',
-                              'novynaplo',
-                              'Channel for sending novyNaplo notifications',
-                              importance: Importance.Max,
-                              priority: Priority.High,
-                              vibrationPattern: vibrationPattern,
-                              color: const Color.fromARGB(255, 255, 165, 0),
-                              visibility: NotificationVisibility.Public,
-                              ledColor: Colors.orange,
-                              ledOnMs: 1000,
-                              ledOffMs: 1000,
-                              enableLights: true,
-                            );
-                            var iOSPlatformChannelSpecifics =
-                                new IOSNotificationDetails();
-                            var platformChannelSpecifics =
-                                new NotificationDetails(
-                                    androidPlatformChannelSpecifics,
-                                    iOSPlatformChannelSpecifics);
-                            await main.flutterLocalNotificationsPlugin.show(
+                            await notifications.flutterLocalNotificationsPlugin.show(
                               1,
                               'Teszt értesítés',
                               'Így fog kinézni egy értesítés...',
-                              platformChannelSpecifics,
+                              notifications.platformChannelSpecifics,
                               payload: 'teszt',
                             );
                           },
