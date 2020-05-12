@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -42,6 +43,7 @@ NotificationDetails platformChannelSpecificsSendNotif;
 int notifId = 2;
 
 void backgroundFetch() async {
+  FirebaseAnalytics().logEvent(name: "BackgroundFetch");
   Crashlytics.instance.log("backgroundFetch started");
   vibrationPattern = new Int64List(4);
   vibrationPattern[0] = 0;
@@ -65,7 +67,7 @@ void backgroundFetch() async {
     playSound: true,
   );
   platformChannelSpecificsSendNotif =
-      new NotificationDetails(androidFetchDetail, iOSPlatformChannelSpecifics);
+      new NotificationDetails(sendNotification, iOSPlatformChannelSpecifics);
   if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
     return;
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -117,7 +119,8 @@ void backgroundFetch() async {
     if (res.statusCode == 200) {
       globals.dJson = json.decode(res.body);
       await parseAllByDateFetch(globals.dJson);
-      await getAvarages(token, decryptedCode);
+      await getAvaragesFetch(token, decryptedCode);
+      await parseNoticesFetch(globals.dJson);
     }
   }
   await flutterLocalNotificationsPlugin.cancel(111);
@@ -149,7 +152,7 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
   //Get all evals, and see whether we should be just replacing
   List<Evals> allEvals = await getAllEvals();
   for (var eval in evalList) {
-    notifId++;
+    notifId = notifId == 111 ? notifId + 2 : notifId + 1;
     var matchedEvals = allEvals.where(
       (element) {
         return (element.id == eval.id && element.form == eval.form) ||
@@ -165,7 +168,7 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       if (notifId == 111) {
-        notifId++;
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       }
       //print("notifID: $notifId");
       await flutterLocalNotificationsPlugin.show(
@@ -195,7 +198,6 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
           );
           var tempRequests = await flutterLocalNotificationsPlugin
               .pendingNotificationRequests();
-          int notifId = tempRequests.length != 0 ? tempRequests.last.id : 2;
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           //print("notifID: $notifId");
           await flutterLocalNotificationsPlugin.show(
@@ -213,7 +215,7 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
   ////print("INSERTED EVAL BATCH");
 }
 
-Future<void> getAvarages(var token, code) async {
+Future<void> getAvaragesFetch(var token, code) async {
   var headers = {
     'Authorization': 'Bearer $token',
     'User-Agent': '$agent',
@@ -267,7 +269,7 @@ Future<void> batchInsertAvarageAndNotif(List<Avarage> avarageList) async {
         if (n.diff != avarage.diff ||
             n.ownValue != avarage.ownValue ||
             n.classValue != avarage.classValue) {
-          notifId++;
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           batch.delete(
             "Avarage",
             where: "databaseId = ?",
@@ -279,7 +281,9 @@ Future<void> batchInsertAvarageAndNotif(List<Avarage> avarageList) async {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           double diffValue = avarage.ownValue - n.ownValue;
-          String diff = diffValue < 0 ? ("-${diffValue.toString()}") : diffValue.toString();
+          String diff = diffValue < 0
+              ? ("-${diffValue.toString()}")
+              : diffValue.toString();
           await flutterLocalNotificationsPlugin.show(
             notifId,
             'Átlag módosult: ' + capitalize(avarage.subject),
@@ -292,4 +296,74 @@ Future<void> batchInsertAvarageAndNotif(List<Avarage> avarageList) async {
     }
   }
   await batch.commit();
+}
+
+Future<List<Notices>> parseNoticesFetch(var input) async {
+  if (input != null && input["Notes"] != null) {
+    List<Notices> noticesArray = [];
+    var notices = input["Notes"];
+    for (var n in notices) {
+      noticesArray.add(setNotices(n));
+    }
+    await batchInsertNoticesAndNotif(noticesArray);
+    return noticesArray;
+  } else {
+    return [];
+  }
+}
+
+Future<void> batchInsertNoticesAndNotif(List<Notices> noticeList) async {
+  Crashlytics.instance.log("batchInsertNoticesAndNotif");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Notices> allNotices = await getAllNotices();
+  for (var notice in noticeList) {
+    var matchedNotices = allNotices.where((element) {
+      return (element.title == notice.title || element.id == notice.id);
+    });
+    if (matchedNotices.length == 0) {
+      batch.insert(
+        'Notices',
+        notice.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      await flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új feljegyzés: ' + capitalize(notice.title),
+        notice.teacher,
+        platformChannelSpecificsSendNotif,
+        payload: "notice " + notice.id.toString(),
+      );
+    } else {
+      for (var n in matchedNotices) {
+        //!Update didn't work so we delete and create a new one
+        if ((n.title != notice.title || n.content != notice.content) &&
+            n.id == notice.id) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          batch.delete(
+            "Notices",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Notices',
+            notice.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          await flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Feljegyzés módusolt: ' + capitalize(notice.title),
+            notice.teacher,
+            platformChannelSpecificsSendNotif,
+            payload: "notice " + notice.id.toString(),
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  //print("BATCH INSERTED NOTICES");
 }
