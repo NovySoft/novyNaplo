@@ -33,7 +33,6 @@ matrix:
         - npm install
         - cd travis
         - export GIT_MESSAGE=`git log -1 --pretty=%B`
-        - node discord.js starting
         - cd /home/travis/build/NovySoft/novyNaplo
       before_script:
         - cd /home/travis/build/NovySoft/novyNaplo
@@ -86,7 +85,6 @@ matrix:
       after_deploy:
         - cd travis
         - git fetch --tags
-        - node discord.js deployed
         - cd /home/travis/build/NovySoft/novyNaplo
       after_failure:
         - cd travis
