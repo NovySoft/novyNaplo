@@ -595,9 +595,11 @@ class _LoadingPageState extends State<LoadingPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: isBreaking
+                  ? null
+                  : () {
+                      Navigator.of(context).pop();
+                    },
             ),
             FlatButton(
               child: Text('Frissítés'),
