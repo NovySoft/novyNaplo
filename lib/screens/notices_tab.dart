@@ -33,40 +33,6 @@ class _NoticesTabState extends State<NoticesTab> {
 
   @override
   void initState() {
-    if (globals.payloadId != -1) {
-      int tempindex = allParsedNotices.indexWhere(
-        (element) {
-          return element.id == globals.payloadId;
-        },
-      );
-      Notices tempNotice = allParsedNotices.firstWhere(
-        (element) {
-          return element.id == globals.payloadId;
-        },
-        orElse: () {
-          return new Notices();
-        },
-      );
-      //Evals tempEval = allParsedByDate[0];
-      if (tempNotice.id != null)
-        Future.delayed(Duration(milliseconds: 500), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NoticeDetailTab(
-                id: tempindex,
-                title: tempNotice.title,
-                teacher: tempNotice.teacher,
-                content: tempNotice.content,
-                date: tempNotice.dateString,
-                subject: tempNotice.subject,
-                color: colors[tempindex],
-              ),
-            ),
-          );
-        });
-      globals.payloadId = -1;
-    }
     super.initState();
     onInit();
   }

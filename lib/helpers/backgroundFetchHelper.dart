@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
@@ -15,6 +16,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/database/getSql.dart';
@@ -90,7 +92,7 @@ void backgroundFetch() async {
   );
   final DateTime now = DateTime.now();
   final int isolateId = Isolate.current.hashCode;
-  print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");
+  //print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");
   final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
   var passKey = encrypt.Key.fromUtf8(config.passKey);
   var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -202,8 +204,6 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
             eval.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          var tempRequests = await flutterLocalNotificationsPlugin
-              .pendingNotificationRequests();
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           //print("notifID: $notifId");
           await flutterLocalNotificationsPlugin.show(
@@ -419,7 +419,7 @@ Future<List<List<Lesson>>> getWeekLessonsFetch(token, code) async {
   List<Lesson> tempLessonList = [];
   List<Lesson> tempLessonListForDB = [];
   for (var n in decoded) {
-    tempLessonList.add(await setLesson(n, token, code));
+    tempLessonList.add(await setLessonFetch(n, token, code));
   }
   tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
   int index = 0;
@@ -476,10 +476,6 @@ Future<void> batchInsertLessonsAndNotif(List<Lesson> lessonList) async {
             n.startDateString != lesson.startDateString ||
             n.endDateString != lesson.endDateString) {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-          print(
-              "n.startDateString != lesson.startDateString ${n.startDateString != lesson.startDateString}");
-          print(
-              "n.endDateString != lesson.endDateString ${n.endDateString != lesson.endDateString}");
           batch.delete(
             "Timetable",
             where: "databaseId = ?",
@@ -516,4 +512,128 @@ Future<void> batchInsertLessonsAndNotif(List<Lesson> lessonList) async {
   }
   await batch.commit();
   //print("INSERTED EVAL BATCH");
+}
+
+Future<Lesson> setLessonFetch(var input, token, code) async {
+  var temp = new Lesson();
+  //INTs
+  temp.id = input["LessonId"];
+  temp.whichLesson = input["Count"];
+  temp.homeWorkId = input["Homework"];
+  temp.groupID = input["OsztalyCsoportId"];
+  temp.teacherHomeworkId = input["TeacherHomeworkId"];
+  //Strings
+  temp.groupName = input["ClassGroup"];
+  temp.subject = capitalize(input["Subject"]);
+  temp.name = capitalize(input["Nev"]);
+  if (input["ClassRoom"].toString().startsWith("I")) {
+    temp.classroom = input["ClassRoom"];
+  } else {
+    temp.classroom = capitalize(input["ClassRoom"]);
+  }
+  temp.theme = input["Theme"];
+  temp.teacher = input["Teacher"];
+  temp.deputyTeacherName = input["DeputyTeacher"];
+  //DateTimes
+  temp.startDate = DateTime.parse(input["StartTime"]);
+  temp.endDate = DateTime.parse(input["EndTime"]);
+  temp.date = DateTime.parse(input["Date"]);
+  //Datetime sttring
+  temp.startDateString = input["StartTime"];
+  temp.endDateString = input["EndTime"];
+  temp.dateString = input["Date"];
+  //Booleans
+  temp.homeworkEnabled = input["IsTanuloHaziFeladatEnabled"];
+  //Lists
+  temp.dogaIds = input["BejelentettSzamonkeresIdList"];
+  temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
+  if (temp.teacherHomeworkId != null) {
+    temp.homework =
+        await setTeacherHomeworkFetch(temp.teacherHomeworkId, token, code);
+  } else {
+    temp.homework = new Homework();
+  }
+  return temp;
+}
+
+Future<Homework> setTeacherHomeworkFetch(
+    int hwId, String token, String code) async {
+  var header = {
+    'Authorization': 'Bearer $token',
+    'User-Agent': '$agent',
+    'Content-Type': 'application/json',
+  };
+
+  var res = await http.get(
+      'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
+      headers: header);
+  if (res.statusCode != 200) {
+    print(res.statusCode);
+    return new Homework();
+  }
+  //Process response
+  var decoded = json.decode(res.body);
+  Homework temp = setHomework(decoded);
+  await insertHomeworkAndNotif(temp);
+  return temp;
+}
+
+Future<void> insertHomeworkAndNotif(Homework hw) async {
+  Crashlytics.instance.log("insertSingleHw");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  await sleep1();
+  List<Homework> allHw = await getAllHomework();
+  var matchedHw = allHw.where((element) {
+    return (element.id == hw.id && element.subject == hw.subject);
+  });
+  if (matchedHw.length == 0) {
+    notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+    await db.insert(
+      'Homework',
+      hw.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    String subTitle = "Határidő: " +
+        hw.dueDate.year.toString() +
+        "-" +
+        hw.dueDate.month.toString() +
+        "-" +
+        hw.dueDate.day.toString() +
+        " " +
+        parseIntToWeekdayString(hw.dueDate.weekday);
+    await flutterLocalNotificationsPlugin.show(
+      notifId,
+      'Új házifeladat: ' + capitalize(hw.subject),
+      subTitle,
+      platformChannelSpecificsSendNotif,
+      payload: "hw " + hw.id.toString(),
+    );
+  } else {
+    for (var n in matchedHw) {
+      //!Update didn't work so we delete and create a new one
+      if (n.content != hw.content ||
+          n.dueDateString != hw.dueDateString ||
+          n.givenUpString != hw.givenUpString) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        deleteFromDb(n.databaseId, "Homework");
+        insertHomework(hw);
+        String subTitle = "Határidő: " +
+            hw.dueDate.year.toString() +
+            "-" +
+            hw.dueDate.month.toString() +
+            "-" +
+            hw.dueDate.day.toString() +
+            " " +
+            parseIntToWeekdayString(hw.dueDate.weekday);
+        await flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Módusolt házifeladat: ' + capitalize(hw.subject),
+          subTitle,
+          platformChannelSpecificsSendNotif,
+          payload: "hw " + hw.id.toString(),
+        );
+      }
+    }
+  }
 }

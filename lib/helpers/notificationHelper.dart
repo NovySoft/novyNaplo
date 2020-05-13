@@ -2,10 +2,16 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
+import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
+import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 
@@ -59,20 +65,119 @@ Future<void> setupNotifications() async {
 Future selectNotification(String payload) async {
   if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
   if (payload != null && payload != "teszt" && payload is String) {
+    print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {
       case "marks":
-        Navigator.of(globals.globalContext).pushNamed(marksTab.MarksTab.tag);
+        int tempindex = allParsedByDate.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        Evals tempEval = allParsedByDate.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Evals();
+          },
+        );
+        //Evals tempEval = allParsedByDate[0];
+        if (tempEval.id != null)
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.push(
+              globals.globalContext,
+              MaterialPageRoute(
+                builder: (context) => MarksDetailTab(
+                  eval: tempEval,
+                  mode: tempEval.mode,
+                  theme: tempEval.theme,
+                  weight: tempEval.weight,
+                  date: tempEval.dateString,
+                  createDate: tempEval.createDateString,
+                  teacher: tempEval.teacher,
+                  subject: tempEval.subject,
+                  numberValue: tempEval.numberValue,
+                  value: tempEval.value,
+                  formName: tempEval.formName,
+                  form: tempEval.form,
+                  id: tempEval.id,
+                  name: capitalize(tempEval.subject + " " + tempEval.value),
+                  color: colors[tempindex],
+                ),
+              ),
+            );
+          });
+        globals.payloadId = -1;
         return;
         break;
       case "hw":
-        Navigator.of(globals.globalContext)
-            .pushNamed(homeworkTab.HomeworkTab.tag);
+        print(globals.payloadId);
+        int tempindex = homeworkTab.globalHomework.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        Homework tempHw = homeworkTab.globalHomework.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Homework();
+          },
+        );
+        if (homeworkTab.colors.length == 0 || homeworkTab.colors == [])
+          homeworkTab.colors =
+              getRandomColors(homeworkTab.globalHomework.length);
+        //Evals tempEval = allParsedByDate[0];
+        if (tempHw.id != null)
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.push(
+              globals.globalContext,
+              MaterialPageRoute(
+                builder: (context) => HomeworkDetailTab(
+                  hwInfo: tempHw,
+                  color: homeworkTab.colors[tempindex],
+                ),
+              ),
+            );
+          });
+        globals.payloadId = -1;
         return;
         break;
       case "notice":
-        Navigator.of(globals.globalContext)
-            .pushNamed(noticeTab.NoticesTab.tag);
+        int tempindex = noticeTab.allParsedNotices.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        Notices tempNotice = noticeTab.allParsedNotices.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Notices();
+          },
+        );
+        //Evals tempEval = allParsedByDate[0];
+        if (tempNotice.id != null)
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.push(
+              globals.globalContext,
+              MaterialPageRoute(
+                builder: (context) => NoticeDetailTab(
+                  id: tempindex,
+                  title: tempNotice.title,
+                  teacher: tempNotice.teacher,
+                  content: tempNotice.content,
+                  date: tempNotice.dateString,
+                  subject: tempNotice.subject,
+                  color: noticeTab.colors[tempindex],
+                ),
+              ),
+            );
+          });
+        globals.payloadId = -1;
         return;
         break;
       case "timetable":
@@ -81,8 +186,7 @@ Future selectNotification(String payload) async {
         return;
         break;
       case "avarage":
-        Navigator.of(globals.globalContext)
-            .pushNamed(AvaragesTab.tag);
+        Navigator.of(globals.globalContext).pushNamed(AvaragesTab.tag);
         return;
         break;
     }

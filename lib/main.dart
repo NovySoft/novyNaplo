@@ -57,7 +57,7 @@ void main() async {
       await AndroidAlarmManager.cancel(fetchAlarmID);
       await sleep(1000);
       await AndroidAlarmManager.periodic(
-        Duration(minutes: 1/*globals.fetchPeriod*/),
+        Duration(minutes: globals.fetchPeriod),
         fetchAlarmID,
         backgroundFetchHelper.backgroundFetch,
         wakeup: globals.backgroundFetchCanWakeUpPhone,
