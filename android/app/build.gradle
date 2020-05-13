@@ -86,6 +86,8 @@ android {
     }
     buildTypes {
         release {
+            zipAlignEnabled false
+            minifyEnabled false
             signingConfig signingConfigs.release
         }
         debug{
