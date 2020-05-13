@@ -29,9 +29,11 @@ if (keystorePropertiesFile.exists()) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     configurations.all {
@@ -108,6 +110,3 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf:19.0.7'
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
 }
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
