@@ -55,6 +55,9 @@ Future<void> setupNotifications() async {
   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  if(notificationAppLaunchDetails.didNotificationLaunchApp){
+    selectNotification(notificationAppLaunchDetails.payload);
+  }
   globals.notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
