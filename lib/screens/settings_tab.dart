@@ -1465,50 +1465,57 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 8:
-                return ListTile(
-                  title: Text("A lekérés felkeltheti a telefont (ajánlott)"),
-                  trailing: Switch(
-                    onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        globals.backgroundFetchCanWakeUpPhone = isOn;
-                        prefs.setBool("backgroundFetchCanWakeUpPhone", isOn);
-                        Crashlytics.instance
-                            .setBool("backgroundFetchCanWakeUpPhone", isOn);
-                      });
-                      if (isOn) {
-                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                        Crashlytics.instance.log(
-                            "Canceled alarm: " + main.fetchAlarmID.toString());
-                        await sleep(1500);
-                        main.fetchAlarmID++;
-                        await AndroidAlarmManager.periodic(
-                          Duration(minutes: globals.fetchPeriod),
-                          main.fetchAlarmID,
-                          backgroundFetchHelper.backgroundFetch,
-                          wakeup: globals.backgroundFetchCanWakeUpPhone,
-                          rescheduleOnReboot:
-                              globals.backgroundFetchCanWakeUpPhone,
-                        );
-                      } else {
-                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                        Crashlytics.instance.log(
-                            "Canceled alarm: " + main.fetchAlarmID.toString());
-                        await sleep(1500);
-                        main.fetchAlarmID++;
-                        await AndroidAlarmManager.periodic(
-                          Duration(minutes: globals.fetchPeriod),
-                          main.fetchAlarmID,
-                          backgroundFetchHelper.backgroundFetch,
-                          wakeup: globals.backgroundFetchCanWakeUpPhone,
-                          rescheduleOnReboot:
-                              globals.backgroundFetchCanWakeUpPhone,
-                        );
-                      }
-                    },
-                    value: globals.backgroundFetchCanWakeUpPhone,
-                  ),
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      title:
+                          Text("A lekérés felkeltheti a telefont (ajánlott)"),
+                      trailing: Switch(
+                        onChanged: (bool isOn) async {
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          setState(() {
+                            globals.backgroundFetchCanWakeUpPhone = isOn;
+                            prefs.setBool(
+                                "backgroundFetchCanWakeUpPhone", isOn);
+                            Crashlytics.instance
+                                .setBool("backgroundFetchCanWakeUpPhone", isOn);
+                          });
+                          if (isOn) {
+                            await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                            Crashlytics.instance.log("Canceled alarm: " +
+                                main.fetchAlarmID.toString());
+                            await sleep(1500);
+                            main.fetchAlarmID++;
+                            await AndroidAlarmManager.periodic(
+                              Duration(minutes: globals.fetchPeriod),
+                              main.fetchAlarmID,
+                              backgroundFetchHelper.backgroundFetch,
+                              wakeup: globals.backgroundFetchCanWakeUpPhone,
+                              rescheduleOnReboot:
+                                  globals.backgroundFetchCanWakeUpPhone,
+                            );
+                          } else {
+                            await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                            Crashlytics.instance.log("Canceled alarm: " +
+                                main.fetchAlarmID.toString());
+                            await sleep(1500);
+                            main.fetchAlarmID++;
+                            await AndroidAlarmManager.periodic(
+                              Duration(minutes: globals.fetchPeriod),
+                              main.fetchAlarmID,
+                              backgroundFetchHelper.backgroundFetch,
+                              wakeup: globals.backgroundFetchCanWakeUpPhone,
+                              rescheduleOnReboot:
+                                  globals.backgroundFetchCanWakeUpPhone,
+                            );
+                          }
+                        },
+                        value: globals.backgroundFetchCanWakeUpPhone,
+                      ),
+                    ),
+                    SizedBox(height: 100, width: 10),
+                  ],
                 );
                 break;
             }

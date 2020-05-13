@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.5",
-    "isBreaking": false,
-    "releaseNotes": "Sok minden módusúlt \n(lásd frissítés gomb)",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.5"
+    "version": "V0.1.4.6",
+    "isBreaking": true,
+    "releaseNotes": "Breaking bugifx!\nAzonnali frissítés ajánlott",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.6"
 }
