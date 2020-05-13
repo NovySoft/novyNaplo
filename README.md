@@ -3,6 +3,7 @@
 [![time tracker](https://wakatime.com/badge/github/NovySoft/novyNaplo.svg)](https://wakatime.com/badge/github/NovySoft/novyNaplo)
 [![Build Status](https://travis-ci.com/NovySoft/novyNaplo.svg?branch=master)](https://travis-ci.com/NovySoft/novyNaplo)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08d8ae48160409997ea32cf95d1a64f)](https://www.codacy.com/manual/Legolaszstudio/novyNaplo?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NovySoft/novyNaplo&amp;utm_campaign=Badge_Grade)
+[![Maintainability](https://api.codeclimate.com/v1/badges/48e75a94f1484016fa8a/maintainability)](https://codeclimate.com/github/NovySoft/novyNaplo/maintainability)
 [![HitCount](http://hits.dwyl.io/NovySoft/novyNaplo.svg)](http://hits.dwyl.io/NovySoft/novyNaplo)
 [![Discord](https://img.shields.io/discord/340112709628592139.svg)](http://discord.gg/rmjC4d4)
 [![Open Source Helpers](https://www.codetriage.com/novysoft/novynaplo/badges/users.svg)](https://www.codetriage.com/novysoft/novynaplo)
