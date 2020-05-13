@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
@@ -153,19 +154,25 @@ class HeroAnimatingMarksCard extends StatelessWidget {
       this.color,
       this.heroAnimation,
       this.onPressed,
-      this.icon});
+      this.iconData,
+      @required this.eval});
 
   final String title;
   final String subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
-  final IconData icon;
+  final Evals eval;
+  final IconData iconData;
 
   double get playButtonSize => 100 + 50 * heroAnimation.value;
 
   @override
   Widget build(context) {
+    IconData icon = iconData;
+    if (iconData == null && eval != null) {
+      icon = parseSubjectToIcon(subject: eval.subject);
+    }
     double subTitleSize = 80;
     if (subTitle.length > 30) {
       subTitleSize = 100;
@@ -444,6 +451,168 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                 }),
           ),
         ));
+  }
+}
+
+class AnimatedHomeworkCard extends StatelessWidget {
+  AnimatedHomeworkCard({
+    this.title,
+    this.color,
+    this.subTitle,
+    this.onPressed,
+    this.heroAnimation,
+    this.dueOver,
+  });
+
+  final String title, subTitle;
+  final Color color;
+  final Animation<double> heroAnimation;
+  final Widget onPressed;
+  final bool dueOver;
+
+  @override
+  Widget build(context) {
+    if (dueOver) {
+      return PressableCard(
+          onPressed: null,
+          color: color,
+          flattenAnimation: heroAnimation,
+          child: SizedBox(
+            height: 120,
+            width: double.infinity,
+            child: Container(
+              color: color,
+              child: OpenContainer(
+                  closedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  openShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1)),
+                  transitionDuration: Duration(milliseconds: 550),
+                  openColor: color,
+                  closedColor: color,
+                  closedBuilder:
+                      (BuildContext context, VoidCallback openContainer) {
+                    return SizedBox(
+                      height: 120,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 120,
+                              color: Colors.black12,
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                  textDirection: TextDirection.ltr,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      title,
+                                      textAlign: TextAlign.left,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 25.0),
+                                    ),
+                                    Text(
+                                      subTitle,
+                                      textAlign: TextAlign.left,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 20.0),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                          Positioned(
+                            right: 8,
+                            child: Icon(
+                              MdiIcons.alarmLight,
+                              size: 60,
+                              color: Colors.red[900],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  openBuilder:
+                      (BuildContext context, VoidCallback openContainer) {
+                    return onPressed;
+                  }),
+            ),
+          ));
+    } else {
+      return PressableCard(
+          onPressed: null,
+          color: color,
+          flattenAnimation: heroAnimation,
+          child: SizedBox(
+            height: 120,
+            width: double.infinity,
+            child: Container(
+              color: color,
+              child: OpenContainer(
+                  closedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  openShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1)),
+                  transitionDuration: Duration(milliseconds: 550),
+                  openColor: color,
+                  closedColor: color,
+                  closedBuilder:
+                      (BuildContext context, VoidCallback openContainer) {
+                    return SizedBox(
+                      height: 120,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 120,
+                              color: Colors.black12,
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                  textDirection: TextDirection.ltr,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      title,
+                                      textAlign: TextAlign.left,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 25.0),
+                                    ),
+                                    Text(
+                                      subTitle,
+                                      textAlign: TextAlign.left,
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 20.0),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  openBuilder:
+                      (BuildContext context, VoidCallback openContainer) {
+                    return onPressed;
+                  }),
+            ),
+          ));
+    }
   }
 }
 

@@ -241,6 +241,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         return Column(
                           children: [
                             ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: allSubjectsAv.length,
                               itemBuilder: (BuildContext context, int index) {

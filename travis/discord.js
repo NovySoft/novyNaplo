@@ -77,6 +77,10 @@ if (myArgs[0] === "fail") {
             value: gitMessage
           },
           {
+            name: "Branch:",
+            value: "```" + gitBranch + "```"
+          },
+          {
             name: "Date:",
             value: today
           }
@@ -110,16 +114,16 @@ if (myArgs[0] === "fail") {
             value: "```SUCCESS!```"
           },
           {
-            name: "New status:",
-            value: nextStatus
-          },
-          {
             name: "URL + Build number:",
             value: travisBuildUrl + " (" + travisBuildNum + ")"
           },
           {
             name: "Commit message:",
             value: gitMessage
+          },
+          {
+            name: "Branch:",
+            value: "```" + gitBranch + "```"
           },
           {
             name: "Date:",

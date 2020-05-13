@@ -1,8 +1,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
@@ -20,10 +22,13 @@ import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/database/getSql.dart';
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -196,15 +201,13 @@ class _LoadingPageState extends State<LoadingPage> {
         });
         globals.dJson = json.decode(res.body);
         var eval = globals.dJson["Evaluations"];
-        if (globals.markCount != 0) globals.markCount = 0;
-        if (globals.noticesCount != 0) globals.noticesCount = 0;
         await getAvarages(token, code);
-        if (eval != null)
-          globals.markCount = eval.length;
-        else
-          globals.markCount = 0;
+        globals.markCount = eval.length;
+        marksPage.colors = getRandomColors(globals.markCount);
+        marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
+        marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
         globals.noticesCount = countNotices(globals.dJson);
-        noticesPage.allParsedNotices = parseNotices(globals.dJson);
+        noticesPage.allParsedNotices = await parseNotices(globals.dJson);
         statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
         statisticsPage.colors =
             getRandomColors(statisticsPage.allParsedSubjects.length);
@@ -239,7 +242,7 @@ class _LoadingPageState extends State<LoadingPage> {
         });
         var bodyJson = json.decode(res.body);
         globals.avJson = bodyJson;
-        avaragesPage.avarageList = parseAvarages(globals.avJson);
+        avaragesPage.avarageList = await parseAvarages(globals.avJson);
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getAvarages');
@@ -301,6 +304,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = "Órarend dekódolása\nHázifeladatok lekérése";
       });
       List<Lesson> tempLessonList = [];
+      List<Lesson> tempLessonListForDB = [];
       for (var n in decoded) {
         tempLessonList.add(await setLesson(n, token, code));
       }
@@ -316,7 +320,9 @@ class _LoadingPageState extends State<LoadingPage> {
               beforeDay = n.startDate.day;
             }
             output[index].add(n);
+            tempLessonListForDB.add(n);
           }
+          await batchInsertLessons(tempLessonListForDB);
         }
       }
       return output;
@@ -329,33 +335,27 @@ class _LoadingPageState extends State<LoadingPage> {
   }
   //NETWORK END
 
+  //Runs after initState
   void onLoad(var context) async {
-    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-    NewVersion newVerDetails = await getVersion();
-    if (newVerDetails.returnedAnything) {
-      if (config.currentAppVersionCode != newVerDetails.versionCode) {
-        setState(() {
-          loadingText = "Verzió ellenőrzése";
-        });
-        await _newVersionAlert(
-            context,
-            newVerDetails.versionCode,
-            newVerDetails.releaseNotes,
-            newVerDetails.isBreaking,
-            newVerDetails.releaseLink);
-      }
-    }
-    setState(() {
-      loadingText = "Addatok olvasása a memóriából";
-    });
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-      decryptedPass =
-          userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       globals.setGlobals();
+      setState(() {
+        loadingText = "Verzió ellenőrzése";
+      });
+      Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+      NewVersion newVerDetails = await getVersion();
+      if (newVerDetails.returnedAnything) {
+        if (config.currentAppVersionCode != newVerDetails.versionCode) {
+          await _newVersionAlert(
+              context,
+              newVerDetails.versionCode,
+              newVerDetails.releaseNotes,
+              newVerDetails.isBreaking,
+              newVerDetails.releaseLink);
+        }
+      }
+      //Load ADS
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
         if (prefs.getBool("ads")) {
@@ -372,12 +372,86 @@ class _LoadingPageState extends State<LoadingPage> {
       } else {
         globals.adsEnabled = false;
       }
+      //If we have prefetched data
+      if (globals.backgroundFetch || globals.offlineModeDb) {
+        setState(() {
+          loadingText = "Adatok olvasása az adatbázisból";
+        });
+        //MARKS
+        setState(() {
+          loadingText = "Jegyek olvasása az adatbázisból";
+        });
+        List<Evals> tempEvals = await getAllEvals();
+        globals.markCount = tempEvals.length;
+        marksPage.colors = getRandomColors(globals.markCount);
+        marksPage.allParsedByDate = tempEvals;
+        marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+        //Homework
+        setState(() {
+          loadingText = "Házifeladat olvasása az adatbázisból";
+        });
+        homeworkPage.globalHomework = await getAllHomework();
+        homeworkPage.globalHomework
+            .sort((a, b) => a.dueDate.compareTo(b.dueDate));
+        //Notices
+        setState(() {
+          loadingText = "Feljegyzések olvasása az adatbázisból";
+        });
+        noticesPage.allParsedNotices = await getAllNotices();
+        //Avarages
+        setState(() {
+          loadingText = "Átlagok olvasása az adatbázisból";
+        });
+        avaragesPage.avarageList = await getAllAvarages();
+        //Statisztika
+        statisticsPage.allParsedSubjects =
+            categorizeSubjectsFromEvals(marksPage.allParsedByDate);
+        statisticsPage.colors =
+            getRandomColors(statisticsPage.allParsedSubjects.length);
+        setUpCalculatorPage(statisticsPage.allParsedSubjects);
+        //Timetable
+        setState(() {
+          loadingText = "Órarend olvasása az adatbázisból";
+        });
+        timetablePage.lessonsList =
+            getWeekLessonsFromLessons(await getAllTimetable());
+        //Sort
+        marksPage.allParsedByDate
+            .sort((a, b) => b.createDateString.compareTo(a.createDateString));
+        setState(() {
+          loadingText = "Mindjárt kész!";
+        });
+        //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
+        if ((tempEvals.length != 0 &&
+                homeworkPage.globalHomework.length != 0 &&
+                noticesPage.allParsedNotices.length != 0 &&
+                avaragesPage.avarageList.length != 0 &&
+                timetablePage.lessonsList.length != 0) ||
+            await Connectivity().checkConnectivity() ==
+                ConnectivityResult.none) {
+          if (globals.notificationAppLaunchDetails.didNotificationLaunchApp &&
+              globals.notificationAppLaunchDetails.payload != "teszt") {
+          } else {
+            Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+          }
+          FirebaseAnalytics().logEvent(name: "login");
+          return;
+        }
+      }
+      //If we don't have prefetched data
+      setState(() {
+        loadingText = "Addatok olvasása a memóriából";
+      });
+      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedPass =
+          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'onLoad-prefs');
-      globals.resetAllGlobals();
+      Crashlytics.instance.recordError(e, s, context: 'onLoad');
       await _ackAlert(context,
-          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása\nMemória törölve...");
+          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása");
     }
     auth(context);
   }
@@ -438,6 +512,7 @@ class _LoadingPageState extends State<LoadingPage> {
       });
     } else {
       Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+      FirebaseAnalytics().logEvent(name: "login");
     }
   }
 
@@ -445,7 +520,9 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     FirebaseAdMob.instance.initialize(appId: config.adMob);
-    WidgetsBinding.instance.addPostFrameCallback((_) => onLoad(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onLoad(context);
+    });
   }
 
   @override
@@ -475,6 +552,16 @@ class _LoadingPageState extends State<LoadingPage> {
               child: Text(
                 "Üdv a Novy Naplóban!",
                 style: TextStyle(fontSize: 28),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Center(
+              child: Text(
+                "Ver: " + config.currentAppVersionCode,
+                style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             ),

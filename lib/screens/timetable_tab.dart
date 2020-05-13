@@ -16,8 +16,10 @@ final List<Tab> days = <Tab>[
   Tab(text: 'Vasárnap'),
 ];
 
-List<List<Lesson>> lessonsList;
+List<List<Lesson>> lessonsList = [];
 List<Color> colors = getRandomColors(15);
+int matrixIndex = 0;
+
 
 class TimetableTab extends StatefulWidget {
   static String tag = 'timetable';
@@ -25,10 +27,55 @@ class TimetableTab extends StatefulWidget {
   _TimetableTabState createState() => new _TimetableTabState();
 }
 
-class _TimetableTabState extends State<TimetableTab> {
+class _TimetableTabState extends State<TimetableTab>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    matrixIndex = 0;
+    if (globals.payloadId != -1) {
+      Lesson tempLesson;
+      int tempindex;
+      for (var n in lessonsList) {
+        tempindex = n.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        tempLesson = n.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Lesson();
+          },
+        );
+        if (tempLesson.id != null) {
+          break;
+        }
+        matrixIndex++;
+      }
+      if (tempLesson.id != null)
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TimetableDetailTab(
+                icon: lessonsList[matrixIndex][tempindex].homework.icon,
+                color: colors[tempindex],
+                lessonInfo: lessonsList[matrixIndex][tempindex],
+              ),
+            ),
+          );
+        });
+      globals.payloadId = -1;
+    }
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return DefaultTabController(
+      initialIndex: matrixIndex,
       length: 7,
       child: Scaffold(
           drawer: getDrawer(TimetableTab.tag, context),
@@ -40,67 +87,70 @@ class _TimetableTabState extends State<TimetableTab> {
           ),
           body: TabBarView(
               children: days.map((Tab tab) {
-            String label = tab.text;
-            //Itemcount globals.adModifier because we need one beacuse of the ads
-            if (label == "Hétfő") {
-              if (lessonsList[0].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[0].length + globals.adModifier,
-                itemBuilder: _timetableBuilder,
-              );
-            } else if (label == "Kedd") {
-              if (lessonsList[1].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[1].length + globals.adModifier,
-                itemBuilder: _timetableTwoBuilder,
-              );
-            } else if (label == "Szerda") {
-              if (lessonsList[2].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[2].length + globals.adModifier,
-                itemBuilder: _timetableThreeBuilder,
-              );
-            } else if (label == "Csütörtök") {
-              if (lessonsList[3].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[3].length + globals.adModifier,
-                itemBuilder: _timetableFourBuilder,
-              );
-            } else if (label == "Péntek") {
-              if (lessonsList[4].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[4].length + globals.adModifier,
-                itemBuilder: _timetableFiveBuilder,
-              );
-            } else if (label == "Szombat") {
-              if (lessonsList[5].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[5].length + globals.adModifier,
-                itemBuilder: _timetableSixBuilder,
-              );
-            } else if (label == "Vasárnap") {
-              if (lessonsList[6].length == 0) {
-                return noLesson();
-              }
-              return ListView.builder(
-                itemCount: lessonsList[6].length + globals.adModifier,
-                itemBuilder: _timetableSevenBuilder,
-              );
-            } else
-              return Text("Mi van?");
-          }).toList())),
+                String label = tab.text;
+                //Itemcount globals.adModifier because we need one beacuse of the ads
+                if (lessonsList.length == 0) {
+                  return noLesson();
+                }
+                if (label == "Hétfő") {
+                  if (lessonsList[0].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[0].length + globals.adModifier,
+                    itemBuilder: _timetableBuilder,
+                  );
+                } else if (label == "Kedd") {
+                  if (lessonsList[1].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[1].length + globals.adModifier,
+                    itemBuilder: _timetableTwoBuilder,
+                  );
+                } else if (label == "Szerda") {
+                  if (lessonsList[2].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[2].length + globals.adModifier,
+                    itemBuilder: _timetableThreeBuilder,
+                  );
+                } else if (label == "Csütörtök") {
+                  if (lessonsList[3].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[3].length + globals.adModifier,
+                    itemBuilder: _timetableFourBuilder,
+                  );
+                } else if (label == "Péntek") {
+                  if (lessonsList[4].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[4].length + globals.adModifier,
+                    itemBuilder: _timetableFiveBuilder,
+                  );
+                } else if (label == "Szombat") {
+                  if (lessonsList[5].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[5].length + globals.adModifier,
+                    itemBuilder: _timetableSixBuilder,
+                  );
+                } else if (label == "Vasárnap") {
+                  if (lessonsList[6].length == 0) {
+                    return noLesson();
+                  }
+                  return ListView.builder(
+                    itemCount: lessonsList[6].length + globals.adModifier,
+                    itemBuilder: _timetableSevenBuilder,
+                  );
+                } else
+                  return Text("Mi van?");
+              }).toList())),
     );
   }
 }

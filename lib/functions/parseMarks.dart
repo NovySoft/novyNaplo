@@ -12,7 +12,7 @@ List<Evals> jegyArray = [];
 var stringEvals = [];
 var catIndex = 0;
 
-List<dynamic> parseAllByDate(var input) {
+Future<List<dynamic>> parseAllByDate(var input) async {
   jegyArray = [];
   //! TODO fix this duplicate code
   try {
@@ -26,7 +26,7 @@ List<dynamic> parseAllByDate(var input) {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-  batchInsertEval(jegyArray);
+  await batchInsertEval(jegyArray);
   return jegyArray;
 }
 
@@ -47,33 +47,7 @@ List<dynamic> parseAllBySubject(var input) {
   return jegyArray;
 }
 
-List<String> parseMarksByDate(var input) {
-  List<String> evalArray = [];
-  if (input != null) {
-    var evalJegy = parseAllByDate(input);
-    if (evalJegy.length == 0) return [];
-    if (evalJegy[0] == "Error") return ["Error"];
-    for (var n in evalJegy) {
-      evalArray.add(capitalize(n.subject + " " + n.value));
-    }
-  }
-  return evalArray;
-}
-
-List<String> parseMarksBySubject(var input) {
-  List<String> evalArray = [];
-  if (input != null) {
-    var evalJegy = parseAllBySubject(input);
-    if (evalJegy.length == 0) return [];
-    if (evalJegy[0] == "Error") return ["Error"];
-    for (var n in evalJegy) {
-      evalArray.add(capitalize(n.subject + " " + n.value));
-    }
-  }
-  return evalArray;
-}
-
-List<Avarage> parseAvarages(var input) {
+Future<List<Avarage>> parseAvarages(var input) async {
   List<Avarage> atlagArray = [];
   try {
     for (var n in input) {
@@ -84,7 +58,7 @@ List<Avarage> parseAvarages(var input) {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
   }
-  batchInsertAvarage(atlagArray);
+  await batchInsertAvarage(atlagArray);
   return atlagArray;
 }
 
@@ -97,14 +71,14 @@ int countNotices(var input) {
   return count;
 }
 
-List<Notices> parseNotices(var input) {
+Future<List<Notices>> parseNotices(var input) async {
   if (input != null && input["Notes"] != null) {
     List<Notices> noticesArray = [];
     var notices = input["Notes"];
     for (var n in notices) {
       noticesArray.add(setNotices(n));
     }
-    batchInsertNotices(noticesArray);
+    await batchInsertNotices(noticesArray);
     return noticesArray;
   } else {
     return [];
@@ -186,6 +160,31 @@ List<dynamic> categorizeSubjects(var input) {
   return jegyMatrix;
 }
 
+List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
+  List<Evals> jegyArray = input;
+  List<List<Evals>> jegyMatrix = [[]];
+  jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
+  String lastString = "";
+  for (var n in jegyArray) {
+    if ((n.form != "Percent" && n.type != "HalfYear") ||
+        n.subject == "Magatartas" ||
+        n.subject == "Szorgalom") {
+      if (n.subject != lastString) {
+        jegyMatrix.add([]);
+        lastString = n.subject;
+      }
+      jegyMatrix.last.add(n);
+    }
+  }
+  jegyMatrix.removeAt(0);
+  int index = 0;
+  for (var n in jegyMatrix) {
+    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    index++;
+  }
+  return jegyMatrix;
+}
+
 List<dynamic> sortByDateAndSubject(List<dynamic> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
@@ -211,4 +210,26 @@ List<dynamic> sortByDateAndSubject(List<dynamic> input) {
     }
   }
   return _output;
+}
+
+List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
+  if (lessons == null) return [];
+  List<Lesson> tempLessonList = lessons;
+  List<List<Lesson>> output = [[], [], [], [], [], [], []];
+  tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+  int index = 0;
+  if (tempLessonList != null) {
+    if (tempLessonList.length != 0) {
+      int beforeDay = tempLessonList[0].startDate.day;
+      //Just a matrix
+      for (var n in tempLessonList) {
+        if (n.startDate.day != beforeDay) {
+          index++;
+          beforeDay = n.startDate.day;
+        }
+        output[index].add(n);
+      }
+    }
+  }
+  return output;
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'utils.dart';
@@ -8,7 +10,6 @@ import 'package:novynaplo/functions/utils.dart';
 class Evals {
   var formName,
       form,
-      id,
       value,
       numberValue,
       teacher,
@@ -23,6 +24,7 @@ class Evals {
   DateTime date;
   IconData icon;
   int databaseId;
+  int id;
 
   Map<String, dynamic> toMap() {
     return {
@@ -189,6 +191,7 @@ class School {
 }
 
 class Lesson {
+  int databaseId;
   String subject;
   String name;
   String groupName;
@@ -205,9 +208,36 @@ class Lesson {
   List<dynamic> dogaIds; //Dynamic due to empty listes
   bool homeworkEnabled;
   DateTime date;
+  String dateString;
   DateTime startDate;
+  String startDateString;
   DateTime endDate;
-  Homework homework;
+  String endDateString;
+  Homework homework = new Homework();
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'theme': theme,
+      'subject': subject,
+      'teacher': teacher,
+      'name': name,
+      'groupName': groupName,
+      'classroom': classroom,
+      'deputyTeacherName': deputyTeacherName,
+      'dogaNames': json.encode(dogaNames),
+      'whichLesson': whichLesson,
+      'homeWorkId': homeWorkId,
+      'teacherHomeworkId': teacherHomeworkId,
+      'groupID': groupID,
+      'dogaIds': json.encode(dogaIds),
+      'homeworkEnabled': homeworkEnabled ? 1 : 0,
+      'date': dateString,
+      'startDate': startDateString,
+      'endDate': endDateString,
+    };
+  }
 }
 
 Future<Lesson> setLesson(var input, token, code) async {
@@ -234,6 +264,10 @@ Future<Lesson> setLesson(var input, token, code) async {
   temp.startDate = DateTime.parse(input["StartTime"]);
   temp.endDate = DateTime.parse(input["EndTime"]);
   temp.date = DateTime.parse(input["Date"]);
+  //Datetime sttring
+  temp.startDateString = input["StartTime"];
+  temp.endDateString = input["EndTime"];
+  temp.dateString = input["Date"];
   //Booleans
   temp.homeworkEnabled = input["IsTanuloHaziFeladatEnabled"];
   //Lists
@@ -290,8 +324,8 @@ Homework setHomework(var decoded) {
   temp.icon = parseSubjectToIcon(subject: temp.subject);
   temp.teacher = decoded["Rogzito"];
   temp.content = decoded["Szoveg"];
-  temp.givenUpString = decoded["FeladasDatuma"];
-  temp.givenUp = DateTime.parse(decoded["FeladasDatuma"]);
+  temp.givenUpString = decoded["RogzitesIdopontja"];
+  temp.givenUp = DateTime.parse(decoded["RogzitesIdopontja"]);
   temp.dueDateString = decoded["Hatarido"];
   temp.dueDate = DateTime.parse(decoded["Hatarido"]);
   return temp;

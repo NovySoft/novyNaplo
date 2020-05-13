@@ -46,7 +46,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HeroAnimatingMarksCard(
-            icon: icon,
+            eval: null,
+            iconData: icon,
             subTitle: "",
             title: widget.lessonInfo.name,
             color: widget.color,
@@ -197,14 +198,6 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                     fontSize: 17, fontWeight: FontWeight.bold)),
                             Html(
                               data: widget.lessonInfo.homework.content,
-                              customTextStyle:
-                                  (dom.Node node, TextStyle baseStyle) {
-                                if (node is dom.Element) {
-                                  return baseStyle
-                                      .merge(TextStyle(fontSize: 20));
-                                }
-                                return baseStyle;
-                              },
                               onLinkTap: (url) async {
                                 if (await canLaunch(url)) {
                                   await launch(url);

@@ -96,16 +96,18 @@ class _LoginPageState extends State<LoginPage> {
       FirebaseAnalytics().logEvent(name: "login");
       hasPrefs = true;
       try {
-        final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-        String decryptedCode =
-            codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-        String decryptedUser =
-            userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-        String decryptedPass =
-            userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-        codeController.text = decryptedCode;
-        userController.text = decryptedUser;
-        passController.text = decryptedPass;
+        for (var i = 0; i < 2; i++) {
+          final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+          String decryptedCode =
+              codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+          String decryptedUser =
+              userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+          String decryptedPass =
+              userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+          codeController.text = decryptedCode;
+          userController.text = decryptedUser;
+          passController.text = decryptedPass;
+        }
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'onLoad-login');
         isError = true;
@@ -185,9 +187,9 @@ class _LoginPageState extends State<LoginPage> {
         String pass = passController.text;
         status = await NetworkHelper().getToken(code, user, pass);
         //TODO fix this buggy garbage
-        if (status == null)
+        if (status == null || status == "Error")
           status = await NetworkHelper().getToken(code, user, pass);
-        if (status == null)
+        if (status == null || status == "Error")
           status = await NetworkHelper().getToken(code, user, pass);
         if (status == "OK") {
           await NetworkHelper().getStudentInfo(globals.token, code);

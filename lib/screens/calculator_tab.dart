@@ -427,7 +427,7 @@ class CalculatorTabState extends State<CalculatorTab>
                           height: 90,
                         )
                       : SizedBox(
-                          height: 0,
+                          height: 15,
                         ),
                 ]),
                 floatingActionButtonLocation:
@@ -566,7 +566,7 @@ class CalculatorTabState extends State<CalculatorTab>
           DecoratedBox(
             decoration: new BoxDecoration(border: Border.all()),
             child: SizedBox(
-              height: 300,
+              height: 250,
               child: virtualMarks.length != 0
                   ? ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -787,9 +787,9 @@ class CalculatorTabState extends State<CalculatorTab>
           ),
           globals.adsEnabled
               ? SizedBox(
-                  height: 100,
+                  height: 150,
                 )
-              : SizedBox(height: 0),
+              : SizedBox(height: 100),
         ],
       ),
     );
@@ -799,45 +799,47 @@ class CalculatorTabState extends State<CalculatorTab>
     if (globals.markCount == 0) {
       return noMarks();
     } else {
-      return Column(
+      return ListView(
         children: <Widget>[
-          Container(
-            child: DropdownButton<String>(
-              value: dropdownValue,
-              icon: Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              underline: Container(
-                color: Theme.of(context).accentColor,
-                height: 2,
+          Center(
+            child: Container(
+              child: DropdownButton<String>(
+                value: dropdownValue,
+                icon: Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  color: Theme.of(context).accentColor,
+                  height: 2,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                    currentIndex = dropdownValues.indexOf(newValue);
+                    currentSubject = stats.allParsedSubjects[currentIndex];
+                    currCount = avarageList[currentIndex].count;
+                    currSum = avarageList[currentIndex].sum;
+                  });
+                },
+                items: dropdownValues
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-              onChanged: (String newValue) {
-                setState(() {
-                  dropdownValue = newValue;
-                  currentIndex = dropdownValues.indexOf(newValue);
-                  currentSubject = stats.allParsedSubjects[currentIndex];
-                  currCount = avarageList[currentIndex].count;
-                  currSum = avarageList[currentIndex].sum;
-                });
-              },
-              items:
-                  dropdownValues.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+              alignment: Alignment(0, 0),
+              margin: EdgeInsets.all(5),
             ),
-            alignment: Alignment(0, 0),
-            margin: EdgeInsets.all(5),
           ),
-          Text("Jegyek összege (súlyozva): " + currSum.toString()),
+          Text("Jegyek összege (súlyozva): " + currSum.toString(),textAlign: TextAlign.center),
           Icon(MdiIcons.division),
-          Text("Jegyek száma (súlyozva): " + currCount.toString()),
+          Text("Jegyek száma (súlyozva): " + currCount.toString(),textAlign: TextAlign.center),
           Icon(MdiIcons.equal),
-          Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3)),
+          Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3),textAlign: TextAlign.center),
           SizedBox(height: 20),
-          Text("Mit szeretnél elérni? $elakErni"),
+          Text("Mit szeretnél elérni? $elakErni",textAlign: TextAlign.center),
           Slider(
             value: elakErni,
             onChanged: (newValue) {
@@ -850,7 +852,7 @@ class CalculatorTabState extends State<CalculatorTab>
             divisions: 40,
             label: elakErni.toString(),
           ),
-          Text("Hány jegy alatt szeretnéd elérni? $turesHatar"),
+          Text("Hány jegy alatt szeretnéd elérni? $turesHatar",textAlign: TextAlign.center),
           Slider(
             value: turesHatar,
             onChanged: (newValue) {
@@ -884,6 +886,10 @@ class CalculatorTabState extends State<CalculatorTab>
           Text(
             text1,
             style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center
+          ),
+          SizedBox(
+            height: 250,
           ),
         ],
       );

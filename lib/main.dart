@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -24,8 +23,10 @@ import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
+    as backgroundFetchHelper;
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
@@ -42,34 +43,28 @@ void main() async {
   }
   runZoned(() async {
     mainSql.initDatabase();
+    await notifications.setupNotifications();
     runApp(MyApp());
-    globals.fetchPeriod = prefs.getInt("fetchPeriod");
-    if (prefs.getBool("backgroundFetch")) {
+    globals.fetchPeriod =
+        prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
+    globals.backgroundFetch = prefs.getBool("backgroundFetch");
+    if (globals.backgroundFetch == null ? false : globals.backgroundFetch) {
       globals.backgroundFetchCanWakeUpPhone =
           prefs.getBool("backgroundFetchCanWakeUpPhone") == null
               ? true
               : prefs.getBool("backgroundFetchCanWakeUpPhone");
-      if (prefs.getBool("backgroundFetch")) {
-        await AndroidAlarmManager.initialize();
-        await AndroidAlarmManager.cancel(fetchAlarmID);
-        await sleep(1000);
-        await AndroidAlarmManager.periodic(
-          Duration(minutes: globals.fetchPeriod),
-          fetchAlarmID,
-          getMarksInBackground,
-          wakeup: globals.backgroundFetchCanWakeUpPhone,
-          rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
-        );
-      }
+      await AndroidAlarmManager.initialize();
+      await AndroidAlarmManager.cancel(fetchAlarmID);
+      await sleep(1000);
+      await AndroidAlarmManager.periodic(
+        Duration(minutes: globals.fetchPeriod),
+        fetchAlarmID,
+        backgroundFetchHelper.backgroundFetch,
+        wakeup: globals.backgroundFetchCanWakeUpPhone,
+        rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
+      );
     }
   }, onError: Crashlytics.instance.recordError);
-}
-
-void getMarksInBackground() {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  print(
-      "[$now] Hello, world! isolate=$isolateId function='$getMarksInBackground'");
 }
 
 class MyApp extends StatelessWidget {
@@ -88,81 +83,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    initializeNotifications();
     return new DynamicTheme(
-        defaultBrightness: Brightness.dark,
-        data: (brightness) => ThemeHelper().getTheme(brightness),
-        themedWidgetBuilder: (context, theme) {
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            theme: theme,
-            title: 'Novy Napló',
-            debugShowCheckedModeBanner: false,
-            home: isNew ? WelcomeScreen() : LoadingPage(),
-            routes: routes,
-            navigatorObservers: [
-              FirebaseAnalyticsObserver(analytics: analytics),
-            ],
-          );
-        });
-  }
-
-  void initializeNotifications() async {
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
-    NotificationAppLaunchDetails notificationAppLaunchDetails =
-        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    print(notificationAppLaunchDetails.didNotificationLaunchApp);
-    print(notificationAppLaunchDetails.payload);
-  }
-
-  Future selectNotification(String payload) async {
-    if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
-    if (payload != null && payload != "teszt" && payload is String) {
-      print(payload);
-      showDialog<void>(
-        context: globals.globalContext,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Értesítés'),
-            content: Text(payload),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      showDialog<void>(
-        context: globals.globalContext,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Státusz'),
-            content: Text(
-                "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+      defaultBrightness: Brightness.dark,
+      data: (brightness) => ThemeHelper().getTheme(brightness),
+      themedWidgetBuilder: (context, theme) {
+        return MaterialApp(
+          navigatorKey: navigatorKey,
+          theme: theme,
+          title: 'Novy Napló',
+          debugShowCheckedModeBanner: false,
+          home: isNew ? WelcomeScreen() : LoadingPage(),
+          routes: routes,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+          ],
+        );
+      },
+    );
   }
 }

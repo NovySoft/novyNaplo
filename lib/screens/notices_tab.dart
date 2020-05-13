@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-var allParsedNotices;
-var colors = getRandomColors(globals.noticesCount);
+List<Notices> allParsedNotices;
+var colors = getRandomColors(allParsedNotices.length);
 
 class NoticesTab extends StatefulWidget {
   static String tag = 'notices';
@@ -38,11 +39,11 @@ class _NoticesTabState extends State<NoticesTab> {
 }
 
 Widget _body(BuildContext context) {
-  if (globals.noticesCount == 0) {
+  if (allParsedNotices.length == 0) {
     return noNotice();
   } else {
     return ListView.builder(
-      itemCount: globals.noticesCount + globals.adModifier,
+      itemCount: allParsedNotices.length + globals.adModifier,
       padding: EdgeInsets.symmetric(vertical: 12),
       itemBuilder: _noticesBuilder,
     );
@@ -64,6 +65,7 @@ Widget noNotice() {
 }
 
 Widget _noticesBuilder(BuildContext context, int index) {
+  onInit();
   if (index >= allParsedNotices.length) {
     return SizedBox(
       height: 100,
@@ -92,5 +94,6 @@ Widget _noticesBuilder(BuildContext context, int index) {
 }
 
 void onInit() {
-  //TODO write this function
+  if (colors == [] || colors == null)
+    colors = getRandomColors(allParsedNotices.length);
 }

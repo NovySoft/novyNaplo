@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
@@ -5,6 +8,7 @@ import 'package:novynaplo/functions/classManager.dart';
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
+  Crashlytics.instance.log("getAllEvals");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -35,6 +39,7 @@ Future<List<Evals>> getAllEvals() async {
 }
 
 Future<List<Notices>> getAllNotices() async {
+  Crashlytics.instance.log("getAllNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -55,6 +60,7 @@ Future<List<Notices>> getAllNotices() async {
 }
 
 Future<List<Avarage>> getAllAvarages() async {
+  Crashlytics.instance.log("getAllAvarages");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -72,6 +78,7 @@ Future<List<Avarage>> getAllAvarages() async {
 }
 
 Future<List<Homework>> getAllHomework() async {
+  Crashlytics.instance.log("getAllHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -91,4 +98,69 @@ Future<List<Homework>> getAllHomework() async {
     temp.dueDate = DateTime.parse(temp.dueDateString);
     return temp;
   });
+}
+
+Future<List<Lesson>> getAllTimetable() async {
+  Crashlytics.instance.log("getAllTimetable");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Timetable');
+
+  List<Lesson> outputTempList = List.generate(maps.length, (i) {
+    Lesson temp = new Lesson();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.theme = maps[i]['theme'];
+    temp.subject = maps[i]['subject'];
+    temp.teacher = maps[i]['teacher'];
+    temp.name = maps[i]['name'];
+    temp.groupName = maps[i]['groupName'];
+    temp.classroom = maps[i]['classroom'];
+    temp.deputyTeacherName = maps[i]['deputyTeacherName'];
+    temp.dogaNames = json.decode(maps[i]['dogaNames']);
+    temp.whichLesson = maps[i]['whichLesson'];
+    temp.homeWorkId = maps[i]['homeWorkId'];
+    temp.teacherHomeworkId = maps[i]['teacherHomeworkId'];
+    temp.groupID = maps[i]['groupID'];
+    temp.dogaIds = json.decode(maps[i]['dogaIds']);
+    temp.homeworkEnabled = maps[i]['homeworkEnabled'] == 0 ? false : true;
+
+    temp.dateString = maps[i]['date'];
+    temp.date = DateTime.parse(temp.dateString);
+
+    temp.startDateString = maps[i]['startDate'];
+    temp.startDate = DateTime.parse(temp.startDateString);
+
+    temp.endDateString = maps[i]['endDate'];
+    temp.endDate = DateTime.parse(temp.endDateString);
+    return temp;
+  });
+  for (var n in outputTempList) {
+    if (n.teacherHomeworkId != null) {
+      n.homework = await getHomeworkById(n.teacherHomeworkId);
+    } else if (n.homeWorkId != null) {
+      n.homework = await getHomeworkById(n.homeWorkId);
+    }
+  }
+  return outputTempList;
+}
+
+Future<Homework> getHomeworkById(int id) async {
+  final Database db = await mainSql.database;
+  var answer = await db.rawQuery(
+      "select * from Homework where id = ? or databaseId = ?;", [id, id]);
+  Homework output = new Homework();
+  if(answer.length == 0) return output;
+  output.databaseId = answer[0]['databaseId'];
+  output.id = answer[0]['id'];
+  output.classGroupId = answer[0]['classGroupId'];
+  output.subject = answer[0]['subject'];
+  output.teacher = answer[0]['teacher'];
+  output.content = answer[0]['content'];
+  output.givenUpString = answer[0]['givenUpString'];
+  output.dueDateString = answer[0]['dueDateString'];
+  output.givenUp = DateTime.parse(output.givenUpString);
+  output.dueDate = DateTime.parse(output.dueDateString);
+  return output;
 }

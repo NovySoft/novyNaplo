@@ -9,6 +9,7 @@ import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -117,15 +118,13 @@ class NetworkHelper {
     if (res.statusCode == 200) {
       globals.dJson = json.decode(res.body);
       var eval = globals.dJson["Evaluations"];
-      if (globals.markCount != 0) globals.markCount = 0;
-      if (globals.noticesCount != 0) globals.noticesCount = 0;
       await getAvarages(token, code);
-      if (eval != null)
-        globals.markCount = eval.length;
-      else
-        globals.markCount = 0;
+      globals.markCount = eval.length;
+      marksPage.colors = getRandomColors(globals.markCount);
+      marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
+      marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
       globals.noticesCount = countNotices(globals.dJson);
-      noticesPage.allParsedNotices = parseNotices(globals.dJson);
+      noticesPage.allParsedNotices = await parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
       statisticsPage.colors =
           getRandomColors(statisticsPage.allParsedSubjects.length);
@@ -148,7 +147,7 @@ class NetworkHelper {
     if (res.statusCode == 200) {
       var bodyJson = json.decode(res.body);
       globals.avJson = bodyJson;
-      avaragesPage.avarageList = parseAvarages(globals.avJson);
+      avaragesPage.avarageList = await parseAvarages(globals.avJson);
     }
   }
 
@@ -232,6 +231,7 @@ class NetworkHelper {
     //Process response
     var decoded = json.decode(res.body);
     List<Lesson> tempLessonList = [];
+    List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
       tempLessonList.add(await setLesson(n, token, code));
     }
@@ -247,7 +247,9 @@ class NetworkHelper {
             beforeDay = n.startDate.day;
           }
           output[index].add(n);
+          tempLessonListForDB.add(n);
         }
+        await batchInsertLessons(tempLessonListForDB);
       }
     }
     return output;
@@ -298,8 +300,20 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   var decoded = json.decode(res.body);
   Homework temp = setHomework(decoded);
   //*Add it to the database
-  insertHomework(temp);
-  homeworkPage.globalHomework.add(temp);
-  homeworkPage.globalHomework.sort((a, b) => b.givenUp.compareTo(a.givenUp));
+  //TODO batchify
+  await insertHomework(temp);
+  //Find the same ids
+  var matchedIds = homeworkPage.globalHomework.where((element) {
+    return element.id == temp.id;
+  });
+  if (matchedIds.length == 0) {
+    homeworkPage.globalHomework.add(temp);
+  } else {
+    var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+      return element.id == temp.id;
+    });
+    homeworkPage.globalHomework[matchedindex] = temp;
+  }
+  homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
   return temp;
 }

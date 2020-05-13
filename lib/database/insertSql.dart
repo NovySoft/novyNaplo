@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -12,6 +13,7 @@ Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval) async {
+  Crashlytics.instance.log("insertSingleEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -44,6 +46,7 @@ Future<void> insertEval(Evals eval) async {
 }
 
 Future<void> insertHomework(Homework hw) async {
+  Crashlytics.instance.log("insertSingleHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -60,7 +63,9 @@ Future<void> insertHomework(Homework hw) async {
   } else {
     for (var n in matchedHw) {
       //!Update didn't work so we delete and create a new one
-      if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
+      if (n.content != hw.content ||
+          n.dueDateString != hw.dueDateString ||
+          n.givenUpString != hw.givenUpString) {
         deleteFromDb(n.databaseId, "Homework");
         insertHomework(hw);
       }
@@ -69,6 +74,7 @@ Future<void> insertHomework(Homework hw) async {
 }
 
 Future<void> insertNotices(Notices notice) async {
+  Crashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -94,6 +100,7 @@ Future<void> insertNotices(Notices notice) async {
 }
 
 Future<void> insertAvarage(Avarage avarage) async {
+  Crashlytics.instance.log("insertSingleAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   await sleep1();
@@ -124,6 +131,7 @@ Future<void> insertAvarage(Avarage avarage) async {
 //*Batch inserts
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEval(List<Evals> evalList) async {
+  Crashlytics.instance.log("batchInsertEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -168,10 +176,11 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
     }
   }
   await batch.commit();
-  print("INSERTED EVAL BATCH");
+  //print("INSERTED EVAL BATCH");
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
+  Crashlytics.instance.log("batchInsertHomework");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -190,7 +199,9 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
     } else {
       for (var n in matchedHw) {
         //!Update didn't work so we delete and create a new one
-        if (n.content != hw.content || n.dueDateString != hw.dueDateString) {
+        if (n.content != hw.content ||
+            n.dueDateString != hw.dueDateString ||
+            n.givenUpString != hw.givenUpString) {
           batch.delete(
             "Homework",
             where: "databaseId = ?",
@@ -209,6 +220,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
 }
 
 Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
+  Crashlytics.instance.log("batchInsertAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -248,6 +260,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
 }
 
 Future<void> batchInsertNotices(List<Notices> noticeList) async {
+  Crashlytics.instance.log("batchInsertNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -283,5 +296,58 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
     }
   }
   await batch.commit();
-  print("BATCH INSERTED NOTICES");
+  //print("BATCH INSERTED NOTICES");
+}
+
+Future<void> batchInsertLessons(List<Lesson> lessonList) async {
+  Crashlytics.instance.log("batchInsertEval");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  //Get all evals, and see whether we should be just replacing
+  List<Lesson> allTimetable = await getAllTimetable();
+  for (var lesson in lessonList) {
+    var matchedLessons = allTimetable.where(
+      (element) {
+        return (element.id == lesson.id && element.subject == lesson.subject);
+      },
+    );
+    if (matchedLessons.length == 0) {
+      batch.insert(
+        'Timetable',
+        lesson.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedLessons) {
+        //!Update didn't work so we delete and create a new one
+        if ((n.theme != lesson.theme ||
+                n.teacher != lesson.teacher ||
+                n.dateString != lesson.dateString ||
+                n.deputyTeacherName != lesson.deputyTeacherName ||
+                n.name != lesson.name ||
+                n.classroom != lesson.classroom ||
+                n.homeWorkId != lesson.homeWorkId ||
+                n.teacherHomeworkId != lesson.teacherHomeworkId ||
+                n.dogaIds != lesson.dogaIds ||
+                n.startDateString != lesson.startDateString ||
+                n.endDateString != lesson.endDateString) &&
+            n.id == lesson.id) {
+          batch.delete(
+            "Timetable",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Timetable',
+            lesson.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
+  //print("INSERTED EVAL BATCH");
 }
