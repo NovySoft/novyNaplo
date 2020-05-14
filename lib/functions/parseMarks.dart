@@ -1,12 +1,10 @@
 import 'dart:core';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'classManager.dart';
 import 'utils.dart';
-
-List<ChartPoints> chartData = [];
-var index, sum;
+int index = 0;
+var sum;
 var jegyek;
 List<Evals> jegyArray = [];
 var stringEvals = [];
@@ -94,40 +92,6 @@ List<String> parseSubjects(var input) {
   return subjectsArray;
 }
 
-//TODO move this code to the chartHelper file
-//!FROM here
-List<charts.Series<ChartPoints, int>> createSubjectChart(
-    List<Evals> input, String id) {
-  chartData = [];
-  double sum = 0;
-  double index = 0;
-  int listArray = 0;
-  for (var n in input) {
-    sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
-    index += 1 * double.parse(n.weight.split("%")[0]) / 100;
-    chartData.add(new ChartPoints(listArray, sum / index));
-    listArray++;
-  }
-  return [
-    new charts.Series<ChartPoints, int>(
-      id: id,
-      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-      domainFn: (ChartPoints marks, _) => marks.count,
-      measureFn: (ChartPoints marks, _) => marks.value,
-      data: chartData,
-    )
-  ];
-}
-
-class ChartPoints {
-  var count;
-  var value;
-
-  ChartPoints(this.count, this.value);
-}
-//!TO here
-
-//TODO probably we should move this to somewhere else
 //*USED BY STATISTICS
 List<dynamic> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
@@ -151,7 +115,7 @@ List<dynamic> categorizeSubjects(var input) {
       }
     }
     jegyMatrix.removeAt(0);
-    int index = 0;
+    index = 0;
     for (var n in jegyMatrix) {
       n.sort((a, b) => a.createDate.compareTo(b.createDate));
       index++;
@@ -177,7 +141,7 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
     }
   }
   jegyMatrix.removeAt(0);
-  int index = 0;
+  index = 0;
   for (var n in jegyMatrix) {
     n.sort((a, b) => a.createDate.compareTo(b.createDate));
     index++;
@@ -217,7 +181,7 @@ List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
   List<Lesson> tempLessonList = lessons;
   List<List<Lesson>> output = [[], [], [], [], [], [], []];
   tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
-  int index = 0;
+  index = 0;
   if (tempLessonList != null) {
     if (tempLessonList.length != 0) {
       int beforeDay = tempLessonList[0].startDate.day;

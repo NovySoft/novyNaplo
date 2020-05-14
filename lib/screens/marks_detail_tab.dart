@@ -5,39 +5,10 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-//TODO refactor to only use this.eval instead of all this bs
 class MarksDetailTab extends StatelessWidget {
-  const MarksDetailTab(
-      {this.numberValue,
-      this.subject,
-      this.id,
-      this.name,
-      this.color,
-      this.theme,
-      this.teacher,
-      this.createDate,
-      this.date,
-      this.mode,
-      this.weight,
-      this.value,
-      this.form,
-      this.formName,
-      this.eval});
+  const MarksDetailTab({@required this.color, @required this.eval});
 
-  final int id;
   final Evals eval;
-  final String name;
-  final String theme;
-  final String weight;
-  final String date;
-  final String teacher;
-  final String mode;
-  final String subject;
-  final String value;
-  final String formName;
-  final String form;
-  final String createDate;
-  final int numberValue;
   final Color color;
 
   Widget _buildBody() {
@@ -54,7 +25,7 @@ class MarksDetailTab extends StatelessWidget {
                 ? parseSubjectToIcon(subject: eval.subject)
                 : eval.icon,
             subTitle: "",
-            title: name,
+            title: capitalize(eval.subject + " " + eval.value),
             color: color,
             heroAnimation: AlwaysStoppedAnimation(1),
             onPressed: null,
@@ -83,14 +54,14 @@ class MarksDetailTab extends StatelessWidget {
                     break;
                   case 1:
                     return SizedBox(
-                      child: Text("Tantárgy: " + subject,
+                      child: Text("Tantárgy: " + eval.subject,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 2:
                     return SizedBox(
-                      child: Text("Téma: " + theme.toString(),
+                      child: Text("Téma: " + eval.theme.toString(),
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -104,19 +75,19 @@ class MarksDetailTab extends StatelessWidget {
                     break;
                   case 4:
                     return SizedBox(
-                      child: Text("Értékelés típusa: " + formName,
+                      child: Text("Értékelés típusa: " + eval.formName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 5:
-                    if (form == "Mark" ||
-                        form == "Diligence" ||
-                        form == "Deportment") {
-                      switch (numberValue) {
+                    if (eval.form == "Mark" ||
+                        eval.form == "Diligence" ||
+                        eval.form == "Deportment") {
+                      switch (eval.numberValue) {
                         case 1:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -125,7 +96,7 @@ class MarksDetailTab extends StatelessWidget {
                           break;
                         case 2:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -134,7 +105,7 @@ class MarksDetailTab extends StatelessWidget {
                           break;
                         case 3:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -143,7 +114,7 @@ class MarksDetailTab extends StatelessWidget {
                           break;
                         case 4:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -152,7 +123,7 @@ class MarksDetailTab extends StatelessWidget {
                           break;
                         case 5:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -161,40 +132,40 @@ class MarksDetailTab extends StatelessWidget {
                           break;
                         default:
                           return SizedBox(
-                            child: Text("Értékelés: " + value,
+                            child: Text("Értékelés: " + eval.value,
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
                           );
                           break;
                       }
-                    } else if (form == "Percent") {
-                      if (numberValue >= 90) {
+                    } else if (eval.form == "Percent") {
+                      if (eval.numberValue >= 90) {
                         return SizedBox(
-                          child: Text("Értékelés: " + value,
+                          child: Text("Értékelés: " + eval.value,
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green)),
                         );
-                      } else if (numberValue >= 75) {
+                      } else if (eval.numberValue >= 75) {
                         return SizedBox(
-                          child: Text("Értékelés: " + value,
+                          child: Text("Értékelés: " + eval.value,
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.lightGreen)),
                         );
-                      } else if (numberValue >= 60) {
+                      } else if (eval.numberValue >= 60) {
                         return SizedBox(
-                          child: Text("Értékelés: " + value,
+                          child: Text("Értékelés: " + eval.value,
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.yellow[800])),
                         );
-                      } else if (numberValue >= 40) {
+                      } else if (eval.numberValue >= 40) {
                         return SizedBox(
-                          child: Text("Értékelés: " + value,
+                          child: Text("Értékelés: " + eval.value,
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -202,7 +173,7 @@ class MarksDetailTab extends StatelessWidget {
                         );
                       } else {
                         return SizedBox(
-                          child: Text("Értékelés: " + value,
+                          child: Text("Értékelés: " + eval.value,
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -211,21 +182,22 @@ class MarksDetailTab extends StatelessWidget {
                       }
                     } else {
                       return SizedBox(
-                        child: Text("Értékelés: " + value,
+                        child: Text("Értékelés: " + eval.value,
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       );
                     }
                     break;
                   case 6:
-                    if (form == "Mark" ||
-                        form == "Diligence" ||
-                        form == "Deportment") {
-                      switch (numberValue) {
+                    if (eval.form == "Mark" ||
+                        eval.form == "Diligence" ||
+                        eval.form == "Deportment") {
+                      switch (eval.numberValue) {
                         case 1:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -235,7 +207,8 @@ class MarksDetailTab extends StatelessWidget {
                         case 2:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -245,7 +218,8 @@ class MarksDetailTab extends StatelessWidget {
                         case 3:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -255,7 +229,8 @@ class MarksDetailTab extends StatelessWidget {
                         case 4:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -265,7 +240,8 @@ class MarksDetailTab extends StatelessWidget {
                         case 5:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -275,44 +251,49 @@ class MarksDetailTab extends StatelessWidget {
                         default:
                           return SizedBox(
                             child: Text(
-                                "Értékelés számmal: " + numberValue.toString(),
+                                "Értékelés számmal: " +
+                                    eval.numberValue.toString(),
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
                           );
                           break;
                       }
-                    } else if (form == "Percent") {
-                      if (numberValue >= 90) {
+                    } else if (eval.form == "Percent") {
+                      if (eval.numberValue >= 90) {
                         return SizedBox(
                           child: Text(
-                              "Értékelés számmal: " + numberValue.toString(),
+                              "Értékelés számmal: " +
+                                  eval.numberValue.toString(),
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green)),
                         );
-                      } else if (numberValue >= 75) {
+                      } else if (eval.numberValue >= 75) {
                         return SizedBox(
                           child: Text(
-                              "Értékelés számmal: " + numberValue.toString(),
+                              "Értékelés számmal: " +
+                                  eval.numberValue.toString(),
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.lightGreen)),
                         );
-                      } else if (numberValue >= 60) {
+                      } else if (eval.numberValue >= 60) {
                         return SizedBox(
                           child: Text(
-                              "Értékelés számmal: " + numberValue.toString(),
+                              "Értékelés számmal: " +
+                                  eval.numberValue.toString(),
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.yellow[800])),
                         );
-                      } else if (numberValue >= 40) {
+                      } else if (eval.numberValue >= 40) {
                         return SizedBox(
                           child: Text(
-                              "Értékelés számmal: " + numberValue.toString(),
+                              "Értékelés számmal: " +
+                                  eval.numberValue.toString(),
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -321,7 +302,8 @@ class MarksDetailTab extends StatelessWidget {
                       } else {
                         return SizedBox(
                           child: Text(
-                              "Értékelés számmal: " + numberValue.toString(),
+                              "Értékelés számmal: " +
+                                  eval.numberValue.toString(),
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -331,7 +313,7 @@ class MarksDetailTab extends StatelessWidget {
                     } else {
                       return SizedBox(
                         child: Text(
-                            "Értékelés számmal: " + numberValue.toString(),
+                            "Értékelés számmal: " + eval.numberValue.toString(),
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       );
@@ -339,28 +321,28 @@ class MarksDetailTab extends StatelessWidget {
                     break;
                   case 7:
                     return SizedBox(
-                      child: Text("Súly: " + weight,
+                      child: Text("Súly: " + eval.weight,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 8:
                     return SizedBox(
-                      child: Text("Tanár: " + teacher,
+                      child: Text("Tanár: " + eval.teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 9:
                     return SizedBox(
-                      child: Text("Beírás dátuma: " + date,
+                      child: Text("Beírás dátuma: " + eval.dateString,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 10:
                     return SizedBox(
-                      child: Text("Létrehozás dátuma: " + createDate,
+                      child: Text("Létrehozás dátuma: " + eval.createDateString,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -376,15 +358,11 @@ class MarksDetailTab extends StatelessWidget {
     );
   }
 
-  // ===========================================================================
-  // Non-shared code below because we're using different scaffolds.
-  // ===========================================================================
-
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(name)),
+      appBar: AppBar(title: Text(capitalize(eval.subject + " " + eval.value))),
       body: _buildBody(),
     );
   }

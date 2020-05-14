@@ -86,7 +86,8 @@ class MarksTabState extends State<MarksTab>
       platformChannelSpecificsGetNotif,
     );
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //TODO fix this
+    ////fix this
+    //! won't fix
     //!It only works when i put his ting here
     var decryptedPass, decryptedUser, decryptedCode, status;
     for (var i = 0; i < 2; i++) {
@@ -207,23 +208,7 @@ class MarksTabState extends State<MarksTab>
             color: color,
             heroAnimation: AlwaysStoppedAnimation(0),
             onPressed: MarksDetailTab(
-              //TODO refactor this shit
               eval: allParsedByDate[index],
-              mode: allParsedByDate[index].mode,
-              theme: allParsedByDate[index].theme,
-              weight: allParsedByDate[index].weight,
-              date: allParsedByDate[index].dateString,
-              createDate: allParsedByDate[index].createDateString,
-              teacher: allParsedByDate[index].teacher,
-              subject: allParsedByDate[index].subject,
-              numberValue: allParsedByDate[index].numberValue,
-              value: allParsedByDate[index].value,
-              formName: allParsedByDate[index].formName,
-              form: allParsedByDate[index].form,
-              id: index,
-              name: capitalize(allParsedByDate[index].subject +
-                  " " +
-                  allParsedByDate[index].value),
               color: color,
             ),
           )),
@@ -343,22 +328,6 @@ class MarksTabState extends State<MarksTab>
                         heroAnimation: AlwaysStoppedAnimation(0),
                         onPressed: MarksDetailTab(
                           eval: allParsedBySubject[index],
-                          mode: allParsedBySubject[index].mode,
-                          theme: allParsedBySubject[index].theme,
-                          weight: allParsedBySubject[index].weight,
-                          date: allParsedBySubject[index].dateString,
-                          createDate:
-                              allParsedBySubject[index].createDateString,
-                          teacher: allParsedBySubject[index].teacher,
-                          subject: allParsedBySubject[index].subject,
-                          numberValue: allParsedBySubject[index].numberValue,
-                          value: allParsedBySubject[index].value,
-                          formName: allParsedBySubject[index].formName,
-                          form: allParsedBySubject[index].form,
-                          id: index,
-                          name: capitalize(allParsedBySubject[index].subject) +
-                              " " +
-                              allParsedBySubject[index].value,
                           color: color,
                         ),
                       )),
@@ -402,21 +371,6 @@ class MarksTabState extends State<MarksTab>
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
                         eval: allParsedBySubject[index],
-                        mode: allParsedBySubject[index].mode,
-                        theme: allParsedBySubject[index].theme,
-                        weight: allParsedBySubject[index].weight,
-                        date: allParsedBySubject[index].dateString,
-                        createDate: allParsedBySubject[index].createDateString,
-                        teacher: allParsedBySubject[index].teacher,
-                        subject: allParsedBySubject[index].subject,
-                        numberValue: allParsedBySubject[index].numberValue,
-                        value: allParsedBySubject[index].value,
-                        formName: allParsedBySubject[index].formName,
-                        form: allParsedBySubject[index].form,
-                        id: index,
-                        name: capitalize(allParsedBySubject[index].subject) +
-                            " " +
-                            allParsedBySubject[index].value,
                         color: color,
                       ),
                     ),
@@ -445,21 +399,6 @@ class MarksTabState extends State<MarksTab>
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
                 eval: allParsedBySubject[index],
-                mode: allParsedBySubject[index].mode,
-                theme: allParsedBySubject[index].theme,
-                weight: allParsedBySubject[index].weight,
-                date: allParsedBySubject[index].dateString,
-                createDate: allParsedBySubject[index].createDateString,
-                teacher: allParsedBySubject[index].teacher,
-                subject: allParsedBySubject[index].subject,
-                numberValue: allParsedBySubject[index].numberValue,
-                value: allParsedBySubject[index].value,
-                formName: allParsedBySubject[index].formName,
-                form: allParsedBySubject[index].form,
-                id: index,
-                name: capitalize(allParsedBySubject[index].subject) +
-                    " " +
-                    allParsedBySubject[index].value,
                 color: color,
               ),
             ),

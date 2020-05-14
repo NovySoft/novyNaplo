@@ -89,7 +89,6 @@ class ThemeHelper {
   ];
 
   ThemeData getTheme(brightness) {
-    //TODO fix this deprecated garbage
     if (brightness == Brightness.dark) {
       Crashlytics.instance.setString("Theme", "Dark");
     } else {
@@ -112,8 +111,8 @@ class ThemeHelper {
               valueIndicatorTextStyle: TextStyle(color: Colors.orange)),
           dividerColor: Colors.orange,
           textTheme: TextTheme(
-              subhead: TextStyle(color: Colors.orange),
-              title: TextStyle(color: Colors.black)),
+              subtitle1: TextStyle(color: Colors.orange),
+              headline6: TextStyle(color: Colors.black)),
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.orange,
           ),
@@ -148,8 +147,8 @@ class ThemeHelper {
               valueIndicatorTextStyle: TextStyle(color: Colors.white)),
           dividerColor: Colors.black,
           textTheme: TextTheme(
-              subhead: TextStyle(color: Colors.black),
-              title: TextStyle(color: Colors.black)),
+              subtitle1: TextStyle(color: Colors.black),
+              headline6: TextStyle(color: Colors.black)),
           brightness: Brightness.light,
           primarySwatch: Colors.lightBlue,
           buttonTheme: ButtonThemeData(

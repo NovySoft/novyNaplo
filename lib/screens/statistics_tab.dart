@@ -2,7 +2,6 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/screens/charts_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -422,77 +421,41 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 10:
-                      //TODO refactor with conditionals
-                      if (DynamicTheme.of(context).brightness ==
-                          Brightness.dark) {
-                        return SizedBox(
-                          height: 400,
-                          width: double.infinity,
-                          child: charts.BarChart(
-                            howManyFromMarks,
-                            animate: globals.chartAnimations,
-                            domainAxis: new charts.OrdinalAxisSpec(
-                                renderSpec: charts.SmallTickRendererSpec(
-                                    labelStyle: charts.TextStyleSpec(
-                              fontSize: 15,
-                              color: charts.MaterialPalette.blue.shadeDefault,
-                            ))),
-                            primaryMeasureAxis: new charts.NumericAxisSpec(
-                                renderSpec: charts.GridlineRendererSpec(
-                                    labelStyle: charts.TextStyleSpec(
-                              fontSize: 15,
-                              color: charts.MaterialPalette.blue.shadeDefault,
-                            ))),
-                            defaultRenderer: new charts.BarRendererConfig(
-                                barRendererDecorator:
-                                    new charts.BarLabelDecorator<String>(
-                                        insideLabelStyleSpec:
-                                            new charts.TextStyleSpec(
-                                                color: charts
-                                                    .MaterialPalette.white),
-                                        outsideLabelStyleSpec:
-                                            new charts.TextStyleSpec(
-                                                color: charts
-                                                    .MaterialPalette.white)),
-                                cornerStrategy:
-                                    const charts.ConstCornerStrategy(30)),
-                          ),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: 400,
-                          width: double.infinity,
-                          child: charts.BarChart(
-                            howManyFromMarks,
-                            animate: globals.chartAnimations,
-                            domainAxis: new charts.OrdinalAxisSpec(
-                                renderSpec: charts.SmallTickRendererSpec(
-                                    labelStyle: charts.TextStyleSpec(
-                              fontSize: 15,
-                              color: charts.MaterialPalette.blue.shadeDefault,
-                            ))),
-                            primaryMeasureAxis: new charts.NumericAxisSpec(
-                                renderSpec: charts.GridlineRendererSpec(
-                                    labelStyle: charts.TextStyleSpec(
-                              fontSize: 15,
-                              color: charts.MaterialPalette.blue.shadeDefault,
-                            ))),
-                            defaultRenderer: new charts.BarRendererConfig(
-                                barRendererDecorator:
-                                    new charts.BarLabelDecorator<String>(
-                                        insideLabelStyleSpec:
-                                            new charts.TextStyleSpec(
-                                                color: charts
-                                                    .MaterialPalette.white),
-                                        outsideLabelStyleSpec:
-                                            new charts.TextStyleSpec(
-                                                color: charts
-                                                    .MaterialPalette.black)),
-                                cornerStrategy:
-                                    const charts.ConstCornerStrategy(30)),
-                          ),
-                        );
-                      }
+                      return SizedBox(
+                        height: 400,
+                        width: double.infinity,
+                        child: charts.BarChart(
+                          howManyFromMarks,
+                          animate: globals.chartAnimations,
+                          domainAxis: new charts.OrdinalAxisSpec(
+                              renderSpec: charts.SmallTickRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                            fontSize: 15,
+                            color: charts.MaterialPalette.blue.shadeDefault,
+                          ))),
+                          primaryMeasureAxis: new charts.NumericAxisSpec(
+                              renderSpec: charts.GridlineRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                            fontSize: 15,
+                            color: charts.MaterialPalette.blue.shadeDefault,
+                          ))),
+                          defaultRenderer: new charts.BarRendererConfig(
+                              barRendererDecorator: new charts
+                                      .BarLabelDecorator<String>(
+                                  insideLabelStyleSpec:
+                                      new charts.TextStyleSpec(
+                                          color: charts.MaterialPalette.white),
+                                  outsideLabelStyleSpec:
+                                      new charts.TextStyleSpec(
+                                          color: DynamicTheme.of(context)
+                                                      .brightness ==
+                                                  Brightness.dark
+                                              ? charts.MaterialPalette.white
+                                              : charts.MaterialPalette.black)),
+                              cornerStrategy:
+                                  const charts.ConstCornerStrategy(30)),
+                        ),
+                      );
                       break;
                     default:
                       return SizedBox(

@@ -10,7 +10,6 @@ import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
-import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
@@ -72,12 +71,12 @@ Future selectNotification(String payload) async {
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {
       case "marks":
-        int tempindex = allParsedByDate.indexWhere(
+        int tempindex = marksTab.allParsedByDate.indexWhere(
           (element) {
             return element.id == globals.payloadId;
           },
         );
-        Evals tempEval = allParsedByDate.firstWhere(
+        Evals tempEval = marksTab.allParsedByDate.firstWhere(
           (element) {
             return element.id == globals.payloadId;
           },
@@ -93,20 +92,7 @@ Future selectNotification(String payload) async {
               MaterialPageRoute(
                 builder: (context) => MarksDetailTab(
                   eval: tempEval,
-                  mode: tempEval.mode,
-                  theme: tempEval.theme,
-                  weight: tempEval.weight,
-                  date: tempEval.dateString,
-                  createDate: tempEval.createDateString,
-                  teacher: tempEval.teacher,
-                  subject: tempEval.subject,
-                  numberValue: tempEval.numberValue,
-                  value: tempEval.value,
-                  formName: tempEval.formName,
-                  form: tempEval.form,
-                  id: tempEval.id,
-                  name: capitalize(tempEval.subject + " " + tempEval.value),
-                  color: colors[tempindex],
+                  color: marksTab.colors[tempindex],
                 ),
               ),
             );

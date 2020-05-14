@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'dart:typed_data';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -10,13 +9,11 @@ import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/database/getSql.dart';
@@ -93,9 +90,9 @@ void backgroundFetch() async {
       'Éppen zajlik az adatok lekérése...',
       platformChannelSpecificsGetNotif,
     );
-    final DateTime now = DateTime.now();
+    /*final DateTime now = DateTime.now();
     final int isolateId = Isolate.current.hashCode;
-    //print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");
+    print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");*/
     final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
     var passKey = encrypt.Key.fromUtf8(config.passKey);
     var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -150,7 +147,6 @@ void backgroundFetch() async {
 
 Future<List<dynamic>> parseAllByDateFetch(var input) async {
   List<Evals> jegyArray = [];
-  //! TODO fix this duplicate code
   try {
     var jegyek = input["Evaluations"];
     jegyArray = [];

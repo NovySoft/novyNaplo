@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
             });
       }
       //Not showing quickly enough
-      await sleep1(); //So sleep for a second TODO FIX THIS
+      await sleep1(); //So sleep for a second
       if (await NetworkHelper().isNetworkAvailable() ==
           ConnectivityResult.none) {
         status = "No internet connection was detected";
@@ -186,7 +186,8 @@ class _LoginPageState extends State<LoginPage> {
         String user = userController.text;
         String pass = passController.text;
         status = await NetworkHelper().getToken(code, user, pass);
-        //TODO fix this buggy garbage
+        ////fix this buggy garbage
+        //! probably won't fix
         if (status == null || status == "Error")
           status = await NetworkHelper().getToken(code, user, pass);
         if (status == null || status == "Error")

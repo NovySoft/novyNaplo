@@ -18,11 +18,14 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 * Órarend megtekintése
 * Átlagok grafikonon való megtekintése
 * Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
+* Mi van ha, virtuális jegyszámoló
+* Statisztika oldal
 * Értesítések
 * Offline mód
 
 **HAMAROSAN:**
 
+* Bejelentett dolgozatok
 * Hiányzások
 * Támogatók oldal - **Gáti Úr** közreműködésével
 * Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)

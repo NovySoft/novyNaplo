@@ -1,10 +1,10 @@
 import 'dart:math';
-
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+int index = 0;
+List<ChartPoints> chartData = [];
 
-//TODO optimize this entire thing
-//TODO IT uses more memory and cpu than it really needs to
 class LinearMarkChartData {
   final int count;
   final double value;
@@ -109,7 +109,7 @@ List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(var input) {
     charts.MaterialPalette.pink.shadeDefault,
     charts.MaterialPalette.teal.shadeDefault,
   ];
-  int index = 0;
+  index = 0;
   for (var n in input) {
     tempList = [];
     for (var y in n) {
@@ -300,4 +300,34 @@ void getBarChart(input) {
           ('${count.count.toString()}db'),
     )
   ];
+}
+
+List<charts.Series<ChartPoints, int>> createSubjectChart(
+    List<Evals> input, String id) {
+  chartData = [];
+  double sum = 0;
+  double index = 0;
+  int listArray = 0;
+  for (var n in input) {
+    sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+    index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+    chartData.add(new ChartPoints(listArray, sum / index));
+    listArray++;
+  }
+  return [
+    new charts.Series<ChartPoints, int>(
+      id: id,
+      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      domainFn: (ChartPoints marks, _) => marks.count,
+      measureFn: (ChartPoints marks, _) => marks.value,
+      data: chartData,
+    )
+  ];
+}
+
+class ChartPoints {
+  var count;
+  var value;
+
+  ChartPoints(this.count, this.value);
 }
