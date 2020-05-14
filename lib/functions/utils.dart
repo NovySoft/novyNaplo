@@ -75,6 +75,7 @@ String generateRandomHeadline() {
 }
 
 List<Color> getRandomColors(int amount) {
+  if (amount == null) amount = 10;
   return List<Color>.generate(amount, (index) {
     return _myListOfRandomColors[_random.nextInt(_myListOfRandomColors.length)];
     //return _myListOfRandomColors[2];

@@ -45,93 +45,107 @@ NotificationDetails platformChannelSpecificsSendNotif;
 int notifId = 2;
 
 void backgroundFetch() async {
-  FirebaseAnalytics().logEvent(name: "BackgroundFetch");
-  Crashlytics.instance.log("backgroundFetch started");
-  vibrationPattern = new Int64List(4);
-  vibrationPattern[0] = 0;
-  vibrationPattern[1] = 1000;
-  vibrationPattern[2] = 500;
-  vibrationPattern[3] = 1000;
-  sendNotification = new AndroidNotificationDetails(
-    'novynaplo01',
-    'novynaplo',
-    'Channel for sending novyNaplo notifications',
-    importance: Importance.Max,
-    priority: Priority.High,
-    enableVibration: true,
-    vibrationPattern: vibrationPattern,
-    color: Color.fromARGB(255, 255, 165, 0),
-    visibility: NotificationVisibility.Public,
-    ledColor: Colors.orange,
-    ledOnMs: 1000,
-    ledOffMs: 1000,
-    enableLights: true,
-    playSound: true,
-  );
-  platformChannelSpecificsSendNotif =
-      new NotificationDetails(sendNotification, iOSPlatformChannelSpecifics);
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-    return;
-  }
-  if (prefs.getBool("backgroundFetchOnCellular") == false &&
-      await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
-    return;
-  }
-  var initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = IOSInitializationSettings();
-  var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await flutterLocalNotificationsPlugin.show(
-    111,
-    'Adatok lekérése',
-    'Éppen zajlik az adatok lekérése...',
-    platformChannelSpecificsGetNotif,
-  );
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  //print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");
-  final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-  var passKey = encrypt.Key.fromUtf8(config.passKey);
-  var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-  var userKey = encrypt.Key.fromUtf8(config.userKey);
-  final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-  final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-  final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-  String decryptedCode =
-      codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-  if (decryptedCode == null || decryptedCode == "") return;
-  String decryptedUser =
-      userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-  String decryptedPass =
-      passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-  var status = "";
-  await mainSql.initDatabase();
-  for (var i = 0; i < 2; i++) {
-    status = await NetworkHelper()
-        .getToken(decryptedCode, decryptedUser, decryptedPass);
-  }
-  if (status == "OK") {
-    //print(globals.token);
-    String token = globals.token;
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-    };
-    var res = await http.get(
-        'https://$decryptedCode.e-kreta.hu/mapi/api/v1/StudentAmi?fromDate=null&toDate=null',
-        headers: headers);
-    if (res.statusCode == 200) {
-      globals.dJson = json.decode(res.body);
-      await parseAllByDateFetch(globals.dJson); //Evals
-      await getAvaragesFetch(token, decryptedCode); //Avarages
-      await parseNoticesFetch(globals.dJson); //Notices
-      await getWeekLessonsFetch(token, decryptedCode); //Homework and Timetable
+  try {
+    FirebaseAnalytics().logEvent(name: "BackgroundFetch");
+    FirebaseAnalytics()
+        .setUserProperty(name: "Version", value: config.currentAppVersionCode);
+    Crashlytics.instance.log("backgroundFetch started");
+    vibrationPattern = new Int64List(4);
+    vibrationPattern[0] = 0;
+    vibrationPattern[1] = 1000;
+    vibrationPattern[2] = 500;
+    vibrationPattern[3] = 1000;
+    sendNotification = new AndroidNotificationDetails(
+      'novynaplo01',
+      'novynaplo',
+      'Channel for sending novyNaplo notifications',
+      importance: Importance.Max,
+      priority: Priority.High,
+      enableVibration: true,
+      vibrationPattern: vibrationPattern,
+      color: Color.fromARGB(255, 255, 165, 0),
+      visibility: NotificationVisibility.Public,
+      ledColor: Colors.orange,
+      ledOnMs: 1000,
+      ledOffMs: 1000,
+      enableLights: true,
+      playSound: true,
+    );
+    platformChannelSpecificsSendNotif =
+        new NotificationDetails(sendNotification, iOSPlatformChannelSpecifics);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      return;
     }
+    if (prefs.getBool("backgroundFetchOnCellular") == false &&
+        await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
+      return;
+    }
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.show(
+      111,
+      'Adatok lekérése',
+      'Éppen zajlik az adatok lekérése...',
+      platformChannelSpecificsGetNotif,
+    );
+    final DateTime now = DateTime.now();
+    final int isolateId = Isolate.current.hashCode;
+    //print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");
+    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    var passKey = encrypt.Key.fromUtf8(config.passKey);
+    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+    var userKey = encrypt.Key.fromUtf8(config.userKey);
+    final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+    final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+    String decryptedCode =
+        codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    if (decryptedCode == null || decryptedCode == "") return;
+    String decryptedUser =
+        userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+    String decryptedPass =
+        passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+    var status = "";
+    await mainSql.initDatabase();
+    for (var i = 0; i < 2; i++) {
+      status = await NetworkHelper()
+          .getToken(decryptedCode, decryptedUser, decryptedPass);
+    }
+    if (status == "OK") {
+      //print(globals.token);
+      String token = globals.token;
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+      var res = await http.get(
+          'https://$decryptedCode.e-kreta.hu/mapi/api/v1/StudentAmi?fromDate=null&toDate=null',
+          headers: headers);
+      if (res.statusCode == 200) {
+        globals.dJson = json.decode(res.body);
+        await parseAllByDateFetch(globals.dJson); //Evals
+        await getAvaragesFetch(token, decryptedCode); //Avarages
+        await parseNoticesFetch(globals.dJson); //Notices
+        await getWeekLessonsFetch(
+            token, decryptedCode); //Homework and Timetable
+      }
+    }
+    await flutterLocalNotificationsPlugin.cancel(111);
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'backgroundFetch');
+    await flutterLocalNotificationsPlugin.cancel(111);
+    await flutterLocalNotificationsPlugin.show(
+      -111,
+      'Hiba történt a lekérés közben:',
+      e.toString(),
+      platformChannelSpecificsSendNotif,
+    );
   }
-  await flutterLocalNotificationsPlugin.cancel(111);
 }
 
 Future<List<dynamic>> parseAllByDateFetch(var input) async {

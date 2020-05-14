@@ -1,9 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/global.dart' as globals;
-
 
 PageController controller = PageController();
 var currentPageValue = 0.0;
@@ -33,6 +33,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
+    FirebaseAnalytics().logEvent(name: "tutorial_begin");
     WidgetsBinding.instance.addPostFrameCallback((_) => animate());
   }
 
@@ -358,6 +359,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           var prefs = await SharedPreferences.getInstance();
           prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
+          FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },
         padding: EdgeInsets.all(12),
         child: Text('Bejelentkezés', style: TextStyle(color: Colors.black)),
