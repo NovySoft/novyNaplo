@@ -8,6 +8,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
@@ -970,6 +971,22 @@ Widget getDrawer(String screen, BuildContext context) {
             } else {
               try {
                 Navigator.pushNamed(context, TimetableTab.tag);
+              } catch (e, s) {
+                Crashlytics.instance.recordError(e, s, context: 'getDrawer');
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Bejelentett dolgozatok'),
+          leading: Icon(MdiIcons.clipboardText),
+          onTap: () {
+            if (screen == ExamsTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, ExamsTab.tag);
               } catch (e, s) {
                 Crashlytics.instance.recordError(e, s, context: 'getDrawer');
                 print(e.message);

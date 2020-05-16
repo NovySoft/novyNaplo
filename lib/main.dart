@@ -19,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
+import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
     TimetableTab.tag: (context) => TimetableTab(),
     CalculatorTab.tag: (context) => CalculatorTab(),
     HomeworkTab.tag: (context) => HomeworkTab(),
+    ExamsTab.tag: (context) => ExamsTab(),
   };
 
   @override

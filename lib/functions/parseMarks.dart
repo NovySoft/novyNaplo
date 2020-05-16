@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'classManager.dart';
 import 'utils.dart';
+
 int index = 0;
 var sum;
 var jegyek;
@@ -196,4 +197,29 @@ List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
     }
   }
   return output;
+}
+
+Future<List<Exam>> parseExams(var input) async {
+  List<Exam> examArray = [];
+  try {
+    for (var n in input) {
+      Exam temp = new Exam();
+      temp.id = n["Id"];
+      temp.dateWriteString = n["Datum"];
+      temp.dateWrite = DateTime.parse(n["Datum"]);
+      temp.dateGivenUpString = n["BejelentesDatuma"];
+      temp.dateGivenUp = DateTime.parse(n["BejelentesDatuma"]);
+      temp.subject = n["Tantargy"];
+      temp.teacher = n["Tanar"];
+      temp.nameOfExam = n["SzamonkeresMegnevezese"];
+      temp.typeOfExam = n["SzamonkeresModja"];
+      temp.groupID = n["OsztalyCsoportUid"];
+      examArray.add(temp);
+    }
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'parseExams');
+    return [];
+  }
+  //await batchInsertAvarage(examArray);
+  return examArray;
 }

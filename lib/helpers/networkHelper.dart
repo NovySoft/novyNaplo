@@ -10,6 +10,7 @@ import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -119,6 +120,7 @@ class NetworkHelper {
       globals.dJson = json.decode(res.body);
       var eval = globals.dJson["Evaluations"];
       await getAvarages(token, code);
+      await getExams(token, code);
       globals.markCount = eval.length;
       marksPage.colors = getRandomColors(globals.markCount);
       marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
@@ -280,6 +282,30 @@ void setUpCalculatorPage(List<List<Evals>> input) {
     calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
   else
     calculatorPage.dropdownValue = "Az lehet, hogy még nincs jegyed?";
+}
+
+Future<void> getExams(token, code) async {
+  try {
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'User-Agent': '$agent',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
+        headers: headers);
+    if (res.statusCode != 200)
+      throw Exception('get error: statusCode= ${res.statusCode}');
+    if (res.statusCode == 200) {
+      //print("res.body ${res.body}");
+      var bodyJson = json.decode(res.body);
+      examsPage.allParsedExams = await parseExams(bodyJson);
+      //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+    }
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'getExams');
+    return [];
+  }
 }
 
 Future<Homework> setTeacherHomework(int hwId, String token, String code) async {

@@ -23,6 +23,7 @@ import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
+import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -180,6 +181,37 @@ class _LoadingPageState extends State<LoadingPage> {
     }
   }
 
+  Future<void> getExams(token, code) async {
+    try {
+      setState(() {
+        loadingText = "Bejelentett dolgozatok lekérése";
+      });
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {
+          loadingText = "Bejelentett dolgozatok dekódolása";
+        });
+        //print("res.body ${res.body}");
+        var bodyJson = json.decode(res.body);
+        examsPage.allParsedExams = await parseExams(bodyJson);
+        //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+      }
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getExams');
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+    }
+  }
+
   Future<void> getStudentInfo(token, code) async {
     try {
       setState(() {
@@ -201,6 +233,7 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.dJson = json.decode(res.body);
         var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
+        await getExams(token, code);
         globals.markCount = eval.length;
         marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);

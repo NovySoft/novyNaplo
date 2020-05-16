@@ -330,3 +330,16 @@ Homework setHomework(var decoded) {
   temp.dueDate = DateTime.parse(decoded["Hatarido"]);
   return temp;
 }
+
+class Exam {
+  int id;
+  String dateWriteString;
+  DateTime dateWrite;
+  String dateGivenUpString;
+  DateTime dateGivenUp;
+  String subject;
+  String teacher;
+  String nameOfExam;
+  String typeOfExam;
+  String groupID;
+}

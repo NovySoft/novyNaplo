@@ -8,6 +8,8 @@ import 'package:novynaplo/functions/utils.dart';
 
 List<Color> colors = [];
 List<Homework> globalHomework = [];
+//!Some users see weird behaviors when the app is opened from the background
+//! IE: All of the subjects apear on one day
 
 class HomeworkTab extends StatefulWidget {
   static String tag = 'homework';
