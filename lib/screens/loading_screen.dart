@@ -6,6 +6,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -461,15 +462,26 @@ class _LoadingPageState extends State<LoadingPage> {
                 timetablePage.lessonsList.length != 0) ||
             await Connectivity().checkConnectivity() ==
                 ConnectivityResult.none) {
-          if (globals.notificationAppLaunchDetails.didNotificationLaunchApp &&
-              globals.notificationAppLaunchDetails.payload != "teszt") {
-          } else {
+          if (globals.notificationAppLaunchDetails.didNotificationLaunchApp) {
+            //print("NotifLaunchApp");
+            if (globals.notificationAppLaunchDetails.payload == "teszt") {
+              //print("TESZT");
+              Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+              showTesztNotificationDialog();
+            } else {
+              //print(globals.notificationAppLaunchDetails.payload);
+              marksTab.redirectPayload = true;
+              await sleep(10);
+              Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+            }
+          }else{
             Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
           }
           FirebaseAnalytics().logEvent(name: "login");
           return;
         }
       }
+      print("NoData");
       //If we don't have prefetched data
       setState(() {
         loadingText = "Addatok olvasása a memóriából";
@@ -575,6 +587,7 @@ class _LoadingPageState extends State<LoadingPage> {
     return Scaffold(
       body: Center(
         child: ListView(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[

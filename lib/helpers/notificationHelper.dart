@@ -54,7 +54,7 @@ Future<void> setupNotifications() async {
   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  if(notificationAppLaunchDetails.didNotificationLaunchApp){
+  if (notificationAppLaunchDetails.didNotificationLaunchApp) {
     selectNotification(notificationAppLaunchDetails.payload);
   }
   globals.notificationAppLaunchDetails =
@@ -65,7 +65,14 @@ Future<void> setupNotifications() async {
 }
 
 Future selectNotification(String payload) async {
-  if (ModalRoute.of(globals.globalContext).settings.name == "/") return;
+  if (globals.globalContext == null) {
+    print("NoContext");
+    return;
+  }
+  if (ModalRoute.of(globals.globalContext).settings.name == "/") {
+    print("MainRoute");
+    return;
+  }
   if (payload != null && payload != "teszt" && payload is String) {
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.payloadId = int.parse(payload.split(" ")[1]);
@@ -199,23 +206,27 @@ Future selectNotification(String payload) async {
     );
   } else {
     print("TESZT");
-    showDialog<void>(
-      context: globals.globalContext,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Státusz'),
-          content: Text(
-              "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    showTesztNotificationDialog();
   }
+}
+
+Future<void> showTesztNotificationDialog() async {
+  showDialog<void>(
+    context: globals.globalContext,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Státusz'),
+        content: Text(
+            "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

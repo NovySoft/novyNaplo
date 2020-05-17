@@ -7,6 +7,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -31,6 +32,7 @@ final List<Tab> markTabs = <Tab>[
 String label, labelBefore;
 TabController _tabController;
 List<dynamic> colors;
+bool redirectPayload = false;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -59,6 +61,10 @@ class MarksTabState extends State<MarksTab>
           !globals.didFetch) {
         globals.didFetch = true;
         _androidRefreshKey.currentState?.show();
+      }
+      if (redirectPayload) {
+        redirectPayload = false;
+        selectNotification(globals.notificationAppLaunchDetails.payload);
       }
     });
     super.initState();
