@@ -255,7 +255,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                    "Az alkalmazás több hibát is tartalmazhat, ezeket a novynaplo@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
+                    "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24)),
               )),
