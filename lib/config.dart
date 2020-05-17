@@ -23,5 +23,5 @@ String bannerUnitId = "ca-app-pub-6768960612393878/1881515932";
 String currentAppVersionCode = "V0.1.4.7.1";
 //Is the app final release? (aka is/was in version.json)
 //!If false don't do the new version check
-//Mainly for travis ci builds
+//Mainly for travis ci builds and test builds
 bool isAppRelease = true;

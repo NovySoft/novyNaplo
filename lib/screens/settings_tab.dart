@@ -1199,7 +1199,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 7 + (globals.backgroundFetch ? 3 : 0),
+          itemCount: 8 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1250,8 +1250,10 @@ class _NetworkAndNotificationSettingsState
                               'Teszt jegy értesítés',
                               'Új jegyek...',
                               notifications.platformChannelSpecifics,
-                              payload:
-                                  'marks ' + (allParsedByDate.length == 0 ? "0" : allParsedByDate[0].id.toString()),
+                              payload: 'marks ' +
+                                  (allParsedByDate.length == 0
+                                      ? "0"
+                                      : allParsedByDate[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1281,7 +1283,10 @@ class _NetworkAndNotificationSettingsState
                               'Teszt értesítés',
                               'Új lecke...',
                               notifications.platformChannelSpecifics,
-                              payload: 'hw ' + (globalHomework.length == 0 ? "0" : globalHomework[0].id.toString()),
+                              payload: 'hw ' +
+                                  (globalHomework.length == 0
+                                      ? "0"
+                                      : globalHomework[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1311,8 +1316,10 @@ class _NetworkAndNotificationSettingsState
                               'Teszt értesítés',
                               'Új feljegyzés...',
                               notifications.platformChannelSpecifics,
-                              payload:
-                                  'notice ' + (allParsedNotices.length == 0 ? "0" : allParsedNotices[0].id.toString()),
+                              payload: 'notice ' +
+                                  (allParsedNotices.length == 0
+                                      ? "0"
+                                      : allParsedNotices[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1343,7 +1350,9 @@ class _NetworkAndNotificationSettingsState
                               'Új óra...',
                               notifications.platformChannelSpecifics,
                               payload: 'timetable ' +
-                                  (lessonsList[0].length == 0 ? "0" : lessonsList[0][0].id.toString()),
+                                  (lessonsList[0].length == 0
+                                      ? "0"
+                                      : lessonsList[0][0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1374,7 +1383,10 @@ class _NetworkAndNotificationSettingsState
                               'Új dolgozat...',
                               notifications.platformChannelSpecifics,
                               payload: 'exam ' +
-                                  (examsPage.allParsedExams.length == 0 ? "0" : examsPage.allParsedExams[0].id.toString()),
+                                  (examsPage.allParsedExams.length == 0
+                                      ? "0"
+                                      : examsPage.allParsedExams[0].id
+                                          .toString()),
                             );
                           },
                           icon: Icon(
@@ -1388,6 +1400,23 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 6:
+                return ListTile(
+                  title: Text("Értesítések"),
+                  trailing: Switch(
+                    onChanged: (bool isOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        globals.notifications = isOn;
+                        prefs.setBool("notifications", isOn);
+                        Crashlytics.instance.setBool("notifications", isOn);
+                      });
+                    },
+                    value: globals.notifications,
+                  ),
+                );
+                break;
+              case 7:
                 return ListTile(
                   title: Text("Háttér lekérések"),
                   trailing: Switch(
@@ -1433,7 +1462,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 7:
+              case 8:
                 return ListTile(
                   title: Text("Háttér lekérések mobilnetről"),
                   trailing: Switch(
@@ -1451,7 +1480,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 8:
+              case 9:
                 return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
@@ -1500,7 +1529,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 9:
+              case 10:
                 return Column(
                   children: <Widget>[
                     ListTile(

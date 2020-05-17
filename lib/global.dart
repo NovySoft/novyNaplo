@@ -34,8 +34,11 @@ int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
-NotificationAppLaunchDetails notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
-int payloadId = -1;  //Payload id, contains id of the notification we want to show
+NotificationAppLaunchDetails
+    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
+int payloadId =
+    -1; //Payload id, contains id of the notification we want to show
+bool notifications = false; //Should we send notifications
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,12 +54,19 @@ void resetAllGlobals() async {
   didFetch = false;
 }
 
-void setGlobals() async {
+Future<void> setGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("ads") != null) {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
     adsEnabled = prefs.getBool("ads");
     if (adsEnabled) adModifier = 1;
+  }
+
+  if (prefs.getBool("notifications") != null) {
+    notifications = prefs.getBool("notifications");
+  } else {
+    prefs.setBool("notifications", false);
+    notifications = false;
   }
 
   if (prefs.getBool("offlineModeDb") != null) {
@@ -73,7 +83,8 @@ void setGlobals() async {
     prefs.setBool("backgroundFetchOnCellular", false);
     backgroundFetchOnCellular = false;
   }
-  Crashlytics.instance.setBool("backgroundFetchOnCellular", backgroundFetchOnCellular);
+  Crashlytics.instance
+      .setBool("backgroundFetchOnCellular", backgroundFetchOnCellular);
 
   fetchPeriod =
       prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");

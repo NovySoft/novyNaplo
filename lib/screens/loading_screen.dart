@@ -376,7 +376,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void onLoad(var context) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      globals.setGlobals();
+      await globals.setGlobals();
       setState(() {
         loadingText = "Verzió ellenőrzése";
       });

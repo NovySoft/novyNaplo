@@ -48,6 +48,8 @@ void backgroundFetch() async {
     FirebaseAnalytics()
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
     Crashlytics.instance.log("backgroundFetch started");
+    await globals.setGlobals();
+    //print(globals.notifications);
     vibrationPattern = new Int64List(4);
     vibrationPattern[0] = 0;
     vibrationPattern[1] = 1000;
@@ -186,13 +188,15 @@ Future<void> batchInsertExamsAndNotif(List<Exam> examList) async {
     });
     if (matchedAv.length == 0) {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-      await flutterLocalNotificationsPlugin.show(
-        notifId,
-        'Új dolgozat: ' + capitalize(exam.nameOfExam),
-        'Téma: ' + exam.subject,
-        platformChannelSpecificsSendNotif,
-        payload: "exam " + exam.id.toString(),
-      );
+      if (globals.notifications) {
+        await flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új dolgozat: ' + capitalize(exam.nameOfExam),
+          'Téma: ' + exam.subject,
+          platformChannelSpecificsSendNotif,
+          payload: "exam " + exam.id.toString(),
+        );
+      }
       batch.insert(
         'Exams',
         exam.toMap(),
@@ -216,13 +220,15 @@ Future<void> batchInsertExamsAndNotif(List<Exam> examList) async {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-          await flutterLocalNotificationsPlugin.show(
-            notifId,
-            'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
-            'Téma: ' + exam.subject,
-            platformChannelSpecificsSendNotif,
-            payload: "exam " + exam.id.toString(),
-          );
+          if (globals.notifications) {
+            await flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
+              'Téma: ' + exam.subject,
+              platformChannelSpecificsSendNotif,
+              payload: "exam " + exam.id.toString(),
+            );
+          }
         }
       }
     }
@@ -274,13 +280,15 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       }
       //print("notifID: $notifId");
-      await flutterLocalNotificationsPlugin.show(
-        notifId,
-        'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
-        'Téma: ' + eval.theme,
-        platformChannelSpecificsSendNotif,
-        payload: "marks " + eval.id.toString(),
-      );
+      if (globals.notifications) {
+        await flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
+          'Téma: ' + eval.theme,
+          platformChannelSpecificsSendNotif,
+          payload: "marks " + eval.id.toString(),
+        );
+      }
     } else {
       for (var n in matchedEvals) {
         //!Update didn't work so we delete and create a new one
@@ -301,13 +309,15 @@ Future<void> batchInsertEvalAndSendNotif(List<Evals> evalList) async {
           );
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           //print("notifID: $notifId");
-          await flutterLocalNotificationsPlugin.show(
-            notifId,
-            'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
-            'Téma: ' + eval.theme,
-            platformChannelSpecificsSendNotif,
-            payload: "marks " + eval.id.toString(),
-          );
+          if (globals.notifications) {
+            await flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
+              'Téma: ' + eval.theme,
+              platformChannelSpecificsSendNotif,
+              payload: "marks " + eval.id.toString(),
+            );
+          }
         }
       }
     }
@@ -385,13 +395,15 @@ Future<void> batchInsertAvarageAndNotif(List<Avarage> avarageList) async {
           String diff = diffValue > 0
               ? ("+${diffValue.toString()}")
               : diffValue.toString();
-          await flutterLocalNotificationsPlugin.show(
-            notifId,
-            'Átlag módosult: ' + capitalize(avarage.subject),
-            'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
-            platformChannelSpecificsSendNotif,
-            payload: "avarage 0",
-          );
+          if (globals.notifications) {
+            await flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Átlag módosult: ' + capitalize(avarage.subject),
+              'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
+              platformChannelSpecificsSendNotif,
+              payload: "avarage 0",
+            );
+          }
         }
       }
     }
@@ -431,13 +443,15 @@ Future<void> batchInsertNoticesAndNotif(List<Notices> noticeList) async {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-      await flutterLocalNotificationsPlugin.show(
-        notifId,
-        'Új feljegyzés: ' + capitalize(notice.title),
-        notice.teacher,
-        platformChannelSpecificsSendNotif,
-        payload: "notice " + notice.id.toString(),
-      );
+      if (globals.notifications) {
+        await flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új feljegyzés: ' + capitalize(notice.title),
+          notice.teacher,
+          platformChannelSpecificsSendNotif,
+          payload: "notice " + notice.id.toString(),
+        );
+      }
     } else {
       for (var n in matchedNotices) {
         //!Update didn't work so we delete and create a new one
@@ -454,13 +468,15 @@ Future<void> batchInsertNoticesAndNotif(List<Notices> noticeList) async {
             notice.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          await flutterLocalNotificationsPlugin.show(
-            notifId,
-            'Feljegyzés módusolt: ' + capitalize(notice.title),
-            notice.teacher,
-            platformChannelSpecificsSendNotif,
-            payload: "notice " + notice.id.toString(),
-          );
+          if (globals.notifications) {
+            await flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Feljegyzés módusolt: ' + capitalize(notice.title),
+              notice.teacher,
+              platformChannelSpecificsSendNotif,
+              payload: "notice " + notice.id.toString(),
+            );
+          }
         }
       }
     }
@@ -592,15 +608,17 @@ Future<void> batchInsertLessonsAndNotif(List<Lesson> lessonList) async {
           } else {
             subTitle = lesson.classroom;
           }
-          await flutterLocalNotificationsPlugin.show(
-            notifId,
-            'Módusolt tanóra: ' +
-                capitalize(lesson.subject) +
-                " (${parseIntToWeekdayString(lesson.date.weekday)})",
-            subTitle,
-            platformChannelSpecificsSendNotif,
-            payload: "timetable " + lesson.id.toString(),
-          );
+          if (globals.notifications) {
+            await flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Módusolt tanóra: ' +
+                  capitalize(lesson.subject) +
+                  " (${parseIntToWeekdayString(lesson.date.weekday)})",
+              subTitle,
+              platformChannelSpecificsSendNotif,
+              payload: "timetable " + lesson.id.toString(),
+            );
+          }
         }
       }
     }
@@ -697,13 +715,15 @@ Future<void> insertHomeworkAndNotif(Homework hw) async {
         hw.dueDate.day.toString() +
         " " +
         parseIntToWeekdayString(hw.dueDate.weekday);
-    await flutterLocalNotificationsPlugin.show(
-      notifId,
-      'Új házifeladat: ' + capitalize(hw.subject),
-      subTitle,
-      platformChannelSpecificsSendNotif,
-      payload: "hw " + hw.id.toString(),
-    );
+    if (globals.notifications) {
+      await flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új házifeladat: ' + capitalize(hw.subject),
+        subTitle,
+        platformChannelSpecificsSendNotif,
+        payload: "hw " + hw.id.toString(),
+      );
+    }
   } else {
     for (var n in matchedHw) {
       //!Update didn't work so we delete and create a new one
@@ -721,13 +741,15 @@ Future<void> insertHomeworkAndNotif(Homework hw) async {
             hw.dueDate.day.toString() +
             " " +
             parseIntToWeekdayString(hw.dueDate.weekday);
-        await flutterLocalNotificationsPlugin.show(
-          notifId,
-          'Módusolt házifeladat: ' + capitalize(hw.subject),
-          subTitle,
-          platformChannelSpecificsSendNotif,
-          payload: "hw " + hw.id.toString(),
-        );
+        if (globals.notifications) {
+          await flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Módusolt házifeladat: ' + capitalize(hw.subject),
+            subTitle,
+            platformChannelSpecificsSendNotif,
+            payload: "hw " + hw.id.toString(),
+          );
+        }
       }
     }
   }

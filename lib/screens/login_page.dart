@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    globals.setGlobals();
+    await globals.setGlobals();
     //DONT DELETE, FOR TESTING USE ONLY
     /*print("subtitle:" + markCardSubtitle);
     print("constColor:" + markCardConstColor);
