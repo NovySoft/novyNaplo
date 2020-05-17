@@ -31,6 +31,9 @@ Future<void> initDatabase() async {
       db.execute(
         "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT);",
       );
+      db.execute(
+        "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT);",
+      );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.

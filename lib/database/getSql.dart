@@ -151,7 +151,7 @@ Future<Homework> getHomeworkById(int id) async {
   var answer = await db.rawQuery(
       "select * from Homework where id = ? or databaseId = ?;", [id, id]);
   Homework output = new Homework();
-  if(answer.length == 0) return output;
+  if (answer.length == 0) return output;
   output.databaseId = answer[0]['databaseId'];
   output.id = answer[0]['id'];
   output.classGroupId = answer[0]['classGroupId'];
@@ -163,4 +163,28 @@ Future<Homework> getHomeworkById(int id) async {
   output.givenUp = DateTime.parse(output.givenUpString);
   output.dueDate = DateTime.parse(output.dueDateString);
   return output;
+}
+
+Future<List<Exam>> getAllExams() async {
+  Crashlytics.instance.log("getAllExams");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Exams');
+
+  return List.generate(maps.length, (i) {
+    Exam temp = new Exam();
+    temp.nameOfExam = maps[i]['nameOfExam'];
+    temp.typeOfExam = maps[i]['typeOfExam'];
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.classGroupId = maps[i]['classGroupId'];
+    temp.subject = maps[i]['subject'];
+    temp.teacher = maps[i]['teacher'];
+    temp.dateWriteString = maps[i]['dateWriteString'];
+    temp.dateGivenUpString = maps[i]['dateGivenUpString'];
+    temp.dateWrite = DateTime.parse(temp.dateWriteString);
+    temp.dateGivenUp = DateTime.parse(temp.dateGivenUpString);
+    return temp;
+  });
 }

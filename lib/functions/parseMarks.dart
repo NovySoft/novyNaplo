@@ -213,7 +213,7 @@ Future<List<Exam>> parseExams(var input) async {
       temp.teacher = n["Tanar"];
       temp.nameOfExam = n["SzamonkeresMegnevezese"];
       temp.typeOfExam = n["SzamonkeresModja"];
-      temp.groupID = n["OsztalyCsoportUid"];
+      temp.classGroupId = n["OsztalyCsoportUid"];
       examArray.add(temp);
     }
   } catch (e, s) {

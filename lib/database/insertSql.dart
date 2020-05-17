@@ -128,6 +128,36 @@ Future<void> insertAvarage(Avarage avarage) async {
   }
 }
 
+Future<void> insertExam(Exam exam) async {
+  Crashlytics.instance.log("insertSingleExam");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  await sleep1();
+  List<Exam> allExam = await getAllExams();
+
+  var matchedAv = allExam.where((element) {
+    return (element.id == exam.id);
+  });
+  if (matchedAv.length == 0) {
+    await db.insert(
+      'Exams',
+      exam.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  } else {
+    for (var n in matchedAv) {
+      //!Update didn't work so we delete and create a new one
+      if (n.dateGivenUpString != exam.dateGivenUpString ||
+          n.dateWriteString != exam.dateWriteString ||
+          n.nameOfExam != exam.nameOfExam ||
+          n.typeOfExam != exam.typeOfExam) {
+        deleteFromDb(n.databaseId, "Exams");
+        insertExam(exam);
+      }
+    }
+  }
+}
+
 //*Batch inserts
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEval(List<Evals> evalList) async {
@@ -350,4 +380,44 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
   }
   await batch.commit();
   //print("INSERTED EVAL BATCH");
+}
+
+Future<void> batchInsertExams(List<Exam> examList) async {
+  Crashlytics.instance.log("batchInsertExam");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Exam> allExam = await getAllExams();
+  for (var exam in examList) {
+    var matchedAv = allExam.where((element) {
+      return (element.id == exam.id);
+    });
+    if (matchedAv.length == 0) {
+      batch.insert(
+        'Exams',
+        exam.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedAv) {
+        //!Update didn't work so we delete and create a new one
+        if (n.dateGivenUpString != exam.dateGivenUpString ||
+            n.dateWriteString != exam.dateWriteString ||
+            n.nameOfExam != exam.nameOfExam ||
+            n.typeOfExam != exam.typeOfExam) {
+          batch.delete(
+            "Exams",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Exams',
+            exam.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
+  }
 }

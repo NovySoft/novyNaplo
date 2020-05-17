@@ -332,6 +332,7 @@ Homework setHomework(var decoded) {
 }
 
 class Exam {
+  int databaseId;
   int id;
   String dateWriteString;
   DateTime dateWrite;
@@ -339,7 +340,21 @@ class Exam {
   DateTime dateGivenUp;
   String subject;
   String teacher;
-  String nameOfExam;
+  String nameOfExam; //Content
   String typeOfExam;
-  String groupID;
+  String classGroupId;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'classGroupId': classGroupId,
+      'subject': subject,
+      'teacher': teacher,
+      'typeOfExam': typeOfExam,
+      'nameOfExam': nameOfExam,
+      'dateGivenUpString': dateGivenUpString,
+      'dateWriteString': dateWriteString,
+    };
+  }
 }
