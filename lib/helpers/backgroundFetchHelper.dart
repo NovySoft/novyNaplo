@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:novynaplo/functions/parseMarks.dart';
 
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
@@ -131,6 +132,7 @@ void backgroundFetch() async {
         await parseNoticesFetch(globals.dJson); //Notices
         await getWeekLessonsFetch(
             token, decryptedCode); //Homework and Timetable
+        await getExamsFetch(token, decryptedCode); //Exams
       }
     }
     await flutterLocalNotificationsPlugin.cancel(111);
@@ -144,6 +146,88 @@ void backgroundFetch() async {
       platformChannelSpecificsSendNotif,
     );
   }
+}
+
+Future<void> getExamsFetch(token, code) async {
+  try {
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'User-Agent': '$agent',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
+        headers: headers);
+    if (res.statusCode != 200)
+      throw Exception('get error: statusCode= ${res.statusCode}');
+    if (res.statusCode == 200) {
+      //print("res.body ${res.body}");
+      var bodyJson = json.decode(res.body);
+      var allParsedExams = await parseExams(bodyJson);
+      await batchInsertExamsAndNotif(allParsedExams);
+      //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+    }
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'getExamsFetch');
+    return [];
+  }
+}
+
+Future<void> batchInsertExamsAndNotif(List<Exam> examList) async {
+  Crashlytics.instance.log("batchInsertExam");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  await sleep1();
+  List<Exam> allExam = await getAllExams();
+  for (var exam in examList) {
+    var matchedAv = allExam.where((element) {
+      return (element.id == exam.id);
+    });
+    if (matchedAv.length == 0) {
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      await flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új dolgozat: ' + capitalize(exam.nameOfExam),
+        'Téma: ' + exam.subject,
+        platformChannelSpecificsSendNotif,
+        payload: "exam " + exam.id.toString(),
+      );
+      batch.insert(
+        'Exams',
+        exam.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedAv) {
+        //!Update didn't work so we delete and create a new one
+        if (n.dateGivenUpString != exam.dateGivenUpString ||
+            n.dateWriteString != exam.dateWriteString ||
+            n.nameOfExam != exam.nameOfExam ||
+            n.typeOfExam != exam.typeOfExam) {
+          batch.delete(
+            "Exams",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Exams',
+            exam.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          await flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
+            'Téma: ' + exam.subject,
+            platformChannelSpecificsSendNotif,
+            payload: "exam " + exam.id.toString(),
+          );
+        }
+      }
+    }
+  }
+  await batch.commit();
 }
 
 Future<List<dynamic>> parseAllByDateFetch(var input) async {

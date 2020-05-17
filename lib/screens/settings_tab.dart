@@ -25,6 +25,7 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
+import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
 final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
@@ -1198,7 +1199,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 6 + (globals.backgroundFetch ? 3 : 0),
+          itemCount: 7 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1250,7 +1251,7 @@ class _NetworkAndNotificationSettingsState
                               'Új jegyek...',
                               notifications.platformChannelSpecifics,
                               payload:
-                                  'marks ' + allParsedByDate[0].id.toString(),
+                                  'marks ' + (allParsedByDate.length == 0 ? "0" : allParsedByDate[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1280,7 +1281,7 @@ class _NetworkAndNotificationSettingsState
                               'Teszt értesítés',
                               'Új lecke...',
                               notifications.platformChannelSpecifics,
-                              payload: 'hw ' + globalHomework[0].id.toString(),
+                              payload: 'hw ' + (globalHomework.length == 0 ? "0" : globalHomework[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1311,7 +1312,7 @@ class _NetworkAndNotificationSettingsState
                               'Új feljegyzés...',
                               notifications.platformChannelSpecifics,
                               payload:
-                                  'notice ' + allParsedNotices[0].id.toString(),
+                                  'notice ' + (allParsedNotices.length == 0 ? "0" : allParsedNotices[0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1342,7 +1343,7 @@ class _NetworkAndNotificationSettingsState
                               'Új óra...',
                               notifications.platformChannelSpecifics,
                               payload: 'timetable ' +
-                                  lessonsList[0][0].id.toString(),
+                                  (lessonsList[0].length == 0 ? "0" : lessonsList[0][0].id.toString()),
                             );
                           },
                           icon: Icon(
@@ -1356,6 +1357,37 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 5:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt értesítés',
+                              'Új dolgozat...',
+                              notifications.platformChannelSpecifics,
+                              payload: 'exam ' +
+                                  (examsPage.allParsedExams.length == 0 ? "0" : examsPage.allParsedExams[0].id.toString()),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt dolgozat értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 6:
                 return ListTile(
                   title: Text("Háttér lekérések"),
                   trailing: Switch(
@@ -1401,7 +1433,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 6:
+              case 7:
                 return ListTile(
                   title: Text("Háttér lekérések mobilnetről"),
                   trailing: Switch(
@@ -1419,7 +1451,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 7:
+              case 8:
                 return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
@@ -1468,7 +1500,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 8:
+              case 9:
                 return Column(
                   children: <Widget>[
                     ListTile(

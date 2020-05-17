@@ -13,6 +13,8 @@ import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
+import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/screens/exams_detail_tab.dart';
 
 Int64List vibrationPattern;
 var androidPlatformChannelSpecifics;
@@ -77,6 +79,36 @@ Future selectNotification(String payload) async {
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {
+      case "exam":
+        int tempindex = examsPage.allParsedExams.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        Exam tempExam = examsPage.allParsedExams.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Exam();
+          },
+        );
+        //Evals tempEval = allParsedByDate[0];
+        if (tempExam.id != null)
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.push(
+              globals.globalContext,
+              MaterialPageRoute(
+                builder: (context) => ExamsDetailTab(
+                  exam: tempExam,
+                  color: examsPage.colors.length == 0 ? Colors.green : examsPage.colors[tempindex],
+                ),
+              ),
+            );
+          });
+        globals.payloadId = -1;
+        return;
+        break;
       case "marks":
         int tempindex = marksTab.allParsedByDate.indexWhere(
           (element) {
@@ -108,7 +140,6 @@ Future selectNotification(String payload) async {
         return;
         break;
       case "hw":
-        print(globals.payloadId);
         int tempindex = homeworkTab.globalHomework.indexWhere(
           (element) {
             return element.id == globals.payloadId;

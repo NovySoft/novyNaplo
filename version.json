@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.7",
+    "version": "V0.1.4.7.1",
     "isBreaking": false,
-    "releaseNotes": "Bugfix\nBejelentett dolgozatok",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7"
+    "releaseNotes": "Dolgozat értesítések SQL javítás\n+Fejlesztői beállítások",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.1"
 }

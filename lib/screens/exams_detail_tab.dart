@@ -31,7 +31,7 @@ Widget _buildBody(Exam exam, Color color) {
           iconData: parseSubjectToIcon(subject: exam.subject),
           subTitle: "",
           title: capitalize(exam.subject + " " + exam.nameOfExam),
-          color: color,
+          color: color == null ? Colors.green : color,
           heroAnimation: AlwaysStoppedAnimation(1),
           onPressed: null,
         ),
