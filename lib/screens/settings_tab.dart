@@ -22,6 +22,9 @@ import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
+import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:sqflite/sqflite.dart';
+import 'dart:convert';
 
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
 final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
@@ -282,6 +285,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                 height: 38,
                 width: double.infinity,
                 child: RaisedButton.icon(
+                    color: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -289,11 +293,11 @@ class _SettingsBodyState extends State<SettingsBody> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DatabaseSettings()),
+                            builder: (context) => DeveloperSettings()),
                       );
                     },
-                    icon: Icon(MdiIcons.databaseEdit, color: Colors.black),
-                    label: Text('Adatbázis beállításai',
+                    icon: Icon(MdiIcons.codeTagsCheck, color: Colors.black),
+                    label: Text('Fejlesztői beállítások',
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -1543,7 +1547,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3,
+          itemCount: 4 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -1554,10 +1558,12 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                         Text(
                           "SQLITE adatbázis",
                           style: new TextStyle(fontSize: 30),
+                          textAlign: TextAlign.center,
                         ),
                         Text(
                           "Csak haladóknak",
                           style: new TextStyle(fontSize: 20, color: Colors.red),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -1640,6 +1646,170 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                             color: Colors.black,
                           ),
                           label: Text('Táblák kiürítése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 3:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RawSqlQuery()),
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.databaseImport,
+                            color: Colors.black,
+                          ),
+                          label: Text('Nyers sql script',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              default:
+                return SizedBox(height: 10, width: 10);
+                break;
+            }
+          }),
+    );
+  }
+}
+
+class RawSqlQuery extends StatefulWidget {
+  @override
+  _RawSqlQueryState createState() => _RawSqlQueryState();
+}
+
+class _RawSqlQueryState extends State<RawSqlQuery> {
+  TextEditingController _sqlController = new TextEditingController();
+  FocusNode _sqlFocus = new FocusNode();
+  String result = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text("Nyers sql script"),
+      ),
+      body: Column(
+        children: <Widget>[
+          TextFormField(
+            controller: _sqlController,
+            focusNode: _sqlFocus,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (term) async {
+              final Database db = await mainSql.database;
+              if (term.contains("insert")) {
+                int tempId = await db.rawInsert(term);
+                result = "inserted at id: " + tempId.toString();
+              } else if (term.contains("delete")) {
+                int tempId = await db.rawDelete(term);
+                result = tempId.toString() + " items deleted";
+              } else if (term.contains("select")) {
+                var temp = await db.rawQuery(term);
+                JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                String prettyprint = encoder.convert(temp);
+                result = prettyprint;
+              } else if (term.contains("update")) {
+                int tempId = await db.rawUpdate(term);
+                result = tempId.toString() + " items modified";
+              }
+              setState(() {
+                result = result;
+              });
+              _sqlFocus.unfocus();
+            },
+          ),
+          SizedBox(height: 15),
+          DecoratedBox(
+            decoration: new BoxDecoration(border: Border.all()),
+            child: SizedBox(
+              height: 250,
+              child: ListView(
+                children: [
+                  Text(result),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DeveloperSettings extends StatefulWidget {
+  @override
+  _DeveloperSettingsState createState() => _DeveloperSettingsState();
+}
+
+class _DeveloperSettingsState extends State<DeveloperSettings> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text("Fejlesztői beállítások"),
+      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => Divider(),
+          itemCount: 3 + globals.adModifier,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return ListTile(
+                  title: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Fejlesztői beállítások",
+                          style: new TextStyle(fontSize: 30),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "Minden amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nMinden itt történő dologért NEM vállalunk felelőséget",
+                          style: new TextStyle(fontSize: 20, color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DatabaseSettings()),
+                            );
+                          },
+                          icon:
+                              Icon(MdiIcons.databaseEdit, color: Colors.black),
+                          label: Text('Adatbázis beállításai',
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
