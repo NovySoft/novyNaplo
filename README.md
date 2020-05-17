@@ -13,6 +13,7 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 **Jelenlegi funkciók:**
 
 * Jegyek megtekintése
+* Bejelentett dolgozatok megtekintése
 * Átlagok megtekintése
 * Feljegyzések megtekintése
 * Órarend megtekintése
@@ -25,7 +26,6 @@ Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
 **HAMAROSAN:**
 
-* Bejelentett dolgozatok
 * Hiányzások
 * Támogatók oldal - **Gáti Úr** közreműködésével
 * Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)
