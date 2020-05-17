@@ -318,7 +318,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                         ),
                         onPressed: () async {
                           await _ackAlert(context,
-                              "Az alábbi emailra tudsz írni:\nnovynaplo@gmail.com");
+                              "Az alábbi emailra tudsz írni:\nnovysoftware@gmail.com");
                         },
                         icon: Icon(MdiIcons.emailSend, color: Colors.black),
                         label: Text('Bug report (Email)',
