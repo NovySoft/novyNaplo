@@ -459,6 +459,8 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "Dolgozatok olvasása az adatbázisból";
         });
         examsPage.allParsedExams = await getAllExams();
+        examsPage.allParsedExams
+            .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
         setState(() {
           loadingText = "Mindjárt kész!";
         });
