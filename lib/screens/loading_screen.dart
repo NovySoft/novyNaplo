@@ -204,6 +204,9 @@ class _LoadingPageState extends State<LoadingPage> {
         //print("res.body ${res.body}");
         var bodyJson = json.decode(res.body);
         examsPage.allParsedExams = await parseExams(bodyJson);
+        examsPage.allParsedExams
+            .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+        await batchInsertExams(examsPage.allParsedExams);
         //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
       }
     } catch (e, s) {
@@ -451,6 +454,11 @@ class _LoadingPageState extends State<LoadingPage> {
         //Sort
         marksPage.allParsedByDate
             .sort((a, b) => b.createDateString.compareTo(a.createDateString));
+        //Exams
+        setState(() {
+          loadingText = "Dolgozatok olvasása az adatbázisból";
+        });
+        examsPage.allParsedExams = await getAllExams();
         setState(() {
           loadingText = "Mindjárt kész!";
         });
@@ -474,7 +482,7 @@ class _LoadingPageState extends State<LoadingPage> {
               await sleep(10);
               Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
             }
-          }else{
+          } else {
             Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
           }
           FirebaseAnalytics().logEvent(name: "login");

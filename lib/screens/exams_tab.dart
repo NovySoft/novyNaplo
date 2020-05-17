@@ -18,7 +18,6 @@ class ExamsTab extends StatefulWidget {
 class _ExamsTabState extends State<ExamsTab> {
   @override
   void initState() {
-    print(allParsedExams.length);
     colors = getRandomColors(allParsedExams.length);
     super.initState();
   }

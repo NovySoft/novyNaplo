@@ -300,6 +300,9 @@ Future<void> getExams(token, code) async {
       //print("res.body ${res.body}");
       var bodyJson = json.decode(res.body);
       examsPage.allParsedExams = await parseExams(bodyJson);
+      examsPage.allParsedExams
+          .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+      await batchInsertExams(examsPage.allParsedExams);
       //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
     }
   } catch (e, s) {

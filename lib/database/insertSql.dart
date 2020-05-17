@@ -420,4 +420,5 @@ Future<void> batchInsertExams(List<Exam> examList) async {
       }
     }
   }
+  await batch.commit();
 }
