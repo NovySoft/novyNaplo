@@ -125,6 +125,7 @@ void backgroundFetch() async {
           headers: headers);
       if (res.statusCode == 200) {
         globals.dJson = json.decode(res.body);
+        Crashlytics.instance.setUserName(globals.dJson["Name"]);
         await parseAllByDateFetch(globals.dJson); //Evals
         await getAvaragesFetch(token, decryptedCode); //Avarages
         await parseNoticesFetch(globals.dJson); //Notices

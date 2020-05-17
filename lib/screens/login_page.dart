@@ -454,6 +454,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _newVersionAlert(BuildContext context, String version,
       String notes, bool isBreaking, String link) async {
     return showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
