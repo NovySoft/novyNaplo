@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/getSql.dart';
@@ -565,7 +567,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
                 n.classroom != lesson.classroom ||
                 n.homeWorkId != lesson.homeWorkId ||
                 n.teacherHomeworkId != lesson.teacherHomeworkId ||
-                n.dogaIds != lesson.dogaIds ||
+                json.encode(n.dogaIds) != json.encode(lesson.dogaIds) ||
                 n.startDateString != lesson.startDateString ||
                 n.endDateString != lesson.endDateString) &&
             n.id == lesson.id) {
@@ -579,18 +581,18 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
             lesson.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          String subTitle = "";
-          if (lesson.theme != null && lesson.theme != "") {
-            subTitle = lesson.theme;
-          } else if (lesson.teacher != null && lesson.teacher != "") {
-            subTitle = lesson.teacher;
-          } else if (lesson.deputyTeacherName != null &&
-              lesson.deputyTeacherName != "") {
-            subTitle = lesson.deputyTeacherName;
-          } else {
-            subTitle = lesson.classroom;
-          }
           if (globals.notifications) {
+            String subTitle = "";
+            if (lesson.theme != null && lesson.theme != "") {
+              subTitle = lesson.theme;
+            } else if (lesson.teacher != null && lesson.teacher != "") {
+              subTitle = lesson.teacher;
+            } else if (lesson.deputyTeacherName != null &&
+                lesson.deputyTeacherName != "") {
+              subTitle = lesson.deputyTeacherName;
+            } else {
+              subTitle = lesson.classroom;
+            }
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,

@@ -186,13 +186,27 @@ List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
   if (tempLessonList != null) {
     if (tempLessonList.length != 0) {
       int beforeDay = tempLessonList[0].startDate.day;
+      DateTime now = new DateTime.now();
+      int monday = 1;
+      int sunday = 7;
+      while (now.weekday != monday) {
+        now = now.subtract(new Duration(days: 1));
+      }
+      DateTime startMonday = now;
+      while (now.weekday != sunday) {
+        now = now.add(new Duration(days: 1));
+      }
+      DateTime endSunday = now;
+
       //Just a matrix
       for (var n in tempLessonList) {
-        if (n.startDate.day != beforeDay) {
-          index++;
-          beforeDay = n.startDate.day;
+        if (n.date.compareTo(startMonday) >= 0 && n.date.compareTo(endSunday) <= 0) {
+          if (n.startDate.day != beforeDay) {
+            index++;
+            beforeDay = n.startDate.day;
+          }
+          output[index].add(n);
         }
-        output[index].add(n);
       }
     }
   }
