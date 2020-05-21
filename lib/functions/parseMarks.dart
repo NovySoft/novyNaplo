@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'classManager.dart';
 import 'utils.dart';
@@ -177,7 +178,8 @@ List<dynamic> sortByDateAndSubject(List<dynamic> input) {
   return _output;
 }
 
-List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
+Future<List<List<Lesson>>> getWeekLessonsFromLessons(
+    List<Lesson> lessons) async {
   if (lessons == null) return [];
   List<Lesson> tempLessonList = lessons;
   List<List<Lesson>> output = [[], [], [], [], [], [], []];
@@ -200,12 +202,16 @@ List<List<Lesson>> getWeekLessonsFromLessons(List<Lesson> lessons) {
 
       //Just a matrix
       for (var n in tempLessonList) {
-        if (n.date.compareTo(startMonday) >= 0 && n.date.compareTo(endSunday) <= 0) {
+        if (n.date.compareTo(startMonday) >= 0 &&
+            n.date.compareTo(endSunday) <= 0) {
           if (n.startDate.day != beforeDay) {
             index++;
             beforeDay = n.startDate.day;
           }
           output[index].add(n);
+        } else {
+          //Delete from the table if it is out of this week
+          await deleteFromDb(n.databaseId, "Timetable");
         }
       }
     }
