@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.7.2",
+    "version": "V0.1.4.7.2+HOTFIX",
     "isBreaking": false,
-    "releaseNotes": "Értesítések, háttérlekérések, memória használat finomhangolása\nNéhány grafikus és SQL bug javítása",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.2"
+    "releaseNotes": "Háttérlekérés, értesítés és házifeladat bugfix",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.2%2BHOTFIX"
 }
