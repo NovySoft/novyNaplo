@@ -1990,8 +1990,8 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
               updateHwTab();
             },
             min: -1,
-            max: 10,
-            divisions: 12,
+            max: 15,
+            divisions: 17,
             label: keepDataForHw.toStringAsFixed(0),
           ),
         ],

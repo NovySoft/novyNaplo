@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.7.1",
+    "version": "V0.1.4.7.2",
     "isBreaking": false,
-    "releaseNotes": "Dolgozat értesítések SQL javítás\n+Fejlesztői beállítások",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.1"
+    "releaseNotes": "Értesítések, háttérlekérések, memória használat finomhangolása\nNéhány grafikus és SQL bug javítása",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.2"
 }
