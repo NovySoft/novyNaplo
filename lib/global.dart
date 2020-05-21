@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -39,6 +40,7 @@ NotificationAppLaunchDetails
 int payloadId =
     -1; //Payload id, contains id of the notification we want to show
 bool notifications = false; //Should we send notifications
+double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,12 +64,25 @@ Future<void> setGlobals() async {
     if (adsEnabled) adModifier = 1;
   }
 
+  if (prefs.getDouble("howLongKeepDataForHw") != null) {
+    howLongKeepDataForHw = prefs.getDouble("howLongKeepDataForHw");
+  } else {
+    prefs.setDouble("howLongKeepDataForHw", 7);
+    howLongKeepDataForHw = 7;
+  }
+  Crashlytics.instance.setDouble("howLongKeepDataForHw", howLongKeepDataForHw);
+
   if (prefs.getBool("notifications") != null) {
     notifications = prefs.getBool("notifications");
   } else {
     prefs.setBool("notifications", false);
     notifications = false;
   }
+  Crashlytics.instance.setBool("notifications", notifications);
+  FirebaseAnalytics().setUserProperty(
+    name: "Notifications",
+    value: notifications ? "ON" : "OFF",
+  );
 
   if (prefs.getBool("offlineModeDb") != null) {
     offlineModeDb = prefs.getBool("offlineModeDb");

@@ -79,7 +79,21 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
   var matchedHw = allHw.where((element) {
     return (element.id == hw.id && element.subject == hw.subject);
   });
+
+  DateTime afterDue = hw.dueDate;
+  if (globals.howLongKeepDataForHw != -1) {
+    afterDue = afterDue.add(Duration(days: 15)); //Delete from DB after 15 days
+  }
+
   if (matchedHw.length == 0) {
+    if (afterDue.compareTo(DateTime.now()) < 0) {
+      print("OUT OF RANGE");
+      if (hw.databaseId != null) {
+        print("Deleted ${hw.databaseId}");
+        await deleteFromDb(hw.databaseId, "Homework");
+      }
+      return;
+    }
     await db.insert(
       'Homework',
       hw.toMap(),
@@ -105,6 +119,14 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
     }
   } else {
     for (var n in matchedHw) {
+      if (afterDue.compareTo(DateTime.now()) < 0) {
+        print("OUT OF RANGE");
+        if (n.databaseId != null) {
+          print("Deleted ${n.databaseId}");
+          await deleteFromDb(n.databaseId, "Homework");
+        }
+        return;
+      }
       //!Update didn't work so we delete and create a new one
       if (n.content != hw.content ||
           n.dueDateString != hw.dueDateString ||

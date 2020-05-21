@@ -1,7 +1,9 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -125,7 +127,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 9 + globals.adModifier,
+      itemCount: 10 + globals.adModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -216,6 +218,30 @@ class _SettingsBodyState extends State<SettingsBody> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                            builder: (context) => HomeworkSettingsTab()),
+                      );
+                    },
+                    icon:
+                        Icon(MdiIcons.bagPersonalOutline, color: Colors.black),
+                    label: Text('Házifeladat beállításai',
+                        style: TextStyle(color: Colors.black))),
+              ),
+            ),
+          );
+        } else if (index == 4) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                             builder: (context) => StatisticSettings()),
                       );
                     },
@@ -226,7 +252,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 5) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -249,7 +275,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 5) {
+        } else if (index == 6) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -279,7 +305,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 6) {
+        } else if (index == 7) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -303,7 +329,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 7) {
+        } else if (index == 8) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -349,7 +375,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 8) {
+        } else if (index == 9) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -1410,6 +1436,10 @@ class _NetworkAndNotificationSettingsState
                         globals.notifications = isOn;
                         prefs.setBool("notifications", isOn);
                         Crashlytics.instance.setBool("notifications", isOn);
+                        FirebaseAnalytics().setUserProperty(
+                          name: "Notifications",
+                          value: isOn ? "ON" : "OFF",
+                        );
                       });
                     },
                     value: globals.notifications,
@@ -1428,7 +1458,8 @@ class _NetworkAndNotificationSettingsState
                           setState(() {
                             globals.backgroundFetch = isOn;
                             prefs.setBool("backgroundFetch", isOn);
-                            Crashlytics.instance.setBool("backgroundFetch", isOn);
+                            Crashlytics.instance
+                                .setBool("backgroundFetch", isOn);
                           });
                           if (isOn) {
                             if (globals.offlineModeDb == false) {
@@ -1440,8 +1471,8 @@ class _NetworkAndNotificationSettingsState
                               prefs.setBool("offlineModeDb", true);
                             }
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log(
-                                "Canceled alarm: " + main.fetchAlarmID.toString());
+                            Crashlytics.instance.log("Canceled alarm: " +
+                                main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
@@ -1454,8 +1485,8 @@ class _NetworkAndNotificationSettingsState
                             );
                           } else {
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log(
-                                "Canceled alarm: " + main.fetchAlarmID.toString());
+                            Crashlytics.instance.log("Canceled alarm: " +
+                                main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                           }
@@ -1886,6 +1917,85 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                 break;
             }
           }),
+    );
+  }
+}
+
+class HomeworkSettingsTab extends StatefulWidget {
+  @override
+  _HomeworkSettingsTabState createState() => _HomeworkSettingsTabState();
+}
+
+class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
+  double keepDataForHw = 7;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        keepDataForHw = prefs.getDouble("howLongKeepDataForHw");
+      });
+    });
+    super.initState();
+  }
+
+  void updateHwTab() async {
+    homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
+    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Házifeladat beállításai"),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Text(
+            keepDataForHw >= 0
+                ? "Határidő után meddig mutassuk a házit? \n${keepDataForHw.toStringAsFixed(0)} napig"
+                : "Határidő után meddig mutassuk a házit? \nVégtelenig",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+          Slider(
+            value: keepDataForHw,
+            onChanged: (newValue) {
+              setState(() {
+                if (newValue.roundToDouble() == 0 ||
+                    newValue.roundToDouble() == -0) {
+                  keepDataForHw = 0;
+                } else {
+                  keepDataForHw = newValue.roundToDouble();
+                }
+              });
+            },
+            onChangeEnd: (newValue) async {
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              setState(() {
+                if (newValue.roundToDouble() == 0 ||
+                    newValue.roundToDouble() == -0) {
+                  keepDataForHw = 0;
+                } else {
+                  keepDataForHw = newValue.roundToDouble();
+                }
+                globals.howLongKeepDataForHw = keepDataForHw;
+                prefs.setDouble("howLongKeepDataForHw", keepDataForHw);
+                Crashlytics.instance
+                    .setDouble("howLongKeepDataForHw", keepDataForHw);
+              });
+              updateHwTab();
+            },
+            min: -1,
+            max: 10,
+            divisions: 12,
+            label: keepDataForHw.toStringAsFixed(0),
+          ),
+        ],
+      ),
     );
   }
 }

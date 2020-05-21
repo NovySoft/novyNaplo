@@ -18,6 +18,7 @@ import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/functions/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String agent = config.currAgent;
 var response;
@@ -314,6 +315,9 @@ Future<void> getExams(token, code) async {
 }
 
 Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  double keepForDays = prefs.getDouble("howLongKeepDataForHw");
+
   var header = {
     'Authorization': 'Bearer $token',
     'User-Agent': '$agent',
@@ -337,13 +341,24 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   var matchedIds = homeworkPage.globalHomework.where((element) {
     return element.id == temp.id;
   });
+
+  //Should we keep it?
+  DateTime afterDue = temp.dueDate;
+  if (keepForDays != -1) {
+    afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
+  }
+
   if (matchedIds.length == 0) {
-    homeworkPage.globalHomework.add(temp);
+    if (afterDue.compareTo(DateTime.now()) >= 0) {
+      homeworkPage.globalHomework.add(temp);
+    }
   } else {
     var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
       return element.id == temp.id;
     });
-    homeworkPage.globalHomework[matchedindex] = temp;
+    if (afterDue.compareTo(DateTime.now()) >= 0) {
+      homeworkPage.globalHomework[matchedindex] = temp;
+    }
   }
   homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
   return temp;

@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
@@ -77,14 +77,14 @@ Future<List<Avarage>> getAllAvarages() async {
   });
 }
 
-Future<List<Homework>> getAllHomework() async {
+Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   Crashlytics.instance.log("getAllHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
   final List<Map<String, dynamic>> maps = await db.query('Homework');
 
-  return List.generate(maps.length, (i) {
+  List<Homework> tempList = List.generate(maps.length, (i) {
     Homework temp = new Homework();
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
@@ -98,6 +98,25 @@ Future<List<Homework>> getAllHomework() async {
     temp.dueDate = DateTime.parse(temp.dueDateString);
     return temp;
   });
+  //If we don't ignore the dueDate
+  if (ignoreDue == false) {
+    tempList.removeWhere((item) {
+      //Hide if it doesn't needed
+      DateTime afterDue = item.dueDate;
+      if (globals.howLongKeepDataForHw != -1) {
+        afterDue =
+            afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
+        if (afterDue.compareTo(DateTime.now()) < 0) {
+          return true;
+        } else {
+          return false;
+        }
+      }else{
+        return false;
+      }
+    });
+  }
+  return tempList;
 }
 
 Future<List<Lesson>> getAllTimetable() async {

@@ -428,7 +428,7 @@ class _LoadingPageState extends State<LoadingPage> {
         setState(() {
           loadingText = "Házifeladat olvasása az adatbázisból";
         });
-        homeworkPage.globalHomework = await getAllHomework();
+        homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
         homeworkPage.globalHomework
             .sort((a, b) => a.dueDate.compareTo(b.dueDate));
         //Notices

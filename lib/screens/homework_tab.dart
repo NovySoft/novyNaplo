@@ -56,6 +56,16 @@ class _HomeworkTabState extends State<HomeworkTab> {
         height: 100,
       );
     } else {
+      //Hide if it doesn't needed
+      DateTime afterDue = globalHomework[index].dueDate;
+      if (globals.howLongKeepDataForHw != -1) {
+        afterDue =
+            afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
+        if (afterDue.compareTo(DateTime.now()) < 0) {
+          return SizedBox(height: 0, width: 0);
+        }
+      }
+
       bool dueOver = false;
       var left = globalHomework[index].dueDate.difference(DateTime.now());
       if (left.inMinutes / 60 < 0) {
