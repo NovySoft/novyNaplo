@@ -5,14 +5,17 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:collection/collection.dart';
 
 Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
+int notifId = 2;
 
 //*Normal inserts
 // A function that inserts evals into the database
-Future<void> insertEval(Evals eval) async {
+Future<void> insertEval(Evals eval, {bool edited}) async {
   Crashlytics.instance.log("insertSingleEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -31,6 +34,16 @@ Future<void> insertEval(Evals eval) async {
       eval.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (globals.notifications && edited != true) {
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      await notifHelper.flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
+        'Téma: ' + eval.theme,
+        notifHelper.platformChannelSpecifics,
+        payload: "marks " + eval.id.toString(),
+      );
+    }
   } else {
     for (var n in matchedEvals) {
       //!Update didn't work so we delete and create a new one
@@ -38,14 +51,24 @@ Future<void> insertEval(Evals eval) async {
           n.theme != eval.theme ||
           n.dateString != eval.dateString ||
           n.weight != eval.weight) {
-        deleteFromDb(n.databaseId, "Evals");
-        insertEval(eval);
+        await deleteFromDb(n.databaseId, "Evals");
+        if (globals.notifications) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          await notifHelper.flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
+            'Téma: ' + eval.theme,
+            notifHelper.platformChannelSpecifics,
+            payload: "marks " + eval.id.toString(),
+          );
+        }
+        insertEval(eval, edited: true);
       }
     }
   }
 }
 
-Future<void> insertHomework(Homework hw) async {
+Future<void> insertHomework(Homework hw, {bool edited}) async {
   Crashlytics.instance.log("insertSingleHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -60,20 +83,56 @@ Future<void> insertHomework(Homework hw) async {
       hw.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (globals.notifications && edited != true) {
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      String subTitle = "Határidő: " +
+          hw.dueDate.year.toString() +
+          "-" +
+          hw.dueDate.month.toString() +
+          "-" +
+          hw.dueDate.day.toString() +
+          " " +
+          parseIntToWeekdayString(hw.dueDate.weekday);
+      await notifHelper.flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új házifeladat: ' + capitalize(hw.subject),
+        subTitle,
+        notifHelper.platformChannelSpecifics,
+        payload: "hw " + hw.id.toString(),
+      );
+    }
   } else {
     for (var n in matchedHw) {
       //!Update didn't work so we delete and create a new one
       if (n.content != hw.content ||
           n.dueDateString != hw.dueDateString ||
           n.givenUpString != hw.givenUpString) {
-        deleteFromDb(n.databaseId, "Homework");
-        insertHomework(hw);
+        await deleteFromDb(n.databaseId, "Homework");
+        if (globals.notifications) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          String subTitle = "Határidő: " +
+              hw.dueDate.year.toString() +
+              "-" +
+              hw.dueDate.month.toString() +
+              "-" +
+              hw.dueDate.day.toString() +
+              " " +
+              parseIntToWeekdayString(hw.dueDate.weekday);
+          await notifHelper.flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Módusolt házifeladat: ' + capitalize(hw.subject),
+            subTitle,
+            notifHelper.platformChannelSpecifics,
+            payload: "hw " + hw.id.toString(),
+          );
+        }
+        insertHomework(hw, edited: true);
       }
     }
   }
 }
 
-Future<void> insertNotices(Notices notice) async {
+Future<void> insertNotices(Notices notice, {bool edited}) async {
   Crashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -88,12 +147,32 @@ Future<void> insertNotices(Notices notice) async {
       notice.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (globals.notifications && edited != true) {
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      await notifHelper.flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új feljegyzés: ' + capitalize(notice.title),
+        notice.teacher,
+        notifHelper.platformChannelSpecifics,
+        payload: "notice " + notice.id.toString(),
+      );
+    }
   } else {
     for (var n in matchedNotices) {
       //!Update didn't work so we delete and create a new one
       if (n.title != notice.title || n.content != notice.content) {
-        deleteFromDb(n.databaseId, "Notices");
-        insertNotices(notice);
+        await deleteFromDb(n.databaseId, "Notices");
+        if (globals.notifications) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          await notifHelper.flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Feljegyzés módusolt: ' + capitalize(notice.title),
+            notice.teacher,
+            notifHelper.platformChannelSpecifics,
+            payload: "notice " + notice.id.toString(),
+          );
+        }
+        insertNotices(notice, edited: true);
       }
     }
   }
@@ -121,14 +200,28 @@ Future<void> insertAvarage(Avarage avarage) async {
       if (n.diff != avarage.diff ||
           n.ownValue != avarage.ownValue ||
           n.classValue != avarage.classValue) {
-        deleteFromDb(n.databaseId, "Avarage");
+        await deleteFromDb(n.databaseId, "Avarage");
+        if (globals.notifications) {
+          double diffValue = avarage.ownValue - n.ownValue;
+          String diff = diffValue > 0
+              ? ("+${diffValue.toStringAsFixed(3)}")
+              : diffValue.toStringAsFixed(3);
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          await notifHelper.flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Átlag módosult: ' + capitalize(avarage.subject),
+            'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
+            notifHelper.platformChannelSpecifics,
+            payload: "avarage 0",
+          );
+        }
         insertAvarage(avarage);
       }
     }
   }
 }
 
-Future<void> insertExam(Exam exam) async {
+Future<void> insertExam(Exam exam, {bool edited}) async {
   Crashlytics.instance.log("insertSingleExam");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -144,6 +237,16 @@ Future<void> insertExam(Exam exam) async {
       exam.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (globals.notifications && edited != true) {
+      notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+      await notifHelper.flutterLocalNotificationsPlugin.show(
+        notifId,
+        'Új dolgozat: ' + capitalize(exam.nameOfExam),
+        'Téma: ' + exam.subject,
+        notifHelper.platformChannelSpecifics,
+        payload: "exam " + exam.id.toString(),
+      );
+    }
   } else {
     for (var n in matchedAv) {
       //!Update didn't work so we delete and create a new one
@@ -151,8 +254,18 @@ Future<void> insertExam(Exam exam) async {
           n.dateWriteString != exam.dateWriteString ||
           n.nameOfExam != exam.nameOfExam ||
           n.typeOfExam != exam.typeOfExam) {
-        deleteFromDb(n.databaseId, "Exams");
-        insertExam(exam);
+        await deleteFromDb(n.databaseId, "Exams");
+        if (globals.notifications) {
+          notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+          await notifHelper.flutterLocalNotificationsPlugin.show(
+            notifId,
+            'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
+            'Téma: ' + exam.subject,
+            notifHelper.platformChannelSpecifics,
+            payload: "exam " + exam.id.toString(),
+          );
+        }
+        insertExam(exam, edited: true);
       }
     }
   }
@@ -183,6 +296,17 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
         eval.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      //print("notifID: $notifId");
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
+          'Téma: ' + eval.theme,
+          notifHelper.platformChannelSpecifics,
+          payload: "marks " + eval.id.toString(),
+        );
+      }
     } else {
       for (var n in matchedEvals) {
         //!Update didn't work so we delete and create a new one
@@ -201,6 +325,17 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
             eval.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          //print("notifID: $notifId");
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
+              'Téma: ' + eval.theme,
+              notifHelper.platformChannelSpecifics,
+              payload: "marks " + eval.id.toString(),
+            );
+          }
         }
       }
     }
@@ -226,6 +361,24 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
         hw.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        String subTitle = "Határidő: " +
+            hw.dueDate.year.toString() +
+            "-" +
+            hw.dueDate.month.toString() +
+            "-" +
+            hw.dueDate.day.toString() +
+            " " +
+            parseIntToWeekdayString(hw.dueDate.weekday);
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új házifeladat: ' + capitalize(hw.subject),
+          subTitle,
+          notifHelper.platformChannelSpecifics,
+          payload: "hw " + hw.id.toString(),
+        );
+      }
     } else {
       for (var n in matchedHw) {
         //!Update didn't work so we delete and create a new one
@@ -242,6 +395,24 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
             hw.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            String subTitle = "Határidő: " +
+                hw.dueDate.year.toString() +
+                "-" +
+                hw.dueDate.month.toString() +
+                "-" +
+                hw.dueDate.day.toString() +
+                " " +
+                parseIntToWeekdayString(hw.dueDate.weekday);
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Módusolt házifeladat: ' + capitalize(hw.subject),
+              subTitle,
+              notifHelper.platformChannelSpecifics,
+              payload: "hw " + hw.id.toString(),
+            );
+          }
         }
       }
     }
@@ -282,6 +453,20 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
             avarage.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          if (globals.notifications) {
+            double diffValue = avarage.ownValue - n.ownValue;
+            String diff = diffValue > 0
+                ? ("+${diffValue.toStringAsFixed(3)}")
+                : diffValue.toStringAsFixed(3);
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Átlag módosult: ' + capitalize(avarage.subject),
+              'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
+              notifHelper.platformChannelSpecifics,
+              payload: "avarage 0",
+            );
+          }
         }
       }
     }
@@ -306,6 +491,16 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
         notice.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új feljegyzés: ' + capitalize(notice.title),
+          notice.teacher,
+          notifHelper.platformChannelSpecifics,
+          payload: "notice " + notice.id.toString(),
+        );
+      }
     } else {
       for (var n in matchedNotices) {
         //!Update didn't work so we delete and create a new one
@@ -321,6 +516,16 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
             notice.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Feljegyzés módusolt: ' + capitalize(notice.title),
+              notice.teacher,
+              notifHelper.platformChannelSpecifics,
+              payload: "notice " + notice.id.toString(),
+            );
+          }
         }
       }
     }
@@ -374,6 +579,29 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
             lesson.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          String subTitle = "";
+          if (lesson.theme != null && lesson.theme != "") {
+            subTitle = lesson.theme;
+          } else if (lesson.teacher != null && lesson.teacher != "") {
+            subTitle = lesson.teacher;
+          } else if (lesson.deputyTeacherName != null &&
+              lesson.deputyTeacherName != "") {
+            subTitle = lesson.deputyTeacherName;
+          } else {
+            subTitle = lesson.classroom;
+          }
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Módusolt tanóra: ' +
+                  capitalize(lesson.subject) +
+                  " (${parseIntToWeekdayString(lesson.date.weekday)})",
+              subTitle,
+              notifHelper.platformChannelSpecifics,
+              payload: "timetable " + lesson.id.toString(),
+            );
+          }
         }
       }
     }
@@ -394,6 +622,16 @@ Future<void> batchInsertExams(List<Exam> examList) async {
       return (element.id == exam.id);
     });
     if (matchedAv.length == 0) {
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új dolgozat: ' + capitalize(exam.nameOfExam),
+          'Téma: ' + exam.subject,
+          notifHelper.platformChannelSpecifics,
+          payload: "exam " + exam.id.toString(),
+        );
+      }
       batch.insert(
         'Exams',
         exam.toMap(),
@@ -416,6 +654,16 @@ Future<void> batchInsertExams(List<Exam> examList) async {
             exam.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
+              'Téma: ' + exam.subject,
+              notifHelper.platformChannelSpecifics,
+              payload: "exam " + exam.id.toString(),
+            );
+          }
         }
       }
     }
