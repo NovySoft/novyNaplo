@@ -9,6 +9,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
@@ -38,6 +39,7 @@ void backgroundFetch() async {
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
     Crashlytics.instance.log("backgroundFetch started");
     await globals.setGlobals();
+    await notifHelper.setupNotifications();
     //print(globals.notifications);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {

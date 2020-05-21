@@ -22,8 +22,11 @@ class HomeworkTab extends StatefulWidget {
 class _HomeworkTabState extends State<HomeworkTab> {
   @override
   void initState() {
-    if (colors.length == 0 || colors == [])
+    if (colors.length == 0 ||
+        colors == [] ||
+        colors.length < globalHomework.length) {
       colors = getRandomColors(globalHomework.length);
+    }
     super.initState();
   }
 
