@@ -88,7 +88,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
   if (matchedHw.length == 0) {
     if (afterDue.compareTo(DateTime.now()) < 0) {
       print("OUT OF RANGE");
-      if (hw.databaseId != null) {
+      if (hw.databaseId != null && globals.howLongKeepDataForHw != -1) {
         print("Deleted ${hw.databaseId}");
         await deleteFromDb(hw.databaseId, "Homework");
       }
@@ -121,7 +121,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
     for (var n in matchedHw) {
       if (afterDue.compareTo(DateTime.now()) < 0) {
         print("OUT OF RANGE");
-        if (n.databaseId != null) {
+        if (n.databaseId != null && globals.howLongKeepDataForHw != -1) {
           print("Deleted ${n.databaseId}");
           await deleteFromDb(n.databaseId, "Homework");
         }
