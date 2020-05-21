@@ -768,7 +768,8 @@ class CalculatorTabState extends State<CalculatorTab>
             textAlign: TextAlign.start,
             style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          Row(
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
                 dropdownValue +
