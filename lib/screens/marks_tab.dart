@@ -79,7 +79,7 @@ class MarksTabState extends State<MarksTab>
   Future<void> _setData() async {
     colors = getRandomColors(globals.markCount);
     allParsedByDate = await parseAllByDate(globals.dJson);
-    allParsedBySubject = parseAllBySubject(globals.dJson);
+    allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
   }
 
   Future<void> _refreshData() async {

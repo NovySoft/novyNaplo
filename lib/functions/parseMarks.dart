@@ -14,7 +14,6 @@ var catIndex = 0;
 
 Future<List<dynamic>> parseAllByDate(var input) async {
   jegyArray = [];
-  //! TODO fix this duplicate code
   try {
     jegyek = input["Evaluations"];
     jegyArray = [];
@@ -27,23 +26,6 @@ Future<List<dynamic>> parseAllByDate(var input) async {
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
   await batchInsertEval(jegyArray);
-  return jegyArray;
-}
-
-List<dynamic> parseAllBySubject(var input) {
-  jegyArray = [];
-  //! TODO fix this duplicate code
-  try {
-    jegyek = input["Evaluations"];
-    jegyArray = [];
-    for (var n in jegyek) {
-      jegyArray.add(setEvals(n));
-    }
-  } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'parseAllBySubject');
-    return [];
-  }
-  jegyArray = sortByDateAndSubject(jegyArray);
   return jegyArray;
 }
 
@@ -151,7 +133,7 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
   return jegyMatrix;
 }
 
-List<dynamic> sortByDateAndSubject(List<dynamic> input) {
+List<dynamic> sortByDateAndSubject(List<Evals> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
   List<Evals> _output = [];

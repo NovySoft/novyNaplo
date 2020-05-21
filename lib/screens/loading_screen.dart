@@ -243,7 +243,8 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.markCount = eval.length;
         marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
-        marksPage.allParsedBySubject = parseAllBySubject(globals.dJson);
+        marksPage.allParsedBySubject =
+            sortByDateAndSubject(List.from(marksPage.allParsedByDate));
         globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
         statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
