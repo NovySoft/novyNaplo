@@ -1417,49 +1417,54 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 7:
-                return ListTile(
-                  title: Text("Háttér lekérések"),
-                  trailing: Switch(
-                    onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        globals.backgroundFetch = isOn;
-                        prefs.setBool("backgroundFetch", isOn);
-                        Crashlytics.instance.setBool("backgroundFetch", isOn);
-                      });
-                      if (isOn) {
-                        if (globals.offlineModeDb == false) {
-                          await _ackAlert(
-                            context,
-                            "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
-                          );
-                          globals.offlineModeDb = true;
-                          prefs.setBool("offlineModeDb", true);
-                        }
-                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                        Crashlytics.instance.log(
-                            "Canceled alarm: " + main.fetchAlarmID.toString());
-                        await sleep(1500);
-                        main.fetchAlarmID++;
-                        await AndroidAlarmManager.periodic(
-                          Duration(minutes: globals.fetchPeriod),
-                          main.fetchAlarmID,
-                          backgroundFetchHelper.backgroundFetch,
-                          wakeup: globals.backgroundFetchCanWakeUpPhone,
-                          rescheduleOnReboot:
-                              globals.backgroundFetchCanWakeUpPhone,
-                        );
-                      } else {
-                        await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                        Crashlytics.instance.log(
-                            "Canceled alarm: " + main.fetchAlarmID.toString());
-                        await sleep(1500);
-                        main.fetchAlarmID++;
-                      }
-                    },
-                    value: globals.backgroundFetch,
-                  ),
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text("Háttér lekérések"),
+                      trailing: Switch(
+                        onChanged: (bool isOn) async {
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          setState(() {
+                            globals.backgroundFetch = isOn;
+                            prefs.setBool("backgroundFetch", isOn);
+                            Crashlytics.instance.setBool("backgroundFetch", isOn);
+                          });
+                          if (isOn) {
+                            if (globals.offlineModeDb == false) {
+                              await _ackAlert(
+                                context,
+                                "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+                              );
+                              globals.offlineModeDb = true;
+                              prefs.setBool("offlineModeDb", true);
+                            }
+                            await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                            Crashlytics.instance.log(
+                                "Canceled alarm: " + main.fetchAlarmID.toString());
+                            await sleep(1500);
+                            main.fetchAlarmID++;
+                            await AndroidAlarmManager.periodic(
+                              Duration(minutes: globals.fetchPeriod),
+                              main.fetchAlarmID,
+                              backgroundFetchHelper.backgroundFetch,
+                              wakeup: globals.backgroundFetchCanWakeUpPhone,
+                              rescheduleOnReboot:
+                                  globals.backgroundFetchCanWakeUpPhone,
+                            );
+                          } else {
+                            await AndroidAlarmManager.cancel(main.fetchAlarmID);
+                            Crashlytics.instance.log(
+                                "Canceled alarm: " + main.fetchAlarmID.toString());
+                            await sleep(1500);
+                            main.fetchAlarmID++;
+                          }
+                        },
+                        value: globals.backgroundFetch,
+                      ),
+                    ),
+                    SizedBox(height: globals.backgroundFetch ? 0 : 100),
+                  ],
                 );
                 break;
               case 8:
