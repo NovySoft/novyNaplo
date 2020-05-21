@@ -74,6 +74,7 @@ void backgroundFetch() async {
     platformChannelSpecificsSendNotif =
         new NotificationDetails(sendNotification, iOSPlatformChannelSpecifics);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //TODO fix this
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       return;
     }
@@ -129,6 +130,7 @@ void backgroundFetch() async {
       if (res.statusCode == 200) {
         globals.dJson = json.decode(res.body);
         Crashlytics.instance.setUserName(globals.dJson["Name"]);
+        Crashlytics.instance.setString("User", globals.dJson["Name"]);
         await parseAllByDateFetch(globals.dJson); //Evals
         await getAvaragesFetch(token, decryptedCode); //Avarages
         await parseNoticesFetch(globals.dJson); //Notices

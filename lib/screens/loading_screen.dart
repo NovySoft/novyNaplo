@@ -236,6 +236,7 @@ class _LoadingPageState extends State<LoadingPage> {
         });
         globals.dJson = json.decode(res.body);
         Crashlytics.instance.setUserName(globals.dJson["Name"]);
+        Crashlytics.instance.setString("User", globals.dJson["Name"]);
         var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
         await getExams(token, code);
