@@ -12,6 +12,7 @@ import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
+import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/exams_detail_tab.dart';
@@ -101,7 +102,9 @@ Future selectNotification(String payload) async {
               MaterialPageRoute(
                 builder: (context) => ExamsDetailTab(
                   exam: tempExam,
-                  color: examsPage.colors.length == 0 ? Colors.green : examsPage.colors[tempindex],
+                  color: examsPage.colors.length == 0
+                      ? Colors.green
+                      : examsPage.colors[tempindex],
                 ),
               ),
             );
@@ -213,7 +216,11 @@ Future selectNotification(String payload) async {
         return;
         break;
       case "avarage":
-        Navigator.of(globals.globalContext).pushNamed(AvaragesTab.tag);
+        if (globals.showAllAvsInStats) {
+          Navigator.of(globals.globalContext).pushNamed(StatisticsTab.tag);
+        } else {
+          Navigator.of(globals.globalContext).pushNamed(AvaragesTab.tag);
+        }
         return;
         break;
     }

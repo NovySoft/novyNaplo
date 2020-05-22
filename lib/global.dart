@@ -41,6 +41,8 @@ int payloadId =
     -1; //Payload id, contains id of the notification we want to show
 bool notifications = false; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
+bool colorAvsInStatisctics =
+    true; //Should we color the name of subjects based on their values
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,6 +64,13 @@ Future<void> setGlobals() async {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
     adsEnabled = prefs.getBool("ads");
     if (adsEnabled) adModifier = 1;
+  }
+
+  if (prefs.getBool("colorAvsInStatisctics") != null) {
+    colorAvsInStatisctics = prefs.getBool("colorAvsInStatisctics");
+  } else {
+    prefs.setBool("colorAvsInStatisctics", true);
+    colorAvsInStatisctics = true;
   }
 
   if (prefs.getDouble("howLongKeepDataForHw") != null) {

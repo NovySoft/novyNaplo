@@ -927,7 +927,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4,
+          itemCount: 5 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -1015,6 +1015,22 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 3:
                 return ListTile(
+                  title: Text("Átlagok színezése:"),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        globals.colorAvsInStatisctics = switchOn;
+                      });
+                      prefs.setBool("colorAvsInStatisctics", switchOn);
+                    },
+                    value: globals.colorAvsInStatisctics,
+                  ),
+                );
+                break;
+              case 4:
+                return ListTile(
                   title: Text("Grafikon alatti extra hely (1-500px):"),
                   trailing: SizedBox(
                     width: 50,
@@ -1055,7 +1071,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 );
                 break;
               default:
-                return SizedBox(height: 10, width: 10);
+                return SizedBox(height: 100, width: 10);
             }
           }),
     );
@@ -1225,7 +1241,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 8 + (globals.backgroundFetch ? 3 : 0),
+          itemCount: 9 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1427,6 +1443,36 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 6:
                 return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            await notifications.flutterLocalNotificationsPlugin
+                                .show(
+                              1,
+                              'Teszt értesítés',
+                              'Új átlag...',
+                              notifications.platformChannelSpecifics,
+                              payload: 'avarage 0',
+                            );
+                          },
+                          icon: Icon(
+                            MdiIcons.bellRing,
+                            color: Colors.black,
+                          ),
+                          label: Text('Teszt átlag értesítés küldése',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 7:
+                return ListTile(
                   title: Text("Értesítések"),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
@@ -1446,7 +1492,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 7:
+              case 8:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -1498,7 +1544,7 @@ class _NetworkAndNotificationSettingsState
                   ],
                 );
                 break;
-              case 8:
+              case 9:
                 return ListTile(
                   title: Text("Háttér lekérések mobilnetről"),
                   trailing: Switch(
@@ -1516,7 +1562,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 9:
+              case 10:
                 return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
@@ -1565,7 +1611,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 10:
+              case 11:
                 return Column(
                   children: <Widget>[
                     ListTile(

@@ -16,6 +16,7 @@ import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -1106,22 +1107,25 @@ Widget getDrawer(String screen, BuildContext context) {
             }
           },
         ),
-        ListTile(
-          title: Text('Átlagok'),
-          leading: Icon(Icons.all_inclusive),
-          onTap: () {
-            if (screen == AvaragesTab.tag) {
-              Navigator.pop(context);
-            } else {
-              try {
-                Navigator.pushNamed(context, AvaragesTab.tag);
-              } catch (e, s) {
-                Crashlytics.instance.recordError(e, s, context: 'getDrawer');
-                print(e.message);
-              }
-            }
-          },
-        ),
+        globals.showAllAvsInStats
+            ? SizedBox(height: 0, width: 0)
+            : ListTile(
+                title: Text('Átlagok'),
+                leading: Icon(Icons.all_inclusive),
+                onTap: () {
+                  if (screen == AvaragesTab.tag) {
+                    Navigator.pop(context);
+                  } else {
+                    try {
+                      Navigator.pushNamed(context, AvaragesTab.tag);
+                    } catch (e, s) {
+                      Crashlytics.instance
+                          .recordError(e, s, context: 'getDrawer');
+                      print(e.message);
+                    }
+                  }
+                },
+              ),
         ListTile(
           title: Text('Feljegyzések'),
           leading: Icon(Icons.layers),
