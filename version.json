@@ -1,6 +1,6 @@
 {
-    "version": "V0.1.4.7.2+HOTFIX",
+    "version": "V0.1.4.7.3",
     "isBreaking": false,
-    "releaseNotes": "Háttérlekérés, értesítés és házifeladat bugfix",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.2%2BHOTFIX"
+    "releaseNotes": "Átlagok lassú migrálása a statisztikába",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.3"
 }
