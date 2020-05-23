@@ -1,11 +1,11 @@
 {
-    "version": "V0.1.4.7.3",
+    "version": "V0.1.4.8",
     "isBreaking": false,
-    "releaseNotes": "Átlagok lassú migrálása a statisztikába",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.3",
+    "releaseNotes": "Készülődés a playstorehoz\nApplikáció információk fül",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.8",
     
-    "playVersion": "V0.1.4.7.3",
+    "playVersion": "V0.1.4.8",
     "isPlayBreaking": false,
-    "playNotes": "Átlagok lassú migrálása a statisztikába",
+    "playNotes": "Készülődés a playstorehoz\nApplikáció információk fül",
     "playLink": "https://play.google.com"
 }
