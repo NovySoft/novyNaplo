@@ -47,6 +47,7 @@ dependencies:
   flutter_slidable: any
   flutter_local_notifications: any
   android_alarm_manager: any
+  in_app_update: any
 
 flutter_icons:
   android: true

@@ -384,7 +384,7 @@ class _LoadingPageState extends State<LoadingPage> {
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
       NewVersion newVerDetails = await getVersion();
-      if (newVerDetails.returnedAnything) {
+      if (newVerDetails.returnedAnything && !newVerDetails.isPlayStore) {
         if (config.currentAppVersionCode != newVerDetails.versionCode) {
           await _newVersionAlert(
               context,

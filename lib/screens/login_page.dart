@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
         });
     await sleep1();
     NewVersion newVerDetails = await getVersion();
-    if (newVerDetails.returnedAnything) {
+    if (newVerDetails.returnedAnything && !newVerDetails.isPlayStore) {
       if (config.currentAppVersionCode != newVerDetails.versionCode) {
         await _newVersionAlert(
             context,

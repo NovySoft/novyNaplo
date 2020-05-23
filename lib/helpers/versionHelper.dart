@@ -3,6 +3,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:novynaplo/config.dart' as config;
+import 'package:in_app_update/in_app_update.dart';
+import 'dart:io' show Platform;
 
 class NewVersion {
   String versionCode;
@@ -10,6 +12,7 @@ class NewVersion {
   String releaseLink;
   bool returnedAnything;
   bool isBreaking;
+  bool isPlayStore;
 }
 
 Future<NewVersion> getVersion() async {
@@ -23,23 +26,48 @@ Future<NewVersion> getVersion() async {
       try {
         var res = await http.get(
             'https://raw.githubusercontent.com/NovySoft/novyNaplo/master/version.json');
+        var gitJson;
         if (res.statusCode != 200) {
           output.returnedAnything = false;
-          return output;
-        }
-        var gitJson = json.decode(res.body);
-        if (config.isAppPlaystoreRelease) {
-          output.versionCode = gitJson['playVersion'];
-          output.releaseNotes = gitJson['playNotes'];
-          output.releaseLink = gitJson['playLink'];
-          output.isBreaking = gitJson['isPlayBreaking'];
         } else {
+          output.returnedAnything = true;
+          gitJson = json.decode(res.body);
+        }
+        //TODO refactor this nested nightmare
+        if (config.isAppPlaystoreRelease && Platform.isAndroid) {
+          output.isPlayStore = true;
+          AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+          if (output.returnedAnything) {
+            if (updateInfo?.updateAvailable == true) {
+              if (gitJson["isPlayBreaking"]) {
+                if (updateInfo?.immediateUpdateAllowed == true) {
+                  await InAppUpdate.performImmediateUpdate();
+                }
+              } else {
+                if (updateInfo?.flexibleUpdateAllowed == true) {
+                  bool errored = false;
+                  try {
+                    await InAppUpdate.startFlexibleUpdate();
+                  } catch (e) {
+                    errored = true;
+                  }
+                  if (errored == false) {
+                    await InAppUpdate.completeFlexibleUpdate();
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          if (output.returnedAnything == false) {
+            return output;
+          }
+          output.isPlayStore = false;
           output.versionCode = gitJson['version'];
           output.releaseNotes = gitJson['releaseNotes'];
           output.releaseLink = gitJson['releaseLink'];
           output.isBreaking = gitJson['isBreaking'];
         }
-        output.returnedAnything = true;
         return output;
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'getVersion');
