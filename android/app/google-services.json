@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "362994109207-tl1vrspafcjh7esm24i4lmb0eicpf6j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "novy.vip.novynaplo",
+            "certificate_hash": "05963bdb7d122e86b60cf5a04d99a5b035dcbe98"
+          }
+        },
+        {
           "client_id": "362994109207-t8k5firkkfi37uvlj87lf3k4tutuc8v2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
