@@ -2,5 +2,10 @@
     "version": "V0.1.4.7.3",
     "isBreaking": false,
     "releaseNotes": "Átlagok lassú migrálása a statisztikába",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.3"
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V0.1.4.7.3",
+    
+    "playVersion": "V0.1.4.7.3",
+    "isPlayBreaking": false,
+    "playNotes": "Átlagok lassú migrálása a statisztikába",
+    "playLink": "https://play.google.com"
 }

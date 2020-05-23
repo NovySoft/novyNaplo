@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -77,6 +78,10 @@ Future selectNotification(String payload) async {
     return;
   }
   if (payload != null && payload != "teszt" && payload is String) {
+    FirebaseAnalytics().logEvent(
+      name: "SelectedNotification",
+      parameters: {"payload": payload.split(" ")[0]},
+    );
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {

@@ -28,10 +28,17 @@ Future<NewVersion> getVersion() async {
           return output;
         }
         var gitJson = json.decode(res.body);
-        output.versionCode = gitJson['version'];
-        output.releaseNotes = gitJson['releaseNotes'];
-        output.releaseLink = gitJson['releaseLink'];
-        output.isBreaking = gitJson['isBreaking'];
+        if (config.isAppPlaystoreRelease) {
+          output.versionCode = gitJson['playVersion'];
+          output.releaseNotes = gitJson['playNotes'];
+          output.releaseLink = gitJson['playLink'];
+          output.isBreaking = gitJson['isPlayBreaking'];
+        } else {
+          output.versionCode = gitJson['version'];
+          output.releaseNotes = gitJson['releaseNotes'];
+          output.releaseLink = gitJson['releaseLink'];
+          output.isBreaking = gitJson['isBreaking'];
+        }
         output.returnedAnything = true;
         return output;
       } catch (e, s) {
