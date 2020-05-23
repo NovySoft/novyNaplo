@@ -242,7 +242,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Ez az alkalmazás még csak BÉTA változat!",
+                  "Ez az alkalmazás nyílt forráskódú!",
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),

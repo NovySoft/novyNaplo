@@ -8,7 +8,7 @@
 [![Discord](https://img.shields.io/discord/340112709628592139.svg)](http://discord.gg/rmjC4d4)
 [![Open Source Helpers](https://www.codetriage.com/novysoft/novynaplo/badges/users.svg)](https://www.codetriage.com/novysoft/novynaplo)
 
-Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
+Novy teljesen nem eredeti kréta kliense.
 
 **Branchek**
 [master](https://github.com/NovySoft/novyNaplo/tree/master): Tesztelés alatt álló kód
