@@ -2271,6 +2271,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
             title: Text('Applikáció playStore változat:'),
             trailing: Text(config.isAppPlaystoreRelease ? "Igen" : "Nem"),
           ),
+          SizedBox(height: 100, width: 25),
         ],
       ),
     );

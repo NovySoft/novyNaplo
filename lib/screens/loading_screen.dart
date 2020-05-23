@@ -235,8 +235,10 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "Jegyek dekódolása";
         });
         globals.dJson = json.decode(res.body);
-        Crashlytics.instance.setUserName(globals.dJson["Name"]);
-        Crashlytics.instance.setString("User", globals.dJson["Name"]);
+        if (!config.isAppPlaystoreRelease) {
+          Crashlytics.instance.setUserName(globals.dJson["Name"]);
+          Crashlytics.instance.setString("User", globals.dJson["Name"]);
+        }
         var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
         await getExams(token, code);
