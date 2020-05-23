@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/database/deleteSql.dart';
@@ -28,7 +29,10 @@ import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/config.dart' as config;
 
+String latestGithub = "";
+String latestPlayStore = "";
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
 final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
 String dropDown;
@@ -127,7 +131,7 @@ class _SettingsBodyState extends State<SettingsBody> {
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 10 + globals.adModifier,
+      itemCount: 11 + globals.adModifier,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -376,6 +380,32 @@ class _SettingsBodyState extends State<SettingsBody> {
             ])),
           );
         } else if (index == 9) {
+          return ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AppInformationTab()),
+                          );
+                        },
+                        icon: Icon(MdiIcons.cellphoneInformation,
+                            color: Colors.black),
+                        label: Text('App informácók',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+            ),
+          );
+        } else if (index == 10) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -1224,6 +1254,258 @@ Future<void> _ackAlert(BuildContext context, String content) async {
   );
 }
 
+class SendTestNotif extends StatefulWidget {
+  @override
+  _SendTestNotifState createState() => _SendTestNotifState();
+}
+
+class _SendTestNotifState extends State<SendTestNotif> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Teszt értesítések küldése"),
+      ),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => Divider(),
+        itemCount: 7 + globals.adModifier,
+        itemBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Így fog kinézni egy értesítés...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'teszt',
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 1:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt jegy értesítés',
+                            'Új jegyek...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'marks ' +
+                                (allParsedByDate.length == 0
+                                    ? "0"
+                                    : allParsedByDate[0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt jegy értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 2:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új lecke...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'hw ' +
+                                (globalHomework.length == 0
+                                    ? "0"
+                                    : globalHomework[0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt házifeladat értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 3:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új feljegyzés...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'notice ' +
+                                (allParsedNotices.length == 0
+                                    ? "0"
+                                    : allParsedNotices[0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt feljegyzés értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 4:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új óra...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'timetable ' +
+                                (lessonsList[0].length == 0
+                                    ? "0"
+                                    : lessonsList[0][0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt órarend értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 5:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új dolgozat...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'exam ' +
+                                (examsPage.allParsedExams.length == 0
+                                    ? "0"
+                                    : examsPage.allParsedExams[0].id
+                                        .toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt dolgozat értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 6:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új átlag...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'avarage 0',
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt átlag értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            default:
+              return SizedBox(height: 100);
+          }
+        },
+      ),
+    );
+  }
+}
+
 class NetworkAndNotificationSettings extends StatefulWidget {
   @override
   _NetworkAndNotificationSettingsState createState() =>
@@ -1241,7 +1523,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 9 + (globals.backgroundFetch ? 3 : 0),
+          itemCount: 3 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -1256,222 +1538,23 @@ class _NetworkAndNotificationSettingsState
                             borderRadius: BorderRadius.circular(24),
                           ),
                           onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Így fog kinézni egy értesítés...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'teszt',
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SendTestNotif()),
                             );
                           },
                           icon: Icon(
                             MdiIcons.bellRing,
                             color: Colors.black,
                           ),
-                          label: Text('Teszt értesítés küldése',
+                          label: Text('Teszt értesítések küldése',
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
                 );
                 break;
               case 1:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt jegy értesítés',
-                              'Új jegyek...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'marks ' +
-                                  (allParsedByDate.length == 0
-                                      ? "0"
-                                      : allParsedByDate[0].id.toString()),
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt jegy értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 2:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Új lecke...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'hw ' +
-                                  (globalHomework.length == 0
-                                      ? "0"
-                                      : globalHomework[0].id.toString()),
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt házifeladat értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 3:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Új feljegyzés...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'notice ' +
-                                  (allParsedNotices.length == 0
-                                      ? "0"
-                                      : allParsedNotices[0].id.toString()),
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt feljegyzés értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 4:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Új óra...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'timetable ' +
-                                  (lessonsList[0].length == 0
-                                      ? "0"
-                                      : lessonsList[0][0].id.toString()),
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt órarend értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 5:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Új dolgozat...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'exam ' +
-                                  (examsPage.allParsedExams.length == 0
-                                      ? "0"
-                                      : examsPage.allParsedExams[0].id
-                                          .toString()),
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt dolgozat értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 6:
-                return ListTile(
-                  title: Center(
-                    child: SizedBox(
-                      height: 38,
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          onPressed: () async {
-                            await notifications.flutterLocalNotificationsPlugin
-                                .show(
-                              1,
-                              'Teszt értesítés',
-                              'Új átlag...',
-                              notifications.platformChannelSpecifics,
-                              payload: 'avarage 0',
-                            );
-                          },
-                          icon: Icon(
-                            MdiIcons.bellRing,
-                            color: Colors.black,
-                          ),
-                          label: Text('Teszt átlag értesítés küldése',
-                              style: TextStyle(color: Colors.black))),
-                    ),
-                  ),
-                );
-                break;
-              case 7:
                 return ListTile(
                   title: Text("Értesítések"),
                   trailing: Switch(
@@ -1492,7 +1575,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 8:
+              case 2:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -1544,7 +1627,7 @@ class _NetworkAndNotificationSettingsState
                   ],
                 );
                 break;
-              case 9:
+              case 3:
                 return ListTile(
                   title: Text("Háttér lekérések mobilnetről"),
                   trailing: Switch(
@@ -1562,7 +1645,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 10:
+              case 4:
                 return ListTile(
                   title: Text("Automatikus lekérések időköze (30-500perc):"),
                   trailing: SizedBox(
@@ -1611,7 +1694,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 11:
+              case 5:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -2040,6 +2123,153 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
             max: 15,
             divisions: 17,
             label: keepDataForHw.toStringAsFixed(0),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AppInformationTab extends StatefulWidget {
+  @override
+  _AppInformationTabState createState() => _AppInformationTabState();
+}
+
+class _AppInformationTabState extends State<AppInformationTab> {
+  Future<void> _newVersionAlert(BuildContext context, String version,
+      String notes, bool isBreaking, String link) async {
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Új verzió: $version"),
+          content: SingleChildScrollView(
+            child:
+                Column(children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: isBreaking
+                  ? null
+                  : () {
+                      Navigator.of(context).pop();
+                    },
+            ),
+            FlatButton(
+              child: Text('Frissítés'),
+              onPressed: () async {
+                if (await canLaunch(link)) {
+                  await launch(link);
+                } else {
+                  FirebaseAnalytics().logEvent(name: "LinkFail");
+                  throw 'Could not launch $link';
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("App informácók"),
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          NewVersion newVerDetails = await getVersion();
+                          setState(() {
+                            newVerDetails = newVerDetails;
+                          });
+                          if (newVerDetails.returnedAnything &&
+                              !newVerDetails.isPlayStore) {
+                            if (config.currentAppVersionCode !=
+                                newVerDetails.versionCode) {
+                              await _newVersionAlert(
+                                  context,
+                                  newVerDetails.versionCode,
+                                  newVerDetails.releaseNotes,
+                                  newVerDetails.isBreaking,
+                                  newVerDetails.releaseLink);
+                            }
+                          }
+                        },
+                        icon: Icon(MdiIcons.cellphoneArrowDown,
+                            color: Colors.black),
+                        label: Text('Frissítések keresése',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+            ),
+          ),
+          ListTile(
+            title: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          String link =
+                              "https://github.com/NovySoft/novyNaplo/releases/latest";
+                          if (await canLaunch(link)) {
+                            await launch(link);
+                          } else {
+                            FirebaseAnalytics().logEvent(name: "LinkFail");
+                            throw 'Could not launch $link';
+                          }
+                        },
+                        icon: Icon(MdiIcons.testTube, color: Colors.black),
+                        label: Text('Béta teszt verzió letöltése',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+            ),
+          ),
+          SizedBox(height: 25, width: 25),
+          ListTile(
+            title: Text('Jelenlegi verzió:'),
+            trailing: Text(config.currentAppVersionCode),
+          ),
+          SizedBox(height: 20, width: 25),
+          ListTile(
+            title: Text('Legújabb béta verzió:'),
+            trailing: Text(latestGithub),
+          ),
+          SizedBox(height: 20, width: 25),
+          ListTile(
+            title: Text('Legújabb playStore verzió:'),
+            trailing: Text(latestPlayStore),
+          ),
+          SizedBox(height: 20, width: 25),
+          ListTile(
+            title: Text('Applikáció végleges változat:'),
+            trailing: Text(config.isAppRelease ? "Igen" : "Nem"),
+          ),
+          SizedBox(height: 20, width: 25),
+          ListTile(
+            title: Text('Applikáció playStore változat:'),
+            trailing: Text(config.isAppPlaystoreRelease ? "Igen" : "Nem"),
           ),
         ],
       ),

@@ -43,6 +43,7 @@ bool notifications = false; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
+String versionInfoJson; //Github version.json in string
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();

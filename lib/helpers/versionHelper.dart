@@ -3,8 +3,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/global.dart' as globals;
 import 'package:in_app_update/in_app_update.dart';
 import 'dart:io' show Platform;
+import 'package:novynaplo/screens/settings_tab.dart' as settings;
 
 class NewVersion {
   String versionCode;
@@ -31,7 +33,10 @@ Future<NewVersion> getVersion() async {
           output.returnedAnything = false;
         } else {
           output.returnedAnything = true;
+          globals.versionInfoJson = res.body;
           gitJson = json.decode(res.body);
+          settings.latestGithub = gitJson['version'];
+          settings.latestPlayStore = gitJson['playVersion'];
         }
         //TODO refactor this nested nightmare
         if (config.isAppPlaystoreRelease && Platform.isAndroid) {
