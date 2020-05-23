@@ -10,6 +10,10 @@
 
 Novy Csodálatos béta verzióban lévő teljesen nem eredeti kréta kliense.
 
+**Branchek**
+[master](https://github.com/NovySoft/novyNaplo/tree/master): Tesztelés alatt álló kód
+[stableRelease](https://github.com/NovySoft/novyNaplo/tree/stableRelease): A play storeban található kód
+
 **Jelenlegi funkciók:**
 
 * Jegyek megtekintése
