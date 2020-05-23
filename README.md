@@ -10,11 +10,12 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
-**Branchek**
+## Branchek
 [master](https://github.com/NovySoft/novyNaplo/tree/master): Tesztelés alatt álló kód
+
 [stableRelease](https://github.com/NovySoft/novyNaplo/tree/stableRelease): A play storeban található kód
 
-**Jelenlegi funkciók:**
+## Jelenlegi funkciók
 
 * Jegyek megtekintése
 * Bejelentett dolgozatok megtekintése
@@ -28,7 +29,7 @@ Novy teljesen nem eredeti kréta kliense.
 * Értesítések
 * Offline mód
 
-**HAMAROSAN:**
+## **HAMAROSAN**
 
 * Hiányzások
 * Támogatók oldal - **Gáti Úr** közreműködésével
