@@ -42,7 +42,7 @@ void main() async {
     isNew = false;
   }
   runZoned(() async {
-    mainSql.initDatabase();
+    await mainSql.initDatabase();
     await notifications.setupNotifications();
     runApp(MyApp());
     globals.fetchPeriod =
