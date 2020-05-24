@@ -324,7 +324,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk az a neved. \nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+                  "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk rólad (CSAK A TESZT VERZIÓBAN) az a neved. Amenyiben a playstore-ból vagy az appstore-ból tölttötted le az applikációt, akkor nem tárolunk rólad semmilyen adatot.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
                   style: TextStyle(fontSize: 24),
                   textAlign: TextAlign.center,
                 ),
