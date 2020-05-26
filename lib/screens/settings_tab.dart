@@ -1565,6 +1565,14 @@ class _NetworkAndNotificationSettingsState
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
+                      if (isOn && globals.offlineModeDb == false) {
+                        await _ackAlert(
+                          context,
+                          "Figyelem!\nAz értesítések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+                        );
+                        globals.offlineModeDb = true;
+                        prefs.setBool("offlineModeDb", true);
+                      }
                       setState(() {
                         globals.notifications = isOn;
                         prefs.setBool("notifications", isOn);
