@@ -7,6 +7,7 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/events_detail_tab.dart';
 import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/screens/marks_detail_tab.dart';
@@ -16,6 +17,7 @@ import 'package:novynaplo/screens/notices_tab.dart' as noticeTab;
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/screens/exams_detail_tab.dart';
 
 Int64List vibrationPattern;
@@ -85,7 +87,36 @@ Future selectNotification(String payload) async {
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {
       case "event":
-        print("EVENT");
+        int tempindex = eventsPage.allParsedEvents.indexWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+        );
+        Event tempEvent = eventsPage.allParsedEvents.firstWhere(
+          (element) {
+            return element.id == globals.payloadId;
+          },
+          orElse: () {
+            return new Event();
+          },
+        );
+        //Evals tempEval = allParsedByDate[0];
+        if (tempEvent.id != null)
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.push(
+              globals.globalContext,
+              MaterialPageRoute(
+                builder: (context) => EventsDetailTab(
+                  eventDetails: eventsPage.allParsedEvents[tempindex],
+                  color: eventsPage.colors.length == 0
+                      ? Colors.green
+                      : eventsPage.colors[tempindex],
+                ),
+              ),
+            );
+          });
+        globals.payloadId = -1;
+        return;
         break;
       case "exam":
         int tempindex = examsPage.allParsedExams.indexWhere(

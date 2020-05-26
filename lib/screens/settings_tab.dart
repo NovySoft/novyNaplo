@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/versionHelper.dart';
+import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/database/deleteSql.dart';
@@ -1272,7 +1273,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
-        itemCount: 7 + globals.adModifier,
+        itemCount: 8 + globals.adModifier,
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
@@ -1496,6 +1497,39 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           color: Colors.black,
                         ),
                         label: Text('Teszt átlag értesítés küldése',
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 7:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            'Teszt értesítés',
+                            'Új dolog a faliújságon...',
+                            notifications.platformChannelSpecifics,
+                            payload: 'event ' +
+                                (allParsedEvents.length == 0
+                                    ? "0"
+                                    : allParsedEvents[0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text('Teszt faliújság értesítés küldése',
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
