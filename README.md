@@ -29,9 +29,11 @@ Novy teljesen nem eredeti kréta kliense.
 * Statisztika oldal
 * Értesítések
 * Offline mód
+* Faliújság megtekintése
 
 ## **HAMAROSAN**
 
+* Több felhasználós támogatás
 * Hiányzások
 * Támogatók oldal - **Gáti Úr** közreműködésével
 * Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)
