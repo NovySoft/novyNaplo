@@ -29,7 +29,6 @@ matrix:
           - "$HOME/.pub-cache"
       install:
         - echo install
-        - cd travis
         - export GIT_MESSAGE=`git log -1 --pretty=%B`
         - cd /home/travis/build/NovySoft/novyNaplo
       before_script:
