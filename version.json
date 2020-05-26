@@ -1,8 +1,8 @@
 {
-    "version": "V1.0.0",
+    "version": "V1.0.1",
     "isBreaking": false,
-    "releaseNotes": "Készülődés a playstorehoz\nApplikáció információk fül",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V1.0.0",
+    "releaseNotes": "Faliújság",
+    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V1.0.1",
     
     "playVersion": "V1.0.0",
     "isPlayBreaking": false,
