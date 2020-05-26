@@ -9,7 +9,7 @@ env:
     - secure: FtVSlMb3iK7ZPzFJmmB4QEyPkEb9+tPtkkwPcG9N+4R6+nkI2oSNl9D7u/6w/u0pgpv8rTeiy76T0REZbF8AkkPs0hlN2DxjDMmS98CDz6lcMNsF+OpLwZL12uwrIQk20cSAmflCEClbkelI48QVLpURWIaiXkmdJ9hF5mnXpPzjkOnon80htPHR4YYpp5yvSlSaEtPfbbfHcY3l+/ORD4hw+Ekd+f+M0pkHsVUpSk8sOcITg1s3MmD1kc71U4bkicSS9FjjldNam92VXtCumh3tFM/LBBH76Mv5o9LUEAg8rjncfR9kuEYJd6bV0eyjH6K5nK89T2Atupz/MX9lbYxvc7gLh6VKCCVQORKV8TgKlulm3Jpfb74Z5BKKGB+cWYQUE7Be9uukeHlgXjqJLG2mi9CagVbEBy+DB9vB4n4zirouEq46/0dd3wjn+7t4Zr+tD1BS0vyd0Mj3oLWTxEWeAfGIvA5+qc+joHQxjHJmq+BGW8nD4s+B6bHPvemNMbx+wA04q2EO4zjnclCogziqMqenVAIf+Atsf337dXzehRiIFEohs+CorTXXmgmFTZOaYWN6XjyU2ieREAPc1Kls1quCAbpyFTWw6e/rRlDA05oJbhpYzVVj1aoJH8G4jQbB5YD0EEieLjF0lcjT8p+dT7iEPk/72qfiBYv3XDY=
 matrix:
   include:
-    - name: Build and release apk
+    - name: Build an apk to test android integrity
       os: linux
       dist: trusty
       jdk: oraclejdk8
@@ -27,10 +27,8 @@ matrix:
       cache:
         directories:
           - "$HOME/.pub-cache"
-          - node_modules
       install:
         - echo install
-        - npm install
         - cd travis
         - export GIT_MESSAGE=`git log -1 --pretty=%B`
         - cd /home/travis/build/NovySoft/novyNaplo
@@ -62,34 +60,6 @@ matrix:
         - wget "$KEYJKS" -O key.jks &> /dev/null
         - cd /home/travis/build/NovySoft/novyNaplo
         - "./flutter/bin/flutter build apk --no-shrink"
-      after_success:
-        - cd travis
-        - node discord.js success
-        - cd /home/travis/build/NovySoft/novyNaplo
-      #before_deploy:
-        #- git config --local user.name "$GITUSER"
-        #- git config --local user.email "$GITEMAIL"
-        #- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-        #- git tag $TRAVIS_TAG
-      #deploy:
-        #cleanup: false
-        #skip_cleanup: true
-        #provider: releases
-        #name: Travis CI auto release
-        #prerelease: true
-        #on:
-          #repo: NovySoft/novyNaplo
-        #token:
-          #secure: nrH0NT6zZPklkK20788D073/dWsG65/C3+wQRU039gOiIjoPHsbsWyvPww12CQ3d52GEOHfw9h36qTJXGtjaXQ0AvVboMD+gV9Kmtt5uPrnpuVhhKRAYV+jm56AEaLOJCDu8FoDBKheDsvZhObmwmk7l1fjSJyx7iEA0ztHrRrYNf8yGZ5Wtbz6FHn2s9b067Hk32W2TvROGBIBumtrlQLufM7XP6Up042X6DJfOVEcVgJ6peazSF/PT7WNZ/nymXav3xld94h0T787TSWB24/leCowlmiVLVCbYxWAX2TMgGZmhxHGwQK4nMAeHcVj/y2+hfBUjn1cGJXvMrK97N9cIhddOGFDl6QOp/rHzKg179ka/8jUnVhlONdfEd1+4HH4w0NhiSlguxtXa3nig/E0vvUNm+IS2faH9A6VReNtkyv7cWegE55ZZsCD8XZnq63jGb79WngyVzir7jlBpPQ2Lv8dwnja9/GHN4kSdLfOR0v2aklKFGWMy+TKqnW9GHclohl/n7lpURIlPDHjxP84BOEnnkgUv+N6Wzo8p9j77R7hm+m247muQkHU0xt2EybOF3faOfH+6HBxSJj30Dnff0W0JuqI3Oi8gZAn6EyLdRiAniUWmYReD7HjVRypdLaH8vkCrrfaqewIYOnrqPdtaSRxyZtJ5kfglbCrr4wI=
-        #file: "/home/travis/build/NovySoft/novyNaplo/build/app/outputs/apk/release/app-release.apk"
-      #after_deploy:
-        #- cd travis
-        #- git fetch --tags
-        #- cd /home/travis/build/NovySoft/novyNaplo
-      after_failure:
-        - cd travis
-        - node discord.js fail
-        - cd /home/travis/build/NovySoft/novyNaplo
 
     - name: Build an ipa to test ios integrity
       os: osx
