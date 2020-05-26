@@ -18,7 +18,9 @@ class EventsTab extends StatefulWidget {
 class _EventsTabState extends State<EventsTab> {
   @override
   void initState() {
-    colors = getRandomColors(allParsedEvents.length);
+    if (colors.length == 0 || colors == []) {
+      colors = getRandomColors(allParsedEvents.length);
+    }
     super.initState();
   }
 
