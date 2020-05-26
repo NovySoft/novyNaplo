@@ -20,7 +20,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
   Crashlytics.instance.log("insertSingleEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
-  await sleep1();
+
   //Get all evals, and see whether we should be just replacing
   List<Evals> allEvals = await getAllEvals();
   var matchedEvals = allEvals.where((element) {
@@ -73,7 +73,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
   Crashlytics.instance.log("insertSingleHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
-  await sleep1();
+
   List<Homework> allHw = await getAllHomework();
   var matchedHw = allHw.where((element) {
     return (element.id == hw.id && element.subject == hw.subject);
@@ -159,7 +159,7 @@ Future<void> insertNotices(Notices notice, {bool edited}) async {
   Crashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
-  await sleep1();
+
   List<Notices> allNotices = await getAllNotices();
   var matchedNotices = allNotices.where((element) {
     return (element.title == notice.title || element.id == notice.id);
@@ -205,7 +205,7 @@ Future<void> insertAvarage(Avarage avarage) async {
   Crashlytics.instance.log("insertSingleAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
-  await sleep1();
+
   List<Avarage> allAv = await getAllAvarages();
 
   var matchedAv = allAv.where((element) {
@@ -248,7 +248,7 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
   Crashlytics.instance.log("insertSingleExam");
   // Get a reference to the database.
   final Database db = await mainSql.database;
-  await sleep1();
+
   List<Exam> allExam = await getAllExams();
 
   var matchedAv = allExam.where((element) {
@@ -301,7 +301,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   //Get all evals, and see whether we should be just replacing
   List<Evals> allEvals = await getAllEvals();
   for (var eval in evalList) {
@@ -372,7 +372,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   List<Homework> allHw = await getAllHomework();
   for (var hw in hwList) {
     var matchedHw = allHw.where((element) {
@@ -448,7 +448,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   List<Avarage> allAv = await getAllAvarages();
   for (var avarage in avarageList) {
     var matchedAv = allAv.where((element) {
@@ -502,7 +502,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   List<Notices> allNotices = await getAllNotices();
   for (var notice in noticeList) {
     var matchedNotices = allNotices.where((element) {
@@ -562,7 +562,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   //Get all evals, and see whether we should be just replacing
   List<Lesson> allTimetable = await getAllTimetable();
   for (var lesson in lessonList) {
@@ -638,13 +638,13 @@ Future<void> batchInsertExams(List<Exam> examList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  await sleep1();
+
   List<Exam> allExam = await getAllExams();
   for (var exam in examList) {
-    var matchedAv = allExam.where((element) {
+    var matchedExams = allExam.where((element) {
       return (element.id == exam.id);
     });
-    if (matchedAv.length == 0) {
+    if (matchedExams.length == 0) {
       if (globals.notifications) {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
@@ -661,7 +661,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } else {
-      for (var n in matchedAv) {
+      for (var n in matchedExams) {
         //!Update didn't work so we delete and create a new one
         if (n.dateGivenUpString != exam.dateGivenUpString ||
             n.dateWriteString != exam.dateWriteString ||
@@ -685,6 +685,66 @@ Future<void> batchInsertExams(List<Exam> examList) async {
               'Téma: ' + exam.subject,
               notifHelper.platformChannelSpecifics,
               payload: "exam " + exam.id.toString(),
+            );
+          }
+        }
+      }
+    }
+  }
+  await batch.commit();
+}
+
+Future<void> batchInsertEvents(List<Event> eventList) async {
+  Crashlytics.instance.log("batchInsertExam");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  List<Event> allExam = await getAllEvents();
+  for (var event in eventList) {
+    var matchedEvents = allExam.where((element) {
+      return (element.id == event.id);
+    });
+    if (matchedEvents.length == 0) {
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          'Új dolog a faliújságon: ',
+          event.title,
+          notifHelper.platformChannelSpecifics,
+          payload: "event " + event.id.toString(),
+        );
+      }
+      batch.insert(
+        'Events',
+        event.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedEvents) {
+        //!Update didn't work so we delete and create a new one
+        if (n.dateString != event.dateString ||
+            n.endDateString != event.endDateString ||
+            n.content != event.content ||
+            n.title != event.title) {
+          batch.delete(
+            "Events",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Events',
+            event.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              'Faliújság módusolt:',
+              event.title,
+              notifHelper.platformChannelSpecifics,
+              payload: "event " + event.id.toString(),
             );
           }
         }

@@ -34,6 +34,9 @@ Future<void> initDatabase() async {
       db.execute(
         "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT);",
       );
+      db.execute(
+        "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT);",
+      );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.

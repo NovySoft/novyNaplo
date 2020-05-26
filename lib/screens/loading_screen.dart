@@ -204,6 +204,12 @@ class _LoadingPageState extends State<LoadingPage> {
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+        setState(() {
+          loadingText = "Faliújság mentése";
+        });
+        if (globals.offlineModeDb || globals.backgroundFetch) {
+          await batchInsertEvents(eventsPage.allParsedEvents);
+        }
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
@@ -236,7 +242,12 @@ class _LoadingPageState extends State<LoadingPage> {
         examsPage.allParsedExams = await parseExams(bodyJson);
         examsPage.allParsedExams
             .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
-        await batchInsertExams(examsPage.allParsedExams);
+        setState(() {
+          loadingText = "Dolgozatok mentése";
+        });
+        if (globals.offlineModeDb || globals.backgroundFetch) {
+          await batchInsertExams(examsPage.allParsedExams);
+        }
         //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
       }
     } catch (e, s) {
@@ -394,7 +405,12 @@ class _LoadingPageState extends State<LoadingPage> {
             output[index].add(n);
             tempLessonListForDB.add(n);
           }
-          await batchInsertLessons(tempLessonListForDB);
+          setState(() {
+            loadingText = "Órarend mentése";
+          });
+          if (globals.offlineModeDb || globals.backgroundFetch) {
+            await batchInsertLessons(tempLessonListForDB);
+          }
         }
       }
       return output;
@@ -497,6 +513,13 @@ class _LoadingPageState extends State<LoadingPage> {
         examsPage.allParsedExams = await getAllExams();
         examsPage.allParsedExams
             .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+        //Events
+        setState(() {
+          loadingText = "Faliújság olvasása az adatbázisból";
+        });
+        eventsPage.allParsedEvents = await getAllEvents();
+        eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+        //DONE
         setState(() {
           loadingText = "Mindjárt kész!";
         });

@@ -1,19 +1,12 @@
 import 'dart:math';
-
 import 'package:english_words/english_words.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-// ignore: implementation_imports
 import 'package:flutter/material.dart';
-//Loading widget:
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'dart:async';
-
 import 'package:diacritic/diacritic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'package:novynaplo/screens/login_page.dart' as login;
-
 import 'package:novynaplo/global.dart' as globals;
 
 const _myListOfRandomColors = [
@@ -126,12 +119,6 @@ class SpinnerDialogState extends State<SpinnerDialog> {
                 ]),
               )
             ]));
-  }
-
-  callback(input) {
-    setState(() {
-      loadingText = input;
-    });
   }
 }
 
@@ -246,7 +233,7 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.cashMultiple;
   }
   if ((subject.toLowerCase().contains("etika") ||
-          subject.toLowerCase().contains("erkölcs"))) {
+      subject.toLowerCase().contains("erkölcs"))) {
     return MdiIcons.headHeart;
   }
   if (subject.toLowerCase().contains("hit")) {

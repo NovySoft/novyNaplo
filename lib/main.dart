@@ -32,6 +32,7 @@ FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
+Map<String, WidgetBuilder> routes;
 
 void main() async {
   //Change to true if needed
@@ -42,6 +43,20 @@ void main() async {
   if (prefs.getBool("isNew") == false) {
     isNew = false;
   }
+  routes = <String, WidgetBuilder>{
+    "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
+    LoginPage.tag: (context) => LoginPage(),
+    MarksTab.tag: (context) => MarksTab(),
+    AvaragesTab.tag: (context) => AvaragesTab(),
+    SettingsTab.tag: (context) => SettingsTab(),
+    NoticesTab.tag: (context) => NoticesTab(),
+    StatisticsTab.tag: (context) => StatisticsTab(),
+    TimetableTab.tag: (context) => TimetableTab(),
+    CalculatorTab.tag: (context) => CalculatorTab(),
+    HomeworkTab.tag: (context) => HomeworkTab(),
+    ExamsTab.tag: (context) => ExamsTab(),
+    EventsTab.tag: (context) => EventsTab(),
+  };
   runZoned(() async {
     await mainSql.initDatabase();
     await notifications.setupNotifications();
@@ -69,21 +84,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  //Routes
-  final routes = <String, WidgetBuilder>{
-    LoginPage.tag: (context) => LoginPage(),
-    MarksTab.tag: (context) => MarksTab(),
-    AvaragesTab.tag: (context) => AvaragesTab(),
-    SettingsTab.tag: (context) => SettingsTab(),
-    NoticesTab.tag: (context) => NoticesTab(),
-    StatisticsTab.tag: (context) => StatisticsTab(),
-    TimetableTab.tag: (context) => TimetableTab(),
-    CalculatorTab.tag: (context) => CalculatorTab(),
-    HomeworkTab.tag: (context) => HomeworkTab(),
-    ExamsTab.tag: (context) => ExamsTab(),
-    EventsTab.tag: (context) => EventsTab(),
-  };
-
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
@@ -96,7 +96,6 @@ class MyApp extends StatelessWidget {
           theme: theme,
           title: 'Novy Napló',
           debugShowCheckedModeBanner: false,
-          home: isNew ? WelcomeScreen() : LoadingPage(),
           routes: routes,
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),

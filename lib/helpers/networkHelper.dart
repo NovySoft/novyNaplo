@@ -45,6 +45,9 @@ class NetworkHelper {
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+        if (globals.offlineModeDb || globals.backgroundFetch) {
+          await batchInsertEvents(eventsPage.allParsedEvents);
+        }
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
@@ -280,7 +283,9 @@ class NetworkHelper {
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        await batchInsertLessons(tempLessonListForDB);
+        if (globals.offlineModeDb || globals.backgroundFetch) {
+          await batchInsertLessons(tempLessonListForDB);
+        }
       }
     }
     return output;
@@ -331,7 +336,9 @@ Future<void> getExams(token, code) async {
       examsPage.allParsedExams = await parseExams(bodyJson);
       examsPage.allParsedExams
           .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
-      await batchInsertExams(examsPage.allParsedExams);
+      if (globals.offlineModeDb || globals.backgroundFetch) {
+        await batchInsertExams(examsPage.allParsedExams);
+      }
       //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
     }
   } catch (e, s) {
@@ -362,7 +369,9 @@ Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
   Homework temp = setHomework(decoded);
   //*Add it to the database
   //TODO batchify
-  await insertHomework(temp);
+  if (globals.offlineModeDb || globals.backgroundFetch) {
+    await insertHomework(temp);
+  }
   //Find the same ids
   var matchedIds = homeworkPage.globalHomework.where((element) {
     return element.id == temp.id;

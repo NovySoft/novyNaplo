@@ -69,22 +69,24 @@ Future<void> setupNotifications() async {
 }
 
 Future selectNotification(String payload) async {
+  print(payload);
   if (globals.globalContext == null) {
     print("NoContext");
     return;
   }
+  //Sometimes doesn't work when used with pushReplacement
+  //TODO fix this
   if (ModalRoute.of(globals.globalContext).settings.name == "/") {
     print("MainRoute");
     return;
   }
   if (payload != null && payload != "teszt" && payload is String) {
-    FirebaseAnalytics().logEvent(
-      name: "SelectedNotification",
-      parameters: {"payload": payload.split(" ")[0]},
-    );
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.payloadId = int.parse(payload.split(" ")[1]);
     switch (payload.split(" ")[0]) {
+      case "event":
+        print("EVENT");
+        break;
       case "exam":
         int tempindex = examsPage.allParsedExams.indexWhere(
           (element) {
@@ -230,6 +232,10 @@ Future selectNotification(String payload) async {
         break;
     }
     Crashlytics.instance.log("Unkown payload: " + payload);
+    FirebaseAnalytics().logEvent(
+      name: "UnkownPayload",
+      parameters: {"payload": payload},
+    );
     showDialog<void>(
       context: globals.globalContext,
       builder: (BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'classManager.dart';
 import 'utils.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 int index = 0;
 var sum;
@@ -25,7 +26,9 @@ Future<List<dynamic>> parseAllByDate(var input) async {
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-  await batchInsertEval(jegyArray);
+  if (globals.offlineModeDb || globals.backgroundFetch) {
+    await batchInsertEval(jegyArray);
+  }
   return jegyArray;
 }
 
@@ -40,7 +43,9 @@ Future<List<Avarage>> parseAvarages(var input) async {
     Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
     return [];
   }
-  await batchInsertAvarage(atlagArray);
+  if (globals.offlineModeDb || globals.backgroundFetch) {
+    await batchInsertAvarage(atlagArray);
+  }
   return atlagArray;
 }
 
@@ -60,7 +65,9 @@ Future<List<Notices>> parseNotices(var input) async {
     for (var n in notices) {
       noticesArray.add(setNotices(n));
     }
-    await batchInsertNotices(noticesArray);
+    if (globals.offlineModeDb || globals.backgroundFetch) {
+      await batchInsertNotices(noticesArray);
+    }
     return noticesArray;
   } else {
     return [];
