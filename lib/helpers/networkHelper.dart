@@ -11,6 +11,7 @@ import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -27,6 +28,27 @@ int tokenIndex = 0;
 class NetworkHelper {
   Future<ConnectivityResult> isNetworkAvailable() async {
     return await (Connectivity().checkConnectivity());
+  }
+
+  Future<void> getEvents(token, code) async {
+    try {
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get('https://$code.e-kreta.hu/mapi/api/v1/EventAmi',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        var bodyJson = json.decode(res.body);
+        eventsPage.allParsedEvents = await parseEvents(bodyJson);
+        eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+      }
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getEvents');
+    }
   }
 
   Future<String> getToken(code, user, pass) async {
@@ -126,6 +148,7 @@ class NetworkHelper {
       var eval = globals.dJson["Evaluations"];
       await getAvarages(token, code);
       await getExams(token, code);
+      await getEvents(token, code);
       globals.markCount = eval.length;
       marksPage.colors = getRandomColors(globals.markCount);
       marksPage.allParsedByDate = await parseAllByDate(globals.dJson);

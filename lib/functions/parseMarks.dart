@@ -222,6 +222,27 @@ Future<List<Exam>> parseExams(var input) async {
     Crashlytics.instance.recordError(e, s, context: 'parseExams');
     return [];
   }
-  //await batchInsertAvarage(examArray);
   return examArray;
+}
+
+Future<List<Event>> parseEvents(var input) async {
+  List<Event> eventArray = [];
+  try {
+    for (var n in input) {
+      Event temp = new Event();
+      temp.id = n["EventId"];
+      temp.dateString = n["Date"];
+      temp.date = DateTime.parse(n["Date"]);
+      temp.endDateString = n["EndDate"];
+      temp.endDate = DateTime.parse(n["EndDate"]);
+      temp.content = n["Content"];
+      temp.content = temp.content.replaceAll("\n", "<br>");
+      temp.title = n["Title"];
+      eventArray.add(temp);
+    }
+  } catch (e, s) {
+    Crashlytics.instance.recordError(e, s, context: 'parseEvents');
+    return [];
+  }
+  return eventArray;
 }

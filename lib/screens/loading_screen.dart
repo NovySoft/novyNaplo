@@ -25,6 +25,7 @@ import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -182,6 +183,35 @@ class _LoadingPageState extends State<LoadingPage> {
     }
   }
 
+  Future<void> getEvents(token, code) async {
+    try {
+      setState(() {
+        loadingText = "Faliújság lekérése";
+      });
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get('https://$code.e-kreta.hu/mapi/api/v1/EventAmi',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {
+          loadingText = "Faliújság dekódolása";
+        });
+        var bodyJson = json.decode(res.body);
+        eventsPage.allParsedEvents = await parseEvents(bodyJson);
+        eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+      }
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getEvents');
+      await _ackAlert(context,
+          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+    }
+  }
+
   Future<void> getExams(token, code) async {
     try {
       setState(() {
@@ -242,6 +272,7 @@ class _LoadingPageState extends State<LoadingPage> {
         var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
         await getExams(token, code);
+        await getEvents(token, code);
         globals.markCount = eval.length;
         marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
@@ -668,7 +699,10 @@ class _LoadingPageState extends State<LoadingPage> {
                 if (await canLaunch(link)) {
                   await launch(link);
                 } else {
-                  FirebaseAnalytics().logEvent(name: "LinkFail");
+                  FirebaseAnalytics().logEvent(
+                    name: "LinkFail",
+                    parameters: {"link": link},
+                  );
                   throw 'Could not launch $link';
                 }
                 Navigator.of(context).pop();

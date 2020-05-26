@@ -37,6 +37,7 @@ void backgroundFetch() async {
     FirebaseAnalytics().logEvent(name: "BackgroundFetch");
     FirebaseAnalytics()
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
+    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     Crashlytics.instance.log("backgroundFetch started");
     await globals.setGlobals();
     await notifHelper.setupNotifications();

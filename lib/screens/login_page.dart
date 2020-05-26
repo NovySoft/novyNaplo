@@ -480,7 +480,10 @@ class _LoginPageState extends State<LoginPage> {
                 if (await canLaunch(link)) {
                   await launch(link);
                 } else {
-                  FirebaseAnalytics().logEvent(name: "LinkFail");
+                  FirebaseAnalytics().logEvent(
+                    name: "LinkFail",
+                    parameters: {"link": link},
+                  );
                   throw 'Could not launch $link';
                 }
                 Navigator.of(context).pop();

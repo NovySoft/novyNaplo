@@ -72,8 +72,10 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                   if (await canLaunch(url)) {
                                     await launch(url);
                                   } else {
-                                    FirebaseAnalytics()
-                                        .logEvent(name: "LinkFail");
+                                    FirebaseAnalytics().logEvent(
+                                      name: "LinkFail",
+                                      parameters: {"link": url},
+                                    );
                                     throw 'Could not launch $url';
                                   }
                                 },

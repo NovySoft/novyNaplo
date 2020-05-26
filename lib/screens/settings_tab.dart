@@ -369,7 +369,10 @@ class _SettingsBodyState extends State<SettingsBody> {
                           if (await canLaunch(link)) {
                             await launch(link);
                           } else {
-                            FirebaseAnalytics().logEvent(name: "LinkFail");
+                            FirebaseAnalytics().logEvent(
+                              name: "LinkFail",
+                              parameters: {"link": link},
+                            );
                             throw 'Could not launch $link';
                           }
                         },
@@ -1262,6 +1265,7 @@ class SendTestNotif extends StatefulWidget {
 class _SendTestNotifState extends State<SendTestNotif> {
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Teszt értesítések küldése"),
@@ -2163,7 +2167,10 @@ class _AppInformationTabState extends State<AppInformationTab> {
                 if (await canLaunch(link)) {
                   await launch(link);
                 } else {
-                  FirebaseAnalytics().logEvent(name: "LinkFail");
+                  FirebaseAnalytics().logEvent(
+                    name: "LinkFail",
+                    parameters: {"link": link},
+                  );
                   throw 'Could not launch $link';
                 }
                 Navigator.of(context).pop();
@@ -2236,7 +2243,10 @@ class _AppInformationTabState extends State<AppInformationTab> {
                           if (await canLaunch(link)) {
                             await launch(link);
                           } else {
-                            FirebaseAnalytics().logEvent(name: "LinkFail");
+                            FirebaseAnalytics().logEvent(
+                              name: "LinkFail",
+                              parameters: {"link": link},
+                            );
                             throw 'Could not launch $link';
                           }
                         },

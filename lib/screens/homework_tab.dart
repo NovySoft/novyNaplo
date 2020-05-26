@@ -107,7 +107,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
         size: 50,
       ),
       Text(
-        "Nincs házifeladat!\n(Jelenleg csak a mostani hétre feladott leckét tudom mutatni)",
+        "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)",
         textAlign: TextAlign.center,
       )
     ]));

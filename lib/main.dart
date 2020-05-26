@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
@@ -68,6 +69,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  //Routes
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
@@ -79,6 +81,7 @@ class MyApp extends StatelessWidget {
     CalculatorTab.tag: (context) => CalculatorTab(),
     HomeworkTab.tag: (context) => HomeworkTab(),
     ExamsTab.tag: (context) => ExamsTab(),
+    EventsTab.tag: (context) => EventsTab(),
   };
 
   @override

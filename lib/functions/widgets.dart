@@ -8,6 +8,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
+import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
@@ -53,6 +54,7 @@ class PressableCard extends StatefulWidget {
   const PressableCard({
     this.onPressed,
     this.color,
+    @required
     this.flattenAnimation,
     this.child,
   });
@@ -375,9 +377,13 @@ void showChoices(BuildContext context, List<String> choices) {
 
 class AnimatedTitleSubtitleCard extends StatelessWidget {
   AnimatedTitleSubtitleCard({
+    @required
     this.title,
+    @required
     this.color,
+    @required
     this.subTitle,
+    @required
     this.onPressed,
     this.heroAnimation,
   });
@@ -1135,6 +1141,22 @@ Widget getDrawer(String screen, BuildContext context) {
             } else {
               try {
                 Navigator.pushNamed(context, NoticesTab.tag);
+              } catch (e, s) {
+                Crashlytics.instance.recordError(e, s, context: 'getDrawer');
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
+          title: Text('Faliújság'),
+          leading: Icon(MdiIcons.pin),
+          onTap: () {
+            if (screen == EventsTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, EventsTab.tag);
               } catch (e, s) {
                 Crashlytics.instance.recordError(e, s, context: 'getDrawer');
                 print(e.message);

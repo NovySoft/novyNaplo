@@ -24,6 +24,7 @@ class _ExamsTabState extends State<ExamsTab> {
 
   @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Bejelentett dolgozatok"),
