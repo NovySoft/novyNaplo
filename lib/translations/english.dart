@@ -152,5 +152,14 @@ final Map<String, String> translation = {
   "yourAv": "Your avarage",
   "wantGet": "What do you want to get",
   "underHowMany": "Under how many marks do you want to get it",
-  "go": "GO"
+  "go": "GO",
+  "events": "Events",
+  "noEvents": "You have got nothing here",
+  "examInfo": "Exam information",
+  "subject": "Subject",
+  "examType": "Type of exam",
+  "dateWrite": "Date of writing",
+  "dateGiveUp": "Date when given up",
+  "exams": "Upcoming exams",
+  "noExam": "You have no upcoming exam",
 };

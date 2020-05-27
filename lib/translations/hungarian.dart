@@ -1,19 +1,25 @@
 final Map<String, String> translation = {
   "Welcome to novynaplo": "Üdv a Novy Naplóban!",
   "adsOffRestart": "A reklámok kikapcsolásához indítsd újra az applikációt",
-  "turnOnAds": "A reklámok bekapcsolásával elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
-  "notifTurnOnWarn": "Figyelem!\nAz értesítések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
-  "backgroundFetchTurnOnWarning": "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+  "turnOnAds":
+      "A reklámok bekapcsolásával elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
+  "notifTurnOnWarn":
+      "Figyelem!\nAz értesítések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+  "backgroundFetchTurnOnWarning":
+      "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
   "backgroundFetchOnCellular": "Háttér lekérések mobilnetről",
   "timeBetweenFetches": "Automatikus lekérések időköze",
   "minutes": "perc",
   "mustBeBetween30And50": "Az értéknek 30 és 500 között kell lenie",
   "fetchWakePhone": "A lekérés felkeltheti a telefont (ajánlott)",
   "offlineDb": "Adatbázis használata\n(Offline mód)",
-  "dbOffWarning": "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket és az értesítéseket!",
-  "sureDeleteDB": "Biztosan ki szeretnéd törölni az adatbázisokat?\nEz nem fordítható vissza",
+  "dbOffWarning":
+      "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket és az értesítéseket!",
+  "sureDeleteDB":
+      "Biztosan ki szeretnéd törölni az adatbázisokat?\nEz nem fordítható vissza",
   "runRawSQL": "Nyers sql script",
-  "developerSettingsWarning": "Minden amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nMinden itt történő dologért NEM vállalunk felelőséget",
+  "developerSettingsWarning":
+      "Minden amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nMinden itt történő dologért NEM vállalunk felelőséget",
   "homeworkKeepFor": "Határidő után meddig mutassuk a házit?",
   "forDay": "napig",
   "forInfinity": "Végtelenig",
@@ -66,4 +72,14 @@ final Map<String, String> translation = {
   "wantGet": "Mit szeretnél elérni",
   "underHowMany": "Hány jegy alatt szeretnéd elérni",
   "go": "Mehet",
+  "av": "Átlag",
+  "events": "Faliújság",
+  "noEvents": "Nincs semmi a faliújságon",
+  "examInfo": "Dolgozat információk",
+  "subject": "Tantárgy",
+  "examType": "Dolgozat típusa",
+  "dateWrite": "Írás dátuma",
+  "dateGiveUp": "Feladás dátuma",
+  "exams": "Bejelentett dolgozatok",
+  "noExam": "Nincs még bejelentett dolgozat"
 };
