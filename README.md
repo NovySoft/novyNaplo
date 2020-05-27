@@ -13,10 +13,13 @@ Novy teljesen nem eredeti kréta kliense.
 ## Letöltés
 
 * Playstoreból:
+
 [![Szerezd meg: Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/hu_badge_web_generic.png)](https://play.google.com/store/apps/details?id=novy.vip.novynaplo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
 * Teszt verzió githubról:
+
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/NovySoft/NovyNaplo?color=red&style=for-the-badge)
+
 [Legújabb verzió letöltése](https://github.com/NovySoft/novyNaplo/releases/latest)
 
 ## Branchek
