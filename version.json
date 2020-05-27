@@ -4,8 +4,8 @@
     "releaseNotes": "Faliújság",
     "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V1.0.1",
     
-    "playVersion": "V1.0.0",
+    "playVersion": "V1.0.1",
     "isPlayBreaking": false,
-    "playNotes": "Crashlytics",
-    "playLink": "https://play.google.com"
+    "playNotes": "Faliújság",
+    "playLink": "https://play.google.com/store/apps/details?id=novy.vip.novynaplo"
 }
