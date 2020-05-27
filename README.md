@@ -45,6 +45,7 @@ Novy teljesen nem eredeti kréta kliense.
 
 ## **HAMAROSAN**
 
+* Fordítások
 * Több felhasználós támogatás
 * Hiányzások
 * Támogatók oldal - **Gáti Úr** közreműködésével
