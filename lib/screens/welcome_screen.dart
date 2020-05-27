@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -186,7 +187,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Üdv a Novy Naplóban!",
+                  getTranslatedString("Welcome to novynaplo"),
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
@@ -201,7 +202,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Húzd el a kezdéshez", style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),

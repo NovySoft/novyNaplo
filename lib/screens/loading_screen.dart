@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
@@ -664,7 +665,7 @@ class _LoadingPageState extends State<LoadingPage> {
             SizedBox(height: 5.0),
             Center(
               child: Text(
-                "Üdv a Novy Naplóban!",
+                getTranslatedString("Welcome to novynaplo"),
                 style: TextStyle(fontSize: 28),
                 textAlign: TextAlign.center,
               ),

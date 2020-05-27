@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/versionHelper.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -56,7 +57,7 @@ TextEditingController fetchPeriodController =
 
 class SettingsTab extends StatefulWidget {
   static String tag = 'settings';
-  static const title = 'Beállítások';
+  static String title = getTranslatedString("settings");
 
   const SettingsTab({Key key, this.androidDrawer}) : super(key: key);
 
@@ -126,9 +127,9 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     if (Theme.of(context).brightness == Brightness.light) {
-      dropDown = "Világos";
+      dropDown = getTranslatedString("bright");
     } else {
-      dropDown = "Sötét";
+      dropDown = getTranslatedString("dark");
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
@@ -151,11 +152,20 @@ class _SettingsBodyState extends State<SettingsBody> {
                         MaterialPageRoute(builder: (context) => UIsettings()),
                       );
                     },
-                    icon: Icon(
-                      MdiIcons.televisionGuide,
-                      color: Colors.black,
+                    icon: Row(
+                      children: <Widget>[
+                        Icon(
+                          MdiIcons.televisionGuide,
+                          color: Colors.black,
+                        ),
+                        SizedBox(height: 1, width: 5),
+                        Icon(
+                          MdiIcons.translate,
+                          color: Colors.black,
+                        ),
+                      ],
                     ),
-                    label: Text('UI beállítások',
+                    label: Text('UI ${getTranslatedString("settings")}',
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -181,7 +191,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                       Icons.create,
                       color: Colors.black,
                     ),
-                    label: Text('Jegyek oldal beállításai',
+                    label: Text(getTranslatedString("marksTabSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -204,7 +214,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                       );
                     },
                     icon: Icon(Icons.today, color: Colors.black),
-                    label: Text('Órarend beállításai',
+                    label: Text(getTranslatedString("timetableSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -228,7 +238,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                     },
                     icon:
                         Icon(MdiIcons.bagPersonalOutline, color: Colors.black),
-                    label: Text('Házifeladat beállításai',
+                    label: Text(getTranslatedString("homeworkSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -252,7 +262,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                     },
                     icon: Icon(MdiIcons.chartScatterPlotHexbin,
                         color: Colors.black),
-                    label: Text('Statisztika oldal beállításai',
+                    label: Text(getTranslatedString("statisticSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -275,7 +285,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                       );
                     },
                     icon: Icon(MdiIcons.calculator, color: Colors.black),
-                    label: Text('Jegyszámoló oldal beállításai',
+                    label: Text(getTranslatedString("markCalculatorSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -305,7 +315,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                         Icon(MdiIcons.bellRing, color: Colors.black),
                       ],
                     ),
-                    label: Text('Hálozat és értesítés beállításai',
+                    label: Text(getTranslatedString("networkAndNotificationSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -329,7 +339,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                       );
                     },
                     icon: Icon(MdiIcons.codeTagsCheck, color: Colors.black),
-                    label: Text('Fejlesztői beállítások',
+                    label: Text(getTranslatedString("developerSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -349,7 +359,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                         ),
                         onPressed: () async {
                           await _ackAlert(context,
-                              "Az alábbi emailra tudsz írni:\nnovysoftware@gmail.com");
+                              "${getTranslatedString("youCanWriteToTheFollowingEmail")}\nnovysoftware@gmail.com");
                         },
                         icon: Icon(MdiIcons.emailSend, color: Colors.black),
                         label: Text('Bug report (Email)',
@@ -404,7 +414,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                         },
                         icon: Icon(MdiIcons.cellphoneInformation,
                             color: Colors.black),
-                        label: Text('App informácók',
+                        label: Text(getTranslatedString("appInfo"),
                             style: TextStyle(color: Colors.black)))),
               ),
             ),
@@ -430,7 +440,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                               });
                         },
                         icon: Icon(MdiIcons.logout, color: Colors.black),
-                        label: Text('Kijelentkezés',
+                        label: Text(getTranslatedString("logOut"),
                             style: TextStyle(color: Colors.black)))),
               ),
             ),
@@ -803,24 +813,24 @@ class _UIsettingsState extends State<UIsettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3,
+          itemCount: 4 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
                 return ListTile(
-                  title: Text("Téma:"),
+                  title: Text(getTranslatedString("theme")),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Sötét",
                         child: Text(
-                          "Sötét",
+                          getTranslatedString("dark"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Világos",
                         child: Text(
-                          "Világos",
+                          getTranslatedString("bright"),
                         ),
                       ),
                     ],
@@ -848,7 +858,42 @@ class _UIsettingsState extends State<UIsettings> {
                 break;
               case 1:
                 return ListTile(
-                  title: Text("Reklámok"),
+                  title: Text("Nyelv (language):"),
+                  trailing: DropdownButton<String>(
+                    items: [
+                      DropdownMenuItem(
+                        value: "hu",
+                        child: Text(
+                          getTranslatedString("hu"),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "en",
+                        child: Text(
+                          getTranslatedString("en"),
+                        ),
+                      ),
+                    ],
+                    onChanged: (String value) async{
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString("Language", value);
+                      FirebaseAnalytics().setUserProperty(
+                        name: "Language",
+                        value: value,
+                      );
+                      Crashlytics.instance.setString("Language", value);
+                      setState(() {
+                        globals.language = value;
+                      });
+                    },
+                    value: globals.language,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text(getTranslatedString("ads")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =
@@ -881,9 +926,9 @@ class _UIsettingsState extends State<UIsettings> {
                             barrierDismissible: true,
                             builder: (_) {
                               return new AlertDialog(
-                                title: new Text("Reklámok"),
+                                title: new Text(getTranslatedString("ads")),
                                 content: Text(
-                                  "A reklámok kikapcsolásához indítsd újra az applikációt",
+                                  getTranslatedString("adsOffRestart"),
                                   textAlign: TextAlign.left,
                                 ),
                                 actions: <Widget>[
@@ -902,9 +947,9 @@ class _UIsettingsState extends State<UIsettings> {
                   ),
                 );
                 break;
-              case 2:
+              case 3:
                 return ListTile(
-                  title: Text("Chart animációk:"),
+                  title: Text(getTranslatedString("chartAnimations")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
                       final SharedPreferences prefs =
@@ -1078,7 +1123,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         ],
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Ezt nem hagyhatod üresen';
+                            return getTranslatedString("cantLeaveEmpty");
                           }
                           if (int.parse(value) > 500 || int.parse(value) <= 0) {
                             return "Az értéknek 1 és 500 között kell lenie";
@@ -1176,14 +1221,14 @@ class _LogOutDialogState extends State<LogOutDialog> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return new AlertDialog(
-      title: new Text("Kijelentkezés"),
+      title: new Text(getTranslatedString("logOut")),
       content: Text(
-        "Biztosan ki szeretnél jelentkezni?",
+        getTranslatedString("sureLogout"),
         textAlign: TextAlign.left,
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text('Igen'),
+          child: Text(getTranslatedString("yes")),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
             globals.resetAllGlobals();
@@ -1196,7 +1241,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
           },
         ),
         FlatButton(
-          child: Text('Nem'),
+          child: Text(getTranslatedString("no")),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -1215,9 +1260,9 @@ class _AdsDialogState extends State<AdsDialog> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return new AlertDialog(
-      title: new Text("Reklámok"),
+      title: new Text(getTranslatedString("ads")),
       content: Text(
-        "A reklámok bekapcsolásával elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
+        getTranslatedString("turnOnAds"),
         textAlign: TextAlign.left,
       ),
       actions: <Widget>[
@@ -1243,7 +1288,7 @@ Future<void> _ackAlert(BuildContext context, String content) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Státusz'),
+        title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[
           FlatButton(
@@ -1269,7 +1314,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Teszt értesítések küldése"),
+        title: Text(getTranslatedString("sendTestNotifs")),
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
@@ -1290,8 +1335,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Így fog kinézni egy értesítés...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'teszt',
                           );
@@ -1300,7 +1345,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif"),
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1320,8 +1365,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt jegy értesítés',
-                            'Új jegyek...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'marks ' +
                                 (allParsedByDate.length == 0
@@ -1333,7 +1378,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt jegy értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("marks")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1353,8 +1398,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új lecke...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'hw ' +
                                 (globalHomework.length == 0
@@ -1366,7 +1411,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt házifeladat értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("hw")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1386,8 +1431,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új feljegyzés...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'notice ' +
                                 (allParsedNotices.length == 0
@@ -1399,7 +1444,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt feljegyzés értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("notice")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1419,8 +1464,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új óra...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'timetable ' +
                                 (lessonsList[0].length == 0
@@ -1432,7 +1477,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt órarend értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("timetable")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1452,8 +1497,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új dolgozat...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'exam ' +
                                 (examsPage.allParsedExams.length == 0
@@ -1466,7 +1511,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt dolgozat értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("exam")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1486,8 +1531,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új átlag...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'avarage 0',
                           );
@@ -1496,7 +1541,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt átlag értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("av")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1516,8 +1561,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           await notifications.flutterLocalNotificationsPlugin
                               .show(
                             1,
-                            'Teszt értesítés',
-                            'Új dolog a faliújságon...',
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload: 'event ' +
                                 (allParsedEvents.length == 0
@@ -1529,7 +1574,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text('Teszt faliújság értesítés küldése',
+                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("event")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1557,7 +1602,7 @@ class _NetworkAndNotificationSettingsState
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hálózat és értesítés beállításai"),
+        title: Text(getTranslatedString("networkAndNotificationSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -1586,7 +1631,7 @@ class _NetworkAndNotificationSettingsState
                             MdiIcons.bellRing,
                             color: Colors.black,
                           ),
-                          label: Text('Teszt értesítések küldése',
+                          label: Text(getTranslatedString("sendTestNotifs"),
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
@@ -1594,7 +1639,7 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 1:
                 return ListTile(
-                  title: Text("Értesítések"),
+                  title: Text(getTranslatedString("notifications")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =
@@ -1602,7 +1647,7 @@ class _NetworkAndNotificationSettingsState
                       if (isOn && globals.offlineModeDb == false) {
                         await _ackAlert(
                           context,
-                          "Figyelem!\nAz értesítések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+                          getTranslatedString("notifTurnOnWarn"),
                         );
                         globals.offlineModeDb = true;
                         prefs.setBool("offlineModeDb", true);
@@ -1625,7 +1670,7 @@ class _NetworkAndNotificationSettingsState
                 return Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text("Háttér lekérések"),
+                      title: Text(getTranslatedString("backgroundFetch")),
                       trailing: Switch(
                         onChanged: (bool isOn) async {
                           final SharedPreferences prefs =
@@ -1640,7 +1685,7 @@ class _NetworkAndNotificationSettingsState
                             if (globals.offlineModeDb == false) {
                               await _ackAlert(
                                 context,
-                                "Figyelem!\nA háttérlekérések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
+                                getTranslatedString("backgroundFetchTurnOnWarning"),
                               );
                               globals.offlineModeDb = true;
                               prefs.setBool("offlineModeDb", true);
@@ -1675,7 +1720,7 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 3:
                 return ListTile(
-                  title: Text("Háttér lekérések mobilnetről"),
+                  title: Text(getTranslatedString("backgroundFetchOnCellular")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =
@@ -1693,7 +1738,7 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 4:
                 return ListTile(
-                  title: Text("Automatikus lekérések időköze (30-500perc):"),
+                  title: Text("${getTranslatedString("timeBetweenFetches")} (30-500${getTranslatedString("minutes")}):"),
                   trailing: SizedBox(
                     width: 50,
                     child: Form(
@@ -1706,10 +1751,10 @@ class _NetworkAndNotificationSettingsState
                         ],
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Ezt nem hagyhatod üresen';
+                            return getTranslatedString("cantLeaveEmpty");
                           }
                           if (int.parse(value) > 500 || int.parse(value) < 30) {
-                            return "Az értéknek 30 és 500 között kell lenie";
+                            return getTranslatedString("mustBeBetween30And50");
                           }
                           return null;
                         },
@@ -1745,7 +1790,7 @@ class _NetworkAndNotificationSettingsState
                   children: <Widget>[
                     ListTile(
                       title:
-                          Text("A lekérés felkeltheti a telefont (ajánlott)"),
+                          Text(getTranslatedString("fetchWakePhone")),
                       trailing: Switch(
                         onChanged: (bool isOn) async {
                           final SharedPreferences prefs =
@@ -1815,7 +1860,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Adatbázis beállításai"),
+        title: Text(getTranslatedString("dbSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -1828,12 +1873,12 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "SQLITE adatbázis",
+                          "SQLITE " + getTranslatedString("db"),
                           style: new TextStyle(fontSize: 30),
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Csak haladóknak",
+                          getTranslatedString("onlyAdvanced"),
                           style: new TextStyle(fontSize: 20, color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
@@ -1844,7 +1889,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                 break;
               case 1:
                 return ListTile(
-                  title: Text("Adatbázis használata\n(Offline mód)"),
+                  title: Text(getTranslatedString("offlineDb")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =

@@ -11,6 +11,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
@@ -223,7 +224,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Ezt nem hagyhatod üresen';
+                                  return getTranslatedString("cantLeaveEmpty");
                                 }
                                 if (int.parse(value) > 1000 ||
                                     int.parse(value) <= 0) {
@@ -278,7 +279,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Ezt nem hagyhatod üresen';
+                                  return getTranslatedString("cantLeaveEmpty");
                                 }
                                 if (int.parse(value) > 100 ||
                                     int.parse(value) <= 0) {
