@@ -162,4 +162,13 @@ final Map<String, String> translation = {
   "dateGiveUp": "Date when given up",
   "exams": "Upcoming exams",
   "noExam": "You have no upcoming exam",
+  "and": "and",
+  "yMins": "mins",
+  "hDue": "Due date",
+  "overDue": "over due",
+  "hLeft": "you got",
+  "givenUpBy": "Give up by",
+  "due": "Due",
+  "noHw":
+      "No homework!\n(Currently I can only show you homework from the last 2 weeks)",
 };

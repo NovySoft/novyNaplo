@@ -81,5 +81,15 @@ final Map<String, String> translation = {
   "dateWrite": "Írás dátuma",
   "dateGiveUp": "Feladás dátuma",
   "exams": "Bejelentett dolgozatok",
-  "noExam": "Nincs még bejelentett dolgozat"
+  "noExam": "Nincs még bejelentett dolgozat",
+  "yHrs": "órád",
+  "and": "és",
+  "yMins": "perced",
+  "hDue": "Házifeladat határideje",
+  "overDue": "határidőn túl",
+  "hLeft": "van még",
+  "givenUpBy": "Házifeladatot feladta",
+  "due": "Határidő",
+  "noHw":
+      "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)"
 };
