@@ -10,6 +10,15 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
+## Letöltés
+
+* Playstoreból:
+[![Szerezd meg: Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/hu_badge_web_generic.png)](https://play.google.com/store/apps/details?id=novy.vip.novynaplo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
+
+* Teszt verzió githubról:
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/NovySoft/NovyNaplo?color=red&style=for-the-badge)
+[Legújabb verzió letöltése](https://github.com/NovySoft/novyNaplo/releases/latest)
+
 ## Branchek
 
 [master](https://github.com/NovySoft/novyNaplo/tree/master): Tesztelés alatt álló kód
@@ -99,3 +108,5 @@ Novy teljesen nem eredeti kréta kliense.
 * [WakaTime](https://wakatime.com/) Ajánlott a letöltése, így összegezni tudjuk, hogy mennyi fölösleges órát tölttöttünk kód írással ;)
 * [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments) Az én kis komment kiemelő pluginom, mert különböző kommenteket különböztetek meg
 * [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode) Egy kis kód kiegesztő plugin, ajánlom a használatát
+
+### A Google Play és a Google Play-logó a Google LLC védjegyei
