@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
@@ -33,11 +34,12 @@ class NoticeDetailTab extends StatelessWidget {
 
   Widget body() {
     return SafeArea(
-        bottom: false,
-        left: false,
-        right: false,
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      bottom: false,
+      left: false,
+      right: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           SizedBox(
             height: 60,
             child: DecoratedBox(
@@ -51,115 +53,96 @@ class NoticeDetailTab extends StatelessWidget {
                 )),
           ),
           Expanded(
-              child: ListView.builder(
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    switch (index) {
-                      case 0:
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 15),
-                              Text(
-                                "Szöveg:",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                capitalize(content),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                            ]);
-                        break;
-                      case 1:
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 15),
-                              Text(
-                                "Tanár:",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                teacher,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                            ]);
-                        break;
-                      case 2:
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 15),
-                              Text(
-                                "Dátum:",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                capitalize(date),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                            ]);
-                        break;
-                      case 3:
-                        if (subject == null) {
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 15),
-                                Text(
-                                  "Tantárgy:",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Ismeretlen",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ]);
-                        } else {
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 15),
-                                Text(
-                                  "Tantárgy:",
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  capitalize(subject),
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ]);
-                        }
-                        break;
-                    }
-                    return SizedBox(height: 10, width: 10);
-                  }))
-          //Expanded()
-        ]));
+            child: ListView.builder(
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 15),
+                          Text(
+                            "${getTranslatedString("content")}:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 25.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            capitalize(content),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                  case 1:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 15),
+                          Text(
+                            "${getTranslatedString("teacher")}:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 25.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            teacher,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                  case 2:
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 15),
+                          Text(
+                            "${getTranslatedString("date")}:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 25.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            capitalize(date),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ]);
+                    break;
+                  case 3:
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 15),
+                        Text(
+                          "${getTranslatedString("subject")}:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          subject == null
+                              ? getTranslatedString("unkown")
+                              : capitalize(subject),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ],
+                    );
+                    break;
+                }
+                return SizedBox(height: 10, width: 10);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

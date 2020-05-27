@@ -26,8 +26,8 @@ String text2 = " ";
 double tantargyiAtlagUtanna = 0;
 TabController _tabController;
 final List<Tab> calcTabs = <Tab>[
-  Tab(text: 'Jegyszámoló', icon: Icon(MdiIcons.calculator)),
-  Tab(text: 'Mi van ha?', icon: Icon(MdiIcons.headQuestion)),
+  Tab(text: getTranslatedString("markCalc"), icon: Icon(MdiIcons.calculator)),
+  Tab(text: "${getTranslatedString("whatIf")}?", icon: Icon(MdiIcons.headQuestion)),
 ];
 List<VirtualMarks> virtualMarks = [];
 int radioGroup = 5;
@@ -407,7 +407,7 @@ class CalculatorTabState extends State<CalculatorTab>
             if (globals.markCount == 0) {
               return noMarks();
             }
-            if (tab.icon == Icon(MdiIcons.calculator)) {
+            if (tab.text == getTranslatedString("markCalc")) {
               return _calculatorBody();
             } else {
               return Scaffold(
@@ -842,16 +842,23 @@ class CalculatorTabState extends State<CalculatorTab>
               margin: EdgeInsets.all(5),
             ),
           ),
-          Text("${getTranslatedString("marksSumWeighted")}: " + currSum.toString(),
+          Text(
+              "${getTranslatedString("marksSumWeighted")}: " +
+                  currSum.toString(),
               textAlign: TextAlign.center),
           Icon(MdiIcons.division),
-          Text("${getTranslatedString("marksCountWeighted")}: " + currCount.toString(),
+          Text(
+              "${getTranslatedString("marksCountWeighted")}: " +
+                  currCount.toString(),
               textAlign: TextAlign.center),
           Icon(MdiIcons.equal),
-          Text("${getTranslatedString("yourAv")}: " + (currSum / currCount).toStringAsFixed(3),
+          Text(
+              "${getTranslatedString("yourAv")}: " +
+                  (currSum / currCount).toStringAsFixed(3),
               textAlign: TextAlign.center),
           SizedBox(height: 20),
-          Text("${getTranslatedString("wantGet")}? $elakErni", textAlign: TextAlign.center),
+          Text("${getTranslatedString("wantGet")}? $elakErni",
+              textAlign: TextAlign.center),
           Slider(
             value: elakErni,
             onChanged: (newValue) {
@@ -890,7 +897,8 @@ class CalculatorTabState extends State<CalculatorTab>
                 });
               },
               padding: EdgeInsets.all(12),
-              child: Text(getTranslatedString("go"), style: TextStyle(color: Colors.black)),
+              child: Text(getTranslatedString("go"),
+                  style: TextStyle(color: Colors.black)),
             ),
           ),
           SizedBox(

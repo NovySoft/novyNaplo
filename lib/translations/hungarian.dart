@@ -72,7 +72,7 @@ final Map<String, String> translation = {
   "wantGet": "Mit szeretnél elérni",
   "underHowMany": "Hány jegy alatt szeretnéd elérni",
   "go": "Mehet",
-  "av": "Átlag",
+  "av": "átlag",
   "events": "Faliújság",
   "noEvents": "Nincs semmi a faliújságon",
   "examInfo": "Dolgozat információk",
@@ -91,5 +91,19 @@ final Map<String, String> translation = {
   "givenUpBy": "Házifeladatot feladta",
   "due": "Határidő",
   "noHw":
-      "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)"
+      "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)",
+  "whatIf": "Mi van ha",
+  "general": "Általános",
+  "bySubject": "Tantárgy",
+  "combinedAv": "Összesített átlag",
+  "best": "Legjobb",
+  "worst": "Legroszabb",
+  "marksFromSubjects": "Jegyek száma bizonyos tantárgyakból",
+  "marksDistribution": "Jegyek számának eloszlása",
+  "countOfSpecMarks": "Bizonyos jegyek száma",
+  "notices": "Feljegyzések",
+  "noNotice": "Nincs még feljegyzésed",
+  "content": "Tartalom",
+  "date": "Dátum",
+  "unkown": "Ismeretlen"
 };

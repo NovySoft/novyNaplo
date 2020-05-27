@@ -68,13 +68,12 @@ Future<void> setGlobals() async {
     adsEnabled = prefs.getBool("ads");
     if (adsEnabled) adModifier = 1;
   }
-
   if (prefs.getString("Language") != null) {
     language = prefs.getString("Language");
   } else {
     //String countryCode = Platform.localeName.split('_')[0];
     String languageCode = Platform.localeName.split('_')[1];
-    if (languageCode.contains('hu')) {
+    if (languageCode.toLowerCase().contains('hu')) {
       language = "hu";
     } else {
       language = "en";

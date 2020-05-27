@@ -2,6 +2,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:customgauge/customgauge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 
@@ -79,8 +80,10 @@ class ChartsDetailTab extends StatelessWidget {
                             GaugeSegment('4', 1, Colors.green),
                           ],
                           currentValue: seriesList.last.data.last.value,
-                          displayWidget: Text('${getTranslatedString("av")}:',
-                              style: TextStyle(fontSize: 21)),
+                          displayWidget: Text(
+                            '${capitalize(getTranslatedString("av"))}:',
+                            style: TextStyle(fontSize: 21),
+                          ),
                           valueWidget: Text(
                               seriesList.last.data.last.value
                                   .toStringAsFixed(3),

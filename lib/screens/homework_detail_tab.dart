@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -63,7 +64,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${getTranslatedString("hw")}: ",
+                            "${capitalize(getTranslatedString("hw"))}: ",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 25.0, fontWeight: FontWeight.bold),

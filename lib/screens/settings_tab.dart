@@ -127,9 +127,9 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     if (Theme.of(context).brightness == Brightness.light) {
-      dropDown = getTranslatedString("bright");
+      dropDown = "Világos";
     } else {
-      dropDown = getTranslatedString("dark");
+      dropDown = "Sötét";
     }
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
