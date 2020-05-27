@@ -315,7 +315,8 @@ class _SettingsBodyState extends State<SettingsBody> {
                         Icon(MdiIcons.bellRing, color: Colors.black),
                       ],
                     ),
-                    label: Text(getTranslatedString("networkAndNotificationSettings"),
+                    label: Text(
+                        getTranslatedString("networkAndNotificationSettings"),
                         style: TextStyle(color: Colors.black))),
               ),
             ),
@@ -464,7 +465,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Órarend beállításai"),
+        title: Text(getTranslatedString("timetableSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -473,37 +474,37 @@ class _TimetableSettingsState extends State<TimetableSettings> {
             switch (index) {
               case 0:
                 return ListTile(
-                  title: Text("Órarend alcím:"),
+                  title: Text("${getTranslatedString("timetableSubtitle")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Tanterem",
                         child: Text(
-                          "Tanterem",
+                          getTranslatedString("classroom"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Óra témája",
                         child: Text(
-                          "Óra témája",
+                          getTranslatedString("theme"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Tanár",
                         child: Text(
-                          "Tanár",
+                          getTranslatedString("teacher"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Kezdés-Bejezés",
                         child: Text(
-                          "Kezdés-Bejezés",
+                          getTranslatedString("startStop"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Időtartam",
                         child: Text(
-                          "Időtartam",
+                          getTranslatedString("period"),
                         ),
                       ),
                     ],
@@ -551,7 +552,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Jegyek oldal beállításai"),
+        title: Text(getTranslatedString("marksTabSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -560,31 +561,31 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
             switch (index) {
               case 1:
                 return ListTile(
-                  title: Text("Jegykártya színtéma:"),
+                  title: Text("${getTranslatedString("marksCardColorTheme")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Véletlenszerű",
                         child: Text(
-                          "Véletlenszerű",
+                          getTranslatedString("random"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Értékelés nagysága",
                         child: Text(
-                          "Értékelés nagysága",
+                          getTranslatedString("evaulationValue"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Egyszínű",
                         child: Text(
-                          "Egyszínű",
+                          getTranslatedString("oneColor"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Színátmenetes",
                         child: Text(
-                          "Színátmenetes",
+                          getTranslatedString("gradient"),
                         ),
                       ),
                     ],
@@ -613,37 +614,37 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 break;
               case 0:
                 return ListTile(
-                  title: Text("Jegy alcím:"),
+                  title: Text("${getTranslatedString("marksCardSubtitle")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Téma",
                         child: Text(
-                          "Téma",
+                          getTranslatedString("theme"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Tanár",
                         child: Text(
-                          "Tanár",
+                          getTranslatedString("teacher"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Súly",
                         child: Text(
-                          "Súly",
+                          getTranslatedString("weight"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Egyszerűsített Dátum",
                         child: Text(
-                          "Egyszerűsített Dátum",
+                          getTranslatedString("simplifiedDate"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Pontos Dátum",
                         child: Text(
-                          "Pontos Dátum",
+                          getTranslatedString("exactDate"),
                         ),
                       ),
                     ],
@@ -663,104 +664,104 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 break;
               case 2:
                 return ListTile(
-                  title: Text("Jegykártyák színe:"),
+                  title: Text("${getTranslatedString("marksCardColor")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Red",
                         child: Text(
-                          "Piros",
+                          getTranslatedString("red"),
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Green",
                         child: Text(
-                          "Zöld",
+                          getTranslatedString("green"),
                           style: TextStyle(color: Colors.green),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "lightGreenAccent400",
                         child: Text(
-                          "Világos zöld",
+                          getTranslatedString("lightGreen"),
                           style: TextStyle(color: Colors.lightGreenAccent[400]),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Lime",
                         child: Text(
-                          "Lime",
+                          getTranslatedString("lime"),
                           style: TextStyle(color: Colors.lime),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Blue",
                         child: Text(
-                          "Kék",
+                          getTranslatedString("blue"),
                           style: TextStyle(color: Colors.blue),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "LightBlue",
                         child: Text(
-                          "Világos kék",
+                          getTranslatedString("lightBlue"),
                           style: TextStyle(color: Colors.lightBlue),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Teal",
                         child: Text(
-                          "Zöldes kék",
+                          getTranslatedString("teal"),
                           style: TextStyle(color: Colors.teal),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Indigo",
                         child: Text(
-                          "Indigó kék",
+                          getTranslatedString("indigo"),
                           style: TextStyle(color: Colors.indigo),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Yellow",
                         child: Text(
-                          "Sárga",
+                          getTranslatedString("yellow"),
                           style: TextStyle(color: Colors.yellow),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Orange",
                         child: Text(
-                          "Narancs",
+                          getTranslatedString("orange"),
                           style: TextStyle(color: Colors.orange),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "DeepOrange",
                         child: Text(
-                          "Sötét narancs",
+                          getTranslatedString("deepOrange"),
                           style: TextStyle(color: Colors.deepOrange),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Pink",
                         child: Text(
-                          "Rózsaszín",
+                          getTranslatedString("pink"),
                           style: TextStyle(color: Colors.pink),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "LightPink",
                         child: Text(
-                          "Világos Rózsaszín",
+                          getTranslatedString("lightPink"),
                           style: TextStyle(color: Colors.pink[300]),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Purple",
                         child: Text(
-                          "Lila",
+                          getTranslatedString("purple"),
                           style: TextStyle(color: Colors.purple),
                         ),
                       ),
@@ -809,7 +810,7 @@ class _UIsettingsState extends State<UIsettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("UI beállításaok"),
+        title: Text("UI ${getTranslatedString("settings")}"),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -874,7 +875,7 @@ class _UIsettingsState extends State<UIsettings> {
                         ),
                       ),
                     ],
-                    onChanged: (String value) async{
+                    onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.setString("Language", value);
@@ -1002,7 +1003,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Statisztika oldal beállításai"),
+        title: Text(getTranslatedString("statisticSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -1011,19 +1012,19 @@ class _StatisticSettingsState extends State<StatisticSettings> {
             switch (index) {
               case 0:
                 return ListTile(
-                  title: Text("Statisztika mutató:"),
+                  title: Text("${getTranslatedString("statiscticsGraph")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Mindent",
                         child: Text(
-                          "Mindent",
+                          getTranslatedString("all"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Összesített",
                         child: Text(
-                          "Összesített",
+                          getTranslatedString("contracted"),
                         ),
                       ),
                     ],
@@ -1043,19 +1044,19 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 1:
                 return ListTile(
-                  title: Text("Jegyek számának mutatója:"),
+                  title: Text("${getTranslatedString("markCountChart")}:"),
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
                         value: "Kör diagram",
                         child: Text(
-                          "Kör diagram",
+                          getTranslatedString("pieChart"),
                         ),
                       ),
                       DropdownMenuItem(
                         value: "Oszlop diagram",
                         child: Text(
-                          "Oszlop diagram",
+                          getTranslatedString("barChart"),
                         ),
                       ),
                     ],
@@ -1075,7 +1076,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 2:
                 return ListTile(
-                  title: Text("Összes átlag mutatása:"),
+                  title: Text("${getTranslatedString("showAllAv")}:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
                       final SharedPreferences prefs =
@@ -1094,7 +1095,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 3:
                 return ListTile(
-                  title: Text("Átlagok színezése:"),
+                  title: Text("${getTranslatedString("colorAv")}:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
                       final SharedPreferences prefs =
@@ -1110,7 +1111,8 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 4:
                 return ListTile(
-                  title: Text("Grafikon alatti extra hely (1-500px):"),
+                  title: Text(
+                      "${getTranslatedString("extraSpaceUnderStat")} (1-500px):"),
                   trailing: SizedBox(
                     width: 50,
                     child: Form(
@@ -1126,7 +1128,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                             return getTranslatedString("cantLeaveEmpty");
                           }
                           if (int.parse(value) > 500 || int.parse(value) <= 0) {
-                            return "Az értéknek 1 és 500 között kell lenie";
+                            return getTranslatedString("mustBeBeetween1and500");
                           }
                           return null;
                         },
@@ -1178,7 +1180,7 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Jegyszámoló oldal beállításai"),
+        title: Text(getTranslatedString("markCalculatorSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -1187,7 +1189,8 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
             switch (index) {
               case 0:
                 return ListTile(
-                  title: Text("Virtuális jegyek összevonása"),
+                  title:
+                      Text(getTranslatedString("shouldVirtualMarksCollapse")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
                       final SharedPreferences prefs =
@@ -1378,7 +1381,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("marks")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("marks")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1411,7 +1416,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("hw")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("hw")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1444,7 +1451,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("notice")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("notice")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1477,7 +1486,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("timetable")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("timetable")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1511,7 +1522,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("exam")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("exam")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1541,7 +1554,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("av")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("av")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1574,7 +1589,9 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           MdiIcons.bellRing,
                           color: Colors.black,
                         ),
-                        label: Text(getTranslatedString("sendTestNotif") + " (${getTranslatedString("event")})",
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("event")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),
@@ -1685,7 +1702,8 @@ class _NetworkAndNotificationSettingsState
                             if (globals.offlineModeDb == false) {
                               await _ackAlert(
                                 context,
-                                getTranslatedString("backgroundFetchTurnOnWarning"),
+                                getTranslatedString(
+                                    "backgroundFetchTurnOnWarning"),
                               );
                               globals.offlineModeDb = true;
                               prefs.setBool("offlineModeDb", true);
@@ -1738,7 +1756,8 @@ class _NetworkAndNotificationSettingsState
                 break;
               case 4:
                 return ListTile(
-                  title: Text("${getTranslatedString("timeBetweenFetches")} (30-500${getTranslatedString("minutes")}):"),
+                  title: Text(
+                      "${getTranslatedString("timeBetweenFetches")} (30-500${getTranslatedString("minutes")}):"),
                   trailing: SizedBox(
                     width: 50,
                     child: Form(
@@ -1789,8 +1808,7 @@ class _NetworkAndNotificationSettingsState
                 return Column(
                   children: <Widget>[
                     ListTile(
-                      title:
-                          Text(getTranslatedString("fetchWakePhone")),
+                      title: Text(getTranslatedString("fetchWakePhone")),
                       trailing: Switch(
                         onChanged: (bool isOn) async {
                           final SharedPreferences prefs =
@@ -1898,11 +1916,18 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                         dbSwitch = isOn;
                         globals.offlineModeDb = isOn;
                       });
-                      if (!isOn && globals.backgroundFetch) {
-                        _ackAlert(context,
-                            "Figyelem!\nAz adatbázis kikapcsolása kikapcsolja a háttérlekéréseket!");
-                        globals.backgroundFetch = false;
-                        prefs.setBool("backgroundFetch", false);
+                      if (!isOn &&
+                          (globals.backgroundFetch || globals.notifications)) {
+                        _ackAlert(
+                          context,
+                          getTranslatedString("dbOffWarning"),
+                        );
+                        setState(() {
+                          globals.backgroundFetch = false;
+                          prefs.setBool("backgroundFetch", false);
+                          globals.notifications = false;
+                          prefs.setBool("notifications", false);
+                        });
                       }
                       prefs.setBool("offlineModeDb", isOn);
                       Crashlytics.instance.setBool("offlineModeDb", isOn);
@@ -1927,14 +1952,15 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                               barrierDismissible: true,
                               builder: (_) {
                                 return AlertDialog(
-                                  title: new Text("Törlés"),
+                                  title:
+                                      new Text(getTranslatedString("delete")),
                                   content: Text(
-                                    "Biztosan ki szeretnéd törölni az adatbázisokat?\nEz nem fordítható vissza",
+                                    getTranslatedString("sureDeleteDB"),
                                     textAlign: TextAlign.left,
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
-                                      child: Text('Igen',
+                                      child: Text(getTranslatedString("yes"),
                                           style: TextStyle(color: Colors.red)),
                                       onPressed: () async {
                                         FirebaseAnalytics()
@@ -1948,7 +1974,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                       },
                                     ),
                                     FlatButton(
-                                      child: Text('Nem'),
+                                      child: Text(getTranslatedString("no")),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
@@ -1962,7 +1988,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                             MdiIcons.databaseRemove,
                             color: Colors.black,
                           ),
-                          label: Text('Táblák kiürítése',
+                          label: Text(getTranslatedString("deleteDB"),
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
@@ -1989,7 +2015,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                             MdiIcons.databaseImport,
                             color: Colors.black,
                           ),
-                          label: Text('Nyers sql script',
+                          label: Text(getTranslatedString("runRawSQL"),
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
@@ -2019,7 +2045,7 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Nyers sql script"),
+        title: Text(getTranslatedString("runRawSQL")),
       ),
       body: Column(
         children: <Widget>[
@@ -2080,7 +2106,7 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Fejlesztői beállítások"),
+        title: Text(getTranslatedString("developerSettings")),
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
@@ -2093,12 +2119,12 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "Fejlesztői beállítások",
+                          getTranslatedString("developerSettings"),
                           style: new TextStyle(fontSize: 30),
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Minden amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nMinden itt történő dologért NEM vállalunk felelőséget",
+                          getTranslatedString("developerSettingsWarning"),
                           style: new TextStyle(fontSize: 20, color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
@@ -2126,7 +2152,7 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                           },
                           icon:
                               Icon(MdiIcons.databaseEdit, color: Colors.black),
-                          label: Text('Adatbázis beállításai',
+                          label: Text(getTranslatedString("dbSettings"),
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),
@@ -2170,14 +2196,16 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Házifeladat beállításai"),
+        title: Text(getTranslatedString("homeworkSettings")),
       ),
       body: ListView(
         children: <Widget>[
           Text(
             keepDataForHw >= 0
-                ? "Határidő után meddig mutassuk a házit? \n${keepDataForHw.toStringAsFixed(0)} napig"
-                : "Határidő után meddig mutassuk a házit? \nVégtelenig",
+                ? getTranslatedString("homeworkKeepFor") +
+                    " \n${keepDataForHw.toStringAsFixed(0)} ${getTranslatedString("forDay")}"
+                : getTranslatedString("homeworkKeepFor") +
+                    " \n${getTranslatedString("forInfinity")}",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),
@@ -2234,10 +2262,12 @@ class _AppInformationTabState extends State<AppInformationTab> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Új verzió: $version"),
+          title: Text("${getTranslatedString("newVersion")}: $version"),
           content: SingleChildScrollView(
-            child:
-                Column(children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
+            child: Column(children: <Widget>[
+              Text("${getTranslatedString("details")}:"),
+              Text(notes)
+            ]),
           ),
           actions: <Widget>[
             FlatButton(
@@ -2249,7 +2279,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
                     },
             ),
             FlatButton(
-              child: Text('Frissítés'),
+              child: Text(getTranslatedString("update")),
               onPressed: () async {
                 if (await canLaunch(link)) {
                   await launch(link);
@@ -2273,7 +2303,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("App informácók"),
+        title: Text(getTranslatedString("appInfo")),
       ),
       body: ListView(
         children: <Widget>[
@@ -2308,7 +2338,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
                         },
                         icon: Icon(MdiIcons.cellphoneArrowDown,
                             color: Colors.black),
-                        label: Text('Frissítések keresése',
+                        label: Text(getTranslatedString("searchForUpdate"),
                             style: TextStyle(color: Colors.black)))),
               ),
             ),
@@ -2338,35 +2368,39 @@ class _AppInformationTabState extends State<AppInformationTab> {
                           }
                         },
                         icon: Icon(MdiIcons.testTube, color: Colors.black),
-                        label: Text('Béta teszt verzió letöltése',
+                        label: Text(getTranslatedString("downloadBetaTest"),
                             style: TextStyle(color: Colors.black)))),
               ),
             ),
           ),
           SizedBox(height: 25, width: 25),
           ListTile(
-            title: Text('Jelenlegi verzió:'),
+            title: Text('${getTranslatedString("currVersion")}:'),
             trailing: Text(config.currentAppVersionCode),
           ),
           SizedBox(height: 20, width: 25),
           ListTile(
-            title: Text('Legújabb béta verzió:'),
+            title: Text('${getTranslatedString("latestBetaVersion")}:'),
             trailing: Text(latestGithub),
           ),
           SizedBox(height: 20, width: 25),
           ListTile(
-            title: Text('Legújabb playStore verzió:'),
+            title: Text('${getTranslatedString("latestPlayVersion")}:'),
             trailing: Text(latestPlayStore),
           ),
           SizedBox(height: 20, width: 25),
           ListTile(
-            title: Text('Applikáció végleges változat:'),
-            trailing: Text(config.isAppRelease ? "Igen" : "Nem"),
+            title: Text('${getTranslatedString("isAppFinal")}:'),
+            trailing: Text(config.isAppRelease
+                ? getTranslatedString("yes")
+                : getTranslatedString("no")),
           ),
           SizedBox(height: 20, width: 25),
           ListTile(
-            title: Text('Applikáció playStore változat:'),
-            trailing: Text(config.isAppPlaystoreRelease ? "Igen" : "Nem"),
+            title: Text('${getTranslatedString("isAppPlay")}:'),
+            trailing: Text(config.isAppPlaystoreRelease
+                ? getTranslatedString("yes")
+                : getTranslatedString("no")),
           ),
           SizedBox(height: 100, width: 25),
         ],
