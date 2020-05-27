@@ -19,6 +19,7 @@ import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String agent = config.currAgent;
@@ -58,7 +59,7 @@ class NetworkHelper {
     tokenIndex++;
     try {
       if (code == "" || user == "" || pass == "") {
-        return "Hiányzó bemenet";
+        return getTranslatedString("missingInput");
       } else {
         var headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -78,7 +79,7 @@ class NetworkHelper {
             if (status == '' || status == null) {
               if (parsedJson["error_description"] == '' ||
                   parsedJson["error_description"] == null) {
-                return "Hibás felhasználónév/jelszó";
+                return getTranslatedString("wrongUserPass");
               } else {
                 return parsedJson["error_description"];
               }
@@ -91,7 +92,7 @@ class NetworkHelper {
             var parsedJson = json.decode(response.body);
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
-              return "Hibás felhasználónév/jelszó";
+              return getTranslatedString("wrongUserPass");
             } else {
               return parsedJson["error_description"];
             }
@@ -100,7 +101,7 @@ class NetworkHelper {
             return 'post error: statusCode= ${response.statusCode}';
           }
         } on SocketException {
-          return "Rossz iskola azonosító";
+          return getTranslatedString("wrongSchId");
         }
       }
     } catch (e, s) {
@@ -120,12 +121,12 @@ class NetworkHelper {
             getToken(code, user, pass);
           } else {
             Crashlytics.instance.recordError(e, s, context: 'getToken');
-            return "Nincs válasz a krétától!\nPróbáld újra később!";
+            return getTranslatedString("noAns");
           }
         }
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'getToken');
-        return "Nincs válasz a novy API-tól!\nPróbáld újra később!";
+        return getTranslatedString("noAnsNovy");
       }
     }
     return "Error";
@@ -315,7 +316,7 @@ void setUpCalculatorPage(List<List<Evals>> input) {
   if (calculatorPage.dropdownValues.length != 0)
     calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
   else
-    calculatorPage.dropdownValue = "Az lehet, hogy még nincs jegyed?";
+    calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
 }
 
 Future<void> getExams(token, code) async {

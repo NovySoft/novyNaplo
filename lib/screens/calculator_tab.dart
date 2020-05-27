@@ -62,7 +62,7 @@ class VirtualMarks {
 
 class CalculatorTab extends StatefulWidget {
   static String tag = 'calculator';
-  static const title = 'Jegyszámoló';
+  static String title = getTranslatedString("markCalc");
 
   @override
   CalculatorTabState createState() => CalculatorTabState();
@@ -86,8 +86,9 @@ class CalculatorTabState extends State<CalculatorTab>
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            title:
-                Text(isEditing ? 'Jegy szerkesztése' : 'Új jegy hozzáadása:'),
+            title: Text(isEditing
+                ? getTranslatedString("editMark")
+                : '${getTranslatedString("addMark")}:'),
             content: SizedBox(
                 height: 400,
                 width: 400,
@@ -228,12 +229,13 @@ class CalculatorTabState extends State<CalculatorTab>
                                 }
                                 if (int.parse(value) > 1000 ||
                                     int.parse(value) <= 0) {
-                                  return "Az értéknek 1 és 1000 között kell lenie";
+                                  return getTranslatedString(
+                                      "mustBeBeetween1and1000");
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: "Súlyozás",
+                                labelText: getTranslatedString("weighting"),
                                 icon: Column(
                                   children: [
                                     SizedBox(
@@ -283,12 +285,13 @@ class CalculatorTabState extends State<CalculatorTab>
                                 }
                                 if (int.parse(value) > 100 ||
                                     int.parse(value) <= 0) {
-                                  return "Az értéknek 1 és 100 között kell lenie";
+                                  return getTranslatedString(
+                                      "mustBeBeetween1and100");
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: "Darab",
+                                labelText: getTranslatedString("pcs"),
                                 icon: Column(
                                   children: [
                                     SizedBox(
@@ -312,7 +315,7 @@ class CalculatorTabState extends State<CalculatorTab>
                                 height: 30,
                               ),
                               Text(
-                                "db",
+                                getTranslatedString("count"),
                                 style: TextStyle(fontSize: 20),
                               )
                             ],
@@ -324,7 +327,7 @@ class CalculatorTabState extends State<CalculatorTab>
                 )),
             actions: <Widget>[
               FlatButton(
-                child: Text('Mégse'),
+                child: Text(getTranslatedString("cancel")),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -365,7 +368,7 @@ class CalculatorTabState extends State<CalculatorTab>
         size: 50,
       ),
       Text(
-        "Nincs még jegyed!",
+        getTranslatedString("possibleNoMarks"),
         textAlign: TextAlign.center,
       )
     ]));
@@ -404,7 +407,7 @@ class CalculatorTabState extends State<CalculatorTab>
             if (globals.markCount == 0) {
               return noMarks();
             }
-            if (tab.text == "Jegyszámoló") {
+            if (tab.icon == Icon(MdiIcons.calculator)) {
               return _calculatorBody();
             } else {
               return Scaffold(
@@ -419,7 +422,7 @@ class CalculatorTabState extends State<CalculatorTab>
                             ? Colors.orange
                             : Colors.lightBlueAccent,
                     child: Icon(MdiIcons.plus),
-                    tooltip: "Virtuális jegy hozzáadása",
+                    tooltip: getTranslatedString("addVmark"),
                     elevation: 10,
                   ),
                   globals.adsEnabled
@@ -515,7 +518,7 @@ class CalculatorTabState extends State<CalculatorTab>
       child: ListView(
         children: <Widget>[
           Text(
-            "Mi van ha kapok",
+            getTranslatedString("whatIfIGet"),
             style: TextStyle(fontSize: 21),
             textAlign: TextAlign.center,
           ),
@@ -555,7 +558,7 @@ class CalculatorTabState extends State<CalculatorTab>
                 margin: EdgeInsets.all(5),
               ),
               Text(
-                "-ból/ből",
+                getTranslatedString("bolbol"),
                 style: TextStyle(fontSize: 21),
               ),
             ],
@@ -579,8 +582,8 @@ class CalculatorTabState extends State<CalculatorTab>
                         if (virtualMarks[index].count > 9) {
                           countText = virtualMarks[index].count.toString();
                         } else {
-                          countText =
-                              virtualMarks[index].count.toString() + "DB";
+                          countText = virtualMarks[index].count.toString() +
+                              getTranslatedString("count");
                         }
                         switch (virtualMarks[index].numberValue) {
                           case 1:
@@ -675,7 +678,7 @@ class CalculatorTabState extends State<CalculatorTab>
                           ],
                           secondaryActions: <Widget>[
                             IconSlideAction(
-                              caption: 'Szerkesztés',
+                              caption: getTranslatedString("edit"),
                               color: Colors.black45,
                               icon: Icons.create,
                               onTap: () async {
@@ -687,7 +690,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               },
                             ),
                             IconSlideAction(
-                              caption: 'Törlés',
+                              caption: getTranslatedString("delete"),
                               color: Colors.red,
                               icon: Icons.delete,
                               onTap: () async {
@@ -702,43 +705,48 @@ class CalculatorTabState extends State<CalculatorTab>
                       })
                   : Center(
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           Icon(
                             MdiIcons.emoticonSadOutline,
                             size: 50,
                           ),
                           Text(
-                            "Nincs még virtuális jegyed!",
+                            getTranslatedString("noVmark"),
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "A plusz gombbal adj hozzá párat!",
+                            getTranslatedString("addSomeVmark"),
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "A kártyákat alrébb húzva érheted el majd a beállításokat!",
+                            getTranslatedString("VmarkSlide"),
                             textAlign: TextAlign.center,
                           )
-                        ])),
+                        ],
+                      ),
+                    ),
             ),
           ),
           Center(
             child: RaisedButton.icon(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                onPressed: () async {
-                  setState(() {
-                    virtualMarks = [];
-                  });
-                },
-                icon: Icon(
-                  MdiIcons.delete,
-                  color: Colors.black,
-                ),
-                label: Text('Összes törlése',
-                    style: TextStyle(color: Colors.black))),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              onPressed: () async {
+                setState(() {
+                  virtualMarks = [];
+                });
+              },
+              icon: Icon(
+                MdiIcons.delete,
+                color: Colors.black,
+              ),
+              label: Text(
+                getTranslatedString("delAll"),
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
           SizedBox(
             height: 20,
@@ -764,7 +772,7 @@ class CalculatorTabState extends State<CalculatorTab>
           ),
           Text(
             dropdownValue +
-                " átlag előtte: " +
+                " ${getTranslatedString("avBefore")}: " +
                 (currSum / currCount).toStringAsFixed(3),
             textAlign: TextAlign.start,
             style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -774,7 +782,7 @@ class CalculatorTabState extends State<CalculatorTab>
             children: [
               Text(
                 dropdownValue +
-                    " átlag utánna: " +
+                    " ${getTranslatedString("avAfter")}: " +
                     tantargyiAtlagUtanna.toStringAsFixed(3),
                 textAlign: TextAlign.start,
                 style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -834,13 +842,16 @@ class CalculatorTabState extends State<CalculatorTab>
               margin: EdgeInsets.all(5),
             ),
           ),
-          Text("Jegyek összege (súlyozva): " + currSum.toString(),textAlign: TextAlign.center),
+          Text("${getTranslatedString("marksSumWeighted")}: " + currSum.toString(),
+              textAlign: TextAlign.center),
           Icon(MdiIcons.division),
-          Text("Jegyek száma (súlyozva): " + currCount.toString(),textAlign: TextAlign.center),
+          Text("${getTranslatedString("marksCountWeighted")}: " + currCount.toString(),
+              textAlign: TextAlign.center),
           Icon(MdiIcons.equal),
-          Text("Átlagod: " + (currSum / currCount).toStringAsFixed(3),textAlign: TextAlign.center),
+          Text("${getTranslatedString("yourAv")}: " + (currSum / currCount).toStringAsFixed(3),
+              textAlign: TextAlign.center),
           SizedBox(height: 20),
-          Text("Mit szeretnél elérni? $elakErni",textAlign: TextAlign.center),
+          Text("${getTranslatedString("wantGet")}? $elakErni", textAlign: TextAlign.center),
           Slider(
             value: elakErni,
             onChanged: (newValue) {
@@ -853,7 +864,8 @@ class CalculatorTabState extends State<CalculatorTab>
             divisions: 40,
             label: elakErni.toString(),
           ),
-          Text("Hány jegy alatt szeretnéd elérni? $turesHatar",textAlign: TextAlign.center),
+          Text("${getTranslatedString("underHowMany")}? $turesHatar",
+              textAlign: TextAlign.center),
           Slider(
             value: turesHatar,
             onChanged: (newValue) {
@@ -878,17 +890,14 @@ class CalculatorTabState extends State<CalculatorTab>
                 });
               },
               padding: EdgeInsets.all(12),
-              child: Text('Mehet', style: TextStyle(color: Colors.black)),
+              child: Text(getTranslatedString("go"), style: TextStyle(color: Colors.black)),
             ),
           ),
           SizedBox(
             height: 50,
           ),
-          Text(
-            text1,
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center
-          ),
+          Text(text1,
+              style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
           SizedBox(
             height: 250,
           ),
@@ -947,6 +956,7 @@ class CalculatorTabState extends State<CalculatorTab>
   }
 }
 
+//TODO translate under this
 void reCalculate() {
   text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
   if (text1 != "Nem lehetséges") {
