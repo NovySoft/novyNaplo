@@ -8,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 Timer timer;
 
@@ -57,8 +58,10 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
             color: Colors.grey,
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: 30,
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: 10, width: 5),
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
@@ -66,7 +69,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       padding:
                           const EdgeInsets.only(left: 15, top: 16, bottom: 16),
                       child: Text(
-                        'Óra információk:',
+                        '${getTranslatedString("lessonInfo")}:',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -76,35 +79,45 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                     break;
                   case 1:
                     return SizedBox(
-                      child: Text("Az óra neve: " + widget.lessonInfo.name,
+                      child: Text(
+                          "${getTranslatedString("nameOfLesson")}: " +
+                              widget.lessonInfo.name,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 2:
                     return SizedBox(
-                      child: Text("Óra témája: " + widget.lessonInfo.theme,
+                      child: Text(
+                          "${getTranslatedString("themeOfLesson")}: " +
+                              widget.lessonInfo.theme,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 3:
                     return SizedBox(
-                      child: Text("Tantárgy: " + widget.lessonInfo.subject,
+                      child: Text(
+                          "${getTranslatedString("subject")}: " +
+                              widget.lessonInfo.subject,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 4:
                     return SizedBox(
-                      child: Text("Terem: " + widget.lessonInfo.classroom,
+                      child: Text(
+                          "${getTranslatedString("classroom")}: " +
+                              widget.lessonInfo.classroom,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 5:
                     return SizedBox(
-                      child: Text("Tanár: " + widget.lessonInfo.teacher,
+                      child: Text(
+                          "${getTranslatedString("teacher")}: " +
+                              widget.lessonInfo.teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -112,7 +125,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   case 6:
                     return SizedBox(
                       child: Text(
-                          "Helyettesítő Tanár (ha van): " +
+                          "${getTranslatedString("deputTeacher")}: " +
                               widget.lessonInfo.deputyTeacherName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
@@ -125,7 +138,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         "-" +
                         widget.lessonInfo.date.day.toString();
                     return SizedBox(
-                      child: Text("Dátum: " + date,
+                      child: Text("${getTranslatedString("date")}: " + date,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -157,7 +170,11 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         ":" +
                         endMinutes;
                     return SizedBox(
-                      child: Text("Kezdés-befejezés: " + start + " - " + end,
+                      child: Text(
+                          "${getTranslatedString("startStop")}: " +
+                              start +
+                              " - " +
+                              end,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -167,14 +184,18 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         .difference(widget.lessonInfo.startDate);
                     return SizedBox(
                       child: Text(
-                          "Időtartam: " + diff.inMinutes.toString() + " perc",
+                          "${getTranslatedString("period")}: " +
+                              diff.inMinutes.toString() +
+                              " perc",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 10:
                     return SizedBox(
-                      child: Text("Osztály: " + widget.lessonInfo.groupName,
+                      child: Text(
+                          "${getTranslatedString("class")}: " +
+                              widget.lessonInfo.groupName,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -182,7 +203,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   case 11:
                     if (widget.lessonInfo.homework.content == null) {
                       return SizedBox(
-                        child: Text("Házifeladat: NINCS",
+                        child: Text(
+                            "${capitalize(getTranslatedString("hw"))}: ${getTranslatedString("nothing").toUpperCase()}",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                       );
@@ -192,7 +214,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         child: Column(
                           children: <Widget>[
                             SizedBox(height: 18),
-                            Text("Házifeladat: ",
+                            Text("${capitalize(getTranslatedString("hw"))}: ",
                                 style: TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.bold)),
                             Html(
@@ -235,7 +257,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                           (left.inMinutes / 60).toStringAsFixed(0);
                       String leftMins =
                           (left.inMinutes % 60).toStringAsFixed(0);
-                      String leftString = "$leftHours órád és $leftMins perced";
+                      String leftString =
+                          "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
                       bool dueOver = false;
                       if (left.inMinutes / 60 < 0) {
                         dueOver = true;
@@ -251,7 +274,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                             leftHours =
                                 (left.inMinutes / 60).toStringAsFixed(0);
                             leftMins = (left.inMinutes % 60).toStringAsFixed(0);
-                            leftString = "$leftHours órád és $leftMins perced";
+                            leftString =
+                                "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
                             if (left.inMinutes / 60 < 0) {
                               dueOver = true;
                             } else {
@@ -263,9 +287,9 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       if (dueOver) {
                         return SizedBox(
                           child: Text(
-                              "Házifeladat határideje: " +
+                              "${getTranslatedString("hDue")}: " +
                                   due +
-                                  " (határidőn túl)",
+                                  " (${getTranslatedString("overDue")})",
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -274,9 +298,9 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       } else {
                         return SizedBox(
                           child: Text(
-                              "Házifeladat határideje: " +
+                              "${getTranslatedString("hDue")}: " +
                                   due +
-                                  " (van még: $leftString)",
+                                  " (${getTranslatedString("hLeft")}: $leftString)",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold)),
                         );

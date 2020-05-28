@@ -100,15 +100,19 @@ class _HomeworkTabState extends State<HomeworkTab> {
 
   Widget noHomework() {
     return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(
-        MdiIcons.emoticonHappyOutline,
-        size: 50,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MdiIcons.emoticonHappyOutline,
+            size: 50,
+          ),
+          Text(
+            getTranslatedString("noHw"),
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
-      Text(
-        getTranslatedString("noHw"),
-        textAlign: TextAlign.center,
-      )
-    ]));
+    );
   }
 }
