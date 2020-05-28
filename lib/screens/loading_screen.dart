@@ -42,7 +42,7 @@ final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
 String decryptedCode,
     decryptedUser,
     decryptedPass,
-    loadingText = "Kérlek várj...";
+    loadingText = "${getTranslatedString("plsWait")}...";
 var status;
 String agent = config.currAgent;
 var response;
@@ -59,7 +59,7 @@ class _LoadingPageState extends State<LoadingPage> {
   //Network start
   void setUpCalculatorPage(List<List<Evals>> input) {
     setState(() {
-      loadingText = "Jegyszámoló beállítása";
+      loadingText = getTranslatedString("setUpMarkCalc");
     });
     calculatorPage.dropdownValues = [];
     calculatorPage.dropdownValue = "";
@@ -83,12 +83,12 @@ class _LoadingPageState extends State<LoadingPage> {
     if (calculatorPage.dropdownValues.length != 0)
       calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
     else
-      calculatorPage.dropdownValue = "Az lehet, hogy még nincs jegyed?";
+      calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
   }
 
   Future<ConnectivityResult> isNetworkAvailable() async {
     setState(() {
-      loadingText = "Hálózat ellenőrzése";
+      loadingText = getTranslatedString("checkNet");
     });
     return await (Connectivity().checkConnectivity());
   }
@@ -97,10 +97,10 @@ class _LoadingPageState extends State<LoadingPage> {
     tokenIndex++;
     try {
       if (code == "" || user == "" || pass == "") {
-        afterTokenGrab(context, "Hiányzó bemenet");
+        afterTokenGrab(context, getTranslatedString("missingInput"));
       } else {
         setState(() {
-          loadingText = "Token lekérése";
+          loadingText = getTranslatedString("getToken");
         });
         var headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -116,14 +116,14 @@ class _LoadingPageState extends State<LoadingPage> {
               body: data);
           if (response.statusCode == 200) {
             setState(() {
-              loadingText = "Token dekódolása";
+              loadingText = getTranslatedString("decodeToken");
             });
             var parsedJson = json.decode(response.body);
             var status = parsedJson['token_type'];
             if (status == '' || status == null) {
               if (parsedJson["error_description"] == '' ||
                   parsedJson["error_description"] == null) {
-                afterTokenGrab(context, "Hibás felhasználónév/jelszó");
+                afterTokenGrab(context, getTranslatedString("wrongUserPass"));
               } else {
                 afterTokenGrab(context, parsedJson["error_description"]);
               }
@@ -136,7 +136,7 @@ class _LoadingPageState extends State<LoadingPage> {
             var parsedJson = json.decode(response.body);
             if (parsedJson["error_description"] == '' ||
                 parsedJson["error_description"] == null) {
-              afterTokenGrab(context, "Hibás felhasználónév/jelszó");
+              afterTokenGrab(context, getTranslatedString("wrongUserPass"));
             } else {
               afterTokenGrab(context, parsedJson["error_description"]);
             }
@@ -146,12 +146,12 @@ class _LoadingPageState extends State<LoadingPage> {
                 context, 'post error: statusCode= ${response.statusCode}');
           }
         } on SocketException {
-          afterTokenGrab(context, "Rossz iskola azonosító");
+          afterTokenGrab(context, getTranslatedString("wrongSchId"));
         }
       }
     } catch (e, s) {
       setState(() {
-        loadingText = "Hiba a tokennel való lekérés közben\nÚjra próbálkozás";
+        loadingText = getTranslatedString("errToken");
       });
       var client = http.Client();
       var header = {
@@ -160,9 +160,6 @@ class _LoadingPageState extends State<LoadingPage> {
       };
       var res;
       try {
-        setState(() {
-          loadingText = "Újra kezdés!";
-        });
         res = await client.get('https://api.novy.vip/kretaHeader.json',
             headers: header);
         if (res.statusCode == 200) {
@@ -173,13 +170,13 @@ class _LoadingPageState extends State<LoadingPage> {
           } else {
             Crashlytics.instance.recordError(e, s, context: 'getToken');
             _ackAlert(
-                context, "Nincs válasz a krétától!\nPróbáld újra később!");
+                context, getTranslatedString("noAns"));
           }
         }
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'getToken');
         _ackAlert(
-            context, "Nincs válasz a novy API-tól!\nPróbáld újra később!");
+            context, getTranslatedString("noAnsNovy"));
       }
     }
   }
@@ -187,7 +184,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Future<void> getEvents(token, code) async {
     try {
       setState(() {
-        loadingText = "Faliújság lekérése";
+        loadingText = getTranslatedString("getEvents");
       });
       var headers = {
         'Authorization': 'Bearer $token',
@@ -200,13 +197,13 @@ class _LoadingPageState extends State<LoadingPage> {
         throw Exception('get error: statusCode= ${res.statusCode}');
       if (res.statusCode == 200) {
         setState(() {
-          loadingText = "Faliújság dekódolása";
+          loadingText = getTranslatedString("decodeEvents");
         });
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
         setState(() {
-          loadingText = "Faliújság mentése";
+          loadingText = getTranslatedString("saveEvents");
         });
         if (globals.offlineModeDb || globals.backgroundFetch) {
           await batchInsertEvents(eventsPage.allParsedEvents);
@@ -214,6 +211,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -222,7 +220,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Future<void> getExams(token, code) async {
     try {
       setState(() {
-        loadingText = "Bejelentett dolgozatok lekérése";
+        loadingText = getTranslatedString("getUpExams");
       });
       var headers = {
         'Authorization': 'Bearer $token',
@@ -236,7 +234,7 @@ class _LoadingPageState extends State<LoadingPage> {
         throw Exception('get error: statusCode= ${res.statusCode}');
       if (res.statusCode == 200) {
         setState(() {
-          loadingText = "Bejelentett dolgozatok dekódolása";
+          loadingText = getTranslatedString("decodeExams");
         });
         //print("res.body ${res.body}");
         var bodyJson = json.decode(res.body);
@@ -244,7 +242,7 @@ class _LoadingPageState extends State<LoadingPage> {
         examsPage.allParsedExams
             .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
         setState(() {
-          loadingText = "Dolgozatok mentése";
+          loadingText = getTranslatedString("saveExam");
         });
         if (globals.offlineModeDb || globals.backgroundFetch) {
           await batchInsertExams(examsPage.allParsedExams);
@@ -253,6 +251,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getExams');
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -261,7 +260,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Future<void> getStudentInfo(token, code) async {
     try {
       setState(() {
-        loadingText = "Jegyek lekérése";
+        loadingText = getTranslatedString("getMarks");
       });
       var headers = {
         'Authorization': 'Bearer $token',
@@ -274,7 +273,7 @@ class _LoadingPageState extends State<LoadingPage> {
         throw Exception('get error: statusCode= ${res.statusCode}');
       if (res.statusCode == 200) {
         setState(() {
-          loadingText = "Jegyek dekódolása";
+          loadingText = getTranslatedString("decodeMarks");
         });
         globals.dJson = json.decode(res.body);
         if (!config.isAppPlaystoreRelease) {
@@ -300,6 +299,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: loadingText);
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -308,7 +308,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Future<void> getAvarages(var token, code) async {
     try {
       setState(() {
-        loadingText = "Átlagok lekérése";
+        loadingText = getTranslatedString("getAvs");
       });
       var headers = {
         'Authorization': 'Bearer $token',
@@ -322,7 +322,7 @@ class _LoadingPageState extends State<LoadingPage> {
         throw Exception('get error: statusCode= ${res.statusCode}');
       if (res.statusCode == 200) {
         setState(() {
-          loadingText = "Átlagok dekódolása";
+          loadingText = getTranslatedString("decodeAvs");
         });
         var bodyJson = json.decode(res.body);
         globals.avJson = bodyJson;
@@ -330,6 +330,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getAvarages');
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -338,7 +339,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Future<List<List<Lesson>>> getWeekLessons(token, code) async {
     try {
       setState(() {
-        loadingText = "Órarend előkészítése";
+        loadingText = getTranslatedString("getTimetableReady");
       });
       List<List<Lesson>> output = [];
       for (var n = 0; n < 7; n++) {
@@ -373,7 +374,7 @@ class _LoadingPageState extends State<LoadingPage> {
         'Content-Type': 'application/json',
       };
       setState(() {
-        loadingText = "Órarend lekérése";
+        loadingText = getTranslatedString("getTimetable");
       });
 
       var res = await http.get(
@@ -385,7 +386,7 @@ class _LoadingPageState extends State<LoadingPage> {
       //Process response
       var decoded = json.decode(res.body);
       setState(() {
-        loadingText = "Órarend dekódolása\nHázifeladatok lekérése";
+        loadingText = getTranslatedString("decTimetable");
       });
       List<Lesson> tempLessonList = [];
       List<Lesson> tempLessonListForDB = [];
@@ -407,7 +408,7 @@ class _LoadingPageState extends State<LoadingPage> {
             tempLessonListForDB.add(n);
           }
           setState(() {
-            loadingText = "Órarend mentése";
+            loadingText = getTranslatedString("savTimetable");
           });
           if (globals.offlineModeDb || globals.backgroundFetch) {
             await batchInsertLessons(tempLessonListForDB);
@@ -417,6 +418,7 @@ class _LoadingPageState extends State<LoadingPage> {
       return output;
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getWeekLessons');
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -430,7 +432,7 @@ class _LoadingPageState extends State<LoadingPage> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await globals.setGlobals();
       setState(() {
-        loadingText = "Verzió ellenőrzése";
+        loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
       NewVersion newVerDetails = await getVersion();
@@ -463,12 +465,9 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       //If we have prefetched data
       if (globals.backgroundFetch || globals.offlineModeDb) {
-        setState(() {
-          loadingText = "Adatok olvasása az adatbázisból";
-        });
         //MARKS
         setState(() {
-          loadingText = "Jegyek olvasása az adatbázisból";
+          loadingText = getTranslatedString("readMarks");
         });
         List<Evals> tempEvals = await getAllEvals();
         globals.markCount = tempEvals.length;
@@ -477,19 +476,19 @@ class _LoadingPageState extends State<LoadingPage> {
         marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
         //Homework
         setState(() {
-          loadingText = "Házifeladat olvasása az adatbázisból";
+          loadingText = getTranslatedString("readHw");
         });
         homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
         homeworkPage.globalHomework
             .sort((a, b) => a.dueDate.compareTo(b.dueDate));
         //Notices
         setState(() {
-          loadingText = "Feljegyzések olvasása az adatbázisból";
+          loadingText = getTranslatedString("readNotices");
         });
         noticesPage.allParsedNotices = await getAllNotices();
         //Avarages
         setState(() {
-          loadingText = "Átlagok olvasása az adatbázisból";
+          loadingText = getTranslatedString("readAvs");
         });
         avaragesPage.avarageList = await getAllAvarages();
         //Statisztika
@@ -500,7 +499,7 @@ class _LoadingPageState extends State<LoadingPage> {
         setUpCalculatorPage(statisticsPage.allParsedSubjects);
         //Timetable
         setState(() {
-          loadingText = "Órarend olvasása az adatbázisból";
+          loadingText = getTranslatedString("readTimetable");
         });
         timetablePage.lessonsList =
             await getWeekLessonsFromLessons(await getAllTimetable());
@@ -509,20 +508,20 @@ class _LoadingPageState extends State<LoadingPage> {
             .sort((a, b) => b.createDateString.compareTo(a.createDateString));
         //Exams
         setState(() {
-          loadingText = "Dolgozatok olvasása az adatbázisból";
+          loadingText = getTranslatedString("readExam");
         });
         examsPage.allParsedExams = await getAllExams();
         examsPage.allParsedExams
             .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
         //Events
         setState(() {
-          loadingText = "Faliújság olvasása az adatbázisból";
+          loadingText = getTranslatedString("readEvents");
         });
         eventsPage.allParsedEvents = await getAllEvents();
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
         //DONE
         setState(() {
-          loadingText = "Mindjárt kész!";
+          loadingText = "${getTranslatedString("almReady")}!";
         });
         //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
         if ((tempEvals.length != 0 &&
@@ -564,6 +563,7 @@ class _LoadingPageState extends State<LoadingPage> {
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');
+      //TODO translate
       await _ackAlert(context,
           "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása");
     }
@@ -578,17 +578,20 @@ class _LoadingPageState extends State<LoadingPage> {
           save(context);
         } catch (e, s) {
           Crashlytics.instance.recordError(e, s, context: 'afterTokenGrab');
+          //TODO translate
           await _ackAlert(context,
               "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
         }
       } else {
         if (status != null) {
+          //TODO translate
           await _ackAlert(
               context,
               "HTTP hiba: " +
                   status.toString() +
                   "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
         } else {
+          //TODO translate
           await _ackAlert(context,
               "Ismeretlen HTTP hiba\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
           return;
@@ -600,12 +603,13 @@ class _LoadingPageState extends State<LoadingPage> {
   void auth(var context) async {
     try {
       if (await isNetworkAvailable() == ConnectivityResult.none) {
-        afterTokenGrab(context, "No internet connection was detected");
+        afterTokenGrab(context, getTranslatedString("noNet"));
       } else {
         getToken(decryptedCode, decryptedUser, decryptedPass);
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'auth');
+      //TODO translate
       await _ackAlert(context,
           "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
     }
@@ -613,7 +617,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
   void save(var context) async {
     setState(() {
-      loadingText = "Mindjárt megvagyunk!";
+      loadingText = "${getTranslatedString("almReady")}!";
     });
     FirebaseAnalytics().setUserProperty(name: "School", value: decryptedCode);
     Crashlytics.instance.setString("School", decryptedCode);
@@ -703,10 +707,10 @@ class _LoadingPageState extends State<LoadingPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Új verzió: $version"),
+          title: Text("${getTranslatedString("newVersion")}: $version"),
           content: SingleChildScrollView(
             child:
-                Column(children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
+                Column(children: <Widget>[Text("${getTranslatedString("details")}:"), Text(notes)]),
           ),
           actions: <Widget>[
             FlatButton(
@@ -718,7 +722,7 @@ class _LoadingPageState extends State<LoadingPage> {
                     },
             ),
             FlatButton(
-              child: Text('Frissítés'),
+              child: Text(getTranslatedString("update")),
               onPressed: () async {
                 if (await canLaunch(link)) {
                   await launch(link);
@@ -744,7 +748,7 @@ class _LoadingPageState extends State<LoadingPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Státusz'),
+          title: Text(getTranslatedString("status")),
           content: Text(content),
           actions: <Widget>[
             FlatButton(

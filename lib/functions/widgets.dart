@@ -18,6 +18,7 @@ import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -1050,7 +1051,7 @@ Widget getDrawer(String screen, BuildContext context) {
             decoration: BoxDecoration(color: Colors.grey),
             child: Center(child: new Image.asset(menuLogo, fit: BoxFit.fill))),
         ListTile(
-          title: Text('Jegyek'),
+          title: Text(capitalize(getTranslatedString("marks"))),
           leading: Icon(Icons.create),
           onTap: () {
             if (screen == MarksTab.tag) {
@@ -1066,7 +1067,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Órarend'),
+          title: Text(capitalize(getTranslatedString("timetable"))),
           leading: Icon(Icons.today),
           onTap: () {
             if (screen == TimetableTab.tag) {
@@ -1082,7 +1083,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Bejelentett dolgozatok'),
+          title: Text(capitalize(getTranslatedString("exams"))),
           leading: Icon(MdiIcons.clipboardText),
           onTap: () {
             if (screen == ExamsTab.tag) {
@@ -1098,7 +1099,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Házifeladatok'),
+          title: Text(capitalize(getTranslatedString("hw"))),
           leading: Icon(MdiIcons.bagPersonalOutline),
           onTap: () {
             if (screen == HomeworkTab.tag) {
@@ -1116,7 +1117,7 @@ Widget getDrawer(String screen, BuildContext context) {
         globals.showAllAvsInStats
             ? SizedBox(height: 0, width: 0)
             : ListTile(
-                title: Text('Átlagok'),
+                title: Text(capitalize(getTranslatedString("avs"))),
                 leading: Icon(Icons.all_inclusive),
                 onTap: () {
                   if (screen == AvaragesTab.tag) {
@@ -1133,7 +1134,7 @@ Widget getDrawer(String screen, BuildContext context) {
                 },
               ),
         ListTile(
-          title: Text('Feljegyzések'),
+          title: Text(capitalize(getTranslatedString("notices"))),
           leading: Icon(Icons.layers),
           onTap: () {
             if (screen == NoticesTab.tag) {
@@ -1149,7 +1150,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Faliújság'),
+          title: Text(capitalize(getTranslatedString("events"))),
           leading: Icon(MdiIcons.pin),
           onTap: () {
             if (screen == EventsTab.tag) {
@@ -1165,7 +1166,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Statisztika'),
+          title: Text(capitalize(getTranslatedString("statistics"))),
           leading: Icon(MdiIcons.chartScatterPlotHexbin),
           onTap: () {
             if (screen == StatisticsTab.tag) {
@@ -1181,7 +1182,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Jegyszámoló'),
+          title: Text(capitalize(getTranslatedString("markCalc"))),
           leading: new Icon(MdiIcons.calculator),
           onTap: () {
             if (screen == CalculatorTab.tag) {
@@ -1197,7 +1198,7 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
-          title: Text('Beállítások'),
+          title: Text(capitalize(getTranslatedString("settings"))),
           leading: Icon(Icons.settings_applications),
           onTap: () {
             if (screen == SettingsTab.tag) {
