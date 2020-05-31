@@ -277,6 +277,7 @@ IconData parseSubjectToIcon({@required String subject}) {
           subject.toLowerCase().contains("idegen") ||
           subject.toLowerCase().contains("nyelv") ||
           subject.toLowerCase().contains("angol") ||
+          subject.toLowerCase().contains("héber") ||
           subject.toLowerCase().contains("english")) &&
       !subject.toLowerCase().contains("magyar")) {
     return MdiIcons.translate;
@@ -312,6 +313,15 @@ IconData parseSubjectToIcon({@required String subject}) {
       subject.toLowerCase().contains("mozgóképkultúra") ||
       subject.toLowerCase().contains("média")) {
     return MdiIcons.videoVintage;
+  }
+  if (subject.toLowerCase().contains("osztályfő")) {
+    return MdiIcons.accountVoice;
+  }
+  if(subject.toLowerCase().contains("művészettörténet")){
+    return MdiIcons.googleEarth;
+  }
+  if(subject.toLowerCase().contains("napközi")){
+    return MdiIcons.basketball;
   }
   //LogUnkown subject so I can add that later
   FirebaseAnalytics().logEvent(
