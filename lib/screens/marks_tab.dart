@@ -20,14 +20,15 @@ import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<Evals> allParsedByDate, allParsedBySubject;
 int selectedIndex = 0;
 bool differenSubject = false;
 String subjectBefore = "";
 final List<Tab> markTabs = <Tab>[
-  Tab(text: 'Dátum szerint', icon: Icon(Icons.calendar_today)),
-  Tab(text: 'Tantárgy szerint', icon: Icon(Icons.view_list)),
+  Tab(text: getTranslatedString("byDate"), icon: Icon(Icons.calendar_today)),
+  Tab(text: getTranslatedString("bySubject"), icon: Icon(Icons.view_list)),
 ];
 String label, labelBefore;
 TabController _tabController;
@@ -36,8 +37,7 @@ bool redirectPayload = false;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
-  static const title = 'Jegyek';
-  static const androidIcon = Icon(Icons.music_note);
+  static String title = capitalize(getTranslatedString("marks"));
 
   const MarksTab({Key key, this.androidDrawer}) : super(key: key);
 
@@ -87,8 +87,8 @@ class MarksTabState extends State<MarksTab>
     Crashlytics.instance.log("RefreshData");
     await notifications.flutterLocalNotificationsPlugin.show(
       -111,
-      'Adatok lekérése',
-      'Éppen zajlik az adatok lekérése...',
+      getTranslatedString("gettingData"),
+      '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -132,7 +132,7 @@ class MarksTabState extends State<MarksTab>
           allParsedByDate[index].theme != "")
         subtitle = capitalize(allParsedByDate[index].theme);
       else
-        subtitle = "Ismeretlen";
+        subtitle = getTranslatedString("unkown");
     } else if (globals.markCardSubtitle == "Tanár") {
       subtitle = allParsedByDate[index].teacher;
     } else if (globals.markCardSubtitle == "Súly") {
@@ -228,7 +228,7 @@ class MarksTabState extends State<MarksTab>
           allParsedBySubject[index].theme != "")
         subtitle = capitalize(allParsedBySubject[index].theme);
       else
-        subtitle = "Ismeretlen";
+        subtitle = getTranslatedString("unkown");
     } else if (globals.markCardSubtitle == "Tanár") {
       subtitle = allParsedBySubject[index].teacher;
     } else if (globals.markCardSubtitle == "Súly") {
@@ -245,7 +245,7 @@ class MarksTabState extends State<MarksTab>
       subtitle = "$year-$month-$day $hour:$minutes:$seconds";
     }
     if (subtitle == "" || subtitle == null) {
-      subtitle = "Ismeretlen";
+      subtitle = getTranslatedString("unkown");
     }
     if (subtitle.length >= 30) {
       subtitle = subtitle.substring(0, 27);
@@ -429,7 +429,7 @@ class MarksTabState extends State<MarksTab>
       body: TabBarView(
           controller: _tabController,
           children: markTabs.map((Tab tab) {
-            if (tab.text.toLowerCase() == "dátum szerint") {
+            if (tab.text == getTranslatedString("byDate")) {
               if (globals.markCount == 0) {
                 return noMarks();
               } else {
@@ -468,15 +468,19 @@ class MarksTabState extends State<MarksTab>
 
   Widget noMarks() {
     return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(
-        MdiIcons.emoticonSadOutline,
-        size: 50,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MdiIcons.emoticonSadOutline,
+            size: 50,
+          ),
+          Text(
+            "${getTranslatedString("possibleNoMarks")}!",
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
-      Text(
-        "Nincs még jegyed!",
-        textAlign: TextAlign.center,
-      )
-    ]));
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 class ExamsDetailTab extends StatelessWidget {
   ExamsDetailTab({@required this.exam, this.color});
@@ -41,7 +42,7 @@ Widget _buildBody(Exam exam, Color color) {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: 8,
+            itemCount: 7 + globals.adModifier,
             itemBuilder: (context, index) {
               switch (index) {
                 case 0:
@@ -49,7 +50,7 @@ Widget _buildBody(Exam exam, Color color) {
                     padding:
                         const EdgeInsets.only(left: 15, top: 16, bottom: 16),
                     child: Text(
-                      'Dolgozat információk:',
+                      '${getTranslatedString("examInfo")}:',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -59,14 +60,14 @@ Widget _buildBody(Exam exam, Color color) {
                   break;
                 case 1:
                   return SizedBox(
-                    child: Text("Tantárgy: " + exam.subject,
+                    child: Text("${getTranslatedString("subject")}: " + exam.subject,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 2:
                   return SizedBox(
-                    child: Text("Téma: " + exam.nameOfExam,
+                    child: Text("${getTranslatedString("theme")}: " + exam.nameOfExam,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -74,14 +75,14 @@ Widget _buildBody(Exam exam, Color color) {
                 case 3:
                   return SizedBox(
                     child: Text(
-                        "Dolgozat típusa: " + exam.typeOfExam.toString(),
+                        "${getTranslatedString("examType")}: " + exam.typeOfExam.toString(),
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 4:
                   return SizedBox(
-                    child: Text("Tanár: " + exam.teacher,
+                    child: Text("${getTranslatedString("teacher")}: " + exam.teacher,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -91,7 +92,7 @@ Widget _buildBody(Exam exam, Color color) {
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(
-                    child: Text("Írás dátuma: " + subtitle,
+                    child: Text("${getTranslatedString("dateWrite")}: " + subtitle,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -101,13 +102,13 @@ Widget _buildBody(Exam exam, Color color) {
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(
-                    child: Text("Feladás dátuma: " + subtitle,
+                    child: Text("${getTranslatedString("dateGiveUp")}: " + subtitle,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 default:
-                  return SizedBox(height: 25);
+                  return SizedBox(height: 100);
               }
             },
           ),

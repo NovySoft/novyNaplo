@@ -19,6 +19,7 @@ import 'package:novynaplo/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/screens/exams_detail_tab.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 Int64List vibrationPattern;
 var androidPlatformChannelSpecifics;
@@ -271,8 +272,8 @@ Future selectNotification(String payload) async {
       context: globals.globalContext,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Értesítés'),
-          content: Text("Ismeretlen payload:\n" + payload),
+          title: Text(getTranslatedString("notif")),
+          content: Text("${getTranslatedString("unkPayload")}:\n" + payload),
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),
@@ -295,9 +296,9 @@ Future<void> showTesztNotificationDialog() async {
     context: globals.globalContext,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Státusz'),
+        title: Text(getTranslatedString("status")),
         content: Text(
-            "Egy teszt értesítést nyomtál meg...\nAmennyiben ez nem így történt jelentsd a hibát"),
+            "${getTranslatedString("pressTestNotif")}..."),
         actions: <Widget>[
           FlatButton(
             child: Text('Ok'),

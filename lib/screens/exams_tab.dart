@@ -5,6 +5,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/exams_detail_tab.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<Exam> allParsedExams = [];
 List<Color> colors = [];
@@ -27,7 +28,7 @@ class _ExamsTabState extends State<ExamsTab> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bejelentett dolgozatok"),
+        title: Text(getTranslatedString("exams")),
       ),
       drawer: getDrawer(ExamsTab.tag, context),
       body: _body(context),
@@ -54,7 +55,7 @@ class _ExamsTabState extends State<ExamsTab> {
         size: 50,
       ),
       Text(
-        "Nincs még bejelentett dolgozat!",
+        "${getTranslatedString("noExam")}!",
         textAlign: TextAlign.center,
       )
     ]));

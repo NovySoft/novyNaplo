@@ -86,6 +86,7 @@ flutter:
     - assets/git.png
     - assets/firebase.png
     - assets/admob.png
+    - assets/icon/icon.png
 
   fonts:
       - family: Nunito

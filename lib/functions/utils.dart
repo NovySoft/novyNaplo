@@ -83,7 +83,13 @@ List<String> getRandomNames(int amount) {
 }
 
 String capitalize(String word) {
-  if (word == null) return "";
+  if (word == null ||
+      word == "" ||
+      word.length == 0 ||
+      (word is String) == false) {
+    return "";
+  }
+  if (word.length < 2) return word;
   return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
 }
 
@@ -271,6 +277,7 @@ IconData parseSubjectToIcon({@required String subject}) {
           subject.toLowerCase().contains("idegen") ||
           subject.toLowerCase().contains("nyelv") ||
           subject.toLowerCase().contains("angol") ||
+          subject.toLowerCase().contains("héber") ||
           subject.toLowerCase().contains("english")) &&
       !subject.toLowerCase().contains("magyar")) {
     return MdiIcons.translate;
@@ -284,7 +291,8 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("biológia")) {
     return MdiIcons.dna;
   }
-  if (subject.toLowerCase().contains("kémia")) {
+  if (subject.toLowerCase().contains("kémia") ||
+      subject.toLowerCase().contains("term. tud.")) {
     return MdiIcons.beakerCheck;
   }
   if (subject.toLowerCase().contains("fizika")) {
@@ -297,6 +305,23 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("matek") ||
       subject.toLowerCase().contains("matematika")) {
     return MdiIcons.androidStudio;
+  }
+  if (subject.toLowerCase().contains("ügyvitel")) {
+    return MdiIcons.keyboardSettings;
+  }
+  if (subject.toLowerCase().contains("mozgógépkultúra") ||
+      subject.toLowerCase().contains("mozgóképkultúra") ||
+      subject.toLowerCase().contains("média")) {
+    return MdiIcons.videoVintage;
+  }
+  if (subject.toLowerCase().contains("osztályfő")) {
+    return MdiIcons.accountVoice;
+  }
+  if(subject.toLowerCase().contains("művészettörténet")){
+    return MdiIcons.googleEarth;
+  }
+  if(subject.toLowerCase().contains("napközi")){
+    return MdiIcons.basketball;
   }
   //LogUnkown subject so I can add that later
   FirebaseAnalytics().logEvent(

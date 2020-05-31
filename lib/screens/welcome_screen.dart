@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -186,7 +187,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Üdv a Novy Naplóban!",
+                  getTranslatedString("Welcome to novynaplo"),
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
@@ -201,7 +202,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Húzd el a kezdéshez", style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -242,7 +243,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Ez az alkalmazás nyílt forráskódú!",
+                  getTranslatedString("thisAppOpenSource"),
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
@@ -255,7 +256,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                    "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
+                    getTranslatedString("errAndGit"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24)),
               )),
@@ -269,7 +270,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Húzd tovább ", style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -311,7 +312,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Harmadik felek és adatgyűjtés",
+                  getTranslatedString("thirdParty"),
                   style: TextStyle(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
@@ -324,7 +325,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               duration: Duration(milliseconds: 500),
               child: Center(
                 child: Text(
-                  "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk rólad (CSAK A TESZT VERZIÓBAN) az a neved. Amenyiben a playstore-ból vagy az appstore-ból tölttötted le az applikációt, akkor nem tárolunk rólad semmilyen adatot.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+                  getTranslatedString("useThirdParties"),
                   style: TextStyle(fontSize: 24),
                   textAlign: TextAlign.center,
                 ),
@@ -339,7 +340,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Húzd tovább ", style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -369,35 +370,35 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         child: ListView(
       children: <Widget>[
         Text(
-          "Akik az apphoz hozzájárultak:",
+          getTranslatedString("contributors"),
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 32),
         ),
         SizedBox(
           height: 30,
         ),
-        PeopleCard(name: "Novy", job: "Fő fejlesztő"),
-        PeopleCard(name: "Zoller András", job: "Jegyszámoló programja"),
-        PeopleCard(name: "Gáti Gergely", job: "Reklámok készítője"),
-        PeopleCard(name: "Dallos Levente", job: "JS programozó"),
-        PeopleCard(name: "Gáspár Bernát", job: "Design tanácsadó"),
-        PeopleCard(name: "Madács Márton", job: "Fő finanszírozó"),
+        PeopleCard(name: "Novy", job: getTranslatedString("leadDev")),
+        PeopleCard(name: "Zoller András", job: getTranslatedString("markCalcDev")),
+        PeopleCard(name: "Gáti Gergely", job: getTranslatedString("adsMaker")),
+        PeopleCard(name: "Dallos Levente", job: getTranslatedString("jsDev")),
+        PeopleCard(name: "Gáspár Bernát", job: getTranslatedString("designTip")),
+        PeopleCard(name: "Madács Márton", job: getTranslatedString("mainDonator")),
         PeopleCard(name: "Boapps", job: "Ekréta API"),
         PeopleCard(
-            name: "Stackoverflow", job: "Informatika problémák megoldása :)"),
+            name: "Stackoverflow", job: getTranslatedString("stackPro")),
         PeopleCard(
-            name: "Sokan Mások...", job: "Finanszírozás\nTesztelés\nÖtletek"),
+            name: "${getTranslatedString("manyOther")}...", job: getTranslatedString("manyOtherJob")),
         Column(
           children: <Widget>[
             Text(
-              "TE",
+              "${getTranslatedString("you").toUpperCase()}",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 3,
             ),
             Text(
-              "Nekünk minden felhasználó értékes!",
+              getTranslatedString("everyImp"),
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(

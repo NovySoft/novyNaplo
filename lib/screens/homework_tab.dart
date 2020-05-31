@@ -5,15 +5,14 @@ import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<Color> colors = [];
 List<Homework> globalHomework = [];
-//!Some users see weird behaviors when the app is opened from the background
-//! IE: All of the subjects apear on one day
 
 class HomeworkTab extends StatefulWidget {
   static String tag = 'homework';
-  static const title = 'Házifeladat';
+  static String title = capitalize(getTranslatedString("hw"));
 
   @override
   _HomeworkTabState createState() => _HomeworkTabState();
@@ -74,7 +73,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       if (left.inMinutes / 60 < 0) {
         dueOver = true;
       }
-      String subTitle = "Határidő: " +
+      String subTitle = "${getTranslatedString("due")}: " +
           globalHomework[index].dueDate.year.toString() +
           "-" +
           globalHomework[index].dueDate.month.toString() +
@@ -101,15 +100,19 @@ class _HomeworkTabState extends State<HomeworkTab> {
 
   Widget noHomework() {
     return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(
-        MdiIcons.emoticonHappyOutline,
-        size: 50,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MdiIcons.emoticonHappyOutline,
+            size: 50,
+          ),
+          Text(
+            getTranslatedString("noHw"),
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
-      Text(
-        "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)",
-        textAlign: TextAlign.center,
-      )
-    ]));
+    );
   }
 }

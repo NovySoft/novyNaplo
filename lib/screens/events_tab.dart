@@ -5,6 +5,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/events_detail_tab.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<Event> allParsedEvents = [];
 List<Color> colors = [];
@@ -31,7 +32,7 @@ class _EventsTabState extends State<EventsTab> {
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Faliújság"),
+        title: Text(getTranslatedString("events")),
       ),
       drawer: getDrawer(EventsTab.tag, context),
       body: _body(),
@@ -79,7 +80,7 @@ class _EventsTabState extends State<EventsTab> {
         size: 50,
       ),
       Text(
-        "Nincs semmi a faliújságon!",
+        "${getTranslatedString("noEvents")}!",
         textAlign: TextAlign.center,
       )
     ]));

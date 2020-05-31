@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/database/deleteSql.dart' as delSql;
+import 'dart:io' show Platform;
 
 //Variables used globally;
 //Session
@@ -44,6 +45,7 @@ double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
 String versionInfoJson; //Github version.json in string
+String language = "hu"; //Language to show stuff in
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,6 +68,23 @@ Future<void> setGlobals() async {
     adsEnabled = prefs.getBool("ads");
     if (adsEnabled) adModifier = 1;
   }
+  if (prefs.getString("Language") != null) {
+    language = prefs.getString("Language");
+  } else {
+    //String countryCode = Platform.localeName.split('_')[0];
+    String languageCode = Platform.localeName.split('_')[1];
+    if (languageCode.toLowerCase().contains('hu')) {
+      language = "hu";
+    } else {
+      language = "en";
+    }
+    prefs.setString("Language", language);
+  }
+  FirebaseAnalytics().setUserProperty(
+    name: "Language",
+    value: language,
+  );
+  Crashlytics.instance.setString("Language", language);
 
   if (prefs.getBool("colorAvsInStatisctics") != null) {
     colorAvsInStatisctics = prefs.getBool("colorAvsInStatisctics");

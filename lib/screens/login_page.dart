@@ -10,6 +10,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,6 @@ import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 TextEditingController codeController = TextEditingController();
 TextEditingController userController = TextEditingController();
@@ -61,17 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           return SpinnerDialog();
         });
     await sleep1();
-    NewVersion newVerDetails = await getVersion();
-    if (newVerDetails.returnedAnything && !newVerDetails.isPlayStore) {
-      if (config.currentAppVersionCode != newVerDetails.versionCode) {
-        await _newVersionAlert(
-            context,
-            newVerDetails.versionCode,
-            newVerDetails.releaseNotes,
-            newVerDetails.isBreaking,
-            newVerDetails.releaseLink);
-      }
-    }
+    await getVersion();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await globals.setGlobals();
     //DONT DELETE, FOR TESTING USE ONLY
@@ -214,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       if (status != null) _ackAlert(context, status);
       if (status == null)
-        _ackAlert(context, "Ismeretlen hiba történt\nPróbáld újra később!");
+        _ackAlert(context, getTranslatedString("unkError"));
     }
     isPressed = false;
     if (caller == "_ackAlert") {
@@ -329,7 +319,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.text,
       autofocus: false,
       decoration: InputDecoration(
-        hintText: 'Iskola azonosító',
+        hintText: getTranslatedString("schId"),
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -345,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.text,
       autofocus: false,
       decoration: InputDecoration(
-        hintText: 'Felhasználónév',
+        hintText: getTranslatedString("username"),
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -362,7 +352,7 @@ class _LoginPageState extends State<LoginPage> {
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
-        hintText: 'Jelszó',
+        hintText: getTranslatedString("password"),
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -396,7 +386,7 @@ class _LoginPageState extends State<LoginPage> {
           */
         },
         padding: EdgeInsets.all(12),
-        child: Text('Bejelentkezés', style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
       ),
     );
 
@@ -423,12 +413,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _ackAlert(BuildContext context, String content) async {
     if (content == null)
-      content = "Ismeretlen hiba történt\nPróbáld újra később";
+      content = getTranslatedString("unkError");
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Státusz'),
+          title: Text(getTranslatedString("status")),
           content: Text(content),
           actions: <Widget>[
             FlatButton(
@@ -451,62 +441,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _newVersionAlert(BuildContext context, String version,
-      String notes, bool isBreaking, String link) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Új verzió: $version"),
-          content: SingleChildScrollView(
-            child:
-                Column(children: <Widget>[Text("Megjegyzések:"), Text(notes)]),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                if (newVersion == true && hasPrefs) {
-                  auth(context, "_ackAlert");
-                } else {
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-            FlatButton(
-              child: Text('Frissítés'),
-              onPressed: () async {
-                if (await canLaunch(link)) {
-                  await launch(link);
-                } else {
-                  FirebaseAnalytics().logEvent(
-                    name: "LinkFail",
-                    parameters: {"link": link},
-                  );
-                  throw 'Could not launch $link';
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Future<void> _timeoutAlert(BuildContext context) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Hiba: Kérés timeout"),
+          title: Text(getTranslatedString("timeoutErr")),
           content: SingleChildScrollView(
             child: Column(children: <Widget>[
-              Text("Hiba:"),
-              Text("A kérésünkre nem kaptunk választ 10 másodperc után sem!"),
+              Text("${getTranslatedString("err")}:"),
+              Text(getTranslatedString("noAns10")),
               Text(
-                "Manuális kód megadás szükséges!",
+                getTranslatedString("manCode"),
                 style: TextStyle(fontWeight: FontWeight.bold),
               )
             ]),
@@ -534,7 +481,7 @@ class _SchoolSelectState extends State<SchoolSelect> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return new SimpleDialog(
-      title: new Text("Iskola választó"),
+      title: new Text(getTranslatedString("schSelector")),
       contentPadding: const EdgeInsets.all(10.0),
       children: <Widget>[
         new Container(

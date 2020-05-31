@@ -10,6 +10,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
@@ -58,8 +59,8 @@ void backgroundFetch() async {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
     await flutterLocalNotificationsPlugin.show(
       111,
-      'Adatok lekérése',
-      'Éppen zajlik az adatok lekérése...',
+      getTranslatedString("gettingData"),
+      '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
     /*final DateTime now = DateTime.now();
@@ -78,7 +79,7 @@ void backgroundFetch() async {
       await flutterLocalNotificationsPlugin.cancel(111);
       await flutterLocalNotificationsPlugin.show(
         -111,
-        'Hiba történt a lekérés közben:',
+        '${getTranslatedString("errWhileFetch")}:',
         "Decryption error",
         platformChannelSpecificsSendNotif,
       );
@@ -105,7 +106,7 @@ void backgroundFetch() async {
     await flutterLocalNotificationsPlugin.cancel(111);
     await flutterLocalNotificationsPlugin.show(
       -111,
-      'Hiba történt a lekérés közben:',
+      '${getTranslatedString("errWhileFetch")}',
       e.toString(),
       platformChannelSpecificsSendNotif,
     );

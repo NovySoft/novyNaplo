@@ -8,12 +8,19 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 
 var allParsedSubjects = [];
 var colors;
 final List<Tab> statTabs = <Tab>[
-  Tab(text: 'Általános', icon: Icon(MdiIcons.chartScatterPlotHexbin)),
-  Tab(text: 'Tantárgy szerinti', icon: Icon(Icons.view_list)),
+  Tab(
+    text: getTranslatedString("general"),
+    icon: Icon(MdiIcons.chartScatterPlotHexbin),
+  ),
+  Tab(
+    text: getTranslatedString("bySubject"),
+    icon: Icon(Icons.view_list),
+  ),
 ];
 TabController _tabController;
 List<charts.Series<LinearMarkChartData, int>> allSubjectsChartData;
@@ -81,7 +88,7 @@ class _StatisticsTabState extends State<StatisticsTab>
             } else {
               sizedBoxHeight = 0;
             }
-            if (tab.text.toLowerCase() == "általános") {
+            if (tab.text == getTranslatedString("general")) {
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
@@ -205,7 +212,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Összesített átlag: " +
+                                "${getTranslatedString("combinedAv")}: " +
                                     globalAllSubjectAv.value.toStringAsFixed(3),
                                 textAlign: TextAlign.start,
                                 style: new TextStyle(
@@ -232,9 +239,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Legjobb (" +
-                                    bestSubjectAv.subject +
-                                    ") átlag: ",
+                                "${getTranslatedString("best")} (" +
+                                    capitalize(bestSubjectAv.subject) +
+                                    ") ${getTranslatedString("av")}: ",
                                 textAlign: TextAlign.start,
                                 style: new TextStyle(
                                     color: Colors.green,
@@ -351,9 +358,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  "Legroszabb (" +
-                                      worstSubjectAv.subject +
-                                      ") átlag: ",
+                                  "${getTranslatedString("worst")} (" +
+                                      capitalize(worstSubjectAv.subject) +
+                                      ") ${getTranslatedString("av")}: ",
                                   textAlign: TextAlign.start,
                                   style: new TextStyle(
                                       color: Colors.red,
@@ -384,18 +391,14 @@ class _StatisticsTabState extends State<StatisticsTab>
                           alignment: WrapAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Legroszabb (" + worstSubjectAv.subject + ")",
+                              "${getTranslatedString("worst")} (" +
+                                  capitalize(worstSubjectAv.subject) +
+                                  ") ${getTranslatedString("av")}: ",
                               textAlign: TextAlign.start,
                               style: new TextStyle(
                                   color: Colors.red,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              " átlag: " +
-                                  worstSubjectAv.value.toStringAsFixed(3),
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 18),
                             ),
                             worstAvIcon,
                             Text(
@@ -416,8 +419,8 @@ class _StatisticsTabState extends State<StatisticsTab>
                       return Center(
                         child: Text(
                           globals.howManyGraph == "Kör diagram"
-                              ? "Jegyek száma bizonyos tantárgyakból:"
-                              : "Jegyek számának eloszlása:",
+                              ? "${getTranslatedString("marksFromSubjects")}:"
+                              : "${getTranslatedString("marksDistribution")}:",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -482,7 +485,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     case 9:
                       return Center(
                         child: Text(
-                          "Bizonyos jegyek száma:",
+                          "${getTranslatedString("countOfSpecMarks")}:",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -557,7 +560,7 @@ class _StatisticsTabState extends State<StatisticsTab>
         size: 50,
       ),
       Text(
-        "Nincs még jegyed!\nNem tudunk statisztikát mutatni",
+        getTranslatedString("possibleNoMarks"),
         textAlign: TextAlign.center,
       )
     ]));

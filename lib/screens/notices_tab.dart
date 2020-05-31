@@ -6,13 +6,14 @@ import 'package:novynaplo/screens/notices_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 List<Notices> allParsedNotices;
 var colors = getRandomColors(allParsedNotices.length);
 
 class NoticesTab extends StatefulWidget {
   static String tag = 'notices';
-  static const title = 'Feljegyzések';
+  static String title = getTranslatedString("notices");
 
   @override
   _NoticesTabState createState() => _NoticesTabState();
@@ -34,7 +35,11 @@ class _NoticesTabState extends State<NoticesTab> {
   @override
   void initState() {
     super.initState();
-    onInit();
+    if (colors == [] ||
+        colors == null ||
+        colors.length < allParsedNotices.length) {
+      colors = getRandomColors(allParsedNotices.length);
+    }
   }
 }
 
@@ -58,14 +63,13 @@ Widget noNotice() {
       size: 50,
     ),
     Text(
-      "Nincs még feljegyzésed!",
+      "${getTranslatedString("noNotice")}!",
       textAlign: TextAlign.center,
     )
   ]));
 }
 
 Widget _noticesBuilder(BuildContext context, int index) {
-  onInit();
   if (index >= allParsedNotices.length) {
     return SizedBox(
       height: 100,
@@ -91,9 +95,4 @@ Widget _noticesBuilder(BuildContext context, int index) {
           ),
         ));
   }
-}
-
-void onInit() {
-  if (colors == [] || colors == null)
-    colors = getRandomColors(allParsedNotices.length);
 }
