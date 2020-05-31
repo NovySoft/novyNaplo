@@ -142,7 +142,9 @@ class _LoadingPageState extends State<LoadingPage> {
             //print('Response status: ${response.statusCode}');
           } else {
             _ackAlert(
-                context, 'post error: statusCode= ${response.statusCode}');
+              context,
+              'post error: statusCode= ${response.statusCode}',
+            );
           }
         } on SocketException {
           afterTokenGrab(context, getTranslatedString("wrongSchId"));
@@ -168,12 +170,18 @@ class _LoadingPageState extends State<LoadingPage> {
             getToken(code, user, pass);
           } else {
             Crashlytics.instance.recordError(e, s, context: 'getToken');
-            _ackAlert(context, getTranslatedString("noAns"));
+            _ackAlert(
+              context,
+              getTranslatedString("noAns"),
+            );
           }
         }
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'getToken');
-        _ackAlert(context, getTranslatedString("noAnsNovy"));
+        _ackAlert(
+          context,
+          getTranslatedString("noAnsNovy"),
+        );
       }
     }
   }
@@ -208,9 +216,10 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
   }
 
@@ -248,9 +257,10 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getExams');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
   }
 
@@ -296,9 +306,10 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: loadingText);
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
   }
 
@@ -327,9 +338,10 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getAvarages');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
   }
 
@@ -415,9 +427,10 @@ class _LoadingPageState extends State<LoadingPage> {
       return output;
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getWeekLessons');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
     return [];
   }
@@ -550,9 +563,10 @@ class _LoadingPageState extends State<LoadingPage> {
       //print("ads" + globals.adsEnabled.toString());
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba a memóriából való olvasás közben ($e)\nAjánlott az alkalmazás újraindítása");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("errReadMem")} ($e) ${getTranslatedString("restartApp")}",
+      );
     }
     auth(context);
   }
@@ -565,22 +579,24 @@ class _LoadingPageState extends State<LoadingPage> {
           save(context);
         } catch (e, s) {
           Crashlytics.instance.recordError(e, s, context: 'afterTokenGrab');
-          //TODO translate
-          await _ackAlert(context,
-              "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+          await _ackAlert(
+            context,
+            "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+          );
         }
       } else {
         if (status != null) {
-          //TODO translate
           await _ackAlert(
-              context,
-              "HTTP hiba: " +
-                  status.toString() +
-                  "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+            context,
+            "HTTP ${getTranslatedString("err")}: " +
+                status.toString() +
+                getTranslatedString("generalErrDesc"),
+          );
         } else {
-          //TODO translate
-          await _ackAlert(context,
-              "Ismeretlen HTTP hiba\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+          await _ackAlert(
+            context,
+            "${getTranslatedString("unkown")} HTTP ${getTranslatedString("err")} ${getTranslatedString("generalErrDesc")}",
+          );
           return;
         }
       }
@@ -596,9 +612,10 @@ class _LoadingPageState extends State<LoadingPage> {
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'auth');
-      //TODO translate
-      await _ackAlert(context,
-          "Hiba: $e\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!");
+      await _ackAlert(
+        context,
+        "${getTranslatedString("err")}: $e ${getTranslatedString("generalErrDesc")}",
+      );
     }
   }
 

@@ -189,4 +189,7 @@ final Map<String, String> translation = {
   "noAns10": "A kérésünkre nem kaptunk választ 10 másodperc után sem!",
   "manCode": "Manuális kód megadás szükséges!",
   "schSelector": "Iskola választó",
+  "generalErrDesc": "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!",
+  "errReadMem": "Hiba a memóriából való olvasás közben!",
+  "restartApp": "\nAjánlott az alkalmazás újraindítása",
 };

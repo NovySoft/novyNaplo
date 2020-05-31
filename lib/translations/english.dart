@@ -264,4 +264,7 @@ final Map<String, String> translation = {
   "noAns10": "We didn't get an answer to our request after 10 seconds!",
   "manCode": "Manual school id entering is required!",
   "schSelector": "School selector",
+  "generalErrDesc": "\nIt is recommended that you restart the application.\nIf the error persists, please contact the developers!",
+  "errReadMem": "Error while reading from the memory!",
+  "restartApp": "\nIt is recommended that you restart the application.",
 };
