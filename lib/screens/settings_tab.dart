@@ -406,10 +406,16 @@ class _SettingsBodyState extends State<SettingsBody> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AppInformationTab()),
+                          showAboutDialog(
+                            context: context,
+                            applicationName: "Novy Napló",
+                            applicationVersion: config.currentAppVersionCode,
+                            applicationLegalese: "This application is contributed under the MIT license",
+                            applicationIcon: Image.asset(
+                              "assets/icon/icon.png",
+                              height: 100,
+                              width: 100,
+                            ),
                           );
                         },
                         icon: Icon(MdiIcons.cellphoneInformation,
@@ -2242,122 +2248,6 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
             divisions: 17,
             label: keepDataForHw.toStringAsFixed(0),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class AppInformationTab extends StatefulWidget {
-  @override
-  _AppInformationTabState createState() => _AppInformationTabState();
-}
-
-class _AppInformationTabState extends State<AppInformationTab> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranslatedString("appInfo")),
-      ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: SizedBox(
-                    height: 38,
-                    width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        onPressed: () async {
-                          /*NewVersion newVerDetails = await getVersion();
-                          setState(() {
-                            newVerDetails = newVerDetails;
-                          });
-                          if (newVerDetails.returnedAnything &&
-                              !newVerDetails.isPlayStore) {
-                            if (config.currentAppVersionCode !=
-                                newVerDetails.versionCode) {
-                              await _newVersionAlert(
-                                  context,
-                                  newVerDetails.versionCode,
-                                  newVerDetails.releaseNotes,
-                                  newVerDetails.isBreaking,
-                                  newVerDetails.releaseLink);
-                            }
-                          }*/
-                        },
-                        icon: Icon(MdiIcons.cellphoneArrowDown,
-                            color: Colors.black),
-                        label: Text(getTranslatedString("searchForUpdate"),
-                            style: TextStyle(color: Colors.black)))),
-              ),
-            ),
-          ),
-          ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: SizedBox(
-                    height: 38,
-                    width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        onPressed: () async {
-                          String link =
-                              "https://github.com/NovySoft/novyNaplo/releases/latest";
-                          if (await canLaunch(link)) {
-                            await launch(link);
-                          } else {
-                            FirebaseAnalytics().logEvent(
-                              name: "LinkFail",
-                              parameters: {"link": link},
-                            );
-                            throw 'Could not launch $link';
-                          }
-                        },
-                        icon: Icon(MdiIcons.testTube, color: Colors.black),
-                        label: Text(getTranslatedString("downloadBetaTest"),
-                            style: TextStyle(color: Colors.black)))),
-              ),
-            ),
-          ),
-          SizedBox(height: 25, width: 25),
-          ListTile(
-            title: Text('${getTranslatedString("currVersion")}:'),
-            trailing: Text(config.currentAppVersionCode),
-          ),
-          SizedBox(height: 20, width: 25),
-          ListTile(
-            title: Text('${getTranslatedString("latestBetaVersion")}:'),
-            trailing: Text(latestGithub),
-          ),
-          SizedBox(height: 20, width: 25),
-          ListTile(
-            title: Text('${getTranslatedString("latestPlayVersion")}:'),
-            trailing: Text(latestPlayStore),
-          ),
-          SizedBox(height: 20, width: 25),
-          ListTile(
-            title: Text('${getTranslatedString("isAppFinal")}:'),
-            trailing: Text(config.isAppRelease
-                ? getTranslatedString("yes")
-                : getTranslatedString("no")),
-          ),
-          SizedBox(height: 20, width: 25),
-          ListTile(
-            title: Text('${getTranslatedString("isAppPlay")}:'),
-            trailing: Text(config.isAppPlaystoreRelease
-                ? getTranslatedString("yes")
-                : getTranslatedString("no")),
-          ),
-          SizedBox(height: 100, width: 25),
         ],
       ),
     );
