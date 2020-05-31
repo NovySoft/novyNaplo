@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
@@ -39,8 +40,8 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       await notifHelper.flutterLocalNotificationsPlugin.show(
         notifId,
-        'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
-        'Téma: ' + eval.theme,
+        '${getTranslatedString("newMark")}: ' + capitalize(eval.subject) + " " + eval.value,
+        '${getTranslatedString("theme")}: ' + eval.theme,
         notifHelper.platformChannelSpecifics,
         payload: "marks " + eval.id.toString(),
       );
@@ -57,8 +58,8 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
-            'Téma: ' + eval.theme,
+            '${getTranslatedString("markModified")}: ' + capitalize(eval.subject) + " " + eval.value,
+            '${getTranslatedString("theme")}: ' + eval.theme,
             notifHelper.platformChannelSpecifics,
             payload: "marks " + eval.id.toString(),
           );
@@ -100,7 +101,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
     );
     if (globals.notifications && edited != true) {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-      String subTitle = "Határidő: " +
+      String subTitle = "${getTranslatedString("due")}: " +
           hw.dueDate.year.toString() +
           "-" +
           hw.dueDate.month.toString() +
@@ -110,7 +111,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
           parseIntToWeekdayString(hw.dueDate.weekday);
       await notifHelper.flutterLocalNotificationsPlugin.show(
         notifId,
-        'Új házifeladat: ' + capitalize(hw.subject),
+        '${getTranslatedString("newHw")}: ' + capitalize(hw.subject),
         subTitle,
         notifHelper.platformChannelSpecifics,
         payload: "hw " + hw.id.toString(),
@@ -133,7 +134,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
         await deleteFromDb(n.databaseId, "Homework");
         if (globals.notifications) {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-          String subTitle = "Határidő: " +
+          String subTitle = "${getTranslatedString("due")}: " +
               hw.dueDate.year.toString() +
               "-" +
               hw.dueDate.month.toString() +
@@ -143,7 +144,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
               parseIntToWeekdayString(hw.dueDate.weekday);
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            'Módusolt házifeladat: ' + capitalize(hw.subject),
+            '${getTranslatedString("hwModified")}: ' + capitalize(hw.subject),
             subTitle,
             notifHelper.platformChannelSpecifics,
             payload: "hw " + hw.id.toString(),
@@ -174,7 +175,7 @@ Future<void> insertNotices(Notices notice, {bool edited}) async {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       await notifHelper.flutterLocalNotificationsPlugin.show(
         notifId,
-        'Új feljegyzés: ' + capitalize(notice.title),
+        '${getTranslatedString("newNotice")}: ' + capitalize(notice.title),
         notice.teacher,
         notifHelper.platformChannelSpecifics,
         payload: "notice " + notice.id.toString(),
@@ -189,7 +190,7 @@ Future<void> insertNotices(Notices notice, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            'Feljegyzés módusolt: ' + capitalize(notice.title),
+            '${getTranslatedString("noticeModified")}: ' + capitalize(notice.title),
             notice.teacher,
             notifHelper.platformChannelSpecifics,
             payload: "notice " + notice.id.toString(),
@@ -232,8 +233,8 @@ Future<void> insertAvarage(Avarage avarage) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            'Átlag módosult: ' + capitalize(avarage.subject),
-            'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
+            '${getTranslatedString("avChanged")}: ' + capitalize(avarage.subject),
+            '${getTranslatedString("newAv")}: ' + avarage.ownValue.toString() + " ($diff)",
             notifHelper.platformChannelSpecifics,
             payload: "avarage 0",
           );
@@ -264,8 +265,8 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       await notifHelper.flutterLocalNotificationsPlugin.show(
         notifId,
-        'Új dolgozat: ' + capitalize(exam.nameOfExam),
-        'Téma: ' + exam.subject,
+        '${getTranslatedString("newExam")}: ' + capitalize(exam.nameOfExam),
+        '${getTranslatedString("theme")}: ' + exam.subject,
         notifHelper.platformChannelSpecifics,
         payload: "exam " + exam.id.toString(),
       );
@@ -282,8 +283,8 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
-            'Téma: ' + exam.subject,
+            '${getTranslatedString("examModified")}: ' + capitalize(exam.nameOfExam),
+            '${getTranslatedString("theme")}: ' + exam.subject,
             notifHelper.platformChannelSpecifics,
             payload: "exam " + exam.id.toString(),
           );
@@ -298,6 +299,7 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEval(List<Evals> evalList) async {
   Crashlytics.instance.log("batchInsertEval");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -314,6 +316,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
       },
     );
     if (matchedEvals.length == 0) {
+      inserted = true;
       batch.insert(
         'Evals',
         eval.toMap(),
@@ -324,8 +327,8 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          'Új jegy: ' + capitalize(eval.subject) + " " + eval.value,
-          'Téma: ' + eval.theme,
+          '${getTranslatedString("newMark")}: ' + capitalize(eval.subject) + " " + eval.value,
+          '${getTranslatedString("theme")}: ' + eval.theme,
           notifHelper.platformChannelSpecifics,
           payload: "marks " + eval.id.toString(),
         );
@@ -338,6 +341,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
                 n.dateString != eval.dateString ||
                 n.weight != eval.weight) &&
             n.id == eval.id) {
+          inserted = true;
           batch.delete(
             "Evals",
             where: "databaseId = ?",
@@ -353,8 +357,8 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Jegy módosult: ' + capitalize(eval.subject) + " " + eval.value,
-              'Téma: ' + eval.theme,
+              '${getTranslatedString("markModified")}: ' + capitalize(eval.subject) + " " + eval.value,
+              '${getTranslatedString("theme")}: ' + eval.theme,
               notifHelper.platformChannelSpecifics,
               payload: "marks " + eval.id.toString(),
             );
@@ -363,12 +367,14 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
       }
     }
   }
-  await batch.commit();
-  //print("INSERTED EVAL BATCH");
+  if (inserted) {
+    await batch.commit();
+  }
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
   Crashlytics.instance.log("batchInsertHomework");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -379,6 +385,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
       return (element.id == hw.id && element.subject == hw.subject);
     });
     if (matchedHw.length == 0) {
+      inserted = true;
       batch.insert(
         'Homework',
         hw.toMap(),
@@ -386,7 +393,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
       );
       if (globals.notifications) {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-        String subTitle = "Határidő: " +
+        String subTitle = "${getTranslatedString("due")}: " +
             hw.dueDate.year.toString() +
             "-" +
             hw.dueDate.month.toString() +
@@ -396,7 +403,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
             parseIntToWeekdayString(hw.dueDate.weekday);
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          'Új házifeladat: ' + capitalize(hw.subject),
+          '${getTranslatedString("newHw")}: ' + capitalize(hw.subject),
           subTitle,
           notifHelper.platformChannelSpecifics,
           payload: "hw " + hw.id.toString(),
@@ -408,6 +415,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
         if (n.content != hw.content ||
             n.dueDateString != hw.dueDateString ||
             n.givenUpString != hw.givenUpString) {
+          inserted = true;
           batch.delete(
             "Homework",
             where: "databaseId = ?",
@@ -420,7 +428,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
           );
           if (globals.notifications) {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-            String subTitle = "Határidő: " +
+            String subTitle = "${getTranslatedString("due")}: " +
                 hw.dueDate.year.toString() +
                 "-" +
                 hw.dueDate.month.toString() +
@@ -430,7 +438,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
                 parseIntToWeekdayString(hw.dueDate.weekday);
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Módusolt házifeladat: ' + capitalize(hw.subject),
+              '${getTranslatedString("hwModified")}: ' + capitalize(hw.subject),
               subTitle,
               notifHelper.platformChannelSpecifics,
               payload: "hw " + hw.id.toString(),
@@ -440,11 +448,14 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
       }
     }
   }
-  await batch.commit();
+  if (inserted) {
+    await batch.commit();
+  }
 }
 
 Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
   Crashlytics.instance.log("batchInsertAvarage");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -455,6 +466,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
       return (element.subject == avarage.subject);
     });
     if (matchedAv.length == 0) {
+      inserted = true;
       batch.insert(
         'Avarage',
         avarage.toMap(),
@@ -466,6 +478,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
         if (n.diff != avarage.diff ||
             n.ownValue != avarage.ownValue ||
             n.classValue != avarage.classValue) {
+          inserted = true;
           batch.delete(
             "Avarage",
             where: "databaseId = ?",
@@ -484,8 +497,8 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Átlag módosult: ' + capitalize(avarage.subject),
-              'Új átlag: ' + avarage.ownValue.toString() + " ($diff)",
+              '${getTranslatedString("avChanged")}: ' + capitalize(avarage.subject),
+              '${getTranslatedString("newAv")}: ' + avarage.ownValue.toString() + " ($diff)",
               notifHelper.platformChannelSpecifics,
               payload: "avarage 0",
             );
@@ -494,11 +507,14 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
       }
     }
   }
-  await batch.commit();
+  if (inserted) {
+    await batch.commit();
+  }
 }
 
 Future<void> batchInsertNotices(List<Notices> noticeList) async {
   Crashlytics.instance.log("batchInsertNotices");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -509,6 +525,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
       return (element.title == notice.title || element.id == notice.id);
     });
     if (matchedNotices.length == 0) {
+      inserted = true;
       batch.insert(
         'Notices',
         notice.toMap(),
@@ -518,7 +535,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          'Új feljegyzés: ' + capitalize(notice.title),
+          '${getTranslatedString("newNotice")}: ' + capitalize(notice.title),
           notice.teacher,
           notifHelper.platformChannelSpecifics,
           payload: "notice " + notice.id.toString(),
@@ -529,6 +546,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
         //!Update didn't work so we delete and create a new one
         if ((n.title != notice.title || n.content != notice.content) &&
             n.id == notice.id) {
+          inserted = true;
           batch.delete(
             "Notices",
             where: "databaseId = ?",
@@ -543,7 +561,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Feljegyzés módusolt: ' + capitalize(notice.title),
+              '${getTranslatedString("noticeModified")}: ' + capitalize(notice.title),
               notice.teacher,
               notifHelper.platformChannelSpecifics,
               payload: "notice " + notice.id.toString(),
@@ -553,12 +571,15 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
       }
     }
   }
-  await batch.commit();
+  if (inserted) {
+    await batch.commit();
+  }
   //print("BATCH INSERTED NOTICES");
 }
 
 Future<void> batchInsertLessons(List<Lesson> lessonList) async {
   Crashlytics.instance.log("batchInsertEval");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -572,6 +593,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
       },
     );
     if (matchedLessons.length == 0) {
+      inserted = true;
       batch.insert(
         'Timetable',
         lesson.toMap(),
@@ -592,6 +614,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
                 n.startDateString != lesson.startDateString ||
                 n.endDateString != lesson.endDateString) &&
             n.id == lesson.id) {
+          inserted = true;
           batch.delete(
             "Timetable",
             where: "databaseId = ?",
@@ -629,12 +652,14 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
       }
     }
   }
-  await batch.commit();
-  //print("INSERTED EVAL BATCH");
+  if (inserted) {
+    await batch.commit();
+  }
 }
 
 Future<void> batchInsertExams(List<Exam> examList) async {
   Crashlytics.instance.log("batchInsertExam");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -649,12 +674,13 @@ Future<void> batchInsertExams(List<Exam> examList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          'Új dolgozat: ' + capitalize(exam.nameOfExam),
-          'Téma: ' + exam.subject,
+          '${getTranslatedString("newExam")}: ' + capitalize(exam.nameOfExam),
+          '${getTranslatedString("theme")}: ' + exam.subject,
           notifHelper.platformChannelSpecifics,
           payload: "exam " + exam.id.toString(),
         );
       }
+      inserted = true;
       batch.insert(
         'Exams',
         exam.toMap(),
@@ -667,6 +693,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
             n.dateWriteString != exam.dateWriteString ||
             n.nameOfExam != exam.nameOfExam ||
             n.typeOfExam != exam.typeOfExam) {
+          inserted = true;
           batch.delete(
             "Exams",
             where: "databaseId = ?",
@@ -681,8 +708,8 @@ Future<void> batchInsertExams(List<Exam> examList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Dolgozat módusolt: ' + capitalize(exam.nameOfExam),
-              'Téma: ' + exam.subject,
+              '${getTranslatedString("examModified")}: ' + capitalize(exam.nameOfExam),
+              '${getTranslatedString("theme")}: ' + exam.subject,
               notifHelper.platformChannelSpecifics,
               payload: "exam " + exam.id.toString(),
             );
@@ -691,11 +718,14 @@ Future<void> batchInsertExams(List<Exam> examList) async {
       }
     }
   }
-  await batch.commit();
+  if (inserted) {
+    await batch.commit();
+  }
 }
 
 Future<void> batchInsertEvents(List<Event> eventList) async {
   Crashlytics.instance.log("batchInsertExam");
+  bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -715,6 +745,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
           payload: "event " + event.id.toString(),
         );
       }
+      inserted = true;
       batch.insert(
         'Events',
         event.toMap(),
@@ -727,6 +758,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
             n.endDateString != event.endDateString ||
             n.content != event.content ||
             n.title != event.title) {
+          inserted = true;
           batch.delete(
             "Events",
             where: "databaseId = ?",
@@ -751,5 +783,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
       }
     }
   }
-  await batch.commit();
+  if (inserted) {
+    await batch.commit();
+  }
 }

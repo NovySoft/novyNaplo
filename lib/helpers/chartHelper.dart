@@ -262,11 +262,11 @@ void getPieChartOrBarChart(var input) {
 void getBarChart(input) {
   List<stats.MarkForBars> data = [
     //WARN do not modify order!
-    new stats.MarkForBars('1-es', 0), //0
-    new stats.MarkForBars('2-es', 0), //1
-    new stats.MarkForBars('3-as', 0), //2
-    new stats.MarkForBars('4-es', 0), //3
-    new stats.MarkForBars('5-ös', 0), //4
+    new stats.MarkForBars('1', 0), //0
+    new stats.MarkForBars('2', 0), //1
+    new stats.MarkForBars('3', 0), //2
+    new stats.MarkForBars('4', 0), //3
+    new stats.MarkForBars('5', 0), //4
   ];
   for (var n in input) {
     for (var y in n) {

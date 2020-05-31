@@ -1,11 +1,11 @@
 {
-    "version": "V1.0.1",
+    "version": "V1.0.2+8",
     "isBreaking": false,
-    "releaseNotes": "Faliújság",
-    "releaseLink": "https://github.com/NovySoft/novyNaplo/releases/tag/V1.0.1",
+    "releaseNotes": "Fordítások",
+    "releaseLink": "https://play.google.com/apps/testing/novy.vip.novynaplo",
     
-    "playVersion": "V1.0.1",
+    "playVersion": "V1.0.2+8",
     "isPlayBreaking": false,
-    "playNotes": "Faliújság",
+    "playNotes": "Fordítások",
     "playLink": "https://play.google.com/store/apps/details?id=novy.vip.novynaplo"
 }

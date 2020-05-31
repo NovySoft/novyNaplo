@@ -116,7 +116,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               SizedBox(
                                 height: 15,
                               ),
-                              Text("5-ös")
+                              Text("5")
                             ],
                           ),
                         ],
@@ -139,7 +139,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               SizedBox(
                                 height: 15,
                               ),
-                              Text("4-es")
+                              Text("4")
                             ],
                           ),
                         ],
@@ -162,7 +162,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               SizedBox(
                                 height: 15,
                               ),
-                              Text("3-as")
+                              Text("3")
                             ],
                           ),
                         ],
@@ -185,7 +185,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               SizedBox(
                                 height: 15,
                               ),
-                              Text("2-es")
+                              Text("2")
                             ],
                           ),
                         ],
@@ -208,7 +208,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               SizedBox(
                                 height: 15,
                               ),
-                              Text("1-es")
+                              Text("1")
                             ],
                           ),
                         ],
@@ -589,23 +589,23 @@ class CalculatorTabState extends State<CalculatorTab>
                         }
                         switch (virtualMarks[index].numberValue) {
                           case 1:
-                            numVal = "1-es";
+                            numVal = "1";
                             numValColor = Colors.red[900];
                             break;
                           case 2:
-                            numVal = "2-es";
+                            numVal = "2";
                             numValColor = Colors.red[400];
                             break;
                           case 3:
-                            numVal = "3-as";
+                            numVal = "3";
                             numValColor = Colors.orange;
                             break;
                           case 4:
-                            numVal = "4-es";
+                            numVal = "4";
                             numValColor = Colors.lightGreen;
                             break;
                           case 5:
-                            numVal = "5-ös";
+                            numVal = "5";
                             numValColor = Colors.green;
                             break;
                           default:
@@ -966,7 +966,6 @@ class CalculatorTabState extends State<CalculatorTab>
   }
 }
 
-//TODO translate under this
 void reCalculate() {
   text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
   if (text1 != getTranslatedString("notPos")) {

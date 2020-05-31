@@ -16,11 +16,12 @@ Novy teljesen nem eredeti kréta kliense.
 
 [![Szerezd meg: Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/hu_badge_web_generic.png)](https://play.google.com/store/apps/details?id=novy.vip.novynaplo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
-- Teszt verzió githubról:
+### Amennyiben nem zavar, hogy az alkalmazás hibákat tartalmazhat és szeretnél hozzájárulni az applikáció fejlesztéséhez, javasoljuk a béta tesztelést
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/NovySoft/NovyNaplo?color=red&style=for-the-badge)
+- Teszt verzió playstoreon:
+[Legújabb béta verzió letöltése](https://play.google.com/apps/testing/novy.vip.novynaplo)
 
-[Legújabb verzió letöltése](https://github.com/NovySoft/novyNaplo/releases/latest)
+### A github releases használata **megszűnt**
 
 ## Jelenlegi funkciók
 
@@ -36,10 +37,10 @@ Novy teljesen nem eredeti kréta kliense.
 - Értesítések
 - Offline mód
 - Faliújság megtekintése
+- Fordítások
 
 ## **HAMAROSAN**
 
-- Fordítások
 - Több felhasználós támogatás
 - Hiányzások
 - Támogatók oldal - **Gáti Úr** közreműködésével
