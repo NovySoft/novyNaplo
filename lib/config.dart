@@ -28,4 +28,5 @@ String currentAppVersionCode = "V1.0.2+8";
 bool isAppRelease = true;
 
 //Is the app playstore release?
-bool isAppPlaystoreRelease = false;
+//By default always release to playStore
+bool isAppPlaystoreRelease = true;
