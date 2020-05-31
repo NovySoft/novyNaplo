@@ -48,7 +48,6 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
-                      SizedBox(height: globals.adsEnabled ? 150 : 10),
                     ],
                   ),
                 ),
@@ -71,6 +70,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                       }
                     },
                   ),
+                  SizedBox(height: globals.adsEnabled ? 150 : 10),
                 ],
               ),
             ),

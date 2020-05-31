@@ -553,7 +553,7 @@ class _LoadingPageState extends State<LoadingPage> {
       print("NoData");
       //If we don't have prefetched data
       setState(() {
-        loadingText = "Addatok olvasása a memóriából";
+        loadingText = getTranslatedString("readData");
       });
       final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
@@ -630,7 +630,7 @@ class _LoadingPageState extends State<LoadingPage> {
     Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     if (hasError) {
       setState(() {
-        loadingText = "Hiba történt\nKérem indítsa újra az applikációt!";
+        loadingText = getTranslatedString("errRestart");
       });
     } else {
       Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);

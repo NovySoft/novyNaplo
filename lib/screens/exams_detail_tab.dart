@@ -42,7 +42,7 @@ Widget _buildBody(Exam exam, Color color) {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: 8,
+            itemCount: 7 + globals.adModifier,
             itemBuilder: (context, index) {
               switch (index) {
                 case 0:
@@ -108,7 +108,7 @@ Widget _buildBody(Exam exam, Color color) {
                   );
                   break;
                 default:
-                  return SizedBox(height: 25);
+                  return SizedBox(height: 100);
               }
             },
           ),

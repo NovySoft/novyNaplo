@@ -27,7 +27,9 @@ double tantargyiAtlagUtanna = 0;
 TabController _tabController;
 final List<Tab> calcTabs = <Tab>[
   Tab(text: getTranslatedString("markCalc"), icon: Icon(MdiIcons.calculator)),
-  Tab(text: "${getTranslatedString("whatIf")}?", icon: Icon(MdiIcons.headQuestion)),
+  Tab(
+      text: "${getTranslatedString("whatIf")}?",
+      icon: Icon(MdiIcons.headQuestion)),
 ];
 List<VirtualMarks> virtualMarks = [];
 int radioGroup = 5;
@@ -967,8 +969,8 @@ class CalculatorTabState extends State<CalculatorTab>
 //TODO translate under this
 void reCalculate() {
   text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
-  if (text1 != "Nem lehetséges") {
-    text1 = "Szerezz kb.: " + text1;
+  if (text1 != getTranslatedString("notPos")) {
+    text1 = "${getTranslatedString("getAbout")}: " + text1;
   }
 }
 
@@ -987,14 +989,14 @@ String getEasiest(num jegyek, jsz, th, elak) {
 
   if (jsz == 0 || jegyek == 0) {
     if (isInteger(elak)) {
-      return "1 db $elak";
+      return "1 ${getTranslatedString("count")} $elak";
     }
   }
 
   var atlag = jegyek / jsz; //átlag
   var x = elak * jsz +
       elak * th -
-      jegyek; //mennyi jegyet kell hozzáadni, hogy elérjük az adottátlagot
+      jegyek; //mennyi jegyet kell hozzáadni, hogy elérjük az adott átlagot
 
   var j2 = th *
       5; // rontásnál mennyi jegyet kell hozzáadni, hogy elérjük az adottátlagot
@@ -1022,7 +1024,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
   int w = c.toInt();
   if (elak >= atlag) {
     if (x - 5 * th > 0) {
-      return "Nem lehetséges";
+      return getTranslatedString("notPos");
     } else {
       switch (w) {
         case 1:
@@ -1030,40 +1032,40 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db kettest és $t db egyest";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("twos")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("ones")}";
           break;
         case 2:
           while (t * 2 + n * 3 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db hármast és $t db kettest";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("threes")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("twos")}";
           break;
         case 3:
           while (t * 3 + n * 4 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyest és $t db hármast";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("threes")}";
           break;
         case 4:
           while (t * 4 + n * 5 != x) {
             t = t - 1;
             n = n + 1;
           }
-          return "$t db négyest és $n db ötöst";
+          return "$t ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $n ${getTranslatedString("count")} ${getTranslatedString("fives")}";
           break;
         case 5:
-          return "$th db ötöst";
+          return "$th ${getTranslatedString("count")} ${getTranslatedString("fives")}";
           break;
         default:
-          return "Nem lehetséges";
+          return getTranslatedString("notPos");
           break;
       }
     }
   } else {
     if (j2 - th < 0) {
-      return "Nem lehetséges";
+      return getTranslatedString("notPos");
     } else {
       switch (ww) {
         case 1:
@@ -1071,31 +1073,31 @@ String getEasiest(num jegyek, jsz, th, elak) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db kettest és $t db egyest";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("twos")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("ones")}";
           break;
         case 2:
           while (t * 2 + n * 3 != j2) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db hármast és $t db kettest";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("threes")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("twos")}";
           break;
         case 3:
           while (t * 3 + n * 4 != j2) {
             t = t - 1;
             n = n + 1;
           }
-          return "$n db négyest és $t db hármast";
+          return "$n ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("threes")}";
           break;
         case 4:
           while (t * 4 + n * 5 != j2) {
             t = t - 1;
             n = n + 1;
           }
-          return "$t db négyest és $n db ötöst";
+          return "$t ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $n ${getTranslatedString("count")} ${getTranslatedString("fives")}";
           break;
         default:
-          return "Nem lehetséges";
+          return getTranslatedString("notPos");
           break;
       }
     }
@@ -1123,5 +1125,5 @@ String getWithFivesOnly(num jegyek, jsz, elak) {
     index++;
     avarage = jegyek / jsz;
   }
-  return "$index db ötös";
+  return "$index ${getTranslatedString("count")} ötös";
 }
