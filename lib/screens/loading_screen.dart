@@ -15,7 +15,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
@@ -169,14 +168,12 @@ class _LoadingPageState extends State<LoadingPage> {
             getToken(code, user, pass);
           } else {
             Crashlytics.instance.recordError(e, s, context: 'getToken');
-            _ackAlert(
-                context, getTranslatedString("noAns"));
+            _ackAlert(context, getTranslatedString("noAns"));
           }
         }
       } catch (e, s) {
         Crashlytics.instance.recordError(e, s, context: 'getToken');
-        _ackAlert(
-            context, getTranslatedString("noAnsNovy"));
+        _ackAlert(context, getTranslatedString("noAnsNovy"));
       }
     }
   }
@@ -435,17 +432,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-      NewVersion newVerDetails = await getVersion();
-      if (newVerDetails.returnedAnything && !newVerDetails.isPlayStore) {
-        if (config.currentAppVersionCode != newVerDetails.versionCode) {
-          await _newVersionAlert(
-              context,
-              newVerDetails.versionCode,
-              newVerDetails.releaseNotes,
-              newVerDetails.isBreaking,
-              newVerDetails.releaseLink);
-        }
-      }
+      await getVersion();
       //Load ADS
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
@@ -697,48 +684,6 @@ class _LoadingPageState extends State<LoadingPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _newVersionAlert(BuildContext context, String version,
-      String notes, bool isBreaking, String link) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("${getTranslatedString("newVersion")}: $version"),
-          content: SingleChildScrollView(
-            child:
-                Column(children: <Widget>[Text("${getTranslatedString("details")}:"), Text(notes)]),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: isBreaking
-                  ? null
-                  : () {
-                      Navigator.of(context).pop();
-                    },
-            ),
-            FlatButton(
-              child: Text(getTranslatedString("update")),
-              onPressed: () async {
-                if (await canLaunch(link)) {
-                  await launch(link);
-                } else {
-                  FirebaseAnalytics().logEvent(
-                    name: "LinkFail",
-                    parameters: {"link": link},
-                  );
-                  throw 'Could not launch $link';
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 

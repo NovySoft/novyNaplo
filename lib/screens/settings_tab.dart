@@ -3,7 +3,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
-import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
@@ -2255,50 +2254,6 @@ class AppInformationTab extends StatefulWidget {
 }
 
 class _AppInformationTabState extends State<AppInformationTab> {
-  Future<void> _newVersionAlert(BuildContext context, String version,
-      String notes, bool isBreaking, String link) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("${getTranslatedString("newVersion")}: $version"),
-          content: SingleChildScrollView(
-            child: Column(children: <Widget>[
-              Text("${getTranslatedString("details")}:"),
-              Text(notes)
-            ]),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: isBreaking
-                  ? null
-                  : () {
-                      Navigator.of(context).pop();
-                    },
-            ),
-            FlatButton(
-              child: Text(getTranslatedString("update")),
-              onPressed: () async {
-                if (await canLaunch(link)) {
-                  await launch(link);
-                } else {
-                  FirebaseAnalytics().logEvent(
-                    name: "LinkFail",
-                    parameters: {"link": link},
-                  );
-                  throw 'Could not launch $link';
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -2319,7 +2274,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          NewVersion newVerDetails = await getVersion();
+                          /*NewVersion newVerDetails = await getVersion();
                           setState(() {
                             newVerDetails = newVerDetails;
                           });
@@ -2334,7 +2289,7 @@ class _AppInformationTabState extends State<AppInformationTab> {
                                   newVerDetails.isBreaking,
                                   newVerDetails.releaseLink);
                             }
-                          }
+                          }*/
                         },
                         icon: Icon(MdiIcons.cellphoneArrowDown,
                             color: Colors.black),
