@@ -50,12 +50,20 @@ class MarksTab extends StatefulWidget {
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
   int itemsLength = globals.markCount;
-  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
-  final _androidRefreshKeyTwo = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> _androidRefreshKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "1");
+  GlobalKey<RefreshIndicatorState> _androidRefreshKeyTwo =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "2");
 
   @override
   void initState() {
+    //Update refresh key
+    _androidRefreshKey = new GlobalKey<RefreshIndicatorState>(debugLabel: "1");
+    _androidRefreshKeyTwo =
+        new GlobalKey<RefreshIndicatorState>(debugLabel: "2");
+    //setup tabcontroller
     _tabController = new TabController(vsync: this, length: 2);
+    //Payload handling and fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if ((globals.backgroundFetch || globals.offlineModeDb) &&
           !globals.didFetch) {

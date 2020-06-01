@@ -82,6 +82,8 @@ Novy teljesen nem eredeti kréta kliense.
 - **customgauge**: A kis sebbeség óra szerüség
 - **flutter_local_notifications**: Értesítések küldése
 - **android_alarm_manager**: Háttér lekérések időzítése
+- **in_app_update**: Playstore frissítések jelzése
+- **flutter_phoenix**: Alkalmazás újrainditásához szükséges
 
 ## Felhasznált kódok
 

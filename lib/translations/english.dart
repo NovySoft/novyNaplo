@@ -7,7 +7,7 @@ final Map<String, String> translation = {
   "dark": "Dark",
   "hu": "Hungarian",
   "en": "English",
-  "adsOffRestart": "To turn off ads you have to restart the application",
+  "adsOffRestart": "To turn off ads you must restart the application",
   "turnOnAds":
       "By turning on ads you agree to the admob privacy policy and to that fact that google might collect some information about you (and might share it with 3rd parties). You also agree to that using the collected information more relevant ads will be shown to you",
   "settings": "Settings",
@@ -289,4 +289,5 @@ final Map<String, String> translation = {
   "newAv": "New avarage",
   "newExam": "New exam",
   "examModified": "Exam modified",
+  "Swipe to countinue": "Swipe to continue",
 };

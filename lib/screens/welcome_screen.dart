@@ -363,7 +363,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },
         padding: EdgeInsets.all(12),
-        child: Text('Bejelentkezés', style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
       ),
     );
     return Center(

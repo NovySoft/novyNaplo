@@ -27,6 +27,7 @@ import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -60,7 +61,11 @@ void main() async {
   runZoned(() async {
     await mainSql.initDatabase();
     await notifications.setupNotifications();
-    runApp(MyApp());
+    runApp(
+      Phoenix(
+        child: MyApp(),
+      ),
+    );
     globals.fetchPeriod =
         prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
     globals.backgroundFetch = prefs.getBool("backgroundFetch");

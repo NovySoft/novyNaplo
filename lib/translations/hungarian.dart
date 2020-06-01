@@ -288,4 +288,5 @@ final Map<String, String> translation = {
   "newAv": "Új átlag",
   "newExam": "Új dolgozat",
   "examModified": "Dolgozat módusolt",
+  "Swipe to countinue": "Húzd el a folytatáshoz",
 };

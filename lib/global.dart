@@ -18,7 +18,6 @@ String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme
 String markCardConstColor; //If theme is constant what color is it
 String lessonCardSubtitle; //Lesson card's subtitle
-String loadingText = "Kérlek várj..."; //Betöltő szöveg
 String statChart; //Mit kell a statisztikánál mutatni
 String howManyGraph; //What should we show? A pie- or a bar-chart
 bool adsEnabled; //Do we have to show ads
@@ -45,7 +44,8 @@ double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
 String versionInfoJson; //Github version.json in string
-String language = "hu"; //Language to show stuff in
+String language =
+    "hu"; //Language to show stuff in, defualts to hungarian as you can see
 
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -8,6 +8,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 const _myListOfRandomColors = [
   Colors.red,
@@ -103,7 +104,7 @@ class SpinnerDialog extends StatefulWidget {
 }
 
 class SpinnerDialogState extends State<SpinnerDialog> {
-  String loadingText = globals.loadingText;
+  String loadingText = getTranslatedString("plsWait");
   final GlobalKey<State> key = login.keyLoader;
   @override
   Widget build(BuildContext context) {
