@@ -1,7 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/translations/translationProvider.dart';
@@ -894,7 +893,6 @@ class _UIsettingsState extends State<UIsettings> {
                       setState(() {
                         globals.language = value;
                       });
-                      Phoenix.rebirth(context);
                     },
                     value: globals.language,
                   ),
@@ -1096,7 +1094,6 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       prefs.setBool("showAllAvsInStats", switchOn);
                       Crashlytics.instance
                           .setBool("showAllAvsInStats", switchOn);
-                      Phoenix.rebirth(context);
                     },
                     value: showAllAvsInStatsSwitch,
                   ),

@@ -48,7 +48,6 @@ dependencies:
   flutter_local_notifications: any
   android_alarm_manager: any
   in_app_update: any
-  flutter_phoenix: any
 
 flutter_icons:
   android: true
