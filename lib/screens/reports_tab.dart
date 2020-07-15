@@ -4,8 +4,11 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/screens/reports_detail_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marks;
+import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 
 TabController _tabController;
 final List<Tab> reportTabs = <Tab>[
@@ -80,6 +83,22 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: firstQuarterEvaluationList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  int statListIndex = stats.allParsedSubjects.indexWhere(
+                      (element) =>
+                          element[0].subject.toLowerCase() ==
+                          firstQuarterEvaluationList[index]
+                              .subject
+                              .toLowerCase());
+                  List<dynamic> chartListPoints =
+                      stats.allParsedSubjects[statListIndex].where((element) {
+                    if (element.date.compareTo(
+                            firstQuarterEvaluationList[index].date) <=
+                        0) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }).toList();
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(firstQuarterEvaluationList[index].subject),
@@ -93,7 +112,11 @@ class _ReportsTabState extends State<ReportsTab>
                     ),
                     trailing: Text(
                       (firstQuarterEvaluationList[index].theme.toLowerCase() ==
-                                  "dicséret"
+                                      "dicséret" ||
+                                  firstQuarterEvaluationList[index]
+                                          .theme
+                                          .toLowerCase() ==
+                                      "kitűnő"
                               ? "Dicséretes\n"
                               : "") +
                           firstQuarterEvaluationList[index].value,
@@ -106,7 +129,16 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     color: Colors.red,
-                    onPressed: null,
+                    onPressed: ReportsDetailTab(
+                      title:
+                          "${getTranslatedString("FirstQuarter").toLowerCase()} ${firstQuarterEvaluationList[index].subject}",
+                      eval: firstQuarterEvaluationList[index],
+                      color: Colors.red,
+                      chartList: statListIndex != -1
+                          ? createSubjectChart(
+                              chartListPoints, index.toString())
+                          : null,
+                    ),
                   );
                 },
               );
@@ -121,6 +153,19 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: halfYearEvalList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  int statListIndex = stats.allParsedSubjects.indexWhere(
+                      (element) =>
+                          element[0].subject.toLowerCase() ==
+                          halfYearEvalList[index].subject.toLowerCase());
+                  List<dynamic> chartListPoints =
+                      stats.allParsedSubjects[statListIndex].where((element) {
+                    if (element.date.compareTo(halfYearEvalList[index].date) <=
+                        0) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }).toList();
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(halfYearEvalList[index].subject),
@@ -133,7 +178,10 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     trailing: Text(
-                      (halfYearEvalList[index].theme.toLowerCase() == "dicséret"
+                      (halfYearEvalList[index].theme.toLowerCase() ==
+                                      "dicséret" ||
+                                  halfYearEvalList[index].theme.toLowerCase() ==
+                                      "kitűnő"
                               ? "Dicséretes\n"
                               : "") +
                           halfYearEvalList[index].value,
@@ -146,7 +194,16 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     color: Colors.red,
-                    onPressed: null,
+                    onPressed: ReportsDetailTab(
+                      title:
+                          "${getTranslatedString("HalfYear").toLowerCase()} ${halfYearEvalList[index].subject}",
+                      eval: halfYearEvalList[index],
+                      color: Colors.red,
+                      chartList: statListIndex != -1
+                          ? createSubjectChart(
+                              chartListPoints, index.toString())
+                          : null,
+                    ),
                   );
                 },
               );
@@ -169,6 +226,19 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: endOfYearEvalList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  int statListIndex = stats.allParsedSubjects.indexWhere(
+                      (element) =>
+                          element[0].subject.toLowerCase() ==
+                          endOfYearEvalList[index].subject.toLowerCase());
+                  List<dynamic> chartListPoints =
+                      stats.allParsedSubjects[statListIndex].where((element) {
+                    if (element.date.compareTo(endOfYearEvalList[index].date) <=
+                        0) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }).toList();
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(endOfYearEvalList[index].subject),
@@ -182,7 +252,11 @@ class _ReportsTabState extends State<ReportsTab>
                     ),
                     trailing: Text(
                       (endOfYearEvalList[index].theme.toLowerCase() ==
-                                  "dicséret"
+                                      "dicséret" ||
+                                  endOfYearEvalList[index]
+                                          .theme
+                                          .toLowerCase() ==
+                                      "kitűnő"
                               ? "Dicséretes\n"
                               : "") +
                           endOfYearEvalList[index].value,
@@ -195,7 +269,16 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     color: Colors.red,
-                    onPressed: null,
+                    onPressed: ReportsDetailTab(
+                      title:
+                          "${getTranslatedString("EndOfYear").toLowerCase()} ${endOfYearEvalList[index].subject}",
+                      eval: endOfYearEvalList[index],
+                      color: Colors.red,
+                      chartList: statListIndex != -1
+                          ? createSubjectChart(
+                              chartListPoints, index.toString())
+                          : null,
+                    ),
                   );
                 },
               );

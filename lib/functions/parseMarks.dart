@@ -84,7 +84,8 @@ List<String> parseSubjects(var input) {
 }
 
 //*USED BY STATISTICS
-List<dynamic> categorizeSubjects(var input) {
+//TODO Optimize to use already parsed evals, instead of reparsing
+List<List<Evals>> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];
   List<List<Evals>> jegyMatrix = [[]];
