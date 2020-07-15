@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
@@ -884,15 +885,50 @@ class _UIsettingsState extends State<UIsettings> {
                     onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      prefs.setString("Language", value);
-                      FirebaseAnalytics().setUserProperty(
+                      await prefs.setString("Language", value);
+                      await FirebaseAnalytics().setUserProperty(
                         name: "Language",
                         value: value,
                       );
                       Crashlytics.instance.setString("Language", value);
-                      setState(() {
-                        globals.language = value;
-                      });
+                      if (globals.language != value) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => UIsettings(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                        setState(() {
+                          globals.language = value;
+                        });
+                        await showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return WillPopScope(
+                              onWillPop: () async {
+                                return false;
+                                //Don't let the user exit without pressing ok
+                                //Else it would cause globalkey issues
+                                //TODO fix this issue
+                                //! Severity: high
+                                //! Fix complexity: high
+                              },
+                              child: AlertDialog(
+                                title: Text(getTranslatedString("status")),
+                                content:
+                                    Text(getTranslatedString("langRestart")),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Ok'),
+                                    onPressed: null,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
                     },
                     value: globals.language,
                   ),

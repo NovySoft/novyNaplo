@@ -292,4 +292,6 @@ final Map<String, String> translation = {
   "Swipe to countinue": "Swipe to continue",
   "checkNet": "Checking network status",
   "decodeToken": "Decoding token",
+  "langRestart":
+      "For the language change to take effect you must restart the application now!",
 };

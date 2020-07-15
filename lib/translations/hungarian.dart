@@ -164,9 +164,11 @@ final Map<String, String> translation = {
   "class": "Osztály",
   "nothing": "semmi",
   "thisAppOpenSource": "Ez az alkalmazás nyílt forráskódú!",
-  "errAndGit": "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
+  "errAndGit":
+      "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
   "thirdParty": "Harmadik felek és adatgyűjtés",
-  "useThirdParties": "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk rólad (CSAK A TESZT VERZIÓBAN) az a neved. Amenyiben a playstore-ból vagy az appstore-ból tölttötted le az applikációt, akkor nem tárolunk rólad semmilyen adatot.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+  "useThirdParties":
+      "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk rólad (CSAK A TESZT VERZIÓBAN) az a neved. Amenyiben a playstore-ból vagy az appstore-ból tölttötted le az applikációt, akkor nem tárolunk rólad semmilyen adatot.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
   "contributors": "Akik az apphoz hozzájárultak:",
   "leadDev": "Fő fejlesztő",
   "markCalcDev": "Jegyszámoló programja",
@@ -189,7 +191,8 @@ final Map<String, String> translation = {
   "noAns10": "A kérésünkre nem kaptunk választ 10 másodperc után sem!",
   "manCode": "Manuális kód megadás szükséges!",
   "schSelector": "Iskola választó",
-  "generalErrDesc": "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!",
+  "generalErrDesc":
+      "\nAjánlott az alkalmazás újraindítása.\nHa a hiba továbbra is fent áll, akkor lépjen kapcsolatba a fejlesztőkkel!",
   "errReadMem": "Hiba a memóriából való olvasás közben!",
   "restartApp": "\nAjánlott az alkalmazás újraindítása",
   "errRestart": "Hiba történt\nKérem indítsa újra az applikációt!",
@@ -216,8 +219,7 @@ final Map<String, String> translation = {
   "markCalculatorSettings": "Jegyszámoló beállításai",
   "networkAndNotificationSettings": "Hálózat és értesítés beállításai",
   "developerSettings": "Fejlesztői beállítások",
-  "youCanWriteToTheFollowingEmail":
-      "Az alábbi email-ra tudsz írni",
+  "youCanWriteToTheFollowingEmail": "Az alábbi email-ra tudsz írni",
   "appInfo": "Applikáció információk",
   "logOut": "Kijelentkezés",
   "sureLogout": "Biztosan ki szeretnél jelentkezni?",
@@ -289,4 +291,6 @@ final Map<String, String> translation = {
   "newExam": "Új dolgozat",
   "examModified": "Dolgozat módusolt",
   "Swipe to countinue": "Húzd el a folytatáshoz",
+  "langRestart":
+      "A nyelv megváltoztatásához újra kell indítanod az alkalmazást!",
 };
