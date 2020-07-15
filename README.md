@@ -41,6 +41,9 @@ Novy teljesen nem eredeti kréta kliense.
 
 ## **HAMAROSAN**
 
+- Éves, féléves, és negyedéves értesítők megetekintése
+- Tanulói házifeladat felírása
+- Házifeladat TODO lista szerűség
 - Több felhasználós támogatás
 - Hiányzások
 - Támogatók oldal - **Gáti Úr** közreműködésével

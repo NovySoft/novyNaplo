@@ -4,7 +4,6 @@
 String passKey = "NovyNovyNovyNovy"; //
 String codeKey = "NovyNovyNovyNovy"; //
 String userKey = "NovyNovyNovyNovy"; //
-String iv = 'yyyyyyyyyyyyyyyy'; // This is not how an IV looks like
 String currAgent = "Novy.Kreta"; //Probably will change in future
 
 

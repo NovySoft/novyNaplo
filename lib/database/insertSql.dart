@@ -15,6 +15,7 @@ import 'package:collection/collection.dart';
 Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
 int notifId = 2;
 
+//TODO make batch inserts INSERTED variable a little bit more understandable
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {

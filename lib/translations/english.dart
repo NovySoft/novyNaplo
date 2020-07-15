@@ -290,4 +290,6 @@ final Map<String, String> translation = {
   "newExam": "New exam",
   "examModified": "Exam modified",
   "Swipe to countinue": "Swipe to continue",
+  "checkNet": "Checking network status",
+  "decodeToken": "Decoding token",
 };
