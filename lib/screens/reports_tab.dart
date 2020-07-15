@@ -209,12 +209,21 @@ class _ReportsTabState extends State<ReportsTab>
               );
             } else if (tab.text == getTranslatedString("ThirdQuarter")) {
               //!Nem tudom
-              return Text(marks.allParsedByDate
-                  .where((item) {
-                    return item.type == "HalfYear" ? true : false;
-                  })
-                  .length
-                  .toString());
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      MdiIcons.emoticonSadOutline,
+                      size: 50,
+                    ),
+                    Text(
+                      "Még nem elérhető\nNot yet available!",
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
+              );
             } else if (tab.text == getTranslatedString("EndOfYear")) {
               List<Evals> endOfYearEvalList = marks.allParsedByDate.where(
                 (item) {
