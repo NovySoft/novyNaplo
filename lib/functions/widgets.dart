@@ -1249,7 +1249,7 @@ class AnimatedLeadingTrailingCard extends StatelessWidget {
         color: color,
         flattenAnimation: AlwaysStoppedAnimation(0),
         child: SizedBox(
-          height: 120,
+          height: 100,
           width: double.infinity,
           child: Container(
             color: color,
@@ -1264,19 +1264,12 @@ class AnimatedLeadingTrailingCard extends StatelessWidget {
                 closedBuilder:
                     (BuildContext context, VoidCallback openContainer) {
                   return SizedBox(
-                    height: 120,
+                    height: 100,
                     child: Stack(
-                      alignment: Alignment.center,
+                      alignment: Alignment.centerLeft,
                       children: [
                         Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                              height: 120,
-                              color: Colors.black12,
-                              alignment: Alignment.centerLeft,
-                              child: leading),
+                          child: leading,
                         ),
                         Positioned(
                           right: 8,

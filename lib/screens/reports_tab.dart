@@ -53,6 +53,7 @@ class _ReportsTabState extends State<ReportsTab>
 
   @override
   Widget build(BuildContext context) {
+    //TODO refactor, to make it a bit less complex
     globals.globalContext = context;
     return Scaffold(
       drawer: getDrawer(ReportsTab.tag, context),

@@ -69,7 +69,7 @@ class ReportsDetailTab extends StatelessWidget {
               break;
             case 2:
               return SizedBox(
-                  height: 500,
+                  height: 200,
                   child: new charts.LineChart(
                     chartList,
                     behaviors: [new charts.PanAndZoomBehavior()],
