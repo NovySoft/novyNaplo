@@ -293,4 +293,9 @@ final Map<String, String> translation = {
   "Swipe to countinue": "Húzd el a folytatáshoz",
   "langRestart":
       "A nyelv megváltoztatásához újra kell indítanod az alkalmazást!",
+  "reports": "Jelentések",
+  "FirstQuarter": "Negyed éves",
+  "HalfYear": "Féléves",
+  "ThirdQuarter": "Háromnegyed éves",
+  "EndOfYear": "Évvégi"
 };

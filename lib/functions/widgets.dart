@@ -12,6 +12,7 @@ import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/reports_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
@@ -55,8 +56,7 @@ class PressableCard extends StatefulWidget {
   const PressableCard({
     this.onPressed,
     this.color,
-    @required
-    this.flattenAnimation,
+    @required this.flattenAnimation,
     this.child,
   });
 
@@ -378,14 +378,10 @@ void showChoices(BuildContext context, List<String> choices) {
 
 class AnimatedTitleSubtitleCard extends StatelessWidget {
   AnimatedTitleSubtitleCard({
-    @required
-    this.title,
-    @required
-    this.color,
-    @required
-    this.subTitle,
-    @required
-    this.onPressed,
+    @required this.title,
+    @required this.color,
+    @required this.subTitle,
+    @required this.onPressed,
     this.heroAnimation,
   });
 
@@ -1067,6 +1063,22 @@ Widget getDrawer(String screen, BuildContext context) {
           },
         ),
         ListTile(
+          title: Text(capitalize(getTranslatedString("reports"))),
+          leading: Icon(MdiIcons.fileChart),
+          onTap: () {
+            if (screen == ReportsTab.tag) {
+              Navigator.pop(context);
+            } else {
+              try {
+                Navigator.pushNamed(context, ReportsTab.tag);
+              } catch (e, s) {
+                Crashlytics.instance.recordError(e, s, context: 'getDrawer');
+                print(e.message);
+              }
+            }
+          },
+        ),
+        ListTile(
           title: Text(capitalize(getTranslatedString("timetable"))),
           leading: Icon(Icons.today),
           onTap: () {
@@ -1217,4 +1229,68 @@ Widget getDrawer(String screen, BuildContext context) {
       ],
     ),
   );
+}
+
+class AnimatedLeadingTrailingCard extends StatelessWidget {
+  AnimatedLeadingTrailingCard({
+    @required this.leading,
+    @required this.color,
+    @required this.trailing,
+    @required this.onPressed,
+  });
+
+  final Color color;
+  final Widget onPressed, leading, trailing;
+
+  @override
+  Widget build(context) {
+    return PressableCard(
+        onPressed: null,
+        color: color,
+        flattenAnimation: AlwaysStoppedAnimation(0),
+        child: SizedBox(
+          height: 120,
+          width: double.infinity,
+          child: Container(
+            color: color,
+            child: OpenContainer(
+                closedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                openShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1)),
+                transitionDuration: Duration(milliseconds: 550),
+                openColor: color,
+                closedColor: color,
+                closedBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return SizedBox(
+                    height: 120,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              height: 120,
+                              color: Colors.black12,
+                              alignment: Alignment.centerLeft,
+                              child: leading),
+                        ),
+                        Positioned(
+                          right: 8,
+                          child: trailing,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                openBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return onPressed;
+                }),
+          ),
+        ));
+  }
 }

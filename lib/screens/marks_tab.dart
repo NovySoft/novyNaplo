@@ -18,7 +18,6 @@ import 'package:novynaplo/screens/marks_detail_tab.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'dart:async';
-import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 

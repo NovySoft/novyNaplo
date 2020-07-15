@@ -140,6 +140,7 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
   return jegyMatrix;
 }
 
+//TODO refactor with matrixes
 List<dynamic> sortByDateAndSubject(List<Evals> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;

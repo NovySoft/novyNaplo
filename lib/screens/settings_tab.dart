@@ -3,7 +3,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
-import 'package:novynaplo/screens/loading_screen.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
