@@ -37,7 +37,7 @@ Novy teljesen nem eredeti kréta kliense.
 - Értesítések
 - Offline mód
 - Faliújság megtekintése
-- Fordítások
+- Fordítások (Angol, Magyar)
 
 ## **HAMAROSAN**
 

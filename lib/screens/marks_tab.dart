@@ -80,7 +80,6 @@ class MarksTabState extends State<MarksTab>
 
   @override
   void dispose() {
-    adBanner.dispose();
     super.dispose();
   }
 
