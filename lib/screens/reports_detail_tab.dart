@@ -3,6 +3,7 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/chartHelper.dart';
 
 class ReportsDetailTab extends StatelessWidget {
   ReportsDetailTab({
@@ -32,6 +33,7 @@ class ReportsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<ChartPoints> avList = List.from(chartList[0].data);
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
@@ -79,6 +81,17 @@ class ReportsDetailTab extends StatelessWidget {
                     defaultRenderer:
                         new charts.LineRendererConfig(includePoints: true),
                   ));
+              break;
+            case 3:
+              List<ChartPoints> sortableList = List.from(avList);
+              sortableList.sort((a, b) => a.value.compareTo(b.value));
+              return Column(
+                children: <Widget>[
+                  SizedBox(height: 5),
+                  Text("legkisebb " + sortableList.first.value.toString()),
+                  Text("legnagyobb " + sortableList.last.value.toString()),
+                ],
+              );
               break;
           }
         },
