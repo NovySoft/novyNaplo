@@ -42,7 +42,7 @@ Future<void> setupNotifications() async {
     enableVibration: true,
     vibrationPattern: vibrationPattern,
     color: Color.fromARGB(255, 255, 165, 0),
-    visibility: NotificationVisibility.Public,
+    visibility: NotificationVisibility.Private,
     ledColor: Colors.orange,
     ledOnMs: 1000,
     ledOffMs: 1000,
@@ -297,8 +297,7 @@ Future<void> showTesztNotificationDialog() async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(getTranslatedString("status")),
-        content: Text(
-            "${getTranslatedString("pressTestNotif")}..."),
+        content: Text("${getTranslatedString("pressTestNotif")}..."),
         actions: <Widget>[
           FlatButton(
             child: Text('Ok'),

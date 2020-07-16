@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/hungarian.dart' as hu;
 import 'package:novynaplo/translations/english.dart' as en;
-import 'dart:io' show Platform;
+//import 'dart:io' show Platform;
 
 String getTranslatedString(String input) {
   //Dont delete this piece of code, it makes sure that the translation is right

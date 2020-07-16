@@ -9,6 +9,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/reports_tab.dart';
 import 'package:novynaplo/screens/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
@@ -56,6 +57,7 @@ void main() async {
     HomeworkTab.tag: (context) => HomeworkTab(),
     ExamsTab.tag: (context) => ExamsTab(),
     EventsTab.tag: (context) => EventsTab(),
+    ReportsTab.tag: (context) => ReportsTab(),
   };
   runZoned(() async {
     await mainSql.initDatabase();

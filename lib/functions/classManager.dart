@@ -26,6 +26,25 @@ class Evals {
   int databaseId;
   int id;
 
+  @override
+  String toString() {
+    return """
+    subject: $subject 
+    teacher: $teacher 
+    theme: $theme 
+    value: $value 
+    numberValue: $numberValue 
+    date: ${createDate.toString()}
+    mode: $mode 
+    formName: $formName 
+    form: $form 
+    type: $type 
+    weight: $weight 
+    id: $id 
+    dbId: $databaseId \n
+    """;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'databaseId': databaseId,
@@ -359,7 +378,7 @@ class Exam {
   }
 }
 
-class Event{
+class Event {
   int databaseId;
   int id;
   String dateString;

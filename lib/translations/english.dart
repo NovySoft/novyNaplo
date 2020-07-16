@@ -294,4 +294,14 @@ final Map<String, String> translation = {
   "decodeToken": "Decoding token",
   "langRestart":
       "For the language change to take effect you must restart the application now!",
+  "reports": "Reports",
+  "FirstQuarter": "First quarter",
+  "HalfYear": "Half year",
+  "ThirdQuarter": "Third quarter",
+  "EndOfYear": "End of year",
+  "inAv": "In avarage",
+  "inPc": "In percent",
+  "praiseworthy": "Praiseworthy",
+  "arrowFirstMark": "The arrow is showing the difference from the first mark",
+  "performance": "Performance",
 };

@@ -84,7 +84,8 @@ List<String> parseSubjects(var input) {
 }
 
 //*USED BY STATISTICS
-List<dynamic> categorizeSubjects(var input) {
+//TODO Optimize to use already parsed evals, instead of reparsing
+List<List<Evals>> categorizeSubjects(var input) {
   var parsed = input["Evaluations"];
   List<Evals> jegyArray = [];
   List<List<Evals>> jegyMatrix = [[]];
@@ -140,6 +141,7 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
   return jegyMatrix;
 }
 
+//TODO refactor with matrixes
 List<dynamic> sortByDateAndSubject(List<Evals> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;

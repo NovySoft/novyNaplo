@@ -8,6 +8,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 final List<Tab> days = <Tab>[
+  //TODO Only show day if it has lessons on it
   Tab(text: getTranslatedString("monday")),
   Tab(text: getTranslatedString("tuesday")),
   Tab(text: getTranslatedString("wednesday")),
