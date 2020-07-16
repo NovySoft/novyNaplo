@@ -2125,7 +2125,10 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
               height: 250,
               child: ListView(
                 children: [
-                  Text(result),
+                  SelectableText(
+                    result,
+                    toolbarOptions: ToolbarOptions(copy: true, selectAll: true),
+                  ),
                 ],
               ),
             ),
