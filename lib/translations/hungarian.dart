@@ -301,4 +301,6 @@ final Map<String, String> translation = {
   "inAv": "Átalagosan",
   "inPc": "Százalékosan",
   "praiseworthy": "Dicséretes",
+  "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
+  "performance": "Teljesítmény",
 };

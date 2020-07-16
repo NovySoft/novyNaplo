@@ -60,7 +60,7 @@ class ReportsDetailTab extends StatelessWidget {
                     Text(
                       capitalize((eval.theme.toLowerCase() == "dicséret" ||
                                   eval.theme.toLowerCase() == "kitűnő"
-                              ? "Dicséretes "
+                              ? "${getTranslatedString("praiseworthy")} "
                               : "") +
                           eval.subject +
                           " " +
@@ -88,8 +88,10 @@ class ReportsDetailTab extends StatelessWidget {
               break;
             case 3:
               return Center(
-                  child: Text(
-                      "A mutató az első jegytől való különbözetet mutatja"));
+                child: Text(
+                  getTranslatedString("arrowFirstMark"),
+                ),
+              );
               break;
             case 4:
               List<ChartPoints> sortableList = List.from(avList);
@@ -121,12 +123,12 @@ class ReportsDetailTab extends StatelessWidget {
                 children: <Widget>[
                   SizedBox(height: 15),
                   Text(
-                      "Legroszabb átlag: " +
+                      "${getTranslatedString("worst")} ${getTranslatedString("av")}: " +
                           sortableList.first.value.toStringAsFixed(3),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   Text(
-                      "Legjobb átlag: " +
+                      "${getTranslatedString("best")} ${getTranslatedString("av")}: " +
                           sortableList.last.value.toStringAsFixed(3),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -135,7 +137,7 @@ class ReportsDetailTab extends StatelessWidget {
                     alignment: WrapAlignment.center,
                     children: <Widget>[
                       Text(
-                          "${capitalize(title)} átlag: " +
+                          "${capitalize(title)} ${getTranslatedString("av")}: " +
                               avList.last.value.toStringAsFixed(3),
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
@@ -189,7 +191,7 @@ class ReportsDetailTab extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    "Teljesítmény",
+                    getTranslatedString("performance"),
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(
