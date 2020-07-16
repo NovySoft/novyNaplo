@@ -300,4 +300,5 @@ final Map<String, String> translation = {
   "EndOfYear": "Évvégi",
   "inAv": "Átalagosan",
   "inPc": "Százalékosan",
+  "praiseworthy": "Dicséretes",
 };

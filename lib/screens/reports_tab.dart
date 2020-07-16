@@ -54,6 +54,7 @@ class _ReportsTabState extends State<ReportsTab>
   @override
   Widget build(BuildContext context) {
     //TODO refactor, to make it a bit less complex
+    //*For example preparse while loading to save cpu resources
     globals.globalContext = context;
     return Scaffold(
       drawer: getDrawer(ReportsTab.tag, context),
@@ -122,7 +123,7 @@ class _ReportsTabState extends State<ReportsTab>
                                           .theme
                                           .toLowerCase() ==
                                       "kitűnő"
-                              ? "Dicséretes\n"
+                              ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
                           firstQuarterEvaluationList[index].value,
                       textAlign: TextAlign.center,
@@ -191,7 +192,7 @@ class _ReportsTabState extends State<ReportsTab>
                                       "dicséret" ||
                                   halfYearEvalList[index].theme.toLowerCase() ==
                                       "kitűnő"
-                              ? "Dicséretes\n"
+                              ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
                           halfYearEvalList[index].value,
                       textAlign: TextAlign.center,
@@ -279,7 +280,7 @@ class _ReportsTabState extends State<ReportsTab>
                                           .theme
                                           .toLowerCase() ==
                                       "kitűnő"
-                              ? "Dicséretes\n"
+                              ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
                           endOfYearEvalList[index].value,
                       textAlign: TextAlign.center,

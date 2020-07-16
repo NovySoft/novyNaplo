@@ -299,4 +299,7 @@ final Map<String, String> translation = {
   "HalfYear": "Half year",
   "ThirdQuarter": "Third quarter",
   "EndOfYear": "End of year",
+  "inAv": "In avarage",
+  "inPc": "In percent",
+  "praiseworthy": "Praiseworthy"
 };
