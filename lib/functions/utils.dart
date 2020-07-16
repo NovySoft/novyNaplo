@@ -6,8 +6,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
 import 'package:diacritic/diacritic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+import 'package:novynaplo/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 const _myListOfRandomColors = [
@@ -318,10 +322,10 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("osztályfő")) {
     return MdiIcons.accountVoice;
   }
-  if(subject.toLowerCase().contains("művészettörténet")){
+  if (subject.toLowerCase().contains("művészettörténet")) {
     return MdiIcons.googleEarth;
   }
-  if(subject.toLowerCase().contains("napközi")){
+  if (subject.toLowerCase().contains("napközi")) {
     return MdiIcons.basketball;
   }
   //LogUnkown subject so I can add that later
@@ -330,4 +334,102 @@ IconData parseSubjectToIcon({@required String subject}) {
     parameters: {"subject": subject},
   );
   return Icons.create;
+}
+
+List<Evals> getSameSubjectEvals(
+    {@required String subject, bool sort = false, DateTime onlyBefore}) {
+  List<Evals> tempList = List.from(stats.allParsedSubjects.firstWhere(
+      (element) => element[0].subject.toLowerCase() == subject.toLowerCase()));
+  if (onlyBefore != null) {
+    tempList
+        .removeWhere((element) => element.createDate.compareTo(onlyBefore) > 0);
+  }
+  if (sort) {
+    tempList.sort((a, b) => b.createDate.compareTo(a.createDate));
+  }
+  return List.from(tempList);
+}
+
+int calcPercentFromEvalsList({@required List<Evals> evalList}) {
+  List<int> tempList = List.from(
+    List.from(evalList).map((element) {
+      //Felesleges, mert nem nezunk szazalekokat
+      //De azert itt hagyom, hatha ezen valtoztatni fogunk
+      if (element.form != "Percent") {
+        switch (element.numberValue) {
+          case 5:
+            return 100;
+            break;
+          case 4:
+            return 75;
+            break;
+          case 3:
+            return 50;
+            break;
+          case 2:
+            return 25;
+            break;
+          case 1:
+            return 0;
+            break;
+        }
+      } else {
+        return element.numberValue.toInt();
+      }
+    }),
+  );
+  tempList.removeWhere((element) => element == null);
+  if (tempList.length == 0) return 0;
+  double av = tempList.map((m) => m).reduce((a, b) => a + b) / tempList.length;
+  return av.toInt();
+}
+
+Color getMarkCardColor({@required Evals eval, @required int index}) {
+  Color color;
+  if (globals.markCardTheme == "Véletlenszerű") {
+    color = marks.colors[index].shade400;
+  } else if (globals.markCardTheme == "Értékelés nagysága") {
+    if (eval.form == "Percent") {
+      if (eval.numberValue >= 90) {
+        color = Colors.green;
+      } else if (eval.numberValue >= 75) {
+        color = Colors.lightGreen;
+      } else if (eval.numberValue >= 60) {
+        color = Colors.yellow[800];
+      } else if (eval.numberValue >= 40) {
+        color = Colors.deepOrange;
+      } else {
+        color = Colors.red[900];
+      }
+    } else {
+      switch (eval.numberValue) {
+        case 5:
+          color = Colors.green;
+          break;
+        case 4:
+          color = Colors.lightGreen;
+          break;
+        case 3:
+          color = Colors.yellow[800];
+          break;
+        case 2:
+          color = Colors.deepOrange;
+          break;
+        case 1:
+          color = Colors.red[900];
+          break;
+        default:
+          color = Colors.purple;
+          break;
+      }
+    }
+  } else if (globals.markCardTheme == "Egyszínű") {
+    color = ThemeHelper().stringToColor(globals.markCardConstColor);
+  } else if (globals.markCardTheme == "Színátmenetes") {
+    color = ThemeHelper().myGradientList[
+        (ThemeHelper().myGradientList.length - index - 1).abs()];
+  } else {
+    color = Colors.red;
+  }
+  return color;
 }

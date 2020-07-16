@@ -258,52 +258,11 @@ class MarksTabState extends State<MarksTab>
       subtitle += "...";
     }
     if (index >= itemsLength) return null;
-    var color;
-    if (globals.markCardTheme == "Véletlenszerű") {
-      color = colors[index].shade400;
-    } else if (globals.markCardTheme == "Értékelés nagysága") {
-      if (allParsedBySubject[index].form == "Percent") {
-        if (allParsedBySubject[index].numberValue >= 90) {
-          color = Colors.green;
-        } else if (allParsedBySubject[index].numberValue >= 75) {
-          color = Colors.lightGreen;
-        } else if (allParsedBySubject[index].numberValue >= 60) {
-          color = Colors.yellow[800];
-        } else if (allParsedBySubject[index].numberValue >= 40) {
-          color = Colors.deepOrange;
-        } else {
-          color = Colors.red[900];
-        }
-      } else {
-        switch (allParsedBySubject[index].numberValue) {
-          case 5:
-            color = Colors.green;
-            break;
-          case 4:
-            color = Colors.lightGreen;
-            break;
-          case 3:
-            color = Colors.yellow[800];
-            break;
-          case 2:
-            color = Colors.deepOrange;
-            break;
-          case 1:
-            color = Colors.red[900];
-            break;
-          default:
-            color = Colors.purple;
-            break;
-        }
-      }
-    } else if (globals.markCardTheme == "Egyszínű") {
-      color = ThemeHelper().stringToColor(globals.markCardConstColor);
-    } else if (globals.markCardTheme == "Színátmenetes") {
-      color = ThemeHelper().myGradientList[
-          (ThemeHelper().myGradientList.length - index - 1).abs()];
-    } else {
-      color = Colors.red;
-    }
+    Color color = getMarkCardColor(
+      eval: allParsedBySubject[index],
+      index: index,
+    );
+    //TODO refactor with matrixes
     if (subjectBefore != allParsedBySubject[index].subject) {
       subjectBefore = allParsedBySubject[index].subject;
       if (defaultTargetPlatform == TargetPlatform.iOS) {

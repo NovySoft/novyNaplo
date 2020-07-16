@@ -84,6 +84,10 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: firstQuarterEvaluationList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  Color color = getMarkCardColor(
+                    eval: firstQuarterEvaluationList[index],
+                    index: index,
+                  );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
                           element[0].subject.toLowerCase() ==
@@ -129,12 +133,12 @@ class _ReportsTabState extends State<ReportsTab>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    color: Colors.red,
+                    color: color,
                     onPressed: ReportsDetailTab(
                       title:
                           "${getTranslatedString("FirstQuarter").toLowerCase()} ${firstQuarterEvaluationList[index].subject}",
                       eval: firstQuarterEvaluationList[index],
-                      color: Colors.red,
+                      color: color,
                       chartList: statListIndex != -1
                           ? createSubjectChart(
                               chartListPoints, index.toString())
@@ -154,6 +158,10 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: halfYearEvalList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  Color color = getMarkCardColor(
+                    eval: halfYearEvalList[index],
+                    index: index,
+                  );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
                           element[0].subject.toLowerCase() ==
@@ -194,12 +202,12 @@ class _ReportsTabState extends State<ReportsTab>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    color: Colors.red,
+                    color: color,
                     onPressed: ReportsDetailTab(
                       title:
                           "${getTranslatedString("HalfYear").toLowerCase()} ${halfYearEvalList[index].subject}",
                       eval: halfYearEvalList[index],
-                      color: Colors.red,
+                      color: color,
                       chartList: statListIndex != -1
                           ? createSubjectChart(
                               chartListPoints, index.toString())
@@ -236,6 +244,10 @@ class _ReportsTabState extends State<ReportsTab>
                 itemCount: endOfYearEvalList.length,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  Color color = getMarkCardColor(
+                    eval: endOfYearEvalList[index],
+                    index: index,
+                  );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
                           element[0].subject.toLowerCase() ==
@@ -278,12 +290,12 @@ class _ReportsTabState extends State<ReportsTab>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    color: Colors.red,
+                    color: color,
                     onPressed: ReportsDetailTab(
                       title:
                           "${getTranslatedString("EndOfYear").toLowerCase()} ${endOfYearEvalList[index].subject}",
                       eval: endOfYearEvalList[index],
-                      color: Colors.red,
+                      color: color,
                       chartList: statListIndex != -1
                           ? createSubjectChart(
                               chartListPoints, index.toString())

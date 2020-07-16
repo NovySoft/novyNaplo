@@ -297,5 +297,7 @@ final Map<String, String> translation = {
   "FirstQuarter": "Negyed éves",
   "HalfYear": "Féléves",
   "ThirdQuarter": "Háromnegyed éves",
-  "EndOfYear": "Évvégi"
+  "EndOfYear": "Évvégi",
+  "inAv": "Átalagosan",
+  "inPc": "Százalékosan",
 };
