@@ -5,10 +5,19 @@ import 'package:novynaplo/translations/english.dart' as en;
 
 //TODO remake with variable replacement
 String getTranslatedString(String input, {List<String> replaceVariables}) {
+  String tempString;
+  if (replaceVariables == null) replaceVariables = [];
   if (globals.language == "hu") {
-    if (hu.translation[input] != null) return hu.translation[input];
+    if (hu.translation[input] != null) tempString = hu.translation[input];
   } else if (globals.language == "en") {
-    if (en.translation[input] != null) return en.translation[input];
+    if (en.translation[input] != null) tempString = en.translation[input];
+  }
+  if (tempString != null) {
+    for (var i = 0; i < replaceVariables.length; i++) {
+      //?{0} ?{1}
+      tempString.replaceAll("?{$i}", replaceVariables[i]);
+    }
+    return tempString;
   }
   print("Can't translate: $input, lang: ${globals.language}");
   FirebaseAnalytics().logEvent(
