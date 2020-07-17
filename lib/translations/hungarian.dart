@@ -303,4 +303,5 @@ final Map<String, String> translation = {
   "praiseworthy": "Dicséretes",
   "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
   "performance": "Teljesítmény",
+  "verCheckOnStart": "Automatikus verzió ellenőrzés",
 };

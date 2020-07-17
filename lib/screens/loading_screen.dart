@@ -445,8 +445,9 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-      //TODO Make version check optional
-      await getVersion();
+      if (prefs.getBool("getVersion")) {
+        await getVersion();
+      }
       //Load ADS
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
@@ -566,7 +567,7 @@ class _LoadingPageState extends State<LoadingPage> {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');
       await _ackAlert(
         context,
-        "${getTranslatedString("errReadMem")} ($e) ${getTranslatedString("restartApp")}",
+        "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",
       );
     }
     auth(context);

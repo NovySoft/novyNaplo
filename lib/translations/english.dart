@@ -304,4 +304,6 @@ final Map<String, String> translation = {
   "praiseworthy": "Praiseworthy",
   "arrowFirstMark": "The arrow is showing the difference from the first mark",
   "performance": "Performance",
+  "verCheckOnStart": "Automatic version check",
+  "you": "you",
 };

@@ -52,6 +52,7 @@ void main() async {
       globals.language = "en";
     }
     await prefs.setString("Language", globals.language);
+    await prefs.setBool("getVersion", true);
   }
   routes = <String, WidgetBuilder>{
     "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),

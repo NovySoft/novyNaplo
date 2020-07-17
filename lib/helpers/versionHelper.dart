@@ -4,15 +4,6 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:in_app_update/in_app_update.dart';
 import 'dart:io' show Platform;
 
-class NewVersion {
-  String versionCode;
-  String releaseNotes;
-  String releaseLink;
-  bool returnedAnything;
-  bool isBreaking;
-  bool isPlayStore;
-}
-
 Future<void> getVersion() async {
   try {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -44,4 +35,5 @@ Future<void> getVersion() async {
     Crashlytics.instance.recordError(e, s, context: 'getVersion');
     return;
   }
+  return;
 }

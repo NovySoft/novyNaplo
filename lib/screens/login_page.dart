@@ -60,11 +60,13 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) {
           return SpinnerDialog();
         });
-    await sleep1();
-    await getVersion();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await sleep1();
+    if (prefs.getBool("getVersion")) {
+      await getVersion();
+    }
     await globals.setGlobals();
-    //DONT DELETE, FOR TESTING USE ONLY
+    //!DONT DELETE, FOR TESTING USE ONLY
     /*print("subtitle:" + markCardSubtitle);
     print("constColor:" + markCardConstColor);
     print("lesson card:" + lessonCardSubtitle);
@@ -203,8 +205,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       if (status != null) _ackAlert(context, status);
-      if (status == null)
-        _ackAlert(context, getTranslatedString("unkError"));
+      if (status == null) _ackAlert(context, getTranslatedString("unkError"));
     }
     isPressed = false;
     if (caller == "_ackAlert") {
@@ -386,7 +387,8 @@ class _LoginPageState extends State<LoginPage> {
           */
         },
         padding: EdgeInsets.all(12),
-        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"),
+            style: TextStyle(color: Colors.black)),
       ),
     );
 
@@ -412,8 +414,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _ackAlert(BuildContext context, String content) async {
-    if (content == null)
-      content = getTranslatedString("unkError");
+    if (content == null) content = getTranslatedString("unkError");
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -440,7 +441,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
 
   Future<void> _timeoutAlert(BuildContext context) async {
     return showDialog<void>(
