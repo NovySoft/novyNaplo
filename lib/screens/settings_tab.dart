@@ -909,7 +909,7 @@ class _UIsettingsState extends State<UIsettings> {
                                 return false;
                                 //Don't let the user exit without pressing ok
                                 //Else it would cause globalkey issues
-                                //TODO fix this issue
+                                //FIXME: fix this issue
                                 //! Severity: high
                                 //! Fix complexity: high
                               },

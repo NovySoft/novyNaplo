@@ -82,9 +82,14 @@ class _ReportsTabState extends State<ReportsTab>
               firstQuarterEvaluationList
                   .sort((a, b) => a.subject.compareTo(b.subject));
               return ListView.builder(
-                itemCount: firstQuarterEvaluationList.length,
+                itemCount: firstQuarterEvaluationList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  if (firstQuarterEvaluationList.length <= index) {
+                    return SizedBox(
+                      height: 60,
+                    );
+                  }
                   Color color = getMarkCardColor(
                     eval: firstQuarterEvaluationList[index],
                     index: index,
@@ -156,9 +161,14 @@ class _ReportsTabState extends State<ReportsTab>
               ).toList();
               halfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
               return ListView.builder(
-                itemCount: halfYearEvalList.length,
+                itemCount: halfYearEvalList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  if (halfYearEvalList.length <= index) {
+                    return SizedBox(
+                      height: 60,
+                    );
+                  }
                   Color color = getMarkCardColor(
                     eval: halfYearEvalList[index],
                     index: index,
@@ -242,9 +252,14 @@ class _ReportsTabState extends State<ReportsTab>
               ).toList();
               endOfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
               return ListView.builder(
-                itemCount: endOfYearEvalList.length,
+                itemCount: endOfYearEvalList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  if (endOfYearEvalList.length <= index) {
+                    return SizedBox(
+                      height: 60,
+                    );
+                  }
                   Color color = getMarkCardColor(
                     eval: endOfYearEvalList[index],
                     index: index,
@@ -304,6 +319,10 @@ class _ReportsTabState extends State<ReportsTab>
                     ),
                   );
                 },
+              );
+            } else {
+              return SizedBox(
+                height: 50,
               );
             }
           }).toList()),

@@ -445,6 +445,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+      //TODO Make version check optional
       await getVersion();
       //Load ADS
       if (prefs.getBool("ads") != null) {

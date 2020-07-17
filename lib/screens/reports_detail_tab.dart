@@ -42,6 +42,7 @@ class ReportsDetailTab extends StatelessWidget {
         title: Text(capitalize(title)),
       ),
       body: ListView.builder(
+        itemCount: 7,
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
@@ -242,6 +243,11 @@ class ReportsDetailTab extends StatelessWidget {
                     ],
                   ),
                 ],
+              );
+              break;
+            default:
+              return SizedBox(
+                height: 150,
               );
               break;
           }

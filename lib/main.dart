@@ -28,6 +28,7 @@ import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
+import 'dart:io' show Platform;
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -43,6 +44,14 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("isNew") == false) {
     isNew = false;
+  } else {
+    String languageCode = Platform.localeName.split('_')[1];
+    if (languageCode.toLowerCase().contains('hu')) {
+      globals.language = "hu";
+    } else {
+      globals.language = "en";
+    }
+    await prefs.setString("Language", globals.language);
   }
   routes = <String, WidgetBuilder>{
     "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
