@@ -91,7 +91,7 @@ class MarksDetailTab extends StatelessWidget {
                     );
                     break;
                   case 5:
-                    //FIXME: refactor this
+                    //TODO: refactor this
                     if (eval.form == "Mark" ||
                         eval.form == "Diligence" ||
                         eval.form == "Deportment") {

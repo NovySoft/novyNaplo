@@ -6,7 +6,6 @@ String codeKey = "NovyNovyNovyNovy"; //
 String userKey = "NovyNovyNovyNovy"; //
 String currAgent = "Novy.Kreta"; //Probably will change in future
 
-
 //menuLogo
 String menuLogo = "assets/home.png";
 

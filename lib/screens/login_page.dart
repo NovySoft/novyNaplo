@@ -152,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
     isPressed = false;
   }
 
+  //TODO: Only check credentials and do the fetching on loading page.
   void auth(var context, caller) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
