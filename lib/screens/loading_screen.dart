@@ -48,6 +48,7 @@ var response;
 bool hasError = false;
 int tokenIndex = 0;
 
+//TODO: Rewrite to use only networkHelper
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
   @override
