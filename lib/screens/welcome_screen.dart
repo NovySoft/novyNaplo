@@ -202,7 +202,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -255,8 +256,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               opacity: secondVisibilityTwo,
               duration: Duration(milliseconds: 500),
               child: Center(
-                child: Text(
-                    getTranslatedString("errAndGit"),
+                child: Text(getTranslatedString("errAndGit"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24)),
               )),
@@ -270,7 +270,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -340,7 +341,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -363,7 +365,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },
         padding: EdgeInsets.all(12),
-        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"),
+            style: TextStyle(color: Colors.black)),
       ),
     );
     return Center(
@@ -378,16 +381,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           height: 30,
         ),
         PeopleCard(name: "Novy", job: getTranslatedString("leadDev")),
-        PeopleCard(name: "Zoller András", job: getTranslatedString("markCalcDev")),
+        PeopleCard(
+            name: "Zoller András", job: getTranslatedString("markCalcDev")),
         PeopleCard(name: "Gáti Gergely", job: getTranslatedString("adsMaker")),
         PeopleCard(name: "Dallos Levente", job: getTranslatedString("jsDev")),
-        PeopleCard(name: "Gáspár Bernát", job: getTranslatedString("designTip")),
-        PeopleCard(name: "Madács Márton", job: getTranslatedString("mainDonator")),
+        PeopleCard(
+            name: "Gáspár Bernát", job: getTranslatedString("designTip")),
+        PeopleCard(
+            name: "Madács Márton", job: getTranslatedString("mainDonator")),
         PeopleCard(name: "Boapps", job: "Ekréta API"),
+        PeopleCard(name: "Stackoverflow", job: getTranslatedString("stackPro")),
         PeopleCard(
-            name: "Stackoverflow", job: getTranslatedString("stackPro")),
-        PeopleCard(
-            name: "${getTranslatedString("manyOther")}...", job: getTranslatedString("manyOtherJob")),
+            name: "${getTranslatedString("manyOther")}...",
+            job: getTranslatedString("manyOtherJob")),
         Column(
           children: <Widget>[
             Text(
