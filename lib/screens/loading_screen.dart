@@ -299,7 +299,7 @@ class _LoadingPageState extends State<LoadingPage> {
             sortByDateAndSubject(List.from(marksPage.allParsedByDate));
         globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
-        statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
+        statisticsPage.allParsedSubjects = categorizeSubjects();
         statisticsPage.colors =
             getRandomColors(statisticsPage.allParsedSubjects.length);
         timetablePage.lessonsList = await getWeekLessons(token, code);

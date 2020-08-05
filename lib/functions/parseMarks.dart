@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/database/insertSql.dart';
@@ -84,34 +85,27 @@ List<String> parseSubjects(var input) {
 }
 
 //*USED BY STATISTICS
-//TODO Optimize to use already parsed evals, instead of reparsing
-List<List<Evals>> categorizeSubjects(var input) {
-  var parsed = input["Evaluations"];
-  List<Evals> jegyArray = [];
+List<List<Evals>> categorizeSubjects() {
+  List<Evals> jegyArray = new List.from(marksPage.allParsedByDate);
   List<List<Evals>> jegyMatrix = [[]];
-  if (input != [] && input != null && parsed != null && parsed != []) {
-    for (var n in parsed) {
-      jegyArray.add(setEvals(n));
-    }
-    jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
-    String lastString = "";
-    for (var n in jegyArray) {
-      if ((n.form != "Percent" && n.type != "HalfYear") ||
-          n.subject == "Magatartas" ||
-          n.subject == "Szorgalom") {
-        if (n.subject != lastString) {
-          jegyMatrix.add([]);
-          lastString = n.subject;
-        }
-        jegyMatrix.last.add(n);
+  jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
+  String lastString = "";
+  for (var n in jegyArray) {
+    if ((n.form != "Percent" && n.type != "HalfYear") ||
+        n.subject == "Magatartas" ||
+        n.subject == "Szorgalom") {
+      if (n.subject != lastString) {
+        jegyMatrix.add([]);
+        lastString = n.subject;
       }
+      jegyMatrix.last.add(n);
     }
-    jegyMatrix.removeAt(0);
-    _index = 0;
-    for (var n in jegyMatrix) {
-      n.sort((a, b) => a.createDate.compareTo(b.createDate));
-      _index++;
-    }
+  }
+  jegyMatrix.removeAt(0);
+  _index = 0;
+  for (var n in jegyMatrix) {
+    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    _index++;
   }
   return jegyMatrix;
 }
@@ -141,7 +135,6 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
   return jegyMatrix;
 }
 
-//TODO refactor with matrixes
 List<List<Evals>> sortByDateAndSubject(List<Evals> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
