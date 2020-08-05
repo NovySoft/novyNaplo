@@ -24,9 +24,6 @@ matrix:
           - lib32stdc++6
           - libstdc++6
           - curl
-      cache:
-        directories:
-          - "$HOME/.pub-cache"
       install:
         - echo install
         - export GIT_MESSAGE=`git log -1 --pretty=%B`
@@ -78,4 +75,3 @@ matrix:
         directories:
           - /usr/local/Homebrew
           - "$HOME/Library/Caches/Homebrew"
-          - "$HOME/.pub-cache"
