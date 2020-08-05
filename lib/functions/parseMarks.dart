@@ -6,7 +6,7 @@ import 'classManager.dart';
 import 'utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-int index = 0;
+int _index = 0;
 var sum;
 var jegyek;
 List<Evals> jegyArray = [];
@@ -107,10 +107,10 @@ List<List<Evals>> categorizeSubjects(var input) {
       }
     }
     jegyMatrix.removeAt(0);
-    index = 0;
+    _index = 0;
     for (var n in jegyMatrix) {
       n.sort((a, b) => a.createDate.compareTo(b.createDate));
-      index++;
+      _index++;
     }
   }
   return jegyMatrix;
@@ -133,40 +133,34 @@ List<dynamic> categorizeSubjectsFromEvals(List<Evals> input) {
     }
   }
   jegyMatrix.removeAt(0);
-  index = 0;
+  _index = 0;
   for (var n in jegyMatrix) {
     n.sort((a, b) => a.createDate.compareTo(b.createDate));
-    index++;
+    _index++;
   }
   return jegyMatrix;
 }
 
 //TODO refactor with matrixes
-List<dynamic> sortByDateAndSubject(List<Evals> input) {
+List<List<Evals>> sortByDateAndSubject(List<Evals> input) {
   input.sort((a, b) => a.subject.compareTo(b.subject));
   int _currentIndex = 0;
-  List<Evals> _output = [];
-  if (input != null) {
-    if (input.length != 0) {
-      String _beforeSubject = input[0].subject;
-      List<List<Evals>> _tempArray = [[]];
-      for (var n in input) {
-        if (n.subject != _beforeSubject) {
-          _currentIndex++;
-          _tempArray.add([]);
-          _beforeSubject = n.subject;
-        }
-        _tempArray[_currentIndex].add(n);
+  List<List<Evals>> _tempArray = [[]];
+  if (input != null && input.length != 0) {
+    String _beforeSubject = input[0].subject;
+    for (var n in input) {
+      if (n.subject != _beforeSubject) {
+        _currentIndex++;
+        _tempArray.add([]);
+        _beforeSubject = n.subject;
       }
-      for (List<Evals> n in _tempArray) {
-        n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
-        for (var x in n) {
-          _output.add(x);
-        }
-      }
+      _tempArray[_currentIndex].add(n);
+    }
+    for (List<Evals> n in _tempArray) {
+      n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
     }
   }
-  return _output;
+  return _tempArray;
 }
 
 Future<List<List<Lesson>>> getWeekLessonsFromLessons(
@@ -175,7 +169,7 @@ Future<List<List<Lesson>>> getWeekLessonsFromLessons(
   List<Lesson> tempLessonList = lessons;
   List<List<Lesson>> output = [[], [], [], [], [], [], []];
   tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
-  index = 0;
+  _index = 0;
   if (tempLessonList != null) {
     if (tempLessonList.length != 0) {
       int beforeDay = tempLessonList[0].startDate.day;
@@ -196,10 +190,10 @@ Future<List<List<Lesson>>> getWeekLessonsFromLessons(
         if (n.date.compareTo(startMonday) >= 0 &&
             n.date.compareTo(endSunday) <= 0) {
           if (n.startDate.day != beforeDay) {
-            index++;
+            _index++;
             beforeDay = n.startDate.day;
           }
-          output[index].add(n);
+          output[_index].add(n);
         } else {
           //Delete from the table if it is out of this week
           await deleteFromDb(n.databaseId, "Timetable");

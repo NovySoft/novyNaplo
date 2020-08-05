@@ -58,7 +58,7 @@ class MarkForBars {
 
 class StatisticsTab extends StatefulWidget {
   static String tag = 'statistics';
-  static const title = 'Statisztika';
+  static String title = getTranslatedString("statistics");
 
   @override
   _StatisticsTabState createState() => _StatisticsTabState();
