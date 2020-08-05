@@ -49,6 +49,7 @@ dependencies:
   flutter_local_notifications: any
   android_alarm_manager: any
   in_app_update: any
+  flutter_svg: 0.18.0
 
 flutter_icons:
   android: true
