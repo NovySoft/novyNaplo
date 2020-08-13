@@ -9,7 +9,8 @@ import 'package:novynaplo/screens/reports_detail_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
-
+//TODO: add performance to mark calculator and statistics
+//TODO: add összesített nézet to statistics
 TabController _tabController;
 final List<Tab> reportTabs = <Tab>[
   //*"Type": "IQuarterEvaluation",
