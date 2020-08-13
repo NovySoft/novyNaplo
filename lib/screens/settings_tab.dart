@@ -32,6 +32,7 @@ import 'dart:convert';
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/config.dart' as config;
 
+//TODO Split settings pages into different files (create a settings folder in lib maybe?)
 String latestGithub = "";
 String latestPlayStore = "";
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');

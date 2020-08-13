@@ -41,10 +41,10 @@ final Map<String, String> translation = {
   "notif": "Notification",
   "notifications": "Notifications",
   "notifTurnOnWarn":
-      "Warnign!\nTurning on notifications will also turn on the database (offline mode)!",
+      "Warning!\nTurning on notifications will also turn on the database (offline mode)!",
   "backgroundFetch": "Background requests",
   "backgroundFetchTurnOnWarning":
-      "Warnign!\nTurning on background requests will also turn on the database (offline mode)!",
+      "Warning!\nTurning on background requests will also turn on the database (offline mode)!",
   "backgroundFetchOnCellular": "Background requests on cellular connection",
   "timeBetweenFetches": "Time between requests",
   "minutes": "minutes",

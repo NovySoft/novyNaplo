@@ -50,6 +50,7 @@ Future<List<Avarage>> parseAvarages(var input) async {
   return atlagArray;
 }
 
+//TODO Migrate this function to usages
 int countNotices(var input) {
   int count = 0;
   if (input != null && input["Notes"] != null) {

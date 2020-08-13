@@ -7,13 +7,20 @@ import 'package:novynaplo/database/deleteSql.dart' as delSql;
 import 'dart:io' show Platform;
 
 //Variables used globally;
-//Session
+//* Session
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 var token; //Bearer token from api
+//TODO Ditch these unnecessary variables (I was so stupid to implement them in the first place because they can be simply replaced by a .length)
 int markCount; //How many marks do we have
 int noticesCount; //How many notices do we have
-//"Permanent"
+BuildContext globalContext; //Yes this is a global context variable
+bool didFetch = false; //True if we fetched the data, false if we didn't
+NotificationAppLaunchDetails
+    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
+int payloadId =
+    -1; //Payload id, contains id of the notification we want to show
+//* "Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme
 String markCardConstColor; //If theme is constant what color is it
@@ -33,17 +40,10 @@ bool backgroundFetchOnCellular = false; //Should we fetch on cellular data
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
-BuildContext globalContext; //Yes this is a global context variable
-bool didFetch = false; //True if we fetched the data, false if we didn't
-NotificationAppLaunchDetails
-    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
-int payloadId =
-    -1; //Payload id, contains id of the notification we want to show
 bool notifications = false; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
-String versionInfoJson; //Github version.json in string
 String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
 

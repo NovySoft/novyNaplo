@@ -20,8 +20,9 @@ import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
+//TODO Remove unused widgets
 
-/// A simple widget that builds different things on different platforms.
+// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
   const PlatformWidget({
     Key key,

@@ -38,6 +38,7 @@ const _myListOfRandomColors = [
 
 final _random = Random();
 
+//TODO Remove unused stuff
 // Avoid customizing the word generator, which can be slow.
 // https://github.com/filiph/english_words/issues/9
 final wordPairIterator = generateWordPairs();
@@ -137,14 +138,17 @@ Future sleep(int millis) async {
   return new Future.delayed(Duration(milliseconds: millis), () => "1");
 }
 
+//TODO Change to use the "upper sleep()"
 Future sleep1() async {
   return new Future.delayed(const Duration(seconds: 1), () => "1");
 }
 
+//TODO Change to use the "upper sleep()"
 Future sleep2() async {
   return new Future.delayed(const Duration(milliseconds: 500), () => "500");
 }
 
+//TODO look into this functions usage, and remove if unnecessary
 String toEnglish(var input) {
   return removeDiacritics(input.toString());
 }
@@ -165,6 +169,7 @@ bool isLeap(int year) {
   }
 }
 
+//TODO look into usage and delete if unnecessary
 int getMonthLength(int input, bool isLeap) {
   switch (input) {
     case 1:
