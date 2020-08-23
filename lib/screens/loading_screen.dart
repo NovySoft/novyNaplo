@@ -455,7 +455,8 @@ class _LoadingPageState extends State<LoadingPage> {
             prefs.getBool("ShouldAsk") &&
             DateTime.parse(prefs.getString("LastAsked"))
                     .difference(DateTime.now()) >=
-                Duration(days: 2)) {
+                Duration(days: 2) &&
+            config.isAppPlaystoreRelease) {
           setState(() {
             loadingText = getTranslatedString("reviewProcess");
           });
