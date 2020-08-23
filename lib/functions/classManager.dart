@@ -93,6 +93,9 @@ Evals setEvals(var input) {
   //Magatartas es Szorgalom integer
   if (input["NumberValue"] == 0 && input["Form"] != "Percent") {
     switch (input["Value"]) {
+      case "Elégtelen":
+        temp.numberValue = 1;
+        break;
       case "Rossz":
         temp.numberValue = 2;
         break;

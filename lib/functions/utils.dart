@@ -327,16 +327,28 @@ IconData parseSubjectToIcon({@required String subject}) {
 
 List<Evals> getSameSubjectEvals(
     {@required String subject, bool sort = false, DateTime onlyBefore}) {
-  List<Evals> tempList = List.from(stats.allParsedSubjects.firstWhere(
+  List<Evals> _tempList = [];
+  if (subject == getTranslatedString("contracted")) {
+    List<List<Evals>> itteratorList =
+        List.from(stats.allParsedSubjectsWithoutZeros);
+    for (var n in itteratorList) {
+      for (var j in n) {
+        _tempList.add(j);
+      }
+    }
+    _tempList.sort((a, b) => a.createDate.compareTo(b.createDate));
+    return _tempList;
+  }
+  _tempList = List.from(stats.allParsedSubjects.firstWhere(
       (element) => element[0].subject.toLowerCase() == subject.toLowerCase()));
   if (onlyBefore != null) {
-    tempList
+    _tempList
         .removeWhere((element) => element.createDate.compareTo(onlyBefore) > 0);
   }
   if (sort) {
-    tempList.sort((a, b) => b.createDate.compareTo(a.createDate));
+    _tempList.sort((a, b) => b.createDate.compareTo(a.createDate));
   }
-  return List.from(tempList);
+  return List.from(_tempList);
 }
 
 int calcPercentFromEvalsList({@required List<Evals> evalList}) {

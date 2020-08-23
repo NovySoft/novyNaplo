@@ -919,12 +919,12 @@ class CalculatorTabState extends State<CalculatorTab>
     }
   }
 
-  List<charts.Series<ChartPoints, int>> createWhatIfChartAndMarks(
+  List<charts.Series<LinearMarkChartData, int>> createWhatIfChartAndMarks(
       {List<Evals> defaultValues,
       List<VirtualMarks> virtualValues,
       String id}) {
-    List<ChartPoints> primaryChartData = [];
-    List<ChartPoints> secondaryChartData = [];
+    List<LinearMarkChartData> primaryChartData = [];
+    List<LinearMarkChartData> secondaryChartData = [];
     double sum = 0;
     double index = 0;
     double virtualSum = 0;
@@ -933,17 +933,17 @@ class CalculatorTabState extends State<CalculatorTab>
     for (var n in defaultValues) {
       sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
       index += 1 * double.parse(n.weight.split("%")[0]) / 100;
-      primaryChartData.add(new ChartPoints(listArray, sum / index));
+      primaryChartData.add(new LinearMarkChartData(listArray, sum / index));
       listArray++;
     }
-    secondaryChartData.add(new ChartPoints(listArray - 1, sum / index));
+    secondaryChartData.add(new LinearMarkChartData(listArray - 1, sum / index));
     for (var n in virtualValues) {
       for (var i = 0; i < n.count; i++) {
         sum += n.numberValue * n.weight / 100;
         virtualSum += n.numberValue * n.weight / 100;
         index += 1 * n.weight / 100;
         virtualIndex += 1 * n.weight / 100;
-        secondaryChartData.add(new ChartPoints(listArray, sum / index));
+        secondaryChartData.add(new LinearMarkChartData(listArray, sum / index));
         listArray++;
       }
     }
@@ -951,18 +951,18 @@ class CalculatorTabState extends State<CalculatorTab>
     //STRANGE..
     setAvAfter((currSum + virtualSum) / (currCount + virtualIndex));
     return [
-      new charts.Series<ChartPoints, int>(
+      new charts.Series<LinearMarkChartData, int>(
         id: id + "secondary",
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (ChartPoints marks, _) => marks.count,
-        measureFn: (ChartPoints marks, _) => marks.value,
+        domainFn: (LinearMarkChartData marks, _) => marks.count,
+        measureFn: (LinearMarkChartData marks, _) => marks.value,
         data: secondaryChartData,
       ),
-      new charts.Series<ChartPoints, int>(
+      new charts.Series<LinearMarkChartData, int>(
         id: id,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (ChartPoints marks, _) => marks.count,
-        measureFn: (ChartPoints marks, _) => marks.value,
+        domainFn: (LinearMarkChartData marks, _) => marks.count,
+        measureFn: (LinearMarkChartData marks, _) => marks.value,
         data: primaryChartData,
       )
     ];

@@ -38,7 +38,7 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ChartPoints> avList = List.from(seriesList[0].data);
+    List<LinearMarkChartData> avList = List.from(seriesList[0].data);
     globals.globalContext = context;
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {

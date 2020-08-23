@@ -35,8 +35,9 @@ class ReportsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ChartPoints> avList = List.from(chartList[0].data);
-    if (avList.length == 0) avList = [ChartPoints(0, 0), ChartPoints(1, 0)];
+    List<LinearMarkChartData> avList = List.from(chartList[0].data);
+    if (avList.length == 0)
+      avList = [LinearMarkChartData(0, 0), LinearMarkChartData(1, 0)];
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
@@ -95,7 +96,7 @@ class ReportsDetailTab extends StatelessWidget {
               );
               break;
             case 4:
-              List<ChartPoints> sortableList = List.from(avList);
+              List<LinearMarkChartData> sortableList = List.from(avList);
               sortableList.sort((a, b) => a.value.compareTo(b.value));
               Color diffColor;
               Widget diffIcon;

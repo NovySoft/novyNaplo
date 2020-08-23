@@ -2,6 +2,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/charts_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -13,7 +14,7 @@ import 'package:novynaplo/translations/translationProvider.dart';
 
 //TODO: add összesített nézet to statistics subject list
 var allParsedSubjects = [];
-var allParsedSubjectsWithoutZeros = [];
+List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 var colors;
 final List<Tab> statTabs = <Tab>[
   Tab(
@@ -96,7 +97,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
-                getAllSubjectsAv(allParsedSubjects);
+                getAllSubjectsAv(allParsedSubjectsWithoutZeros);
                 getWorstAndBest(allParsedSubjectsWithoutZeros);
                 getPieChartOrBarChart(allParsedSubjects);
                 getBarChart(allParsedSubjects);
@@ -549,8 +550,9 @@ class _StatisticsTabState extends State<StatisticsTab>
               );
             } else {
               return ListView.builder(
-                  itemCount:
-                      allParsedSubjectsWithoutZeros.length + globals.adModifier,
+                  itemCount: allParsedSubjectsWithoutZeros.length +
+                      1 + //+1 due to összesített
+                      globals.adModifier,
                   padding: EdgeInsets.symmetric(vertical: 12),
                   itemBuilder: _chartsListBuilder);
             }
@@ -582,26 +584,44 @@ class _StatisticsTabState extends State<StatisticsTab>
   }
 
   Widget _chartsListBuilder(BuildContext context, int index) {
-    if (index >= allParsedSubjectsWithoutZeros.length) {
+    if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
     Color currColor = colors[index];
-    return SafeArea(
+    if (index == 0) {
+      return SafeArea(
         top: false,
         bottom: false,
         child: AnimatedChartsCard(
-          title: capitalize(allParsedSubjectsWithoutZeros[index][0].subject),
+          title: capitalize(getTranslatedString("contracted")),
           color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: ChartsDetailTab(
             id: index,
-            subject:
-                capitalize(allParsedSubjectsWithoutZeros[index][0].subject),
+            subject: capitalize(getTranslatedString("contracted")),
             color: currColor,
-            seriesList: createSubjectChart(
-                allParsedSubjectsWithoutZeros[index], index.toString()),
+            seriesList: createOsszesitett(allParsedSubjectsWithoutZeros),
             animate: globals.chartAnimations,
           ),
-        ));
+        ),
+      );
+    }
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: AnimatedChartsCard(
+        title: capitalize(allParsedSubjectsWithoutZeros[index -1][0].subject),
+        color: currColor,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: ChartsDetailTab(
+          id: index,
+          subject: capitalize(allParsedSubjectsWithoutZeros[index-1][0].subject),
+          color: currColor,
+          seriesList: createSubjectChart(
+              allParsedSubjectsWithoutZeros[index-1], index.toString()),
+          animate: globals.chartAnimations,
+        ),
+      ),
+    );
   }
 }
