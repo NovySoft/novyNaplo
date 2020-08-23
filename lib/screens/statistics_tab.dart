@@ -7,6 +7,7 @@ import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
@@ -81,7 +82,8 @@ class _StatisticsTabState extends State<StatisticsTab>
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
-            if (globals.markCount == 0) return noMarks();
+            if (allParsedSubjects.length == 0 ||
+                marksPage.allParsedByDate.length == 0) return noMarks();
             if (allParsedSubjects.length > 15) {
               sizedBoxHeight =
                   ((allParsedSubjects.length - 15) * 23).toDouble();

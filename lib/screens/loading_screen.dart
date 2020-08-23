@@ -288,16 +288,13 @@ class _LoadingPageState extends State<LoadingPage> {
           Crashlytics.instance.setUserName(globals.dJson["Name"]);
           Crashlytics.instance.setString("User", globals.dJson["Name"]);
         }
-        var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
         await getExams(token, code);
         await getEvents(token, code);
-        globals.markCount = eval.length;
-        marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
+        marksPage.colors = getRandomColors(marksPage.allParsedByDate.length);
         marksPage.allParsedBySubject =
             sortByDateAndSubject(List.from(marksPage.allParsedByDate));
-        globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
         statisticsPage.allParsedSubjects = categorizeSubjects();
         statisticsPage.colors =
@@ -473,8 +470,7 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = getTranslatedString("readMarks");
         });
         List<Evals> tempEvals = await getAllEvals();
-        globals.markCount = tempEvals.length;
-        marksPage.colors = getRandomColors(globals.markCount);
+        marksPage.colors = getRandomColors(tempEvals.length);
         marksPage.allParsedByDate = tempEvals;
         marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
         //Homework

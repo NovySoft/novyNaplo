@@ -11,6 +11,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 List<String> dropdownValues = [];
@@ -379,7 +380,7 @@ class CalculatorTabState extends State<CalculatorTab>
   @override
   void initState() {
     //Set dropdown to item 0
-    if (globals.markCount != 0) {
+    if (marksPage.allParsedByDate.length != 0) {
       dropdownValue = dropdownValues[0];
       currentIndex = 0;
       currCount = avarageList[0].count;
@@ -406,7 +407,7 @@ class CalculatorTabState extends State<CalculatorTab>
       body: TabBarView(
           controller: _tabController,
           children: calcTabs.map((Tab tab) {
-            if (globals.markCount == 0) {
+            if (marksPage.allParsedByDate.length == 0) {
               return noMarks();
             }
             if (tab.text == getTranslatedString("markCalc")) {
@@ -807,7 +808,7 @@ class CalculatorTabState extends State<CalculatorTab>
   }
 
   Widget _calculatorBody() {
-    if (globals.markCount == 0) {
+    if (marksPage.allParsedByDate.length == 0) {
       return noMarks();
     } else {
       return ListView(

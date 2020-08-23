@@ -48,7 +48,6 @@ class MarksTab extends StatefulWidget {
 
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
-  int itemsLength = globals.markCount;
   GlobalKey<RefreshIndicatorState> _androidRefreshKey =
       GlobalKey<RefreshIndicatorState>(debugLabel: "1");
   GlobalKey<RefreshIndicatorState> _androidRefreshKeyTwo =
@@ -83,8 +82,8 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _setData() async {
-    colors = getRandomColors(globals.markCount);
     allParsedByDate = await parseAllByDate(globals.dJson);
+    colors = getRandomColors(allParsedByDate.length);
     allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
   }
 
@@ -271,7 +270,7 @@ class MarksTabState extends State<MarksTab>
           controller: _tabController,
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
-              if (globals.markCount == 0) {
+              if (allParsedByDate.length == 0) {
                 return noMarks();
               } else {
                 return RefreshIndicator(
@@ -281,14 +280,14 @@ class MarksTabState extends State<MarksTab>
                   },
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: globals.markCount,
+                    itemCount: allParsedByDate.length,
                     padding: EdgeInsets.symmetric(vertical: 12),
                     itemBuilder: _dateListBuilder,
                   ),
                 );
               }
             } else {
-              if (globals.markCount == 0) {
+              if (allParsedByDate.length == 0) {
                 return noMarks();
               } else {
                 return RefreshIndicator(

@@ -9,6 +9,7 @@ import 'package:novynaplo/screens/reports_detail_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+
 //TODO: add performance to mark calculator and statistics
 //TODO: add összesített nézet to statistics
 TabController _tabController;
@@ -70,7 +71,7 @@ class _ReportsTabState extends State<ReportsTab>
           controller: _tabController,
           children: reportTabs.map((Tab tab) {
             /*return ListView.builder(
-              itemCount: globals.markCount,
+              itemCount: allParsedByDate.length,
               padding: EdgeInsets.symmetric(vertical: 12),
               itemBuilder: (BuildContext context, int index) {},);*/
             if (tab.text == getTranslatedString("FirstQuarter")) {

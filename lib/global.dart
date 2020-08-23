@@ -11,9 +11,6 @@ import 'dart:io' show Platform;
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 var token; //Bearer token from api
-//TODO Ditch these unnecessary variables (I was so stupid to implement them in the first place because they can be simply replaced by a .length)
-int markCount; //How many marks do we have
-int noticesCount; //How many notices do we have
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
 NotificationAppLaunchDetails
@@ -56,8 +53,6 @@ void resetAllGlobals() async {
   dJson = null;
   avJson = null;
   token = null;
-  markCount = null;
-  noticesCount = null;
   didFetch = false;
 }
 
