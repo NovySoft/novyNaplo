@@ -33,25 +33,12 @@ import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/config.dart' as config;
 
 //TODO Split settings pages into different files (create a settings folder in lib maybe?)
-//TODO Instead off all this bullcrap dropdown String variables use their globals variable pair
-//TODO Implement https://pub.dev/packages/in_app_review
 String latestGithub = "";
 String latestPlayStore = "";
 final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
 final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
 String dropDown;
-String statDropDown = globals.statChart;
-String howManyGraphDropDown = globals.howManyGraph;
-String markDropdown = globals.markCardSubtitle;
-String lessonDropdown = globals.lessonCardSubtitle;
-String markThemeDropdown = globals.markCardTheme;
-String constColorDropdown = globals.markCardConstColor;
-bool adsSwitch = globals.adsEnabled;
-bool animationSwitch = globals.chartAnimations;
-bool notificationSwitch = false;
 int indexModifier = 0;
-bool shouldCollapseSwitch = globals.shouldVirtualMarksCollapse;
-bool showAllAvsInStatsSwitch = globals.showAllAvsInStats;
 TextEditingController extraSpaceUnderStatController =
     TextEditingController(text: globals.extraSpaceUnderStat.toString());
 TextEditingController fetchPeriodController =
@@ -96,7 +83,6 @@ class _SettingsBodyState extends State<SettingsBody> {
     if (main.isNew) {
       main.isNew = false;
       setState(() {
-        adsSwitch = true;
         globals.adsEnabled = true;
         globals.adModifier = 1;
       });
@@ -523,12 +509,11 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                       Crashlytics.instance
                           .setString("lessonCardSubtitle", value);
                       prefs.setString("lessonCardSubtitle", value);
-                      globals.lessonCardSubtitle = value;
                       setState(() {
-                        lessonDropdown = value;
+                        globals.markCardSubtitle = value;
                       });
                     },
-                    value: lessonDropdown,
+                    value: globals.markCardSubtitle,
                   ),
                 );
                 break;
@@ -603,9 +588,8 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                           await SharedPreferences.getInstance();
                       Crashlytics.instance.setString("markCardTheme", value);
                       prefs.setString("markCardTheme", value);
-                      globals.markCardTheme = value;
                       setState(() {
-                        markThemeDropdown = value;
+                        globals.markCardTheme = value;
                       });
                       if (value == "Egyszínű") {
                         setState(() {
@@ -617,7 +601,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                         });
                       }
                     },
-                    value: markThemeDropdown,
+                    value: globals.markCardTheme,
                   ),
                 );
                 break;
@@ -662,12 +646,11 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                           await SharedPreferences.getInstance();
                       Crashlytics.instance.setString("markCardSubtitle", value);
                       prefs.setString("markCardSubtitle", value);
-                      globals.markCardSubtitle = value;
                       setState(() {
-                        markDropdown = value;
+                        globals.markCardSubtitle = value;
                       });
                     },
-                    value: markDropdown,
+                    value: globals.markCardSubtitle,
                   ),
                 );
                 break;
@@ -781,12 +764,11 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       Crashlytics.instance
                           .setString("markCardConstColor", value);
                       prefs.setString("markCardConstColor", value);
-                      globals.markCardConstColor = value;
                       setState(() {
-                        constColorDropdown = value;
+                        globals.markCardConstColor = value;
                       });
                     },
-                    value: constColorDropdown,
+                    value: globals.markCardConstColor,
                   ),
                 );
                 break;
@@ -944,15 +926,14 @@ class _UIsettingsState extends State<UIsettings> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        adsSwitch = isOn;
+                        globals.adsEnabled = isOn;
                       });
                       Crashlytics.instance.setBool("Ads", isOn);
+                      prefs.setBool("ads", isOn);
+                      FirebaseAnalytics().setUserProperty(
+                          name: "Ads", value: isOn ? "ON" : "OFF");
+                      globals.adModifier = isOn ? 1 : 0;
                       if (isOn) {
-                        FirebaseAnalytics()
-                            .setUserProperty(name: "Ads", value: "ON");
-                        prefs.setBool("ads", true);
-                        globals.adsEnabled = true;
-                        globals.adModifier = 1;
                         showDialog<void>(
                             context: context,
                             barrierDismissible: false,
@@ -960,35 +941,31 @@ class _UIsettingsState extends State<UIsettings> {
                               return AdsDialog();
                             });
                       } else {
-                        FirebaseAnalytics()
-                            .setUserProperty(name: "Ads", value: "OFF");
-                        prefs.setBool("ads", false);
-                        globals.adsEnabled = false;
-                        globals.adModifier = 0;
                         adBanner.dispose();
                         showDialog<void>(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (_) {
-                              return new AlertDialog(
-                                title: new Text(getTranslatedString("ads")),
-                                content: Text(
-                                  getTranslatedString("adsOffRestart"),
-                                  textAlign: TextAlign.left,
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (_) {
+                            return new AlertDialog(
+                              title: new Text(getTranslatedString("ads")),
+                              content: Text(
+                                getTranslatedString("adsOffRestart"),
+                                textAlign: TextAlign.left,
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('OK'),
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text('OK'),
-                                    onPressed: () async {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
+                              ],
+                            );
+                          },
+                        );
                       }
                     },
-                    value: adsSwitch,
+                    value: globals.adsEnabled,
                   ),
                 );
                 break;
@@ -1000,7 +977,6 @@ class _UIsettingsState extends State<UIsettings> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        animationSwitch = switchOn;
                         globals.chartAnimations = switchOn;
                       });
                       Crashlytics.instance.setBool("ChartAnimations", switchOn);
@@ -1014,7 +990,7 @@ class _UIsettingsState extends State<UIsettings> {
                         prefs.setBool("chartAnimations", false);
                       }
                     },
-                    value: animationSwitch,
+                    value: globals.chartAnimations,
                   ),
                 );
                 break;
@@ -1079,10 +1055,9 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         Crashlytics.instance.setString("statChart", value);
                         prefs.setString("statChart", value);
                         globals.statChart = value;
-                        statDropDown = value;
                       });
                     },
-                    value: statDropDown,
+                    value: globals.statChart,
                   ),
                 );
                 break;
@@ -1111,10 +1086,9 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         Crashlytics.instance.setString("howManyGraph", value);
                         prefs.setString("howManyGraph", value);
                         globals.howManyGraph = value;
-                        howManyGraphDropDown = value;
                       });
                     },
-                    value: howManyGraphDropDown,
+                    value: globals.howManyGraph,
                   ),
                 );
                 break;
@@ -1126,14 +1100,13 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        showAllAvsInStatsSwitch = switchOn;
                         globals.showAllAvsInStats = switchOn;
                       });
                       prefs.setBool("showAllAvsInStats", switchOn);
                       Crashlytics.instance
                           .setBool("showAllAvsInStats", switchOn);
                     },
-                    value: showAllAvsInStatsSwitch,
+                    value: globals.showAllAvsInStats,
                   ),
                 );
                 break;
@@ -1240,14 +1213,13 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        shouldCollapseSwitch = switchOn;
                         globals.shouldVirtualMarksCollapse = switchOn;
                       });
                       prefs.setBool("shouldVirtualMarksCollapse", switchOn);
                       Crashlytics.instance
                           .setBool("shouldVirtualMarksCollapse", switchOn);
                     },
-                    value: shouldCollapseSwitch,
+                    value: globals.shouldVirtualMarksCollapse,
                   ),
                 );
                 break;
