@@ -4,7 +4,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
-import 'package:diacritic/diacritic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
@@ -136,21 +135,6 @@ class SpinnerDialogState extends State<SpinnerDialog> {
 
 Future sleep(int millis) async {
   return new Future.delayed(Duration(milliseconds: millis), () => "1");
-}
-
-//TODO Change to use the "upper sleep()"
-Future sleep1() async {
-  return new Future.delayed(const Duration(seconds: 1), () => "1");
-}
-
-//TODO Change to use the "upper sleep()"
-Future sleep2() async {
-  return new Future.delayed(const Duration(milliseconds: 500), () => "500");
-}
-
-//TODO look into this functions usage, and remove if unnecessary
-String toEnglish(var input) {
-  return removeDiacritics(input.toString());
 }
 
 bool isLeap(int year) {

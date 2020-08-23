@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           return SpinnerDialog();
         });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await sleep1();
+    await sleep(1000);
     if (prefs.getBool("getVersion")) {
       await getVersion();
     }
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             });
       }
       //Not showing quickly enough
-      await sleep1(); //So sleep for a second
+      await sleep(1000); //So sleep for a second
       if (await NetworkHelper().isNetworkAvailable() ==
           ConnectivityResult.none) {
         status = "No internet connection was detected";

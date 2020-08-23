@@ -203,7 +203,7 @@ class NetworkHelper {
     } finally {
       client.close();
     }
-    await sleep1();
+    await sleep(1000);
     if (res.statusCode != 200) {
       print(res.statusCode);
       return res.statusCode;

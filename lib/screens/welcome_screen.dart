@@ -53,42 +53,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   void animate() async {
-    await sleep1();
-    await sleep1();
+    await sleep(2000);
     setState(() {
       size = 150;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       visibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       visibilityTwo = 1;
     });
   }
 
   void animateSecond() async {
-    await sleep2();
+    await sleep(500);
     setState(() {
       size = 150;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       secondVisibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       secondVisibilityTwo = 1;
     });
   }
 
   void animateThird() async {
-    await sleep2();
+    await sleep(500);
     setState(() {
       thirdVisibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       thirdVisibilityTwo = 1;
     });
