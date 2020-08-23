@@ -51,6 +51,7 @@ void main() async {
     } else {
       globals.language = "en";
     }
+    await prefs.setString("FirstOpenTime", DateTime.now().toString());
     await prefs.setString("Language", globals.language);
     await prefs.setBool("getVersion", true);
   }

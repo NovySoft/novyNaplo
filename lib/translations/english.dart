@@ -306,4 +306,10 @@ final Map<String, String> translation = {
   "performance": "Performance",
   "verCheckOnStart": "Automatic version check",
   "you": "you",
+  "review": "Review",
+  "plsRateUs":
+      "Hey!\n\n-Do you enjoy using novynapló?\n-Yes/No/Maybe?\n\nWould you please tell us your experiences in the app store?",
+  "later": "Later",
+  "never": "Never",
+  "reviewProcess": "Review prompt",
 };

@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -447,6 +448,20 @@ class _LoadingPageState extends State<LoadingPage> {
       if (prefs.getBool("getVersion")) {
         await getVersion();
       }
+      if (prefs.getString("FirstOpenTime") != null) {
+        if (DateTime.parse(prefs.getString("FirstOpenTime"))
+                    .difference(DateTime.now()) >=
+                Duration(days: 14) &&
+            prefs.getBool("ShouldAsk") &&
+            DateTime.parse(prefs.getString("LastAsked"))
+                    .difference(DateTime.now()) >=
+                Duration(days: 2)) {
+          setState(() {
+            loadingText = getTranslatedString("reviewProcess");
+          });
+          await showReviewWindow(context);
+        }
+      }
       //Load ADS
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
@@ -654,6 +669,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Maybe i should ditch the Heros?
     globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',
@@ -720,6 +736,82 @@ class _LoadingPageState extends State<LoadingPage> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> showReviewWindow(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            prefs.setString("LastAsked", DateTime.now().toString());
+            prefs.setBool("ShouldAsk", true);
+            FirebaseAnalytics().logEvent(
+              name: "seenReviewPopUp",
+              parameters: {"Action": "Later"},
+            );
+            return true;
+          },
+          child: AlertDialog(
+            title: Text(getTranslatedString("review")),
+            content: Text(getTranslatedString("plsRateUs")),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  getTranslatedString("yes"),
+                  style: TextStyle(color: Colors.green),
+                ),
+                onPressed: () async {
+                  final InAppReview inAppReview = InAppReview.instance;
+
+                  if (await inAppReview.isAvailable()) {
+                    inAppReview.requestReview();
+                  } else {
+                    inAppReview.openStoreListing();
+                  }
+                  prefs.setBool("ShouldAsk", false);
+                  FirebaseAnalytics().logEvent(
+                    name: "ratedApp",
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  getTranslatedString("later"),
+                  style: TextStyle(color: Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  prefs.setString("LastAsked", DateTime.now().toString());
+                  prefs.setBool("ShouldAsk", true);
+                  FirebaseAnalytics().logEvent(
+                    name: "seenReviewPopUp",
+                    parameters: {"Action": "Later"},
+                  );
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  getTranslatedString("never"),
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  prefs.setBool("ShouldAsk", false);
+                  Navigator.of(context).pop();
+                  FirebaseAnalytics().logEvent(
+                    name: "seenReviewPopUp",
+                    parameters: {"Action": "Never"},
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );
