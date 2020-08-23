@@ -33,6 +33,7 @@ import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/config.dart' as config;
 
 //TODO Split settings pages into different files (create a settings folder in lib maybe?)
+//TODO Instead off all this bullcrap dropdown String variables use their globals variable pair
 //TODO Implement https://pub.dev/packages/in_app_review
 String latestGithub = "";
 String latestPlayStore = "";

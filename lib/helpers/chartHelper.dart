@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+
 int index = 0;
 List<ChartPoints> chartData = [];
 
@@ -73,6 +74,7 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     index++;
   }
   index = 0;
+  //TODO: Look into this isn't there a better option to do this?
   for (var n in subjectMarks) {
     linearMarkDataList.add(makeChartPoints(n));
     index++;
@@ -253,8 +255,7 @@ void getPieChartOrBarChart(var input) {
       domainFn: (stats.LinearPiData count, _) => count.id.toString(),
       measureFn: (stats.LinearPiData count, _) => count.value,
       data: tempData,
-      labelAccessorFn: (stats.LinearPiData count, _) =>
-          ('${count.value}'),
+      labelAccessorFn: (stats.LinearPiData count, _) => ('${count.value}'),
     )
   ];
 }

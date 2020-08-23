@@ -15,6 +15,7 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 //TODO: Add option to add mark calculator marks to what if
+//TODO: add performance to mark calculator and also make avarages a before and after gauge pair
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
 List<CalculatorData> avarageList = [];
