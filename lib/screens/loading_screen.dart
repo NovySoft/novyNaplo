@@ -49,6 +49,7 @@ bool hasError = false;
 int tokenIndex = 0;
 
 //TODO: Rewrite to use only networkHelper
+//TODO: DO NOT report network issues to firebase
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
   @override

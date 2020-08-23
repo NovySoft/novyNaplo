@@ -213,7 +213,7 @@ class ReportsDetailTab extends StatelessWidget {
                         currentValue: result,
                         displayWidget: Text(
                           '${capitalize(getTranslatedString("inAv"))}:',
-                          style: TextStyle(fontSize: 21),
+                          style: TextStyle(fontSize: 18),
                         ),
                         valueWidget: Text(
                           result.toStringAsFixed(3),
@@ -233,7 +233,7 @@ class ReportsDetailTab extends StatelessWidget {
                         currentValue: performancePercentage.toDouble(),
                         displayWidget: Text(
                           '${capitalize(getTranslatedString("inPc"))}:',
-                          style: TextStyle(fontSize: 21),
+                          style: TextStyle(fontSize: 18),
                         ),
                         valueWidget: Text(
                           performancePercentage.toString() + "%",

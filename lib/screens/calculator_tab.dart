@@ -14,6 +14,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 
+//TODO: Add option to add mark calculator marks to what if
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
 List<CalculatorData> avarageList = [];

@@ -7,6 +7,7 @@ import 'classManager.dart';
 import 'utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 
+//TODO: Add option to translate notices, events, evals, homework and subjects
 int _index = 0;
 var sum;
 var jegyek;

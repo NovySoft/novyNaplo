@@ -11,6 +11,7 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
+//TODO: Fix "not numerical evals" causing ZERO avarages
 var allParsedSubjects = [];
 var colors;
 final List<Tab> statTabs = <Tab>[

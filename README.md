@@ -38,10 +38,10 @@ Novy teljesen nem eredeti kréta kliense.
 - Offline mód
 - Faliújság megtekintése
 - Fordítások (Angol, Magyar)
+- - Éves, féléves, és negyedéves értesítők megetekintése
 
 ## **HAMAROSAN**
 
-- Éves, féléves, és negyedéves értesítők megetekintése
 - Tanulói házifeladat felírása
 - Házifeladat TODO lista szerűség
 - Több felhasználós támogatás
@@ -69,7 +69,6 @@ Novy teljesen nem eredeti kréta kliense.
 - **connectivity**: Az internet elérhetőségét figyeli
 - **package_info**: Ennek a segítségével nézi meg az applikáció saját verzióját
 - **flutter_spinkit**: A kis homokóráért felelős
-- **diacritic**: A magyar betűk angol megfelelőit tárolja
 - **dynamic_theme**: A sötét és fehér téma közt vált
 - **charts_flutter**: A grafikonokat rajzolja ki
 - **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
