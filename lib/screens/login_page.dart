@@ -62,8 +62,10 @@ class _LoginPageState extends State<LoginPage> {
         });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await sleep(1000);
-    if (prefs.getBool("getVersion")) {
-      await getVersion();
+    if (prefs.getBool("getVersion") != null) {
+      if (prefs.getBool("getVersion")) {
+        await getVersion();
+      }
     }
     await globals.setGlobals();
     //!DONT DELETE, FOR TESTING USE ONLY

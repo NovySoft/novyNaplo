@@ -38,7 +38,7 @@ Novy teljesen nem eredeti kréta kliense.
 - Offline mód
 - Faliújság megtekintése
 - Fordítások (Angol, Magyar)
-- - Éves, féléves, és negyedéves értesítők megetekintése
+- Éves, féléves, és negyedéves értesítők megetekintése
 
 ## **HAMAROSAN**
 
