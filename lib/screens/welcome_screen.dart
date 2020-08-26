@@ -359,7 +359,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         ),
         onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
-          prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
           FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },
