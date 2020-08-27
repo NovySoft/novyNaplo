@@ -310,4 +310,5 @@ final Map<String, String> translation = {
   "later": "Később",
   "never": "Soha",
   "reviewProcess": "Értékelés ablak",
+  "dbExplorer": "Adatbázis böngésző",
 };

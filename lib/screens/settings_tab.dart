@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/database/getSql.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/screens/settings/dbExplorer/sqlite_viewer.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
@@ -2189,6 +2190,30 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                           icon:
                               Icon(MdiIcons.databaseEdit, color: Colors.black),
                           label: Text(getTranslatedString("dbSettings"),
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: RaisedButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => DatabaseList()),
+                            );
+                          },
+                          icon: Icon(MdiIcons.databaseSearch,
+                              color: Colors.black),
+                          label: Text(getTranslatedString("dbExplorer"),
                               style: TextStyle(color: Colors.black))),
                     ),
                   ),

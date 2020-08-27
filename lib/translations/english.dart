@@ -312,4 +312,5 @@ final Map<String, String> translation = {
   "later": "Later",
   "never": "Never",
   "reviewProcess": "Review prompt",
+  "dbExplorer": "Database explorer",
 };

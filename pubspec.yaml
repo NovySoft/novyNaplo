@@ -49,6 +49,7 @@ dependencies:
   in_app_update: any
   in_app_review: any
   flutter_svg: 0.18.0
+  json_table: any
 
 flutter_icons:
   android: true
