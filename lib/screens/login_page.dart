@@ -9,7 +9,7 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/main.dart' as main;
-import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/settings/settings_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';

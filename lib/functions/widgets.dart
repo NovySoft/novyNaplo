@@ -14,7 +14,7 @@ import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/reports_tab.dart';
 import 'package:novynaplo/screens/timetable_tab.dart';
-import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/settings/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
