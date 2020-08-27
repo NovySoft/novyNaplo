@@ -3,7 +3,6 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/hungarian.dart' as hu;
 import 'package:novynaplo/translations/english.dart' as en;
 
-//TODO remake with variable replacement
 String getTranslatedString(String input, {List<String> replaceVariables}) {
   String tempString;
   if (replaceVariables == null) replaceVariables = [];

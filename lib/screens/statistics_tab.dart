@@ -12,7 +12,6 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
-//TODO: add összesített nézet to statistics subject list
 var allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 var colors;
@@ -610,15 +609,16 @@ class _StatisticsTabState extends State<StatisticsTab>
       top: false,
       bottom: false,
       child: AnimatedChartsCard(
-        title: capitalize(allParsedSubjectsWithoutZeros[index -1][0].subject),
+        title: capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
         color: currColor,
         heroAnimation: AlwaysStoppedAnimation(0),
         onPressed: ChartsDetailTab(
           id: index,
-          subject: capitalize(allParsedSubjectsWithoutZeros[index-1][0].subject),
+          subject:
+              capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
           color: currColor,
           seriesList: createSubjectChart(
-              allParsedSubjectsWithoutZeros[index-1], index.toString()),
+              allParsedSubjectsWithoutZeros[index - 1], index.toString()),
           animate: globals.chartAnimations,
         ),
       ),

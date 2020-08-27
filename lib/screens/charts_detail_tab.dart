@@ -2,10 +2,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:customgauge/customgauge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
 class ChartsDetailTab extends StatelessWidget {
@@ -38,7 +36,6 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<LinearMarkChartData> avList = List.from(seriesList[0].data);
     globals.globalContext = context;
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {

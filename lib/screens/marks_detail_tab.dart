@@ -5,6 +5,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
+//TODO: refactor this (I mean not just refactor this... It umh needs to be completly redesigned)
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});
@@ -91,7 +92,6 @@ class MarksDetailTab extends StatelessWidget {
                     );
                     break;
                   case 5:
-                    //TODO: refactor this
                     if (eval.form == "Mark" ||
                         eval.form == "Diligence" ||
                         eval.form == "Deportment") {

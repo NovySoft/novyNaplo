@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 PageController controller = PageController();
@@ -358,7 +357,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          var prefs = await SharedPreferences.getInstance();
           Navigator.pushReplacementNamed(context, LoginPage.tag);
           FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },

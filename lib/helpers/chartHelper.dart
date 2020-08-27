@@ -74,7 +74,6 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     index++;
   }
   index = 0;
-  //TODO: Look into this isn't there a better option to do this?
   for (var n in subjectMarks) {
     linearMarkDataList.add(makeLinearMarkChartData(n));
     index++;
