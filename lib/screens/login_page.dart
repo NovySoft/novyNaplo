@@ -62,17 +62,10 @@ class _LoginPageState extends State<LoginPage> {
         });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await sleep(1000);
-    if (prefs.getBool("getVersion") != null) {
-      if (prefs.getBool("getVersion")) {
-        await getVersion();
-      }
-    }
     await globals.setGlobals();
-    //!DONT DELETE, FOR TESTING USE ONLY
-    /*print("subtitle:" + markCardSubtitle);
-    print("constColor:" + markCardConstColor);
-    print("lesson card:" + lessonCardSubtitle);
-    print("mark theme:" + markCardTheme);*/
+    if (globals.verCheckOnStart) {
+      await getVersion();
+    }
     if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
       Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
       if (prefs.getBool("ads")) {

@@ -34,6 +34,8 @@ bool backgroundFetch = false; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
 bool backgroundFetchOnCellular = false; //Should we fetch on cellular data
+bool verCheckOnStart =
+    true; //Should we check for updates upon startup, can be slow, but reminds user to update
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
@@ -62,6 +64,14 @@ Future<void> setGlobals() async {
     await prefs.setString("FirstOpenTime", DateTime.now().toString());
     await prefs.setString("LastAsked", DateTime.now().toString());
   }
+
+  if (prefs.getBool("getVersion") != null) {
+    verCheckOnStart = prefs.getBool("getVersion");
+  } else {
+    prefs.setBool("getVersion", true);
+    verCheckOnStart = true;
+  }
+
   if (prefs.getBool("ShouldAsk") == null) {
     await prefs.setBool("ShouldAsk", true);
   }

@@ -445,7 +445,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-      if (prefs.getBool("getVersion")) {
+      if (globals.verCheckOnStart) {
         await getVersion();
       }
       if (prefs.getString("FirstOpenTime") != null) {

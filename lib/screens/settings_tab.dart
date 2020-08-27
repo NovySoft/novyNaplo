@@ -1630,23 +1630,6 @@ class NetworkAndNotificationSettings extends StatefulWidget {
 
 class _NetworkAndNotificationSettingsState
     extends State<NetworkAndNotificationSettings> {
-  bool verCheckOnStart = true;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        verCheckOnStart = prefs.getBool("getVersion");
-        if (verCheckOnStart == null) {
-          verCheckOnStart = true;
-          prefs.setBool("getVersion", true);
-        }
-      });
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
@@ -1725,11 +1708,11 @@ class _NetworkAndNotificationSettingsState
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        verCheckOnStart = isOn;
+                        globals.verCheckOnStart = isOn;
                         prefs.setBool("getVersion", isOn);
                       });
                     },
-                    value: verCheckOnStart,
+                    value: globals.verCheckOnStart,
                   ),
                 );
                 break;
