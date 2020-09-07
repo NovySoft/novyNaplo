@@ -204,6 +204,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  dartz:
+    dependency: transitive
+    description:
+      name: dartz
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.9"
   dynamic_theme:
     dependency: "direct main"
     description:
@@ -307,6 +314,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_calendar_week:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "0.3.1"
+      resolved-ref: "61794a58f4af73241e03af0b63d41a6b403b4b5d"
+      url: "https://github.com/mduccc/flutter_calendar_week"
+    source: git
+    version: "0.3.0"
   flutter_html:
     dependency: "direct main"
     description:
@@ -646,6 +662,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.23.1"
   screen:
     dependency: transitive
     description:

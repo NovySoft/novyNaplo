@@ -540,6 +540,7 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "${getTranslatedString("almReady")}!";
         });
         //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
+        //TODO Only get what we don't have
         if ((tempEvals.length != 0 &&
                 homeworkPage.globalHomework.length != 0 &&
                 noticesPage.allParsedNotices.length != 0 &&
@@ -670,14 +671,11 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: Maybe i should ditch the Heros?
     globals.globalContext = context;
-    final logo = Hero(
-      tag: 'hero',
-      child: CircleAvatar(
-          backgroundColor: Colors.grey,
-          radius: 75.0,
-          child: Image.asset('assets/home.png')),
+    final logo = CircleAvatar(
+      backgroundColor: Colors.grey,
+      radius: 75.0,
+      child: Image.asset('assets/home.png'),
     );
     return Scaffold(
       body: Center(
