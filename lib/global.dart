@@ -49,6 +49,8 @@ String language =
 void resetAllGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   delSql.clearAllTables();
+  //TODO Add variable for checking if person is not new, but "signed out"
+  prefs.setBool("isNew", true);
   prefs.setString("code", null);
   await prefs.clear();
   prefs.setBool("ads", adsEnabled);

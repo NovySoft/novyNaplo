@@ -318,8 +318,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.3.1"
-      resolved-ref: "61794a58f4af73241e03af0b63d41a6b403b4b5d"
+      ref: "0.4.1"
+      resolved-ref: "58b93bec4279a0fb01455f68d25558c7d9648b7f"
       url: "https://github.com/mduccc/flutter_calendar_week"
     source: git
     version: "0.3.0"

@@ -1,9 +1,11 @@
+import 'package:encrypt/encrypt.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:in_app_review/in_app_review.dart';
+import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -572,7 +574,14 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readData");
       });
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      IV iv;
+      try {
+        iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      } catch (_) {
+        Navigator.pushReplacementNamed(context, LoginPage.tag);
+        prefs.setBool("isNew", true);
+        return;
+      }
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
