@@ -292,8 +292,15 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  void setNewUserPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isNew", true);
+    prefs.setBool("isNotNew", true);
+  }
+
   @override
   Widget build(BuildContext context) {
+    setNewUserPrefs();
     globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',

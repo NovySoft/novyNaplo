@@ -33,6 +33,7 @@ import 'dart:io' show Platform;
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
+bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
@@ -45,18 +46,26 @@ void main() async {
   if (prefs.getBool("isNew") == false) {
     isNew = false;
   } else {
-    String languageCode = Platform.localeName.split('_')[1];
-    if (languageCode.toLowerCase().contains('hu')) {
-      globals.language = "hu";
-    } else {
-      globals.language = "en";
+    if (prefs.getBool("isNotNew") != null) {
+      if (prefs.getBool("isNotNew") == true) {
+        isNotNew = true;
+      }
     }
-    await prefs.setString("FirstOpenTime", DateTime.now().toString());
-    await prefs.setString("Language", globals.language);
-    await prefs.setBool("getVersion", true);
+    if (isNotNew == false) {
+      String languageCode = Platform.localeName.split('_')[1];
+      if (languageCode.toLowerCase().contains('hu')) {
+        globals.language = "hu";
+      } else {
+        globals.language = "en";
+      }
+      await prefs.setString("FirstOpenTime", DateTime.now().toString());
+      await prefs.setString("Language", globals.language);
+      await prefs.setBool("getVersion", true);
+    }
   }
   routes = <String, WidgetBuilder>{
-    "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
+    "/": (context) =>
+        isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
     AvaragesTab.tag: (context) => AvaragesTab(),

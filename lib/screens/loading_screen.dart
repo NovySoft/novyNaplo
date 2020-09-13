@@ -443,6 +443,12 @@ class _LoadingPageState extends State<LoadingPage> {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await globals.setGlobals();
+      if (prefs.getString("code") == null) {
+        Navigator.pushReplacementNamed(context, LoginPage.tag);
+        prefs.setBool("isNew", true);
+        prefs.setBool("isNotNew", true);
+        return;
+      }
       setState(() {
         loadingText = getTranslatedString("checkVersion");
       });
@@ -542,7 +548,7 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "${getTranslatedString("almReady")}!";
         });
         //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
-        //TODO Only get what we don't have
+        //TODO Only use database when loading, fetch when inside application
         if ((tempEvals.length != 0 &&
                 homeworkPage.globalHomework.length != 0 &&
                 noticesPage.allParsedNotices.length != 0 &&
@@ -574,14 +580,7 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readData");
       });
-      IV iv;
-      try {
-        iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      } catch (_) {
-        Navigator.pushReplacementNamed(context, LoginPage.tag);
-        prefs.setBool("isNew", true);
-        return;
-      }
+      IV iv = encrypt.IV.fromBase64(prefs.getString("iv"));
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
