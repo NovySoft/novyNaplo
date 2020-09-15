@@ -7,13 +7,17 @@ import 'package:novynaplo/database/deleteSql.dart' as delSql;
 import 'dart:io' show Platform;
 
 //Variables used globally;
-//Session
+//* Session
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 var token; //Bearer token from api
-int markCount; //How many marks do we have
-int noticesCount; //How many notices do we have
-//"Permanent"
+BuildContext globalContext; //Yes this is a global context variable
+bool didFetch = false; //True if we fetched the data, false if we didn't
+NotificationAppLaunchDetails
+    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
+int payloadId =
+    -1; //Payload id, contains id of the notification we want to show
+//* "Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme
 String markCardConstColor; //If theme is constant what color is it
@@ -30,20 +34,15 @@ bool backgroundFetch = false; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
 bool backgroundFetchOnCellular = false; //Should we fetch on cellular data
+bool verCheckOnStart =
+    true; //Should we check for updates upon startup, can be slow, but reminds user to update
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
-BuildContext globalContext; //Yes this is a global context variable
-bool didFetch = false; //True if we fetched the data, false if we didn't
-NotificationAppLaunchDetails
-    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
-int payloadId =
-    -1; //Payload id, contains id of the notification we want to show
 bool notifications = false; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
-String versionInfoJson; //Github version.json in string
 String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
 
@@ -53,16 +52,33 @@ void resetAllGlobals() async {
   prefs.setString("code", null);
   await prefs.clear();
   prefs.setBool("ads", adsEnabled);
+  prefs.setBool("isNew", true);
+  prefs.setBool("isNotNew",
+      true); //isNotNew is for users that already loged in, but logged out later
   dJson = null;
   avJson = null;
   token = null;
-  markCount = null;
-  noticesCount = null;
   didFetch = false;
 }
 
 Future<void> setGlobals() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getString("FirstOpenTime") == null) {
+    await prefs.setString("FirstOpenTime", DateTime.now().toString());
+    await prefs.setString("LastAsked", DateTime.now().toString());
+  }
+
+  if (prefs.getBool("getVersion") != null) {
+    verCheckOnStart = prefs.getBool("getVersion");
+  } else {
+    prefs.setBool("getVersion", true);
+    verCheckOnStart = true;
+  }
+
+  if (prefs.getBool("ShouldAsk") == null) {
+    await prefs.setBool("ShouldAsk", true);
+  }
+
   if (prefs.getBool("ads") != null) {
     Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
     adsEnabled = prefs.getBool("ads");

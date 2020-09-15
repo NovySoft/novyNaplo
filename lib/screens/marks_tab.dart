@@ -8,7 +8,6 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
-import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
@@ -21,7 +20,8 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
-List<Evals> allParsedByDate, allParsedBySubject;
+List<Evals> allParsedByDate;
+List<List<Evals>> allParsedBySubject;
 int selectedIndex = 0;
 bool differenSubject = false;
 String subjectBefore = "";
@@ -48,7 +48,6 @@ class MarksTab extends StatefulWidget {
 
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
-  int itemsLength = globals.markCount;
   GlobalKey<RefreshIndicatorState> _androidRefreshKey =
       GlobalKey<RefreshIndicatorState>(debugLabel: "1");
   GlobalKey<RefreshIndicatorState> _androidRefreshKeyTwo =
@@ -83,8 +82,8 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _setData() async {
-    colors = getRandomColors(globals.markCount);
     allParsedByDate = await parseAllByDate(globals.dJson);
+    colors = getRandomColors(allParsedByDate.length);
     allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
   }
 
@@ -132,79 +131,10 @@ class MarksTabState extends State<MarksTab>
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
-    String subtitle = "undefined";
-    if (globals.markCardSubtitle == "Téma") {
-      if (allParsedByDate[index].theme != null &&
-          allParsedByDate[index].theme != "")
-        subtitle = capitalize(allParsedByDate[index].theme);
-      else
-        subtitle = getTranslatedString("unkown");
-    } else if (globals.markCardSubtitle == "Tanár") {
-      subtitle = allParsedByDate[index].teacher;
-    } else if (globals.markCardSubtitle == "Súly") {
-      subtitle = allParsedByDate[index].weight;
-    } else if (globals.markCardSubtitle == "Pontos Dátum") {
-      subtitle = allParsedByDate[index].createDateString;
-    } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
-      String year = allParsedByDate[index].createDate.year.toString();
-      String month = allParsedByDate[index].createDate.month.toString();
-      String day = allParsedByDate[index].createDate.day.toString();
-      String hour = allParsedByDate[index].createDate.hour.toString();
-      String minutes = allParsedByDate[index].createDate.minute.toString();
-      String seconds = allParsedByDate[index].createDate.second.toString();
-      subtitle = "$year-$month-$day $hour:$minutes:$seconds";
-    }
-    if (subtitle.length >= 38) {
-      subtitle = subtitle.substring(0, 35);
-      subtitle += "...";
-    }
-    if (index >= itemsLength) return null;
-    var color;
-    if (globals.markCardTheme == "Véletlenszerű") {
-      color = colors[index].shade400;
-    } else if (globals.markCardTheme == "Értékelés nagysága") {
-      if (allParsedByDate[index].form == "Percent") {
-        if (allParsedByDate[index].numberValue >= 90) {
-          color = Colors.green;
-        } else if (allParsedByDate[index].numberValue >= 75) {
-          color = Colors.lightGreen;
-        } else if (allParsedByDate[index].numberValue >= 60) {
-          color = Colors.yellow[800];
-        } else if (allParsedByDate[index].numberValue >= 40) {
-          color = Colors.deepOrange;
-        } else {
-          color = Colors.red[900];
-        }
-      } else {
-        switch (allParsedByDate[index].numberValue) {
-          case 5:
-            color = Colors.green;
-            break;
-          case 4:
-            color = Colors.lightGreen;
-            break;
-          case 3:
-            color = Colors.yellow[800];
-            break;
-          case 2:
-            color = Colors.deepOrange;
-            break;
-          case 1:
-            color = Colors.red[900];
-            break;
-          default:
-            color = Colors.purple;
-            break;
-        }
-      }
-    } else if (globals.markCardTheme == "Egyszínű") {
-      color = ThemeHelper().stringToColor(globals.markCardConstColor);
-    } else if (globals.markCardTheme == "Színátmenetes") {
-      color = ThemeHelper().myGradientList[
-          (ThemeHelper().myGradientList.length - index - 1).abs()];
-    } else {
-      color = Colors.red;
-    }
+    Color color = getMarkCardColor(
+      eval: allParsedByDate[index],
+      index: index,
+    );
     return SafeArea(
       top: false,
       bottom: false,
@@ -213,7 +143,9 @@ class MarksTabState extends State<MarksTab>
           child: HeroAnimatingMarksCard(
             eval: allParsedByDate[index],
             iconData: allParsedByDate[index].icon,
-            subTitle: subtitle, //capitalize(allParsedByDate[index].theme),
+            subTitle: getMarkCardSubtitle(
+              eval: allParsedByDate[index],
+            ), //capitalize(allParsedByDate[index].theme),
             title: capitalize(allParsedByDate[index].subject +
                 " " +
                 allParsedByDate[index].value),
@@ -227,121 +159,62 @@ class MarksTabState extends State<MarksTab>
     );
   }
 
-  Widget _subjectListBuilder(BuildContext context, int index) {
-    String subtitle = "undefined";
-    if (globals.markCardSubtitle == "Téma") {
-      if (allParsedBySubject[index].theme != null &&
-          allParsedBySubject[index].theme != "")
-        subtitle = capitalize(allParsedBySubject[index].theme);
-      else
-        subtitle = getTranslatedString("unkown");
-    } else if (globals.markCardSubtitle == "Tanár") {
-      subtitle = allParsedBySubject[index].teacher;
-    } else if (globals.markCardSubtitle == "Súly") {
-      subtitle = allParsedBySubject[index].weight;
-    } else if (globals.markCardSubtitle == "Pontos Dátum") {
-      subtitle = allParsedBySubject[index].createDateString;
-    } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
-      String year = allParsedBySubject[index].createDate.year.toString();
-      String month = allParsedBySubject[index].createDate.month.toString();
-      String day = allParsedBySubject[index].createDate.day.toString();
-      String hour = allParsedBySubject[index].createDate.hour.toString();
-      String minutes = allParsedBySubject[index].createDate.minute.toString();
-      String seconds = allParsedBySubject[index].createDate.second.toString();
-      subtitle = "$year-$month-$day $hour:$minutes:$seconds";
-    }
-    if (subtitle == "" || subtitle == null) {
-      subtitle = getTranslatedString("unkown");
-    }
-    if (subtitle.length >= 30) {
-      subtitle = subtitle.substring(0, 27);
-      subtitle += "...";
-    }
-    if (index >= itemsLength) return null;
-    Color color = getMarkCardColor(
-      eval: allParsedBySubject[index],
-      index: index,
-    );
-    //TODO refactor with matrixes
-    if (subjectBefore != allParsedBySubject[index].subject) {
-      subjectBefore = allParsedBySubject[index].subject;
-      if (defaultTargetPlatform == TargetPlatform.iOS) {
-        return SizedBox(
-          width: double.infinity,
-          height: 135,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  capitalize(allParsedBySubject[index].subject) + ":",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 10,
-                child: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: Hero(
-                      tag: index,
-                      child: HeroAnimatingSubjectsCard(
-                        subTitle: subtitle,
-                        title: capitalize(allParsedBySubject[index].subject) +
-                            " " +
-                            allParsedBySubject[index].value,
-                        color: color,
-                        heroAnimation: AlwaysStoppedAnimation(0),
-                        onPressed: MarksDetailTab(
-                          eval: allParsedBySubject[index],
-                          color: color,
-                        ),
-                      )),
-                ),
-              ),
-            ],
-          ),
+  Widget _subjectListBuilder(BuildContext context, int listIndex) {
+    return ListView.builder(
+      itemCount: allParsedBySubject[listIndex].length,
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        //return Text(allParsedBySubject[listIndex][index].subject);
+        int indexSum = 0;
+        for (int i = 0; i <= listIndex - 1; i++) {
+          indexSum += allParsedBySubject[i].length;
+        }
+        Color color = getMarkCardColor(
+          eval: allParsedBySubject[listIndex][index],
+          index: indexSum + index,
         );
-      } else {
-        return SizedBox(
-          width: double.infinity,
-          height: 135,
-          child: Column(
+        if (index == 0) {
+          return Column(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 15.0),
                 child: Text(
-                  capitalize(allParsedBySubject[index].subject) + ":",
-                  textAlign: TextAlign.left,
+                  capitalize(allParsedBySubject[listIndex][index].subject) +
+                      ":",
+                  textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                      ? TextAlign.center
+                      : TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 21,
                   ),
                 ),
               ),
-              Expanded(
-                flex: 10,
+              SizedBox(
+                width: double.infinity,
+                height: 106,
                 child: SafeArea(
                   top: false,
                   bottom: false,
                   child: Hero(
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
-                      subTitle: subtitle,
-                      title: capitalize(allParsedBySubject[index].subject) +
+                      subTitle: getMarkCardSubtitle(
+                        eval: allParsedByDate[index],
+                      ),
+                      title: capitalize(
+                              allParsedBySubject[listIndex][index].subject) +
                           " " +
-                          allParsedBySubject[index].value,
+                          allParsedBySubject[listIndex][index].value,
                       color: color,
                       heroAnimation: AlwaysStoppedAnimation(0),
                       onPressed: MarksDetailTab(
-                        eval: allParsedBySubject[index],
+                        eval: allParsedBySubject[listIndex][index],
                         color: color,
                       ),
                     ),
@@ -349,34 +222,36 @@ class MarksTabState extends State<MarksTab>
                 ),
               ),
             ],
-          ),
-        );
-      }
-    } else {
-      return SizedBox(
-        width: double.infinity,
-        height: 106,
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Hero(
-            tag: index,
-            child: HeroAnimatingSubjectsCard(
-              subTitle: subtitle,
-              title: capitalize(allParsedBySubject[index].subject) +
-                  " " +
-                  allParsedBySubject[index].value,
-              color: color,
-              heroAnimation: AlwaysStoppedAnimation(0),
-              onPressed: MarksDetailTab(
-                eval: allParsedBySubject[index],
+          );
+        }
+        return SizedBox(
+          width: double.infinity,
+          height: 106,
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Hero(
+              tag: index,
+              child: HeroAnimatingSubjectsCard(
+                subTitle: getMarkCardSubtitle(
+                  eval: allParsedByDate[index],
+                ),
+                title:
+                    capitalize(allParsedBySubject[listIndex][index].subject) +
+                        " " +
+                        allParsedBySubject[listIndex][index].value,
                 color: color,
+                heroAnimation: AlwaysStoppedAnimation(0),
+                onPressed: MarksDetailTab(
+                  eval: allParsedBySubject[listIndex][index],
+                  color: color,
+                ),
               ),
             ),
           ),
-        ),
-      );
-    }
+        );
+      },
+    );
   }
 
   @override
@@ -395,7 +270,7 @@ class MarksTabState extends State<MarksTab>
           controller: _tabController,
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
-              if (globals.markCount == 0) {
+              if (allParsedByDate.length == 0) {
                 return noMarks();
               } else {
                 return RefreshIndicator(
@@ -404,14 +279,15 @@ class MarksTabState extends State<MarksTab>
                     await _refreshData();
                   },
                   child: ListView.builder(
-                    itemCount: globals.markCount,
+                    shrinkWrap: true,
+                    itemCount: allParsedByDate.length,
                     padding: EdgeInsets.symmetric(vertical: 12),
                     itemBuilder: _dateListBuilder,
                   ),
                 );
               }
             } else {
-              if (globals.markCount == 0) {
+              if (allParsedByDate.length == 0) {
                 return noMarks();
               } else {
                 return RefreshIndicator(
@@ -420,7 +296,8 @@ class MarksTabState extends State<MarksTab>
                     await _refreshData();
                   },
                   child: ListView.builder(
-                    itemCount: globals.markCount,
+                    shrinkWrap: true,
+                    itemCount: allParsedBySubject.length,
                     padding: EdgeInsets.symmetric(vertical: 12),
                     itemBuilder: _subjectListBuilder,
                   ),

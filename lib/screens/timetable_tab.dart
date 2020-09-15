@@ -6,9 +6,10 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
+//import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 
+//TODO Implement: https://github.com/mduccc/flutter_calendar_week
 final List<Tab> days = <Tab>[
-  //TODO Only show day if it has lessons on it
   Tab(text: getTranslatedString("monday")),
   Tab(text: getTranslatedString("tuesday")),
   Tab(text: getTranslatedString("wednesday")),

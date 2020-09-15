@@ -10,7 +10,7 @@ import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/reports_tab.dart';
-import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/settings/settings_tab.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
@@ -28,10 +28,12 @@ import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
+import 'dart:io' show Platform;
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
+bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
@@ -43,9 +45,27 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("isNew") == false) {
     isNew = false;
+  } else {
+    if (prefs.getBool("isNotNew") != null) {
+      if (prefs.getBool("isNotNew") == true) {
+        isNotNew = true;
+      }
+    }
+    if (isNotNew == false) {
+      String languageCode = Platform.localeName.split('_')[1];
+      if (languageCode.toLowerCase().contains('hu')) {
+        globals.language = "hu";
+      } else {
+        globals.language = "en";
+      }
+      await prefs.setString("FirstOpenTime", DateTime.now().toString());
+      await prefs.setString("Language", globals.language);
+      await prefs.setBool("getVersion", true);
+    }
   }
   routes = <String, WidgetBuilder>{
-    "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
+    "/": (context) =>
+        isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
     AvaragesTab.tag: (context) => AvaragesTab(),

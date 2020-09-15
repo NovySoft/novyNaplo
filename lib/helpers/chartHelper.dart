@@ -2,8 +2,9 @@ import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+
 int index = 0;
-List<ChartPoints> chartData = [];
+List<LinearMarkChartData> chartData = [];
 
 class LinearMarkChartData {
   final int count;
@@ -74,13 +75,13 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
   }
   index = 0;
   for (var n in subjectMarks) {
-    linearMarkDataList.add(makeChartPoints(n));
+    linearMarkDataList.add(makeLinearMarkChartData(n));
     index++;
   }
   return makeChartReturnList(linearMarkDataList);
 }
 
-List<LinearMarkChartData> makeChartPoints(var list) {
+List<LinearMarkChartData> makeLinearMarkChartData(var list) {
   List<LinearMarkChartData> returnList = [];
   int locIndex = 0;
   for (var n in list) {
@@ -253,8 +254,7 @@ void getPieChartOrBarChart(var input) {
       domainFn: (stats.LinearPiData count, _) => count.id.toString(),
       measureFn: (stats.LinearPiData count, _) => count.value,
       data: tempData,
-      labelAccessorFn: (stats.LinearPiData count, _) =>
-          ('${count.value}'),
+      labelAccessorFn: (stats.LinearPiData count, _) => ('${count.value}'),
     )
   ];
 }
@@ -302,7 +302,7 @@ void getBarChart(input) {
   ];
 }
 
-List<charts.Series<ChartPoints, int>> createSubjectChart(
+List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
     List<Evals> input, String id) {
   chartData = [];
   double sum = 0;
@@ -311,23 +311,16 @@ List<charts.Series<ChartPoints, int>> createSubjectChart(
   for (var n in input) {
     sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
     index += 1 * double.parse(n.weight.split("%")[0]) / 100;
-    chartData.add(new ChartPoints(listArray, sum / index));
+    chartData.add(new LinearMarkChartData(listArray, sum / index));
     listArray++;
   }
   return [
-    new charts.Series<ChartPoints, int>(
+    new charts.Series<LinearMarkChartData, int>(
       id: id,
       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-      domainFn: (ChartPoints marks, _) => marks.count,
-      measureFn: (ChartPoints marks, _) => marks.value,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
       data: chartData,
     )
   ];
-}
-
-class ChartPoints {
-  var count;
-  var value;
-
-  ChartPoints(this.count, this.value);
 }

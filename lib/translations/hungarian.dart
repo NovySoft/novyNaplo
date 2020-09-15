@@ -303,4 +303,12 @@ final Map<String, String> translation = {
   "praiseworthy": "Dicséretes",
   "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
   "performance": "Teljesítmény",
+  "verCheckOnStart": "Automatikus verzió ellenőrzés",
+  "review": "Értékelés",
+  "plsRateUs":
+      "Szia!\n\n-Élvezed a novynaplót?\n-Igen/Nem/Talán?\n\nEl mondanád nekünk a véleményedet az app áruházban?",
+  "later": "Később",
+  "never": "Soha",
+  "reviewProcess": "Értékelés ablak",
+  "dbExplorer": "Adatbázis böngésző",
 };

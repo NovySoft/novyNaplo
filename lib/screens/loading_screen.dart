@@ -1,8 +1,11 @@
+import 'package:encrypt/encrypt.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:in_app_review/in_app_review.dart';
+import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -48,6 +51,8 @@ var response;
 bool hasError = false;
 int tokenIndex = 0;
 
+//TODO: Rewrite to use only networkHelper
+//TODO: DO NOT report network issues to firebase
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
   @override
@@ -287,18 +292,15 @@ class _LoadingPageState extends State<LoadingPage> {
           Crashlytics.instance.setUserName(globals.dJson["Name"]);
           Crashlytics.instance.setString("User", globals.dJson["Name"]);
         }
-        var eval = globals.dJson["Evaluations"];
         await getAvarages(token, code);
         await getExams(token, code);
         await getEvents(token, code);
-        globals.markCount = eval.length;
-        marksPage.colors = getRandomColors(globals.markCount);
         marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
+        marksPage.colors = getRandomColors(marksPage.allParsedByDate.length);
         marksPage.allParsedBySubject =
             sortByDateAndSubject(List.from(marksPage.allParsedByDate));
-        globals.noticesCount = countNotices(globals.dJson);
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
-        statisticsPage.allParsedSubjects = categorizeSubjects(globals.dJson);
+        statisticsPage.allParsedSubjects = categorizeSubjects();
         statisticsPage.colors =
             getRandomColors(statisticsPage.allParsedSubjects.length);
         timetablePage.lessonsList = await getWeekLessons(token, code);
@@ -438,14 +440,40 @@ class _LoadingPageState extends State<LoadingPage> {
 
   //Runs after initState
   void onLoad(var context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await globals.setGlobals();
+      if (prefs.getString("iv") == null ||
+          prefs.getString("code") == null ||
+          prefs.getString("password") == null ||
+          prefs.getString("user") == null) {
+        Navigator.pushReplacementNamed(context, LoginPage.tag);
+        prefs.setBool("isNew", true);
+        prefs.setBool("isNotNew", true);
+        return;
+      }
       setState(() {
         loadingText = getTranslatedString("checkVersion");
       });
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-      await getVersion();
+      if (globals.verCheckOnStart) {
+        await getVersion();
+      }
+      if (prefs.getString("FirstOpenTime") != null) {
+        if (DateTime.parse(prefs.getString("FirstOpenTime"))
+                    .difference(DateTime.now()) >=
+                Duration(days: 14) &&
+            prefs.getBool("ShouldAsk") &&
+            DateTime.parse(prefs.getString("LastAsked"))
+                    .difference(DateTime.now()) >=
+                Duration(days: 2) &&
+            config.isAppPlaystoreRelease) {
+          setState(() {
+            loadingText = getTranslatedString("reviewProcess");
+          });
+          await showReviewWindow(context);
+        }
+      }
       //Load ADS
       if (prefs.getBool("ads") != null) {
         Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
@@ -470,8 +498,7 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = getTranslatedString("readMarks");
         });
         List<Evals> tempEvals = await getAllEvals();
-        globals.markCount = tempEvals.length;
-        marksPage.colors = getRandomColors(globals.markCount);
+        marksPage.colors = getRandomColors(tempEvals.length);
         marksPage.allParsedByDate = tempEvals;
         marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
         //Homework
@@ -524,6 +551,7 @@ class _LoadingPageState extends State<LoadingPage> {
           loadingText = "${getTranslatedString("almReady")}!";
         });
         //In case there's an error, we get the data instead of showing no data (although no data maybe correct)
+        //TODO Only use database when loading, fetch when inside application
         if ((tempEvals.length != 0 &&
                 homeworkPage.globalHomework.length != 0 &&
                 noticesPage.allParsedNotices.length != 0 &&
@@ -555,7 +583,8 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readData");
       });
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      IV iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      Crashlytics.instance.log("iv: ${iv.toString()}");
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
@@ -565,8 +594,11 @@ class _LoadingPageState extends State<LoadingPage> {
       Crashlytics.instance.recordError(e, s, context: 'onLoad');
       await _ackAlert(
         context,
-        "${getTranslatedString("errReadMem")} ($e) ${getTranslatedString("restartApp")}",
+        "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",
       );
+      Navigator.pushReplacementNamed(context, LoginPage.tag);
+      prefs.setBool("isNew", true);
+      prefs.setBool("isNotNew", true);
     }
     auth(context);
   }
@@ -655,12 +687,10 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    final logo = Hero(
-      tag: 'hero',
-      child: CircleAvatar(
-          backgroundColor: Colors.grey,
-          radius: 75.0,
-          child: Image.asset('assets/home.png')),
+    final logo = CircleAvatar(
+      backgroundColor: Colors.grey,
+      radius: 75.0,
+      child: Image.asset('assets/home.png'),
     );
     return Scaffold(
       body: Center(
@@ -720,6 +750,82 @@ class _LoadingPageState extends State<LoadingPage> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> showReviewWindow(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pop();
+            prefs.setString("LastAsked", DateTime.now().toString());
+            prefs.setBool("ShouldAsk", true);
+            FirebaseAnalytics().logEvent(
+              name: "seenReviewPopUp",
+              parameters: {"Action": "Later"},
+            );
+            return true;
+          },
+          child: AlertDialog(
+            title: Text(getTranslatedString("review")),
+            content: Text(getTranslatedString("plsRateUs")),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  getTranslatedString("yes"),
+                  style: TextStyle(color: Colors.green),
+                ),
+                onPressed: () async {
+                  final InAppReview inAppReview = InAppReview.instance;
+
+                  if (await inAppReview.isAvailable()) {
+                    inAppReview.requestReview();
+                  } else {
+                    inAppReview.openStoreListing();
+                  }
+                  prefs.setBool("ShouldAsk", false);
+                  FirebaseAnalytics().logEvent(
+                    name: "ratedApp",
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  getTranslatedString("later"),
+                  style: TextStyle(color: Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  prefs.setString("LastAsked", DateTime.now().toString());
+                  prefs.setBool("ShouldAsk", true);
+                  FirebaseAnalytics().logEvent(
+                    name: "seenReviewPopUp",
+                    parameters: {"Action": "Later"},
+                  );
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  getTranslatedString("never"),
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  prefs.setBool("ShouldAsk", false);
+                  Navigator.of(context).pop();
+                  FirebaseAnalytics().logEvent(
+                    name: "seenReviewPopUp",
+                    parameters: {"Action": "Never"},
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );

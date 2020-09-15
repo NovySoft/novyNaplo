@@ -10,12 +10,9 @@ import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/functions/classManager.dart';
-import 'package:collection/collection.dart';
 
-Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
 int notifId = 2;
 
-//TODO make batch inserts INSERTED variable a little bit more understandable
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
@@ -41,7 +38,10 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
       notifId = notifId == 111 ? notifId + 2 : notifId + 1;
       await notifHelper.flutterLocalNotificationsPlugin.show(
         notifId,
-        '${getTranslatedString("newMark")}: ' + capitalize(eval.subject) + " " + eval.value,
+        '${getTranslatedString("newMark")}: ' +
+            capitalize(eval.subject) +
+            " " +
+            eval.value,
         '${getTranslatedString("theme")}: ' + eval.theme,
         notifHelper.platformChannelSpecifics,
         payload: "marks " + eval.id.toString(),
@@ -59,7 +59,10 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            '${getTranslatedString("markModified")}: ' + capitalize(eval.subject) + " " + eval.value,
+            '${getTranslatedString("markModified")}: ' +
+                capitalize(eval.subject) +
+                " " +
+                eval.value,
             '${getTranslatedString("theme")}: ' + eval.theme,
             notifHelper.platformChannelSpecifics,
             payload: "marks " + eval.id.toString(),
@@ -191,7 +194,8 @@ Future<void> insertNotices(Notices notice, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            '${getTranslatedString("noticeModified")}: ' + capitalize(notice.title),
+            '${getTranslatedString("noticeModified")}: ' +
+                capitalize(notice.title),
             notice.teacher,
             notifHelper.platformChannelSpecifics,
             payload: "notice " + notice.id.toString(),
@@ -234,8 +238,11 @@ Future<void> insertAvarage(Avarage avarage) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            '${getTranslatedString("avChanged")}: ' + capitalize(avarage.subject),
-            '${getTranslatedString("newAv")}: ' + avarage.ownValue.toString() + " ($diff)",
+            '${getTranslatedString("avChanged")}: ' +
+                capitalize(avarage.subject),
+            '${getTranslatedString("newAv")}: ' +
+                avarage.ownValue.toString() +
+                " ($diff)",
             notifHelper.platformChannelSpecifics,
             payload: "avarage 0",
           );
@@ -284,7 +291,8 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
-            '${getTranslatedString("examModified")}: ' + capitalize(exam.nameOfExam),
+            '${getTranslatedString("examModified")}: ' +
+                capitalize(exam.nameOfExam),
             '${getTranslatedString("theme")}: ' + exam.subject,
             notifHelper.platformChannelSpecifics,
             payload: "exam " + exam.id.toString(),
@@ -328,7 +336,10 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          '${getTranslatedString("newMark")}: ' + capitalize(eval.subject) + " " + eval.value,
+          '${getTranslatedString("newMark")}: ' +
+              capitalize(eval.subject) +
+              " " +
+              eval.value,
           '${getTranslatedString("theme")}: ' + eval.theme,
           notifHelper.platformChannelSpecifics,
           payload: "marks " + eval.id.toString(),
@@ -358,7 +369,10 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              '${getTranslatedString("markModified")}: ' + capitalize(eval.subject) + " " + eval.value,
+              '${getTranslatedString("markModified")}: ' +
+                  capitalize(eval.subject) +
+                  " " +
+                  eval.value,
               '${getTranslatedString("theme")}: ' + eval.theme,
               notifHelper.platformChannelSpecifics,
               payload: "marks " + eval.id.toString(),
@@ -498,8 +512,11 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              '${getTranslatedString("avChanged")}: ' + capitalize(avarage.subject),
-              '${getTranslatedString("newAv")}: ' + avarage.ownValue.toString() + " ($diff)",
+              '${getTranslatedString("avChanged")}: ' +
+                  capitalize(avarage.subject),
+              '${getTranslatedString("newAv")}: ' +
+                  avarage.ownValue.toString() +
+                  " ($diff)",
               notifHelper.platformChannelSpecifics,
               payload: "avarage 0",
             );
@@ -562,7 +579,8 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              '${getTranslatedString("noticeModified")}: ' + capitalize(notice.title),
+              '${getTranslatedString("noticeModified")}: ' +
+                  capitalize(notice.title),
               notice.teacher,
               notifHelper.platformChannelSpecifics,
               payload: "notice " + notice.id.toString(),
@@ -709,7 +727,8 @@ Future<void> batchInsertExams(List<Exam> examList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              '${getTranslatedString("examModified")}: ' + capitalize(exam.nameOfExam),
+              '${getTranslatedString("examModified")}: ' +
+                  capitalize(exam.nameOfExam),
               '${getTranslatedString("theme")}: ' + exam.subject,
               notifHelper.platformChannelSpecifics,
               payload: "exam " + exam.id.toString(),

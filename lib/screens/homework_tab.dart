@@ -82,19 +82,20 @@ class _HomeworkTabState extends State<HomeworkTab> {
           " " +
           parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
       return SafeArea(
-          top: false,
-          bottom: false,
-          child: AnimatedHomeworkCard(
-            dueOver: dueOver,
-            title: globalHomework[index].subject,
-            subTitle: subTitle, //lessonsList[0][index].classroom,
+        top: false,
+        bottom: false,
+        child: AnimatedHomeworkCard(
+          dueOver: dueOver,
+          title: globalHomework[index].subject,
+          subTitle: subTitle, //lessonsList[0][index].classroom,
+          color: colors[index],
+          heroAnimation: AlwaysStoppedAnimation(0),
+          onPressed: HomeworkDetailTab(
             color: colors[index],
-            heroAnimation: AlwaysStoppedAnimation(0),
-            onPressed: HomeworkDetailTab(
-              color: colors[index],
-              hwInfo: globalHomework[index],
-            ),
-          ));
+            hwInfo: globalHomework[index],
+          ),
+        ),
+      );
     }
   }
 

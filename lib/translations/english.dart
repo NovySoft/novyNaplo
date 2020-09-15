@@ -41,10 +41,10 @@ final Map<String, String> translation = {
   "notif": "Notification",
   "notifications": "Notifications",
   "notifTurnOnWarn":
-      "Warnign!\nTurning on notifications will also turn on the database (offline mode)!",
+      "Warning!\nTurning on notifications will also turn on the database (offline mode)!",
   "backgroundFetch": "Background requests",
   "backgroundFetchTurnOnWarning":
-      "Warnign!\nTurning on background requests will also turn on the database (offline mode)!",
+      "Warning!\nTurning on background requests will also turn on the database (offline mode)!",
   "backgroundFetchOnCellular": "Background requests on cellular connection",
   "timeBetweenFetches": "Time between requests",
   "minutes": "minutes",
@@ -304,4 +304,13 @@ final Map<String, String> translation = {
   "praiseworthy": "Praiseworthy",
   "arrowFirstMark": "The arrow is showing the difference from the first mark",
   "performance": "Performance",
+  "verCheckOnStart": "Automatic version check",
+  "you": "you",
+  "review": "Review",
+  "plsRateUs":
+      "Hey!\n\n-Do you enjoy using novynapló?\n-Yes/No/Maybe?\n\nWould you please tell us your experiences in the app store?",
+  "later": "Later",
+  "never": "Never",
+  "reviewProcess": "Review prompt",
+  "dbExplorer": "Database explorer",
 };

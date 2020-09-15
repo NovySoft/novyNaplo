@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 PageController controller = PageController();
@@ -53,42 +52,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   void animate() async {
-    await sleep1();
-    await sleep1();
+    await sleep(2000);
     setState(() {
       size = 150;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       visibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       visibilityTwo = 1;
     });
   }
 
   void animateSecond() async {
-    await sleep2();
+    await sleep(500);
     setState(() {
       size = 150;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       secondVisibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       secondVisibilityTwo = 1;
     });
   }
 
   void animateThird() async {
-    await sleep2();
+    await sleep(500);
     setState(() {
       thirdVisibility = 1;
     });
-    await sleep1();
+    await sleep(1000);
     setState(() {
       thirdVisibilityTwo = 1;
     });
@@ -202,7 +200,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -255,8 +254,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               opacity: secondVisibilityTwo,
               duration: Duration(milliseconds: 500),
               child: Center(
-                child: Text(
-                    getTranslatedString("errAndGit"),
+                child: Text(getTranslatedString("errAndGit"),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 24)),
               )),
@@ -270,7 +268,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -340,7 +339,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(getTranslatedString("Swipe to countinue"), style: TextStyle(fontSize: 24)),
+                  Text(getTranslatedString("Swipe to countinue"),
+                      style: TextStyle(fontSize: 24)),
                   Icon(Icons.arrow_forward)
                 ],
               ))),
@@ -357,13 +357,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          var prefs = await SharedPreferences.getInstance();
-          prefs.setBool("isNew", false);
           Navigator.pushReplacementNamed(context, LoginPage.tag);
           FirebaseAnalytics().logEvent(name: "tutorial_complete");
         },
         padding: EdgeInsets.all(12),
-        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"),
+            style: TextStyle(color: Colors.black)),
       ),
     );
     return Center(
@@ -378,16 +377,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           height: 30,
         ),
         PeopleCard(name: "Novy", job: getTranslatedString("leadDev")),
-        PeopleCard(name: "Zoller András", job: getTranslatedString("markCalcDev")),
+        PeopleCard(
+            name: "Zoller András", job: getTranslatedString("markCalcDev")),
         PeopleCard(name: "Gáti Gergely", job: getTranslatedString("adsMaker")),
         PeopleCard(name: "Dallos Levente", job: getTranslatedString("jsDev")),
-        PeopleCard(name: "Gáspár Bernát", job: getTranslatedString("designTip")),
-        PeopleCard(name: "Madács Márton", job: getTranslatedString("mainDonator")),
+        PeopleCard(
+            name: "Gáspár Bernát", job: getTranslatedString("designTip")),
+        PeopleCard(
+            name: "Madács Márton", job: getTranslatedString("mainDonator")),
         PeopleCard(name: "Boapps", job: "Ekréta API"),
+        PeopleCard(name: "Stackoverflow", job: getTranslatedString("stackPro")),
         PeopleCard(
-            name: "Stackoverflow", job: getTranslatedString("stackPro")),
-        PeopleCard(
-            name: "${getTranslatedString("manyOther")}...", job: getTranslatedString("manyOtherJob")),
+            name: "${getTranslatedString("manyOther")}...",
+            job: getTranslatedString("manyOtherJob")),
         Column(
           children: <Widget>[
             Text(

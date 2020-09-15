@@ -9,7 +9,7 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/main.dart' as main;
-import 'package:novynaplo/screens/settings_tab.dart';
+import 'package:novynaplo/screens/settings/settings_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
@@ -60,15 +60,12 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) {
           return SpinnerDialog();
         });
-    await sleep1();
-    await getVersion();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await sleep(1000);
     await globals.setGlobals();
-    //DONT DELETE, FOR TESTING USE ONLY
-    /*print("subtitle:" + markCardSubtitle);
-    print("constColor:" + markCardConstColor);
-    print("lesson card:" + lessonCardSubtitle);
-    print("mark theme:" + markCardTheme);*/
+    if (globals.verCheckOnStart) {
+      await getVersion();
+    }
     if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
       Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
       if (prefs.getBool("ads")) {
@@ -150,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
     isPressed = false;
   }
 
+  //TODO: Only check credentials and do the fetching on loading page.
   void auth(var context, caller) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -167,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
             });
       }
       //Not showing quickly enough
-      await sleep1(); //So sleep for a second
+      await sleep(1000); //So sleep for a second
       if (await NetworkHelper().isNetworkAvailable() ==
           ConnectivityResult.none) {
         status = "No internet connection was detected";
@@ -203,8 +201,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       if (status != null) _ackAlert(context, status);
-      if (status == null)
-        _ackAlert(context, getTranslatedString("unkError"));
+      if (status == null) _ackAlert(context, getTranslatedString("unkError"));
     }
     isPressed = false;
     if (caller == "_ackAlert") {
@@ -295,8 +292,15 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  void setNewUserPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isNew", true);
+    prefs.setBool("isNotNew", true);
+  }
+
   @override
   Widget build(BuildContext context) {
+    setNewUserPrefs();
     globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',
@@ -386,7 +390,8 @@ class _LoginPageState extends State<LoginPage> {
           */
         },
         padding: EdgeInsets.all(12),
-        child: Text(getTranslatedString("login"), style: TextStyle(color: Colors.black)),
+        child: Text(getTranslatedString("login"),
+            style: TextStyle(color: Colors.black)),
       ),
     );
 
@@ -412,8 +417,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _ackAlert(BuildContext context, String content) async {
-    if (content == null)
-      content = getTranslatedString("unkError");
+    if (content == null) content = getTranslatedString("unkError");
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -440,7 +444,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
 
   Future<void> _timeoutAlert(BuildContext context) async {
     return showDialog<void>(

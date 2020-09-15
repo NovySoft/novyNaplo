@@ -2,24 +2,25 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/hungarian.dart' as hu;
 import 'package:novynaplo/translations/english.dart' as en;
-//import 'dart:io' show Platform;
 
-String getTranslatedString(String input) {
-  //Dont delete this piece of code, it makes sure that the translation is right
-  /*String languageCode = Platform.localeName.split('_')[1];
-  if (languageCode.toLowerCase().contains('hu')) {
-    globals.language = "hu";
-  } else {
-    globals.language = "en";
-  }*/
+String getTranslatedString(String input, {List<String> replaceVariables}) {
+  String tempString;
+  if (replaceVariables == null) replaceVariables = [];
   if (globals.language == "hu") {
-    if (hu.translation[input] != null) return hu.translation[input];
+    if (hu.translation[input] != null) tempString = hu.translation[input];
   } else if (globals.language == "en") {
-    if (en.translation[input] != null) return en.translation[input];
+    if (en.translation[input] != null) tempString = en.translation[input];
   }
-  print("Can't translate: $input");
+  if (tempString != null) {
+    for (var i = 0; i < replaceVariables.length; i++) {
+      //?{0} ?{1}
+      tempString.replaceAll("?{$i}", replaceVariables[i]);
+    }
+    return tempString;
+  }
+  print("Can't translate: $input, lang: ${globals.language}");
   FirebaseAnalytics().logEvent(
-    name: "UnkownTranslation",
+    name: "UnknownTranslation",
     parameters: {
       "language": globals.language,
       "stringToTranslate": input,

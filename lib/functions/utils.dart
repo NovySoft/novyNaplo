@@ -1,10 +1,8 @@
 import 'dart:math';
-import 'package:english_words/english_words.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
-import 'package:diacritic/diacritic.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
@@ -38,53 +36,12 @@ const _myListOfRandomColors = [
 
 final _random = Random();
 
-// Avoid customizing the word generator, which can be slow.
-// https://github.com/filiph/english_words/issues/9
-final wordPairIterator = generateWordPairs();
-
-String generateRandomHeadline() {
-  final artist = capitalizePair(wordPairIterator.first);
-
-  switch (_random.nextInt(10)) {
-    case 0:
-      return '$artist says ${nouns[_random.nextInt(nouns.length)]}';
-    case 1:
-      return '$artist arrested due to ${wordPairIterator.first.join(' ')}';
-    case 2:
-      return '$artist releases ${capitalizePair(wordPairIterator.first)}';
-    case 3:
-      return '$artist talks about his ${nouns[_random.nextInt(nouns.length)]}';
-    case 4:
-      return '$artist talks about her ${nouns[_random.nextInt(nouns.length)]}';
-    case 5:
-      return '$artist talks about their ${nouns[_random.nextInt(nouns.length)]}';
-    case 6:
-      return '$artist says their music is inspired by ${wordPairIterator.first.join(' ')}';
-    case 7:
-      return '$artist says the world needs more ${nouns[_random.nextInt(nouns.length)]}';
-    case 8:
-      return '$artist calls their band ${adjectives[_random.nextInt(adjectives.length)]}';
-    case 9:
-      return '$artist finally ready to talk about ${nouns[_random.nextInt(nouns.length)]}';
-  }
-
-  assert(false, 'Failed to generate news headline');
-  return null;
-}
-
 List<Color> getRandomColors(int amount) {
   if (amount == null) amount = 10;
   return List<Color>.generate(amount, (index) {
     return _myListOfRandomColors[_random.nextInt(_myListOfRandomColors.length)];
     //return _myListOfRandomColors[2];
   });
-}
-
-List<String> getRandomNames(int amount) {
-  return wordPairIterator
-      .take(amount)
-      .map((pair) => capitalizePair(pair))
-      .toList();
 }
 
 String capitalize(String word) {
@@ -96,10 +53,6 @@ String capitalize(String word) {
   }
   if (word.length < 2) return word;
   return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
-}
-
-String capitalizePair(WordPair pair) {
-  return '${capitalize(pair.first)} ${capitalize(pair.second)}';
 }
 
 class SpinnerDialog extends StatefulWidget {
@@ -114,102 +67,31 @@ class SpinnerDialogState extends State<SpinnerDialog> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return new WillPopScope(
-        onWillPop: () async => false,
-        child: SimpleDialog(
-            key: key,
-            backgroundColor: Colors.black54,
-            children: <Widget>[
-              Center(
-                child: Column(children: [
-                  SpinKitPouringHourglass(color: Colors.lightBlueAccent),
-                  SizedBox(height: 10),
-                  Text(
-                    loadingText,
-                    style: TextStyle(color: Colors.blueAccent),
-                  )
-                ]),
-              )
-            ]));
+      onWillPop: () async => false,
+      child: SimpleDialog(
+        key: key,
+        backgroundColor: Colors.black54,
+        children: <Widget>[
+          Center(
+            child: Column(
+              children: [
+                SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                SizedBox(height: 10),
+                Text(
+                  loadingText,
+                  style: TextStyle(color: Colors.blueAccent),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
 Future sleep(int millis) async {
   return new Future.delayed(Duration(milliseconds: millis), () => "1");
-}
-
-Future sleep1() async {
-  return new Future.delayed(const Duration(seconds: 1), () => "1");
-}
-
-Future sleep2() async {
-  return new Future.delayed(const Duration(milliseconds: 500), () => "500");
-}
-
-String toEnglish(var input) {
-  return removeDiacritics(input.toString());
-}
-
-bool isLeap(int year) {
-  if (year % 4 == 0) {
-    if (year % 100 == 0) {
-      if (year % 400 == 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  } else {
-    return false;
-  }
-}
-
-int getMonthLength(int input, bool isLeap) {
-  switch (input) {
-    case 1:
-      return 31;
-      break;
-    case 2:
-      if (isLeap) {
-        return 29;
-      } else {
-        return 28;
-      }
-      break;
-    case 3:
-      return 31;
-      break;
-    case 4:
-      return 30;
-      break;
-    case 5:
-      return 31;
-      break;
-    case 6:
-      return 30;
-      break;
-    case 7:
-      return 31;
-      break;
-    case 8:
-      return 31;
-      break;
-    case 9:
-      return 30;
-      break;
-    case 10:
-      return 31;
-      break;
-    case 11:
-      return 30;
-      break;
-    case 12:
-      return 31;
-      break;
-    default:
-      return 0;
-  }
 }
 
 String parseIntToWeekdayString(int input) {
@@ -338,16 +220,28 @@ IconData parseSubjectToIcon({@required String subject}) {
 
 List<Evals> getSameSubjectEvals(
     {@required String subject, bool sort = false, DateTime onlyBefore}) {
-  List<Evals> tempList = List.from(stats.allParsedSubjects.firstWhere(
+  List<Evals> _tempList = [];
+  if (subject == getTranslatedString("contracted")) {
+    List<List<Evals>> itteratorList =
+        List.from(stats.allParsedSubjectsWithoutZeros);
+    for (var n in itteratorList) {
+      for (var j in n) {
+        _tempList.add(j);
+      }
+    }
+    _tempList.sort((a, b) => a.createDate.compareTo(b.createDate));
+    return _tempList;
+  }
+  _tempList = List.from(stats.allParsedSubjects.firstWhere(
       (element) => element[0].subject.toLowerCase() == subject.toLowerCase()));
   if (onlyBefore != null) {
-    tempList
+    _tempList
         .removeWhere((element) => element.createDate.compareTo(onlyBefore) > 0);
   }
   if (sort) {
-    tempList.sort((a, b) => b.createDate.compareTo(a.createDate));
+    _tempList.sort((a, b) => b.createDate.compareTo(a.createDate));
   }
-  return List.from(tempList);
+  return List.from(_tempList);
 }
 
 int calcPercentFromEvalsList({@required List<Evals> evalList}) {
@@ -432,4 +326,36 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
     color = Colors.red;
   }
   return color;
+}
+
+String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
+  String subtitle = "undefined";
+  if (globals.markCardSubtitle == "Téma") {
+    if (eval.theme != null && eval.theme != "")
+      subtitle = capitalize(eval.theme);
+    else
+      subtitle = getTranslatedString("unkown");
+  } else if (globals.markCardSubtitle == "Tanár") {
+    subtitle = eval.teacher;
+  } else if (globals.markCardSubtitle == "Súly") {
+    subtitle = eval.weight;
+  } else if (globals.markCardSubtitle == "Pontos Dátum") {
+    subtitle = eval.createDateString;
+  } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
+    String year = eval.createDate.year.toString();
+    String month = eval.createDate.month.toString();
+    String day = eval.createDate.day.toString();
+    String hour = eval.createDate.hour.toString();
+    String minutes = eval.createDate.minute.toString();
+    String seconds = eval.createDate.second.toString();
+    subtitle = "$year-$month-$day $hour:$minutes:$seconds";
+  }
+  if (subtitle == "" || subtitle == null) {
+    subtitle = getTranslatedString("unkown");
+  }
+  if (subtitle.length >= trimLength) {
+    subtitle = subtitle.substring(0, trimLength - 3);
+    subtitle += "...";
+  }
+  return subtitle;
 }

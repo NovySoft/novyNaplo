@@ -5,7 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08d8ae48160409997ea32cf95d1a64f)](https://www.codacy.com/manual/Legolaszstudio/novyNaplo?utm_source=github.com&utm_medium=referral&utm_content=NovySoft/novyNaplo&utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/48e75a94f1484016fa8a/maintainability)](https://codeclimate.com/github/NovySoft/novyNaplo/maintainability)
 [![HitCount](http://hits.dwyl.io/NovySoft/novyNaplo.svg)](http://hits.dwyl.io/NovySoft/novyNaplo)
-[![Discord](https://img.shields.io/discord/340112709628592139.svg)](http://discord.gg/rmjC4d4)
+[![Discord](https://img.shields.io/discord/737612284389621845.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/TJYpV2E)
 [![Open Source Helpers](https://www.codetriage.com/novysoft/novynaplo/badges/users.svg)](https://www.codetriage.com/novysoft/novynaplo)
 
 Novy teljesen nem eredeti kréta kliense.
@@ -38,10 +38,10 @@ Novy teljesen nem eredeti kréta kliense.
 - Offline mód
 - Faliújság megtekintése
 - Fordítások (Angol, Magyar)
+- Éves, féléves, és negyedéves értesítők megetekintése
 
 ## **HAMAROSAN**
 
-- Éves, féléves, és negyedéves értesítők megetekintése
 - Tanulói házifeladat felírása
 - Házifeladat TODO lista szerűség
 - Több felhasználós támogatás
@@ -69,7 +69,6 @@ Novy teljesen nem eredeti kréta kliense.
 - **connectivity**: Az internet elérhetőségét figyeli
 - **package_info**: Ennek a segítségével nézi meg az applikáció saját verzióját
 - **flutter_spinkit**: A kis homokóráért felelős
-- **diacritic**: A magyar betűk angol megfelelőit tárolja
 - **dynamic_theme**: A sötét és fehér téma közt vált
 - **charts_flutter**: A grafikonokat rajzolja ki
 - **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat

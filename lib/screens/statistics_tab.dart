@@ -2,15 +2,18 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/screens/charts_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
 var allParsedSubjects = [];
+List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 var colors;
 final List<Tab> statTabs = <Tab>[
   Tab(
@@ -58,7 +61,7 @@ class MarkForBars {
 
 class StatisticsTab extends StatefulWidget {
   static String tag = 'statistics';
-  static const title = 'Statisztika';
+  static String title = getTranslatedString("statistics");
 
   @override
   _StatisticsTabState createState() => _StatisticsTabState();
@@ -81,7 +84,8 @@ class _StatisticsTabState extends State<StatisticsTab>
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
-            if (globals.markCount == 0) return noMarks();
+            if (allParsedSubjects.length == 0 ||
+                marksPage.allParsedByDate.length == 0) return noMarks();
             if (allParsedSubjects.length > 15) {
               sizedBoxHeight =
                   ((allParsedSubjects.length - 15) * 23).toDouble();
@@ -92,8 +96,8 @@ class _StatisticsTabState extends State<StatisticsTab>
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
-                getAllSubjectsAv(allParsedSubjects);
-                getWorstAndBest(allParsedSubjects);
+                getAllSubjectsAv(allParsedSubjectsWithoutZeros);
+                getWorstAndBest(allParsedSubjectsWithoutZeros);
                 getPieChartOrBarChart(allParsedSubjects);
                 getBarChart(allParsedSubjects);
                 if (globalAllSubjectAv.diffSinceLast == 0) {
@@ -165,7 +169,8 @@ class _StatisticsTabState extends State<StatisticsTab>
                               sizedBoxHeight +
                               globals.extraSpaceUnderStat,
                           child: charts.NumericComboChart(
-                            createAllSubjectChartData(allParsedSubjects),
+                            createAllSubjectChartData(
+                                allParsedSubjectsWithoutZeros),
                             animate: globals.chartAnimations,
                             domainAxis: axisTwo,
                             primaryMeasureAxis: axis,
@@ -400,6 +405,12 @@ class _StatisticsTabState extends State<StatisticsTab>
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),
+                            Text(
+                              worstSubjectAv.value.toStringAsFixed(3),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
                             worstAvIcon,
                             Text(
                               worstSubjectAv.diffSinceLast.toStringAsFixed(3),
@@ -538,7 +549,9 @@ class _StatisticsTabState extends State<StatisticsTab>
               );
             } else {
               return ListView.builder(
-                  itemCount: allParsedSubjects.length + globals.adModifier,
+                  itemCount: allParsedSubjectsWithoutZeros.length +
+                      1 + //+1 due to összesített
+                      globals.adModifier,
                   padding: EdgeInsets.symmetric(vertical: 12),
                   itemBuilder: _chartsListBuilder);
             }
@@ -549,6 +562,9 @@ class _StatisticsTabState extends State<StatisticsTab>
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
+    allParsedSubjectsWithoutZeros = List.from(
+      allParsedSubjects.where((element) => element[0].numberValue != 0),
+    );
     super.initState();
   }
 
@@ -567,25 +583,45 @@ class _StatisticsTabState extends State<StatisticsTab>
   }
 
   Widget _chartsListBuilder(BuildContext context, int index) {
-    if (index >= allParsedSubjects.length) {
+    if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
     Color currColor = colors[index];
-    return SafeArea(
+    if (index == 0) {
+      return SafeArea(
         top: false,
         bottom: false,
         child: AnimatedChartsCard(
-          title: capitalize(allParsedSubjects[index][0].subject),
+          title: capitalize(getTranslatedString("contracted")),
           color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: ChartsDetailTab(
             id: index,
-            subject: capitalize(allParsedSubjects[index][0].subject),
+            subject: capitalize(getTranslatedString("contracted")),
             color: currColor,
-            seriesList:
-                createSubjectChart(allParsedSubjects[index], index.toString()),
+            seriesList: createOsszesitett(allParsedSubjectsWithoutZeros),
             animate: globals.chartAnimations,
           ),
-        ));
+        ),
+      );
+    }
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: AnimatedChartsCard(
+        title: capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
+        color: currColor,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: ChartsDetailTab(
+          id: index,
+          subject:
+              capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
+          color: currColor,
+          seriesList: createSubjectChart(
+              allParsedSubjectsWithoutZeros[index - 1], index.toString()),
+          animate: globals.chartAnimations,
+        ),
+      ),
+    );
   }
 }

@@ -78,7 +78,7 @@ Future selectNotification(String payload) async {
     return;
   }
   //Sometimes doesn't work when used with pushReplacement
-  //TODO fix this
+  //BUG fix this
   if (ModalRoute.of(globals.globalContext).settings.name == "/") {
     print("MainRoute");
     return;

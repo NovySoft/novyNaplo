@@ -35,13 +35,15 @@ class ReportsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ChartPoints> avList = List.from(chartList[0].data);
-    if (avList.length == 0) avList = [ChartPoints(0, 0), ChartPoints(1, 0)];
+    List<LinearMarkChartData> avList = List.from(chartList[0].data);
+    if (avList.length == 0)
+      avList = [LinearMarkChartData(0, 0), LinearMarkChartData(1, 0)];
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
       ),
       body: ListView.builder(
+        itemCount: 7,
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
@@ -94,7 +96,7 @@ class ReportsDetailTab extends StatelessWidget {
               );
               break;
             case 4:
-              List<ChartPoints> sortableList = List.from(avList);
+              List<LinearMarkChartData> sortableList = List.from(avList);
               sortableList.sort((a, b) => a.value.compareTo(b.value));
               Color diffColor;
               Widget diffIcon;
@@ -212,7 +214,7 @@ class ReportsDetailTab extends StatelessWidget {
                         currentValue: result,
                         displayWidget: Text(
                           '${capitalize(getTranslatedString("inAv"))}:',
-                          style: TextStyle(fontSize: 21),
+                          style: TextStyle(fontSize: 18),
                         ),
                         valueWidget: Text(
                           result.toStringAsFixed(3),
@@ -232,7 +234,7 @@ class ReportsDetailTab extends StatelessWidget {
                         currentValue: performancePercentage.toDouble(),
                         displayWidget: Text(
                           '${capitalize(getTranslatedString("inPc"))}:',
-                          style: TextStyle(fontSize: 21),
+                          style: TextStyle(fontSize: 18),
                         ),
                         valueWidget: Text(
                           performancePercentage.toString() + "%",
@@ -242,6 +244,11 @@ class ReportsDetailTab extends StatelessWidget {
                     ],
                   ),
                 ],
+              );
+              break;
+            default:
+              return SizedBox(
+                height: 150,
               );
               break;
           }
