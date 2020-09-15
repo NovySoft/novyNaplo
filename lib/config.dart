@@ -18,7 +18,7 @@ String bannerUnitId = "ca-app-pub-6768960612393878/1881515932";
 //Production key: "ca-app-pub-6768960612393878/1881515932"
 
 //App version, so I can do special version names:
-String currentAppVersionCode = "V1.0.4+11";
+String currentAppVersionCode = "V1.0.4+12";
 
 //Is the app final release? (aka is/was in version.json)
 //!If false don't do the new version check

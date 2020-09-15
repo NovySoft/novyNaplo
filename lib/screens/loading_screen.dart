@@ -440,10 +440,13 @@ class _LoadingPageState extends State<LoadingPage> {
 
   //Runs after initState
   void onLoad(var context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await globals.setGlobals();
-      if (prefs.getString("code") == null) {
+      if (prefs.getString("iv") == null ||
+          prefs.getString("code") == null ||
+          prefs.getString("pass") == null ||
+          prefs.getString("user") == null) {
         Navigator.pushReplacementNamed(context, LoginPage.tag);
         prefs.setBool("isNew", true);
         prefs.setBool("isNotNew", true);
@@ -581,6 +584,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readData");
       });
       IV iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+      Crashlytics.instance.log("iv: ${iv.toString()}");
       decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
@@ -592,6 +596,9 @@ class _LoadingPageState extends State<LoadingPage> {
         context,
         "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",
       );
+      Navigator.pushReplacementNamed(context, LoginPage.tag);
+      prefs.setBool("isNew", true);
+      prefs.setBool("isNotNew", true);
     }
     auth(context);
   }
