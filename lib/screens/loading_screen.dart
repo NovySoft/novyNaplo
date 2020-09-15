@@ -445,7 +445,7 @@ class _LoadingPageState extends State<LoadingPage> {
       await globals.setGlobals();
       if (prefs.getString("iv") == null ||
           prefs.getString("code") == null ||
-          prefs.getString("pass") == null ||
+          prefs.getString("password") == null ||
           prefs.getString("user") == null) {
         Navigator.pushReplacementNamed(context, LoginPage.tag);
         prefs.setBool("isNew", true);
