@@ -301,8 +301,6 @@ class _LoadingPageState extends State<LoadingPage> {
             sortByDateAndSubject(List.from(marksPage.allParsedByDate));
         noticesPage.allParsedNotices = await parseNotices(globals.dJson);
         statisticsPage.allParsedSubjects = categorizeSubjects();
-        statisticsPage.colors =
-            getRandomColors(statisticsPage.allParsedSubjects.length);
         timetablePage.lessonsList = await getWeekLessons(token, code);
         setUpCalculatorPage(statisticsPage.allParsedSubjects);
       }
@@ -521,8 +519,10 @@ class _LoadingPageState extends State<LoadingPage> {
         //Statisztika
         statisticsPage.allParsedSubjects =
             categorizeSubjectsFromEvals(marksPage.allParsedByDate);
-        statisticsPage.colors =
-            getRandomColors(statisticsPage.allParsedSubjects.length);
+        statisticsPage.allParsedSubjectsWithoutZeros = List.from(
+          statisticsPage.allParsedSubjects
+              .where((element) => element[0].numberValue != 0),
+        );
         setUpCalculatorPage(statisticsPage.allParsedSubjects);
         //Timetable
         setState(() {

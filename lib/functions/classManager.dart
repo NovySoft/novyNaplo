@@ -260,6 +260,11 @@ class Lesson {
       'endDate': endDateString,
     };
   }
+
+  @override
+  String toString() {
+    return this.name + " " + this.theme;
+  }
 }
 
 Future<Lesson> setLesson(var input, token, code) async {

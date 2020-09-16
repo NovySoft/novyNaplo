@@ -159,8 +159,10 @@ class NetworkHelper {
           sortByDateAndSubject(List.from(marksPage.allParsedByDate));
       noticesPage.allParsedNotices = await parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects();
-      statisticsPage.colors =
-          getRandomColors(statisticsPage.allParsedSubjects.length);
+      statisticsPage.allParsedSubjectsWithoutZeros = List.from(
+        statisticsPage.allParsedSubjects
+            .where((element) => element[0].numberValue != 0),
+      );
       timetablePage.lessonsList = await getWeekLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }
@@ -295,7 +297,9 @@ void setUpCalculatorPage(List<List<Evals>> input) {
   calculatorPage.dropdownValues = [];
   calculatorPage.dropdownValue = "";
   calculatorPage.avarageList = [];
-  if (input != null && input != [[]] && input.length != 1) {
+  //TODO Look into this, why was input.length here?
+  //! Did really cause an issue if we only had one subject?
+  if (input != null && input != [[]] /*&& input.length != 1*/) {
     double sum, index;
     for (var n in input) {
       calculatorPage.dropdownValues.add(capitalize(n[0].subject));

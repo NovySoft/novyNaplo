@@ -595,23 +595,24 @@ class AnimatedHomeworkCard extends StatelessWidget {
 
 class TimetableCard extends StatelessWidget {
   TimetableCard(
-      {this.title,
-      this.color,
-      this.subTitle,
+      {this.color,
       this.onPressed,
       this.heroAnimation,
       this.hasHomework,
+      this.lessonInfo,
       @required this.iconData});
 
-  final String title, subTitle;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
   final bool hasHomework;
   final IconData iconData;
+  final Lesson lessonInfo;
 
   @override
   Widget build(context) {
+    String subTitle = getTimetableSubtitle(lessonInfo);
+    String title = lessonInfo.name;
     if (hasHomework) {
       return PressableCard(
           onPressed: null,
