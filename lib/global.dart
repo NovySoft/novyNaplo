@@ -29,7 +29,6 @@ bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 bool showAllAvsInStats =
     false; //Show all avarages or just the best and the worst?
-bool offlineModeDb = true; //Should we store data in the database?
 bool backgroundFetch = false; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
@@ -128,14 +127,6 @@ Future<void> setGlobals() async {
     name: "Notifications",
     value: notifications ? "ON" : "OFF",
   );
-
-  if (prefs.getBool("offlineModeDb") != null) {
-    offlineModeDb = prefs.getBool("offlineModeDb");
-  } else {
-    prefs.setBool("offlineModeDb", true);
-    offlineModeDb = true;
-  }
-  Crashlytics.instance.setBool("offlineModeDb", offlineModeDb);
 
   if (prefs.getBool("backgroundFetchOnCellular") != null) {
     backgroundFetchOnCellular = prefs.getBool("backgroundFetchOnCellular");

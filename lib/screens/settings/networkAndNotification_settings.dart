@@ -378,14 +378,6 @@ class _NetworkAndNotificationSettingsState
                     onChanged: (bool isOn) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      if (isOn && globals.offlineModeDb == false) {
-                        await _ackAlert(
-                          context,
-                          getTranslatedString("notifTurnOnWarn"),
-                        );
-                        globals.offlineModeDb = true;
-                        prefs.setBool("offlineModeDb", true);
-                      }
                       setState(() {
                         globals.notifications = isOn;
                         prefs.setBool("notifications", isOn);
@@ -433,15 +425,6 @@ class _NetworkAndNotificationSettingsState
                                 .setBool("backgroundFetch", isOn);
                           });
                           if (isOn) {
-                            if (globals.offlineModeDb == false) {
-                              await _ackAlert(
-                                context,
-                                getTranslatedString(
-                                    "backgroundFetchTurnOnWarning"),
-                              );
-                              globals.offlineModeDb = true;
-                              prefs.setBool("offlineModeDb", true);
-                            }
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
                             Crashlytics.instance.log("Canceled alarm: " +
                                 main.fetchAlarmID.toString());
@@ -596,25 +579,4 @@ class _NetworkAndNotificationSettingsState
           }),
     );
   }
-}
-
-Future<void> _ackAlert(BuildContext context, String content) async {
-  return showDialog<void>(
-    barrierDismissible: false,
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(getTranslatedString("status")),
-        content: Text(content),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }

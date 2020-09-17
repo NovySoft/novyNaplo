@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,8 +64,7 @@ class MarksTabState extends State<MarksTab>
     _tabController = new TabController(vsync: this, length: 2);
     //Payload handling and fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if ((globals.backgroundFetch || globals.offlineModeDb) &&
-          !globals.didFetch) {
+      if (!globals.didFetch) {
         globals.didFetch = true;
         _androidRefreshKey.currentState?.show();
       }
@@ -90,6 +90,26 @@ class MarksTabState extends State<MarksTab>
   Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
     Crashlytics.instance.log("RefreshData");
+    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(getTranslatedString("status")),
+            content: Text(getTranslatedString("noNet")),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
     await notifications.flutterLocalNotificationsPlugin.show(
       -111,
       getTranslatedString("gettingData"),
@@ -97,22 +117,19 @@ class MarksTabState extends State<MarksTab>
       platformChannelSpecificsGetNotif,
     );
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    ////fix this
-    //! won't fix
-    //!It only works when i put his ting here
     var decryptedPass, decryptedUser, decryptedCode, status;
+    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    var passKey = encrypt.Key.fromUtf8(config.passKey);
+    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+    var userKey = encrypt.Key.fromUtf8(config.userKey);
+    final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+    final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+    decryptedPass =
+        passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
     for (var i = 0; i < 2; i++) {
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      var passKey = encrypt.Key.fromUtf8(config.passKey);
-      var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-      var userKey = encrypt.Key.fromUtf8(config.userKey);
-      final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-      final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-      final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-      decryptedPass =
-          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       status = await NetworkHelper()
           .getToken(decryptedCode, decryptedUser, decryptedPass);
     }

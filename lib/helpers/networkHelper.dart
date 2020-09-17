@@ -33,6 +33,7 @@ class NetworkHelper {
   }
 
   Future<void> getEvents(token, code) async {
+    Crashlytics.instance.log("getEvents");
     try {
       var headers = {
         'Authorization': 'Bearer $token',
@@ -47,9 +48,7 @@ class NetworkHelper {
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
-        if (globals.offlineModeDb || globals.backgroundFetch) {
-          await batchInsertEvents(eventsPage.allParsedEvents);
-        }
+        await batchInsertEvents(eventsPage.allParsedEvents);
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
@@ -57,6 +56,7 @@ class NetworkHelper {
   }
 
   Future<String> getToken(code, user, pass) async {
+    Crashlytics.instance.log("getToken, try $tokenIndex");
     tokenIndex++;
     try {
       if (code == "" || user == "" || pass == "") {
@@ -134,6 +134,7 @@ class NetworkHelper {
   }
 
   Future<void> getStudentInfo(token, code) async {
+    Crashlytics.instance.log("getStudentInfo");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -163,12 +164,13 @@ class NetworkHelper {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
-      timetablePage.lessonsList = await getWeekLessons(token, code);
+      timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }
   }
 
   Future<void> getAvarages(var token, code) async {
+    Crashlytics.instance.log("getAvarages");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -187,6 +189,7 @@ class NetworkHelper {
   }
 
   Future<dynamic> getSchoolList() async {
+    Crashlytics.instance.log("getSchoolList");
     List<School> tempList = [];
     School tempSchool = new School();
     var client = http.Client();
@@ -223,7 +226,9 @@ class NetworkHelper {
     return tempList;
   }
 
-  Future<List<List<Lesson>>> getWeekLessons(token, code) async {
+  Future<List<List<Lesson>>> getThisWeeksLessons(token, code) async {
+    Crashlytics.instance.log("getThisWeeksLessons");
+    timetablePage.fetchedDayList = [];
     List<List<Lesson>> output = [];
     for (var n = 0; n < 7; n++) {
       output.add([]);
@@ -232,9 +237,10 @@ class NetworkHelper {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
-
+    timetablePage.fetchedDayList.add(now);
     while (now.weekday != monday) {
       now = now.subtract(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
     }
     String startDate = now.year.toString() +
         "-" +
@@ -244,7 +250,9 @@ class NetworkHelper {
     now = new DateTime.now();
     while (now.weekday != sunday) {
       now = now.add(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
     }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     String endDate = now.year.toString() +
         "-" +
         now.month.toString() +
@@ -284,120 +292,118 @@ class NetworkHelper {
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        if (globals.offlineModeDb || globals.backgroundFetch) {
-          await batchInsertLessons(tempLessonListForDB);
-        }
+        await batchInsertLessons(tempLessonListForDB);
       }
     }
     return output;
   }
-}
 
-void setUpCalculatorPage(List<List<Evals>> input) {
-  calculatorPage.dropdownValues = [];
-  calculatorPage.dropdownValue = "";
-  calculatorPage.avarageList = [];
-  //TODO Look into this, why was input.length here?
-  //! Did really cause an issue if we only had one subject?
-  if (input != null && input != [[]] /*&& input.length != 1*/) {
-    double sum, index;
-    for (var n in input) {
-      calculatorPage.dropdownValues.add(capitalize(n[0].subject));
-      sum = 0;
-      index = 0;
-      for (var y in n) {
-        sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-        index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+  void setUpCalculatorPage(List<List<Evals>> input) {
+    Crashlytics.instance.log("setUpCalculatorPage");
+    calculatorPage.dropdownValues = [];
+    calculatorPage.dropdownValue = "";
+    calculatorPage.avarageList = [];
+    //TODO Look into this, why was input.length here?
+    //! Did really cause an issue if we only had one subject?
+    if (input != null && input != [[]] /*&& input.length != 1*/) {
+      double sum, index;
+      for (var n in input) {
+        calculatorPage.dropdownValues.add(capitalize(n[0].subject));
+        sum = 0;
+        index = 0;
+        for (var y in n) {
+          sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+          index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+        }
+        CalculatorData temp = new CalculatorData();
+        temp.count = index;
+        temp.sum = sum;
+        calculatorPage.avarageList.add(temp);
       }
-      CalculatorData temp = new CalculatorData();
-      temp.count = index;
-      temp.sum = sum;
-      calculatorPage.avarageList.add(temp);
+    }
+    if (calculatorPage.dropdownValues.length != 0)
+      calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
+    else
+      calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
+  }
+
+  Future<void> getExams(token, code) async {
+    Crashlytics.instance.log("getExams");
+    try {
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        //print("res.body ${res.body}");
+        var bodyJson = json.decode(res.body);
+        examsPage.allParsedExams = await parseExams(bodyJson);
+        examsPage.allParsedExams
+            .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+        await batchInsertExams(examsPage.allParsedExams);
+        //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+      }
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getExams');
+      return [];
     }
   }
-  if (calculatorPage.dropdownValues.length != 0)
-    calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
-  else
-    calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
-}
 
-Future<void> getExams(token, code) async {
-  try {
-    var headers = {
+  Future<Homework> setTeacherHomework(
+      int hwId, String token, String code) async {
+    Crashlytics.instance.log("setTeacherHomework");
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    double keepForDays = prefs.getDouble("howLongKeepDataForHw");
+
+    var header = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
+      'Content-Type': 'application/json',
     };
 
     var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
-        headers: headers);
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    if (res.statusCode == 200) {
-      //print("res.body ${res.body}");
-      var bodyJson = json.decode(res.body);
-      examsPage.allParsedExams = await parseExams(bodyJson);
-      examsPage.allParsedExams
-          .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
-      if (globals.offlineModeDb || globals.backgroundFetch) {
-        await batchInsertExams(examsPage.allParsedExams);
-      }
-      //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+        'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
+        headers: header);
+    if (res.statusCode != 200) {
+      print(res.statusCode);
+      return new Homework();
     }
-  } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'getExams');
-    return [];
-  }
-}
-
-Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  double keepForDays = prefs.getDouble("howLongKeepDataForHw");
-
-  var header = {
-    'Authorization': 'Bearer $token',
-    'User-Agent': '$agent',
-    'Content-Type': 'application/json',
-  };
-
-  var res = await http.get(
-      'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
-      headers: header);
-  if (res.statusCode != 200) {
-    print(res.statusCode);
-    return new Homework();
-  }
-  //Process response
-  var decoded = json.decode(res.body);
-  Homework temp = setHomework(decoded);
-  //*Add it to the database
-  //TODO batchify
-  if (globals.offlineModeDb || globals.backgroundFetch) {
+    //Process response
+    var decoded = json.decode(res.body);
+    Homework temp = setHomework(decoded);
+    //*Add it to the database
+    //TODO batchify
     await insertHomework(temp);
-  }
-  //Find the same ids
-  var matchedIds = homeworkPage.globalHomework.where((element) {
-    return element.id == temp.id;
-  });
-
-  //Should we keep it?
-  DateTime afterDue = temp.dueDate;
-  if (keepForDays != -1) {
-    afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
-  }
-
-  if (matchedIds.length == 0) {
-    if (afterDue.compareTo(DateTime.now()) >= 0) {
-      homeworkPage.globalHomework.add(temp);
-    }
-  } else {
-    var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+    //Find the same ids
+    var matchedIds = homeworkPage.globalHomework.where((element) {
       return element.id == temp.id;
     });
-    if (afterDue.compareTo(DateTime.now()) >= 0) {
-      homeworkPage.globalHomework[matchedindex] = temp;
+
+    //Should we keep it?
+    DateTime afterDue = temp.dueDate;
+    if (keepForDays != -1) {
+      afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
     }
+
+    if (matchedIds.length == 0) {
+      if (afterDue.compareTo(DateTime.now()) >= 0) {
+        homeworkPage.globalHomework.add(temp);
+      }
+    } else {
+      var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+        return element.id == temp.id;
+      });
+      if (afterDue.compareTo(DateTime.now()) >= 0) {
+        homeworkPage.globalHomework[matchedindex] = temp;
+      }
+    }
+    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    return temp;
   }
-  homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-  return temp;
 }

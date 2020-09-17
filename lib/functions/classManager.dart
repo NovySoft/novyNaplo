@@ -301,8 +301,8 @@ Future<Lesson> setLesson(var input, token, code) async {
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
   if (temp.teacherHomeworkId != null) {
-    temp.homework =
-        await setTeacherHomework(temp.teacherHomeworkId, token, code);
+    temp.homework = await NetworkHelper()
+        .setTeacherHomework(temp.teacherHomeworkId, token, code);
   } else {
     temp.homework = new Homework();
   }

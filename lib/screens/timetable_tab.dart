@@ -5,12 +5,12 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/timetable_detail_tab.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 
 List<List<Lesson>> lessonsList = [];
+List<DateTime> fetchedDayList = [];
 var selectedLessonList = [];
 int i = 0;
 DateTime _selectedDate = DateTime.now();
@@ -18,7 +18,6 @@ var alma = DateTime.monday;
 final CalendarWeekController _controller = CalendarWeekController();
 bool fade = true;
 
-//TODO Implement: https://github.com/mduccc/flutter_calendar_week
 class TimetableTab extends StatefulWidget {
   static String tag = 'timetable';
   @override
@@ -26,6 +25,8 @@ class TimetableTab extends StatefulWidget {
 }
 
 class _TimetableTabState extends State<TimetableTab> {
+  //TODO: Fetch not  yet fetched
+  //TODO: Notifications payload
   @override
   Widget build(BuildContext context) {
     selectedLessonList = List.from(lessonsList.where((element) {
@@ -38,6 +39,15 @@ class _TimetableTabState extends State<TimetableTab> {
     }));
     if (selectedLessonList.length != 0) {
       selectedLessonList = selectedLessonList[0];
+    }
+    if (fetchedDayList
+            .where((element) =>
+                element.day == _selectedDate.day &&
+                element.month == _selectedDate.month &&
+                element.year == _selectedDate.year)
+            .length ==
+        0) {
+      print("NOT FETCHED");
     }
     return Scaffold(
       drawer: getDrawer(TimetableTab.tag, context),
