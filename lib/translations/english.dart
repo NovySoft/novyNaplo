@@ -332,4 +332,5 @@ final Map<String, String> translation = {
   "October": "October",
   "November": "November",
   "December": "December",
+  "noReport": "You haven't got any reports",
 };

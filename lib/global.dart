@@ -11,6 +11,7 @@ import 'dart:io' show Platform;
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 var token; //Bearer token from api
+DateTime tokenDate; //The 'time' of token fetching
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
 NotificationAppLaunchDetails

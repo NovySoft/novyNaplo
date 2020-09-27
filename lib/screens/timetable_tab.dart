@@ -4,11 +4,14 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/screens/login_page.dart' as login;
 import 'package:novynaplo/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 
+//TODO: Implement: https://pub.dev/packages/flutter_rounded_date_picker jumpToDate
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
 var selectedLessonList = [];
@@ -17,6 +20,7 @@ DateTime _selectedDate = DateTime.now();
 var alma = DateTime.monday;
 final CalendarWeekController _controller = CalendarWeekController();
 bool fade = true;
+DateTime minDate;
 
 class TimetableTab extends StatefulWidget {
   static String tag = 'timetable';
@@ -40,14 +44,11 @@ class _TimetableTabState extends State<TimetableTab> {
     if (selectedLessonList.length != 0) {
       selectedLessonList = selectedLessonList[0];
     }
-    if (fetchedDayList
-            .where((element) =>
-                element.day == _selectedDate.day &&
-                element.month == _selectedDate.month &&
-                element.year == _selectedDate.year)
-            .length ==
-        0) {
-      print("NOT FETCHED");
+    if (minDate == null) {
+      minDate = DateTime.now().subtract(Duration(days: 365));
+      while (minDate.weekday != DateTime.monday) {
+        minDate = minDate.subtract(new Duration(days: 1));
+      }
     }
     return Scaffold(
       drawer: getDrawer(TimetableTab.tag, context),
@@ -58,9 +59,7 @@ class _TimetableTabState extends State<TimetableTab> {
         CalendarWeek(
           controller: _controller,
           height: 100,
-          minDate: DateTime.now().add(
-            Duration(days: -365),
-          ),
+          minDate: minDate,
           maxDate: DateTime.now().add(
             Duration(days: 365),
           ),
@@ -73,6 +72,27 @@ class _TimetableTabState extends State<TimetableTab> {
               _selectedDate = datetime;
               fade = true;
             });
+            if (fetchedDayList
+                    .where((item) =>
+                        item.day == _selectedDate.day &&
+                        item.month == _selectedDate.month &&
+                        item.year == _selectedDate.year)
+                    .length ==
+                0) {
+              showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return SpinnerDialog();
+                  });
+              lessonsList.addAll(
+                  await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
+              setState(() {
+                _selectedDate = datetime;
+              });
+              Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
+                  .pop();
+            }
           },
           onDateLongPressed: (DateTime datetime) async {
             setState(() {
@@ -83,6 +103,27 @@ class _TimetableTabState extends State<TimetableTab> {
               _selectedDate = datetime;
               fade = true;
             });
+            if (fetchedDayList
+                    .where((item) =>
+                        item.day == _selectedDate.day &&
+                        item.month == _selectedDate.month &&
+                        item.year == _selectedDate.year)
+                    .length ==
+                0) {
+              showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return SpinnerDialog();
+                  });
+              lessonsList.addAll(
+                  await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
+              setState(() {
+                _selectedDate = datetime;
+              });
+              Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
+                  .pop();
+            }
           },
           onWeekChanged: () {},
           weekendsStyle:

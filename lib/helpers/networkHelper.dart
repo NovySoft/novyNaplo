@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 String agent = config.currAgent;
 var response;
@@ -56,6 +57,7 @@ class NetworkHelper {
   }
 
   Future<String> getToken(code, user, pass) async {
+    //TODO: Look into this function, something is not right
     Crashlytics.instance.log("getToken, try $tokenIndex");
     tokenIndex++;
     try {
@@ -85,7 +87,9 @@ class NetworkHelper {
                 return parsedJson["error_description"];
               }
             } else {
+              globals.tokenDate = DateTime.now();
               globals.token = parsedJson["access_token"];
+              print("TokenOK");
               return "OK";
             }
             //print(status);
@@ -226,9 +230,104 @@ class NetworkHelper {
     return tempList;
   }
 
+  Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
+    Crashlytics.instance.log("getSpecifiedWeeksLesson");
+    String code = "";
+    String decryptedPass, decryptedUser, decryptedCode, status;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    code = decryptedCode;
+    if (DateTime.now().isAfter(
+      globals.tokenDate.add(
+        Duration(minutes: 20),
+      ),
+    )) {
+      var passKey = encrypt.Key.fromUtf8(config.passKey);
+      var userKey = encrypt.Key.fromUtf8(config.userKey);
+      final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+      final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedPass =
+          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+      for (var i = 0; i < 2; i++) {
+        status = await NetworkHelper()
+            .getToken(decryptedCode, decryptedUser, decryptedPass);
+      }
+    }
+    List<List<Lesson>> output = [];
+    for (var n = 0; n < 7; n++) {
+      output.add([]);
+    }
+    //calculate when was monday this week
+    int monday = 1;
+    int sunday = 7;
+    DateTime now = date;
+    timetablePage.fetchedDayList.add(now);
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    String startDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
+    now = date;
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+    String endDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
+    //Make request
+    var header = {
+      'Authorization': 'Bearer ${globals.token}',
+      'User-Agent': '$agent',
+      'Content-Type': 'application/json',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
+        headers: header);
+    if (res.statusCode != 200) {
+      print(res.statusCode);
+    }
+    //Process response
+    var decoded = json.decode(res.body);
+    List<Lesson> tempLessonList = [];
+    List<Lesson> tempLessonListForDB = [];
+    for (var n in decoded) {
+      tempLessonList.add(await setLesson(n, globals.token, code));
+    }
+    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+    int index = 0;
+    if (tempLessonList != null) {
+      if (tempLessonList.length != 0) {
+        int beforeDay = tempLessonList[0].startDate.day;
+        //Just a matrix
+        for (var n in tempLessonList) {
+          if (n.startDate.day != beforeDay) {
+            index++;
+            beforeDay = n.startDate.day;
+          }
+          output[index].add(n);
+          tempLessonListForDB.add(n);
+        }
+        await batchInsertLessons(tempLessonListForDB);
+      }
+    }
+    return output;
+  }
+
   Future<List<List<Lesson>>> getThisWeeksLessons(token, code) async {
     Crashlytics.instance.log("getThisWeeksLessons");
-    timetablePage.fetchedDayList = [];
     List<List<Lesson>> output = [];
     for (var n = 0; n < 7; n++) {
       output.add([]);
@@ -303,9 +402,7 @@ class NetworkHelper {
     calculatorPage.dropdownValues = [];
     calculatorPage.dropdownValue = "";
     calculatorPage.avarageList = [];
-    //TODO Look into this, why was input.length here?
-    //! Did really cause an issue if we only had one subject?
-    if (input != null && input != [[]] /*&& input.length != 1*/) {
+    if (input != null && input != [[]]) {
       double sum, index;
       for (var n in input) {
         calculatorPage.dropdownValues.add(capitalize(n[0].subject));
