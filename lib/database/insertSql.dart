@@ -596,8 +596,9 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
   //print("BATCH INSERTED NOTICES");
 }
 
-Future<void> batchInsertLessons(List<Lesson> lessonList) async {
-  Crashlytics.instance.log("batchInsertEval");
+Future<void> batchInsertLessons(List<Lesson> lessonList,
+    {bool lookAtDate = false}) async {
+  Crashlytics.instance.log("batchInsertLessons");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -605,12 +606,36 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
 
   //Get all evals, and see whether we should be just replacing
   List<Lesson> allTimetable = await getAllTimetable();
+  DateTime startMonday, endSunday;
+  if (lookAtDate) {
+    DateTime now = new DateTime.now();
+    now = new DateTime(now.year, now.month, now.day);
+    int monday = 1;
+    int sunday = 7;
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+    }
+    startMonday = now;
+    now = new DateTime.now();
+    now = new DateTime(now.year, now.month, now.day);
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+    }
+    endSunday = now;
+  }
   for (var lesson in lessonList) {
+    if (lookAtDate) {
+      if (!(lesson.date.compareTo(startMonday) >= 0 &&
+          lesson.date.compareTo(endSunday) <= 0)) {
+        return;
+      }
+    }
     var matchedLessons = allTimetable.where(
       (element) {
         return (element.id == lesson.id && element.subject == lesson.subject);
       },
     );
+
     if (matchedLessons.length == 0) {
       inserted = true;
       batch.insert(
@@ -677,7 +702,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList) async {
 }
 
 Future<void> batchInsertExams(List<Exam> examList) async {
-  Crashlytics.instance.log("batchInsertExam");
+  Crashlytics.instance.log("batchInsertExams");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -744,7 +769,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
 }
 
 Future<void> batchInsertEvents(List<Event> eventList) async {
-  Crashlytics.instance.log("batchInsertExam");
+  Crashlytics.instance.log("batchInsertEvents");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;

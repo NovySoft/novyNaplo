@@ -144,7 +144,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readTimetable");
       });
       timetablePage.lessonsList =
-          await getWeekLessonsFromLessons(await getAllTimetable());
+          await makeTimetableMatrix(await getAllTimetable());
       //Sort
       marksPage.allParsedByDate
           .sort((a, b) => b.createDateString.compareTo(a.createDateString));

@@ -320,7 +320,10 @@ class NetworkHelper {
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        await batchInsertLessons(tempLessonListForDB);
+        await batchInsertLessons(
+          tempLessonListForDB,
+          lookAtDate: true,
+        );
       }
     }
     return output;

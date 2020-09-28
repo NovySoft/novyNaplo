@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/errorHandlingHelper.dart';
 import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -110,12 +111,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ErrorWidget.builder = ErrorMessageBuilder.build();
     globals.globalContext = context;
     return new DynamicTheme(
       defaultBrightness: Brightness.dark,
       data: (brightness) => ThemeHelper().getTheme(brightness),
       themedWidgetBuilder: (context, theme) {
         return MaterialApp(
+          builder: (BuildContext context, Widget widget) {
+            ErrorWidget.builder = ErrorMessageBuilder.build();
+            return widget;
+          },
           navigatorKey: navigatorKey,
           theme: theme,
           title: 'Novy Napló',

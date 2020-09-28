@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
@@ -158,12 +157,6 @@ Future<List<Lesson>> getAllTimetable() async {
   });
   //TODO LOOK INTO THIS
   for (var n in outputTempList) {
-    if (timetablePage.fetchedDayList
-            .where((element) => element.day == n.date.day)
-            .length ==
-        0) {
-      timetablePage.fetchedDayList.add(n.date);
-    }
     if (n.teacherHomeworkId != null) {
       n.homework = await getHomeworkById(n.teacherHomeworkId);
     } else if (n.homeWorkId != null) {
@@ -174,6 +167,7 @@ Future<List<Lesson>> getAllTimetable() async {
 }
 
 Future<Homework> getHomeworkById(int id) async {
+  //TODO If not found fetch it with networkHelper
   final Database db = await mainSql.database;
   var answer = await db.rawQuery(
       "select * from Homework where id = ? or databaseId = ?;", [id, id]);

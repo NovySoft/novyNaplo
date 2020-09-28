@@ -29,7 +29,6 @@ class TimetableTab extends StatefulWidget {
 }
 
 class _TimetableTabState extends State<TimetableTab> {
-  //TODO: Fetch not  yet fetched
   //TODO: Notifications payload
   @override
   Widget build(BuildContext context) {
@@ -238,6 +237,13 @@ class _TimetableTabState extends State<TimetableTab> {
                               height: 100,
                             );
                           }
+                          Color color;
+                          if (index >= marksPage.colors.length) {
+                            color = getRandomColors(1)[0];
+                            marksPage.colors.add(color);
+                          } else {
+                            color = marksPage.colors[index];
+                          }
                           return SafeArea(
                             top: false,
                             bottom: false,
@@ -246,12 +252,12 @@ class _TimetableTabState extends State<TimetableTab> {
                               hasHomework:
                                   selectedLessonList[index].homework.content !=
                                       null,
-                              color: marksPage.colors[index],
+                              color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],
                               onPressed: TimetableDetailTab(
                                 icon: selectedLessonList[index].homework.icon,
-                                color: marksPage.colors[index],
+                                color: color,
                                 lessonInfo: selectedLessonList[index],
                               ),
                             ),
