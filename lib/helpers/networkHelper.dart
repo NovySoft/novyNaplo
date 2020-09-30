@@ -234,6 +234,7 @@ class NetworkHelper {
     Crashlytics.instance.log("getSpecifiedWeeksLesson");
     String code = "";
     String decryptedPass, decryptedUser, decryptedCode, status;
+    status = "";
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var codeKey = encrypt.Key.fromUtf8(config.codeKey);
     final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));

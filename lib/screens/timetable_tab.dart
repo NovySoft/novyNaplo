@@ -11,7 +11,6 @@ import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 
-//TODO: Implement: https://pub.dev/packages/flutter_rounded_date_picker jumpToDate
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
 var selectedLessonList = [];
