@@ -231,10 +231,19 @@ Future<void> insertAvarage(Avarage avarage) async {
           n.classValue != avarage.classValue) {
         await deleteFromDb(n.databaseId, "Avarage");
         if (globals.notifications) {
-          double diffValue = avarage.ownValue - n.ownValue;
-          String diff = diffValue > 0
-              ? ("+${diffValue.toStringAsFixed(3)}")
-              : diffValue.toStringAsFixed(3);
+          String diff;
+          if (avarage.ownValue == null || n.ownValue == null) {
+            if (avarage.ownValue != null && n.ownValue == null) {
+              diff = "+${avarage.ownValue.toStringAsFixed(3)}";
+            } else {
+              diff = "null";
+            }
+          } else {
+            double diffValue = avarage.ownValue - n.ownValue;
+            diff = diffValue > 0
+                ? ("+${diffValue.toStringAsFixed(3)}")
+                : diffValue.toStringAsFixed(3);
+          }
           notifId = notifId == 111 ? notifId + 2 : notifId + 1;
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
@@ -505,10 +514,19 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           if (globals.notifications) {
-            double diffValue = avarage.ownValue - n.ownValue;
-            String diff = diffValue > 0
-                ? ("+${diffValue.toStringAsFixed(3)}")
-                : diffValue.toStringAsFixed(3);
+            String diff;
+            if (avarage.ownValue == null || n.ownValue == null) {
+              if (avarage.ownValue != null && n.ownValue == null) {
+                diff = "+${avarage.ownValue.toStringAsFixed(3)}";
+              } else {
+                diff = "null";
+              }
+            } else {
+              double diffValue = avarage.ownValue - n.ownValue;
+              diff = diffValue > 0
+                  ? ("+${diffValue.toStringAsFixed(3)}")
+                  : diffValue.toStringAsFixed(3);
+            }
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
