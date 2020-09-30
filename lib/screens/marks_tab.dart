@@ -222,7 +222,7 @@ class MarksTabState extends State<MarksTab>
                     tag: index,
                     child: HeroAnimatingSubjectsCard(
                       subTitle: getMarkCardSubtitle(
-                        eval: allParsedByDate[index],
+                        eval: allParsedBySubject[listIndex][index],
                       ),
                       title: capitalize(
                               allParsedBySubject[listIndex][index].subject) +
@@ -251,7 +251,7 @@ class MarksTabState extends State<MarksTab>
               tag: index,
               child: HeroAnimatingSubjectsCard(
                 subTitle: getMarkCardSubtitle(
-                  eval: allParsedByDate[index],
+                  eval: allParsedBySubject[listIndex][index],
                 ),
                 title:
                     capitalize(allParsedBySubject[listIndex][index].subject) +

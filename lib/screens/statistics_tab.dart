@@ -42,6 +42,11 @@ class AV {
   double diffSinceLast;
   String subject = "";
   double count = 0;
+
+  @override
+  String toString() {
+    return subject + ":" + value.toStringAsFixed(3);
+  }
 }
 
 class LinearPiData {
@@ -96,6 +101,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
+                //TODO Move these functions from here
                 getAllSubjectsAv(allParsedSubjectsWithoutZeros);
                 getWorstAndBest(allParsedSubjectsWithoutZeros);
                 getPieChartOrBarChart(allParsedSubjects);

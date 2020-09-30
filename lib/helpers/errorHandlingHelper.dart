@@ -57,86 +57,92 @@ class ErrorMessage {
 
 class BlueScreenErrorMessageTheme {
   static Widget build(ErrorMessage errorMessage) {
-    return Directionality(
-        textDirection: TextDirection.ltr,
-        child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              Container(
-                  padding: EdgeInsets.only(top: 24),
-                  color: Color(0xff2067b2),
-                  child: Column(textDirection: TextDirection.ltr, children: <
-                      Widget>[
-                    Container(
-                        constraints: BoxConstraints(minWidth: double.infinity),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            textDirection: TextDirection.ltr,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 32.0, horizontal: 32),
-                                child: Text(
-                                  "):",
-                                  textDirection: TextDirection.ltr,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 100,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Container(
-                                  padding: EdgeInsets.all(12),
-                                  constraints:
-                                      BoxConstraints(minWidth: double.infinity),
-                                  child: Text(
-                                    errorMessage.exception,
-                                    textDirection: TextDirection.ltr,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  )),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 16),
-                                child: Text(
-                                  errorMessage.title,
-                                  textDirection: TextDirection.ltr,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 36),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  errorMessage.message,
-                                  textDirection: TextDirection.ltr,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 16),
-                                child: Text(
-                                  errorMessage.info,
-                                  textDirection: TextDirection.ltr,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                ),
-                              )
-                            ])),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        children: buildRowStacktraceWidget(errorMessage),
+    return Scaffold(
+      body: Directionality(
+          textDirection: TextDirection.ltr,
+          child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                Container(
+                    padding: EdgeInsets.only(top: 24),
+                    color: Color(0xff2067b2),
+                    child: Column(
                         textDirection: TextDirection.ltr,
-                      ),
-                    )
-                  ]))
-            ]));
+                        children: <Widget>[
+                          Container(
+                              constraints:
+                                  BoxConstraints(minWidth: double.infinity),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 32.0, horizontal: 32),
+                                      child: Text(
+                                        "):",
+                                        textDirection: TextDirection.ltr,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 100,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Container(
+                                        padding: EdgeInsets.all(12),
+                                        constraints: BoxConstraints(
+                                            minWidth: double.infinity),
+                                        child: Text(
+                                          errorMessage.exception,
+                                          textDirection: TextDirection.ltr,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        )),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 16),
+                                      child: Text(
+                                        errorMessage.title,
+                                        textDirection: TextDirection.ltr,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 36),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: Text(
+                                        errorMessage.message,
+                                        textDirection: TextDirection.ltr,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 16),
+                                      child: Text(
+                                        errorMessage.info,
+                                        textDirection: TextDirection.ltr,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                    )
+                                  ])),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Column(
+                              children: buildRowStacktraceWidget(errorMessage),
+                              textDirection: TextDirection.ltr,
+                            ),
+                          )
+                        ]))
+              ])),
+    );
   }
 
   static List<Widget> buildRowStacktraceWidget(ErrorMessage errorMessage) {
