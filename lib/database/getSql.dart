@@ -155,6 +155,7 @@ Future<List<Lesson>> getAllTimetable() async {
     temp.endDate = DateTime.parse(temp.endDateString);
     return temp;
   });
+  //TODO LOOK INTO THIS
   for (var n in outputTempList) {
     if (n.teacherHomeworkId != null) {
       n.homework = await getHomeworkById(n.teacherHomeworkId);
@@ -166,6 +167,7 @@ Future<List<Lesson>> getAllTimetable() async {
 }
 
 Future<Homework> getHomeworkById(int id) async {
+  //TODO If not found fetch it with networkHelper
   final Database db = await mainSql.database;
   var answer = await db.rawQuery(
       "select * from Homework where id = ? or databaseId = ?;", [id, id]);

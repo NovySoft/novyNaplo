@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,8 +64,7 @@ class MarksTabState extends State<MarksTab>
     _tabController = new TabController(vsync: this, length: 2);
     //Payload handling and fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if ((globals.backgroundFetch || globals.offlineModeDb) &&
-          !globals.didFetch) {
+      if (!globals.didFetch) {
         globals.didFetch = true;
         _androidRefreshKey.currentState?.show();
       }
@@ -90,6 +90,26 @@ class MarksTabState extends State<MarksTab>
   Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
     Crashlytics.instance.log("RefreshData");
+    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(getTranslatedString("status")),
+            content: Text(getTranslatedString("noNet")),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
     await notifications.flutterLocalNotificationsPlugin.show(
       -111,
       getTranslatedString("gettingData"),
@@ -97,22 +117,19 @@ class MarksTabState extends State<MarksTab>
       platformChannelSpecificsGetNotif,
     );
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    ////fix this
-    //! won't fix
-    //!It only works when i put his ting here
     var decryptedPass, decryptedUser, decryptedCode, status;
+    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    var passKey = encrypt.Key.fromUtf8(config.passKey);
+    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+    var userKey = encrypt.Key.fromUtf8(config.userKey);
+    final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+    final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+    decryptedPass =
+        passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
     for (var i = 0; i < 2; i++) {
-      final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-      var passKey = encrypt.Key.fromUtf8(config.passKey);
-      var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-      var userKey = encrypt.Key.fromUtf8(config.userKey);
-      final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-      final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-      final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-      decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-      decryptedPass =
-          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
       status = await NetworkHelper()
           .getToken(decryptedCode, decryptedUser, decryptedPass);
     }
@@ -131,6 +148,11 @@ class MarksTabState extends State<MarksTab>
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
+    if (index >= allParsedByDate.length) {
+      return SizedBox(
+        height: 150,
+      );
+    }
     Color color = getMarkCardColor(
       eval: allParsedByDate[index],
       index: index,
@@ -138,28 +160,31 @@ class MarksTabState extends State<MarksTab>
     return SafeArea(
       top: false,
       bottom: false,
-      child: Hero(
-          tag: index,
-          child: HeroAnimatingMarksCard(
-            eval: allParsedByDate[index],
-            iconData: allParsedByDate[index].icon,
-            subTitle: getMarkCardSubtitle(
-              eval: allParsedByDate[index],
-            ), //capitalize(allParsedByDate[index].theme),
-            title: capitalize(allParsedByDate[index].subject +
-                " " +
-                allParsedByDate[index].value),
-            color: color,
-            heroAnimation: AlwaysStoppedAnimation(0),
-            onPressed: MarksDetailTab(
-              eval: allParsedByDate[index],
-              color: color,
-            ),
-          )),
+      child: HeroAnimatingMarksCard(
+        eval: allParsedByDate[index],
+        iconData: allParsedByDate[index].icon,
+        subTitle: getMarkCardSubtitle(
+          eval: allParsedByDate[index],
+        ), //capitalize(allParsedByDate[index].theme),
+        title: capitalize(allParsedByDate[index].subject +
+            " " +
+            allParsedByDate[index].value),
+        color: color,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: MarksDetailTab(
+          eval: allParsedByDate[index],
+          color: color,
+        ),
+      ),
     );
   }
 
   Widget _subjectListBuilder(BuildContext context, int listIndex) {
+    if (listIndex >= allParsedBySubject.length) {
+      return SizedBox(
+        height: 150,
+      );
+    }
     return ListView.builder(
       itemCount: allParsedBySubject[listIndex].length,
       physics: NeverScrollableScrollPhysics(),
@@ -201,22 +226,19 @@ class MarksTabState extends State<MarksTab>
                 child: SafeArea(
                   top: false,
                   bottom: false,
-                  child: Hero(
-                    tag: index,
-                    child: HeroAnimatingSubjectsCard(
-                      subTitle: getMarkCardSubtitle(
-                        eval: allParsedByDate[index],
-                      ),
-                      title: capitalize(
-                              allParsedBySubject[listIndex][index].subject) +
-                          " " +
-                          allParsedBySubject[listIndex][index].value,
+                  child: HeroAnimatingSubjectsCard(
+                    subTitle: getMarkCardSubtitle(
+                      eval: allParsedBySubject[listIndex][index],
+                    ),
+                    title: capitalize(
+                            allParsedBySubject[listIndex][index].subject) +
+                        " " +
+                        allParsedBySubject[listIndex][index].value,
+                    color: color,
+                    heroAnimation: AlwaysStoppedAnimation(0),
+                    onPressed: MarksDetailTab(
+                      eval: allParsedBySubject[listIndex][index],
                       color: color,
-                      heroAnimation: AlwaysStoppedAnimation(0),
-                      onPressed: MarksDetailTab(
-                        eval: allParsedBySubject[listIndex][index],
-                        color: color,
-                      ),
                     ),
                   ),
                 ),
@@ -230,22 +252,18 @@ class MarksTabState extends State<MarksTab>
           child: SafeArea(
             top: false,
             bottom: false,
-            child: Hero(
-              tag: index,
-              child: HeroAnimatingSubjectsCard(
-                subTitle: getMarkCardSubtitle(
-                  eval: allParsedByDate[index],
-                ),
-                title:
-                    capitalize(allParsedBySubject[listIndex][index].subject) +
-                        " " +
-                        allParsedBySubject[listIndex][index].value,
+            child: HeroAnimatingSubjectsCard(
+              subTitle: getMarkCardSubtitle(
+                eval: allParsedBySubject[listIndex][index],
+              ),
+              title: capitalize(allParsedBySubject[listIndex][index].subject) +
+                  " " +
+                  allParsedBySubject[listIndex][index].value,
+              color: color,
+              heroAnimation: AlwaysStoppedAnimation(0),
+              onPressed: MarksDetailTab(
+                eval: allParsedBySubject[listIndex][index],
                 color: color,
-                heroAnimation: AlwaysStoppedAnimation(0),
-                onPressed: MarksDetailTab(
-                  eval: allParsedBySubject[listIndex][index],
-                  color: color,
-                ),
               ),
             ),
           ),
@@ -270,39 +288,37 @@ class MarksTabState extends State<MarksTab>
           controller: _tabController,
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
-              if (allParsedByDate.length == 0) {
-                return noMarks();
-              } else {
-                return RefreshIndicator(
-                  key: _androidRefreshKey,
-                  onRefresh: () async {
-                    await _refreshData();
-                  },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: allParsedByDate.length,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    itemBuilder: _dateListBuilder,
-                  ),
-                );
-              }
+              return RefreshIndicator(
+                key: _androidRefreshKey,
+                onRefresh: () async {
+                  await _refreshData();
+                },
+                child: allParsedByDate.length == 0
+                    ? noMarks()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allParsedByDate.length +
+                            (globals.adsEnabled ? 1 : 0),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        itemBuilder: _dateListBuilder,
+                      ),
+              );
             } else {
-              if (allParsedByDate.length == 0) {
-                return noMarks();
-              } else {
-                return RefreshIndicator(
-                  key: _androidRefreshKeyTwo,
-                  onRefresh: () async {
-                    await _refreshData();
-                  },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: allParsedBySubject.length,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    itemBuilder: _subjectListBuilder,
-                  ),
-                );
-              }
+              return RefreshIndicator(
+                key: _androidRefreshKeyTwo,
+                onRefresh: () async {
+                  await _refreshData();
+                },
+                child: allParsedByDate.length == 0
+                    ? noMarks()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allParsedBySubject.length +
+                            (globals.adsEnabled ? 1 : 0),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        itemBuilder: _subjectListBuilder,
+                      ),
+              );
             }
           }).toList()),
     );

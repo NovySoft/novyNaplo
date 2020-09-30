@@ -6,7 +6,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/database/deleteSql.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
 
@@ -18,11 +17,8 @@ class DatabaseSettings extends StatefulWidget {
 }
 
 class _DatabaseSettingsState extends State<DatabaseSettings> {
-  bool dbSwitch = globals.offlineModeDb;
-
   @override
   Widget build(BuildContext context) {
-    dbSwitch = globals.offlineModeDb;
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +26,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 5 + globals.adModifier,
+          itemCount: 4 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -54,37 +50,6 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                 );
                 break;
               case 1:
-                return ListTile(
-                  title: Text(getTranslatedString("offlineDb")),
-                  trailing: Switch(
-                    onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        dbSwitch = isOn;
-                        globals.offlineModeDb = isOn;
-                      });
-                      if (!isOn &&
-                          (globals.backgroundFetch || globals.notifications)) {
-                        _ackAlert(
-                          context,
-                          getTranslatedString("dbOffWarning"),
-                        );
-                        setState(() {
-                          globals.backgroundFetch = false;
-                          prefs.setBool("backgroundFetch", false);
-                          globals.notifications = false;
-                          prefs.setBool("notifications", false);
-                        });
-                      }
-                      prefs.setBool("offlineModeDb", isOn);
-                      Crashlytics.instance.setBool("offlineModeDb", isOn);
-                    },
-                    value: dbSwitch,
-                  ),
-                );
-                break;
-              case 2:
                 return ListTile(
                   title: Center(
                     child: SizedBox(
@@ -142,7 +107,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                   ),
                 );
                 break;
-              case 3:
+              case 2:
                 return ListTile(
                   title: Center(
                     child: SizedBox(
@@ -169,7 +134,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                   ),
                 );
                 break;
-              case 4:
+              case 3:
                 return ListTile(
                   title: Center(
                     child: SizedBox(

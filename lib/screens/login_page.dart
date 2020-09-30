@@ -225,8 +225,6 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("password", encryptedPass);
       prefs.setString("code", encryptedCode);
       prefs.setString("user", encryptedUser);
-      FirebaseAnalytics().setUserProperty(name: "School", value: code);
-      Crashlytics.instance.setString("School", code);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
       Crashlytics.instance.setString("Version", config.currentAppVersionCode);

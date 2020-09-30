@@ -14,7 +14,7 @@ import 'package:novynaplo/translations/translationProvider.dart';
 
 var allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
-var colors;
+
 final List<Tab> statTabs = <Tab>[
   Tab(
     text: getTranslatedString("general"),
@@ -42,6 +42,11 @@ class AV {
   double diffSinceLast;
   String subject = "";
   double count = 0;
+
+  @override
+  String toString() {
+    return subject + ":" + value.toStringAsFixed(3);
+  }
 }
 
 class LinearPiData {
@@ -96,6 +101,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
+                //TODO Move these functions from here
                 getAllSubjectsAv(allParsedSubjectsWithoutZeros);
                 getWorstAndBest(allParsedSubjectsWithoutZeros);
                 getPieChartOrBarChart(allParsedSubjects);
@@ -562,9 +568,6 @@ class _StatisticsTabState extends State<StatisticsTab>
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
-    allParsedSubjectsWithoutZeros = List.from(
-      allParsedSubjects.where((element) => element[0].numberValue != 0),
-    );
     super.initState();
   }
 
@@ -586,7 +589,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
-    Color currColor = colors[index];
+    Color currColor = marksPage.colors[index];
     if (index == 0) {
       return SafeArea(
         top: false,

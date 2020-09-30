@@ -21,18 +21,20 @@ import 'package:http/http.dart' as http;
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 String agent = config.currAgent;
 var response;
 int tokenIndex = 0;
 
-//TODO: UPDATE TO API V3
+//TODO: UPDATE TO API V3, ONLY WHEN IT WILL BE STABLE TO USE
 class NetworkHelper {
   Future<ConnectivityResult> isNetworkAvailable() async {
     return await (Connectivity().checkConnectivity());
   }
 
   Future<void> getEvents(token, code) async {
+    Crashlytics.instance.log("getEvents");
     try {
       var headers = {
         'Authorization': 'Bearer $token',
@@ -47,9 +49,7 @@ class NetworkHelper {
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
         eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
-        if (globals.offlineModeDb || globals.backgroundFetch) {
-          await batchInsertEvents(eventsPage.allParsedEvents);
-        }
+        await batchInsertEvents(eventsPage.allParsedEvents);
       }
     } catch (e, s) {
       Crashlytics.instance.recordError(e, s, context: 'getEvents');
@@ -57,6 +57,8 @@ class NetworkHelper {
   }
 
   Future<String> getToken(code, user, pass) async {
+    //TODO: Look into this function, something is not right
+    Crashlytics.instance.log("getToken, try $tokenIndex");
     tokenIndex++;
     try {
       if (code == "" || user == "" || pass == "") {
@@ -85,7 +87,9 @@ class NetworkHelper {
                 return parsedJson["error_description"];
               }
             } else {
+              globals.tokenDate = DateTime.now();
               globals.token = parsedJson["access_token"];
+              print("TokenOK");
               return "OK";
             }
             //print(status);
@@ -134,6 +138,7 @@ class NetworkHelper {
   }
 
   Future<void> getStudentInfo(token, code) async {
+    Crashlytics.instance.log("getStudentInfo");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -159,14 +164,17 @@ class NetworkHelper {
           sortByDateAndSubject(List.from(marksPage.allParsedByDate));
       noticesPage.allParsedNotices = await parseNotices(globals.dJson);
       statisticsPage.allParsedSubjects = categorizeSubjects();
-      statisticsPage.colors =
-          getRandomColors(statisticsPage.allParsedSubjects.length);
-      timetablePage.lessonsList = await getWeekLessons(token, code);
+      statisticsPage.allParsedSubjectsWithoutZeros = List.from(
+        statisticsPage.allParsedSubjects
+            .where((element) => element[0].numberValue != 0),
+      );
+      timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }
   }
 
   Future<void> getAvarages(var token, code) async {
+    Crashlytics.instance.log("getAvarages");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -185,6 +193,7 @@ class NetworkHelper {
   }
 
   Future<dynamic> getSchoolList() async {
+    Crashlytics.instance.log("getSchoolList");
     List<School> tempList = [];
     School tempSchool = new School();
     var client = http.Client();
@@ -221,7 +230,108 @@ class NetworkHelper {
     return tempList;
   }
 
-  Future<List<List<Lesson>>> getWeekLessons(token, code) async {
+  Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
+    Crashlytics.instance.log("getSpecifiedWeeksLesson");
+    String code = "";
+    String decryptedPass, decryptedUser, decryptedCode, status;
+    status = "";
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
+    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
+    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    code = decryptedCode;
+    if (DateTime.now().isAfter(
+      globals.tokenDate.add(
+        Duration(minutes: 20),
+      ),
+    )) {
+      var passKey = encrypt.Key.fromUtf8(config.passKey);
+      var userKey = encrypt.Key.fromUtf8(config.userKey);
+      final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
+      final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedPass =
+          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+      for (var i = 0; i < 2; i++) {
+        status = await NetworkHelper()
+            .getToken(decryptedCode, decryptedUser, decryptedPass);
+      }
+    }
+    List<List<Lesson>> output = [];
+    for (var n = 0; n < 7; n++) {
+      output.add([]);
+    }
+    //calculate when was monday this week
+    int monday = 1;
+    int sunday = 7;
+    DateTime now = date;
+    timetablePage.fetchedDayList.add(now);
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    String startDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
+    now = date;
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+    String endDate = now.year.toString() +
+        "-" +
+        now.month.toString() +
+        "-" +
+        now.day.toString();
+    //Make request
+    var header = {
+      'Authorization': 'Bearer ${globals.token}',
+      'User-Agent': '$agent',
+      'Content-Type': 'application/json',
+    };
+
+    var res = await http.get(
+        'https://$code.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=$startDate&toDate=$endDate',
+        headers: header);
+    if (res.statusCode != 200) {
+      print(res.statusCode);
+    }
+    //Process response
+    var decoded = json.decode(res.body);
+    List<Lesson> tempLessonList = [];
+    List<Lesson> tempLessonListForDB = [];
+    for (var n in decoded) {
+      tempLessonList.add(await setLesson(n, globals.token, code));
+    }
+    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+    int index = 0;
+    if (tempLessonList != null) {
+      if (tempLessonList.length != 0) {
+        int beforeDay = tempLessonList[0].startDate.day;
+        //Just a matrix
+        for (var n in tempLessonList) {
+          if (n.startDate.day != beforeDay) {
+            index++;
+            beforeDay = n.startDate.day;
+          }
+          output[index].add(n);
+          tempLessonListForDB.add(n);
+        }
+        await batchInsertLessons(
+          tempLessonListForDB,
+          lookAtDate: true,
+        );
+      }
+    }
+    return output;
+  }
+
+  Future<List<List<Lesson>>> getThisWeeksLessons(token, code) async {
+    Crashlytics.instance.log("getThisWeeksLessons");
     List<List<Lesson>> output = [];
     for (var n = 0; n < 7; n++) {
       output.add([]);
@@ -230,9 +340,10 @@ class NetworkHelper {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
-
+    timetablePage.fetchedDayList.add(now);
     while (now.weekday != monday) {
       now = now.subtract(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
     }
     String startDate = now.year.toString() +
         "-" +
@@ -242,7 +353,9 @@ class NetworkHelper {
     now = new DateTime.now();
     while (now.weekday != sunday) {
       now = now.add(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
     }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     String endDate = now.year.toString() +
         "-" +
         now.month.toString() +
@@ -282,118 +395,116 @@ class NetworkHelper {
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        if (globals.offlineModeDb || globals.backgroundFetch) {
-          await batchInsertLessons(tempLessonListForDB);
-        }
+        await batchInsertLessons(tempLessonListForDB);
       }
     }
     return output;
   }
-}
 
-void setUpCalculatorPage(List<List<Evals>> input) {
-  calculatorPage.dropdownValues = [];
-  calculatorPage.dropdownValue = "";
-  calculatorPage.avarageList = [];
-  if (input != null && input != [[]] && input.length != 1) {
-    double sum, index;
-    for (var n in input) {
-      calculatorPage.dropdownValues.add(capitalize(n[0].subject));
-      sum = 0;
-      index = 0;
-      for (var y in n) {
-        sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-        index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+  void setUpCalculatorPage(List<List<Evals>> input) {
+    Crashlytics.instance.log("setUpCalculatorPage");
+    calculatorPage.dropdownValues = [];
+    calculatorPage.dropdownValue = "";
+    calculatorPage.avarageList = [];
+    if (input != null && input != [[]]) {
+      double sum, index;
+      for (var n in input) {
+        calculatorPage.dropdownValues.add(capitalize(n[0].subject));
+        sum = 0;
+        index = 0;
+        for (var y in n) {
+          sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+          index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+        }
+        CalculatorData temp = new CalculatorData();
+        temp.count = index;
+        temp.sum = sum;
+        calculatorPage.avarageList.add(temp);
       }
-      CalculatorData temp = new CalculatorData();
-      temp.count = index;
-      temp.sum = sum;
-      calculatorPage.avarageList.add(temp);
+    }
+    if (calculatorPage.dropdownValues.length != 0)
+      calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
+    else
+      calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
+  }
+
+  Future<void> getExams(token, code) async {
+    Crashlytics.instance.log("getExams");
+    try {
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'User-Agent': '$agent',
+      };
+
+      var res = await http.get(
+          'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
+          headers: headers);
+      if (res.statusCode != 200)
+        throw Exception('get error: statusCode= ${res.statusCode}');
+      if (res.statusCode == 200) {
+        //print("res.body ${res.body}");
+        var bodyJson = json.decode(res.body);
+        examsPage.allParsedExams = await parseExams(bodyJson);
+        examsPage.allParsedExams
+            .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+        await batchInsertExams(examsPage.allParsedExams);
+        //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+      }
+    } catch (e, s) {
+      Crashlytics.instance.recordError(e, s, context: 'getExams');
+      return [];
     }
   }
-  if (calculatorPage.dropdownValues.length != 0)
-    calculatorPage.dropdownValue = calculatorPage.dropdownValues[0];
-  else
-    calculatorPage.dropdownValue = getTranslatedString("possibleNoMarks");
-}
 
-Future<void> getExams(token, code) async {
-  try {
-    var headers = {
+  Future<Homework> setTeacherHomework(
+      int hwId, String token, String code) async {
+    Crashlytics.instance.log("setTeacherHomework");
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    double keepForDays = prefs.getDouble("howLongKeepDataForHw");
+
+    var header = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
+      'Content-Type': 'application/json',
     };
 
     var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/BejelentettSzamonkeresAmi?DatumTol=null&DatumIg=null',
-        headers: headers);
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    if (res.statusCode == 200) {
-      //print("res.body ${res.body}");
-      var bodyJson = json.decode(res.body);
-      examsPage.allParsedExams = await parseExams(bodyJson);
-      examsPage.allParsedExams
-          .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
-      if (globals.offlineModeDb || globals.backgroundFetch) {
-        await batchInsertExams(examsPage.allParsedExams);
-      }
-      //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
+        'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
+        headers: header);
+    if (res.statusCode != 200) {
+      print(res.statusCode);
+      return new Homework();
     }
-  } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'getExams');
-    return [];
-  }
-}
-
-Future<Homework> setTeacherHomework(int hwId, String token, String code) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  double keepForDays = prefs.getDouble("howLongKeepDataForHw");
-
-  var header = {
-    'Authorization': 'Bearer $token',
-    'User-Agent': '$agent',
-    'Content-Type': 'application/json',
-  };
-
-  var res = await http.get(
-      'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
-      headers: header);
-  if (res.statusCode != 200) {
-    print(res.statusCode);
-    return new Homework();
-  }
-  //Process response
-  var decoded = json.decode(res.body);
-  Homework temp = setHomework(decoded);
-  //*Add it to the database
-  //TODO batchify
-  if (globals.offlineModeDb || globals.backgroundFetch) {
+    //Process response
+    var decoded = json.decode(res.body);
+    Homework temp = setHomework(decoded);
+    //*Add it to the database
+    //TODO batchify
     await insertHomework(temp);
-  }
-  //Find the same ids
-  var matchedIds = homeworkPage.globalHomework.where((element) {
-    return element.id == temp.id;
-  });
-
-  //Should we keep it?
-  DateTime afterDue = temp.dueDate;
-  if (keepForDays != -1) {
-    afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
-  }
-
-  if (matchedIds.length == 0) {
-    if (afterDue.compareTo(DateTime.now()) >= 0) {
-      homeworkPage.globalHomework.add(temp);
-    }
-  } else {
-    var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+    //Find the same ids
+    var matchedIds = homeworkPage.globalHomework.where((element) {
       return element.id == temp.id;
     });
-    if (afterDue.compareTo(DateTime.now()) >= 0) {
-      homeworkPage.globalHomework[matchedindex] = temp;
+
+    //Should we keep it?
+    DateTime afterDue = temp.dueDate;
+    if (keepForDays != -1) {
+      afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
     }
+
+    if (matchedIds.length == 0) {
+      if (afterDue.compareTo(DateTime.now()) >= 0) {
+        homeworkPage.globalHomework.add(temp);
+      }
+    } else {
+      var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+        return element.id == temp.id;
+      });
+      if (afterDue.compareTo(DateTime.now()) >= 0) {
+        homeworkPage.globalHomework[matchedindex] = temp;
+      }
+    }
+    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+    return temp;
   }
-  homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-  return temp;
 }

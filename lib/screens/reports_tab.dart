@@ -81,6 +81,9 @@ class _ReportsTabState extends State<ReportsTab>
               ).toList();
               firstQuarterEvaluationList
                   .sort((a, b) => a.subject.compareTo(b.subject));
+              if (firstQuarterEvaluationList.length == 0) {
+                return noReports();
+              }
               return ListView.builder(
                 itemCount: firstQuarterEvaluationList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -160,6 +163,9 @@ class _ReportsTabState extends State<ReportsTab>
                 },
               ).toList();
               halfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
+              if (halfYearEvalList.length == 0) {
+                return noReports();
+              }
               return ListView.builder(
                 itemCount: halfYearEvalList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -251,6 +257,9 @@ class _ReportsTabState extends State<ReportsTab>
                 },
               ).toList();
               endOfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
+              if (endOfYearEvalList.length == 0) {
+                return noReports();
+              }
               return ListView.builder(
                 itemCount: endOfYearEvalList.length + 1,
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -328,4 +337,22 @@ class _ReportsTabState extends State<ReportsTab>
           }).toList()),
     );
   }
+}
+
+Widget noReports() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          MdiIcons.emoticonSadOutline,
+          size: 50,
+        ),
+        Text(
+          "${getTranslatedString("noReport")}!",
+          textAlign: TextAlign.center,
+        )
+      ],
+    ),
+  );
 }

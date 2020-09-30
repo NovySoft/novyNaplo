@@ -201,14 +201,19 @@ void getWorstAndBest(input) {
       b.value.toStringAsFixed(3).compareTo(a.value.toStringAsFixed(3)));
   index = 0;
   List<stats.AV> tempListTwo = [];
-  tempList.removeWhere((item) => item.value == double.nan || item.value.isNaN);
+  tempList.removeWhere((item) =>
+      item.value == double.nan || item.value.isNaN || item.value == null);
   double curValue = tempList[0].value;
   stats.worstSubjectAv = tempList.last;
   stats.allSubjectsAv = tempList;
   if (tempList.length > 1) {
+    //Find the better subject based on count
     while (curValue == tempList[index.toInt()].value) {
       tempListTwo.add(tempList[index.toInt()]);
       index++;
+      if (index.toInt() <= tempList.length) {
+        curValue = -1;
+      }
     }
   } else {
     tempListTwo.add(tempList[0]);
