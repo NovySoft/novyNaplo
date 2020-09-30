@@ -27,7 +27,7 @@ String agent = config.currAgent;
 var response;
 int tokenIndex = 0;
 
-//TODO: UPDATE TO API V3
+//TODO: UPDATE TO API V3, ONLY WHEN IT WILL BE STABLE TO USE
 class NetworkHelper {
   Future<ConnectivityResult> isNetworkAvailable() async {
     return await (Connectivity().checkConnectivity());

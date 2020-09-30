@@ -148,6 +148,11 @@ class MarksTabState extends State<MarksTab>
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
+    if (index >= allParsedByDate.length) {
+      return SizedBox(
+        height: 150,
+      );
+    }
     Color color = getMarkCardColor(
       eval: allParsedByDate[index],
       index: index,
@@ -155,28 +160,31 @@ class MarksTabState extends State<MarksTab>
     return SafeArea(
       top: false,
       bottom: false,
-      child: Hero(
-          tag: index,
-          child: HeroAnimatingMarksCard(
-            eval: allParsedByDate[index],
-            iconData: allParsedByDate[index].icon,
-            subTitle: getMarkCardSubtitle(
-              eval: allParsedByDate[index],
-            ), //capitalize(allParsedByDate[index].theme),
-            title: capitalize(allParsedByDate[index].subject +
-                " " +
-                allParsedByDate[index].value),
-            color: color,
-            heroAnimation: AlwaysStoppedAnimation(0),
-            onPressed: MarksDetailTab(
-              eval: allParsedByDate[index],
-              color: color,
-            ),
-          )),
+      child: HeroAnimatingMarksCard(
+        eval: allParsedByDate[index],
+        iconData: allParsedByDate[index].icon,
+        subTitle: getMarkCardSubtitle(
+          eval: allParsedByDate[index],
+        ), //capitalize(allParsedByDate[index].theme),
+        title: capitalize(allParsedByDate[index].subject +
+            " " +
+            allParsedByDate[index].value),
+        color: color,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: MarksDetailTab(
+          eval: allParsedByDate[index],
+          color: color,
+        ),
+      ),
     );
   }
 
   Widget _subjectListBuilder(BuildContext context, int listIndex) {
+    if (listIndex >= allParsedBySubject.length) {
+      return SizedBox(
+        height: 150,
+      );
+    }
     return ListView.builder(
       itemCount: allParsedBySubject[listIndex].length,
       physics: NeverScrollableScrollPhysics(),
@@ -218,22 +226,19 @@ class MarksTabState extends State<MarksTab>
                 child: SafeArea(
                   top: false,
                   bottom: false,
-                  child: Hero(
-                    tag: index,
-                    child: HeroAnimatingSubjectsCard(
-                      subTitle: getMarkCardSubtitle(
-                        eval: allParsedBySubject[listIndex][index],
-                      ),
-                      title: capitalize(
-                              allParsedBySubject[listIndex][index].subject) +
-                          " " +
-                          allParsedBySubject[listIndex][index].value,
+                  child: HeroAnimatingSubjectsCard(
+                    subTitle: getMarkCardSubtitle(
+                      eval: allParsedBySubject[listIndex][index],
+                    ),
+                    title: capitalize(
+                            allParsedBySubject[listIndex][index].subject) +
+                        " " +
+                        allParsedBySubject[listIndex][index].value,
+                    color: color,
+                    heroAnimation: AlwaysStoppedAnimation(0),
+                    onPressed: MarksDetailTab(
+                      eval: allParsedBySubject[listIndex][index],
                       color: color,
-                      heroAnimation: AlwaysStoppedAnimation(0),
-                      onPressed: MarksDetailTab(
-                        eval: allParsedBySubject[listIndex][index],
-                        color: color,
-                      ),
                     ),
                   ),
                 ),
@@ -247,22 +252,18 @@ class MarksTabState extends State<MarksTab>
           child: SafeArea(
             top: false,
             bottom: false,
-            child: Hero(
-              tag: index,
-              child: HeroAnimatingSubjectsCard(
-                subTitle: getMarkCardSubtitle(
-                  eval: allParsedBySubject[listIndex][index],
-                ),
-                title:
-                    capitalize(allParsedBySubject[listIndex][index].subject) +
-                        " " +
-                        allParsedBySubject[listIndex][index].value,
+            child: HeroAnimatingSubjectsCard(
+              subTitle: getMarkCardSubtitle(
+                eval: allParsedBySubject[listIndex][index],
+              ),
+              title: capitalize(allParsedBySubject[listIndex][index].subject) +
+                  " " +
+                  allParsedBySubject[listIndex][index].value,
+              color: color,
+              heroAnimation: AlwaysStoppedAnimation(0),
+              onPressed: MarksDetailTab(
+                eval: allParsedBySubject[listIndex][index],
                 color: color,
-                heroAnimation: AlwaysStoppedAnimation(0),
-                onPressed: MarksDetailTab(
-                  eval: allParsedBySubject[listIndex][index],
-                  color: color,
-                ),
               ),
             ),
           ),
@@ -287,39 +288,37 @@ class MarksTabState extends State<MarksTab>
           controller: _tabController,
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
-              if (allParsedByDate.length == 0) {
-                return noMarks();
-              } else {
-                return RefreshIndicator(
-                  key: _androidRefreshKey,
-                  onRefresh: () async {
-                    await _refreshData();
-                  },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: allParsedByDate.length,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    itemBuilder: _dateListBuilder,
-                  ),
-                );
-              }
+              return RefreshIndicator(
+                key: _androidRefreshKey,
+                onRefresh: () async {
+                  await _refreshData();
+                },
+                child: allParsedByDate.length == 0
+                    ? noMarks()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allParsedByDate.length +
+                            (globals.adsEnabled ? 1 : 0),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        itemBuilder: _dateListBuilder,
+                      ),
+              );
             } else {
-              if (allParsedByDate.length == 0) {
-                return noMarks();
-              } else {
-                return RefreshIndicator(
-                  key: _androidRefreshKeyTwo,
-                  onRefresh: () async {
-                    await _refreshData();
-                  },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: allParsedBySubject.length,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    itemBuilder: _subjectListBuilder,
-                  ),
-                );
-              }
+              return RefreshIndicator(
+                key: _androidRefreshKeyTwo,
+                onRefresh: () async {
+                  await _refreshData();
+                },
+                child: allParsedByDate.length == 0
+                    ? noMarks()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: allParsedBySubject.length +
+                            (globals.adsEnabled ? 1 : 0),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        itemBuilder: _subjectListBuilder,
+                      ),
+              );
             }
           }).toList()),
     );
