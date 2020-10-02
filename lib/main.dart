@@ -7,7 +7,6 @@ import 'package:novynaplo/helpers/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/screens/reports_tab.dart';
@@ -69,7 +68,6 @@ void main() async {
         isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
-    AvaragesTab.tag: (context) => AvaragesTab(),
     SettingsTab.tag: (context) => SettingsTab(),
     NoticesTab.tag: (context) => NoticesTab(),
     StatisticsTab.tag: (context) => StatisticsTab(),

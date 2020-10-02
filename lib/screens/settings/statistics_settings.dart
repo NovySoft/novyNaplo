@@ -34,7 +34,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 5 + globals.adModifier,
+          itemCount: 4 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -101,24 +101,6 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 2:
                 return ListTile(
-                  title: Text("${getTranslatedString("showAllAv")}:"),
-                  trailing: Switch(
-                    onChanged: (bool switchOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        globals.showAllAvsInStats = switchOn;
-                      });
-                      prefs.setBool("showAllAvsInStats", switchOn);
-                      Crashlytics.instance
-                          .setBool("showAllAvsInStats", switchOn);
-                    },
-                    value: globals.showAllAvsInStats,
-                  ),
-                );
-                break;
-              case 3:
-                return ListTile(
                   title: Text("${getTranslatedString("colorAv")}:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
@@ -133,7 +115,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 4:
+              case 3:
                 return ListTile(
                   title: Text(
                       "${getTranslatedString("extraSpaceUnderStat")} (1-500px):"),

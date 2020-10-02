@@ -66,16 +66,20 @@ class Evals {
 }
 
 class Avarage {
-  var subject, ownValue, classValue, diff;
+  String subject;
+  double ownValue;
   int databaseId;
+
+  @override
+  String toString() {
+    return this.subject + ": " + this.ownValue.toStringAsFixed(3);
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'databaseId': databaseId,
       'subject': subject,
       'ownValue': ownValue,
-      'classValue': classValue,
-      'diff': diff
     };
   }
 }
@@ -156,15 +160,6 @@ Evals setEvals(var input) {
   temp.createDateString = input["CreatingTime"];
   temp.createDate = DateTime.parse(input["CreatingTime"]);
   temp.date = DateTime.parse(input["Date"]);
-  return temp;
-}
-
-Avarage setAvarage(var subject, ownValue, classValue, diff) {
-  Avarage temp = new Avarage();
-  temp.subject = capitalize(subject);
-  temp.ownValue = ownValue;
-  temp.classValue = classValue;
-  temp.diff = diff;
   return temp;
 }
 

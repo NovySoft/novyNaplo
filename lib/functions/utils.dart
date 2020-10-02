@@ -402,3 +402,17 @@ String getTimetableSubtitle(Lesson input) {
   }
   return subtitle;
 }
+
+List<Avarage> createAvarageDBListFromStatisticsAvarage(
+  stats.AV bestSubject,
+  List<stats.AV> avaragesList,
+  stats.AV worstSubject,
+) {
+  List<Avarage> tempList = [];
+  tempList.add(stats.bestSubjectAv.toDatabaseAvarage());
+  for (var n in avaragesList) {
+    tempList.add(n.toDatabaseAvarage());
+  }
+  tempList.add(worstSubject.toDatabaseAvarage());
+  return tempList;
+}

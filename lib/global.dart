@@ -28,8 +28,6 @@ String howManyGraph; //What should we show? A pie- or a bar-chart
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
-bool showAllAvsInStats =
-    false; //Show all avarages or just the best and the worst?
 bool backgroundFetch = false; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
@@ -163,14 +161,6 @@ Future<void> setGlobals() async {
     extraSpaceUnderStat = prefs.getInt("extraSpaceUnderStat");
   }
   Crashlytics.instance.setInt("extraSpaceUnderStat", extraSpaceUnderStat);
-
-  if (prefs.getBool("showAllAvsInStats") == null) {
-    showAllAvsInStats = false;
-    prefs.setBool("showAllAvsInStats", false);
-  } else {
-    showAllAvsInStats = prefs.getBool("showAllAvsInStats");
-  }
-  Crashlytics.instance.setBool("showAllAvsInStats", showAllAvsInStats);
 
   if (prefs.getBool("shouldVirtualMarksCollapse") == null) {
     shouldVirtualMarksCollapse = false;

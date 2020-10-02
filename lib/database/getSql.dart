@@ -71,8 +71,6 @@ Future<List<Avarage>> getAllAvarages() async {
     temp.databaseId = maps[i]['databaseId'];
     temp.subject = maps[i]['subject'];
     temp.ownValue = maps[i]['ownValue'];
-    temp.classValue = maps[i]['classValue'];
-    temp.diff = maps[i]['diff'];
     return temp;
   });
 }

@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 
 int index = 0;
@@ -150,27 +152,29 @@ int getRandomBetween(int min, int max) {
   return min + _random.nextInt(max - min);
 }
 
+//Összesített átlag
 void getAllSubjectsAv(input) {
   double index = 0, sum = 0, tempIndex = 0;
   double tempValue = 0;
-  stats.globalAllSubjectAv.count = 0;
+  stats.osszesitettAv.count = 0;
   for (var n in input) {
     tempIndex = 0;
     for (var y in n) {
       tempIndex++;
       sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
       index += 1 * double.parse(y.weight.split("%")[0]) / 100;
-      stats.globalAllSubjectAv.value = sum / index;
+      stats.osszesitettAv.value = sum / index;
       if (tempIndex == n.length - 1) {
         tempValue = sum / index;
       }
     }
   }
-  stats.globalAllSubjectAv.count = index;
-  stats.globalAllSubjectAv.diffSinceLast = (tempValue - (sum / index)) * -1;
+  stats.osszesitettAv.count = index;
+  stats.osszesitettAv.diffSinceLast = (tempValue - (sum / index)) * -1;
 }
 
-void getWorstAndBest(input) {
+//Legjobb, legroszabb és a köztes jegyek
+void getWorstAndBest(input) async {
   List<stats.AV> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;
@@ -222,6 +226,9 @@ void getWorstAndBest(input) {
   stats.allSubjectsAv.removeLast();
   stats.allSubjectsAv.removeWhere((item) => item == tempListTwo[0]);
   stats.bestSubjectAv = tempListTwo[0];
+  //We dont await it, cause this function is time critical
+  batchInsertAvarage(createAvarageDBListFromStatisticsAvarage(
+      stats.bestSubjectAv, stats.allSubjectsAv, stats.worstSubjectAv));
 }
 
 void getPieChartOrBarChart(var input) {

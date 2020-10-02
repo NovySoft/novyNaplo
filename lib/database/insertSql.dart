@@ -226,9 +226,7 @@ Future<void> insertAvarage(Avarage avarage) async {
   } else {
     for (var n in matchedAv) {
       //!Update didn't work so we delete and create a new one
-      if (n.diff != avarage.diff ||
-          n.ownValue != avarage.ownValue ||
-          n.classValue != avarage.classValue) {
+      if (n.ownValue != avarage.ownValue) {
         await deleteFromDb(n.databaseId, "Avarage");
         if (globals.notifications) {
           String diff;
@@ -499,9 +497,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
     } else {
       for (var n in matchedAv) {
         //!Update didn't work so we delete and create a new one
-        if (n.diff != avarage.diff ||
-            n.ownValue != avarage.ownValue ||
-            n.classValue != avarage.classValue) {
+        if (n.ownValue != avarage.ownValue) {
           inserted = true;
           batch.delete(
             "Avarage",

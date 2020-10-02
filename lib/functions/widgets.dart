@@ -7,7 +7,6 @@ import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/calculator_tab.dart';
 import 'package:novynaplo/config.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/events_tab.dart';
 import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
@@ -1003,25 +1002,6 @@ Widget getDrawer(String screen, BuildContext context) {
             }
           },
         ),
-        globals.showAllAvsInStats
-            ? SizedBox(height: 0, width: 0)
-            : ListTile(
-                title: Text(capitalize(getTranslatedString("avs"))),
-                leading: Icon(Icons.all_inclusive),
-                onTap: () {
-                  if (screen == AvaragesTab.tag) {
-                    Navigator.pop(context);
-                  } else {
-                    try {
-                      Navigator.pushNamed(context, AvaragesTab.tag);
-                    } catch (e, s) {
-                      Crashlytics.instance
-                          .recordError(e, s, context: 'getDrawer');
-                      print(e.message);
-                    }
-                  }
-                },
-              ),
         ListTile(
           title: Text(capitalize(getTranslatedString("notices"))),
           leading: Icon(Icons.layers),

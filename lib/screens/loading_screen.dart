@@ -21,11 +21,11 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
-import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
+import 'package:novynaplo/helpers/chartHelper.dart' as chartHelper;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:io';
 import 'package:novynaplo/database/getSql.dart';
@@ -126,11 +126,6 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readNotices");
       });
       noticesPage.allParsedNotices = await getAllNotices();
-      //Avarages
-      setState(() {
-        loadingText = getTranslatedString("readAvs");
-      });
-      avaragesPage.avarageList = await getAllAvarages();
       //Statisztika
       statisticsPage.allParsedSubjects =
           categorizeSubjectsFromEvals(marksPage.allParsedByDate);
@@ -139,6 +134,11 @@ class _LoadingPageState extends State<LoadingPage> {
             .where((element) => element[0].numberValue != 0),
       );
       NetworkHelper().setUpCalculatorPage(statisticsPage.allParsedSubjects);
+      //Avarages
+      setState(() {
+        loadingText = getTranslatedString("readAvs");
+      });
+      chartHelper.getWorstAndBest(statisticsPage.allParsedSubjectsWithoutZeros);
       //Timetable
       setState(() {
         loadingText = getTranslatedString("readTimetable");

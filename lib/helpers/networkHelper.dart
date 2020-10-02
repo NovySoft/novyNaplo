@@ -8,7 +8,6 @@ import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
-import 'package:novynaplo/screens/avarages_tab.dart' as avaragesPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
@@ -155,7 +154,6 @@ class NetworkHelper {
         Crashlytics.instance.setUserName(globals.dJson["Name"]);
         Crashlytics.instance.setString("User", globals.dJson["Name"]);
       }
-      await getAvarages(token, code);
       await getExams(token, code);
       await getEvents(token, code);
       marksPage.allParsedByDate = await parseAllByDate(globals.dJson);
@@ -170,25 +168,6 @@ class NetworkHelper {
       );
       timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
-    }
-  }
-
-  Future<void> getAvarages(var token, code) async {
-    Crashlytics.instance.log("getAvarages");
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-    };
-
-    var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/TantargyiAtlagAmi',
-        headers: headers);
-    if (res.statusCode != 200)
-      throw Exception('get error: statusCode= ${res.statusCode}');
-    if (res.statusCode == 200) {
-      var bodyJson = json.decode(res.body);
-      globals.avJson = bodyJson;
-      avaragesPage.avarageList = await parseAvarages(globals.avJson);
     }
   }
 

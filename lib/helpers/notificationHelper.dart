@@ -6,7 +6,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/screens/avarages_tab.dart';
 import 'package:novynaplo/screens/events_detail_tab.dart';
 import 'package:novynaplo/screens/homework_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
@@ -255,11 +254,8 @@ Future selectNotification(String payload) async {
         return;
         break;
       case "avarage":
-        if (globals.showAllAvsInStats) {
-          Navigator.of(globals.globalContext).pushNamed(StatisticsTab.tag);
-        } else {
-          Navigator.of(globals.globalContext).pushNamed(AvaragesTab.tag);
-        }
+        //TODO, Show the page of the subject instead of just pushing to statistics
+        Navigator.of(globals.globalContext).pushNamed(StatisticsTab.tag);
         return;
         break;
     }

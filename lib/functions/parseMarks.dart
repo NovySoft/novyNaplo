@@ -32,21 +32,6 @@ Future<List<dynamic>> parseAllByDate(var input) async {
   return jegyArray;
 }
 
-Future<List<Avarage>> parseAvarages(var input) async {
-  List<Avarage> atlagArray = [];
-  try {
-    for (var n in input) {
-      atlagArray.add(setAvarage(
-          n["Subject"], n["Value"], n["classValue"], n["Difference"]));
-    }
-  } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'parseAvarages');
-    return [];
-  }
-  await batchInsertAvarage(atlagArray);
-  return atlagArray;
-}
-
 Future<List<Notices>> parseNotices(var input) async {
   if (input != null && input["Notes"] != null) {
     List<Notices> noticesArray = [];
