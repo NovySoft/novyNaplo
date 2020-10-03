@@ -71,6 +71,7 @@ Future<void> setupNotifications() async {
 }
 
 Future selectNotification(String payload) async {
+  Crashlytics.instance.log("selectNotification received (payload $payload)");
   print(payload);
   if (globals.globalContext == null) {
     print("NoContext");
