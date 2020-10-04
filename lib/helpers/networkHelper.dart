@@ -11,6 +11,7 @@ import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
+import 'package:novynaplo/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -166,6 +167,7 @@ class NetworkHelper {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
+      absencesPage.absencesList = await parseAllAbsences(globals.dJson);
       timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }

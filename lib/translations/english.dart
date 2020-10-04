@@ -333,4 +333,9 @@ final Map<String, String> translation = {
   "November": "November",
   "December": "December",
   "noReport": "You haven't got any reports",
+  "absences": "Absences",
+  "BeJustified": "Awaiting justification",
+  "Justified": "Justified",
+  "UnJustified": "Unjustified",
+  "marksAndAvs": "Marks and avarages",
 };

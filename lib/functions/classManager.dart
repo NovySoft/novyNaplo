@@ -410,3 +410,35 @@ extension MyDateTime on DateTime {
         this.year == other.year;
   }
 }
+
+class Absence {
+  int absenceId;
+  String type;
+  String typeName;
+  String subject;
+  int delayTimeMinutes;
+  String teacher;
+  String lessonStartTime;
+  int numberOfLessons;
+  String creatingTime;
+  String justificationState;
+  String justificationStateName;
+  String justificationTypeName;
+  String osztalyCsoportUid;
+
+  //TODO Make other classes use this syntax instead of an outside function
+  Absence.fromJson(Map<String, dynamic> json) {
+    absenceId = json['AbsenceId'];
+    type = json['Type'];
+    typeName = json['TypeName'];
+    subject = json['Subject'];
+    delayTimeMinutes = json['DelayTimeMinutes'];
+    teacher = json['Teacher'];
+    lessonStartTime = json['LessonStartTime'];
+    creatingTime = json['CreatingTime'];
+    justificationStateName = json['JustificationStateName'];
+    justificationTypeName = json['JustificationTypeName'];
+    osztalyCsoportUid = json['OsztalyCsoportUid'];
+    justificationState = json['JustificationState'];
+  }
+}

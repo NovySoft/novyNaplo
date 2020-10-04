@@ -1,8 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/screens/absences_tab.dart';
 import 'package:novynaplo/screens/charts_detail_tab.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -14,6 +16,8 @@ import 'package:novynaplo/translations/translationProvider.dart';
 
 var allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
+//TODO Remove contracted main chart option
+//TODO Make subject color constant
 
 final List<Tab> statTabs = <Tab>[
   Tab(
@@ -171,57 +175,117 @@ class _StatisticsTabState extends State<StatisticsTab>
                     color: charts.MaterialPalette.blue.shadeDefault),
               ));
               return ListView.builder(
-                itemCount: 11 + globals.adModifier,
+                itemCount: 12 + globals.adModifier,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
                     case 0:
-                      if (globals.statChart == "Mindent") {
-                        return SizedBox(
-                          height: 500 +
-                              sizedBoxHeight +
-                              globals.extraSpaceUnderStat,
-                          child: charts.NumericComboChart(
-                            createAllSubjectChartData(
-                                allParsedSubjectsWithoutZeros),
-                            animate: globals.chartAnimations,
-                            domainAxis: axisTwo,
-                            primaryMeasureAxis: axis,
-                            // Configure the default renderer as a line renderer. This will be used
-                            // for any series that does not define a rendererIdKey.
-                            defaultRenderer: new charts.LineRendererConfig(
-                                includePoints: true),
-                            behaviors: [
-                              new charts.SeriesLegend(
-                                position: charts.BehaviorPosition.end,
-                              ),
-                              new charts.PanAndZoomBehavior()
-                            ],
+                      return Column(
+                        children: [
+                          Center(
+                            child: Text(
+                              "${getTranslatedString("absences")}:",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
                           ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          OpenContainer(
+                            tappable: false,
+                            closedElevation: 0,
+                            openElevation: 0,
+                            openColor: DynamicTheme.of(context).brightness ==
+                                    Brightness.light
+                                ? Colors.white
+                                : Color.fromARGB(100, 48, 48, 48),
+                            closedColor: DynamicTheme.of(context).brightness ==
+                                    Brightness.light
+                                ? Colors.white
+                                : Color.fromARGB(100, 48, 48, 48),
+                            transitionDuration: Duration(milliseconds: 550),
+                            openBuilder: (_, __) => AbsencesTab(),
+                            closedBuilder: (_, callback) => SizedBox(
+                              height: 200,
+                              width: double.infinity,
+                              child: AbsencesBarChart(callback: callback),
+                            ),
+                          ),
+                        ],
+                      );
+                      break;
+                    case 1:
+                      if (globals.statChart == "Mindent") {
+                        return Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Center(
+                              child: Text(
+                                "${getTranslatedString("marksAndAvs")}:",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 500 +
+                                  sizedBoxHeight +
+                                  globals.extraSpaceUnderStat,
+                              child: charts.NumericComboChart(
+                                createAllSubjectChartData(
+                                    allParsedSubjectsWithoutZeros),
+                                animate: globals.chartAnimations,
+                                domainAxis: axisTwo,
+                                primaryMeasureAxis: axis,
+                                // Configure the default renderer as a line renderer. This will be used
+                                // for any series that does not define a rendererIdKey.
+                                defaultRenderer: new charts.LineRendererConfig(
+                                    includePoints: true),
+                                behaviors: [
+                                  new charts.SeriesLegend(
+                                    position: charts.BehaviorPosition.end,
+                                  ),
+                                  new charts.PanAndZoomBehavior()
+                                ],
+                              ),
+                            ),
+                          ],
                         );
                       } else {
-                        return SizedBox(
-                          height: 400,
-                          child: charts.LineChart(
-                            createOsszesitett(allParsedSubjects),
-                            animate: globals.chartAnimations,
-                            domainAxis: axisTwo,
-                            primaryMeasureAxis: axis,
-                            // Configure the default renderer as a line renderer. This will be used
-                            // for any series that does not define a rendererIdKey.
-                            defaultRenderer: new charts.LineRendererConfig(
-                                includePoints: true),
-                            behaviors: [new charts.PanAndZoomBehavior()],
-                          ),
+                        return Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Center(
+                              child: Text(
+                                "${getTranslatedString("marksAndAvs")}:",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 400,
+                              child: charts.LineChart(
+                                createOsszesitett(allParsedSubjects),
+                                animate: globals.chartAnimations,
+                                domainAxis: axisTwo,
+                                primaryMeasureAxis: axis,
+                                // Configure the default renderer as a line renderer. This will be used
+                                // for any series that does not define a rendererIdKey.
+                                defaultRenderer: new charts.LineRendererConfig(
+                                    includePoints: true),
+                                behaviors: [new charts.PanAndZoomBehavior()],
+                              ),
+                            ),
+                          ],
                         );
                       }
                       break;
-                    case 1:
+                    case 2:
                       return SizedBox(
                         height: 75,
                       );
                       break;
-                    case 2:
+                    case 3:
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +311,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ],
                       );
                       break;
-                    case 3:
+                    case 4:
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +347,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ],
                       );
                       break;
-                    case 4:
+                    case 5:
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,12 +464,12 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ],
                       );
                       break;
-                    case 5:
+                    case 6:
                       return SizedBox(
                         height: 25,
                       );
                       break;
-                    case 6:
+                    case 7:
                       return Center(
                         child: Text(
                           globals.howManyGraph == "Kör diagram"
@@ -416,7 +480,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ),
                       );
                       break;
-                    case 7:
+                    case 8:
                       if (globals.howManyGraph == "Kör diagram") {
                         return SizedBox(
                             height: 400,
@@ -467,12 +531,12 @@ class _StatisticsTabState extends State<StatisticsTab>
                         );
                       }
                       break;
-                    case 8:
+                    case 9:
                       return SizedBox(
                         height: 25,
                       );
                       break;
-                    case 9:
+                    case 10:
                       return Center(
                         child: Text(
                           "${getTranslatedString("countOfSpecMarks")}:",
@@ -481,7 +545,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ),
                       );
                       break;
-                    case 10:
+                    case 11:
                       return SizedBox(
                         height: 400,
                         width: double.infinity,

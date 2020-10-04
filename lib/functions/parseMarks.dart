@@ -228,3 +228,12 @@ Future<List<Event>> parseEvents(var input) async {
   }
   return eventArray;
 }
+
+Future<List<Absence>> parseAllAbsences(input) async {
+  List<Absence> tempList = [];
+  var absences = input["Absences"];
+  for (var n in absences) {
+    tempList.add(new Absence.fromJson(n));
+  }
+  return tempList;
+}

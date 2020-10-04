@@ -1,9 +1,13 @@
 import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/absences_tab.dart' as absencesPage;
+import 'package:novynaplo/translations/translationProvider.dart';
 
 int index = 0;
 List<LinearMarkChartData> chartData = [];
@@ -335,4 +339,101 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
       data: chartData,
     )
   ];
+}
+
+class AbsenceChartData {
+  final String name = "absences";
+  final int sales;
+
+  AbsenceChartData(this.sales);
+}
+
+List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
+    List<Absence> inputList) {
+  final igazolando = [
+    new AbsenceChartData(
+        inputList.where((n) => n.justificationState == "BeJustified").length),
+  ];
+
+  final igazolt = [
+    new AbsenceChartData(
+        inputList.where((n) => n.justificationState == "Justified").length),
+  ];
+
+  final igazolatlan = [
+    new AbsenceChartData(
+        inputList.where((n) => n.justificationState == "UnJustified").length),
+  ];
+
+  return [
+    new charts.Series<AbsenceChartData, String>(
+      id: getTranslatedString("Justified"),
+      seriesColor: charts.MaterialPalette.green.shadeDefault,
+      domainFn: (AbsenceChartData sales, _) => sales.name,
+      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      data: igazolt,
+    ),
+    new charts.Series<AbsenceChartData, String>(
+      id: getTranslatedString("BeJustified"),
+      seriesColor: charts.MaterialPalette.yellow.shadeDefault,
+      domainFn: (AbsenceChartData sales, _) => sales.name,
+      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      data: igazolando,
+    ),
+    new charts.Series<AbsenceChartData, String>(
+      id: getTranslatedString("UnJustified"),
+      seriesColor: charts.MaterialPalette.red.shadeDefault,
+      domainFn: (AbsenceChartData sales, _) => sales.name,
+      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      data: igazolatlan,
+    ),
+  ];
+}
+
+class AbsencesBarChart extends StatelessWidget {
+  final void Function() callback;
+  AbsencesBarChart({this.callback});
+
+  final axis = charts.NumericAxisSpec(
+      renderSpec: charts.GridlineRendererSpec(
+          labelStyle: charts.TextStyleSpec(
+    fontSize: 10,
+    color: charts.MaterialPalette.blue.shadeDefault,
+  )));
+
+  @override
+  Widget build(BuildContext context) {
+    var seriesList = createAbsencesChartData(absencesPage.absencesList);
+    // For horizontal bar charts, set the [vertical] flag to false.
+    return new charts.BarChart(
+      seriesList,
+      animate: globals.chartAnimations,
+      barGroupingType: charts.BarGroupingType.stacked,
+      vertical: false,
+      primaryMeasureAxis: axis,
+      domainAxis: new charts.OrdinalAxisSpec(
+          // Make sure that we draw the domain axis line.
+          showAxisLine: true,
+          // But don't draw anything else.
+          renderSpec: new charts.NoneRenderSpec()),
+      selectionModels: [
+        new charts.SelectionModelConfig(
+            type: charts.SelectionModelType.info,
+            updatedListener: _absencesChartSelectUpdated)
+      ],
+      behaviors: [
+        new charts.SeriesLegend(
+          outsideJustification: charts.OutsideJustification.endDrawArea,
+        ),
+      ],
+    );
+  }
+
+  void _absencesChartSelectUpdated(charts.SelectionModel<String> model) {
+    //open animatedcontainer
+    if (model.hasAnySelection) {
+      if (callback == null) return;
+      callback();
+    }
+  }
 }
