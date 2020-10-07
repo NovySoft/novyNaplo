@@ -336,4 +336,5 @@ final Map<String, String> translation = {
   "Justified": "Igazolt",
   "UnJustified": "Igazolatlan",
   "marksAndAvs": "Jegyek és átlagok",
+  "delays": "Késések",
 };

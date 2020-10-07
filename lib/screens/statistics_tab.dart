@@ -207,7 +207,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                             transitionDuration: Duration(milliseconds: 550),
                             openBuilder: (_, __) => AbsencesTab(),
                             closedBuilder: (_, callback) => SizedBox(
-                              height: 200,
+                              height: 300,
                               width: double.infinity,
                               child: AbsencesBarChart(callback: callback),
                             ),
@@ -481,6 +481,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 8:
+                      //TODO: Fix chart labels
                       if (globals.howManyGraph == "Kör diagram") {
                         return SizedBox(
                             height: 400,

@@ -342,27 +342,74 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
 }
 
 class AbsenceChartData {
-  final String name = "absences";
-  final int sales;
+  final String name;
+  final int count;
 
-  AbsenceChartData(this.sales);
+  AbsenceChartData(this.name, this.count);
 }
 
 List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
     List<Absence> inputList) {
+  final delayList = inputList.where((n) => n.type == "Delay");
+  int igazolandoDelay = 0, igazoltDelay = 0, igazolatlanDelay = 0;
+  if (delayList.length != 0) {
+    //Igazolando
+    for (var n in delayList
+        .where((element) => element.justificationState == "BeJustified")) {
+      igazolandoDelay += n.delayTimeMinutes;
+    }
+    //Igazolt
+    for (var n in delayList
+        .where((element) => element.justificationState == "Justified")) {
+      igazoltDelay += n.delayTimeMinutes;
+    }
+    //Igazolatlan
+    for (var n in delayList
+        .where((element) => element.justificationState == "UnJustified")) {
+      igazolatlanDelay += n.delayTimeMinutes;
+    }
+  }
+
   final igazolando = [
     new AbsenceChartData(
-        inputList.where((n) => n.justificationState == "BeJustified").length),
+      getTranslatedString("absences"),
+      inputList
+          .where((n) =>
+              n.justificationState == "BeJustified" && n.type == "Absence")
+          .length,
+    ),
+    new AbsenceChartData(
+      getTranslatedString("delays"),
+      igazolandoDelay,
+    ),
   ];
 
   final igazolt = [
     new AbsenceChartData(
-        inputList.where((n) => n.justificationState == "Justified").length),
+      getTranslatedString("absences"),
+      inputList
+          .where(
+              (n) => n.justificationState == "Justified" && n.type == "Absence")
+          .length,
+    ),
+    new AbsenceChartData(
+      getTranslatedString("delays"),
+      igazoltDelay,
+    ),
   ];
 
   final igazolatlan = [
     new AbsenceChartData(
-        inputList.where((n) => n.justificationState == "UnJustified").length),
+      getTranslatedString("absences"),
+      inputList
+          .where((n) =>
+              n.justificationState == "UnJustified" && n.type == "Absence")
+          .length,
+    ),
+    new AbsenceChartData(
+      getTranslatedString("delays"),
+      igazolatlanDelay,
+    ),
   ];
 
   return [
@@ -370,21 +417,21 @@ List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
       id: getTranslatedString("Justified"),
       seriesColor: charts.MaterialPalette.green.shadeDefault,
       domainFn: (AbsenceChartData sales, _) => sales.name,
-      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      measureFn: (AbsenceChartData sales, _) => sales.count,
       data: igazolt,
     ),
     new charts.Series<AbsenceChartData, String>(
       id: getTranslatedString("BeJustified"),
       seriesColor: charts.MaterialPalette.yellow.shadeDefault,
       domainFn: (AbsenceChartData sales, _) => sales.name,
-      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      measureFn: (AbsenceChartData sales, _) => sales.count,
       data: igazolando,
     ),
     new charts.Series<AbsenceChartData, String>(
       id: getTranslatedString("UnJustified"),
       seriesColor: charts.MaterialPalette.red.shadeDefault,
       domainFn: (AbsenceChartData sales, _) => sales.name,
-      measureFn: (AbsenceChartData sales, _) => sales.sales,
+      measureFn: (AbsenceChartData sales, _) => sales.count,
       data: igazolatlan,
     ),
   ];
@@ -401,21 +448,23 @@ class AbsencesBarChart extends StatelessWidget {
     color: charts.MaterialPalette.blue.shadeDefault,
   )));
 
+  final axisTwo = charts.OrdinalAxisSpec(
+      renderSpec: charts.GridlineRendererSpec(
+          labelStyle: charts.TextStyleSpec(
+    fontSize: 10,
+    color: charts.MaterialPalette.blue.shadeDefault,
+  )));
+
   @override
   Widget build(BuildContext context) {
     var seriesList = createAbsencesChartData(absencesPage.absencesList);
-    // For horizontal bar charts, set the [vertical] flag to false.
     return new charts.BarChart(
       seriesList,
       animate: globals.chartAnimations,
       barGroupingType: charts.BarGroupingType.stacked,
       vertical: false,
       primaryMeasureAxis: axis,
-      domainAxis: new charts.OrdinalAxisSpec(
-          // Make sure that we draw the domain axis line.
-          showAxisLine: true,
-          // But don't draw anything else.
-          renderSpec: new charts.NoneRenderSpec()),
+      domainAxis: axisTwo,
       selectionModels: [
         new charts.SelectionModelConfig(
             type: charts.SelectionModelType.info,

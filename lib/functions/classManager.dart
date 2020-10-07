@@ -423,6 +423,7 @@ class Absence {
   String creatingTime;
   String justificationState;
   String justificationStateName;
+  String justificationType;
   String justificationTypeName;
   String osztalyCsoportUid;
 
@@ -440,5 +441,6 @@ class Absence {
     justificationTypeName = json['JustificationTypeName'];
     osztalyCsoportUid = json['OsztalyCsoportUid'];
     justificationState = json['JustificationState'];
+    justificationType = json['JustificationType'];
   }
 }
