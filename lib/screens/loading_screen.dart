@@ -26,6 +26,7 @@ import 'package:novynaplo/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/helpers/chartHelper.dart' as chartHelper;
+import 'package:novynaplo/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:io';
 import 'package:novynaplo/database/getSql.dart';
@@ -161,6 +162,8 @@ class _LoadingPageState extends State<LoadingPage> {
       });
       eventsPage.allParsedEvents = await getAllEvents();
       eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+      //Absences and delays
+      absencesPage.allParsedAbsences = await getAllAbsences();
       //DONE
       setState(() {
         loadingText = "${getTranslatedString("almReady")}!";

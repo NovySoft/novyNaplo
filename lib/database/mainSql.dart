@@ -37,6 +37,9 @@ Future<void> initDatabase() async {
       await db.execute(
         "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT);",
       );
+      await db.execute(
+        'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT);',
+      );
     },
 
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
@@ -46,9 +49,12 @@ Future<void> initDatabase() async {
       await db.execute(
         "CREATE TABLE IF NOT EXISTS Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT);",
       );
+      await db.execute(
+        'CREATE TABLE IF NOT EXISTS Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT);',
+      );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 2,
+    version: 3,
   );
 }

@@ -412,7 +412,8 @@ extension MyDateTime on DateTime {
 }
 
 class Absence {
-  int absenceId;
+  int databaseId;
+  int id;
   String type;
   String typeName;
   String subject;
@@ -426,10 +427,11 @@ class Absence {
   String justificationType;
   String justificationTypeName;
   String osztalyCsoportUid;
+  Absence();
 
   //TODO Make other classes use this syntax instead of an outside function
   Absence.fromJson(Map<String, dynamic> json) {
-    absenceId = json['AbsenceId'];
+    id = json['AbsenceId'];
     type = json['Type'];
     typeName = json['TypeName'];
     subject = json['Subject'];
@@ -442,5 +444,25 @@ class Absence {
     osztalyCsoportUid = json['OsztalyCsoportUid'];
     justificationState = json['JustificationState'];
     justificationType = json['JustificationType'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'id': id,
+      'type': type,
+      'typeName': typeName,
+      'subject': subject,
+      'delayTimeMinutes': delayTimeMinutes,
+      'teacher': teacher,
+      'lessonStartTime': lessonStartTime,
+      'numberOfLessons': numberOfLessons,
+      'creatingTime': creatingTime,
+      'justificationState': justificationState,
+      'justificationStateName': justificationStateName,
+      'justificationType': justificationType,
+      'justificationTypeName': justificationTypeName,
+      'osztalyCsoportUid': osztalyCsoportUid,
+    };
   }
 }

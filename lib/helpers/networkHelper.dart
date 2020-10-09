@@ -167,7 +167,7 @@ class NetworkHelper {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
-      absencesPage.absencesList = await parseAllAbsences(globals.dJson);
+      absencesPage.allParsedAbsences = await parseAllAbsences(globals.dJson);
       timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }

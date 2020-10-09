@@ -235,5 +235,8 @@ Future<List<Absence>> parseAllAbsences(input) async {
   for (var n in absences) {
     tempList.add(new Absence.fromJson(n));
   }
+  //Do not await as this a time critical task
+  tempList.sort((a, b) => b.creatingTime.compareTo(a.creatingTime));
+  batchInsertAbsences(tempList);
   return tempList;
 }

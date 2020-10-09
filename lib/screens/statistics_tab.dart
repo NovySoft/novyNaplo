@@ -178,19 +178,39 @@ class _StatisticsTabState extends State<StatisticsTab>
                 itemCount: 12 + globals.adModifier,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  List<String> hiddenSeries = [];
+                  if (!legendSelection.igazolando) {
+                    hiddenSeries.add(getTranslatedString("BeJustified"));
+                  }
+                  if (!legendSelection.igazolatlan) {
+                    hiddenSeries.add(getTranslatedString("UnJustified"));
+                  }
+                  if (!legendSelection.igazolt) {
+                    hiddenSeries.add(getTranslatedString("Justified"));
+                  }
                   switch (index) {
                     case 0:
                       return Column(
                         children: [
                           Center(
                             child: Text(
-                              "${getTranslatedString("absences")}:",
+                              "${getTranslatedString("absencesAndDelays")}:",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                           SizedBox(
-                            height: 15,
+                            height: 10,
+                          ),
+                          Center(
+                            child: Text(
+                              "${getTranslatedString("absenceAndDelayInfo")}:",
+                              style: TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 25,
                           ),
                           OpenContainer(
                             tappable: false,
@@ -209,7 +229,11 @@ class _StatisticsTabState extends State<StatisticsTab>
                             closedBuilder: (_, callback) => SizedBox(
                               height: 300,
                               width: double.infinity,
-                              child: AbsencesBarChart(callback: callback),
+                              child: AbsencesBarChart(
+                                reDraw: true,
+                                callback: callback,
+                                defaultHiddenSeries: hiddenSeries,
+                              ),
                             ),
                           ),
                         ],

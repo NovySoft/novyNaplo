@@ -339,4 +339,13 @@ final Map<String, String> translation = {
   "UnJustified": "Unjustified",
   "marksAndAvs": "Marks and avarages",
   "delays": "Delays",
+  "editedLesson": "Lesson changed",
+  "newEvent": "New event on noticeboard",
+  "editedEvent": "Event changed",
+  "newAbsence": "New absence",
+  "newDelay": "New delay",
+  "editedAbsence": "Absence state changed",
+  "editedDelay": "Delay state changed",
+  "absencesAndDelays": "Absences and delays",
+  "absenceAndDelayInfo": "Absences in lessons\nSum of delays in minutes",
 };

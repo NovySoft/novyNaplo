@@ -228,3 +228,33 @@ Future<List<Event>> getAllEvents() async {
     return temp;
   });
 }
+
+Future<List<Absence>> getAllAbsences() async {
+  Crashlytics.instance.log("getAllAbsences");
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.query('Absences');
+
+  List<Absence> tempList = List.generate(maps.length, (i) {
+    Absence temp = new Absence();
+    temp.databaseId = maps[i]['databaseId'];
+    temp.id = maps[i]['id'];
+    temp.type = maps[i]['type'];
+    temp.typeName = maps[i]['typeName'];
+    temp.subject = maps[i]['subject'];
+    temp.delayTimeMinutes = maps[i]['delayTimeMinutes'];
+    temp.teacher = maps[i]['teacher'];
+    temp.lessonStartTime = maps[i]['lessonStartTime'];
+    temp.creatingTime = maps[i]['creatingTime'];
+    temp.justificationStateName = maps[i]['justificationStateName'];
+    temp.justificationTypeName = maps[i]['justificationTypeName'];
+    temp.osztalyCsoportUid = maps[i]['osztalyCsoportUid'];
+    temp.justificationState = maps[i]['justificationState'];
+    temp.justificationType = maps[i]['justificationType'];
+    temp.osztalyCsoportUid = maps[i]['osztalyCsoportUid'];
+    return temp;
+  });
+  tempList.sort((a, b) => b.creatingTime.compareTo(a.creatingTime));
+  return tempList;
+}

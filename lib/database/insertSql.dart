@@ -698,7 +698,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Módusolt tanóra: ' +
+              '${getTranslatedString("editedLesson")}: ' +
                   capitalize(lesson.subject) +
                   " (${parseIntToWeekdayString(lesson.date.weekday)})",
               subTitle,
@@ -798,7 +798,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
-          'Új dolog a faliújságon: ',
+          '${getTranslatedString("newEvent")}: ',
           event.title,
           notifHelper.platformChannelSpecifics,
           payload: "event " + event.id.toString(),
@@ -832,10 +832,75 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
             notifId = notifId == 111 ? notifId + 2 : notifId + 1;
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
-              'Faliújság módusolt:',
+              '${getTranslatedString("editedEvent")}:',
               event.title,
               notifHelper.platformChannelSpecifics,
               payload: "event " + event.id.toString(),
+            );
+          }
+        }
+      }
+    }
+  }
+  if (inserted) {
+    await batch.commit();
+  }
+}
+
+Future<void> batchInsertAbsences(List<Absence> absenceList) async {
+  Crashlytics.instance.log("batchInsertAbsences");
+  bool inserted = false;
+  // Get a reference to the database.
+  final Database db = await mainSql.database;
+  final Batch batch = db.batch();
+  List<Absence> allAbsences = await getAllAbsences();
+  for (var absence in absenceList) {
+    var matchedEvents = allAbsences.where((element) {
+      return (element.id == absence.id);
+    });
+    if (matchedEvents.length == 0) {
+      if (globals.notifications) {
+        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+        print("notif");
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          '${absence.type == "Absence" ? getTranslatedString("newAbsence") : getTranslatedString("newDelay")}: ',
+          "${absence.subject} - ${absence.teacher}",
+          notifHelper.platformChannelSpecifics,
+          payload: "absence " + absence.id.toString(),
+        );
+      }
+      inserted = true;
+      batch.insert(
+        'Absences',
+        absence.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      for (var n in matchedEvents) {
+        //!Update didn't work so we delete and create a new one
+        if (n.justificationState != absence.justificationState ||
+            n.justificationStateName != absence.justificationStateName ||
+            n.delayTimeMinutes != absence.delayTimeMinutes) {
+          inserted = true;
+          batch.delete(
+            "Absences",
+            where: "databaseId = ?",
+            whereArgs: [n.databaseId],
+          );
+          batch.insert(
+            'Absences',
+            absence.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          if (globals.notifications) {
+            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
+            await notifHelper.flutterLocalNotificationsPlugin.show(
+              notifId,
+              '${absence.type == "Absence" ? getTranslatedString("editedAbsence") : getTranslatedString("editedDelay")}:',
+              "${getTranslatedString("absence.justificationState")}: ${absence.subject} - ${absence.teacher}",
+              notifHelper.platformChannelSpecifics,
+              payload: "absence " + absence.id.toString(),
             );
           }
         }
