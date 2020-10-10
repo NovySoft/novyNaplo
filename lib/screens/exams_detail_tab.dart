@@ -60,14 +60,16 @@ Widget _buildBody(Exam exam, Color color) {
                   break;
                 case 1:
                   return SizedBox(
-                    child: Text("${getTranslatedString("subject")}: " + exam.subject,
+                    child: Text(
+                        "${getTranslatedString("subject")}: " + exam.subject,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 2:
                   return SizedBox(
-                    child: Text("${getTranslatedString("theme")}: " + exam.nameOfExam,
+                    child: Text(
+                        "${getTranslatedString("theme")}: " + exam.nameOfExam,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -75,14 +77,16 @@ Widget _buildBody(Exam exam, Color color) {
                 case 3:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("examType")}: " + exam.typeOfExam.toString(),
+                        "${getTranslatedString("examType")}: " +
+                            exam.typeOfExam.toString(),
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 4:
                   return SizedBox(
-                    child: Text("${getTranslatedString("teacher")}: " + exam.teacher,
+                    child: Text(
+                        "${getTranslatedString("teacher")}: " + exam.teacher,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -92,7 +96,8 @@ Widget _buildBody(Exam exam, Color color) {
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(
-                    child: Text("${getTranslatedString("dateWrite")}: " + subtitle,
+                    child: Text(
+                        "${getTranslatedString("dateWrite")}: " + subtitle,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -102,7 +107,8 @@ Widget _buildBody(Exam exam, Color color) {
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(
-                    child: Text("${getTranslatedString("dateGiveUp")}: " + subtitle,
+                    child: Text(
+                        "${getTranslatedString("dateGiveUp")}: " + subtitle,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );

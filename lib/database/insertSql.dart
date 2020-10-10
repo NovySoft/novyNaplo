@@ -898,7 +898,7 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
               '${absence.type == "Absence" ? getTranslatedString("editedAbsence") : getTranslatedString("editedDelay")}:',
-              "${getTranslatedString("absence.justificationState")}: ${absence.subject} - ${absence.teacher}",
+              "${getTranslatedString(absence.justificationState)}: ${absence.subject} - ${absence.teacher}",
               notifHelper.platformChannelSpecifics,
               payload: "absence " + absence.id.toString(),
             );

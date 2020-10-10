@@ -6,11 +6,12 @@ import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
-import 'dart:convert';
 
 List<Absence> allParsedAbsences = [];
 List<charts.Series> seriesList;
 AbsencesBarChartLegendSelection legendSelection =
+    new AbsencesBarChartLegendSelection();
+AbsencesBarChartLegendSelection legendSelectionBefore =
     new AbsencesBarChartLegendSelection();
 var listener;
 
@@ -21,19 +22,47 @@ class AbsencesTab extends StatefulWidget {
 }
 
 class _AbsencesTabState extends State<AbsencesTab>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   List<Absence> tempAbsences = [];
+  AnimationController _animationControllerJustified;
+  AnimationController _animationControllerUnJustified;
+  AnimationController _animationControllerBeJustified;
 
   @override
   void initState() {
+    _animationControllerJustified = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animationControllerUnJustified = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animationControllerBeJustified = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animationControllerJustified.forward();
+    _animationControllerUnJustified.forward();
+    _animationControllerBeJustified.forward();
+    //DataHandling
     tempAbsences = List.from(allParsedAbsences);
-    //tempAbsences = jsonDecode(jsonEncode(allParsedAbsences));
     listener = () async {
       setState(() {
         legendSelection = legendSelection;
       });
       Future.delayed(Duration(milliseconds: 500), () {
         tempAbsences = List.from(allParsedAbsences);
+        //TODO: Fix fade in
+        _animationControllerJustified.reset();
+        _animationControllerJustified.forward();
+
+        _animationControllerBeJustified.reset();
+        _animationControllerBeJustified.forward();
+
+        _animationControllerUnJustified.reset();
+        _animationControllerUnJustified.forward();
+
         if (!legendSelection.igazolando) {
           tempAbsences.removeWhere(
               (element) => element.justificationState == "BeJustified");
@@ -49,6 +78,7 @@ class _AbsencesTabState extends State<AbsencesTab>
         setState(() {
           legendSelection = legendSelection;
         });
+        legendSelectionBefore = legendSelection;
       });
     };
     legendSelection.addListener(listener);
@@ -105,35 +135,166 @@ class _AbsencesTabState extends State<AbsencesTab>
                   height: 100,
                 );
               }
-              //TODO: Fix fade in
               double opacity = 1;
               Color color = Colors.purple;
+              var animationController;
               if (tempAbsences[index].justificationState == "BeJustified") {
                 color = Colors.yellow;
                 opacity = legendSelection.igazolando ? 1 : 0;
+                animationController = _animationControllerBeJustified;
               } else if (tempAbsences[index].justificationState ==
                   "UnJustified") {
                 color = Colors.red;
                 opacity = legendSelection.igazolatlan ? 1 : 0;
+                animationController = _animationControllerUnJustified;
               } else if (tempAbsences[index].justificationState ==
                   "Justified") {
                 color = Colors.green;
                 opacity = legendSelection.igazolt ? 1 : 0;
+                animationController = _animationControllerJustified;
               }
+              DateTime tempDate =
+                  DateTime.parse(tempAbsences[index].lessonStartTimeString);
+              String subTitle = tempAbsences[index].type == "Delay"
+                  ? "${getTranslatedString("delay")}: ${tempAbsences[index].delayTimeMinutes} ${getTranslatedString("minutes")}"
+                  : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[index].numberOfLessons)} ${getTranslatedString("lesson")})";
               return AnimatedOpacity(
                 duration: Duration(milliseconds: 500),
                 opacity: opacity,
-                child: AnimatedTitleSubtitleCard(
-                  heroAnimation: AlwaysStoppedAnimation(0),
-                  color: color,
-                  title: "Alma",
-                  subTitle: "Körte",
-                  onPressed: Text("Alma"),
+                child: FadeTransition(
+                  opacity: animationController
+                      .drive(CurveTween(curve: Curves.linear)),
+                  child: AnimatedTitleSubtitleCard(
+                    heroAnimation: AlwaysStoppedAnimation(0),
+                    color: color,
+                    title: tempAbsences[index].teacher +
+                        " - " +
+                        capitalize(tempAbsences[index].subject),
+                    subTitle: subTitle,
+                    onPressed: AbsencencesDetailTab(
+                      absence: tempAbsences[index],
+                      color: color,
+                    ),
+                  ),
                 ),
               );
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AbsencencesDetailTab extends StatelessWidget {
+  AbsencencesDetailTab({@required this.absence, this.color});
+  final Absence absence;
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    globals.globalContext = context;
+    return Scaffold(
+      appBar: AppBar(title: Text(capitalize(absence.subject))),
+      body: SafeArea(
+        bottom: false,
+        left: false,
+        right: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HeroAnimatingMarksCard(
+              eval: null,
+              iconData: parseSubjectToIcon(subject: absence.subject),
+              subTitle: "",
+              title: absence.teacher + " - " + capitalize(absence.subject),
+              color: color == null ? Colors.purple : color,
+              heroAnimation: AlwaysStoppedAnimation(1),
+              onPressed: null,
+            ),
+            Divider(
+              height: 0,
+              color: Colors.grey,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 6 + globals.adModifier,
+                itemBuilder: (context, index) {
+                  switch (index) {
+                    case 0:
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, top: 16, bottom: 16),
+                        child: Text(
+                          '${absence.type == "Delay" ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                      break;
+                    case 1:
+                      return SizedBox(
+                        child: Text(
+                            "${getTranslatedString("subject")}: " +
+                                absence.subject,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                      break;
+                    case 2:
+                      return SizedBox(
+                        child: Text(
+                            "${getTranslatedString("teacher")}: " +
+                                absence.teacher,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                      break;
+                    case 3:
+                      DateTime tempDate =
+                          DateTime.parse(absence.lessonStartTimeString);
+                      return SizedBox(
+                        child: Text(
+                            "${getTranslatedString("date")}: " +
+                                "${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(absence.numberOfLessons)} ${getTranslatedString("lesson")})",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                      break;
+                    case 4:
+                      return SizedBox(
+                        child: Text(
+                            "${getTranslatedString("stateOfJustification")}: " +
+                                "${getTranslatedString(absence.justificationState)}",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      );
+                      break;
+                    case 5:
+                      return absence.justificationType != null ||
+                              absence.justificationType != ""
+                          ? SizedBox(
+                              child: Text(
+                                  "${getTranslatedString("justificationType")}: " +
+                                      "${getTranslatedString(absence.justificationTypeName)}",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          : SizedBox(
+                              width: 0,
+                              height: 0,
+                            );
+                      break;
+                    default:
+                      return SizedBox(height: 100);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

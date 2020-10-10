@@ -419,7 +419,7 @@ class Absence {
   String subject;
   int delayTimeMinutes;
   String teacher;
-  String lessonStartTime;
+  String lessonStartTimeString;
   int numberOfLessons;
   String creatingTime;
   String justificationState;
@@ -437,13 +437,14 @@ class Absence {
     subject = json['Subject'];
     delayTimeMinutes = json['DelayTimeMinutes'];
     teacher = json['Teacher'];
-    lessonStartTime = json['LessonStartTime'];
+    lessonStartTimeString = json['LessonStartTime'];
     creatingTime = json['CreatingTime'];
     justificationStateName = json['JustificationStateName'];
     justificationTypeName = json['JustificationTypeName'];
     osztalyCsoportUid = json['OsztalyCsoportUid'];
     justificationState = json['JustificationState'];
     justificationType = json['JustificationType'];
+    numberOfLessons = json['NumberOfLessons'];
   }
 
   Map<String, dynamic> toMap() {
@@ -455,7 +456,7 @@ class Absence {
       'subject': subject,
       'delayTimeMinutes': delayTimeMinutes,
       'teacher': teacher,
-      'lessonStartTime': lessonStartTime,
+      'lessonStartTime': lessonStartTimeString,
       'numberOfLessons': numberOfLessons,
       'creatingTime': creatingTime,
       'justificationState': justificationState,

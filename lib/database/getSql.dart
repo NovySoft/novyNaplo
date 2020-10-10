@@ -245,7 +245,7 @@ Future<List<Absence>> getAllAbsences() async {
     temp.subject = maps[i]['subject'];
     temp.delayTimeMinutes = maps[i]['delayTimeMinutes'];
     temp.teacher = maps[i]['teacher'];
-    temp.lessonStartTime = maps[i]['lessonStartTime'];
+    temp.lessonStartTimeString = maps[i]['lessonStartTime'];
     temp.creatingTime = maps[i]['creatingTime'];
     temp.justificationStateName = maps[i]['justificationStateName'];
     temp.justificationTypeName = maps[i]['justificationTypeName'];
@@ -253,8 +253,14 @@ Future<List<Absence>> getAllAbsences() async {
     temp.justificationState = maps[i]['justificationState'];
     temp.justificationType = maps[i]['justificationType'];
     temp.osztalyCsoportUid = maps[i]['osztalyCsoportUid'];
+    temp.numberOfLessons = maps[i]['numberOfLessons'];
     return temp;
   });
-  tempList.sort((a, b) => b.creatingTime.compareTo(a.creatingTime));
+  tempList.sort(
+    (a, b) => (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
+        .compareTo(
+      a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
+    ),
+  );
   return tempList;
 }

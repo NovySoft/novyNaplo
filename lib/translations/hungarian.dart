@@ -346,4 +346,11 @@ final Map<String, String> translation = {
   "editedDelay": "Módosult késés",
   "absencesAndDelays": "Mulasztások",
   "absenceAndDelayInfo": "Hiányzások száma órában\nKésések összege percben",
+  "delay": "Késés",
+  "absence": "Hiányzás",
+  "lesson": "óra",
+  "delayInfo": "Késés információ",
+  "absenceInfo": "Hiányzás információi",
+  "stateOfJustification": "Igazolás állapota",
+  "justificationType": "Igazolás típusa",
 };
