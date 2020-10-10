@@ -85,8 +85,14 @@ Future selectNotification(String payload) async {
   }
   if (payload != null && payload != "teszt" && payload is String) {
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
-    globals.payloadId = int.parse(payload.split(" ")[1]);
     globals.notifPayload = payload.split(" ")[0];
+    if (payload.split(" ")[0] == "avarage") {
+      globals.payloadId = 0;
+      globals.payloadString = payload.split(" ")[1];
+    } else {
+      globals.payloadId = int.parse(payload.split(" ")[1]);
+    }
+
     switch (payload.split(" ")[0]) {
       case "event":
         int tempindex = eventsPage.allParsedEvents.indexWhere(
@@ -256,7 +262,6 @@ Future selectNotification(String payload) async {
         return;
         break;
       case "avarage":
-        //TODO, Show the page of the subject instead of just pushing to statistics
         Navigator.of(globals.globalContext).pushNamed(StatisticsTab.tag);
         return;
         break;

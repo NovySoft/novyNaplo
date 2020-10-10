@@ -22,7 +22,6 @@ import 'ui_settings.dart';
 
 //TODO: Make settings more user friendly
 //TODO: Implement: https://pub.dev/packages/flutter_material_color_picker
-//TODO: Enable notifications and background request by default
 int indexModifier = 0;
 
 class SettingsTab extends StatefulWidget {

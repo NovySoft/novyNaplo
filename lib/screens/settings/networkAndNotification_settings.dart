@@ -9,6 +9,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/screens/absences_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
+import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
@@ -265,7 +266,8 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
-                            payload: 'avarage 0',
+                            payload:
+                                'avarage ${allParsedSubjectsWithoutZeros[0][0].subject}',
                           );
                         },
                         icon: Icon(

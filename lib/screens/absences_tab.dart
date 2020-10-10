@@ -44,7 +44,6 @@ class _AbsencesTabState extends State<AbsencesTab>
     if (globals.payloadId != -1) {
       if (globals.notifPayload == "absence") {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          print("PP ID: " + globals.payloadId.toString());
           Absence tempAbsence;
           for (var n in allParsedAbsences) {
             if (n.id == globals.payloadId) {

@@ -638,10 +638,34 @@ class _StatisticsTabState extends State<StatisticsTab>
               builder: (context) => AbsencesTab(),
             ),
           );
+        } else if (globals.notifPayload == "avarage") {
+          int tempIndex = allParsedSubjectsWithoutZeros.indexWhere(
+              (element) => element[0].subject == globals.payloadString);
+          Color currColor = marksPage.colors[tempIndex + 1];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChartsDetailTab(
+                id: tempIndex,
+                subject: capitalize(
+                    allParsedSubjectsWithoutZeros[tempIndex][0].subject),
+                color: currColor,
+                seriesList: createSubjectChart(
+                    allParsedSubjectsWithoutZeros[tempIndex], index.toString()),
+                animate: globals.chartAnimations,
+              ),
+            ),
+          );
+          globals.payloadId = -1;
+          globals.notifPayload = "";
         }
       });
     }
-    _tabController = new TabController(vsync: this, length: 2);
+    _tabController = new TabController(
+      vsync: this,
+      length: 2,
+      initialIndex: globals.notifPayload == "avarage" ? 1 : 0,
+    );
     super.initState();
   }
 

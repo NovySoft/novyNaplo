@@ -251,7 +251,7 @@ Future<void> insertAvarage(Avarage avarage) async {
                 avarage.ownValue.toString() +
                 " ($diff)",
             notifHelper.platformChannelSpecifics,
-            payload: "avarage 0",
+            payload: "avarage ${avarage.subject}",
           );
         }
         insertAvarage(avarage);
@@ -532,7 +532,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
                   avarage.ownValue.toString() +
                   " ($diff)",
               notifHelper.platformChannelSpecifics,
-              payload: "avarage 0",
+              payload: "avarage ${avarage.subject}",
             );
           }
         }

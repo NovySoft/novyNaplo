@@ -19,6 +19,8 @@ NotificationAppLaunchDetails
 int payloadId =
     -1; //Payload id, contains id of the notification we want to show
 String notifPayload; //Contains the prefix of the notification payload
+String
+    payloadString; //Used when instead of an integer we use string as payloadId
 //* "Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme
