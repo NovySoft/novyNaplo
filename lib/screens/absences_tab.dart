@@ -15,7 +15,6 @@ AbsencesBarChartLegendSelection legendSelectionBefore =
     new AbsencesBarChartLegendSelection();
 var listener;
 
-//TODO: Notification payload
 class AbsencesTab extends StatefulWidget {
   @override
   _AbsencesTabState createState() => _AbsencesTabState();

@@ -87,7 +87,7 @@ void main() async {
     globals.fetchPeriod =
         prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
     globals.backgroundFetch = prefs.getBool("backgroundFetch");
-    if (globals.backgroundFetch == null ? false : globals.backgroundFetch) {
+    if (globals.backgroundFetch == null ? true : globals.backgroundFetch) {
       globals.backgroundFetchCanWakeUpPhone =
           prefs.getBool("backgroundFetchCanWakeUpPhone") == null
               ? true

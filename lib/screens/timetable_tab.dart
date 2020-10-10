@@ -29,7 +29,6 @@ class TimetableTab extends StatefulWidget {
 }
 
 class _TimetableTabState extends State<TimetableTab> {
-  //TODO: Notifications payload
   @override
   void initState() {
     if (globals.payloadId != -1) {

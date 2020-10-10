@@ -29,7 +29,7 @@ String howManyGraph; //What should we show? A pie- or a bar-chart
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
-bool backgroundFetch = false; //Should we fetch data in the background?
+bool backgroundFetch = true; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
 bool backgroundFetchOnCellular = false; //Should we fetch on cellular data
@@ -38,7 +38,7 @@ bool verCheckOnStart =
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 60; //After how many minutes should we fetch the new data?
-bool notifications = false; //Should we send notifications
+bool notifications = true; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
@@ -119,8 +119,8 @@ Future<void> setGlobals() async {
   if (prefs.getBool("notifications") != null) {
     notifications = prefs.getBool("notifications");
   } else {
-    prefs.setBool("notifications", false);
-    notifications = false;
+    prefs.setBool("notifications", true);
+    notifications = true;
   }
   Crashlytics.instance.setBool("notifications", notifications);
   FirebaseAnalytics().setUserProperty(
@@ -137,16 +137,28 @@ Future<void> setGlobals() async {
   Crashlytics.instance
       .setBool("backgroundFetchOnCellular", backgroundFetchOnCellular);
 
-  fetchPeriod =
-      prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
-  backgroundFetch = prefs.getBool("backgroundFetch") == null
-      ? false
-      : prefs.getBool("backgroundFetch");
+  if (prefs.getInt("fetchPeriod") == null) {
+    fetchPeriod = 60;
+    prefs.setInt("fetchPeriod", 60);
+  } else {
+    fetchPeriod = prefs.getInt("fetchPeriod");
+  }
+
+  if (prefs.getBool("backgroundFetch") == null) {
+    backgroundFetch = true;
+    prefs.setBool("backgroundFetch", true);
+  } else {
+    backgroundFetch = prefs.getBool("backgroundFetch");
+  }
   Crashlytics.instance.setBool("backgroundFetch", backgroundFetch);
-  backgroundFetchCanWakeUpPhone =
-      prefs.getBool("backgroundFetchCanWakeUpPhone") == null
-          ? true
-          : prefs.getBool("backgroundFetchCanWakeUpPhone");
+
+  if (prefs.getBool("backgroundFetchCanWakeUpPhone") == null) {
+    backgroundFetchCanWakeUpPhone = true;
+    prefs.setBool("backgroundFetchCanWakeUpPhone", true);
+  } else {
+    backgroundFetchCanWakeUpPhone =
+        prefs.getBool("backgroundFetchCanWakeUpPhone");
+  }
   Crashlytics.instance
       .setBool("backgroundFetchCanWakeUpPhone", backgroundFetchCanWakeUpPhone);
 
