@@ -10,6 +10,7 @@ import 'package:novynaplo/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
@@ -30,7 +31,52 @@ class TimetableTab extends StatefulWidget {
 class _TimetableTabState extends State<TimetableTab> {
   //TODO: Notifications payload
   @override
+  void initState() {
+    if (globals.payloadId != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Lesson tempLesson;
+        int jI = -1;
+        for (var n in lessonsList) {
+          for (var j in n) {
+            jI++;
+            if (tempLesson != null) break;
+            if (j.id == globals.payloadId) {
+              tempLesson = j;
+              break;
+            }
+          }
+          if (tempLesson != null) break;
+        }
+        _controller.jumpToDate(tempLesson.date);
+        setState(() {
+          _selectedDate = tempLesson.date;
+        });
+        globals.payloadId = -1;
+        Color color;
+        if (jI >= marksPage.colors.length) {
+          color = getRandomColors(1)[0];
+          marksPage.colors.add(color);
+        } else {
+          color = marksPage.colors[jI];
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TimetableDetailTab(
+              icon: tempLesson.homework.icon,
+              color: color,
+              lessonInfo: tempLesson,
+            ),
+          ),
+        );
+      });
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    globals.globalContext = context;
     selectedLessonList = List.from(lessonsList.where((element) {
       if (element == null || element.length == 0) {
         return false;

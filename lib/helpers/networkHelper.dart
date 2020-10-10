@@ -214,6 +214,7 @@ class NetworkHelper {
   Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
     Crashlytics.instance.log("getSpecifiedWeeksLesson");
     String code = "";
+    // ignore: unused_local_variable
     String decryptedPass, decryptedUser, decryptedCode, status;
     status = "";
     final SharedPreferences prefs = await SharedPreferences.getInstance();

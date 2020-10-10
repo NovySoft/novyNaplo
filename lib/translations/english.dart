@@ -355,4 +355,5 @@ final Map<String, String> translation = {
   "absenceInfo": "Absence informations",
   "stateOfJustification": "State of justification",
   "justificationType": "Type of justification",
+  "Orvosi igazolás": "Medical certificate",
 };

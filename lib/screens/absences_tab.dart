@@ -42,6 +42,32 @@ class _AbsencesTabState extends State<AbsencesTab>
       duration: Duration(milliseconds: 500),
       vsync: this,
     );
+    if (globals.payloadId != -1) {
+      if (globals.notifPayload == "absence") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          print("PP ID: " + globals.payloadId.toString());
+          Absence tempAbsence;
+          for (var n in allParsedAbsences) {
+            if (n.id == globals.payloadId) {
+              tempAbsence = n;
+              break;
+            }
+          }
+          if (tempAbsence != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AbsencencesDetailTab(
+                  absence: tempAbsence,
+                  color: getAbsenceCardColor(tempAbsence),
+                ),
+              ),
+            );
+          }
+          globals.payloadId = -1;
+        });
+      }
+    }
     _animationControllerJustified.forward();
     _animationControllerUnJustified.forward();
     _animationControllerBeJustified.forward();
@@ -136,20 +162,17 @@ class _AbsencesTabState extends State<AbsencesTab>
                 );
               }
               double opacity = 1;
-              Color color = Colors.purple;
+              Color color = getAbsenceCardColor(tempAbsences[index]);
               var animationController;
               if (tempAbsences[index].justificationState == "BeJustified") {
-                color = Colors.yellow;
                 opacity = legendSelection.igazolando ? 1 : 0;
                 animationController = _animationControllerBeJustified;
               } else if (tempAbsences[index].justificationState ==
                   "UnJustified") {
-                color = Colors.red;
                 opacity = legendSelection.igazolatlan ? 1 : 0;
                 animationController = _animationControllerUnJustified;
               } else if (tempAbsences[index].justificationState ==
                   "Justified") {
-                color = Colors.green;
                 opacity = legendSelection.igazolt ? 1 : 0;
                 animationController = _animationControllerJustified;
               }

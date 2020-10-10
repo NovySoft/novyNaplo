@@ -8,6 +8,7 @@ import 'utils.dart';
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 
 //TODO: Add option to translate notices, events, evals, homework and subjects
+// ignore: unused_element
 int _index = 0;
 var sum;
 var jegyek;

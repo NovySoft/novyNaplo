@@ -629,6 +629,18 @@ class _StatisticsTabState extends State<StatisticsTab>
 
   @override
   void initState() {
+    if (globals.payloadId != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (globals.notifPayload == "absence") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AbsencesTab(),
+            ),
+          );
+        }
+      });
+    }
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
   }

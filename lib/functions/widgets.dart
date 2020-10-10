@@ -17,7 +17,6 @@ import 'package:novynaplo/screens/settings/settings_tab.dart';
 import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 class PressableCard extends StatefulWidget {

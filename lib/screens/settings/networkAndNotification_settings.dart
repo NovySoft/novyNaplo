@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/screens/absences_tab.dart';
 import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/marks_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
@@ -38,7 +39,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
-        itemCount: 8 + globals.adModifier,
+        itemCount: 9 + globals.adModifier,
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
@@ -309,6 +310,41 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         label: Text(
                             getTranslatedString("sendTestNotif") +
                                 " (${getTranslatedString("event")})",
+                            style: TextStyle(color: Colors.black))),
+                  ),
+                ),
+              );
+              break;
+            case 8:
+              return ListTile(
+                title: Center(
+                  child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
+                          await notifications.flutterLocalNotificationsPlugin
+                              .show(
+                            1,
+                            getTranslatedString("testNotif"),
+                            getTranslatedString("thisIsHowItWillLookLike"),
+                            notifications.platformChannelSpecifics,
+                            payload: 'absence ' +
+                                (allParsedAbsences.length == 0
+                                    ? "0"
+                                    : allParsedAbsences[0].id.toString()),
+                          );
+                        },
+                        icon: Icon(
+                          MdiIcons.bellRing,
+                          color: Colors.black,
+                        ),
+                        label: Text(
+                            getTranslatedString("sendTestNotif") +
+                                " (${getTranslatedString("absencesAndDelays")})",
                             style: TextStyle(color: Colors.black))),
                   ),
                 ),

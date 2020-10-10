@@ -431,3 +431,15 @@ String intToTHEnding(int input) {
   }
   return number + "th";
 }
+
+Color getAbsenceCardColor(Absence absence) {
+  Color color = Colors.purple;
+  if (absence.justificationState == "BeJustified") {
+    color = Colors.yellow;
+  } else if (absence.justificationState == "UnJustified") {
+    color = Colors.red;
+  } else if (absence.justificationState == "Justified") {
+    color = Colors.green;
+  }
+  return color;
+}

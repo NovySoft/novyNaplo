@@ -39,13 +39,13 @@ Novy teljesen nem eredeti kréta kliense.
 - Faliújság megtekintése
 - Fordítások (Angol, Magyar)
 - Éves, féléves, és negyedéves értesítők megetekintése
+- Hiányzások és késések
 
 ## **HAMAROSAN**
 
 - Tanulói házifeladat felírása
 - Házifeladat TODO lista szerűség
 - Több felhasználós támogatás
-- Hiányzások
 - E-Ügyintézés
 - Támogatók oldal - **Gáti Úr** közreműködésével
 - Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)

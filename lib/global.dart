@@ -18,6 +18,7 @@ NotificationAppLaunchDetails
     notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
 int payloadId =
     -1; //Payload id, contains id of the notification we want to show
+String notifPayload; //Contains the prefix of the notification payload
 //* "Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme

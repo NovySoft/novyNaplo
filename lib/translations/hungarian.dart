@@ -353,4 +353,5 @@ final Map<String, String> translation = {
   "absenceInfo": "Hiányzás információi",
   "stateOfJustification": "Igazolás állapota",
   "justificationType": "Igazolás típusa",
+  "Orvosi igazolás": "Orvosi igazolás",
 };
