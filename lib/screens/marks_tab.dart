@@ -35,6 +35,8 @@ TabController _tabController;
 List<dynamic> colors;
 bool redirectPayload = false;
 
+//TODO: Fix margins on other cards
+
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static String title = capitalize(getTranslatedString("marks"));

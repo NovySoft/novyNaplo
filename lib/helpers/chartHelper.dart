@@ -35,22 +35,35 @@ var chartColorList = [
   charts.MaterialPalette.teal.shadeDefault,
 ];
 
-dynamic createOsszesitett(var allParsedInput) {
+dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
   double sum = 0, index = 0;
   var tempList = [];
-  for (var n in allParsedInput) {
-    for (var y in n) {
-      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
-      tempList.add(sum / index);
+  //Convert 2D data to 1D array
+  List<dynamic> interatorList =
+      List.from(allParsedInput).expand((i) => i).toList();
+  interatorList.sort((a, b) {
+    //!LOOK INTO WHY EXTENSION METHODS ARENT WORKING HERE
+    if (a.date.year == b.date.year &&
+        a.date.month == b.date.month &&
+        a.date.day == b.date.day) {
+      return a.createDate.compareTo(b.createDate);
+    } else {
+      return a.date.compareTo(b.date);
     }
+  });
+  for (var n in interatorList) {
+    sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+    index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+    tempList.add(sum / index);
   }
+
   List<LinearMarkChartData> tempListTwo = [];
   index = 0;
   for (var n in tempList) {
     tempListTwo.add(new LinearMarkChartData(index.toInt(), n, id: "Minden"));
     index++;
   }
+
   return [
     new charts.Series<LinearMarkChartData, int>(
         id: tempListTwo[0].id,
@@ -179,7 +192,7 @@ void getAllSubjectsAv(input) {
 }
 
 //Legjobb, legroszabb és a köztes jegyek
-void getWorstAndBest(input) async {
+void getWorstAndBest(List<List<Evals>> input) async {
   List<stats.AV> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;

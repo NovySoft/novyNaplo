@@ -4,7 +4,7 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-//TODO: New onboarding with https://github.com/xsahil03x/fancy_on_boarding
+//TODO: New onboarding with https://pub.dev/packages/introduction_screen
 
 PageController controller = PageController();
 var currentPageValue = 0.0;
