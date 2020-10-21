@@ -45,13 +45,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          HeroAnimatingMarksCard(
+          AnimatedMarksCard(
             eval: null,
             iconData: icon,
             subTitle: "",
             title: widget.lessonInfo.name,
             color: widget.color,
-            heroAnimation: AlwaysStoppedAnimation(1),
           ),
           Divider(
             height: 0,

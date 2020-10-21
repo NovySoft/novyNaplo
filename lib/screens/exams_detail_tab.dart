@@ -27,13 +27,12 @@ Widget _buildBody(Exam exam, Color color) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        HeroAnimatingMarksCard(
+        AnimatedMarksCard(
           eval: null,
           iconData: parseSubjectToIcon(subject: exam.subject),
           subTitle: "",
           title: capitalize(exam.subject + " " + exam.nameOfExam),
           color: color == null ? Colors.green : color,
-          heroAnimation: AlwaysStoppedAnimation(1),
           onPressed: null,
         ),
         Divider(

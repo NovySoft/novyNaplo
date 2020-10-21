@@ -16,7 +16,6 @@ import 'package:novynaplo/translations/translationProvider.dart';
 
 var allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
-//TODO Remove contracted main chart option
 //TODO Make subject color constant
 
 final List<Tab> statTabs = <Tab>[

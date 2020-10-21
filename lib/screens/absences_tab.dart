@@ -223,13 +223,12 @@ class AbsencencesDetailTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            HeroAnimatingMarksCard(
+            AnimatedMarksCard(
               eval: null,
               iconData: parseSubjectToIcon(subject: absence.subject),
               subTitle: "",
               title: absence.teacher + " - " + capitalize(absence.subject),
               color: color == null ? Colors.purple : color,
-              heroAnimation: AlwaysStoppedAnimation(1),
               onPressed: null,
             ),
             Divider(

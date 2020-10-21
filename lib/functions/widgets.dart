@@ -20,16 +20,15 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/translations/translationProvider.dart';
 
 class PressableCard extends StatefulWidget {
-  const PressableCard({
+  PressableCard({
     this.onPressed,
     this.color,
-    @required this.flattenAnimation,
     this.child,
   });
 
   final VoidCallback onPressed;
   final Color color;
-  final Animation<double> flattenAnimation;
+  final Animation<double> flattenAnimation = AlwaysStoppedAnimation(0);
   final Widget child;
 
   @override
@@ -119,12 +118,11 @@ class _PressableCardState extends State<PressableCard>
 ///
 /// This is an example of a custom widget that an app developer might create for
 /// use on both iOS and Android as part of their brand's unique design.
-class HeroAnimatingMarksCard extends StatelessWidget {
-  HeroAnimatingMarksCard(
+class AnimatedMarksCard extends StatelessWidget {
+  AnimatedMarksCard(
       {this.title,
       this.subTitle,
       this.color,
-      this.heroAnimation,
       this.onPressed,
       this.iconData,
       @required this.eval});
@@ -132,12 +130,11 @@ class HeroAnimatingMarksCard extends StatelessWidget {
   final String title;
   final String subTitle;
   final Color color;
-  final Animation<double> heroAnimation;
   final Widget onPressed;
   final Evals eval;
   final IconData iconData;
 
-  double get playButtonSize => 100 + 50 * heroAnimation.value;
+  double get playButtonSize => 120;
 
   @override
   Widget build(context) {
@@ -153,7 +150,6 @@ class HeroAnimatingMarksCard extends StatelessWidget {
       return PressableCard(
           onPressed: null,
           color: color,
-          flattenAnimation: heroAnimation,
           child: SizedBox(
             height: 250,
             width: double.infinity,
@@ -176,7 +172,7 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                           children: [
                             // The song title banner slides off in the hero animation.
                             Positioned(
-                              bottom: -80 * heroAnimation.value,
+                              bottom: 1,
                               left: 0,
                               right: 0,
                               child: Container(
@@ -212,8 +208,7 @@ class HeroAnimatingMarksCard extends StatelessWidget {
                             ),
                             // The play button grows in the hero animation.
                             Padding(
-                              padding: EdgeInsets.only(bottom: 45) *
-                                  (1 - heroAnimation.value),
+                              padding: EdgeInsets.only(bottom: 70),
                               child: Icon(
                                 icon,
                                 size: playButtonSize,
@@ -269,7 +264,6 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
     return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: heroAnimation,
         child: SizedBox(
           height: 120,
           width: double.infinity,
@@ -298,6 +292,7 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                             height: 120,
                             color: Colors.black12,
                             alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                                 textDirection: TextDirection.ltr,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -354,7 +349,6 @@ class AnimatedExamsCard extends StatelessWidget {
     return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: heroAnimation,
         child: SizedBox(
           height: 120,
           width: double.infinity,
@@ -383,6 +377,7 @@ class AnimatedExamsCard extends StatelessWidget {
                             height: 120,
                             color: Colors.black12,
                             alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                                 textDirection: TextDirection.ltr,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -446,148 +441,80 @@ class AnimatedHomeworkCard extends StatelessWidget {
 
   @override
   Widget build(context) {
-    if (dueOver) {
-      return PressableCard(
-          onPressed: null,
-          color: color,
-          flattenAnimation: heroAnimation,
-          child: SizedBox(
-            height: 120,
-            width: double.infinity,
-            child: Container(
-              color: color,
-              child: OpenContainer(
-                  closedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  openShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1)),
-                  transitionDuration: Duration(milliseconds: 550),
-                  openColor: color,
-                  closedColor: color,
-                  closedBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return SizedBox(
-                      height: 120,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 120,
-                              color: Colors.black12,
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                  textDirection: TextDirection.ltr,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      title,
-                                      textAlign: TextAlign.left,
-                                      textDirection: TextDirection.ltr,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 25.0),
-                                    ),
-                                    Text(
-                                      subTitle,
-                                      textAlign: TextAlign.left,
-                                      textDirection: TextDirection.ltr,
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 20.0),
-                                    ),
-                                  ]),
-                            ),
-                          ),
-                          Positioned(
-                            right: 8,
-                            child: Icon(
-                              MdiIcons.alarmLight,
-                              size: 60,
-                              color: Colors.red[900],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  openBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return onPressed;
-                  }),
-            ),
-          ));
-    } else {
-      return PressableCard(
+    return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: heroAnimation,
         child: SizedBox(
           height: 120,
           width: double.infinity,
           child: Container(
             color: color,
             child: OpenContainer(
-              closedShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              openShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(1)),
-              transitionDuration: Duration(milliseconds: 550),
-              openColor: color,
-              closedColor: color,
-              closedBuilder:
-                  (BuildContext context, VoidCallback openContainer) {
-                return SizedBox(
-                  height: 120,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          height: 120,
-                          color: Colors.black12,
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            textDirection: TextDirection.ltr,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                textAlign: TextAlign.left,
+                closedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                openShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1)),
+                transitionDuration: Duration(milliseconds: 550),
+                openColor: color,
+                closedColor: color,
+                closedBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return SizedBox(
+                    height: 120,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 120,
+                            color: Colors.black12,
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Column(
                                 textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 25.0),
-                              ),
-                              Text(
-                                subTitle,
-                                textAlign: TextAlign.left,
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 20.0),
-                              ),
-                            ],
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    textAlign: TextAlign.left,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 25.0),
+                                  ),
+                                  Text(
+                                    subTitle,
+                                    textAlign: TextAlign.left,
+                                    textDirection: TextDirection.ltr,
+                                    style: TextStyle(
+                                        color: Colors.black54, fontSize: 20.0),
+                                  ),
+                                ]),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              openBuilder: (BuildContext context, VoidCallback openContainer) {
-                return onPressed;
-              },
-            ),
+                        dueOver
+                            ? Positioned(
+                                right: 8,
+                                child: Icon(
+                                  MdiIcons.alarmLight,
+                                  size: 60,
+                                  color: Colors.red[900],
+                                ),
+                              )
+                            : SizedBox(height: 0, width: 0),
+                      ],
+                    ),
+                  );
+                },
+                openBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return onPressed;
+                }),
           ),
-        ),
-      );
-    }
+        ));
   }
 }
 
@@ -611,118 +538,40 @@ class TimetableCard extends StatelessWidget {
   Widget build(context) {
     String subTitle = getTimetableSubtitle(lessonInfo);
     String title = lessonInfo.name;
-    if (hasHomework) {
-      return PressableCard(
-          onPressed: null,
-          color: color,
-          flattenAnimation: heroAnimation,
-          child: SizedBox(
-            height: 120,
-            width: double.infinity,
-            child: Container(
-              color: color,
-              child: OpenContainer(
-                  closedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  openShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1)),
-                  transitionDuration: Duration(milliseconds: 550),
-                  openColor: color,
-                  closedColor: color,
-                  closedBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return SizedBox(
-                      height: 120,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 120,
-                              color: color,
-                              alignment: Alignment.centerLeft,
-                              child: Row(children: [
-                                Column(
-                                    textDirection: TextDirection.ltr,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        title,
-                                        textAlign: TextAlign.left,
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 25.0),
-                                      ),
-                                      Text(
-                                        subTitle,
-                                        textAlign: TextAlign.left,
-                                        textDirection: TextDirection.ltr,
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 20.0),
-                                      ),
-                                    ]),
-                              ]),
-                            ),
-                          ),
-                          Positioned(
-                            right: 8,
-                            child: Icon(
-                              MdiIcons.bagPersonalOutline,
-                              size: 60,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  openBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return onPressed;
-                  }),
-            ),
-          ));
-    } else {
-      return PressableCard(
-          onPressed: null,
-          color: color,
-          flattenAnimation: heroAnimation,
-          child: SizedBox(
-            height: 120,
-            width: double.infinity,
-            child: Container(
-              color: color,
-              child: OpenContainer(
-                  closedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  openShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1)),
-                  transitionDuration: Duration(milliseconds: 550),
-                  openColor: color,
-                  closedColor: color,
-                  closedBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return SizedBox(
-                      height: 120,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 120,
-                              color: Colors.black12,
-                              alignment: Alignment.centerLeft,
-                              child: Column(
+    return PressableCard(
+        onPressed: null,
+        color: color,
+        child: SizedBox(
+          height: 120,
+          width: double.infinity,
+          child: Container(
+            color: color,
+            child: OpenContainer(
+                closedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                openShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1)),
+                transitionDuration: Duration(milliseconds: 550),
+                openColor: color,
+                closedColor: color,
+                closedBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return SizedBox(
+                    height: 120,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 120,
+                            color: color,
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(children: [
+                              Column(
                                   textDirection: TextDirection.ltr,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -743,19 +592,29 @@ class TimetableCard extends StatelessWidget {
                                           fontSize: 20.0),
                                     ),
                                   ]),
-                            ),
+                            ]),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                  openBuilder:
-                      (BuildContext context, VoidCallback openContainer) {
-                    return onPressed;
-                  }),
-            ),
-          ));
-    }
+                        ),
+                        hasHomework
+                            ? Positioned(
+                                right: 8,
+                                child: Icon(
+                                  MdiIcons.bagPersonalOutline,
+                                  size: 60,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : SizedBox(height: 0, width: 0),
+                      ],
+                    ),
+                  );
+                },
+                openBuilder:
+                    (BuildContext context, VoidCallback openContainer) {
+                  return onPressed;
+                }),
+          ),
+        ));
   }
 }
 
@@ -777,7 +636,6 @@ class AnimatedChartsCard extends StatelessWidget {
     return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: heroAnimation,
         child: SizedBox(
           height: 100,
           width: double.infinity,
@@ -806,6 +664,7 @@ class AnimatedChartsCard extends StatelessWidget {
                             height: 100,
                             color: Colors.black12,
                             alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                                 textDirection: TextDirection.ltr,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -855,7 +714,6 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
     return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: heroAnimation,
         child: SizedBox(
           height: 250,
           width: double.infinity,
@@ -875,7 +733,7 @@ class HeroAnimatingSubjectsCard extends StatelessWidget {
                     height: 80,
                     color: color,
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1103,7 +961,6 @@ class AnimatedLeadingTrailingCard extends StatelessWidget {
     return PressableCard(
         onPressed: null,
         color: color,
-        flattenAnimation: AlwaysStoppedAnimation(0),
         child: SizedBox(
           height: 100,
           width: double.infinity,
@@ -1125,7 +982,10 @@ class AnimatedLeadingTrailingCard extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         Positioned(
-                          child: leading,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: leading,
+                          ),
                         ),
                         Positioned(
                           right: 8,

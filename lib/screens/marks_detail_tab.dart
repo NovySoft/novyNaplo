@@ -21,7 +21,7 @@ class MarksDetailTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          HeroAnimatingMarksCard(
+          AnimatedMarksCard(
             eval: null,
             iconData: eval.icon == null
                 ? parseSubjectToIcon(subject: eval.subject)
@@ -29,7 +29,6 @@ class MarksDetailTab extends StatelessWidget {
             subTitle: "",
             title: capitalize(eval.subject + " " + eval.value),
             color: color,
-            heroAnimation: AlwaysStoppedAnimation(1),
             onPressed: null,
           ),
           Divider(

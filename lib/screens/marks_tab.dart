@@ -162,7 +162,7 @@ class MarksTabState extends State<MarksTab>
     return SafeArea(
       top: false,
       bottom: false,
-      child: HeroAnimatingMarksCard(
+      child: AnimatedMarksCard(
         eval: allParsedByDate[index],
         iconData: allParsedByDate[index].icon,
         subTitle: getMarkCardSubtitle(
@@ -172,7 +172,6 @@ class MarksTabState extends State<MarksTab>
             " " +
             allParsedByDate[index].value),
         color: color,
-        heroAnimation: AlwaysStoppedAnimation(0),
         onPressed: MarksDetailTab(
           eval: allParsedByDate[index],
           color: color,
