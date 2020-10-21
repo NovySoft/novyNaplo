@@ -199,7 +199,9 @@ Future<List<Exam>> parseExams(var input) async {
       temp.nameOfExam = n["SzamonkeresMegnevezese"];
       temp.typeOfExam = n["SzamonkeresModja"];
       temp.classGroupId = n["OsztalyCsoportUid"];
-      examArray.add(temp);
+      if (!temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now())) {
+        examArray.add(temp);
+      }
     }
   } catch (e, s) {
     Crashlytics.instance.recordError(e, s, context: 'parseExams');

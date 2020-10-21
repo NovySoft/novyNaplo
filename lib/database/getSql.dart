@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/database/deleteSql.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/database/mainSql.dart' as mainSql;
@@ -191,7 +192,7 @@ Future<List<Exam>> getAllExams() async {
 
   final List<Map<String, dynamic>> maps = await db.query('Exams');
 
-  return List.generate(maps.length, (i) {
+  List<Exam> tempList = List.generate(maps.length, (i) {
     Exam temp = new Exam();
     temp.nameOfExam = maps[i]['nameOfExam'];
     temp.typeOfExam = maps[i]['typeOfExam'];
@@ -204,8 +205,14 @@ Future<List<Exam>> getAllExams() async {
     temp.dateGivenUpString = maps[i]['dateGivenUpString'];
     temp.dateWrite = DateTime.parse(temp.dateWriteString);
     temp.dateGivenUp = DateTime.parse(temp.dateGivenUpString);
+    if (temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now())) {
+      deleteFromDb(temp.databaseId, "Exams");
+    }
     return temp;
   });
+  tempList.removeWhere(
+      (temp) => temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now()));
+  return tempList;
 }
 
 Future<List<Event>> getAllEvents() async {
