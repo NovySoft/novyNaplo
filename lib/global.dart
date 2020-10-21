@@ -26,7 +26,6 @@ String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme
 String markCardConstColor; //If theme is constant what color is it
 String lessonCardSubtitle; //Lesson card's subtitle
-String statChart; //Mit kell a statisztikánál mutatni
 String howManyGraph; //What should we show? A pie- or a bar-chart
 bool adsEnabled; //Do we have to show ads
 bool chartAnimations; //Do we need to animate the charts
@@ -219,14 +218,6 @@ Future<void> setGlobals() async {
     markCardTheme = prefs.getString("markCardTheme");
   }
   Crashlytics.instance.setString("markCardTheme", markCardTheme);
-
-  if (prefs.getString("statChart") == null && statChart == null) {
-    statChart = "Mindent";
-    prefs.setString("statChart", "Mindent");
-  } else if (statChart == null) {
-    statChart = prefs.getString("statChart");
-  }
-  Crashlytics.instance.setString("statChart", statChart);
 
   if (prefs.getBool("chartAnimations") == null && chartAnimations == null) {
     chartAnimations = true;

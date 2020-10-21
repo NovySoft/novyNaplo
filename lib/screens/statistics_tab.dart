@@ -240,69 +240,40 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 1:
-                      if (globals.statChart == "Mindent") {
-                        return Column(
-                          children: [
-                            SizedBox(height: 15),
-                            Center(
-                              child: Text(
-                                "${getTranslatedString("marksAndAvs")}:",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
+                      return Column(
+                        children: [
+                          SizedBox(height: 15),
+                          Center(
+                            child: Text(
+                              "${getTranslatedString("marksAndAvs")}:",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
-                              height: 500 +
-                                  sizedBoxHeight +
-                                  globals.extraSpaceUnderStat,
-                              child: charts.NumericComboChart(
-                                createAllSubjectChartData(
-                                    allParsedSubjectsWithoutZeros),
-                                animate: globals.chartAnimations,
-                                domainAxis: axisTwo,
-                                primaryMeasureAxis: axis,
-                                // Configure the default renderer as a line renderer. This will be used
-                                // for any series that does not define a rendererIdKey.
-                                defaultRenderer: new charts.LineRendererConfig(
-                                    includePoints: true),
-                                behaviors: [
-                                  new charts.SeriesLegend(
-                                    position: charts.BehaviorPosition.end,
-                                  ),
-                                  new charts.PanAndZoomBehavior()
-                                ],
-                              ),
+                          ),
+                          SizedBox(
+                            height: 500 +
+                                sizedBoxHeight +
+                                globals.extraSpaceUnderStat,
+                            child: charts.NumericComboChart(
+                              createAllSubjectChartData(
+                                  allParsedSubjectsWithoutZeros),
+                              animate: globals.chartAnimations,
+                              domainAxis: axisTwo,
+                              primaryMeasureAxis: axis,
+                              // Configure the default renderer as a line renderer. This will be used
+                              // for any series that does not define a rendererIdKey.
+                              defaultRenderer: new charts.LineRendererConfig(
+                                  includePoints: true),
+                              behaviors: [
+                                new charts.SeriesLegend(
+                                  position: charts.BehaviorPosition.end,
+                                ),
+                                new charts.PanAndZoomBehavior()
+                              ],
                             ),
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            SizedBox(height: 15),
-                            Center(
-                              child: Text(
-                                "${getTranslatedString("marksAndAvs")}:",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 400,
-                              child: charts.LineChart(
-                                createOsszesitett(allParsedSubjects),
-                                animate: globals.chartAnimations,
-                                domainAxis: axisTwo,
-                                primaryMeasureAxis: axis,
-                                // Configure the default renderer as a line renderer. This will be used
-                                // for any series that does not define a rendererIdKey.
-                                defaultRenderer: new charts.LineRendererConfig(
-                                    includePoints: true),
-                                behaviors: [new charts.PanAndZoomBehavior()],
-                              ),
-                            ),
-                          ],
-                        );
-                      }
+                          ),
+                        ],
+                      );
                       break;
                     case 2:
                       return SizedBox(

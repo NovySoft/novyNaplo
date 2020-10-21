@@ -34,41 +34,10 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4 + globals.adModifier,
+          itemCount: 3 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
-                return ListTile(
-                  title: Text("${getTranslatedString("statiscticsGraph")}:"),
-                  trailing: DropdownButton<String>(
-                    items: [
-                      DropdownMenuItem(
-                        value: "Mindent",
-                        child: Text(
-                          getTranslatedString("all"),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "Összesített",
-                        child: Text(
-                          getTranslatedString("contracted"),
-                        ),
-                      ),
-                    ],
-                    onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        Crashlytics.instance.setString("statChart", value);
-                        prefs.setString("statChart", value);
-                        globals.statChart = value;
-                      });
-                    },
-                    value: globals.statChart,
-                  ),
-                );
-                break;
-              case 1:
                 return ListTile(
                   title: Text("${getTranslatedString("markCountChart")}:"),
                   trailing: DropdownButton<String>(
@@ -99,7 +68,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 2:
+              case 1:
                 return ListTile(
                   title: Text("${getTranslatedString("colorAv")}:"),
                   trailing: Switch(
@@ -115,7 +84,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 3:
+              case 2:
                 return ListTile(
                   title: Text(
                       "${getTranslatedString("extraSpaceUnderStat")} (1-500px):"),
