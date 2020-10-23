@@ -111,11 +111,6 @@ class _StatisticsTabState extends State<StatisticsTab>
               Color avColor, worstAvColor, bestAvColor;
               Icon avIcon, worstAvIcon, bestAvIcon;
               setState(() {
-                //TODO Move these functions from here
-                getAllSubjectsAv(allParsedSubjectsWithoutZeros);
-                getWorstAndBest(allParsedSubjectsWithoutZeros);
-                getPieChartOrBarChart(allParsedSubjects);
-                getBarChart(allParsedSubjects);
                 if (osszesitettAv.diffSinceLast == 0) {
                   avColor = Colors.orange;
                   avIcon = Icon(
@@ -599,6 +594,10 @@ class _StatisticsTabState extends State<StatisticsTab>
 
   @override
   void initState() {
+    getAllSubjectsAv(allParsedSubjectsWithoutZeros);
+    getWorstAndBest(allParsedSubjectsWithoutZeros);
+    getPieChartOrBarChart(allParsedSubjects);
+    getBarChart(allParsedSubjects);
     if (globals.payloadId != -1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (globals.notifPayload == "absence") {

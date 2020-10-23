@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -73,6 +74,91 @@ class _TimetableTabState extends State<TimetableTab> {
     super.initState();
   }
 
+  Future<void> handleDateChange(DateTime datetime, BuildContext context) async {
+    setState(() {
+      fade = false;
+    });
+    await sleep(250);
+    setState(() {
+      _selectedDate = datetime;
+      fade = true;
+    });
+    if (fetchedDayList
+            .where((item) =>
+                item.day == _selectedDate.day &&
+                item.month == _selectedDate.month &&
+                item.year == _selectedDate.year)
+            .length ==
+        0) {
+      if (await NetworkHelper().isNetworkAvailable() ==
+          ConnectivityResult.none) {
+        showDialog<void>(
+            context: context,
+            barrierDismissible: true,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(getTranslatedString("status")),
+                content: SingleChildScrollView(
+                  child: Column(children: <Widget>[
+                    Text("${getTranslatedString("noNet")}:"),
+                  ]),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+      } else {
+        showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return SpinnerDialog();
+            });
+        try {
+          lessonsList.addAll(
+              await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
+          setState(() {
+            _selectedDate = datetime;
+          });
+          Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
+              .pop();
+        } catch (e) {
+          await sleep(500);
+          Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
+              .pop();
+          showDialog<void>(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) {
+                return AlertDialog(
+                  title: Text(getTranslatedString("status")),
+                  content: SingleChildScrollView(
+                    child: Column(children: <Widget>[
+                      Text("${getTranslatedString("err")}"),
+                      Text(e.toString()),
+                    ]),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
@@ -107,66 +193,10 @@ class _TimetableTabState extends State<TimetableTab> {
             Duration(days: 365),
           ),
           onDatePressed: (DateTime datetime) async {
-            setState(() {
-              fade = false;
-            });
-            await sleep(250);
-            setState(() {
-              _selectedDate = datetime;
-              fade = true;
-            });
-            if (fetchedDayList
-                    .where((item) =>
-                        item.day == _selectedDate.day &&
-                        item.month == _selectedDate.month &&
-                        item.year == _selectedDate.year)
-                    .length ==
-                0) {
-              showDialog<void>(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) {
-                    return SpinnerDialog();
-                  });
-              lessonsList.addAll(
-                  await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
-              setState(() {
-                _selectedDate = datetime;
-              });
-              Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
-                  .pop();
-            }
+            await handleDateChange(datetime, context);
           },
           onDateLongPressed: (DateTime datetime) async {
-            setState(() {
-              fade = false;
-            });
-            await sleep(250);
-            setState(() {
-              _selectedDate = datetime;
-              fade = true;
-            });
-            if (fetchedDayList
-                    .where((item) =>
-                        item.day == _selectedDate.day &&
-                        item.month == _selectedDate.month &&
-                        item.year == _selectedDate.year)
-                    .length ==
-                0) {
-              showDialog<void>(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) {
-                    return SpinnerDialog();
-                  });
-              lessonsList.addAll(
-                  await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
-              setState(() {
-                _selectedDate = datetime;
-              });
-              Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
-                  .pop();
-            }
+            await handleDateChange(datetime, context);
           },
           onWeekChanged: () {},
           weekendsStyle:

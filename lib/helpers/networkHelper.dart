@@ -213,6 +213,9 @@ class NetworkHelper {
 
   Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
     Crashlytics.instance.log("getSpecifiedWeeksLesson");
+    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+      throw Exception(getTranslatedString("noNet"));
+    }
     String code = "";
     // ignore: unused_local_variable
     String decryptedPass, decryptedUser, decryptedCode, status;
@@ -223,6 +226,13 @@ class NetworkHelper {
     final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
     decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
     code = decryptedCode;
+    if (globals.tokenDate == null) {
+      globals.tokenDate = DateTime.now().subtract(
+        Duration(
+          minutes: 30,
+        ),
+      );
+    }
     if (DateTime.now().isAfter(
       globals.tokenDate.add(
         Duration(minutes: 20),
@@ -281,6 +291,7 @@ class NetworkHelper {
         headers: header);
     if (res.statusCode != 200) {
       print(res.statusCode);
+      throw Exception("HTTP GET ERROR ${res.statusCode}");
     }
     //Process response
     var decoded = json.decode(res.body);
@@ -461,7 +472,6 @@ class NetworkHelper {
     var decoded = json.decode(res.body);
     Homework temp = setHomework(decoded);
     //*Add it to the database
-    //TODO batchify
     await insertHomework(temp);
     //Find the same ids
     var matchedIds = homeworkPage.globalHomework.where((element) {
