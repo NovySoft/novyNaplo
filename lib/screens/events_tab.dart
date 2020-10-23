@@ -73,6 +73,7 @@ class _EventsTabState extends State<EventsTab> {
   }
 
   Widget noEvent() {
+    //TODO Make a small animation instead of a static image
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Icon(

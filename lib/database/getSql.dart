@@ -14,7 +14,9 @@ Future<List<Evals>> getAllEvals() async {
   final Database db = await mainSql.database;
 
   // Query the table for all the evals.
-  final List<Map<String, dynamic>> maps = await db.query('Evals');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Evals GROUP BY id, form ORDER BY databaseId',
+  );
 
   // Convert the List<Map<String, dynamic> into a List<Evals>.
   return List.generate(maps.length, (i) {
@@ -44,7 +46,9 @@ Future<List<Notices>> getAllNotices() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Notices');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Notices GROUP BY id, content ORDER BY databaseId',
+  );
 
   return List.generate(maps.length, (i) {
     Notices temp = new Notices();
@@ -65,7 +69,9 @@ Future<List<Avarage>> getAllAvarages() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Avarage');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Avarage GROUP BY subject ORDER BY databaseId',
+  );
 
   return List.generate(maps.length, (i) {
     Avarage temp = new Avarage();
@@ -81,7 +87,9 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Homework');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Homework GROUP BY content, id ORDER BY databaseId',
+  );
 
   List<Homework> tempList = List.generate(maps.length, (i) {
     Homework temp = new Homework();
@@ -123,7 +131,9 @@ Future<List<Lesson>> getAllTimetable() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Timetable');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Timetable GROUP BY id ORDER BY databaseId',
+  );
 
   List<Lesson> outputTempList = List.generate(maps.length, (i) {
     Lesson temp = new Lesson();
@@ -190,7 +200,9 @@ Future<List<Exam>> getAllExams() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Exams');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Exams GROUP BY id, nameOfExam ORDER BY databaseId',
+  );
 
   List<Exam> tempList = List.generate(maps.length, (i) {
     Exam temp = new Exam();
@@ -220,7 +232,9 @@ Future<List<Event>> getAllEvents() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Events');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Events GROUP BY id, content ORDER BY databaseId',
+  );
 
   return List.generate(maps.length, (i) {
     Event temp = new Event();
@@ -241,7 +255,9 @@ Future<List<Absence>> getAllAbsences() async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  final List<Map<String, dynamic>> maps = await db.query('Absences');
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Absences GROUP BY id ORDER BY databaseId',
+  );
 
   List<Absence> tempList = List.generate(maps.length, (i) {
     Absence temp = new Absence();
