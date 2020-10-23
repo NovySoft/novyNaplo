@@ -10,6 +10,11 @@ import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/screens/statistics_tab.dart' as stats;
 
+List<Evals> firstQuarterEvaluationList;
+List<Evals> halfYearEvalList;
+List<Evals> thirdQuarterEvalList;
+List<Evals> endOfYearEvalList;
+
 TabController _tabController;
 final List<Tab> reportTabs = <Tab>[
   //*"Type": "IQuarterEvaluation",
@@ -48,13 +53,34 @@ class _ReportsTabState extends State<ReportsTab>
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 4);
+    //LoadData
+    //*FirstQuarter
+    firstQuarterEvaluationList = marks.allParsedByDate.where(
+      (item) {
+        return item.type == "IQuarterEvaluation" ? true : false;
+      },
+    ).toList();
+    firstQuarterEvaluationList.sort((a, b) => a.subject.compareTo(b.subject));
+    //*HalfYear
+    halfYearEvalList = marks.allParsedByDate.where(
+      (item) {
+        return item.type == "HalfYear" ? true : false;
+      },
+    ).toList();
+    halfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
+    //*EndOfYear
+    endOfYearEvalList = marks.allParsedByDate.where(
+      (item) {
+        return item.type == "EndYear" ? true : false;
+      },
+    ).toList();
+    endOfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //TODO refactor, to make it a bit less complex
-    //*For example preparse while loading to save cpu resources
+    //TODO Add a contracted card to reports
     globals.globalContext = context;
     return Scaffold(
       drawer: getDrawer(ReportsTab.tag, context),
@@ -68,19 +94,7 @@ class _ReportsTabState extends State<ReportsTab>
       body: TabBarView(
           controller: _tabController,
           children: reportTabs.map((Tab tab) {
-            /*return ListView.builder(
-              itemCount: allParsedByDate.length,
-              padding: EdgeInsets.symmetric(vertical: 12),
-              itemBuilder: (BuildContext context, int index) {},);*/
             if (tab.text == getTranslatedString("FirstQuarter")) {
-              List<Evals> firstQuarterEvaluationList =
-                  marks.allParsedByDate.where(
-                (item) {
-                  return item.type == "IQuarterEvaluation" ? true : false;
-                },
-              ).toList();
-              firstQuarterEvaluationList
-                  .sort((a, b) => a.subject.compareTo(b.subject));
               if (firstQuarterEvaluationList.length == 0) {
                 return noReports();
               }
@@ -157,12 +171,6 @@ class _ReportsTabState extends State<ReportsTab>
                 },
               );
             } else if (tab.text == getTranslatedString("HalfYear")) {
-              List<Evals> halfYearEvalList = marks.allParsedByDate.where(
-                (item) {
-                  return item.type == "HalfYear" ? true : false;
-                },
-              ).toList();
-              halfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
               if (halfYearEvalList.length == 0) {
                 return noReports();
               }
@@ -251,12 +259,6 @@ class _ReportsTabState extends State<ReportsTab>
                 ),
               );
             } else if (tab.text == getTranslatedString("EndOfYear")) {
-              List<Evals> endOfYearEvalList = marks.allParsedByDate.where(
-                (item) {
-                  return item.type == "EndYear" ? true : false;
-                },
-              ).toList();
-              endOfYearEvalList.sort((a, b) => a.subject.compareTo(b.subject));
               if (endOfYearEvalList.length == 0) {
                 return noReports();
               }
