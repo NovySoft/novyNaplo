@@ -22,6 +22,8 @@ Future<void> clearAllTables() async {
   batch.delete("Evals");
   batch.delete("Avarage");
   batch.delete("Notices");
+  batch.delete("Events");
+  batch.delete("Exams");
   batch.delete("Homework");
   batch.delete("Timetable");
   batch.delete("Absences");

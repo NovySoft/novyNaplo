@@ -12,8 +12,6 @@ import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/functions/classManager.dart';
 
 int notifId = 2;
-//BUG: Double insert glitches
-//TODO: Fix evals, exams double insert glitches
 
 //*Normal inserts
 // A function that inserts evals into the database
