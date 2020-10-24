@@ -66,9 +66,11 @@ class _AbsencesTabState extends State<AbsencesTab>
         });
       }
     }
-    _animationControllerJustified.forward();
-    _animationControllerUnJustified.forward();
-    _animationControllerBeJustified.forward();
+    Future.delayed(Duration(milliseconds: 600), () {
+      _animationControllerJustified.forward();
+      _animationControllerUnJustified.forward();
+      _animationControllerBeJustified.forward();
+    });
     //DataHandling
     tempAbsences = List.from(allParsedAbsences);
     listener = () async {
