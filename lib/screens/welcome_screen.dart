@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
@@ -29,6 +30,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with TickerProviderStateMixin {
   @override
   void initState() {
+    Crashlytics.instance.log("Shown Welcome screen");
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),

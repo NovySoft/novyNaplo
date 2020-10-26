@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -19,6 +20,7 @@ class ExamsTab extends StatefulWidget {
 class _ExamsTabState extends State<ExamsTab> {
   @override
   void initState() {
+    Crashlytics.instance.log("Shown Exams");
     colors = getRandomColors(allParsedExams.length);
     super.initState();
   }

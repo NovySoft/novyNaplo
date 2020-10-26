@@ -1,5 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:customgauge/customgauge.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -36,6 +37,7 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Crashlytics.instance.log("Shown Charts_detail_tab");
     globals.globalContext = context;
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {

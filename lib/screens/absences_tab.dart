@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -29,6 +30,7 @@ class _AbsencesTabState extends State<AbsencesTab>
 
   @override
   void initState() {
+    Crashlytics.instance.log("Shown Absences");
     _animationControllerJustified = AnimationController(
       duration: Duration(milliseconds: 500),
       vsync: this,

@@ -1,9 +1,12 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ErrorMessageBuilder {
   static ErrorWidgetBuilder build() {
     ErrorWidgetBuilder func = (FlutterErrorDetails errorDetails) {
+      Crashlytics.instance
+          .log("Shown error screen (${errorDetails.exception})");
       ErrorMessage errorMessage = ErrorMessage(errorDetails);
       return BlueScreenErrorMessageTheme.build(errorMessage);
     };

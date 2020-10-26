@@ -1,4 +1,5 @@
 import 'package:customgauge/customgauge.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -35,6 +36,7 @@ class ReportsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Crashlytics.instance.log("Shown Reports_detail_tab");
     List<LinearMarkChartData> avList = List.from(chartList[0].data);
     if (avList.length == 0)
       avList = [LinearMarkChartData(0, 0), LinearMarkChartData(1, 0)];

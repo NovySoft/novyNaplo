@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -35,6 +36,7 @@ class _NoticesTabState extends State<NoticesTab> {
   @override
   void initState() {
     super.initState();
+    Crashlytics.instance.log("Shown Notices");
     if (colors == [] ||
         colors == null ||
         colors.length < allParsedNotices.length) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -52,6 +53,7 @@ class _ReportsTabState extends State<ReportsTab>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
+    Crashlytics.instance.log("Shown Reports");
     _tabController = new TabController(vsync: this, length: 4);
     //LoadData
     //*FirstQuarter

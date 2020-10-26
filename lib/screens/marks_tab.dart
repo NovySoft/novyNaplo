@@ -56,6 +56,7 @@ class MarksTabState extends State<MarksTab>
 
   @override
   void initState() {
+    Crashlytics.instance.log("Shown Marks");
     //Update refresh key
     _androidRefreshKey = new GlobalKey<RefreshIndicatorState>(debugLabel: "1");
     _androidRefreshKeyTwo =

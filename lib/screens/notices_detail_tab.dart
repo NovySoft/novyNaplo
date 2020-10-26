@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
@@ -25,6 +26,7 @@ class NoticeDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Crashlytics.instance.log("Shown Notices_detail_tab");
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(),

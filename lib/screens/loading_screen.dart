@@ -56,6 +56,7 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   //Runs after initState
   void onLoad(var context) async {
+    Crashlytics.instance.log("Shown Loading screen");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       await globals.setGlobals();

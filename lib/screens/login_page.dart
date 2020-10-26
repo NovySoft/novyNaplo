@@ -53,6 +53,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   void onLoad(var context) async {
+    Crashlytics.instance.log("Shown login screen");
     Crashlytics.instance.setString("Version", config.currentAppVersionCode);
     showDialog<void>(
         context: context,

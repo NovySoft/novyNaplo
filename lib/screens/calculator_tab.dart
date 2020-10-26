@@ -1,4 +1,5 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -381,6 +382,7 @@ class CalculatorTabState extends State<CalculatorTab>
 
   @override
   void initState() {
+    Crashlytics.instance.log("Shown MarkCalculator");
     //Set dropdown to item 0
     if (marksPage.allParsedByDate.length != 0) {
       dropdownValue = dropdownValues[0];

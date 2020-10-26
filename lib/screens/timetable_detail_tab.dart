@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -24,6 +25,12 @@ class TimetableDetailTab extends StatefulWidget {
 }
 
 class _TimetableDetailTabState extends State<TimetableDetailTab> {
+  @override
+  void initState() {
+    Crashlytics.instance.log("Shown Timetable_detail_tab");
+    super.initState();
+  }
+
   @override
   void dispose() {
     if (timer != null) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -24,6 +25,13 @@ class HomeworkDetailTab extends StatefulWidget {
 }
 
 class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
+  @override
+  void initState() {
+    Crashlytics.instance.log("Shown Homework_detail_tab");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -391,6 +392,7 @@ class MarksDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
+    Crashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(eval.subject + " " + eval.value))),
       body: _buildBody(),
