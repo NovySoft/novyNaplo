@@ -22,7 +22,7 @@ class HomeworkTab extends StatefulWidget {
 class _HomeworkTabState extends State<HomeworkTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Homeworks");
+    FirebaseCrashlytics.instance.log("Shown Homeworks");
     if (colors.length == 0 ||
         colors == [] ||
         colors.length < globalHomework.length) {

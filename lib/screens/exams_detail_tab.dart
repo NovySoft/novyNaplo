@@ -12,7 +12,7 @@ class ExamsDetailTab extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
-    Crashlytics.instance.log("Shown Exams_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Exams_detail_tab");
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(exam.nameOfExam))),

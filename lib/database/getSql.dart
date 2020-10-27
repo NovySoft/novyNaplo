@@ -9,7 +9,7 @@ import 'package:novynaplo/global.dart' as globals;
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
-  Crashlytics.instance.log("getAllEvals");
+  FirebaseCrashlytics.instance.log("getAllEvals");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -42,7 +42,7 @@ Future<List<Evals>> getAllEvals() async {
 }
 
 Future<List<Notices>> getAllNotices() async {
-  Crashlytics.instance.log("getAllNotices");
+  FirebaseCrashlytics.instance.log("getAllNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -65,7 +65,7 @@ Future<List<Notices>> getAllNotices() async {
 }
 
 Future<List<Avarage>> getAllAvarages() async {
-  Crashlytics.instance.log("getAllAvarages");
+  FirebaseCrashlytics.instance.log("getAllAvarages");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -83,7 +83,7 @@ Future<List<Avarage>> getAllAvarages() async {
 }
 
 Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
-  Crashlytics.instance.log("getAllHw");
+  FirebaseCrashlytics.instance.log("getAllHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -127,7 +127,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
 }
 
 Future<List<Lesson>> getAllTimetable() async {
-  Crashlytics.instance.log("getAllTimetable");
+  FirebaseCrashlytics.instance.log("getAllTimetable");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -196,7 +196,7 @@ Future<Homework> getHomeworkById(int id) async {
 }
 
 Future<List<Exam>> getAllExams() async {
-  Crashlytics.instance.log("getAllExams");
+  FirebaseCrashlytics.instance.log("getAllExams");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -228,7 +228,7 @@ Future<List<Exam>> getAllExams() async {
 }
 
 Future<List<Event>> getAllEvents() async {
-  Crashlytics.instance.log("getAllEvents");
+  FirebaseCrashlytics.instance.log("getAllEvents");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -251,7 +251,7 @@ Future<List<Event>> getAllEvents() async {
 }
 
 Future<List<Absence>> getAllAbsences() async {
-  Crashlytics.instance.log("getAllAbsences");
+  FirebaseCrashlytics.instance.log("getAllAbsences");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 

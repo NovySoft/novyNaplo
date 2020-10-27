@@ -92,6 +92,7 @@ Evals setEvals(var input) {
   } else {
     temp.subject = input["Subject"];
   }
+  temp.subject = shortenSubject(temp.subject);
   //Icon
   temp.icon = parseSubjectToIcon(subject: temp.subject);
   //Magatartas es Szorgalom integer

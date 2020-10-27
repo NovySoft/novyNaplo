@@ -90,9 +90,9 @@ class ThemeHelper {
 
   ThemeData getTheme(brightness) {
     if (brightness == Brightness.dark) {
-      Crashlytics.instance.setString("Theme", "Dark");
+      FirebaseCrashlytics.instance.setCustomKey("Theme", "Dark");
     } else {
-      Crashlytics.instance.setString("Theme", "Bright");
+      FirebaseCrashlytics.instance.setCustomKey("Theme", "Bright");
     }
     if (brightness == Brightness.dark) {
       return new ThemeData(

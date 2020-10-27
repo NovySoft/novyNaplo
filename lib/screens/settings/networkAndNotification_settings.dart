@@ -419,7 +419,8 @@ class _NetworkAndNotificationSettingsState
                       setState(() {
                         globals.notifications = isOn;
                         prefs.setBool("notifications", isOn);
-                        Crashlytics.instance.setBool("notifications", isOn);
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("notifications", isOn);
                         FirebaseAnalytics().setUserProperty(
                           name: "Notifications",
                           value: isOn ? "ON" : "OFF",
@@ -459,13 +460,14 @@ class _NetworkAndNotificationSettingsState
                           setState(() {
                             globals.backgroundFetch = isOn;
                             prefs.setBool("backgroundFetch", isOn);
-                            Crashlytics.instance
-                                .setBool("backgroundFetch", isOn);
+                            FirebaseCrashlytics.instance
+                                .setCustomKey("backgroundFetch", isOn);
                           });
                           if (isOn) {
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log("Canceled alarm: " +
-                                main.fetchAlarmID.toString());
+                            FirebaseCrashlytics.instance.log(
+                                "Canceled alarm: " +
+                                    main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
@@ -478,8 +480,9 @@ class _NetworkAndNotificationSettingsState
                             );
                           } else {
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log("Canceled alarm: " +
-                                main.fetchAlarmID.toString());
+                            FirebaseCrashlytics.instance.log(
+                                "Canceled alarm: " +
+                                    main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                           }
@@ -501,8 +504,8 @@ class _NetworkAndNotificationSettingsState
                       setState(() {
                         globals.backgroundFetchOnCellular = isOn;
                         prefs.setBool("backgroundFetchOnCellular", isOn);
-                        Crashlytics.instance
-                            .setBool("backgroundFetchOnCellular", isOn);
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("backgroundFetchOnCellular", isOn);
                       });
                     },
                     value: globals.backgroundFetchOnCellular,
@@ -540,8 +543,9 @@ class _NetworkAndNotificationSettingsState
                             prefs.setInt("fetchPeriod", int.parse(input));
                             globals.fetchPeriod = int.parse(input);
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log("Canceled alarm: " +
-                                main.fetchAlarmID.toString());
+                            FirebaseCrashlytics.instance.log(
+                                "Canceled alarm: " +
+                                    main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
@@ -572,13 +576,14 @@ class _NetworkAndNotificationSettingsState
                             globals.backgroundFetchCanWakeUpPhone = isOn;
                             prefs.setBool(
                                 "backgroundFetchCanWakeUpPhone", isOn);
-                            Crashlytics.instance
-                                .setBool("backgroundFetchCanWakeUpPhone", isOn);
+                            FirebaseCrashlytics.instance.setCustomKey(
+                                "backgroundFetchCanWakeUpPhone", isOn);
                           });
                           if (isOn) {
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log("Canceled alarm: " +
-                                main.fetchAlarmID.toString());
+                            FirebaseCrashlytics.instance.log(
+                                "Canceled alarm: " +
+                                    main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
@@ -591,8 +596,9 @@ class _NetworkAndNotificationSettingsState
                             );
                           } else {
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
-                            Crashlytics.instance.log("Canceled alarm: " +
-                                main.fetchAlarmID.toString());
+                            FirebaseCrashlytics.instance.log(
+                                "Canceled alarm: " +
+                                    main.fetchAlarmID.toString());
                             await sleep(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(

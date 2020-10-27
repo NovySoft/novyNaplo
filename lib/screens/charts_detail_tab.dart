@@ -37,7 +37,7 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Crashlytics.instance.log("Shown Charts_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Charts_detail_tab");
     globals.globalContext = context;
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {

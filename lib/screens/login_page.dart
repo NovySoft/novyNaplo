@@ -53,8 +53,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   void onLoad(var context) async {
-    Crashlytics.instance.log("Shown login screen");
-    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+    FirebaseCrashlytics.instance.log("Shown login screen");
+    FirebaseCrashlytics.instance
+        .setCustomKey("Version", config.currentAppVersionCode);
     showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
       await getVersion();
     }
     if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
-      Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+      FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
       if (prefs.getBool("ads")) {
         adBanner.load();
         adBanner.show(
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
           passController.text = decryptedPass;
         }
       } catch (e, s) {
-        Crashlytics.instance.recordError(e, s, context: 'onLoad-login');
+        FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad-login');
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -113,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
           } catch (e, s) {
-            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
+            FirebaseCrashlytics.instance
+                .recordError(e, s, reason: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
@@ -123,7 +125,8 @@ class _LoginPageState extends State<LoginPage> {
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
           } catch (e, s) {
-            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
+            FirebaseCrashlytics.instance
+                .recordError(e, s, reason: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
@@ -134,13 +137,15 @@ class _LoginPageState extends State<LoginPage> {
           try {
             Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
           } catch (e, s) {
-            Crashlytics.instance.recordError(e, s, context: 'navigator-login');
+            FirebaseCrashlytics.instance
+                .recordError(e, s, reason: 'navigator-login');
             isError = true;
             _ackAlert(context, e.toString());
           }
         }
       } catch (e, s) {
-        Crashlytics.instance.recordError(e, s, context: 'navigator-login');
+        FirebaseCrashlytics.instance
+            .recordError(e, s, reason: 'navigator-login');
         isError = true;
         _ackAlert(context, e.toString());
       }
@@ -187,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'auth-login');
+      FirebaseCrashlytics.instance.recordError(e, s, reason: 'auth-login');
       isError = true;
       _ackAlert(context, e.toString());
     }
@@ -196,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
       try {
         save(context, "auth");
       } catch (e, s) {
-        Crashlytics.instance.recordError(e, s, context: 'save-login');
+        FirebaseCrashlytics.instance.recordError(e, s, reason: 'save-login');
         isError = true;
         _ackAlert(context, e.message);
       }
@@ -228,9 +233,10 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString("user", encryptedUser);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
-      Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+      FirebaseCrashlytics.instance
+          .setCustomKey("Version", config.currentAppVersionCode);
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'encrypt-login');
+      FirebaseCrashlytics.instance.recordError(e, s, reason: 'encrypt-login');
       isError = true;
       _ackAlert(context, e.message);
     }
@@ -250,8 +256,8 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       }
     } catch (e, s) {
-      Crashlytics.instance
-          .recordError(e, s, context: 'navigatorReplacement-login');
+      FirebaseCrashlytics.instance
+          .recordError(e, s, reason: 'navigatorReplacement-login');
       isError = true;
       _ackAlert(context, e.message);
     }

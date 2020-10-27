@@ -20,7 +20,7 @@ class EventsTab extends StatefulWidget {
 class _EventsTabState extends State<EventsTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Events");
+    FirebaseCrashlytics.instance.log("Shown Events");
     if (colors.length == 0 ||
         colors == [] ||
         colors.length < allParsedEvents.length) {

@@ -71,13 +71,15 @@ class _UIsettingsState extends State<UIsettings> {
                             .changeBrightness(context, Brightness.light);
                         FirebaseAnalytics()
                             .setUserProperty(name: "Theme", value: "Bright");
-                        Crashlytics.instance.setString("Theme", "Bright");
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("Theme", "Bright");
                       } else {
                         ThemeHelper()
                             .changeBrightness(context, Brightness.dark);
                         FirebaseAnalytics()
                             .setUserProperty(name: "Theme", value: "Dark");
-                        Crashlytics.instance.setString("Theme", "Dark");
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("Theme", "Dark");
                       }
                       setState(() {
                         dropDown = value;
@@ -113,7 +115,8 @@ class _UIsettingsState extends State<UIsettings> {
                         name: "Language",
                         value: value,
                       );
-                      Crashlytics.instance.setString("Language", value);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("Language", value);
                       if (globals.language != value) {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -167,7 +170,7 @@ class _UIsettingsState extends State<UIsettings> {
                       setState(() {
                         globals.adsEnabled = isOn;
                       });
-                      Crashlytics.instance.setBool("Ads", isOn);
+                      FirebaseCrashlytics.instance.setCustomKey("Ads", isOn);
                       prefs.setBool("ads", isOn);
                       FirebaseAnalytics().setUserProperty(
                           name: "Ads", value: isOn ? "ON" : "OFF");
@@ -218,7 +221,8 @@ class _UIsettingsState extends State<UIsettings> {
                       setState(() {
                         globals.chartAnimations = switchOn;
                       });
-                      Crashlytics.instance.setBool("ChartAnimations", switchOn);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("ChartAnimations", switchOn);
                       if (switchOn) {
                         FirebaseAnalytics().setUserProperty(
                             name: "ChartAnimations", value: "YES");

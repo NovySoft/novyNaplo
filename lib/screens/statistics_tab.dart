@@ -595,7 +595,7 @@ class _StatisticsTabState extends State<StatisticsTab>
 
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Statistics");
+    FirebaseCrashlytics.instance.log("Shown Statistics");
     getAllSubjectsAv(allParsedSubjectsWithoutZeros);
     getWorstAndBest(allParsedSubjectsWithoutZeros);
     getPieChartOrBarChart(allParsedSubjects);

@@ -56,7 +56,7 @@ class LoadingPage extends StatefulWidget {
 class _LoadingPageState extends State<LoadingPage> {
   //Runs after initState
   void onLoad(var context) async {
-    Crashlytics.instance.log("Shown Loading screen");
+    FirebaseCrashlytics.instance.log("Shown Loading screen");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       await globals.setGlobals();
@@ -72,7 +72,8 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("checkVersion");
       });
-      Crashlytics.instance.setString("Version", config.currentAppVersionCode);
+      FirebaseCrashlytics.instance
+          .setCustomKey("Version", config.currentAppVersionCode);
       if (globals.verCheckOnStart) {
         await getVersion();
       }
@@ -93,7 +94,7 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       //Load ADS
       if (prefs.getBool("ads") != null) {
-        Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+        FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
         if (prefs.getBool("ads")) {
           adBanner.load();
           adBanner.show(
@@ -187,7 +188,7 @@ class _LoadingPageState extends State<LoadingPage> {
       FirebaseAnalytics().logEvent(name: "login");
       return;
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'onLoad');
+      FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');
       await _ackAlert(
         context,
         "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",

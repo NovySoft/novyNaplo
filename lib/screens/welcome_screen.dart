@@ -30,7 +30,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with TickerProviderStateMixin {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Welcome screen");
+    FirebaseCrashlytics.instance.log("Shown Welcome screen");
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),

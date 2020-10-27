@@ -806,8 +806,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, MarksTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -825,8 +829,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, ReportsTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -844,8 +852,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, TimetableTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -863,8 +875,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, ExamsTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -882,8 +898,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, HomeworkTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -901,8 +921,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, NoticesTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -920,8 +944,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, EventsTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -939,8 +967,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, StatisticsTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -958,8 +990,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, CalculatorTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }
@@ -977,8 +1013,12 @@ Widget getDrawer(String screen, BuildContext context) {
                         try {
                           Navigator.pushNamed(context, SettingsTab.tag);
                         } catch (e, s) {
-                          Crashlytics.instance
-                              .recordError(e, s, context: 'getDrawer');
+                          FirebaseCrashlytics.instance.recordError(
+                            e,
+                            s,
+                            reason: 'getDrawer',
+                            printDetails: true,
+                          );
                           print(e.message);
                         }
                       }

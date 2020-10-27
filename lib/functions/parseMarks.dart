@@ -25,7 +25,12 @@ Future<List<dynamic>> parseAllByDate(var input) async {
       jegyArray.add(setEvals(n));
     }
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'parseAllByDate');
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'parseAllByDate',
+      printDetails: true,
+    );
     return [];
   }
   jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
@@ -204,7 +209,12 @@ Future<List<Exam>> parseExams(var input) async {
       }
     }
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'parseExams');
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'parseExams',
+      printDetails: true,
+    );
     return [];
   }
   return examArray;
@@ -226,7 +236,12 @@ Future<List<Event>> parseEvents(var input) async {
       eventArray.add(temp);
     }
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'parseEvents');
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'parseEvents',
+      printDetails: true,
+    );
     return [];
   }
   return eventArray;

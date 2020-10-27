@@ -56,7 +56,7 @@ class MarksTabState extends State<MarksTab>
 
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Marks");
+    FirebaseCrashlytics.instance.log("Shown Marks");
     //Update refresh key
     _androidRefreshKey = new GlobalKey<RefreshIndicatorState>(debugLabel: "1");
     _androidRefreshKeyTwo =
@@ -90,7 +90,7 @@ class MarksTabState extends State<MarksTab>
 
   Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
-    Crashlytics.instance.log("RefreshData");
+    FirebaseCrashlytics.instance.log("RefreshData");
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
       await showDialog<void>(
         context: context,

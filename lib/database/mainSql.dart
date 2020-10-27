@@ -14,7 +14,7 @@ Future<void> initDatabase() async {
     join(await getDatabasesPath(), 'NovyNalploDatabase.db'),
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) async {
-      Crashlytics.instance.log("createSqlTables");
+      FirebaseCrashlytics.instance.log("createSqlTables");
       // Run the CREATE TABLE statement on the database.
       await db.execute(
         "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,numberValue INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT)",

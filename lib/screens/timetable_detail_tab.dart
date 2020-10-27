@@ -27,7 +27,7 @@ class TimetableDetailTab extends StatefulWidget {
 class _TimetableDetailTabState extends State<TimetableDetailTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Timetable_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Timetable_detail_tab");
     super.initState();
   }
 

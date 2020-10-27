@@ -66,7 +66,8 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                     onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      Crashlytics.instance.setString("markCardTheme", value);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("markCardTheme", value);
                       prefs.setString("markCardTheme", value);
                       setState(() {
                         globals.markCardTheme = value;
@@ -124,7 +125,8 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                     onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      Crashlytics.instance.setString("markCardSubtitle", value);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("markCardSubtitle", value);
                       prefs.setString("markCardSubtitle", value);
                       setState(() {
                         globals.markCardSubtitle = value;
@@ -241,8 +243,8 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                     onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      Crashlytics.instance
-                          .setString("markCardConstColor", value);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("markCardConstColor", value);
                       prefs.setString("markCardConstColor", value);
                       setState(() {
                         globals.markCardConstColor = value;

@@ -80,7 +80,7 @@ Future<void> setGlobals() async {
   }
 
   if (prefs.getBool("ads") != null) {
-    Crashlytics.instance.setBool("Ads", prefs.getBool("ads"));
+    FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
     adsEnabled = prefs.getBool("ads");
     if (adsEnabled) adModifier = 1;
   }
@@ -100,7 +100,7 @@ Future<void> setGlobals() async {
     name: "Language",
     value: language,
   );
-  Crashlytics.instance.setString("Language", language);
+  FirebaseCrashlytics.instance.setCustomKey("Language", language);
 
   if (prefs.getBool("colorAvsInStatisctics") != null) {
     colorAvsInStatisctics = prefs.getBool("colorAvsInStatisctics");
@@ -115,7 +115,8 @@ Future<void> setGlobals() async {
     prefs.setDouble("howLongKeepDataForHw", 7);
     howLongKeepDataForHw = 7;
   }
-  Crashlytics.instance.setDouble("howLongKeepDataForHw", howLongKeepDataForHw);
+  FirebaseCrashlytics.instance
+      .setCustomKey("howLongKeepDataForHw", howLongKeepDataForHw);
 
   if (prefs.getBool("notifications") != null) {
     notifications = prefs.getBool("notifications");
@@ -123,7 +124,7 @@ Future<void> setGlobals() async {
     prefs.setBool("notifications", true);
     notifications = true;
   }
-  Crashlytics.instance.setBool("notifications", notifications);
+  FirebaseCrashlytics.instance.setCustomKey("notifications", notifications);
   FirebaseAnalytics().setUserProperty(
     name: "Notifications",
     value: notifications ? "ON" : "OFF",
@@ -135,8 +136,10 @@ Future<void> setGlobals() async {
     prefs.setBool("backgroundFetchOnCellular", false);
     backgroundFetchOnCellular = false;
   }
-  Crashlytics.instance
-      .setBool("backgroundFetchOnCellular", backgroundFetchOnCellular);
+  FirebaseCrashlytics.instance.setCustomKey(
+    "backgroundFetchOnCellular",
+    backgroundFetchOnCellular,
+  );
 
   if (prefs.getInt("fetchPeriod") == null) {
     fetchPeriod = 60;
@@ -151,7 +154,7 @@ Future<void> setGlobals() async {
   } else {
     backgroundFetch = prefs.getBool("backgroundFetch");
   }
-  Crashlytics.instance.setBool("backgroundFetch", backgroundFetch);
+  FirebaseCrashlytics.instance.setCustomKey("backgroundFetch", backgroundFetch);
 
   if (prefs.getBool("backgroundFetchCanWakeUpPhone") == null) {
     backgroundFetchCanWakeUpPhone = true;
@@ -160,8 +163,10 @@ Future<void> setGlobals() async {
     backgroundFetchCanWakeUpPhone =
         prefs.getBool("backgroundFetchCanWakeUpPhone");
   }
-  Crashlytics.instance
-      .setBool("backgroundFetchCanWakeUpPhone", backgroundFetchCanWakeUpPhone);
+  FirebaseCrashlytics.instance.setCustomKey(
+    "backgroundFetchCanWakeUpPhone",
+    backgroundFetchCanWakeUpPhone,
+  );
 
   if (prefs.getString("howManyGraph") == null) {
     howManyGraph = "Kör diagram";
@@ -169,12 +174,13 @@ Future<void> setGlobals() async {
   } else {
     howManyGraph = prefs.getString("howManyGraph");
   }
-  Crashlytics.instance.setString("howManyGraph", howManyGraph);
+  FirebaseCrashlytics.instance.setCustomKey("howManyGraph", howManyGraph);
 
   if (prefs.getInt("extraSpaceUnderStat") != null) {
     extraSpaceUnderStat = prefs.getInt("extraSpaceUnderStat");
   }
-  Crashlytics.instance.setInt("extraSpaceUnderStat", extraSpaceUnderStat);
+  FirebaseCrashlytics.instance
+      .setCustomKey("extraSpaceUnderStat", extraSpaceUnderStat);
 
   if (prefs.getBool("shouldVirtualMarksCollapse") == null) {
     shouldVirtualMarksCollapse = false;
@@ -182,8 +188,10 @@ Future<void> setGlobals() async {
   } else {
     shouldVirtualMarksCollapse = prefs.getBool("shouldVirtualMarksCollapse");
   }
-  Crashlytics.instance
-      .setBool("shouldVirtualMarksCollapse", shouldVirtualMarksCollapse);
+  FirebaseCrashlytics.instance.setCustomKey(
+    "shouldVirtualMarksCollapse",
+    shouldVirtualMarksCollapse,
+  );
 
   if (prefs.getString("markCardSubtitle") == null && markCardSubtitle == null) {
     markCardSubtitle = "Téma";
@@ -191,7 +199,8 @@ Future<void> setGlobals() async {
   } else if (markCardSubtitle == null) {
     markCardSubtitle = prefs.getString("markCardSubtitle");
   }
-  Crashlytics.instance.setString("markCardSubtitle", markCardSubtitle);
+  FirebaseCrashlytics.instance
+      .setCustomKey("markCardSubtitle", markCardSubtitle);
 
   if (prefs.getString("markCardConstColor") == null &&
       markCardConstColor == null) {
@@ -200,7 +209,8 @@ Future<void> setGlobals() async {
   } else if (markCardConstColor == null) {
     markCardConstColor = prefs.getString("markCardConstColor");
   }
-  Crashlytics.instance.setString("markCardConstColor", markCardConstColor);
+  FirebaseCrashlytics.instance
+      .setCustomKey("markCardConstColor", markCardConstColor);
 
   if (prefs.getString("lessonCardSubtitle") == null &&
       lessonCardSubtitle == null) {
@@ -209,7 +219,8 @@ Future<void> setGlobals() async {
   } else if (lessonCardSubtitle == null) {
     lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
   }
-  Crashlytics.instance.setString("lessonCardSubtitle", lessonCardSubtitle);
+  FirebaseCrashlytics.instance
+      .setCustomKey("lessonCardSubtitle", lessonCardSubtitle);
 
   if (prefs.getString("markCardTheme") == null && markCardTheme == null) {
     markCardTheme = "Véletlenszerű";
@@ -217,7 +228,7 @@ Future<void> setGlobals() async {
   } else if (markCardTheme == null) {
     markCardTheme = prefs.getString("markCardTheme");
   }
-  Crashlytics.instance.setString("markCardTheme", markCardTheme);
+  FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
 
   if (prefs.getBool("chartAnimations") == null && chartAnimations == null) {
     chartAnimations = true;
@@ -225,5 +236,5 @@ Future<void> setGlobals() async {
   } else if (chartAnimations == null) {
     chartAnimations = prefs.getBool("chartAnimations");
   }
-  Crashlytics.instance.setBool("ChartAnimations", chartAnimations);
+  FirebaseCrashlytics.instance.setCustomKey("ChartAnimations", chartAnimations);
 }

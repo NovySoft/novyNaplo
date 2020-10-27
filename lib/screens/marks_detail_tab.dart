@@ -392,7 +392,7 @@ class MarksDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
-    Crashlytics.instance.log("Shown Marks_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(eval.subject + " " + eval.value))),
       body: _buildBody(),

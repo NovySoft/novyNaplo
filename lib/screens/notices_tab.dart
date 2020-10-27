@@ -36,7 +36,7 @@ class _NoticesTabState extends State<NoticesTab> {
   @override
   void initState() {
     super.initState();
-    Crashlytics.instance.log("Shown Notices");
+    FirebaseCrashlytics.instance.log("Shown Notices");
     if (colors == [] ||
         colors == null ||
         colors.length < allParsedNotices.length) {

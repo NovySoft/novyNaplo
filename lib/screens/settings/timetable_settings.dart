@@ -61,8 +61,8 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                     onChanged: (String value) async {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      Crashlytics.instance
-                          .setString("lessonCardSubtitle", value);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("lessonCardSubtitle", value);
                       prefs.setString("lessonCardSubtitle", value);
                       setState(() {
                         globals.lessonCardSubtitle = value;

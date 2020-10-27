@@ -34,7 +34,7 @@ class NetworkHelper {
   }
 
   Future<void> getEvents(token, code) async {
-    Crashlytics.instance.log("getEvents");
+    FirebaseCrashlytics.instance.log("getEvents");
     try {
       var headers = {
         'Authorization': 'Bearer $token',
@@ -52,13 +52,13 @@ class NetworkHelper {
         await batchInsertEvents(eventsPage.allParsedEvents);
       }
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'getEvents');
+      FirebaseCrashlytics.instance.recordError(e, s, reason: 'getEvents');
     }
   }
 
   Future<String> getToken(code, user, pass) async {
     //TODO: Look into this function, something is not right
-    Crashlytics.instance.log("getToken, try $tokenIndex");
+    FirebaseCrashlytics.instance.log("getToken, try $tokenIndex");
     tokenIndex++;
     try {
       if (code == "" || user == "" || pass == "") {
@@ -125,12 +125,12 @@ class NetworkHelper {
           if (tokenIndex < 3) {
             getToken(code, user, pass);
           } else {
-            Crashlytics.instance.recordError(e, s, context: 'getToken');
+            FirebaseCrashlytics.instance.recordError(e, s, reason: 'getToken');
             return getTranslatedString("noAns");
           }
         }
       } catch (e, s) {
-        Crashlytics.instance.recordError(e, s, context: 'getToken');
+        FirebaseCrashlytics.instance.recordError(e, s, reason: 'getToken');
         return getTranslatedString("noAnsNovy");
       }
     }
@@ -138,7 +138,7 @@ class NetworkHelper {
   }
 
   Future<void> getStudentInfo(token, code) async {
-    Crashlytics.instance.log("getStudentInfo");
+    FirebaseCrashlytics.instance.log("getStudentInfo");
     var headers = {
       'Authorization': 'Bearer $token',
       'User-Agent': '$agent',
@@ -152,8 +152,9 @@ class NetworkHelper {
     if (res.statusCode == 200) {
       globals.dJson = json.decode(res.body);
       if (!config.isAppPlaystoreRelease) {
-        Crashlytics.instance.setUserName(globals.dJson["Name"]);
-        Crashlytics.instance.setString("User", globals.dJson["Name"]);
+        FirebaseCrashlytics.instance.setUserIdentifier(globals.dJson["Name"]);
+        FirebaseCrashlytics.instance
+            .setCustomKey("User", globals.dJson["Name"]);
       }
       await getExams(token, code);
       await getEvents(token, code);
@@ -174,7 +175,7 @@ class NetworkHelper {
   }
 
   Future<dynamic> getSchoolList() async {
-    Crashlytics.instance.log("getSchoolList");
+    FirebaseCrashlytics.instance.log("getSchoolList");
     List<School> tempList = [];
     School tempSchool = new School();
     var client = http.Client();
@@ -212,7 +213,7 @@ class NetworkHelper {
   }
 
   Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
-    Crashlytics.instance.log("getSpecifiedWeeksLesson");
+    FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
       throw Exception(getTranslatedString("noNet"));
     }
@@ -324,7 +325,7 @@ class NetworkHelper {
   }
 
   Future<List<List<Lesson>>> getThisWeeksLessons(token, code) async {
-    Crashlytics.instance.log("getThisWeeksLessons");
+    FirebaseCrashlytics.instance.log("getThisWeeksLessons");
     List<List<Lesson>> output = [];
     for (var n = 0; n < 7; n++) {
       output.add([]);
@@ -395,7 +396,7 @@ class NetworkHelper {
   }
 
   void setUpCalculatorPage(List<List<Evals>> input) {
-    Crashlytics.instance.log("setUpCalculatorPage");
+    FirebaseCrashlytics.instance.log("setUpCalculatorPage");
     calculatorPage.dropdownValues = [];
     calculatorPage.dropdownValue = "";
     calculatorPage.avarageList = [];
@@ -422,7 +423,7 @@ class NetworkHelper {
   }
 
   Future<void> getExams(token, code) async {
-    Crashlytics.instance.log("getExams");
+    FirebaseCrashlytics.instance.log("getExams");
     try {
       var headers = {
         'Authorization': 'Bearer $token',
@@ -444,14 +445,14 @@ class NetworkHelper {
         //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
       }
     } catch (e, s) {
-      Crashlytics.instance.recordError(e, s, context: 'getExams');
+      FirebaseCrashlytics.instance.recordError(e, s, reason: 'getExams');
       return [];
     }
   }
 
   Future<Homework> setTeacherHomework(
       int hwId, String token, String code) async {
-    Crashlytics.instance.log("setTeacherHomework");
+    FirebaseCrashlytics.instance.log("setTeacherHomework");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     double keepForDays = prefs.getDouble("howLongKeepDataForHw");
 

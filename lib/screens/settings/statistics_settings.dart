@@ -59,7 +59,8 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
-                        Crashlytics.instance.setString("howManyGraph", value);
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("howManyGraph", value);
                         prefs.setString("howManyGraph", value);
                         globals.howManyGraph = value;
                       });
@@ -117,7 +118,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                             });
                             prefs.setInt(
                                 "extraSpaceUnderStat", int.parse(input));
-                            Crashlytics.instance.setInt(
+                            FirebaseCrashlytics.instance.setCustomKey(
                                 "extraSpaceUnderStat", int.parse(input));
                           }
                         },

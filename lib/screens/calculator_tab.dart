@@ -382,7 +382,7 @@ class CalculatorTabState extends State<CalculatorTab>
 
   @override
   void initState() {
-    Crashlytics.instance.log("Shown MarkCalculator");
+    FirebaseCrashlytics.instance.log("Shown MarkCalculator");
     //Set dropdown to item 0
     if (marksPage.allParsedByDate.length != 0) {
       dropdownValue = dropdownValues[0];

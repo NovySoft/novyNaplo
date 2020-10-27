@@ -33,7 +33,7 @@ class TimetableTab extends StatefulWidget {
 class _TimetableTabState extends State<TimetableTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Timetable");
+    FirebaseCrashlytics.instance.log("Shown Timetable");
     if (globals.payloadId != -1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Lesson tempLesson;

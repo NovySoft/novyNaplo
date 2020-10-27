@@ -26,7 +26,7 @@ class NoticeDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Crashlytics.instance.log("Shown Notices_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Notices_detail_tab");
     globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(),

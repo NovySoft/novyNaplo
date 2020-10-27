@@ -36,7 +36,7 @@ class ReportsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Crashlytics.instance.log("Shown Reports_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Reports_detail_tab");
     List<LinearMarkChartData> avList = List.from(chartList[0].data);
     if (avList.length == 0)
       avList = [LinearMarkChartData(0, 0), LinearMarkChartData(1, 0)];

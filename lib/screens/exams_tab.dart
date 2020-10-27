@@ -20,7 +20,7 @@ class ExamsTab extends StatefulWidget {
 class _ExamsTabState extends State<ExamsTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Exams");
+    FirebaseCrashlytics.instance.log("Shown Exams");
     colors = getRandomColors(allParsedExams.length);
     super.initState();
   }

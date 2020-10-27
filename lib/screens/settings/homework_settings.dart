@@ -73,8 +73,8 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
                 }
                 globals.howLongKeepDataForHw = keepDataForHw;
                 prefs.setDouble("howLongKeepDataForHw", keepDataForHw);
-                Crashlytics.instance
-                    .setDouble("howLongKeepDataForHw", keepDataForHw);
+                FirebaseCrashlytics.instance
+                    .setCustomKey("howLongKeepDataForHw", keepDataForHw);
               });
               updateHwTab();
             },

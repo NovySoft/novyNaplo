@@ -22,7 +22,7 @@ class EventsDetailTab extends StatefulWidget {
 class _EventsDetailTabState extends State<EventsDetailTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Events_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Events_detail_tab");
     super.initState();
   }
 

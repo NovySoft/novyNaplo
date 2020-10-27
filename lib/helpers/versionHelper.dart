@@ -32,7 +32,12 @@ Future<void> getVersion() async {
       }
     }
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'getVersion');
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'getVersion',
+      printDetails: true,
+    );
     return;
   }
   return;

@@ -16,17 +16,17 @@ var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',
   'Channel for sending novyNaplo load notifications',
-  importance: Importance.Low,
-  priority: Priority.Low,
+  importance: Importance.low,
+  priority: Priority.low,
   enableVibration: false,
   enableLights: false,
   playSound: false,
   color: Color.fromARGB(255, 255, 165, 0),
-  visibility: NotificationVisibility.Public,
+  visibility: NotificationVisibility.public,
 );
 var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-var platformChannelSpecificsGetNotif =
-    new NotificationDetails(androidFetchDetail, iOSPlatformChannelSpecifics);
+var platformChannelSpecificsGetNotif = new NotificationDetails(
+    android: androidFetchDetail, iOS: iOSPlatformChannelSpecifics);
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     new FlutterLocalNotificationsPlugin();
 AndroidNotificationDetails sendNotification;
@@ -38,8 +38,9 @@ void backgroundFetch() async {
     FirebaseAnalytics().logEvent(name: "BackgroundFetch");
     FirebaseAnalytics()
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
-    Crashlytics.instance.setString("Version", config.currentAppVersionCode);
-    Crashlytics.instance.log("backgroundFetch started");
+    FirebaseCrashlytics.instance
+        .setCustomKey("Version", config.currentAppVersionCode);
+    FirebaseCrashlytics.instance.log("backgroundFetch started");
     await globals.setGlobals();
     await notifHelper.setupNotifications();
     //print(globals.notifications);
@@ -55,7 +56,9 @@ void backgroundFetch() async {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings();
     var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
     await flutterLocalNotificationsPlugin.show(
       111,
@@ -102,7 +105,7 @@ void backgroundFetch() async {
     }
     await flutterLocalNotificationsPlugin.cancel(111);
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'backgroundFetch');
+    FirebaseCrashlytics.instance.recordError(e, s, reason: 'backgroundFetch');
     await flutterLocalNotificationsPlugin.cancel(111);
     await flutterLocalNotificationsPlugin.show(
       -111,

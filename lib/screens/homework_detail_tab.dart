@@ -27,7 +27,7 @@ class HomeworkDetailTab extends StatefulWidget {
 class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Homework_detail_tab");
+    FirebaseCrashlytics.instance.log("Shown Homework_detail_tab");
     super.initState();
   }
 

@@ -38,9 +38,8 @@ int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
 void main() async {
-  //Change to true if needed
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("isNew") == false) {
@@ -103,7 +102,7 @@ void main() async {
         rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
       );
     }
-  }, onError: Crashlytics.instance.recordError);
+  }, onError: FirebaseCrashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {

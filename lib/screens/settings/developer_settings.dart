@@ -78,7 +78,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                       onPressed: () async {
                                         FirebaseAnalytics()
                                             .logEvent(name: "clear_database");
-                                        Crashlytics.instance
+                                        FirebaseCrashlytics.instance
                                             .log("clear_database");
                                         await clearAllTables();
                                         Navigator.of(context).pop();

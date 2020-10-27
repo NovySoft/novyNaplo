@@ -30,7 +30,7 @@ class _AbsencesTabState extends State<AbsencesTab>
 
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Absences");
+    FirebaseCrashlytics.instance.log("Shown Absences");
     _animationControllerJustified = AnimationController(
       duration: Duration(milliseconds: 500),
       vsync: this,

@@ -36,12 +36,12 @@ Future<void> setupNotifications() async {
     'novynaplo01',
     'novynaplo',
     'Channel for sending novyNaplo notifications',
-    importance: Importance.Max,
-    priority: Priority.High,
+    importance: Importance.high,
+    priority: Priority.high,
     enableVibration: true,
     vibrationPattern: vibrationPattern,
     color: Color.fromARGB(255, 255, 165, 0),
-    visibility: NotificationVisibility.Private,
+    visibility: NotificationVisibility.private,
     ledColor: Colors.orange,
     ledOnMs: 1000,
     ledOffMs: 1000,
@@ -50,13 +50,17 @@ Future<void> setupNotifications() async {
   );
   iOSPlatformChannelSpecifics = new IOSNotificationDetails();
   platformChannelSpecifics = new NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
+  );
   // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
   var initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = IOSInitializationSettings();
   var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -71,7 +75,8 @@ Future<void> setupNotifications() async {
 }
 
 Future selectNotification(String payload) async {
-  Crashlytics.instance.log("selectNotification received (payload $payload)");
+  FirebaseCrashlytics.instance
+      .log("selectNotification received (payload $payload)");
   print(payload);
   if (globals.globalContext == null) {
     print("NoContext");
@@ -270,7 +275,7 @@ Future selectNotification(String payload) async {
         return;
         break;
     }
-    Crashlytics.instance.log("Unkown payload: " + payload);
+    FirebaseCrashlytics.instance.log("Unkown payload: " + payload);
     FirebaseAnalytics().logEvent(
       name: "UnkownPayload",
       parameters: {"payload": payload},

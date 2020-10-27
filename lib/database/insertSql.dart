@@ -16,7 +16,7 @@ int notifId = 2;
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
-  Crashlytics.instance.log("insertSingleEval");
+  FirebaseCrashlytics.instance.log("insertSingleEval");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -75,7 +75,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
 }
 
 Future<void> insertHomework(Homework hw, {bool edited}) async {
-  Crashlytics.instance.log("insertSingleHw");
+  FirebaseCrashlytics.instance.log("insertSingleHw");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -161,7 +161,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
 }
 
 Future<void> insertNotices(Notices notice, {bool edited}) async {
-  Crashlytics.instance.log("insertSingleNotice");
+  FirebaseCrashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -208,7 +208,7 @@ Future<void> insertNotices(Notices notice, {bool edited}) async {
 }
 
 Future<void> insertAvarage(Avarage avarage) async {
-  Crashlytics.instance.log("insertSingleAvarage");
+  FirebaseCrashlytics.instance.log("insertSingleAvarage");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -261,7 +261,7 @@ Future<void> insertAvarage(Avarage avarage) async {
 }
 
 Future<void> insertExam(Exam exam, {bool edited}) async {
-  Crashlytics.instance.log("insertSingleExam");
+  FirebaseCrashlytics.instance.log("insertSingleExam");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -314,7 +314,7 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
 //*Batch inserts
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEval(List<Evals> evalList) async {
-  Crashlytics.instance.log("batchInsertEval");
+  FirebaseCrashlytics.instance.log("batchInsertEval");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -395,7 +395,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
-  Crashlytics.instance.log("batchInsertHomework");
+  FirebaseCrashlytics.instance.log("batchInsertHomework");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -476,7 +476,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
 }
 
 Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
-  Crashlytics.instance.log("batchInsertAvarage");
+  FirebaseCrashlytics.instance.log("batchInsertAvarage");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -545,7 +545,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
 }
 
 Future<void> batchInsertNotices(List<Notices> noticeList) async {
-  Crashlytics.instance.log("batchInsertNotices");
+  FirebaseCrashlytics.instance.log("batchInsertNotices");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -612,7 +612,7 @@ Future<void> batchInsertNotices(List<Notices> noticeList) async {
 
 Future<void> batchInsertLessons(List<Lesson> lessonList,
     {bool lookAtDate = false}) async {
-  Crashlytics.instance.log("batchInsertLessons");
+  FirebaseCrashlytics.instance.log("batchInsertLessons");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -716,7 +716,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
 }
 
 Future<void> batchInsertExams(List<Exam> examList) async {
-  Crashlytics.instance.log("batchInsertExams");
+  FirebaseCrashlytics.instance.log("batchInsertExams");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -783,7 +783,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
 }
 
 Future<void> batchInsertEvents(List<Event> eventList) async {
-  Crashlytics.instance.log("batchInsertEvents");
+  FirebaseCrashlytics.instance.log("batchInsertEvents");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -848,7 +848,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
 }
 
 Future<void> batchInsertAbsences(List<Absence> absenceList) async {
-  Crashlytics.instance.log("batchInsertAbsences");
+  FirebaseCrashlytics.instance.log("batchInsertAbsences");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;

@@ -53,7 +53,7 @@ class _ReportsTabState extends State<ReportsTab>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    Crashlytics.instance.log("Shown Reports");
+    FirebaseCrashlytics.instance.log("Shown Reports");
     _tabController = new TabController(vsync: this, length: 4);
     //LoadData
     //*FirstQuarter

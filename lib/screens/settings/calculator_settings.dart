@@ -44,8 +44,8 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
                         globals.shouldVirtualMarksCollapse = switchOn;
                       });
                       prefs.setBool("shouldVirtualMarksCollapse", switchOn);
-                      Crashlytics.instance
-                          .setBool("shouldVirtualMarksCollapse", switchOn);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("shouldVirtualMarksCollapse", switchOn);
                     },
                     value: globals.shouldVirtualMarksCollapse,
                   ),
