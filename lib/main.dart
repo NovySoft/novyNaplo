@@ -39,11 +39,10 @@ int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  WidgetsFlutterBinding.ensureInitialized();
-  globals.defaultApp = await Firebase.initializeApp();
-  globals.defaultApp = Firebase.app();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("isNew") == false) {
     isNew = false;
