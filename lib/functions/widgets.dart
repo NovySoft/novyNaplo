@@ -18,6 +18,7 @@ import 'package:novynaplo/screens/notices_tab.dart';
 import 'package:novynaplo/screens/statistics_tab.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'dart:math' as math;
 
 class PressableCard extends StatefulWidget {
   PressableCard({
