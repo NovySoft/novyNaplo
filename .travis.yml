@@ -44,6 +44,7 @@ matrix:
         - yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository" > /dev/null
         - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
         - export ANDROID_HOME=${ANDROID_SDK_ROOT}/tools/bin:$PATH
+        - export ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT}
         - sdkmanager --list
         - git clone https://github.com/flutter/flutter.git -b stable --depth 1
         - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
