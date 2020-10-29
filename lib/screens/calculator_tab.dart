@@ -227,7 +227,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               controller: weightController,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
-                                WhitelistingTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -283,7 +283,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               controller: countController,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
-                                WhitelistingTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly
                               ],
                               validator: (value) {
                                 if (value.isEmpty) {

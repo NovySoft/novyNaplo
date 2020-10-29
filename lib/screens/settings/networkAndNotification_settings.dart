@@ -524,7 +524,7 @@ class _NetworkAndNotificationSettingsState
                         controller: fetchPeriodController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          WhitelistingTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) {
                           if (value.isEmpty) {
