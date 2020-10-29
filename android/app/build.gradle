@@ -37,6 +37,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     configurations.all {
+        all*.exclude group: 'com.google.guava', module: 'listenablefuture'
         resolutionStrategy {
             resolutionStrategy.eachDependency { details ->
                 if (details.requested.group == 'androidx.core') {
@@ -57,7 +58,6 @@ android {
             }
         }
     }
-    compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -70,7 +70,7 @@ android {
     defaultConfig {
         applicationId "novy.vip.novynaplo"
         minSdkVersion 21
-        compileSdkVersion 28
+        compileSdkVersion 29
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

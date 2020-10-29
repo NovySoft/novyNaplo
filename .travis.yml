@@ -30,9 +30,9 @@ matrix:
         - cd /home/travis/build/NovySoft/novyNaplo
       before_script:
         - cd /home/travis/build/NovySoft/novyNaplo
-        - wget https://services.gradle.org/distributions/gradle-5.4.1-all.zip
-        - unzip -qq gradle-5.4.1-all.zip
-        - export GRADLE_HOME=`pwd`/gradle-5.4.1
+        - wget https://services.gradle.org/distributions/gradle-6.1.1-all.zip
+        - unzip -qq gradle-6.1.1-all.zip
+        - export GRADLE_HOME=`pwd`/gradle-6.1.1
         - export PATH=$GRADLE_HOME/bin:$PATH
         - mkdir -p /home/travis/.android
         - echo 'count=0' > /home/travis/.android/repositories.cfg
@@ -56,7 +56,7 @@ matrix:
         - cd app
         - wget "$KEYJKS" -O key.jks &> /dev/null
         - cd /home/travis/build/NovySoft/novyNaplo
-        - "./flutter/bin/flutter build apk --no-shrink"
+        - "./flutter/bin/flutter build apk --no-shrink --release"
 
     - name: Build an ipa to test ios integrity
       os: osx
