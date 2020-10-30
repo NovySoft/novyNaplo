@@ -31,9 +31,6 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        bottom: true,
-        left: false,
-        right: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -661,8 +661,6 @@ class _StatisticsTabState extends State<StatisticsTab>
     Color currColor = marksPage.colors[index];
     if (index == 0) {
       return SafeArea(
-        top: false,
-        bottom: false,
         child: AnimatedChartsCard(
           title: capitalize(getTranslatedString("contracted")),
           color: currColor,
@@ -678,8 +676,6 @@ class _StatisticsTabState extends State<StatisticsTab>
       );
     }
     return SafeArea(
-      top: false,
-      bottom: false,
       child: AnimatedChartsCard(
         title: capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
         color: currColor,

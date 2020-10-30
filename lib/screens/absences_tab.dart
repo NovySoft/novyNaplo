@@ -20,6 +20,7 @@ class AbsencesTab extends StatefulWidget {
   @override
   _AbsencesTabState createState() => _AbsencesTabState();
 }
+//TODO: Rewrite logic with matrixes and also add timestamps to list
 
 class _AbsencesTabState extends State<AbsencesTab>
     with TickerProviderStateMixin {
@@ -221,101 +222,104 @@ class AbsencencesDetailTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(absence.subject))),
       body: SafeArea(
-        bottom: false,
-        left: false,
-        right: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AnimatedMarksCard(
-              eval: null,
-              iconData: parseSubjectToIcon(subject: absence.subject),
-              subTitle: "",
-              title: absence.teacher + " - " + capitalize(absence.subject),
-              color: color == null ? Colors.purple : color,
-              onPressed: null,
-            ),
-            Divider(
-              height: 0,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 6 + globals.adModifier,
-                itemBuilder: (context, index) {
-                  switch (index) {
-                    case 0:
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, top: 16, bottom: 16),
-                        child: Text(
-                          '${absence.type == "Delay" ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      );
-                      break;
-                    case 1:
-                      return SizedBox(
-                        child: Text(
-                            "${getTranslatedString("subject")}: " +
-                                absence.subject,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      );
-                      break;
-                    case 2:
-                      return SizedBox(
-                        child: Text(
-                            "${getTranslatedString("teacher")}: " +
-                                absence.teacher,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      );
-                      break;
-                    case 3:
-                      DateTime tempDate =
-                          DateTime.parse(absence.lessonStartTimeString);
-                      return SizedBox(
-                        child: Text(
-                            "${getTranslatedString("date")}: " +
-                                "${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(absence.numberOfLessons)} ${getTranslatedString("lesson")})",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      );
-                      break;
-                    case 4:
-                      return SizedBox(
-                        child: Text(
-                            "${getTranslatedString("stateOfJustification")}: " +
-                                "${getTranslatedString(absence.justificationState)}",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                      );
-                      break;
-                    case 5:
-                      return absence.justificationType != null ||
-                              absence.justificationType != ""
-                          ? SizedBox(
-                              child: Text(
-                                  "${getTranslatedString("justificationType")}: " +
-                                      "${getTranslatedString(absence.justificationTypeName)}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                            )
-                          : SizedBox(
-                              width: 0,
-                              height: 0,
-                            );
-                      break;
-                    default:
-                      return SizedBox(height: 100);
-                  }
-                },
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              stretch: true,
+              title: new Container(),
+              leading: new Container(),
+              backgroundColor: color == null ? Colors.purple : color,
+              expandedHeight: 250.0,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                stretchModes: [StretchMode.zoomBackground],
+                background: Icon(
+                  parseSubjectToIcon(subject: absence.subject),
+                  size: 150,
+                  color: Colors.black38,
+                  textDirection: TextDirection.ltr,
+                ),
               ),
+            ),
+            SliverList(
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                switch (index) {
+                  case 0:
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, top: 16, bottom: 16),
+                      child: Text(
+                        '${absence.type == "Delay" ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                    break;
+                  case 1:
+                    return SizedBox(
+                      child: Text(
+                          "${getTranslatedString("subject")}: " +
+                              absence.subject,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 3:
+                    return SizedBox(
+                      child: Text(
+                          "${getTranslatedString("teacher")}: " +
+                              absence.teacher,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 5:
+                    DateTime tempDate =
+                        DateTime.parse(absence.lessonStartTimeString);
+                    return SizedBox(
+                      child: Text(
+                          "${getTranslatedString("date")}: " +
+                              "${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(absence.numberOfLessons)} ${getTranslatedString("lesson")})",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 7:
+                    return SizedBox(
+                      child: Text(
+                          "${getTranslatedString("stateOfJustification")}: " +
+                              "${getTranslatedString(absence.justificationState)}",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                    break;
+                  case 9:
+                    return absence.justificationType != null ||
+                            absence.justificationType != ""
+                        ? SizedBox(
+                            child: Text(
+                                "${getTranslatedString("justificationType")}: " +
+                                    "${getTranslatedString(absence.justificationTypeName)}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                          )
+                        : SizedBox(
+                            width: 0,
+                            height: 0,
+                          );
+                    break;
+                  case 10:
+                    return SizedBox(
+                      height: 250,
+                    );
+                    break;
+                  default:
+                    return SizedBox(height: 10);
+                }
+              }, childCount: 11),
             ),
           ],
         ),

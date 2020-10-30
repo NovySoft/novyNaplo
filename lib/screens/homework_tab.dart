@@ -84,8 +84,6 @@ class _HomeworkTabState extends State<HomeworkTab> {
           " " +
           parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
       return SafeArea(
-        top: false,
-        bottom: false,
         child: AnimatedHomeworkCard(
           dueOver: dueOver,
           title: globalHomework[index].subject,

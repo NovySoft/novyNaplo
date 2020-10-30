@@ -36,9 +36,6 @@ class NoticeDetailTab extends StatelessWidget {
 
   Widget body() {
     return SafeArea(
-      bottom: false,
-      left: false,
-      right: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

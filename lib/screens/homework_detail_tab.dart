@@ -42,9 +42,6 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
 
   Widget _body() {
     return SafeArea(
-      bottom: false,
-      left: false,
-      right: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

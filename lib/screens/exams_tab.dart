@@ -76,8 +76,6 @@ class _ExamsTabState extends State<ExamsTab> {
         isDone = true;
       }
       return SafeArea(
-        top: false,
-        bottom: false,
         child: AnimatedExamsCard(
           isDone: isDone,
           title: allParsedExams[index].nameOfExam,

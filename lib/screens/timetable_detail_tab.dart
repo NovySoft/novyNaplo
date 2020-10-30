@@ -45,9 +45,6 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
       icon = parseSubjectToIcon(subject: widget.lessonInfo.subject);
     }
     return SafeArea(
-      bottom: false,
-      left: false,
-      right: false,
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -319,7 +316,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 default:
                   return SizedBox(height: 10);
               }
-            }, childCount: 30),
+            }, childCount: 25),
           ),
         ],
       ),

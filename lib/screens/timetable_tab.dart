@@ -73,6 +73,7 @@ class _TimetableTabState extends State<TimetableTab> {
         );
       });
     }
+    //TODO Go to current day when opening
     super.initState();
   }
 
@@ -321,8 +322,6 @@ class _TimetableTabState extends State<TimetableTab> {
                             color = marksPage.colors[index];
                           }
                           return SafeArea(
-                            top: false,
-                            bottom: false,
                             child: TimetableCard(
                               iconData: selectedLessonList[index].homework.icon,
                               hasHomework:

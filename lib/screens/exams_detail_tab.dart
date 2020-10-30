@@ -23,28 +23,28 @@ class ExamsDetailTab extends StatelessWidget {
 
 Widget _buildBody(Exam exam, Color color) {
   return SafeArea(
-    bottom: false,
-    left: false,
-    right: false,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AnimatedMarksCard(
-          eval: null,
-          iconData: parseSubjectToIcon(subject: exam.subject),
-          subTitle: "",
-          title: capitalize(exam.subject + " " + exam.nameOfExam),
-          color: color == null ? Colors.green : color,
-          onPressed: null,
+    child: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          stretch: true,
+          title: new Container(),
+          leading: new Container(),
+          backgroundColor: color == null ? Colors.green : color,
+          expandedHeight: 250.0,
+          flexibleSpace: FlexibleSpaceBar(
+            collapseMode: CollapseMode.parallax,
+            stretchModes: [StretchMode.zoomBackground],
+            background: Icon(
+              parseSubjectToIcon(subject: exam.subject),
+              size: 150,
+              color: Colors.black38,
+              textDirection: TextDirection.ltr,
+            ),
+          ),
         ),
-        Divider(
-          height: 0,
-          color: Colors.grey,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 7 + globals.adModifier,
-            itemBuilder: (context, index) {
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
               switch (index) {
                 case 0:
                   return Padding(
@@ -67,7 +67,7 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
-                case 2:
+                case 3:
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("theme")}: " + exam.nameOfExam,
@@ -75,7 +75,7 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
-                case 3:
+                case 5:
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("examType")}: " +
@@ -84,7 +84,7 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
-                case 4:
+                case 7:
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("teacher")}: " + exam.teacher,
@@ -92,7 +92,7 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
-                case 5:
+                case 9:
                   DateTime examDate = exam.dateWrite;
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
@@ -103,7 +103,7 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
-                case 6:
+                case 11:
                   DateTime examDate = exam.dateGivenUp;
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
@@ -114,10 +114,16 @@ Widget _buildBody(Exam exam, Color color) {
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
+                case 12:
+                  return SizedBox(
+                    height: 250,
+                  );
+                  break;
                 default:
-                  return SizedBox(height: 100);
+                  return SizedBox(height: 10);
               }
             },
+            childCount: 13,
           ),
         ),
       ],

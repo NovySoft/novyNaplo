@@ -159,8 +159,6 @@ class MarksTabState extends State<MarksTab>
       index: index,
     );
     return SafeArea(
-      top: false,
-      bottom: false,
       child: AnimatedMarksCard(
         eval: allParsedByDate[index],
         iconData: allParsedByDate[index].icon,
@@ -224,8 +222,6 @@ class MarksTabState extends State<MarksTab>
                 width: double.infinity,
                 height: 106,
                 child: SafeArea(
-                  top: false,
-                  bottom: false,
                   child: HeroAnimatingSubjectsCard(
                     subTitle: getMarkCardSubtitle(
                       eval: allParsedBySubject[listIndex][index],
@@ -250,8 +246,6 @@ class MarksTabState extends State<MarksTab>
           width: double.infinity,
           height: 106,
           child: SafeArea(
-            top: false,
-            bottom: false,
             child: HeroAnimatingSubjectsCard(
               subTitle: getMarkCardSubtitle(
                 eval: allParsedBySubject[listIndex][index],

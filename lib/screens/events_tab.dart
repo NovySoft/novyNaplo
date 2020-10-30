@@ -59,18 +59,16 @@ class _EventsTabState extends State<EventsTab> {
       );
     } else {
       return SafeArea(
-          top: false,
-          bottom: false,
           child: AnimatedTitleSubtitleCard(
-            heroAnimation: AlwaysStoppedAnimation(0),
-            title: allParsedEvents[index].title,
-            subTitle: allParsedEvents[index].content.substring(0, 15),
-            color: colors[index],
-            onPressed: EventsDetailTab(
-              color: colors[index],
-              eventDetails: allParsedEvents[index],
-            ),
-          ));
+        heroAnimation: AlwaysStoppedAnimation(0),
+        title: allParsedEvents[index].title,
+        subTitle: allParsedEvents[index].content.substring(0, 15),
+        color: colors[index],
+        onPressed: EventsDetailTab(
+          color: colors[index],
+          eventDetails: allParsedEvents[index],
+        ),
+      ));
     }
   }
 

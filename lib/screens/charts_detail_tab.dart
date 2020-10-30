@@ -52,9 +52,6 @@ class ChartsDetailTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        bottom: false,
-        left: false,
-        right: false,
         child: ListView.builder(
             itemCount: 3 + globals.adModifier,
             itemBuilder: (BuildContext context, int index) {
