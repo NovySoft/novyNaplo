@@ -62,7 +62,9 @@ class _EventsTabState extends State<EventsTab> {
           child: AnimatedTitleSubtitleCard(
         heroAnimation: AlwaysStoppedAnimation(0),
         title: allParsedEvents[index].title,
-        subTitle: allParsedEvents[index].content.substring(0, 15),
+        subTitle: allParsedEvents[index].content.length >= 15
+            ? allParsedEvents[index].content.substring(0, 15)
+            : allParsedEvents[index].content,
         color: colors[index],
         onPressed: EventsDetailTab(
           color: colors[index],
