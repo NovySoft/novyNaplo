@@ -13,7 +13,6 @@ import 'package:novynaplo/functions/classManager.dart';
 
 int notifId = 2;
 //TODO: FIX first login notifications (disable them, when first time loging in)
-//TODO: Don't show homework notification when out of due date
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
@@ -87,11 +86,12 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
 
   DateTime afterDue = hw.dueDate;
   if (globals.howLongKeepDataForHw != -1) {
-    afterDue = afterDue.add(Duration(days: 15)); //Delete from DB after 15 days
+    afterDue =
+        afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
   }
 
   if (matchedHw.length == 0) {
-    if (afterDue.compareTo(DateTime.now()) < 0) {
+    if (afterDue.isBefore(DateTime.now())) {
       print("OUT OF RANGE");
       if (hw.databaseId != null && globals.howLongKeepDataForHw != -1) {
         print("Deleted ${hw.databaseId}");
@@ -114,13 +114,16 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
           hw.dueDate.day.toString() +
           " " +
           parseIntToWeekdayString(hw.dueDate.weekday);
-      await notifHelper.flutterLocalNotificationsPlugin.show(
-        notifId,
-        '${getTranslatedString("newHw")}: ' + capitalize(hw.subject),
-        subTitle,
-        notifHelper.platformChannelSpecifics,
-        payload: "hw " + hw.id.toString(),
-      );
+      if (afterDue.isAfter(DateTime.now())) {
+        print("HW NOTIF");
+        await notifHelper.flutterLocalNotificationsPlugin.show(
+          notifId,
+          '${getTranslatedString("newHw")}: ' + capitalize(hw.subject),
+          subTitle,
+          notifHelper.platformChannelSpecifics,
+          payload: "hw " + hw.id.toString(),
+        );
+      }
     }
   } else {
     for (var n in matchedHw) {
