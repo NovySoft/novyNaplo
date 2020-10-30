@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 

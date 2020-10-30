@@ -53,7 +53,7 @@ class NoticeDetailTab extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 4,
+              itemCount: 4 + globals.adModifier,
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
@@ -136,7 +136,7 @@ class NoticeDetailTab extends StatelessWidget {
                     );
                     break;
                 }
-                return SizedBox(height: 10, width: 10);
+                return SizedBox(height: 250, width: 10);
               },
             ),
           ),

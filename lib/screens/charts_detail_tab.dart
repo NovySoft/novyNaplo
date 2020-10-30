@@ -52,125 +52,134 @@ class ChartsDetailTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: ListView.builder(
-            itemCount: 3 + globals.adModifier,
-            itemBuilder: (BuildContext context, int index) {
-              switch (index) {
-                case 0:
-                  return SizedBox(
-                    height: 60,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(color: color),
-                        child: Center(
-                          child: Text(
-                            subject,
-                            textDirection: TextDirection.ltr,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        )),
-                  );
-                  break;
-                case 1:
-                  int performancePercentage = calcPercentFromEvalsList(
-                    evalList: getSameSubjectEvals(
-                      subject: subject,
-                      sort: true,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 60,
+              child: DecoratedBox(
+                  decoration: BoxDecoration(color: color),
+                  child: Center(
+                    child: Text(
+                      subject,
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.black,
+                      ),
                     ),
-                  );
-                  Color textColPercent;
-                  if (performancePercentage >= 75) {
-                    textColPercent = Colors.green;
-                  } else if (performancePercentage >= 50) {
-                    textColPercent = Colors.orange;
-                  } else if (performancePercentage >= 25) {
-                    textColPercent = Colors.red[400];
-                  } else {
-                    textColPercent = Colors.red[900];
-                  }
+                  )),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 2 + globals.adModifier,
+                itemBuilder: (BuildContext context, int index) {
+                  switch (index) {
+                    case 0:
+                      int performancePercentage = calcPercentFromEvalsList(
+                        evalList: getSameSubjectEvals(
+                          subject: subject,
+                          sort: true,
+                        ),
+                      );
+                      Color textColPercent;
+                      if (performancePercentage >= 75) {
+                        textColPercent = Colors.green;
+                      } else if (performancePercentage >= 50) {
+                        textColPercent = Colors.orange;
+                      } else if (performancePercentage >= 25) {
+                        textColPercent = Colors.red[400];
+                      } else {
+                        textColPercent = Colors.red[900];
+                      }
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        getTranslatedString("performance"),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Wrap(
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          CustomGauge(
-                            gaugeSize: 200,
-                            minValue: 1,
-                            maxValue: 5,
-                            segments: [
-                              GaugeSegment('1', 1, Colors.red[900]),
-                              GaugeSegment('1', 1, Colors.red[400]),
-                              GaugeSegment('2', 1, Colors.orange),
-                              GaugeSegment('4', 1, Colors.green),
-                            ],
-                            currentValue: seriesList.last.data.last.value,
-                            displayWidget: Text(
-                              '${capitalize(getTranslatedString("av"))}:',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            valueWidget: Text(
-                              seriesList.last.data.last.value
-                                  .toStringAsFixed(3),
-                              style: TextStyle(fontSize: 21, color: textCol),
-                            ),
+                          SizedBox(
+                            height: 20,
                           ),
-                          CustomGauge(
-                            gaugeSize: 200,
-                            minValue: 0,
-                            maxValue: 100,
-                            segments: [
-                              GaugeSegment('1', 25, Colors.red[900]),
-                              GaugeSegment('2', 25, Colors.red[400]),
-                              GaugeSegment('3', 25, Colors.orange),
-                              GaugeSegment('4', 25, Colors.green),
+                          Text(
+                            getTranslatedString("performance"),
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Wrap(
+                            children: <Widget>[
+                              CustomGauge(
+                                gaugeSize: 200,
+                                minValue: 1,
+                                maxValue: 5,
+                                segments: [
+                                  GaugeSegment('1', 1, Colors.red[900]),
+                                  GaugeSegment('1', 1, Colors.red[400]),
+                                  GaugeSegment('2', 1, Colors.orange),
+                                  GaugeSegment('4', 1, Colors.green),
+                                ],
+                                currentValue: seriesList.last.data.last.value,
+                                displayWidget: Text(
+                                  '${capitalize(getTranslatedString("av"))}:',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                valueWidget: Text(
+                                  seriesList.last.data.last.value
+                                      .toStringAsFixed(3),
+                                  style:
+                                      TextStyle(fontSize: 21, color: textCol),
+                                ),
+                              ),
+                              CustomGauge(
+                                gaugeSize: 200,
+                                minValue: 0,
+                                maxValue: 100,
+                                segments: [
+                                  GaugeSegment('1', 25, Colors.red[900]),
+                                  GaugeSegment('2', 25, Colors.red[400]),
+                                  GaugeSegment('3', 25, Colors.orange),
+                                  GaugeSegment('4', 25, Colors.green),
+                                ],
+                                currentValue: performancePercentage.toDouble(),
+                                displayWidget: Text(
+                                  '${capitalize(getTranslatedString("inPc"))}:',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                valueWidget: Text(
+                                  performancePercentage.toString() + "%",
+                                  style: TextStyle(
+                                      fontSize: 21, color: textColPercent),
+                                ),
+                              ),
                             ],
-                            currentValue: performancePercentage.toDouble(),
-                            displayWidget: Text(
-                              '${capitalize(getTranslatedString("inPc"))}:',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            valueWidget: Text(
-                              performancePercentage.toString() + "%",
-                              style: TextStyle(
-                                  fontSize: 21, color: textColPercent),
-                            ),
                           ),
                         ],
-                      ),
-                    ],
-                  );
-                  break;
-                case 2:
-                  return SizedBox(
-                      height: 500,
-                      child: new charts.LineChart(
-                        seriesList,
-                        behaviors: [new charts.PanAndZoomBehavior()],
-                        animate: animate,
-                        domainAxis: axisTwo,
-                        primaryMeasureAxis: axis,
-                        defaultRenderer:
-                            new charts.LineRendererConfig(includePoints: true),
-                      ));
-                  break;
-                default:
-                  return SizedBox(
-                    height: 50,
-                  );
-              }
-            }),
+                      );
+                      break;
+                    case 1:
+                      return SizedBox(
+                          height: 500,
+                          child: new charts.LineChart(
+                            seriesList,
+                            behaviors: [new charts.PanAndZoomBehavior()],
+                            animate: animate,
+                            domainAxis: axisTwo,
+                            primaryMeasureAxis: axis,
+                            defaultRenderer: new charts.LineRendererConfig(
+                                includePoints: true),
+                          ));
+                      break;
+                    default:
+                      return SizedBox(
+                        height: 150,
+                      );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
