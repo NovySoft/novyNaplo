@@ -34,6 +34,7 @@ class _TimetableTabState extends State<TimetableTab> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable");
+    _selectedDate = DateTime.now();
     if (globals.payloadId != -1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Lesson tempLesson;

@@ -6,8 +6,6 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 
-//TODO: refactor this (I mean not just refactor this... It umh needs to be completly redesigned)
-//TODO: Rewrite everything with slivers just like below...
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});
 
