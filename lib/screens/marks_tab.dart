@@ -25,7 +25,6 @@ List<Evals> allParsedByDate;
 List<List<Evals>> allParsedBySubject;
 int selectedIndex = 0;
 bool differenSubject = false;
-String subjectBefore = "";
 final List<Tab> markTabs = <Tab>[
   Tab(text: getTranslatedString("byDate"), icon: Icon(Icons.calendar_today)),
   Tab(text: getTranslatedString("bySubject"), icon: Icon(Icons.view_list)),

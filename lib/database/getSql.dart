@@ -250,8 +250,8 @@ Future<List<Event>> getAllEvents() async {
   });
 }
 
-Future<List<Absence>> getAllAbsences() async {
-  FirebaseCrashlytics.instance.log("getAllAbsences");
+Future<List<List<Absence>>> getAllAbsencesMatrix() async {
+  FirebaseCrashlytics.instance.log("getAllAbsencesMatrix");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
@@ -279,11 +279,23 @@ Future<List<Absence>> getAllAbsences() async {
     temp.numberOfLessons = maps[i]['numberOfLessons'];
     return temp;
   });
+  if (tempList.length == 0) return [];
   tempList.sort(
     (a, b) => (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
         .compareTo(
       a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
     ),
   );
-  return tempList;
+  int index = 0;
+  List<List<Absence>> outputList = [[]];
+  DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
+  for (var n in tempList) {
+    if (!DateTime.parse(n.lessonStartTimeString).isSameDay(dateBefore)) {
+      index++;
+      outputList.add([]);
+      dateBefore = DateTime.parse(n.lessonStartTimeString);
+    }
+    outputList[index].add(n);
+  }
+  return outputList;
 }

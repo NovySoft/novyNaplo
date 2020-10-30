@@ -165,7 +165,7 @@ class _LoadingPageState extends State<LoadingPage> {
       eventsPage.allParsedEvents = await getAllEvents();
       eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
       //Absences and delays
-      absencesPage.allParsedAbsences = await getAllAbsences();
+      absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
       //DONE
       setState(() {
         loadingText = "${getTranslatedString("almReady")}!";

@@ -247,19 +247,31 @@ Future<List<Event>> parseEvents(var input) async {
   return eventArray;
 }
 
-Future<List<Absence>> parseAllAbsences(input) async {
+Future<List<List<Absence>>> parseAllAbsences(input) async {
   List<Absence> tempList = [];
+  List<List<Absence>> outputList = [[]];
   var absences = input["Absences"];
   for (var n in absences) {
     tempList.add(new Absence.fromJson(n));
   }
-  //Do not await as this a time critical task
+  if (tempList.length == 0) return [];
   tempList.sort(
     (a, b) => (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
         .compareTo(
       a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
     ),
   );
+  int index = 0;
+  DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
+  for (var n in tempList) {
+    if (!DateTime.parse(n.lessonStartTimeString).isSameDay(dateBefore)) {
+      index++;
+      outputList.add([]);
+      dateBefore = DateTime.parse(n.lessonStartTimeString);
+    }
+    outputList[index].add(n);
+  }
+  //Do not await as this a time critical task
   batchInsertAbsences(tempList);
-  return tempList;
+  return outputList;
 }

@@ -337,7 +337,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'absence ' +
                                 (allParsedAbsences.length == 0
                                     ? "0"
-                                    : allParsedAbsences[0].id.toString()),
+                                    : allParsedAbsences[0][0].id.toString()),
                           );
                         },
                         icon: Icon(

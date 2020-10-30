@@ -854,15 +854,16 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
-  List<Absence> allAbsences = await getAllAbsences();
+  List<List<Absence>> tempAbsencesMatrix = await getAllAbsencesMatrix();
+  List<dynamic> allAbsences =
+      List.from(tempAbsencesMatrix).expand((i) => i).toList();
   for (var absence in absenceList) {
-    var matchedEvents = allAbsences.where((element) {
+    var matchedAbsences = allAbsences.where((element) {
       return (element.id == absence.id);
     });
-    if (matchedEvents.length == 0) {
+    if (matchedAbsences.length == 0) {
       if (globals.notifications) {
         notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-        print("notif");
         await notifHelper.flutterLocalNotificationsPlugin.show(
           notifId,
           '${absence.type == "Absence" ? getTranslatedString("newAbsence") : getTranslatedString("newDelay")}: ',
@@ -878,7 +879,7 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } else {
-      for (var n in matchedEvents) {
+      for (var n in matchedAbsences) {
         //!Update didn't work so we delete and create a new one
         if (n.justificationState != absence.justificationState ||
             n.justificationStateName != absence.justificationStateName ||

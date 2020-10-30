@@ -363,7 +363,8 @@ class AbsenceChartData {
 }
 
 List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
-    List<Absence> inputList) {
+    List<List<Absence>> input) {
+  List<dynamic> inputList = List.from(input).expand((i) => i).toList();
   final delayList = inputList.where((n) => n.type == "Delay");
   int igazolandoDelay = 0, igazoltDelay = 0, igazolatlanDelay = 0;
   if (delayList.length != 0) {

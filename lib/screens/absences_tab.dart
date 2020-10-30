@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -8,7 +9,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
-List<Absence> allParsedAbsences = [];
+List<List<Absence>> allParsedAbsences = [];
 List<charts.Series> seriesList;
 AbsencesBarChartLegendSelection legendSelection =
     new AbsencesBarChartLegendSelection();
@@ -24,7 +25,7 @@ class AbsencesTab extends StatefulWidget {
 
 class _AbsencesTabState extends State<AbsencesTab>
     with TickerProviderStateMixin {
-  List<Absence> tempAbsences = [];
+  List<dynamic> tempAbsences = [];
   AnimationController _animationControllerJustified;
   AnimationController _animationControllerUnJustified;
   AnimationController _animationControllerBeJustified;
@@ -49,9 +50,11 @@ class _AbsencesTabState extends State<AbsencesTab>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Absence tempAbsence;
           for (var n in allParsedAbsences) {
-            if (n.id == globals.payloadId) {
-              tempAbsence = n;
-              break;
+            for (var j in n) {
+              if (j.id == globals.payloadId) {
+                tempAbsence = j;
+                break;
+              }
             }
           }
           if (tempAbsence != null) {
@@ -81,7 +84,7 @@ class _AbsencesTabState extends State<AbsencesTab>
         legendSelection = legendSelection;
       });
       Future.delayed(Duration(milliseconds: 500), () {
-        tempAbsences = List.from(allParsedAbsences);
+        tempAbsences = List.from(allParsedAbsences).expand((i) => i).toList();
         //TODO: Fix fade in
         _animationControllerJustified.reset();
         _animationControllerJustified.forward();
@@ -103,6 +106,32 @@ class _AbsencesTabState extends State<AbsencesTab>
         if (!legendSelection.igazolt) {
           tempAbsences.removeWhere(
               (element) => element.justificationState == "Justified");
+        }
+        if (tempAbsences.length != 0) {
+          tempAbsences.sort(
+            (a, b) =>
+                (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
+                    .compareTo(
+              a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
+            ),
+          );
+          List<dynamic> tempList = List.from(tempAbsences);
+          List<List<Absence>> outputList = [[]];
+          int index = 0;
+          DateTime dateBefore =
+              DateTime.parse(tempList[0].lessonStartTimeString);
+          for (var n in tempList) {
+            if (!DateTime.parse(n.lessonStartTimeString)
+                .isSameDay(dateBefore)) {
+              index++;
+              outputList.add([]);
+              dateBefore = DateTime.parse(n.lessonStartTimeString);
+            }
+            outputList[index].add(n);
+          }
+          tempAbsences = outputList;
+        } else {
+          tempAbsences = [];
         }
         setState(() {
           legendSelection = legendSelection;
@@ -138,8 +167,7 @@ class _AbsencesTabState extends State<AbsencesTab>
       appBar: AppBar(
         title: Text(capitalize(getTranslatedString("absencesAndDelays"))),
       ),
-      body: ListView(
-        shrinkWrap: true,
+      body: Column(
         children: [
           SizedBox(
             height: 15,
@@ -154,57 +182,119 @@ class _AbsencesTabState extends State<AbsencesTab>
           SizedBox(
             height: 15,
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: tempAbsences.length + globals.adModifier,
-            itemBuilder: (context, index) {
-              if (index >= tempAbsences.length) {
-                return SizedBox(
-                  height: 100,
+          Expanded(
+            child: ListView.builder(
+              itemCount: tempAbsences.length + globals.adModifier,
+              itemBuilder: (context, listIndex) {
+                if (listIndex >= tempAbsences.length) {
+                  return SizedBox(
+                    height: 100,
+                  );
+                }
+                return ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: tempAbsences[listIndex].length,
+                  itemBuilder: (context, index) {
+                    double opacity = 1;
+                    Color color =
+                        getAbsenceCardColor(tempAbsences[listIndex][index]);
+                    var animationController;
+                    if (tempAbsences[listIndex][index].justificationState ==
+                        "BeJustified") {
+                      opacity = legendSelection.igazolando ? 1 : 0;
+                      animationController = _animationControllerBeJustified;
+                    } else if (tempAbsences[listIndex][index]
+                            .justificationState ==
+                        "UnJustified") {
+                      opacity = legendSelection.igazolatlan ? 1 : 0;
+                      animationController = _animationControllerUnJustified;
+                    } else if (tempAbsences[listIndex][index]
+                            .justificationState ==
+                        "Justified") {
+                      opacity = legendSelection.igazolt ? 1 : 0;
+                      animationController = _animationControllerJustified;
+                    }
+                    DateTime tempDate = DateTime.parse(
+                        tempAbsences[listIndex][index].lessonStartTimeString);
+                    String subTitle = tempAbsences[listIndex][index].type ==
+                            "Delay"
+                        ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index].delayTimeMinutes} ${getTranslatedString("minutes")}"
+                        : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[listIndex][index].numberOfLessons)} ${getTranslatedString("lesson")})";
+                    if (index == 0) {
+                      String simplifiedDate =
+                          "${tempDate.year}-${tempDate.month}-${tempDate.day}";
+                      return Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment:
+                            defaultTargetPlatform == TargetPlatform.iOS
+                                ? CrossAxisAlignment.center
+                                : CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 15.0),
+                            child: Text(
+                              "$simplifiedDate:",
+                              textAlign:
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                                      ? TextAlign.center
+                                      : TextAlign.left,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 21,
+                              ),
+                            ),
+                          ),
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 500),
+                            opacity: opacity,
+                            child: FadeTransition(
+                              opacity: animationController
+                                  .drive(CurveTween(curve: Curves.linear)),
+                              child: AnimatedTitleSubtitleCard(
+                                heroAnimation: AlwaysStoppedAnimation(0),
+                                color: color,
+                                title: tempAbsences[listIndex][index].teacher +
+                                    " - " +
+                                    capitalize(
+                                        tempAbsences[listIndex][index].subject),
+                                subTitle: subTitle,
+                                onPressed: AbsencencesDetailTab(
+                                  absence: tempAbsences[listIndex][index],
+                                  color: color,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return AnimatedOpacity(
+                        duration: Duration(milliseconds: 500),
+                        opacity: opacity,
+                        child: FadeTransition(
+                          opacity: animationController
+                              .drive(CurveTween(curve: Curves.linear)),
+                          child: AnimatedTitleSubtitleCard(
+                            heroAnimation: AlwaysStoppedAnimation(0),
+                            color: color,
+                            title: tempAbsences[listIndex][index].teacher +
+                                " - " +
+                                capitalize(
+                                    tempAbsences[listIndex][index].subject),
+                            subTitle: subTitle,
+                            onPressed: AbsencencesDetailTab(
+                              absence: tempAbsences[listIndex][index],
+                              color: color,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 );
-              }
-              double opacity = 1;
-              Color color = getAbsenceCardColor(tempAbsences[index]);
-              var animationController;
-              if (tempAbsences[index].justificationState == "BeJustified") {
-                opacity = legendSelection.igazolando ? 1 : 0;
-                animationController = _animationControllerBeJustified;
-              } else if (tempAbsences[index].justificationState ==
-                  "UnJustified") {
-                opacity = legendSelection.igazolatlan ? 1 : 0;
-                animationController = _animationControllerUnJustified;
-              } else if (tempAbsences[index].justificationState ==
-                  "Justified") {
-                opacity = legendSelection.igazolt ? 1 : 0;
-                animationController = _animationControllerJustified;
-              }
-              DateTime tempDate =
-                  DateTime.parse(tempAbsences[index].lessonStartTimeString);
-              String subTitle = tempAbsences[index].type == "Delay"
-                  ? "${getTranslatedString("delay")}: ${tempAbsences[index].delayTimeMinutes} ${getTranslatedString("minutes")}"
-                  : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[index].numberOfLessons)} ${getTranslatedString("lesson")})";
-              return AnimatedOpacity(
-                duration: Duration(milliseconds: 500),
-                opacity: opacity,
-                child: FadeTransition(
-                  opacity: animationController
-                      .drive(CurveTween(curve: Curves.linear)),
-                  child: AnimatedTitleSubtitleCard(
-                    heroAnimation: AlwaysStoppedAnimation(0),
-                    color: color,
-                    title: tempAbsences[index].teacher +
-                        " - " +
-                        capitalize(tempAbsences[index].subject),
-                    subTitle: subTitle,
-                    onPressed: AbsencencesDetailTab(
-                      absence: tempAbsences[index],
-                      color: color,
-                    ),
-                  ),
-                ),
-              );
-            },
+              },
+            ),
           ),
         ],
       ),
