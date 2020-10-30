@@ -12,7 +12,8 @@ import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/functions/classManager.dart';
 
 int notifId = 2;
-
+//TODO: FIX first login notifications (disable them, when first time loging in)
+//TODO: Don't show homework notification when out of due date
 //*Normal inserts
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
