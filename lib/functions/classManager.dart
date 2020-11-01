@@ -298,7 +298,7 @@ Future<Lesson> setLesson(var input, token, code) async {
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
   if (temp.teacherHomeworkId != null) {
     temp.homework = await NetworkHelper()
-        .setTeacherHomework(temp.teacherHomeworkId, token, code);
+        .getTeacherHomework(temp.teacherHomeworkId, token, code);
   } else {
     temp.homework = new Homework();
   }

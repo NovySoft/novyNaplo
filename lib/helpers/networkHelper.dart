@@ -450,9 +450,9 @@ class NetworkHelper {
     }
   }
 
-  Future<Homework> setTeacherHomework(
+  Future<Homework> getTeacherHomework(
       int hwId, String token, String code) async {
-    FirebaseCrashlytics.instance.log("setTeacherHomework");
+    FirebaseCrashlytics.instance.log("getTeacherHomework");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     double keepForDays = prefs.getDouble("howLongKeepDataForHw");
 
@@ -500,4 +500,5 @@ class NetworkHelper {
     homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     return temp;
   }
+  //TODO Get student homework too
 }

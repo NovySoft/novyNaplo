@@ -74,7 +74,6 @@ class _TimetableTabState extends State<TimetableTab> {
         );
       });
     }
-    //TODO Go to current day when opening
     super.initState();
   }
 
