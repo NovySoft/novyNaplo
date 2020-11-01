@@ -30,6 +30,7 @@ import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' as foundation show kDebugMode;
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -41,7 +42,13 @@ Map<String, WidgetBuilder> routes;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  if (foundation.kDebugMode) {
+    print("FirebaseCrashlytics disabled");
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  } else {
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  }
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getBool("isNew") == false) {
