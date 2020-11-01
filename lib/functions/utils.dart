@@ -147,11 +147,15 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.alphabetical;
   }
   if (subject.toLowerCase().contains("ének") ||
-      subject.toLowerCase().contains("zene")) {
+      subject.toLowerCase().contains("zene") ||
+      subject.toLowerCase().contains("furulya") ||
+      subject.toLowerCase().contains("hangszer") ||
+      subject.toLowerCase().contains("szolfézs")) {
     return MdiIcons.musicClefTreble;
   }
   if (subject.toLowerCase().contains("testnevelés") ||
-      subject.toLowerCase().contains("tesi")) {
+      subject.toLowerCase().contains("tesi") ||
+      subject.toLowerCase().contains("sport")) {
     return MdiIcons.soccer;
   }
   if (subject.toLowerCase().contains("vizuális kultúra") ||
@@ -178,8 +182,7 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("biológia")) {
     return MdiIcons.dna;
   }
-  if (subject.toLowerCase().contains("kémia") ||
-      subject.toLowerCase().contains("term. tud.")) {
+  if (subject.toLowerCase().contains("kémia")) {
     return MdiIcons.beakerCheck;
   }
   if (subject.toLowerCase().contains("fizika")) {
@@ -209,6 +212,46 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("napközi")) {
     return MdiIcons.basketball;
+  }
+  if (subject.toLowerCase().contains("természet") ||
+      subject.toLowerCase().contains("kkterm")) {
+    return MdiIcons.tree;
+  }
+  if (subject.toLowerCase().contains("digitális") &&
+      subject.toLowerCase().contains("kultúra")) {
+    return MdiIcons.headLightbulb;
+  }
+  if (subject.toLowerCase().contains("digitális") &&
+      subject.toLowerCase().contains("alkalmazások")) {
+    return MdiIcons.devices;
+  }
+  if (subject.toLowerCase().contains("munkavállaló")) {
+    return MdiIcons.accountTie;
+  }
+  if (subject.toLowerCase().contains("projekt")) {
+    return MdiIcons.pencilRuler;
+  }
+  if (subject.toLowerCase().contains("programozás")) {
+    return MdiIcons.codeJson;
+  }
+  if (subject.toLowerCase().contains("tánc")) {
+    return MdiIcons.danceBallroom;
+  }
+  if (subject.toLowerCase().contains("báb")) {
+    return MdiIcons.theater;
+  }
+  if (subject.toLowerCase().contains("színját") ||
+      subject.toLowerCase().contains("dráma")) {
+    return MdiIcons.dramaMasks;
+  }
+  if (subject.toLowerCase().contains("barkács")) {
+    return MdiIcons.hammerScrewdriver;
+  }
+  if (subject.toLowerCase().contains("kommunikáció")) {
+    return MdiIcons.accountVoice;
+  }
+  if (subject.toLowerCase().contains("logika")) {
+    return MdiIcons.brain;
   }
   //LogUnkown subject so I can add that later
   FirebaseAnalytics().logEvent(
