@@ -31,6 +31,7 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' as foundation show kDebugMode;
+import 'package:firebase_performance/firebase_performance.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -43,10 +44,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   if (foundation.kDebugMode) {
-    print("FirebaseCrashlytics disabled");
+    print("Firebase disabled");
+    FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
   } else {
+    FirebaseAnalytics().setAnalyticsCollectionEnabled(true);
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   }
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
