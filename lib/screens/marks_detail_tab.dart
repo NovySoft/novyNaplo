@@ -141,12 +141,6 @@ class MarksDetailTab extends StatelessWidget {
                     eval.createDateString,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("dateCreated")}: " +
-                    eval.createDateString,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: 500),
             ]),
           ),
