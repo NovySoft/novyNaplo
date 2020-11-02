@@ -34,13 +34,6 @@ TabController _tabController;
 List<dynamic> colors;
 bool redirectPayload = false;
 
-class RefreshKeys {
-  static final androidRefreshKey =
-      GlobalKey<RefreshIndicatorState>(debugLabel: "1");
-  static final androidRefreshKeyTwo =
-      GlobalKey<RefreshIndicatorState>(debugLabel: "2");
-}
-
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static String title = capitalize(getTranslatedString("marks"));
@@ -55,6 +48,11 @@ class MarksTab extends StatefulWidget {
 
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
+  GlobalKey<RefreshIndicatorState> androidRefreshKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "1");
+  GlobalKey<RefreshIndicatorState> androidRefreshKeyTwo =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "2");
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Marks");
@@ -64,7 +62,7 @@ class MarksTabState extends State<MarksTab>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!globals.didFetch) {
         globals.didFetch = true;
-        RefreshKeys.androidRefreshKey.currentState?.show();
+        androidRefreshKey.currentState?.show();
       }
       if (redirectPayload) {
         redirectPayload = false;
@@ -280,7 +278,7 @@ class MarksTabState extends State<MarksTab>
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
               return RefreshIndicator(
-                key: RefreshKeys.androidRefreshKey,
+                key: androidRefreshKey,
                 onRefresh: () async {
                   await _refreshData();
                 },
@@ -296,7 +294,7 @@ class MarksTabState extends State<MarksTab>
               );
             } else {
               return RefreshIndicator(
-                key: RefreshKeys.androidRefreshKeyTwo,
+                key: androidRefreshKeyTwo,
                 onRefresh: () async {
                   await _refreshData();
                 },

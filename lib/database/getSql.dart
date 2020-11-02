@@ -167,9 +167,9 @@ Future<List<Lesson>> getAllTimetable() async {
   //TODO LOOK INTO THIS
   for (var n in outputTempList) {
     if (n.teacherHomeworkId != null) {
-      n.homework = await getHomeworkById(n.teacherHomeworkId);
+      n.teacherHomework = await getHomeworkById(n.teacherHomeworkId);
     } else if (n.homeWorkId != null) {
-      n.homework = await getHomeworkById(n.homeWorkId);
+      n.teacherHomework = await getHomeworkById(n.homeWorkId);
     }
   }
   return outputTempList;

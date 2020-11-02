@@ -231,7 +231,9 @@ class Lesson {
   String startDateString;
   DateTime endDate;
   String endDateString;
-  Homework homework = new Homework();
+  IconData icon;
+  Homework teacherHomework = new Homework();
+  List<Homework> studentsHomework = [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -254,6 +256,7 @@ class Lesson {
       'date': dateString,
       'startDate': startDateString,
       'endDate': endDateString,
+      //'studentsHomework': json.encode(studentsHomework),
     };
   }
 
@@ -296,11 +299,14 @@ Future<Lesson> setLesson(var input, token, code) async {
   //Lists
   temp.dogaIds = input["BejelentettSzamonkeresIdList"];
   temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
+  //Icon
+  temp.icon = parseSubjectToIcon(subject: temp.subject);
+  //Homework
   if (temp.teacherHomeworkId != null) {
-    temp.homework = await NetworkHelper()
+    temp.teacherHomework = await NetworkHelper()
         .getTeacherHomework(temp.teacherHomeworkId, token, code);
   } else {
-    temp.homework = new Homework();
+    temp.teacherHomework = new Homework();
   }
   return temp;
 }
@@ -322,7 +328,6 @@ class Homework {
   String dueDateString;
   DateTime givenUp;
   DateTime dueDate;
-  IconData icon;
   int databaseId;
 
   Map<String, dynamic> toMap() {
@@ -344,7 +349,6 @@ Homework setHomework(var decoded) {
   temp.classGroupId = int.parse(decoded["OsztalyCsoportUid"]);
   temp.id = decoded["Id"];
   temp.subject = capitalize(decoded["Tantargy"]);
-  temp.icon = parseSubjectToIcon(subject: temp.subject);
   temp.teacher = decoded["Rogzito"];
   temp.content = decoded["Szoveg"];
   temp.givenUpString = decoded["RogzitesIdopontja"];

@@ -66,7 +66,7 @@ class _TimetableTabState extends State<TimetableTab> {
           context,
           MaterialPageRoute(
             builder: (context) => TimetableDetailTab(
-              icon: tempLesson.homework.icon,
+              icon: tempLesson.icon,
               color: color,
               lessonInfo: tempLesson,
             ),
@@ -327,15 +327,16 @@ class _TimetableTabState extends State<TimetableTab> {
                           }
                           return SafeArea(
                             child: TimetableCard(
-                              iconData: selectedLessonList[index].homework.icon,
-                              hasHomework:
-                                  selectedLessonList[index].homework.content !=
-                                      null,
+                              iconData: selectedLessonList[index].icon,
+                              hasHomework: selectedLessonList[index]
+                                      .teacherHomework
+                                      .content !=
+                                  null,
                               color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],
                               onPressed: TimetableDetailTab(
-                                icon: selectedLessonList[index].homework.icon,
+                                icon: selectedLessonList[index].icon,
                                 color: color,
                                 lessonInfo: selectedLessonList[index],
                               ),
