@@ -5,8 +5,9 @@ import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-//TODO: New onboarding with https://pub.dev/packages/introduction_screen
 
+//TODO: New onboarding with https://pub.dev/packages/introduction_screen
+//TODO: Some tutorial with overlay stuff because of hard to understand design choices
 PageController controller = PageController();
 var currentPageValue = 0.0;
 AnimationController _animationController;

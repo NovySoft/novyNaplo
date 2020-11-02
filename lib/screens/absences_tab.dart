@@ -21,7 +21,7 @@ class AbsencesTab extends StatefulWidget {
   @override
   _AbsencesTabState createState() => _AbsencesTabState();
 }
-//TODO: Rewrite logic with matrixes and also add timestamps to list
+//TODO: Rewrite UI with animated lists
 
 class _AbsencesTabState extends State<AbsencesTab>
     with TickerProviderStateMixin {
@@ -73,6 +73,7 @@ class _AbsencesTabState extends State<AbsencesTab>
       }
     }
     Future.delayed(Duration(milliseconds: 600), () {
+      print("RUN ANIMATION");
       _animationControllerJustified.forward();
       _animationControllerUnJustified.forward();
       _animationControllerBeJustified.forward();

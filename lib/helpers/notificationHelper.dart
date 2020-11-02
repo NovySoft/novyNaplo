@@ -298,6 +298,7 @@ Future selectNotification(String payload) async {
       },
     );
   } else {
+    if (payload == null) return;
     print("TESZT");
     showTesztNotificationDialog();
   }

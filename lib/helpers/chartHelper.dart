@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_common/common.dart' as common;
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/database/insertSql.dart';
 import 'package:novynaplo/functions/classManager.dart';
@@ -553,7 +554,13 @@ class CustomLegendBuilder extends charts.LegendContentBuilder {
         inherit: true,
         fontFamily: textStyle?.fontFamily,
         fontSize: 13,
-        color: isHidden ? Colors.white.withOpacity(0.25) : Colors.white);
+        color: isHidden
+            ? (DynamicTheme.of(context).brightness == Brightness.light
+                ? Colors.black.withOpacity(0.25)
+                : Colors.white.withOpacity(0.25))
+            : (DynamicTheme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white));
   }
 
   Widget createLabel(BuildContext context, common.LegendEntry legendEntry,
