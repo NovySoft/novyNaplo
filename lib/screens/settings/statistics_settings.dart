@@ -5,7 +5,10 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
+class FormKey {
+  static final formKey = GlobalKey<FormState>(debugLabel: '_FormKey');
+}
+
 TextEditingController extraSpaceUnderStatController =
     TextEditingController(text: globals.extraSpaceUnderStat.toString());
 
@@ -92,7 +95,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   trailing: SizedBox(
                     width: 50,
                     child: Form(
-                      key: _formKey,
+                      key: FormKey.formKey,
                       child: TextFormField(
                         controller: extraSpaceUnderStatController,
                         keyboardType: TextInputType.number,
@@ -110,7 +113,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         },
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (String input) async {
-                          if (_formKey.currentState.validate()) {
+                          if (FormKey.formKey.currentState.validate()) {
                             final SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             setState(() {

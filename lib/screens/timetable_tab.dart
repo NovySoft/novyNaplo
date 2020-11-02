@@ -129,12 +129,16 @@ class _TimetableTabState extends State<TimetableTab> {
           setState(() {
             _selectedDate = datetime;
           });
-          Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
-              .pop();
+          Navigator.of(
+            login.KeyLoaderKey.keyLoader.currentContext,
+            rootNavigator: true,
+          ).pop();
         } catch (e) {
           await sleep(500);
-          Navigator.of(login.keyLoader.currentContext, rootNavigator: true)
-              .pop();
+          Navigator.of(
+            login.KeyLoaderKey.keyLoader.currentContext,
+            rootNavigator: true,
+          ).pop();
           showDialog<void>(
               context: context,
               barrierDismissible: true,

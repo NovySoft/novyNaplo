@@ -34,11 +34,14 @@ import 'package:flutter/foundation.dart' as foundation show kDebugMode;
 import 'package:firebase_performance/firebase_performance.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
-final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
 bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
+
+class NavigatorKey {
+  static final navigatorKey = GlobalKey<NavigatorState>();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -133,7 +136,7 @@ class MyApp extends StatelessWidget {
             ErrorWidget.builder = ErrorMessageBuilder.build();
             return widget;
           },
-          navigatorKey: navigatorKey,
+          navigatorKey: NavigatorKey.navigatorKey,
           theme: theme,
           title: 'Novy Napló',
           debugShowCheckedModeBanner: false,

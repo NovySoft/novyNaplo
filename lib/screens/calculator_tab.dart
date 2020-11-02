@@ -41,7 +41,6 @@ TextEditingController weightController = TextEditingController(text: "100");
 TextEditingController countController = TextEditingController(text: "1");
 final FocusNode _weightFocus = FocusNode();
 final FocusNode _countFocus = FocusNode();
-final _formKey = GlobalKey<FormState>();
 final SlidableController slidableController = SlidableController();
 List<Evals> currentSubject = [];
 final axis = charts.NumericAxisSpec(
@@ -59,6 +58,10 @@ final axisTwo = charts.NumericAxisSpec(
 Color afterAvCol;
 Widget afterAvIcon;
 String afterAvDiff;
+
+class FormKey {
+  static final formKey = GlobalKey<FormState>();
+}
 
 class VirtualMarks {
   int count;
@@ -99,7 +102,7 @@ class CalculatorTabState extends State<CalculatorTab>
                 height: 400,
                 width: 400,
                 child: Form(
-                  key: _formKey,
+                  key: FormKey.formKey,
                   child: ListView(
                     children: <Widget>[
                       Row(
@@ -253,7 +256,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               ),
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (String input) {
-                                if (_formKey.currentState.validate()) {
+                                if (FormKey.formKey.currentState.validate()) {
                                   _weightFocus.unfocus();
                                   FocusScope.of(context)
                                       .requestFocus(_countFocus);
@@ -309,7 +312,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               ),
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (String input) {
-                                if (_formKey.currentState.validate()) {
+                                if (FormKey.formKey.currentState.validate()) {
                                   _countFocus.unfocus();
                                 }
                               },
@@ -341,7 +344,7 @@ class CalculatorTabState extends State<CalculatorTab>
               FlatButton(
                 child: Text('Ok'),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
+                  if (FormKey.formKey.currentState.validate()) {
                     if (isEditing) {
                       VirtualMarks temp = new VirtualMarks();
                       temp.count = int.parse(countController.text);

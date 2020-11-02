@@ -32,7 +32,6 @@ bool newVersion = false;
 bool hasPrefs = false;
 bool isError = false;
 bool listAvailable = true;
-final GlobalKey<State> keyLoader = new GlobalKey<State>();
 final FocusNode _passFocus = FocusNode();
 final FocusNode _codeFocus = FocusNode();
 final FocusNode _userFocus = FocusNode();
@@ -44,6 +43,10 @@ var userKey = encrypt.Key.fromUtf8(config.userKey);
 final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
 final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
 final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
+
+class KeyLoaderKey {
+  static final keyLoader = new GlobalKey<State>();
+}
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -112,7 +115,9 @@ class _LoginPageState extends State<LoginPage> {
           listAvailable = false;
           await _timeoutAlert(context);
           try {
-            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+            Navigator.of(KeyLoaderKey.keyLoader.currentContext,
+                    rootNavigator: true)
+                .pop();
           } catch (e, s) {
             FirebaseCrashlytics.instance
                 .recordError(e, s, reason: 'navigator-login');
@@ -123,7 +128,9 @@ class _LoginPageState extends State<LoginPage> {
           listAvailable = false;
           await _timeoutAlert(context);
           try {
-            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+            Navigator.of(KeyLoaderKey.keyLoader.currentContext,
+                    rootNavigator: true)
+                .pop();
           } catch (e, s) {
             FirebaseCrashlytics.instance
                 .recordError(e, s, reason: 'navigator-login');
@@ -135,7 +142,9 @@ class _LoginPageState extends State<LoginPage> {
             searchList.add(n);
           }
           try {
-            Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+            Navigator.of(KeyLoaderKey.keyLoader.currentContext,
+                    rootNavigator: true)
+                .pop();
           } catch (e, s) {
             FirebaseCrashlytics.instance
                 .recordError(e, s, reason: 'navigator-login');
@@ -190,7 +199,8 @@ class _LoginPageState extends State<LoginPage> {
           await NetworkHelper().getStudentInfo(globals.token, code);
         }
       }
-      Navigator.of(keyLoader.currentContext, rootNavigator: true).pop();
+      Navigator.of(KeyLoaderKey.keyLoader.currentContext, rootNavigator: true)
+          .pop();
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'auth-login');
       isError = true;

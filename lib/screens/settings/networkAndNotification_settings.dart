@@ -21,9 +21,12 @@ import '../timetable_tab.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
 
-final _formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
 TextEditingController fetchPeriodController =
     TextEditingController(text: globals.fetchPeriod.toString());
+
+class FormKey {
+  static final formKeyTwo = GlobalKey<FormState>(debugLabel: '_FormKey2');
+}
 
 class SendTestNotif extends StatefulWidget {
   @override
@@ -519,7 +522,7 @@ class _NetworkAndNotificationSettingsState
                   trailing: SizedBox(
                     width: 50,
                     child: Form(
-                      key: _formKeyTwo,
+                      key: FormKey.formKeyTwo,
                       child: TextFormField(
                         controller: fetchPeriodController,
                         keyboardType: TextInputType.number,
@@ -537,7 +540,7 @@ class _NetworkAndNotificationSettingsState
                         },
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (String input) async {
-                          if (_formKeyTwo.currentState.validate()) {
+                          if (FormKey.formKeyTwo.currentState.validate()) {
                             final SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             prefs.setInt("fetchPeriod", int.parse(input));

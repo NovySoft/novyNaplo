@@ -34,6 +34,13 @@ TabController _tabController;
 List<dynamic> colors;
 bool redirectPayload = false;
 
+class RefreshKeys {
+  static final androidRefreshKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "1");
+  static final androidRefreshKeyTwo =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "2");
+}
+
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static String title = capitalize(getTranslatedString("marks"));
@@ -48,25 +55,16 @@ class MarksTab extends StatefulWidget {
 
 class MarksTabState extends State<MarksTab>
     with SingleTickerProviderStateMixin {
-  GlobalKey<RefreshIndicatorState> _androidRefreshKey =
-      GlobalKey<RefreshIndicatorState>(debugLabel: "1");
-  GlobalKey<RefreshIndicatorState> _androidRefreshKeyTwo =
-      GlobalKey<RefreshIndicatorState>(debugLabel: "2");
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Marks");
-    //Update refresh key
-    _androidRefreshKey = new GlobalKey<RefreshIndicatorState>(debugLabel: "1");
-    _androidRefreshKeyTwo =
-        new GlobalKey<RefreshIndicatorState>(debugLabel: "2");
     //setup tabcontroller
     _tabController = new TabController(vsync: this, length: 2);
     //Payload handling and fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!globals.didFetch) {
         globals.didFetch = true;
-        _androidRefreshKey.currentState?.show();
+        RefreshKeys.androidRefreshKey.currentState?.show();
       }
       if (redirectPayload) {
         redirectPayload = false;
@@ -282,7 +280,7 @@ class MarksTabState extends State<MarksTab>
           children: markTabs.map((Tab tab) {
             if (tab.text == getTranslatedString("byDate")) {
               return RefreshIndicator(
-                key: _androidRefreshKey,
+                key: RefreshKeys.androidRefreshKey,
                 onRefresh: () async {
                   await _refreshData();
                 },
@@ -298,7 +296,7 @@ class MarksTabState extends State<MarksTab>
               );
             } else {
               return RefreshIndicator(
-                key: _androidRefreshKeyTwo,
+                key: RefreshKeys.androidRefreshKeyTwo,
                 onRefresh: () async {
                   await _refreshData();
                 },

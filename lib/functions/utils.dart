@@ -62,7 +62,7 @@ class SpinnerDialog extends StatefulWidget {
 
 class SpinnerDialogState extends State<SpinnerDialog> {
   String loadingText = getTranslatedString("plsWait");
-  final GlobalKey<State> key = login.keyLoader;
+  static final GlobalKey<State> key = login.KeyLoaderKey.keyLoader;
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
