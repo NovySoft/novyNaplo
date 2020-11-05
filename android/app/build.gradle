@@ -90,13 +90,14 @@ android {
     }
     buildTypes {
         release {
-            zipAlignEnabled false
-            minifyEnabled false
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
             signingConfig signingConfigs.release
         }
         debug{
             signingConfig signingConfigs.release
-            zipAlignEnabled false
+            zipAlignEnabled true
         }
     }
 }
