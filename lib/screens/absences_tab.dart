@@ -21,7 +21,6 @@ class AbsencesTab extends StatefulWidget {
   @override
   _AbsencesTabState createState() => _AbsencesTabState();
 }
-//TODO: Rewrite UI with animated lists
 
 class _AbsencesTabState extends State<AbsencesTab>
     with TickerProviderStateMixin {
@@ -195,81 +194,56 @@ class _AbsencesTabState extends State<AbsencesTab>
                 return ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: tempAbsences[listIndex].length,
+                  itemCount: tempAbsences[listIndex].length +
+                      (tempAbsences[listIndex].length == 0 ? 0 : 1),
                   itemBuilder: (context, index) {
-                    double opacity = 1;
-                    Color color =
-                        getAbsenceCardColor(tempAbsences[listIndex][index]);
-                    var animationController;
-                    if (tempAbsences[listIndex][index].justificationState ==
-                        "BeJustified") {
-                      opacity = legendSelection.igazolando ? 1 : 0;
-                      animationController = _animationControllerBeJustified;
-                    } else if (tempAbsences[listIndex][index]
-                            .justificationState ==
-                        "UnJustified") {
-                      opacity = legendSelection.igazolatlan ? 1 : 0;
-                      animationController = _animationControllerUnJustified;
-                    } else if (tempAbsences[listIndex][index]
-                            .justificationState ==
-                        "Justified") {
-                      opacity = legendSelection.igazolt ? 1 : 0;
-                      animationController = _animationControllerJustified;
-                    }
-                    DateTime tempDate = DateTime.parse(
-                        tempAbsences[listIndex][index].lessonStartTimeString);
-                    String subTitle = tempAbsences[listIndex][index].type ==
-                            "Delay"
-                        ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index].delayTimeMinutes} ${getTranslatedString("minutes")}"
-                        : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[listIndex][index].numberOfLessons)} ${getTranslatedString("lesson")})";
                     if (index == 0) {
+                      DateTime tempDate = DateTime.parse(
+                          tempAbsences[listIndex][0].lessonStartTimeString);
                       String simplifiedDate =
                           "${tempDate.year}-${tempDate.month}-${tempDate.day}";
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment:
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? CrossAxisAlignment.center
-                                : CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.0),
-                            child: Text(
-                              "$simplifiedDate:",
-                              textAlign:
-                                  defaultTargetPlatform == TargetPlatform.iOS
-                                      ? TextAlign.center
-                                      : TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 21,
-                              ),
-                            ),
+                      return Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: Text(
+                          "$simplifiedDate:",
+                          textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                              ? TextAlign.center
+                              : TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 21,
                           ),
-                          AnimatedOpacity(
-                            duration: Duration(milliseconds: 500),
-                            opacity: opacity,
-                            child: FadeTransition(
-                              opacity: animationController
-                                  .drive(CurveTween(curve: Curves.linear)),
-                              child: AnimatedTitleSubtitleCard(
-                                heroAnimation: AlwaysStoppedAnimation(0),
-                                color: color,
-                                title: tempAbsences[listIndex][index].teacher +
-                                    " - " +
-                                    capitalize(
-                                        tempAbsences[listIndex][index].subject),
-                                subTitle: subTitle,
-                                onPressed: AbsencencesDetailTab(
-                                  absence: tempAbsences[listIndex][index],
-                                  color: color,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
                     } else {
+                      double opacity = 1;
+                      Color color = getAbsenceCardColor(
+                          tempAbsences[listIndex][index - 1]);
+                      var animationController;
+                      if (tempAbsences[listIndex][index - 1]
+                              .justificationState ==
+                          "BeJustified") {
+                        opacity = legendSelection.igazolando ? 1 : 0;
+                        animationController = _animationControllerBeJustified;
+                      } else if (tempAbsences[listIndex][index - 1]
+                              .justificationState ==
+                          "UnJustified") {
+                        opacity = legendSelection.igazolatlan ? 1 : 0;
+                        animationController = _animationControllerUnJustified;
+                      } else if (tempAbsences[listIndex][index - 1]
+                              .justificationState ==
+                          "Justified") {
+                        opacity = legendSelection.igazolt ? 1 : 0;
+                        animationController = _animationControllerJustified;
+                      }
+                      DateTime tempDate = DateTime.parse(tempAbsences[listIndex]
+                              [index - 1]
+                          .lessonStartTimeString);
+                      String subTitle = tempAbsences[listIndex][index - 1]
+                                  .type ==
+                              "Delay"
+                          ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index - 1].delayTimeMinutes} ${getTranslatedString("minutes")}"
+                          : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[listIndex][index - 1].numberOfLessons)} ${getTranslatedString("lesson")})";
                       return AnimatedOpacity(
                         duration: Duration(milliseconds: 500),
                         opacity: opacity,
@@ -279,13 +253,13 @@ class _AbsencesTabState extends State<AbsencesTab>
                           child: AnimatedTitleSubtitleCard(
                             heroAnimation: AlwaysStoppedAnimation(0),
                             color: color,
-                            title: tempAbsences[listIndex][index].teacher +
+                            title: tempAbsences[listIndex][index - 1].teacher +
                                 " - " +
                                 capitalize(
-                                    tempAbsences[listIndex][index].subject),
+                                    tempAbsences[listIndex][index - 1].subject),
                             subTitle: subTitle,
                             onPressed: AbsencencesDetailTab(
-                              absence: tempAbsences[listIndex][index],
+                              absence: tempAbsences[listIndex][index - 1],
                               color: color,
                             ),
                           ),
