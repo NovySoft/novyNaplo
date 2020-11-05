@@ -337,6 +337,7 @@ final Map<String, String> translation = {
   "BeJustified": "Awaiting justification",
   "Justified": "Justified",
   "UnJustified": "Unjustified",
+  "Igazolatlan": "Unjustified",
   "marksAndAvs": "Marks and avarages",
   "delays": "Delays",
   "editedLesson": "Lesson changed",
