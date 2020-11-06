@@ -72,13 +72,49 @@ class _AbsencesTabState extends State<AbsencesTab>
       }
     }
     Future.delayed(Duration(milliseconds: 600), () {
-      print("RUN ANIMATION");
       _animationControllerJustified.forward();
       _animationControllerUnJustified.forward();
       _animationControllerBeJustified.forward();
     });
-    //DataHandling
+    //DataHandling on first open
     tempAbsences = List.from(allParsedAbsences);
+    tempAbsences = List.from(allParsedAbsences).expand((i) => i).toList();
+    if (!legendSelection.igazolando) {
+      tempAbsences.removeWhere(
+          (element) => element.justificationState == "BeJustified");
+    }
+    if (!legendSelection.igazolatlan) {
+      tempAbsences.removeWhere(
+          (element) => element.justificationState == "UnJustified");
+    }
+    if (!legendSelection.igazolt) {
+      tempAbsences
+          .removeWhere((element) => element.justificationState == "Justified");
+    }
+    if (tempAbsences.length != 0) {
+      tempAbsences.sort(
+        (a, b) => (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
+            .compareTo(
+          a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
+        ),
+      );
+      List<dynamic> tempList = List.from(tempAbsences);
+      List<List<Absence>> outputList = [[]];
+      int index = 0;
+      DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
+      for (var n in tempList) {
+        if (!DateTime.parse(n.lessonStartTimeString).isSameDay(dateBefore)) {
+          index++;
+          outputList.add([]);
+          dateBefore = DateTime.parse(n.lessonStartTimeString);
+        }
+        outputList[index].add(n);
+      }
+      tempAbsences = outputList;
+    } else {
+      tempAbsences = [];
+    }
+    //Listener to handle chart changes
     listener = () async {
       setState(() {
         legendSelection = legendSelection;
