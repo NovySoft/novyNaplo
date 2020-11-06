@@ -35,6 +35,7 @@ NotificationDetails platformChannelSpecificsSendNotif;
 int notifId = 2;
 
 void backgroundFetch() async {
+  print("BACKGROUND FETCH");
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
