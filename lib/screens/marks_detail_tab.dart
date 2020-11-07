@@ -1,9 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/functions/classManager.dart';
-import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/functions/capitalize.dart';
+import 'package:novynaplo/helpers/functions/parseSubjectToIcon.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
 class MarksDetailTab extends StatelessWidget {

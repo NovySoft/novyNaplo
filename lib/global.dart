@@ -4,7 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:novynaplo/database/deleteSql.dart' as delSql;
+import 'package:novynaplo/data/database/deleteSql.dart' as delSql;
 import 'dart:io' show Platform;
 
 //Variables used globally;

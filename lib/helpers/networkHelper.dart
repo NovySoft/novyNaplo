@@ -1,8 +1,13 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/database/insertSql.dart';
-import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/data/database/insertSql.dart';
+import 'package:novynaplo/data/models/calculator.dart';
+import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/functions/capitalize.dart';
 import 'package:novynaplo/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
@@ -299,7 +304,7 @@ class NetworkHelper {
     List<Lesson> tempLessonList = [];
     List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
-      tempLessonList.add(await setLesson(n, globals.token, code));
+      tempLessonList.add(Lesson.fromJson(n));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
@@ -373,7 +378,7 @@ class NetworkHelper {
     List<Lesson> tempLessonList = [];
     List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
-      tempLessonList.add(await setLesson(n, token, code));
+      tempLessonList.add(Lesson.fromJson(n));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
@@ -471,7 +476,7 @@ class NetworkHelper {
     }
     //Process response
     var decoded = json.decode(res.body);
-    Homework temp = setHomework(decoded);
+    Homework temp = Homework.fromJson(decoded);
     //*Add it to the database
     await insertHomework(temp);
     //Find the same ids

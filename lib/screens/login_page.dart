@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/adHelper.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksTab;
@@ -16,7 +17,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/functions/classManager.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 TextEditingController codeController = TextEditingController();

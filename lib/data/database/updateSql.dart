@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/models/evals.dart';
 
 //Give it the new eval and which id to replace
 Future<void> updateEval(Evals eval, int replaceWhereDbId) async {

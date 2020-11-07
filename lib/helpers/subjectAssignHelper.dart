@@ -1,25 +1,20 @@
-import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/functions/capitalize.dart';
 
 class SubjectAssignHelper {
-  String finalSubject = "";
-
-  String assignSubject(dJson, subjectUid, type, content) {
-    finalSubject = "";
+  static String assignSubject(dJson, subjectUid, type, content) {
+    String finalSubject = "";
     if (type == "Házi feladat hiány" || type == "Felszereléshiány") {
       finalSubject = capitalize(content.split(" ")[0]);
     } else {
       var groups = dJson["OsztalyCsoportok"];
       for (var n in groups) {
-        _compare(n, subjectUid);
+        var currentId = n["Uid"];
+        if (currentId == subjectUid) {
+          finalSubject = n["Nev"];
+          break;
+        }
       }
     }
     return finalSubject;
-  }
-
-  void _compare(element, reqId) {
-    var currentId = element["Uid"];
-    if (currentId == reqId) {
-      finalSubject = element["Nev"];
-    }
   }
 }

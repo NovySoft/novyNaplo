@@ -8,7 +8,7 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/translations/translationProvider.dart';

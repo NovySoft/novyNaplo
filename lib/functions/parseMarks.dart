@@ -1,10 +1,16 @@
 import 'dart:core';
+import 'package:novynaplo/data/models/absence.dart';
+import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/event.dart';
+import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/data/models/notices.dart';
+import 'package:novynaplo/helpers/functions/capitalize.dart';
 import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/database/deleteSql.dart';
-import 'package:novynaplo/database/insertSql.dart';
+import 'package:novynaplo/data/database/deleteSql.dart';
+import 'package:novynaplo/data/database/insertSql.dart';
 import 'classManager.dart';
-import 'utils.dart';
 import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
 
 //TODO: Add option to translate notices, events, evals, homework and subjects
@@ -22,7 +28,7 @@ Future<List<dynamic>> parseAllByDate(var input) async {
     jegyek = input["Evaluations"];
     jegyArray = [];
     for (var n in jegyek) {
-      jegyArray.add(setEvals(n));
+      jegyArray.add(Evals.fromJson(n));
     }
   } catch (e, s) {
     FirebaseCrashlytics.instance.recordError(
@@ -43,7 +49,7 @@ Future<List<Notices>> parseNotices(var input) async {
     List<Notices> noticesArray = [];
     var notices = input["Notes"];
     for (var n in notices) {
-      noticesArray.add(setNotices(n));
+      noticesArray.add(Notices.fromJson(n));
     }
     await batchInsertNotices(noticesArray);
     return noticesArray;

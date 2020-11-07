@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 
 Future<void> deleteFromDb(int databaseId, String table) async {
   FirebaseCrashlytics.instance

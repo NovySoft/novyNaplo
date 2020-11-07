@@ -25,7 +25,7 @@ import 'package:novynaplo/screens/homework_tab.dart';
 import 'package:novynaplo/screens/exams_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;

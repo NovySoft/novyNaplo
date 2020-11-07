@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/functions/capitalize.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
 class ChartsDetailTab extends StatelessWidget {

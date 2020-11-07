@@ -3,11 +3,11 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/database/deleteSql.dart';
+import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 
 import 'dbExplorer/sqlite_viewer.dart';
 

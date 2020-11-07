@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 

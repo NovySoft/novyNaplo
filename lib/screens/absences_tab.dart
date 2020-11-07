@@ -1,12 +1,15 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/functions/classManager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/functions/widgets.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/helpers/functions/capitalize.dart';
+import 'package:novynaplo/helpers/functions/parseSubjectToIcon.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 
 List<List<Absence>> allParsedAbsences = [];

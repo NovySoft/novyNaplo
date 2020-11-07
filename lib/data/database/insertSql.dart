@@ -1,15 +1,23 @@
 import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/database/deleteSql.dart';
-import 'package:novynaplo/database/getSql.dart';
+import 'package:novynaplo/data/database/deleteSql.dart';
+import 'package:novynaplo/data/database/getSql.dart';
+import 'package:novynaplo/data/models/absence.dart';
+import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/event.dart';
+import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/data/models/notices.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/functions/capitalize.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
-import 'package:novynaplo/functions/classManager.dart';
 
 int notifId = 2;
 //TODO: FIX first login notifications (disable them, when first time loging in)
