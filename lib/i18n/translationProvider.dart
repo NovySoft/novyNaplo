@@ -3,6 +3,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/hungarian.dart' as hu;
 import 'package:novynaplo/i18n/english.dart' as en;
 
+//TODO: Add option to translate notices, events, evals, homework and subjects
 String getTranslatedString(String input, {List<String> replaceVariables}) {
   String tempString;
   if (replaceVariables == null) replaceVariables = [];

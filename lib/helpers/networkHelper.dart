@@ -7,6 +7,11 @@ import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseEvents.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseExams.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseNotices.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -19,7 +24,6 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
-import 'package:novynaplo/functions/parseMarks.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
@@ -174,7 +178,11 @@ class NetworkHelper {
       marksPage.allParsedBySubject =
           sortByDateAndSubject(List.from(marksPage.allParsedByDate));
       noticesPage.allParsedNotices = await parseNotices(globals.dJson);
-      statisticsPage.allParsedSubjects = categorizeSubjects();
+      statisticsPage.allParsedSubjects = categorizeSubjectsFromEvals(
+        new List.from(
+          marksPage.allParsedByDate,
+        ),
+      );
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/functions/parseMarks.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
@@ -22,7 +22,6 @@ import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
 import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
-
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';

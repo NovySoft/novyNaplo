@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -28,7 +30,6 @@ import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/helpers/chartHelper.dart' as chartHelper;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
-import 'package:novynaplo/functions/parseMarks.dart';
 import 'package:novynaplo/data/database/getSql.dart';
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -116,7 +117,7 @@ class _LoadingPageState extends State<LoadingPage> {
       List<Evals> tempEvals = await getAllEvals();
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
-      marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+      marksPage.allParsedBySubject = sortByDateAndSubject(List.from(tempEvals));
       //Homework
       setState(() {
         loadingText = getTranslatedString("readHw");

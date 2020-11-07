@@ -18,7 +18,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
-var allParsedSubjects = [];
+List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 //TODO Make subject color constant
 
