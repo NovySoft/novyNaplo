@@ -7,6 +7,7 @@ class Event {
   DateTime endDate;
   String title;
   String content;
+  Event();
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,5 +18,16 @@ class Event {
       'title': title,
       'content': content,
     };
+  }
+
+  Event.fromJson(Map<String, dynamic> json) {
+    id = json["EventId"];
+    dateString = json["Date"];
+    date = DateTime.parse(json["Date"]);
+    endDateString = json["EndDate"];
+    endDate = DateTime.parse(json["EndDate"]);
+    content = json["Content"];
+    content = content.replaceAll("\n", "<br>");
+    title = json["Title"];
   }
 }

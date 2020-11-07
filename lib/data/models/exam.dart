@@ -10,6 +10,20 @@ class Exam {
   String nameOfExam; //Content
   String typeOfExam;
   String classGroupId;
+  Exam();
+
+  Exam.fromJson(Map<String, dynamic> json) {
+    id = json["Id"];
+    dateWriteString = json["Datum"];
+    dateWrite = DateTime.parse(json["Datum"]);
+    dateGivenUpString = json["BejelentesDatuma"];
+    dateGivenUp = DateTime.parse(json["BejelentesDatuma"]);
+    subject = json["Tantargy"];
+    teacher = json["Tanar"];
+    nameOfExam = json["SzamonkeresMegnevezese"];
+    typeOfExam = json["SzamonkeresModja"];
+    classGroupId = json["OsztalyCsoportUid"];
+  }
 
   Map<String, dynamic> toMap() {
     return {

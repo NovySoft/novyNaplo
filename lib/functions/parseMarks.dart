@@ -5,7 +5,6 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notices.dart';
-import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/deleteSql.dart';
@@ -56,15 +55,6 @@ Future<List<Notices>> parseNotices(var input) async {
   } else {
     return [];
   }
-}
-
-List<String> parseSubjects(var input) {
-  List<String> subjectsArray = [];
-  var subjects = input["SubjectAverages"];
-  for (var n in subjects) {
-    subjectsArray.add(capitalize(n["Subject"]));
-  }
-  return subjectsArray;
 }
 
 //*USED BY STATISTICS
@@ -199,17 +189,7 @@ Future<List<Exam>> parseExams(var input) async {
   List<Exam> examArray = [];
   try {
     for (var n in input) {
-      Exam temp = new Exam();
-      temp.id = n["Id"];
-      temp.dateWriteString = n["Datum"];
-      temp.dateWrite = DateTime.parse(n["Datum"]);
-      temp.dateGivenUpString = n["BejelentesDatuma"];
-      temp.dateGivenUp = DateTime.parse(n["BejelentesDatuma"]);
-      temp.subject = n["Tantargy"];
-      temp.teacher = n["Tanar"];
-      temp.nameOfExam = n["SzamonkeresMegnevezese"];
-      temp.typeOfExam = n["SzamonkeresModja"];
-      temp.classGroupId = n["OsztalyCsoportUid"];
+      Exam temp = new Exam.fromJson(n);
       if (!temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now())) {
         examArray.add(temp);
       }
@@ -230,16 +210,7 @@ Future<List<Event>> parseEvents(var input) async {
   List<Event> eventArray = [];
   try {
     for (var n in input) {
-      Event temp = new Event();
-      temp.id = n["EventId"];
-      temp.dateString = n["Date"];
-      temp.date = DateTime.parse(n["Date"]);
-      temp.endDateString = n["EndDate"];
-      temp.endDate = DateTime.parse(n["EndDate"]);
-      temp.content = n["Content"];
-      temp.content = temp.content.replaceAll("\n", "<br>");
-      temp.title = n["Title"];
-      eventArray.add(temp);
+      eventArray.add(Event.fromJson(n));
     }
   } catch (e, s) {
     FirebaseCrashlytics.instance.recordError(

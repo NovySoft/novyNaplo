@@ -183,7 +183,6 @@ class NetworkHelper {
   Future<dynamic> getSchoolList() async {
     FirebaseCrashlytics.instance.log("getSchoolList");
     List<School> tempList = [];
-    School tempSchool = new School();
     var client = http.Client();
     var header = {
       'User-Agent': '$agent',
@@ -207,13 +206,7 @@ class NetworkHelper {
     }
     List<dynamic> responseJson = json.decode(utf8.decode(res.bodyBytes));
     for (var n in responseJson) {
-      tempSchool = new School();
-      tempSchool.id = n["InstituteId"];
-      tempSchool.name = n["Name"];
-      tempSchool.code = n["InstituteCode"];
-      tempSchool.url = n["Url"];
-      tempSchool.city = n["City"];
-      tempList.add(tempSchool);
+      tempList.add(School.fromJson(n));
     }
     return tempList;
   }
