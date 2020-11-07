@@ -6,6 +6,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/school.dart';
+import 'package:novynaplo/data/models/user.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -64,6 +65,9 @@ class NetworkHelper {
 
   Future<String> getToken(code, user, pass) async {
     //TODO: Look into this function, something is not right
+    globals.userDetails.username = user;
+    globals.userDetails.password = pass;
+    globals.userDetails.school = code;
     FirebaseCrashlytics.instance.log("getToken, try $tokenIndex");
     tokenIndex++;
     try {
@@ -94,7 +98,9 @@ class NetworkHelper {
               }
             } else {
               globals.tokenDate = DateTime.now();
+              //TODO: Token and stuff duplicates in globals
               globals.token = parsedJson["access_token"];
+              globals.userDetails.token = globals.token;
               print("TokenOK");
               return "OK";
             }
@@ -298,7 +304,7 @@ class NetworkHelper {
     List<Lesson> tempLessonList = [];
     List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
-      tempLessonList.add(Lesson.fromJson(n));
+      tempLessonList.add(await Lesson.fromJson(n));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
@@ -372,7 +378,7 @@ class NetworkHelper {
     List<Lesson> tempLessonList = [];
     List<Lesson> tempLessonListForDB = [];
     for (var n in decoded) {
-      tempLessonList.add(Lesson.fromJson(n));
+      tempLessonList.add(await Lesson.fromJson(n));
     }
     tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
     int index = 0;
@@ -451,6 +457,7 @@ class NetworkHelper {
 
   Future<Homework> getTeacherHomework(
       int hwId, String token, String code) async {
+    //TODO First check in database
     FirebaseCrashlytics.instance.log("getTeacherHomework");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     double keepForDays = prefs.getDouble("howLongKeepDataForHw");

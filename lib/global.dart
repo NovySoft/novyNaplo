@@ -22,7 +22,8 @@ int payloadId =
 String notifPayload; //Contains the prefix of the notification payload
 String
     payloadString; //Used when instead of an integer we use string as payloadId
-User userDetails; //Contains, password, school, username, current token.
+User userDetails =
+    new User(); //Contains, password, school, username, current token.
 //* "Permanent"
 String markCardSubtitle; //Marks subtitle
 String markCardTheme; //Marks color theme

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+//TODO: Implement different text types (title, subtitle, etc...)
 
 class ThemeHelper {
   static List<Color> myGradientList = [

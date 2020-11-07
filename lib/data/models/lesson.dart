@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'homework.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class Lesson {
   int databaseId;
@@ -57,49 +59,53 @@ class Lesson {
     };
   }
 
-  Lesson.fromJson(Map<String, dynamic> json) {
+  //This class is an exceptional one, because we wanted to run a async function in the constructor
+  static Future<Lesson> fromJson(Map<String, dynamic> json) async {
+    Lesson temp = new Lesson();
     //INTs
-    id = json["LessonId"];
-    whichLesson = json["Count"];
-    homeWorkId = json["Homework"];
-    groupID = json["OsztalyCsoportId"];
-    teacherHomeworkId = json["TeacherHomeworkId"];
+    temp.id = json["LessonId"];
+    temp.whichLesson = json["Count"];
+    temp.homeWorkId = json["Homework"];
+    temp.groupID = json["OsztalyCsoportId"];
+    temp.teacherHomeworkId = json["TeacherHomeworkId"];
     //Strings
-    groupName = json["ClassGroup"];
-    subject = capitalize(json["Subject"]);
-    name = capitalize(json["Nev"]);
+    temp.groupName = json["ClassGroup"];
+    temp.subject = capitalize(json["Subject"]);
+    temp.name = capitalize(json["Nev"]);
     if (json["ClassRoom"].toString().startsWith("I")) {
-      classroom = json["ClassRoom"];
+      temp.classroom = json["ClassRoom"];
     } else {
-      classroom = capitalize(json["ClassRoom"]);
+      temp.classroom = capitalize(json["ClassRoom"]);
     }
-    theme = json["Theme"];
-    teacher = json["Teacher"];
-    deputyTeacherName = json["DeputyTeacher"];
+    temp.theme = json["Theme"];
+    temp.teacher = json["Teacher"];
+    temp.deputyTeacherName = json["DeputyTeacher"];
     //DateTimes
-    startDate = DateTime.parse(json["StartTime"]);
-    endDate = DateTime.parse(json["EndTime"]);
-    date = DateTime.parse(json["Date"]);
+    temp.startDate = DateTime.parse(json["StartTime"]);
+    temp.endDate = DateTime.parse(json["EndTime"]);
+    temp.date = DateTime.parse(json["Date"]);
     //Datetime sttring
-    startDateString = json["StartTime"];
-    endDateString = json["EndTime"];
-    dateString = json["Date"];
+    temp.startDateString = json["StartTime"];
+    temp.endDateString = json["EndTime"];
+    temp.dateString = json["Date"];
     //Booleans
-    homeworkEnabled = json["IsTanuloHaziFeladatEnabled"];
+    temp.homeworkEnabled = json["IsTanuloHaziFeladatEnabled"];
     //Lists
-    dogaIds = json["BejelentettSzamonkeresIdList"];
-    dogaNames = []; //TODO EZT MEGCSINÁLNI
+    temp.dogaIds = json["BejelentettSzamonkeresIdList"];
+    temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
     //Icon
-    icon = parseSubjectToIcon(subject: subject);
+    temp.icon = parseSubjectToIcon(subject: temp.subject);
     //Homework
-    if (teacherHomeworkId != null) {
-      //FIXME FIX
-      teacherHomework = new Homework();
-      /*teacherHomework = await NetworkHelper()
-          .getTeacherHomework(teacherHomeworkId, token, code);*/
+    if (temp.teacherHomeworkId != null) {
+      temp.teacherHomework = await NetworkHelper().getTeacherHomework(
+        temp.teacherHomeworkId,
+        globals.userDetails.token,
+        globals.userDetails.school,
+      );
     } else {
-      teacherHomework = new Homework();
+      temp.teacherHomework = new Homework();
     }
+    return temp;
   }
 
   @override
