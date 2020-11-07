@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/screens/statistics_tab.dart' as stats;
+import 'package:novynaplo/helpers/logicAndMath/createAvarageDBListFromStatisticsAvarage.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/screens/absences_tab.dart' as absencesPage;
+import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/translations/translationProvider.dart';
 
 int index = 0;

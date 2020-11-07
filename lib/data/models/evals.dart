@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:novynaplo/helpers/functions/parseSubjectToIcon.dart';
-import 'package:novynaplo/helpers/functions/shortenSubject.dart';
+import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
+import 'package:novynaplo/helpers/misc/shortenSubject.dart';
 
 class Evals {
   var formName,

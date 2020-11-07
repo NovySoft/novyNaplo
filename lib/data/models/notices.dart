@@ -1,4 +1,4 @@
-import 'package:novynaplo/helpers/functions/capitalize.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/subjectAssignHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 

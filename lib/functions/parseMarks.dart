@@ -5,13 +5,13 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notices.dart';
-import 'package:novynaplo/helpers/functions/capitalize.dart';
-import 'package:novynaplo/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
 import 'classManager.dart';
-import 'package:novynaplo/screens/timetable_tab.dart' as timetablePage;
+import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 //TODO: Add option to translate notices, events, evals, homework and subjects
 // ignore: unused_element

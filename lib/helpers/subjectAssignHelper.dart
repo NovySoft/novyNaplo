@@ -1,4 +1,4 @@
-import 'package:novynaplo/helpers/functions/capitalize.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
 
 class SubjectAssignHelper {
   static String assignSubject(dJson, subjectUid, type, content) {

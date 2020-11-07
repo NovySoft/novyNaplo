@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/helpers/functions/capitalize.dart';
-import 'package:novynaplo/helpers/functions/parseSubjectToIcon.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'homework.dart';
 
 class Lesson {
