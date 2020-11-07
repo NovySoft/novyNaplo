@@ -12,7 +12,7 @@ import 'package:novynaplo/data/models/notices.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 // A method that retrieves all the evals from the table.

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/data/models/school.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
@@ -13,6 +12,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return SpinnerDialog();
+          return LoadingSpinner();
         });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await delay(1000);
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return SpinnerDialog();
+              return LoadingSpinner();
             });
       }
       //Not showing quickly enough

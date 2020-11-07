@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/translations/translationProvider.dart';
 
-class SpinnerDialog extends StatefulWidget {
+class LoadingSpinner extends StatefulWidget {
   @override
-  SpinnerDialogState createState() => new SpinnerDialogState();
+  LoadingSpinnerState createState() => new LoadingSpinnerState();
 }
 
-class SpinnerDialogState extends State<SpinnerDialog> {
+class LoadingSpinnerState extends State<LoadingSpinner> {
   String loadingText = getTranslatedString("plsWait");
   static final GlobalKey<State> key = login.KeyLoaderKey.keyLoader;
   @override

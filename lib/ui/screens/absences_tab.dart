@@ -2,7 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
-import 'package:novynaplo/functions/classManager.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:novynaplo/global.dart' as globals;

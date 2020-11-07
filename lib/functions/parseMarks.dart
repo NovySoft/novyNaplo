@@ -10,7 +10,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
-import 'classManager.dart';
+import '../data/models/extensions.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 //TODO: Add option to translate notices, events, evals, homework and subjects
