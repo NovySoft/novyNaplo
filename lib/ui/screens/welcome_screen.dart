@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -56,41 +56,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   void animate() async {
-    await sleep(2000);
+    await delay(2000);
     setState(() {
       size = 150;
     });
-    await sleep(1000);
+    await delay(1000);
     setState(() {
       visibility = 1;
     });
-    await sleep(1000);
+    await delay(1000);
     setState(() {
       visibilityTwo = 1;
     });
   }
 
   void animateSecond() async {
-    await sleep(500);
+    await delay(500);
     setState(() {
       size = 150;
     });
-    await sleep(1000);
+    await delay(1000);
     setState(() {
       secondVisibility = 1;
     });
-    await sleep(1000);
+    await delay(1000);
     setState(() {
       secondVisibilityTwo = 1;
     });
   }
 
   void animateThird() async {
-    await sleep(500);
+    await delay(500);
     setState(() {
       thirdVisibility = 1;
     });
-    await sleep(1000);
+    await delay(1000);
     setState(() {
       thirdVisibilityTwo = 1;
     });

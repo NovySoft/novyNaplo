@@ -5,9 +5,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/notices.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
-import 'package:novynaplo/functions/widgets.dart';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
+import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 List<Notices> allParsedNotices;
 var colors = getRandomColors(allParsedNotices.length);
@@ -28,7 +30,7 @@ class _NoticesTabState extends State<NoticesTab> {
       appBar: AppBar(
         title: Text(NoticesTab.title),
       ),
-      drawer: getDrawer(NoticesTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(NoticesTab.tag, context),
       body: _body(context),
     );
   }

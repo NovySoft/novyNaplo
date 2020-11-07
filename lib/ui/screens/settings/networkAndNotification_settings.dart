@@ -4,8 +4,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
@@ -471,7 +471,7 @@ class _NetworkAndNotificationSettingsState
                             FirebaseCrashlytics.instance.log(
                                 "Canceled alarm: " +
                                     main.fetchAlarmID.toString());
-                            await sleep(1500);
+                            await delay(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
                               Duration(minutes: globals.fetchPeriod),
@@ -486,7 +486,7 @@ class _NetworkAndNotificationSettingsState
                             FirebaseCrashlytics.instance.log(
                                 "Canceled alarm: " +
                                     main.fetchAlarmID.toString());
-                            await sleep(1500);
+                            await delay(1500);
                             main.fetchAlarmID++;
                           }
                         },
@@ -549,7 +549,7 @@ class _NetworkAndNotificationSettingsState
                             FirebaseCrashlytics.instance.log(
                                 "Canceled alarm: " +
                                     main.fetchAlarmID.toString());
-                            await sleep(1500);
+                            await delay(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
                               Duration(minutes: globals.fetchPeriod),
@@ -587,7 +587,7 @@ class _NetworkAndNotificationSettingsState
                             FirebaseCrashlytics.instance.log(
                                 "Canceled alarm: " +
                                     main.fetchAlarmID.toString());
-                            await sleep(1500);
+                            await delay(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
                               Duration(minutes: globals.fetchPeriod),
@@ -602,7 +602,7 @@ class _NetworkAndNotificationSettingsState
                             FirebaseCrashlytics.instance.log(
                                 "Canceled alarm: " +
                                     main.fetchAlarmID.toString());
-                            await sleep(1500);
+                            await delay(1500);
                             main.fetchAlarmID++;
                             await AndroidAlarmManager.periodic(
                               Duration(minutes: globals.fetchPeriod),

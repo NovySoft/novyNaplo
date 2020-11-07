@@ -3,10 +3,11 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/functions/widgets.dart';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/main.dart' as main;
+import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
@@ -44,7 +45,7 @@ class _SettingsTabState extends State<SettingsTab> {
       appBar: AppBar(
         title: Text(SettingsTab.title),
       ),
-      drawer: getDrawer(SettingsTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(SettingsTab.tag, context),
       body: SettingsBody(),
     );
   }

@@ -8,6 +8,7 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;
@@ -24,7 +25,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -200,7 +200,7 @@ class NetworkHelper {
     } finally {
       client.close();
     }
-    await sleep(1000);
+    await delay(1000);
     if (res.statusCode != 200) {
       print(res.statusCode);
       return res.statusCode;

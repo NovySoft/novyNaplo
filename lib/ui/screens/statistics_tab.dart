@@ -9,12 +9,14 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
-import 'package:novynaplo/functions/widgets.dart';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
+import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 var allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
@@ -97,7 +99,7 @@ class _StatisticsTabState extends State<StatisticsTab>
           tabs: statTabs,
         ),
       ),
-      drawer: getDrawer(StatisticsTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(StatisticsTab.tag, context),
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
@@ -662,7 +664,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     Color currColor = marksPage.colors[index];
     if (index == 0) {
       return SafeArea(
-        child: AnimatedChartsCard(
+        child: AnimatedChartsTitleCard(
           title: capitalize(getTranslatedString("contracted")),
           color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
@@ -677,7 +679,7 @@ class _StatisticsTabState extends State<StatisticsTab>
       );
     }
     return SafeArea(
-      child: AnimatedChartsCard(
+      child: AnimatedChartsTitleCard(
         title: capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
         color: currColor,
         heroAnimation: AlwaysStoppedAnimation(0),

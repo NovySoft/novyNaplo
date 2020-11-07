@@ -2,13 +2,15 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/functions/widgets.dart';
+
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/AnimatedHomeworkCard.dart';
+import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 List<Color> colors = [];
 List<Homework> globalHomework = [];
@@ -40,7 +42,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       appBar: AppBar(
         title: Text(HomeworkTab.title),
       ),
-      drawer: getDrawer(HomeworkTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(HomeworkTab.tag, context),
       body: _body(),
     );
   }

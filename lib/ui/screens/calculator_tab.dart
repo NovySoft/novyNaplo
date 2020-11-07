@@ -7,14 +7,15 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/calculator.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/functions/utils.dart';
-import 'package:novynaplo/functions/widgets.dart';
+
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 //TODO: Add option to add mark calculator marks to what if
 //TODO: add performance to mark calculator and also make avarages a before and after gauge pair
@@ -404,7 +405,7 @@ class CalculatorTabState extends State<CalculatorTab>
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      drawer: getDrawer(CalculatorTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(CalculatorTab.tag, context),
       appBar: AppBar(
         title: Text(CalculatorTab.title),
         bottom: TabBar(
@@ -705,7 +706,7 @@ class CalculatorTabState extends State<CalculatorTab>
                               color: Colors.red,
                               icon: Icons.delete,
                               onTap: () async {
-                                await sleep(480);
+                                await delay(480);
                                 setState(() {
                                   virtualMarks.removeAt(index);
                                 });

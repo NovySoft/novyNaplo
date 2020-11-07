@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'dart:async';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/translations/translationProvider.dart';
@@ -38,8 +37,4 @@ class SpinnerDialogState extends State<SpinnerDialog> {
       ),
     );
   }
-}
-
-Future sleep(int millis) async {
-  return new Future.delayed(Duration(milliseconds: millis), () => "1");
 }

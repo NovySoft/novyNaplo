@@ -19,7 +19,10 @@ import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
-import 'package:novynaplo/functions/widgets.dart';
+import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
+import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';
+import 'package:novynaplo/ui/widgets/Drawer.dart';
+
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
@@ -220,7 +223,7 @@ class MarksTabState extends State<MarksTab>
                 width: double.infinity,
                 height: 106,
                 child: SafeArea(
-                  child: HeroAnimatingSubjectsCard(
+                  child: AnimatedSubjectsCard(
                     subTitle: getMarkCardSubtitle(
                       eval: allParsedBySubject[listIndex][index],
                     ),
@@ -244,7 +247,7 @@ class MarksTabState extends State<MarksTab>
           width: double.infinity,
           height: 106,
           child: SafeArea(
-            child: HeroAnimatingSubjectsCard(
+            child: AnimatedSubjectsCard(
               subTitle: getMarkCardSubtitle(
                 eval: allParsedBySubject[listIndex][index],
               ),
@@ -268,7 +271,7 @@ class MarksTabState extends State<MarksTab>
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      drawer: getDrawer(MarksTab.tag, context),
+      drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
       appBar: AppBar(
         title: Text(MarksTab.title),
         bottom: TabBar(

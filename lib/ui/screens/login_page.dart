@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/functions/utils.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           return SpinnerDialog();
         });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await sleep(1000);
+    await delay(1000);
     await globals.setGlobals();
     if (globals.verCheckOnStart) {
       await getVersion();
@@ -180,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
             });
       }
       //Not showing quickly enough
-      await sleep(1000); //So sleep for a second
+      await delay(1000); //So sleep for a second
       if (await NetworkHelper().isNetworkAvailable() ==
           ConnectivityResult.none) {
         status = "No internet connection was detected";

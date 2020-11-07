@@ -5,11 +5,11 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/login_page.dart';
 import 'package:novynaplo/translations/translationProvider.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
@@ -29,7 +29,6 @@ import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/helpers/chartHelper.dart' as chartHelper;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/functions/parseMarks.dart';
-import 'dart:io';
 import 'package:novynaplo/data/database/getSql.dart';
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -180,7 +179,7 @@ class _LoadingPageState extends State<LoadingPage> {
         } else {
           //print(globals.notificationAppLaunchDetails.payload);
           marksTab.redirectPayload = true;
-          await sleep(10);
+          await delay(10);
           Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
         }
       } else {

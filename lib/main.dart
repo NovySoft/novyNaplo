@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/errorHandlingHelper.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -110,7 +110,7 @@ void main() async {
               : prefs.getBool("backgroundFetchCanWakeUpPhone");
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
-      await sleep(1000);
+      await delay(1000);
       await AndroidAlarmManager.periodic(
         Duration(minutes: globals.fetchPeriod),
         fetchAlarmID,
