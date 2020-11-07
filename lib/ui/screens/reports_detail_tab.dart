@@ -8,7 +8,7 @@ import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/helpers/logicAndMath/calcPercentFromEvalsList.dart';
 import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 class ReportsDetailTab extends StatelessWidget {
   ReportsDetailTab({

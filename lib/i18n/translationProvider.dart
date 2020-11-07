@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/translations/hungarian.dart' as hu;
-import 'package:novynaplo/translations/english.dart' as en;
+import 'package:novynaplo/i18n/hungarian.dart' as hu;
+import 'package:novynaplo/i18n/english.dart' as en;
 
 String getTranslatedString(String input, {List<String> replaceVariables}) {
   String tempString;

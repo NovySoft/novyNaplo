@@ -8,7 +8,7 @@ import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';

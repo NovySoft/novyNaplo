@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 

@@ -22,7 +22,7 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 Int64List vibrationPattern;
 var androidPlatformChannelSpecifics;

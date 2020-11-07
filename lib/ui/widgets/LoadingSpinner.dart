@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/global.dart' as globals;
 

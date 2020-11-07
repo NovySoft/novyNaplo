@@ -9,7 +9,7 @@ import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/login_page.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 

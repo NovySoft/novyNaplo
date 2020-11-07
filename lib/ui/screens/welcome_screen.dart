@@ -3,7 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/login_page.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 //TODO: New onboarding with https://pub.dev/packages/introduction_screen

@@ -4,7 +4,7 @@ import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 class ExamsDetailTab extends StatelessWidget {
   ExamsDetailTab({@required this.exam, this.color});

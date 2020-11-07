@@ -11,7 +11,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/intToTHEnding.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 
 List<List<Absence>> allParsedAbsences = [];
@@ -126,7 +126,7 @@ class _AbsencesTabState extends State<AbsencesTab>
       });
       Future.delayed(Duration(milliseconds: 500), () {
         tempAbsences = List.from(allParsedAbsences).expand((i) => i).toList();
-        //TODO: Fix fade in
+
         _animationControllerJustified.reset();
         _animationControllerJustified.forward();
 

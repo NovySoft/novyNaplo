@@ -14,7 +14,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/helpers/chartHelper.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 

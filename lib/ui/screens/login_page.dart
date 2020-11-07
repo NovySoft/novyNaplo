@@ -11,7 +11,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';

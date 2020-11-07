@@ -1,4 +1,4 @@
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 String parseIntToWeekdayString(int input) {
   switch (input) {

@@ -6,7 +6,6 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/school.dart';
-import 'package:novynaplo/data/models/user.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -26,7 +25,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:novynaplo/config.dart' as config;
 import 'package:http/http.dart' as http;
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 

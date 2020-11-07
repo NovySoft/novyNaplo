@@ -10,7 +10,7 @@ import 'package:novynaplo/helpers/logicAndMath/createAvarageDBListFromStatistics
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 int index = 0;
 List<LinearMarkChartData> chartData = [];

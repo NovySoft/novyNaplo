@@ -12,7 +12,7 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notices.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;

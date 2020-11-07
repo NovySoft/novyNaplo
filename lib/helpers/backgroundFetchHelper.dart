@@ -11,7 +11,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',

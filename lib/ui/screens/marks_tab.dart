@@ -25,7 +25,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 
 List<Evals> allParsedByDate;
 List<List<Evals>> allParsedBySubject;

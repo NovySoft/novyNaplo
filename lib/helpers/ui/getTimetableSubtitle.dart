@@ -1,5 +1,5 @@
 import 'package:novynaplo/data/models/lesson.dart';
-import 'package:novynaplo/translations/translationProvider.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 String getTimetableSubtitle(Lesson input) {
