@@ -16,3 +16,23 @@ class Avarage {
     };
   }
 }
+
+//TODO: Merge these two classes
+class AV {
+  double value;
+  double diffSinceLast;
+  String subject = "";
+  double count = 0;
+
+  @override
+  String toString() {
+    return subject + ":" + value.toStringAsFixed(3);
+  }
+
+  Avarage toDatabaseAvarage() {
+    Avarage temp = new Avarage();
+    temp.ownValue = value;
+    temp.subject = subject;
+    return temp;
+  }
+}

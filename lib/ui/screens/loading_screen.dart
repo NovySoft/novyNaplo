@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -28,7 +29,6 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
-import 'package:novynaplo/helpers/chartHelper.dart' as chartHelper;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/data/database/getSql.dart';
 
@@ -142,7 +142,7 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readAvs");
       });
-      chartHelper.getWorstAndBest(statisticsPage.allParsedSubjectsWithoutZeros);
+      getMarksWithChanges(statisticsPage.allParsedSubjectsWithoutZeros);
       //Timetable
       setState(() {
         loadingText = getTranslatedString("readTimetable");

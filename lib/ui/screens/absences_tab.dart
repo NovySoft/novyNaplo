@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/helpers/charts/absencesCharts.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/intToTHEnding.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';

@@ -5,7 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/charts/absencesCharts.dart';
+import 'package:novynaplo/helpers/charts/createAllSubjectChartData.dart';
+import 'package:novynaplo/helpers/charts/createOsszesitett.dart';
+import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
+import 'package:novynaplo/helpers/charts/getBarChart.dart';
+import 'package:novynaplo/helpers/charts/getPieChartOrBarChart.dart';
+import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
+import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
@@ -13,7 +22,6 @@ import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
-import 'package:novynaplo/helpers/chartHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
@@ -42,41 +50,6 @@ List<charts.Series<dynamic, String>> howManyFromMarks;
 List<charts.Series<dynamic, String>> howManyFromSpecific;
 double sizedBoxHeight = 75;
 List<AV> allSubjectsAv = [];
-
-//Classes used by charts
-class AV {
-  double value;
-  double diffSinceLast;
-  String subject = "";
-  double count = 0;
-
-  @override
-  String toString() {
-    return subject + ":" + value.toStringAsFixed(3);
-  }
-
-  Avarage toDatabaseAvarage() {
-    Avarage temp = new Avarage();
-    temp.ownValue = value;
-    temp.subject = subject;
-    return temp;
-  }
-}
-
-class LinearPiData {
-  final int id;
-  final int value;
-  final String name;
-
-  LinearPiData(this.id, this.value, this.name);
-}
-
-class MarkForBars {
-  final String name;
-  int count;
-
-  MarkForBars(this.name, this.count);
-}
 
 class StatisticsTab extends StatefulWidget {
   static String tag = 'statistics';
@@ -600,7 +573,7 @@ class _StatisticsTabState extends State<StatisticsTab>
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Statistics");
     getAllSubjectsAv(allParsedSubjectsWithoutZeros);
-    getWorstAndBest(allParsedSubjectsWithoutZeros);
+    getMarksWithChanges(allParsedSubjectsWithoutZeros);
     getPieChartOrBarChart(allParsedSubjects);
     getBarChart(allParsedSubjects);
     if (globals.payloadId != -1) {
@@ -625,7 +598,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     allParsedSubjectsWithoutZeros[tempIndex][0].subject),
                 color: currColor,
                 seriesList: createSubjectChart(
-                    allParsedSubjectsWithoutZeros[tempIndex], index.toString()),
+                    allParsedSubjectsWithoutZeros[tempIndex], "0"),
                 animate: globals.chartAnimations,
               ),
             ),

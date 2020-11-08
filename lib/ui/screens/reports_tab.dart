@@ -2,9 +2,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
-
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/ui/screens/reports_detail_tab.dart';

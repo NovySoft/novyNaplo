@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/calculator.dart';
+import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
-
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/chartHelper.dart';
+import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:charts_flutter/flutter.dart' as charts;

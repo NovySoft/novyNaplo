@@ -3,9 +3,9 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 //Used to save avarages (created for statiscs page) to database
 List<Avarage> createAvarageDBListFromStatisticsAvarage(
-  stats.AV bestSubject,
-  List<stats.AV> avaragesList,
-  stats.AV worstSubject,
+  AV bestSubject,
+  List<AV> avaragesList,
+  AV worstSubject,
 ) {
   List<Avarage> tempList = [];
   tempList.add(stats.bestSubjectAv.toDatabaseAvarage());
