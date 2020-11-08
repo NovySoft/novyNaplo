@@ -43,7 +43,7 @@ String decryptedCode,
     decryptedPass,
     loadingText = "${getTranslatedString("plsWait")}...";
 var status;
-String agent = config.currAgent;
+String agent = config.userAgent;
 var response;
 bool hasError = false;
 int tokenIndex = 0;

@@ -4,6 +4,7 @@ class User {
   String password;
   String school;
   String token;
+  DateTime tokenDate;
 
   User({
     this.username,

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
@@ -92,19 +93,19 @@ void backgroundFetch() async {
       );
       return;
     }
+    //TODO MAKE DECRYPT HELPER
     String decryptedUser =
         userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
     String decryptedPass =
         passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-    var status = "";
+    globals.userDetails.password = decryptedPass;
+    globals.userDetails.username = decryptedUser;
+    globals.userDetails.school = decryptedCode;
     await mainSql.initDatabase();
-    for (var i = 0; i < 2; i++) {
-      status = await NetworkHelper()
-          .getToken(decryptedCode, decryptedUser, decryptedPass);
-    }
+    String status = await RequestHandler.login(globals.userDetails);
     if (status == "OK") {
-      //print(globals.token);
-      String token = globals.token;
+      //print( globals.userDetails.token);
+      String token = globals.userDetails.token;
       await NetworkHelper().getStudentInfo(token, decryptedCode);
     }
     await flutterLocalNotificationsPlugin.cancel(111);

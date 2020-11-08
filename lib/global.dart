@@ -11,8 +11,6 @@ import 'dart:io' show Platform;
 //* Session
 var dJson; //Student JSON
 var avJson; //Avarage JSON
-var token; //Bearer token from api
-DateTime tokenDate; //The 'time' of token fetching
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
 NotificationAppLaunchDetails
@@ -60,7 +58,6 @@ void resetAllGlobals() async {
       true); //isNotNew is for users that already loged in, but logged out later
   dJson = null;
   avJson = null;
-  token = null;
   didFetch = false;
 }
 

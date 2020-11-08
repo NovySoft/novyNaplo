@@ -32,8 +32,9 @@ import 'package:http/http.dart' as http;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/API/requestHandler.dart';
 
-String agent = config.currAgent;
+String agent = config.userAgent;
 var response;
 int tokenIndex = 0;
 
@@ -64,92 +65,6 @@ class NetworkHelper {
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'getEvents');
     }
-  }
-
-  Future<String> getToken(code, user, pass) async {
-    //TODO: Look into this function, something is not right
-    globals.userDetails.username = user;
-    globals.userDetails.password = pass;
-    globals.userDetails.school = code;
-    FirebaseCrashlytics.instance.log("getToken, try $tokenIndex");
-    tokenIndex++;
-    try {
-      if (code == "" || user == "" || pass == "") {
-        return getTranslatedString("missingInput");
-      } else {
-        var headers = {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-          'User-Agent': '$agent',
-        };
-
-        var data =
-            'institute_code=$code&userName=$user&password=$pass&grant_type=password&client_id=919e0c1c-76a2-4646-a2fb-7085bbbf3c56';
-        try {
-          response = await http.post(
-              'https://$code.e-kreta.hu/idp/api/v1/Token',
-              headers: headers,
-              body: data);
-          if (response.statusCode == 200) {
-            var parsedJson = json.decode(response.body);
-            var status = parsedJson['token_type'];
-            if (status == '' || status == null) {
-              if (parsedJson["error_description"] == '' ||
-                  parsedJson["error_description"] == null) {
-                return getTranslatedString("wrongUserPass");
-              } else {
-                return parsedJson["error_description"];
-              }
-            } else {
-              globals.tokenDate = DateTime.now();
-              //TODO: Token and stuff duplicates in globals
-              globals.token = parsedJson["access_token"];
-              globals.userDetails.token = globals.token;
-              print("TokenOK");
-              return "OK";
-            }
-            //print(status);
-          } else if (response.statusCode == 401) {
-            var parsedJson = json.decode(response.body);
-            if (parsedJson["error_description"] == '' ||
-                parsedJson["error_description"] == null) {
-              return getTranslatedString("wrongUserPass");
-            } else {
-              return parsedJson["error_description"];
-            }
-            //print('Response status: ${response.statusCode}');
-          } else {
-            return 'post error: statusCode= ${response.statusCode}';
-          }
-        } on SocketException {
-          return getTranslatedString("wrongSchId");
-        }
-      }
-    } catch (e, s) {
-      var client = http.Client();
-      var header = {
-        'User-Agent': '$agent',
-        'Content-Type': 'application/json',
-      };
-      var res;
-      try {
-        res = await client.get('https://api.novy.vip/kretaHeader.json',
-            headers: header);
-        if (res.statusCode == 200) {
-          agent = json.decode(res.body)["header"];
-          config.currAgent = agent = json.decode(res.body)["header"];
-          if (tokenIndex < 3) {
-            getToken(code, user, pass);
-          } else {
-            FirebaseCrashlytics.instance.recordError(e, s, reason: 'getToken');
-            return getTranslatedString("noAns");
-          }
-        }
-      } catch (e, s) {
-        FirebaseCrashlytics.instance.recordError(e, s, reason: 'getToken');
-        return getTranslatedString("noAnsNovy");
-      }
-    }
-    return "Error";
   }
 
   Future<void> getStudentInfo(token, code) async {
@@ -193,37 +108,6 @@ class NetworkHelper {
     }
   }
 
-  Future<dynamic> getSchoolList() async {
-    FirebaseCrashlytics.instance.log("getSchoolList");
-    List<School> tempList = [];
-    var client = http.Client();
-    var header = {
-      'User-Agent': '$agent',
-      'Content-Type': 'application/json',
-    };
-    var res;
-    try {
-      res = await client
-          .get('https://api.novy.vip/schoolList.json', headers: header)
-          .timeout(const Duration(seconds: 10));
-    } on TimeoutException catch (_) {
-      print("TIMEOUT");
-      return "TIMEOUT";
-    } finally {
-      client.close();
-    }
-    await delay(1000);
-    if (res.statusCode != 200) {
-      print(res.statusCode);
-      return res.statusCode;
-    }
-    List<dynamic> responseJson = json.decode(utf8.decode(res.bodyBytes));
-    for (var n in responseJson) {
-      tempList.add(School.fromJson(n));
-    }
-    return tempList;
-  }
-
   Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
     FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
@@ -239,15 +123,15 @@ class NetworkHelper {
     final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
     decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
     code = decryptedCode;
-    if (globals.tokenDate == null) {
-      globals.tokenDate = DateTime.now().subtract(
+    if (globals.userDetails.tokenDate == null) {
+      globals.userDetails.tokenDate = DateTime.now().subtract(
         Duration(
           minutes: 30,
         ),
       );
     }
     if (DateTime.now().isAfter(
-      globals.tokenDate.add(
+      globals.userDetails.tokenDate.add(
         Duration(minutes: 20),
       ),
     )) {
@@ -258,10 +142,8 @@ class NetworkHelper {
       decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
       decryptedPass =
           passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-      for (var i = 0; i < 2; i++) {
-        status = await NetworkHelper()
-            .getToken(decryptedCode, decryptedUser, decryptedPass);
-      }
+      String status = await RequestHandler.login(globals.userDetails);
+      //TODO Handle errors
     }
     List<List<Lesson>> output = [];
     for (var n = 0; n < 7; n++) {
@@ -294,7 +176,7 @@ class NetworkHelper {
         now.day.toString();
     //Make request
     var header = {
-      'Authorization': 'Bearer ${globals.token}',
+      'Authorization': 'Bearer ${globals.userDetails.token}',
       'User-Agent': '$agent',
       'Content-Type': 'application/json',
     };

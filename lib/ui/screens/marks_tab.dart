@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -130,12 +131,15 @@ class MarksTabState extends State<MarksTab>
     decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
     decryptedPass =
         passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-    for (var i = 0; i < 2; i++) {
-      status = await NetworkHelper()
-          .getToken(decryptedCode, decryptedUser, decryptedPass);
-    }
+    globals.userDetails.username = decryptedUser;
+    globals.userDetails.password = decryptedPass;
+    globals.userDetails.school = decryptedCode;
+    status = await RequestHandler.login(globals.userDetails);
+
     if (status == "OK") {
-      await NetworkHelper().getStudentInfo(globals.token, decryptedCode);
+      await RequestHandler.getHomeworks(DateTime(2020, 11, 08));
+      await NetworkHelper()
+          .getStudentInfo(globals.userDetails.token, decryptedCode);
       await _setData();
       setState(() {
         colors = colors;

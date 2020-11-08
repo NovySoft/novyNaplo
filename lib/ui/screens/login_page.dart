@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
@@ -25,7 +26,7 @@ TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();
 var status = "No status";
 var i = 0;
-var agent = config.currAgent;
+var agent = config.userAgent;
 String selectedSchoolCode;
 bool gotToken;
 bool isPressed = true;
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       try {
-        schoolList = await NetworkHelper().getSchoolList();
+        schoolList = await RequestHandler.getSchoolList();
         if (schoolList == "TIMEOUT") {
           listAvailable = false;
           await _timeoutAlert(context);
@@ -186,18 +187,13 @@ class _LoginPageState extends State<LoginPage> {
           ConnectivityResult.none) {
         status = "No internet connection was detected";
       } else {
-        String code = codeController.text;
-        String user = userController.text;
-        String pass = passController.text;
-        status = await NetworkHelper().getToken(code, user, pass);
-        ////fix this buggy garbage
-        //! probably won't fix
-        if (status == null || status == "Error")
-          status = await NetworkHelper().getToken(code, user, pass);
-        if (status == null || status == "Error")
-          status = await NetworkHelper().getToken(code, user, pass);
+        globals.userDetails.school = codeController.text;
+        globals.userDetails.username = userController.text;
+        globals.userDetails.password = passController.text;
+        status = await RequestHandler.login(globals.userDetails);
         if (status == "OK") {
-          await NetworkHelper().getStudentInfo(globals.token, code);
+          await NetworkHelper().getStudentInfo(
+              globals.userDetails.token, globals.userDetails.school);
         }
       }
       Navigator.of(KeyLoaderKey.keyLoader.currentContext, rootNavigator: true)
