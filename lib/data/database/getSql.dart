@@ -8,7 +8,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
-import 'package:novynaplo/data/models/notices.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
@@ -49,7 +49,7 @@ Future<List<Evals>> getAllEvals() async {
   });
 }
 
-Future<List<Notices>> getAllNotices() async {
+Future<List<Notice>> getAllNotices() async {
   FirebaseCrashlytics.instance.log("getAllNotices");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -59,7 +59,7 @@ Future<List<Notices>> getAllNotices() async {
   );
 
   return List.generate(maps.length, (i) {
-    Notices temp = new Notices();
+    Notice temp = new Notice();
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
     temp.title = maps[i]['title'];

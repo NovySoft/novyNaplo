@@ -1,12 +1,12 @@
 import 'package:novynaplo/data/database/insertSql.dart';
-import 'package:novynaplo/data/models/notices.dart';
+import 'package:novynaplo/data/models/notice.dart';
 
-Future<List<Notices>> parseNotices(var input) async {
+Future<List<Notice>> parseNotices(var input) async {
   if (input != null && input["Notes"] != null) {
-    List<Notices> noticesArray = [];
+    List<Notice> noticesArray = [];
     var notices = input["Notes"];
     for (var n in notices) {
-      noticesArray.add(Notices.fromJson(n));
+      noticesArray.add(Notice.fromJson(n));
     }
     await batchInsertNotices(noticesArray);
     return noticesArray;

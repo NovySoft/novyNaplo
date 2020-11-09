@@ -7,7 +7,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/data/models/notices.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
@@ -236,12 +236,12 @@ Future selectNotification(String payload) async {
             return element.id == globals.payloadId;
           },
         );
-        Notices tempNotice = noticeTab.allParsedNotices.firstWhere(
+        Notice tempNotice = noticeTab.allParsedNotices.firstWhere(
           (element) {
             return element.id == globals.payloadId;
           },
           orElse: () {
-            return new Notices();
+            return new Notice();
           },
         );
         //Evals tempEval = allParsedByDate[0];

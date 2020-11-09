@@ -9,7 +9,75 @@ env:
     - secure: FtVSlMb3iK7ZPzFJmmB4QEyPkEb9+tPtkkwPcG9N+4R6+nkI2oSNl9D7u/6w/u0pgpv8rTeiy76T0REZbF8AkkPs0hlN2DxjDMmS98CDz6lcMNsF+OpLwZL12uwrIQk20cSAmflCEClbkelI48QVLpURWIaiXkmdJ9hF5mnXpPzjkOnon80htPHR4YYpp5yvSlSaEtPfbbfHcY3l+/ORD4hw+Ekd+f+M0pkHsVUpSk8sOcITg1s3MmD1kc71U4bkicSS9FjjldNam92VXtCumh3tFM/LBBH76Mv5o9LUEAg8rjncfR9kuEYJd6bV0eyjH6K5nK89T2Atupz/MX9lbYxvc7gLh6VKCCVQORKV8TgKlulm3Jpfb74Z5BKKGB+cWYQUE7Be9uukeHlgXjqJLG2mi9CagVbEBy+DB9vB4n4zirouEq46/0dd3wjn+7t4Zr+tD1BS0vyd0Mj3oLWTxEWeAfGIvA5+qc+joHQxjHJmq+BGW8nD4s+B6bHPvemNMbx+wA04q2EO4zjnclCogziqMqenVAIf+Atsf337dXzehRiIFEohs+CorTXXmgmFTZOaYWN6XjyU2ieREAPc1Kls1quCAbpyFTWw6e/rRlDA05oJbhpYzVVj1aoJH8G4jQbB5YD0EEieLjF0lcjT8p+dT7iEPk/72qfiBYv3XDY=
 matrix:
   include:
+    - name: Flutter analyze code
+      language: dart
+      dist: xenial
+      addons:
+        apt:
+          packages:
+            - lib32stdc++6
+      install:
+        - cd /home/travis/build/
+        - git clone https://github.com/flutter/flutter.git -b stable
+        - ./flutter/bin/flutter doctor
+        - export PATH=`pwd`/flutter/bin:$PATH
+      script:
+        - cd /home/travis/build/NovySoft/novyNaplo
+        - flutter analyze
+      cache:
+        directories:
+          - $HOME/.pub-cache
+          
     - name: Build an apk to test android integrity
+      os: linux
+      dist: trusty
+      jdk: oraclejdk8
+      language: node_js
+      node_js:
+        - '12'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+        packages:
+          - lib32stdc++6
+          - libstdc++6
+          - curl
+      install:
+        - echo install
+        - export GIT_MESSAGE=`git log -1 --pretty=%B`
+        - cd /home/travis/build/NovySoft/novyNaplo
+      before_script:
+        - cd /home/travis/build/NovySoft/novyNaplo
+        - wget https://services.gradle.org/distributions/gradle-6.1.1-all.zip
+        - unzip -qq gradle-6.1.1-all.zip
+        - export GRADLE_HOME=`pwd`/gradle-6.1.1
+        - export PATH=$GRADLE_HOME/bin:$PATH
+        - mkdir -p /home/travis/.android
+        - echo 'count=0' > /home/travis/.android/repositories.cfg
+        - wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+        - mkdir android-sdk-tools
+        - unzip -qq sdk-tools-linux-4333796.zip -d android-sdk-tools
+        - export PATH=`pwd`/android-sdk-tools/tools/bin:$PATH
+        - mkdir -p $ANDROID_SDK_ROOT
+        - yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT "tools" "build-tools;28.0.3" "extras;android;m2repository" > /dev/null
+        - export PATH=${ANDROID_SDK_ROOT}/tools/bin:$PATH
+        - export ANDROID_HOME=${ANDROID_SDK_ROOT}
+        - export ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT}
+        - sdkmanager --list
+        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+        - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+      script:
+        - flutter doctor -v
+        - flutter pub get
+        - cd android
+        - wget "$KEYPROPERTIES" -O key.properties &> /dev/null
+        - cd app
+        - wget "$KEYJKS" -O key.jks &> /dev/null
+        - cd /home/travis/build/NovySoft/novyNaplo
+        - "./flutter/bin/flutter build apk --no-shrink --release"
+
+    - name: Build an appbundle to test googleplay releasability
       os: linux
       dist: trusty
       jdk: oraclejdk8
@@ -60,7 +128,9 @@ matrix:
 
     - name: Build an ipa to test ios integrity
       os: osx
-      language: generic
+      language: node_js
+      node_js:
+        - '12'
       osx_image: xcode11.3
       addons:
         homebrew:

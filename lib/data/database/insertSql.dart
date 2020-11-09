@@ -9,7 +9,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
-import 'package:novynaplo/data/models/notices.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -172,12 +172,12 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
   }
 }
 
-Future<void> insertNotices(Notices notice, {bool edited}) async {
+Future<void> insertNotices(Notice notice, {bool edited}) async {
   FirebaseCrashlytics.instance.log("insertSingleNotice");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
-  List<Notices> allNotices = await getAllNotices();
+  List<Notice> allNotices = await getAllNotices();
   var matchedNotices = allNotices.where((element) {
     return (element.title == notice.title || element.id == notice.id);
   });
@@ -556,14 +556,14 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
   }
 }
 
-Future<void> batchInsertNotices(List<Notices> noticeList) async {
+Future<void> batchInsertNotices(List<Notice> noticeList) async {
   FirebaseCrashlytics.instance.log("batchInsertNotices");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
 
-  List<Notices> allNotices = await getAllNotices();
+  List<Notice> allNotices = await getAllNotices();
   for (var notice in noticeList) {
     var matchedNotices = allNotices.where((element) {
       return (element.title == notice.title || element.id == notice.id);

@@ -1,20 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/data/models/extensions.dart';
 
 var client = http.Client();
 
@@ -270,13 +273,13 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Homework>> getHomeworks(DateTime from) async {
+  static Future<List<Homework>> getHomeworks(DateTime fromDue) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) +
             KretaEndpoints.homeworks +
             "?datumTol=" +
-            from.toUtc().toIso8601String(),
+            fromDue.toUtc().toIso8601String(),
         headers: {
           "Authorization": "Bearer ${globals.userDetails.token}",
           "User-Agent": config.userAgent,
@@ -285,14 +288,88 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
-      printWrapped(json.encode(responseJson));
 
-      /*responseJson
+      responseJson
           .forEach((homework) => homeworks.add(Homework.fromJson(homework)));
 
-      return homeworks;*/
+      return homeworks;
     } catch (error) {
       print("ERROR: KretaAPI.getHomeworks: " + error.toString());
+      return null;
+    }
+  }
+
+  static Future<List<Lesson>> getTimetable(DateTime from, DateTime to) async {
+    if (from == null || to == null) return [];
+
+    try {
+      var response = await client.get(
+        BaseURL.kreta(globals.userDetails.school) +
+            KretaEndpoints.timetable +
+            "?datumTol=" +
+            from.toKretaDateString() +
+            "&datumIg=" +
+            to.toKretaDateString(),
+        headers: {
+          "Authorization": "Bearer ${globals.userDetails.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      List responseJson = jsonDecode(response.body);
+      List<Lesson> lessons = [];
+
+      responseJson.forEach((lesson) async {
+        lessons.add(await Lesson.fromJson(lesson));
+      });
+
+      return lessons;
+    } catch (error) {
+      print("ERROR: KretaAPI.getLessons: " + error.toString());
+      return null;
+    }
+  }
+
+  static Future<List<Event>> getEvents() async {
+    try {
+      var response = await client.get(
+        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.events,
+        headers: {
+          "Authorization": "Bearer ${globals.userDetails.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      List<Event> events = [];
+
+      List responseJson = jsonDecode(response.body);
+      responseJson.forEach((json) => events.add(Event.fromJson(json)));
+
+      return events;
+    } catch (error) {
+      print("ERROR: KretaAPI.getEvents " + error.toString());
+      return null;
+    }
+  }
+
+  static Future<List<Notice>> getNotices() async {
+    try {
+      var response = await client.get(
+        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.notes,
+        headers: {
+          "Authorization": "Bearer ${globals.userDetails.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      List<Notice> notes = [];
+
+      List responseJson = jsonDecode(response.body);
+      responseJson.forEach((json) => notes.add(Notice.fromJson(json)));
+
+      return notes;
+    } catch (error) {
+      print("ERROR: KretaAPI.getNotes: " + error.toString());
       return null;
     }
   }

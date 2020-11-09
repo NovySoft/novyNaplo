@@ -131,13 +131,13 @@ class MarksTabState extends State<MarksTab>
     decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
     decryptedPass =
         passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-    globals.userDetails.username = decryptedUser;
+    /*globals.userDetails.username = decryptedUser;
     globals.userDetails.password = decryptedPass;
-    globals.userDetails.school = decryptedCode;
+    globals.userDetails.school = decryptedCode;*/
     status = await RequestHandler.login(globals.userDetails);
 
     if (status == "OK") {
-      await RequestHandler.getHomeworks(DateTime(2020, 11, 08));
+      await RequestHandler.getEvents();
       await NetworkHelper()
           .getStudentInfo(globals.userDetails.token, decryptedCode);
       await _setData();
