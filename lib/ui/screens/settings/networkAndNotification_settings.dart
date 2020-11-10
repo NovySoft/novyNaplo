@@ -270,7 +270,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload:
-                                'avarage ${allParsedSubjectsWithoutZeros[0][0].subject}',
+                                'avarage ${allParsedSubjectsWithoutZeros[0][0].tantargy.nev}',
                           );
                         },
                         icon: Icon(

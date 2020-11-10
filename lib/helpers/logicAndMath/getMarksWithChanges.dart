@@ -20,8 +20,8 @@ void getMarksWithChanges(List<List<Evals>> input) async {
     }
     AV temp = new AV();
     for (var y in n) {
-      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-      index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+      sum += y.szamErtek * y.sulySzazalekErteke / 100;
+      index += 1 * y.sulySzazalekErteke / 100;
       if (listIndex == n.length - 1) {
         temp.diffSinceLast = sum / index;
       }
@@ -29,7 +29,7 @@ void getMarksWithChanges(List<List<Evals>> input) async {
     }
     temp.value = sum / index;
     temp.count = index.toDouble();
-    temp.subject = n[0].subject;
+    temp.subject = n[0].tantargy.nev;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }

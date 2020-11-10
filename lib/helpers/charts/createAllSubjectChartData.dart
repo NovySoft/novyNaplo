@@ -15,7 +15,7 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     subjectMarks.add([]);
     subjectMarks[index].add(y[0].subject);
     for (var n in y) {
-      numVal += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+      numVal += n.szamErtek * double.parse(n.weight.split("%")[0]) / 100;
       oszto += 1 * double.parse(n.weight.split("%")[0]) / 100;
       subjectMarks[index].add(numVal / oszto);
     }

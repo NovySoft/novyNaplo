@@ -15,10 +15,20 @@ class MarksDetailTab extends StatelessWidget {
 
   Widget _buildBody() {
     Color markColor = Colors.purple;
-    if (eval.form == "Mark" ||
-        eval.form == "Diligence" ||
-        eval.form == "Deportment") {
-      switch (eval.numberValue) {
+    if (eval.tipus.nev == "Szazalekos") {
+      if (eval.szamErtek >= 90) {
+        markColor = Colors.green;
+      } else if (eval.szamErtek >= 75) {
+        markColor = Colors.lightGreen;
+      } else if (eval.szamErtek >= 60) {
+        markColor = Colors.yellow[800];
+      } else if (eval.szamErtek >= 40) {
+        markColor = Colors.orange;
+      } else {
+        markColor = Colors.red;
+      }
+    } else {
+      switch (eval.szamErtek) {
         case 1:
           markColor = Colors.red;
           break;
@@ -35,18 +45,6 @@ class MarksDetailTab extends StatelessWidget {
           markColor = Colors.green;
           break;
       }
-    } else if (eval.form == "Percent") {
-      if (eval.numberValue >= 90) {
-        markColor = Colors.green;
-      } else if (eval.numberValue >= 75) {
-        markColor = Colors.lightGreen;
-      } else if (eval.numberValue >= 60) {
-        markColor = Colors.yellow[800];
-      } else if (eval.numberValue >= 40) {
-        markColor = Colors.orange;
-      } else {
-        markColor = Colors.red;
-      }
     }
     return SafeArea(
       child: CustomScrollView(
@@ -62,7 +60,7 @@ class MarksDetailTab extends StatelessWidget {
               stretchModes: [StretchMode.zoomBackground],
               background: Icon(
                 eval.icon == null
-                    ? parseSubjectToIcon(subject: eval.subject)
+                    ? parseSubjectToIcon(subject: eval.tantargy.nev)
                     : eval.icon,
                 size: 150,
                 color: Colors.black38,
@@ -84,27 +82,27 @@ class MarksDetailTab extends StatelessWidget {
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("subject")}: " + eval.subject,
+                "${getTranslatedString("subject")}: " + eval.tantargy.nev,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("theme")}: " + eval.theme.toString(),
+                "${getTranslatedString("theme")}: " + eval.tema.toString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("markType")}: " + eval.mode.toString(),
+                "${getTranslatedString("markType")}: " + eval.tema.toString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("markForm")}: " + eval.formName,
+                "${getTranslatedString("markForm")}: " + eval.tipus.leiras,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("eval")}: " + eval.value,
+                "${getTranslatedString("eval")}: " + eval.szovegesErtek,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -114,7 +112,7 @@ class MarksDetailTab extends StatelessWidget {
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
-                    eval.numberValue.toString(),
+                    eval.szamErtek.toString(),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -123,23 +121,26 @@ class MarksDetailTab extends StatelessWidget {
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${capitalize(getTranslatedString("weight"))}: " + eval.weight,
+                "${capitalize(getTranslatedString("weight"))}: " +
+                    eval.sulySzazalekErteke.toString() +
+                    "%",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("teacher")}: " + eval.teacher,
+                "${getTranslatedString("teacher")}: " + eval.tanar,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("dateGiveUp")}: " + eval.dateString,
+                "${getTranslatedString("dateGiveUp")}: " +
+                    eval.rogzitesDatumaString,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("dateCreated")}: " +
-                    eval.createDateString,
+                    eval.keszitesDatumaString,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 500),
@@ -155,7 +156,9 @@ class MarksDetailTab extends StatelessWidget {
     globals.globalContext = context;
     FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(eval.subject + " " + eval.value))),
+      appBar: AppBar(
+          title:
+              Text(capitalize(eval.tantargy.nev + " " + eval.szovegesErtek))),
       body: _buildBody(),
     );
   }

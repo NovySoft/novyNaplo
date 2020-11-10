@@ -7,23 +7,23 @@ import 'package:novynaplo/global.dart' as globals;
 String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
   String subtitle = "undefined";
   if (globals.markCardSubtitle == "Téma") {
-    if (eval.theme != null && eval.theme != "")
-      subtitle = capitalize(eval.theme);
+    if (eval.tema != null && eval.tema != "")
+      subtitle = capitalize(eval.tema);
     else
       subtitle = getTranslatedString("unkown");
   } else if (globals.markCardSubtitle == "Tanár") {
-    subtitle = eval.teacher;
+    subtitle = eval.tanar;
   } else if (globals.markCardSubtitle == "Súly") {
-    subtitle = eval.weight;
+    subtitle = "${eval.sulySzazalekErteke}%";
   } else if (globals.markCardSubtitle == "Pontos Dátum") {
-    subtitle = eval.createDateString;
+    subtitle = eval.keszitesDatumaString;
   } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
-    String year = eval.createDate.year.toString();
-    String month = eval.createDate.month.toString();
-    String day = eval.createDate.day.toString();
-    String hour = eval.createDate.hour.toString();
-    String minutes = eval.createDate.minute.toString();
-    String seconds = eval.createDate.second.toString();
+    String year = eval.keszitesDatuma.year.toString();
+    String month = eval.keszitesDatuma.month.toString();
+    String day = eval.keszitesDatuma.day.toString();
+    String hour = eval.keszitesDatuma.hour.toString();
+    String minutes = eval.keszitesDatuma.minute.toString();
+    String seconds = eval.keszitesDatuma.second.toString();
     subtitle = "$year-$month-$day $hour:$minutes:$seconds";
   }
   if (subtitle == "" || subtitle == null) {

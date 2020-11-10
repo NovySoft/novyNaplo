@@ -20,7 +20,7 @@ Future<List<dynamic>> parseAllByDate(var input) async {
     );
     return [];
   }
-  jegyArray.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+  jegyArray.sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
   await batchInsertEval(jegyArray);
   return jegyArray;
 }
@@ -28,15 +28,16 @@ Future<List<dynamic>> parseAllByDate(var input) async {
 List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   List<Evals> jegyArray = input;
   List<List<Evals>> jegyMatrix = [[]];
-  jegyArray.sort((a, b) => a.subject.compareTo(b.subject));
+  jegyArray.sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
   String lastString = "";
   for (var n in jegyArray) {
-    if ((n.form != "Percent" && n.type != "HalfYear") ||
-        n.subject == "Magatartas" ||
-        n.subject == "Szorgalom") {
-      if (n.subject != lastString) {
+    if ((n.tipus.nev != "Szazalekos" &&
+            n.tipus.nev != "felevi_jegy_ertekeles") ||
+        n.tantargy.nev == "Magatartas" ||
+        n.tantargy.nev == "Szorgalom") {
+      if (n.tantargy.nev != lastString) {
         jegyMatrix.add([]);
-        lastString = n.subject;
+        lastString = n.tantargy.nev;
       }
       jegyMatrix.last.add(n);
     }
@@ -45,28 +46,28 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   // ignore: unused_local_variable
   int _index = 0;
   for (var n in jegyMatrix) {
-    n.sort((a, b) => a.createDate.compareTo(b.createDate));
+    n.sort((a, b) => a.rogzitesDatuma.compareTo(b.rogzitesDatuma));
     _index++;
   }
   return jegyMatrix;
 }
 
 List<List<Evals>> sortByDateAndSubject(List<Evals> input) {
-  input.sort((a, b) => a.subject.compareTo(b.subject));
+  input.sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
   int _currentIndex = 0;
   List<List<Evals>> _tempArray = [[]];
   if (input != null && input.length != 0) {
-    String _beforeSubject = input[0].subject;
+    String _beforeSubject = input[0].tantargy.nev;
     for (var n in input) {
-      if (n.subject != _beforeSubject) {
+      if (n.tantargy.nev != _beforeSubject) {
         _currentIndex++;
         _tempArray.add([]);
-        _beforeSubject = n.subject;
+        _beforeSubject = n.tantargy.nev;
       }
       _tempArray[_currentIndex].add(n);
     }
     for (List<Evals> n in _tempArray) {
-      n.sort((a, b) => b.createDateString.compareTo(a.createDateString));
+      n.sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
     }
   }
   return _tempArray;

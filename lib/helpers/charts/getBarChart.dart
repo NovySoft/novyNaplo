@@ -13,7 +13,7 @@ void getBarChart(input) {
   ];
   for (var n in input) {
     for (var y in n) {
-      switch (y.numberValue) {
+      switch (y.szamErtek) {
         case 5:
           data[4].count++;
           break;

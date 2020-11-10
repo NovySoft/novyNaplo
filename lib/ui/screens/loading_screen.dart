@@ -31,6 +31,7 @@ import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/data/database/getSql.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 var passKey = encrypt.Key.fromUtf8(config.passKey);
 var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -135,7 +136,7 @@ class _LoadingPageState extends State<LoadingPage> {
           categorizeSubjectsFromEvals(marksPage.allParsedByDate);
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(
         statisticsPage.allParsedSubjects
-            .where((element) => element[0].numberValue != 0),
+            .where((element) => element[0].szamErtek != 0),
       );
       NetworkHelper().setUpCalculatorPage(statisticsPage.allParsedSubjects);
       //Avarages
@@ -151,14 +152,19 @@ class _LoadingPageState extends State<LoadingPage> {
           await makeTimetableMatrix(await getAllTimetable());
       //Sort
       marksPage.allParsedByDate
-          .sort((a, b) => b.createDateString.compareTo(a.createDateString));
+          .sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
       //Exams
       setState(() {
         loadingText = getTranslatedString("readExam");
       });
       examsPage.allParsedExams = await getAllExams();
-      examsPage.allParsedExams
-          .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+      examsPage.allParsedExams.sort(
+        (a, b) =>
+            (b.datum.toKretaDateString() + b.orarendiOraOraszama.toString())
+                .compareTo(
+          a.datum.toKretaDateString() + a.orarendiOraOraszama.toString(),
+        ),
+      );
       //Events
       setState(() {
         loadingText = getTranslatedString("readEvents");

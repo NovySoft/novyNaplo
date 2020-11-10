@@ -29,11 +29,11 @@ Future<List<Evals>> getAllEvals() async {
   // Convert the List<Map<String, dynamic> into a List<Evals>.
   return List.generate(maps.length, (i) {
     Evals temp = new Evals();
-    temp.id = maps[i]['id'];
+    /*temp.id = maps[i]['id'];
     temp.formName = maps[i]['formName'];
     temp.form = maps[i]['form'];
     temp.value = maps[i]['value'];
-    temp.numberValue = maps[i]['numberValue'];
+    temp.szamErtek = maps[i]['szamErtek'];
     temp.teacher = maps[i]['teacher'];
     temp.type = maps[i]['type'];
     temp.subject = maps[i]['subject'];
@@ -44,7 +44,7 @@ Future<List<Evals>> getAllEvals() async {
     temp.dateString = maps[i]['dateString'];
     temp.createDateString = maps[i]['createDateString'];
     temp.date = DateTime.parse(temp.dateString);
-    temp.createDate = DateTime.parse(temp.createDateString);
+    temp.createDate = DateTime.parse(temp.createDateString);*/
     return temp;
   });
 }
@@ -60,14 +60,14 @@ Future<List<Notice>> getAllNotices() async {
 
   return List.generate(maps.length, (i) {
     Notice temp = new Notice();
-    temp.databaseId = maps[i]['databaseId'];
+    /*temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
     temp.title = maps[i]['title'];
     temp.content = maps[i]['content'];
     temp.teacher = maps[i]['teacher'];
     temp.dateString = maps[i]['dateString'];
     temp.subject = maps[i]['subject'];
-    temp.date = DateTime.parse(temp.dateString);
+    temp.date = DateTime.parse(temp.dateString);*/
     return temp;
   });
 }
@@ -214,7 +214,7 @@ Future<List<Exam>> getAllExams() async {
 
   List<Exam> tempList = List.generate(maps.length, (i) {
     Exam temp = new Exam();
-    temp.nameOfExam = maps[i]['nameOfExam'];
+    /* temp.nameOfExam = maps[i]['nameOfExam'];
     temp.typeOfExam = maps[i]['typeOfExam'];
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
@@ -227,11 +227,11 @@ Future<List<Exam>> getAllExams() async {
     temp.dateGivenUp = DateTime.parse(temp.dateGivenUpString);
     if (temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now())) {
       deleteFromDb(temp.databaseId, "Exams");
-    }
+    }*/
     return temp;
   });
-  tempList.removeWhere(
-      (temp) => temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now()));
+  /*tempList.removeWhere(
+      (temp) => temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now()));*/
   return tempList;
 }
 

@@ -82,17 +82,18 @@ Widget _noticesBuilder(BuildContext context, int index) {
     Color currColor = colors[index];
     return SafeArea(
         child: AnimatedTitleSubtitleCard(
-      title: allParsedNotices[index].title,
-      subTitle: allParsedNotices[index].teacher,
+      title: allParsedNotices[index].cim,
+      subTitle: allParsedNotices[index].tanar,
       color: currColor,
       heroAnimation: AlwaysStoppedAnimation(0),
       onPressed: NoticeDetailTab(
         id: index,
-        title: allParsedNotices[index].title,
-        teacher: allParsedNotices[index].teacher,
-        content: allParsedNotices[index].content,
-        date: allParsedNotices[index].dateString,
-        subject: allParsedNotices[index].subject,
+        title: allParsedNotices[index].cim,
+        teacher: allParsedNotices[index].tanar,
+        content: allParsedNotices[index].tartalom,
+        date: allParsedNotices[index].datumString,
+        //FIXME
+        //subject: tempNotice.subject,
         color: currColor,
       ),
     ));

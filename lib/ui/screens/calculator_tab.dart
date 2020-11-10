@@ -67,7 +67,7 @@ class FormKey {
 
 class VirtualMarks {
   int count;
-  int numberValue;
+  int szamErtek;
   int weight;
 }
 
@@ -86,7 +86,7 @@ class CalculatorTabState extends State<CalculatorTab>
     if (isEditing) {
       weightController.text = virtualMarks[index].weight.toString();
       countController.text = virtualMarks[index].count.toString();
-      radioGroup = virtualMarks[index].numberValue;
+      radioGroup = virtualMarks[index].szamErtek;
     } else {
       weightController.text = "100";
       countController.text = "1";
@@ -351,13 +351,13 @@ class CalculatorTabState extends State<CalculatorTab>
                       VirtualMarks temp = new VirtualMarks();
                       temp.count = int.parse(countController.text);
                       temp.weight = int.parse(weightController.text);
-                      temp.numberValue = radioGroup;
+                      temp.szamErtek = radioGroup;
                       editVirtualMark(input: temp, index: index);
                     } else {
                       VirtualMarks temp = new VirtualMarks();
                       temp.count = int.parse(countController.text);
                       temp.weight = int.parse(weightController.text);
-                      temp.numberValue = radioGroup;
+                      temp.szamErtek = radioGroup;
                       addNewVirtualMark(temp);
                     }
                     Navigator.of(context).pop();
@@ -459,12 +459,12 @@ class CalculatorTabState extends State<CalculatorTab>
     if (globals.shouldVirtualMarksCollapse) {
       int existIndex = virtualMarks.indexWhere((n) {
         return n == input ||
-            (n.numberValue == input.numberValue && n.weight == input.weight);
+            (n.szamErtek == input.szamErtek && n.weight == input.weight);
       });
       if (existIndex == -1 || virtualMarks[existIndex].count == 100) {
         existIndex = virtualMarks.lastIndexWhere((n) {
           return n == input ||
-              (n.numberValue == input.numberValue && n.weight == input.weight);
+              (n.szamErtek == input.szamErtek && n.weight == input.weight);
         });
       }
       if (existIndex == -1 || virtualMarks[existIndex].count >= 100) {
@@ -493,7 +493,7 @@ class CalculatorTabState extends State<CalculatorTab>
     setState(() {
       virtualMarks[index].weight = input.weight;
       virtualMarks[index].count = input.count;
-      virtualMarks[index].numberValue = input.numberValue;
+      virtualMarks[index].szamErtek = input.szamErtek;
     });
   }
 
@@ -597,7 +597,7 @@ class CalculatorTabState extends State<CalculatorTab>
                           countText = virtualMarks[index].count.toString() +
                               getTranslatedString("count");
                         }
-                        switch (virtualMarks[index].numberValue) {
+                        switch (virtualMarks[index].szamErtek) {
                           case 1:
                             numVal = "1";
                             numValColor = Colors.red[900];
@@ -938,16 +938,16 @@ class CalculatorTabState extends State<CalculatorTab>
     double virtualIndex = 0;
     int listArray = 0;
     for (var n in defaultValues) {
-      sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
-      index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+      sum += n.szamErtek * n.sulySzazalekErteke / 100;
+      index += 1 * n.sulySzazalekErteke / 100;
       primaryChartData.add(new LinearMarkChartData(listArray, sum / index));
       listArray++;
     }
     secondaryChartData.add(new LinearMarkChartData(listArray - 1, sum / index));
     for (var n in virtualValues) {
       for (var i = 0; i < n.count; i++) {
-        sum += n.numberValue * n.weight / 100;
-        virtualSum += n.numberValue * n.weight / 100;
+        sum += n.szamErtek * n.weight / 100;
+        virtualSum += n.szamErtek * n.weight / 100;
         index += 1 * n.weight / 100;
         virtualIndex += 1 * n.weight / 100;
         secondaryChartData.add(new LinearMarkChartData(listArray, sum / index));

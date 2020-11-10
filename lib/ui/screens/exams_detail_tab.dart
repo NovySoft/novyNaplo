@@ -15,7 +15,7 @@ class ExamsDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Exams_detail_tab");
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(exam.nameOfExam))),
+      appBar: AppBar(title: Text(capitalize(exam.tema))),
       body: _buildBody(exam, color),
     );
   }
@@ -35,7 +35,7 @@ Widget _buildBody(Exam exam, Color color) {
             collapseMode: CollapseMode.parallax,
             stretchModes: [StretchMode.zoomBackground],
             background: Icon(
-              parseSubjectToIcon(subject: exam.subject),
+              parseSubjectToIcon(subject: exam.tantargy.nev),
               size: 150,
               color: Colors.black38,
               textDirection: TextDirection.ltr,
@@ -62,15 +62,15 @@ Widget _buildBody(Exam exam, Color color) {
                 case 1:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("subject")}: " + exam.subject,
+                        "${getTranslatedString("subject")}: " +
+                            exam.tantargy.nev,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 3:
                   return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("theme")}: " + exam.nameOfExam,
+                    child: Text("${getTranslatedString("theme")}: " + exam.tema,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -79,7 +79,7 @@ Widget _buildBody(Exam exam, Color color) {
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("examType")}: " +
-                            exam.typeOfExam.toString(),
+                            exam.modja.leiras,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -87,13 +87,14 @@ Widget _buildBody(Exam exam, Color color) {
                 case 7:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("teacher")}: " + exam.teacher,
+                        "${getTranslatedString("teacher")}: " + exam.tanar,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 9:
-                  DateTime examDate = exam.dateWrite;
+                  //TODO: Tanóra mutatása
+                  DateTime examDate = exam.datum;
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(
@@ -104,7 +105,7 @@ Widget _buildBody(Exam exam, Color color) {
                   );
                   break;
                 case 11:
-                  DateTime examDate = exam.dateGivenUp;
+                  DateTime examDate = exam.bejelentesDatuma;
                   String subtitle =
                       "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
                   return SizedBox(

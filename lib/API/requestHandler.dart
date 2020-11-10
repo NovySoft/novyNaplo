@@ -288,7 +288,7 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
-
+      printWrapped(json.encode(responseJson));
       responseJson
           .forEach((homework) => homeworks.add(Homework.fromJson(homework)));
 

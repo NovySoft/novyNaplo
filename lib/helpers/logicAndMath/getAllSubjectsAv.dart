@@ -9,7 +9,7 @@ void getAllSubjectsAv(input) {
     tempIndex = 0;
     for (var y in n) {
       tempIndex++;
-      sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
+      sum += y.szamErtek * double.parse(y.weight.split("%")[0]) / 100;
       index += 1 * double.parse(y.weight.split("%")[0]) / 100;
       stats.osszesitettAv.value = sum / index;
       if (tempIndex == n.length - 1) {

@@ -6,7 +6,7 @@ Future<List<Exam>> parseExams(var input) async {
   try {
     for (var n in input) {
       Exam temp = new Exam.fromJson(n);
-      if (!temp.dateWrite.add(Duration(days: 7)).isBefore(DateTime.now())) {
+      if (!temp.datum.add(Duration(days: 7)).isBefore(DateTime.now())) {
         examArray.add(temp);
       }
     }

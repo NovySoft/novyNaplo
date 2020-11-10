@@ -22,20 +22,20 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
   if (globals.markCardTheme == "Véletlenszerű") {
     color = marks.colors[index].shade400;
   } else if (globals.markCardTheme == "Értékelés nagysága") {
-    if (eval.form == "Percent") {
-      if (eval.numberValue >= 90) {
+    if (eval.tipus.nev == "Szazalekos") {
+      if (eval.szamErtek >= 90) {
         color = Colors.green;
-      } else if (eval.numberValue >= 75) {
+      } else if (eval.szamErtek >= 75) {
         color = Colors.lightGreen;
-      } else if (eval.numberValue >= 60) {
+      } else if (eval.szamErtek >= 60) {
         color = Colors.yellow[800];
-      } else if (eval.numberValue >= 40) {
+      } else if (eval.szamErtek >= 40) {
         color = Colors.deepOrange;
       } else {
         color = Colors.red[900];
       }
     } else {
-      switch (eval.numberValue) {
+      switch (eval.szamErtek) {
         case 5:
           color = Colors.green;
           break;

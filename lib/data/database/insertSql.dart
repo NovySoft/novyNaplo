@@ -30,7 +30,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
 
   //Get all evals, and see whether we should be just replacing
   List<Evals> allEvals = await getAllEvals();
-  var matchedEvals = allEvals.where((element) {
+  /*var matchedEvals = allEvals.where((element) {
     return (element.id == eval.id && element.form == eval.form) ||
         (element.subject == eval.subject &&
             element.id == eval.id &&
@@ -58,7 +58,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
   } else {
     for (var n in matchedEvals) {
       //!Update didn't work so we delete and create a new one
-      if (n.numberValue != eval.numberValue ||
+      if (n.szamErtek != eval.szamErtek ||
           n.theme != eval.theme ||
           n.dateString != eval.dateString ||
           n.weight != eval.weight) {
@@ -79,7 +79,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
         insertEval(eval, edited: true);
       }
     }
-  }
+  }*/
 }
 
 Future<void> insertHomework(Homework hw, {bool edited}) async {
@@ -178,7 +178,7 @@ Future<void> insertNotices(Notice notice, {bool edited}) async {
   final Database db = await mainSql.database;
 
   List<Notice> allNotices = await getAllNotices();
-  var matchedNotices = allNotices.where((element) {
+  /*var matchedNotices = allNotices.where((element) {
     return (element.title == notice.title || element.id == notice.id);
   });
   if (matchedNotices.length == 0) {
@@ -216,12 +216,12 @@ Future<void> insertNotices(Notice notice, {bool edited}) async {
         insertNotices(notice, edited: true);
       }
     }
-  }
+  }*/
 }
 
 Future<void> insertAvarage(Avarage avarage) async {
   FirebaseCrashlytics.instance.log("insertSingleAvarage");
-  // Get a reference to the database.
+  /*// Get a reference to the database.
   final Database db = await mainSql.database;
 
   List<Avarage> allAv = await getAllAvarages();
@@ -269,13 +269,13 @@ Future<void> insertAvarage(Avarage avarage) async {
         insertAvarage(avarage);
       }
     }
-  }
+  }*/
 }
 
 Future<void> insertExam(Exam exam, {bool edited}) async {
   FirebaseCrashlytics.instance.log("insertSingleExam");
   // Get a reference to the database.
-  final Database db = await mainSql.database;
+  /*final Database db = await mainSql.database;
 
   List<Exam> allExam = await getAllExams();
 
@@ -320,14 +320,14 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
         insertExam(exam, edited: true);
       }
     }
-  }
+  }*/
 }
 
 //*Batch inserts
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEval(List<Evals> evalList) async {
   FirebaseCrashlytics.instance.log("batchInsertEval");
-  bool inserted = false;
+  /*bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -367,7 +367,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
     } else {
       for (var n in matchedEvals) {
         //!Update didn't work so we delete and create a new one
-        if ((n.numberValue != eval.numberValue ||
+        if ((n.szamErtek != eval.szamErtek ||
                 n.theme != eval.theme ||
                 n.dateString != eval.dateString ||
                 n.weight != eval.weight) &&
@@ -403,7 +403,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
@@ -558,7 +558,7 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
 
 Future<void> batchInsertNotices(List<Notice> noticeList) async {
   FirebaseCrashlytics.instance.log("batchInsertNotices");
-  bool inserted = false;
+  /*bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -618,7 +618,7 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
   //print("BATCH INSERTED NOTICES");
 }
 
@@ -729,7 +729,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
 
 Future<void> batchInsertExams(List<Exam> examList) async {
   FirebaseCrashlytics.instance.log("batchInsertExams");
-  bool inserted = false;
+  /*bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -791,7 +791,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
 }
 
 Future<void> batchInsertEvents(List<Event> eventList) async {

@@ -131,13 +131,13 @@ class MarksTabState extends State<MarksTab>
     decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
     decryptedPass =
         passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
-    /*globals.userDetails.username = decryptedUser;
+    globals.userDetails.username = decryptedUser;
     globals.userDetails.password = decryptedPass;
-    globals.userDetails.school = decryptedCode;*/
+    globals.userDetails.school = decryptedCode;
     status = await RequestHandler.login(globals.userDetails);
 
     if (status == "OK") {
-      await RequestHandler.getEvents();
+      await RequestHandler.getHomeworks(DateTime(2020, 11, 04));
       await NetworkHelper()
           .getStudentInfo(globals.userDetails.token, decryptedCode);
       await _setData();
@@ -169,9 +169,9 @@ class MarksTabState extends State<MarksTab>
         subTitle: getMarkCardSubtitle(
           eval: allParsedByDate[index],
         ), //capitalize(allParsedByDate[index].theme),
-        title: capitalize(allParsedByDate[index].subject +
+        title: capitalize(allParsedByDate[index].tantargy.nev +
             " " +
-            allParsedByDate[index].value),
+            allParsedByDate[index].szovegesErtek),
         color: color,
         onPressed: MarksDetailTab(
           eval: allParsedByDate[index],
@@ -211,7 +211,8 @@ class MarksTabState extends State<MarksTab>
               Padding(
                 padding: EdgeInsets.only(left: 15.0),
                 child: Text(
-                  capitalize(allParsedBySubject[listIndex][index].subject) +
+                  capitalize(
+                          allParsedBySubject[listIndex][index].tantargy.nev) +
                       ":",
                   textAlign: defaultTargetPlatform == TargetPlatform.iOS
                       ? TextAlign.center
@@ -231,9 +232,9 @@ class MarksTabState extends State<MarksTab>
                       eval: allParsedBySubject[listIndex][index],
                     ),
                     title: capitalize(
-                            allParsedBySubject[listIndex][index].subject) +
+                            allParsedBySubject[listIndex][index].tantargy.nev) +
                         " " +
-                        allParsedBySubject[listIndex][index].value,
+                        allParsedBySubject[listIndex][index].szovegesErtek,
                     color: color,
                     heroAnimation: AlwaysStoppedAnimation(0),
                     onPressed: MarksDetailTab(
@@ -254,9 +255,10 @@ class MarksTabState extends State<MarksTab>
               subTitle: getMarkCardSubtitle(
                 eval: allParsedBySubject[listIndex][index],
               ),
-              title: capitalize(allParsedBySubject[listIndex][index].subject) +
+              title: capitalize(
+                      allParsedBySubject[listIndex][index].tantargy.nev) +
                   " " +
-                  allParsedBySubject[listIndex][index].value,
+                  allParsedBySubject[listIndex][index].szovegesErtek,
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(

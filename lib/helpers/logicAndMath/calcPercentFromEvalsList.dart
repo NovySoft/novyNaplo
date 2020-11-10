@@ -7,7 +7,7 @@ int calcPercentFromEvalsList({@required List<Evals> evalList}) {
       //Felesleges, mert nem nezunk szazalekokat
       //De azert itt hagyom, hatha ezen valtoztatni fogunk
       if (element.form != "Percent") {
-        switch (element.numberValue) {
+        switch (element.szamErtek) {
           case 5:
             return 100;
             break;
@@ -25,7 +25,7 @@ int calcPercentFromEvalsList({@required List<Evals> evalList}) {
             break;
         }
       } else {
-        return element.numberValue.toInt();
+        return element.szamErtek.toInt();
       }
     }),
   );

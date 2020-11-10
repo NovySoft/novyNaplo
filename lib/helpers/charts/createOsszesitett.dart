@@ -20,7 +20,7 @@ dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
     }
   });
   for (var n in interatorList) {
-    sum += n.numberValue * double.parse(n.weight.split("%")[0]) / 100;
+    sum += n.szamErtek * double.parse(n.weight.split("%")[0]) / 100;
     index += 1 * double.parse(n.weight.split("%")[0]) / 100;
     tempList.add(sum / index);
   }

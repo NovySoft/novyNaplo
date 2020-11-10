@@ -72,15 +72,15 @@ class _ExamsTabState extends State<ExamsTab> {
       );
     } else {
       bool isDone = false;
-      DateTime examDate = allParsedExams[index].dateWrite;
+      DateTime examDate = allParsedExams[index].datum;
       String subtitle = "${examDate.year}-${examDate.month}-${examDate.day}";
-      if (DateTime.now().compareTo(allParsedExams[index].dateWrite) > 0) {
+      if (DateTime.now().compareTo(allParsedExams[index].datum) > 0) {
         isDone = true;
       }
       return SafeArea(
         child: AnimatedExamsCard(
           isDone: isDone,
-          title: allParsedExams[index].nameOfExam,
+          title: allParsedExams[index].tema,
           subTitle: subtitle,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),

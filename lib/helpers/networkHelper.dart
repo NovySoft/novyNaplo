@@ -100,7 +100,7 @@ class NetworkHelper {
       );
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(
         statisticsPage.allParsedSubjects
-            .where((element) => element[0].numberValue != 0),
+            .where((element) => element[0].szamErtek != 0),
       );
       absencesPage.allParsedAbsences = await parseAllAbsences(globals.dJson);
       timetablePage.lessonsList = await getThisWeeksLessons(token, code);
@@ -297,12 +297,12 @@ class NetworkHelper {
     if (input != null && input != [[]]) {
       double sum, index;
       for (var n in input) {
-        calculatorPage.dropdownValues.add(capitalize(n[0].subject));
+        calculatorPage.dropdownValues.add(capitalize(n[0].tantargy.nev));
         sum = 0;
         index = 0;
         for (var y in n) {
-          sum += y.numberValue * double.parse(y.weight.split("%")[0]) / 100;
-          index += 1 * double.parse(y.weight.split("%")[0]) / 100;
+          sum += y.szamErtek * y.sulySzazalekErteke / 100;
+          index += 1 * y.sulySzazalekErteke / 100;
         }
         CalculatorData temp = new CalculatorData();
         temp.count = index;
@@ -333,8 +333,9 @@ class NetworkHelper {
         //print("res.body ${res.body}");
         var bodyJson = json.decode(res.body);
         examsPage.allParsedExams = await parseExams(bodyJson);
-        examsPage.allParsedExams
-            .sort((a, b) => b.dateWrite.compareTo(a.dateWrite));
+        examsPage.allParsedExams.sort((a, b) =>
+            (b.datumString + b.orarendiOraOraszama.toString())
+                .compareTo(a.datumString + a.orarendiOraOraszama.toString()));
         await batchInsertExams(examsPage.allParsedExams);
         //print("examsPage.allParsedExams ${examsPage.allParsedExams}");
       }

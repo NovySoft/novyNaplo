@@ -1,38 +1,56 @@
-import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/subjectAssignHelper.dart';
-import 'package:novynaplo/global.dart' as globals;
+import 'osztalyCsoport.dart';
 
 class Notice {
-  var title, content, teacher, dateString, subject;
-  DateTime date;
-  int databaseId;
+  String cim;
+  String datumString;
+  DateTime datum;
+  String keszitesDatumaString;
+  DateTime keszitesDatuma;
+  String tanar;
+  String lattamozasDatumaString;
+  DateTime lattamozasDatuma;
+  OsztalyCsoport osztalyCsoport;
+  String tartalom;
+  Tipus tipus;
+  String uid;
   int id;
-  Notice();
 
-  Map<String, dynamic> toMap() {
-    return {
-      'databaseId': databaseId,
-      'id': id,
-      'title': title,
-      'content': content,
-      'teacher': teacher,
-      'dateString': dateString,
-      'subject': subject,
-    };
-  }
+  Notice(
+      {this.cim,
+      this.datumString,
+      this.keszitesDatumaString,
+      this.tanar,
+      this.lattamozasDatumaString,
+      this.osztalyCsoport,
+      this.tartalom,
+      this.tipus,
+      this.uid});
 
   Notice.fromJson(Map<String, dynamic> json) {
-    title = capitalize(json["Title"]);
-    teacher = json["Teacher"];
-    content = json["Content"];
-    dateString = json["CreatingTime"];
-    date = DateTime.parse(json["CreatingTime"]);
-    id = json["NoteId"];
-    if (json["OsztalyCsoportUid"] == null) {
-      subject = null;
-    } else {
-      subject = SubjectAssignHelper.assignSubject(globals.dJson,
-          json["OsztalyCsoportUid"], json["Type"], json["Content"]);
-    }
+    cim = json['Cim'];
+    datumString = json['Datum'];
+    keszitesDatumaString = json['KeszitesDatuma'];
+    tanar = json['KeszitoTanarNeve'];
+    lattamozasDatumaString = json['LattamozasDatuma'];
+    osztalyCsoport = json['OsztalyCsoport'] != null
+        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+        : null;
+    tartalom = json['Tartalom'];
+    tipus = json['Tipus'] != null ? new Tipus.fromJson(json['Tipus']) : null;
+    uid = json['Uid'];
+  }
+}
+
+class Tipus {
+  String uid;
+  String leiras;
+  String nev;
+
+  Tipus({this.uid, this.leiras, this.nev});
+
+  Tipus.fromJson(Map<String, dynamic> json) {
+    uid = json['Uid'];
+    leiras = json['Leiras'];
+    nev = json['Nev'];
   }
 }

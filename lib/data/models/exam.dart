@@ -1,41 +1,45 @@
+import 'leiras.dart';
+import 'osztalyCsoport.dart';
+import 'tantargy.dart';
+
 class Exam {
-  int databaseId;
+  String bejelentesDatumaString;
+  DateTime bejelentesDatuma;
+  String datumString;
+  DateTime datum;
+  Leiras modja;
+  int orarendiOraOraszama;
+  String tanar;
+  Tantargy tantargy;
+  String tema;
+  OsztalyCsoport osztalyCsoport;
+  String uid;
   int id;
-  String dateWriteString;
-  DateTime dateWrite;
-  String dateGivenUpString;
-  DateTime dateGivenUp;
-  String subject;
-  String teacher;
-  String nameOfExam; //Content
-  String typeOfExam;
-  String classGroupId;
-  Exam();
+
+  Exam(
+      {this.bejelentesDatuma,
+      this.datum,
+      this.modja,
+      this.orarendiOraOraszama,
+      this.tanar,
+      this.tantargy,
+      this.tema,
+      this.osztalyCsoport,
+      this.uid});
 
   Exam.fromJson(Map<String, dynamic> json) {
-    id = json["Id"];
-    dateWriteString = json["Datum"];
-    dateWrite = DateTime.parse(json["Datum"]);
-    dateGivenUpString = json["BejelentesDatuma"];
-    dateGivenUp = DateTime.parse(json["BejelentesDatuma"]);
-    subject = json["Tantargy"];
-    teacher = json["Tanar"];
-    nameOfExam = json["SzamonkeresMegnevezese"];
-    typeOfExam = json["SzamonkeresModja"];
-    classGroupId = json["OsztalyCsoportUid"];
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'databaseId': databaseId,
-      'id': id,
-      'classGroupId': classGroupId,
-      'subject': subject,
-      'teacher': teacher,
-      'typeOfExam': typeOfExam,
-      'nameOfExam': nameOfExam,
-      'dateGivenUpString': dateGivenUpString,
-      'dateWriteString': dateWriteString,
-    };
+    bejelentesDatuma = json['BejelentesDatuma'];
+    datum = json['Datum'];
+    modja = json['Modja'] != null ? new Leiras.fromJson(json['Modja']) : null;
+    orarendiOraOraszama = json['OrarendiOraOraszama'];
+    tanar = json['RogzitoTanarNeve'];
+    tantargy = json['Tantargy'] != null
+        ? new Tantargy.fromJson(json['Tantargy'])
+        : null;
+    tema = json['Temaja'];
+    osztalyCsoport = json['OsztalyCsoport'] != null
+        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+        : null;
+    uid = json['Uid'];
   }
 }

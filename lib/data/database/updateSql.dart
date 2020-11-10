@@ -6,7 +6,7 @@ import 'package:novynaplo/data/models/evals.dart';
 //Give it the new eval and which id to replace
 Future<void> updateEval(Evals eval, int replaceWhereDbId) async {
   FirebaseCrashlytics.instance.log("updateEval");
-  // Get a reference to the database.
+  /*// Get a reference to the database.
   final db = await mainSql.database;
 
   await db.update(
@@ -14,5 +14,5 @@ Future<void> updateEval(Evals eval, int replaceWhereDbId) async {
     eval.toMap(),
     where: "databaseId = ?",
     whereArgs: [replaceWhereDbId],
-  );
+  );*/
 }

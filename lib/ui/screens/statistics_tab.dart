@@ -587,7 +587,7 @@ class _StatisticsTabState extends State<StatisticsTab>
           );
         } else if (globals.notifPayload == "avarage") {
           int tempIndex = allParsedSubjectsWithoutZeros.indexWhere(
-              (element) => element[0].subject == globals.payloadString);
+              (element) => element[0].tantargy.nev == globals.payloadString);
           Color currColor = marksPage.colors[tempIndex + 1];
           Navigator.push(
             context,
@@ -595,7 +595,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               builder: (context) => ChartsDetailTab(
                 id: tempIndex,
                 subject: capitalize(
-                    allParsedSubjectsWithoutZeros[tempIndex][0].subject),
+                    allParsedSubjectsWithoutZeros[tempIndex][0].tantargy.nev),
                 color: currColor,
                 seriesList: createSubjectChart(
                     allParsedSubjectsWithoutZeros[tempIndex], "0"),
@@ -653,13 +653,14 @@ class _StatisticsTabState extends State<StatisticsTab>
     }
     return SafeArea(
       child: AnimatedChartsTitleCard(
-        title: capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
+        title: capitalize(
+            allParsedSubjectsWithoutZeros[index - 1][0].tantargy.nev),
         color: currColor,
         heroAnimation: AlwaysStoppedAnimation(0),
         onPressed: ChartsDetailTab(
           id: index,
-          subject:
-              capitalize(allParsedSubjectsWithoutZeros[index - 1][0].subject),
+          subject: capitalize(
+              allParsedSubjectsWithoutZeros[index - 1][0].tantargy.nev),
           color: currColor,
           seriesList: createSubjectChart(
               allParsedSubjectsWithoutZeros[index - 1], index.toString()),
