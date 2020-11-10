@@ -368,7 +368,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Notice>> getNotices() async {
+  static Future<List<Notice>> getNotices({bool sort = true}) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.notes,
@@ -382,7 +382,9 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       responseJson.forEach((json) => notes.add(Notice.fromJson(json)));
-
+      if (sort) {
+        notes.sort((a, b) => b.datum.compareTo(a.datum));
+      }
       return notes;
     } catch (error) {
       print("ERROR: KretaAPI.getNotes: " + error.toString());
@@ -393,6 +395,7 @@ class RequestHandler {
   static Future<void> getEverything() async {
     marksPage.allParsedByDate = await getEvaluations();
     examsPage.allParsedExams = await getExams();
+    noticesPage.allParsedNotices = await getNotices();
   }
 
   static void printWrapped(String text) {

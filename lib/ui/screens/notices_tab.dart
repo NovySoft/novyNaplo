@@ -11,7 +11,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
-List<Notice> allParsedNotices;
+List<Notice> allParsedNotices = [];
 var colors = getRandomColors(allParsedNotices.length);
 
 class NoticesTab extends StatefulWidget {
@@ -87,14 +87,9 @@ Widget _noticesBuilder(BuildContext context, int index) {
       color: currColor,
       heroAnimation: AlwaysStoppedAnimation(0),
       onPressed: NoticeDetailTab(
-        id: index,
-        title: allParsedNotices[index].cim,
-        teacher: allParsedNotices[index].tanar,
-        content: allParsedNotices[index].tartalom,
-        date: allParsedNotices[index].datumString,
-        //FIXME
-        //subject: tempNotice.subject,
         color: currColor,
+        id: index,
+        notice: allParsedNotices[index],
       ),
     ));
   }

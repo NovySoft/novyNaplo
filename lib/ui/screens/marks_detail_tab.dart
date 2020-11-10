@@ -89,7 +89,8 @@ class MarksDetailTab extends StatelessWidget {
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("markType")}: " + eval.tema.toString(),
+                "${getTranslatedString("markType")}: " +
+                    eval.mod.leiras.toString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),

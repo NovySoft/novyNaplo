@@ -252,13 +252,10 @@ Future selectNotification(String payload) async {
               MaterialPageRoute(
                 builder: (context) => NoticeDetailTab(
                   id: tempindex,
-                  title: tempNotice.cim,
-                  teacher: tempNotice.tanar,
-                  content: tempNotice.tartalom,
-                  date: tempNotice.datumString,
-                  //FIXME
-                  //subject: tempNotice.subject,
-                  color: noticeTab.colors[tempindex],
+                  notice: tempNotice,
+                  color: noticeTab.colors.length == 0
+                      ? Colors.green
+                      : examsPage.colors[tempindex],
                 ),
               ),
             );

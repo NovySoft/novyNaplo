@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/exam.dart';
 
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -76,7 +77,7 @@ class _ExamsTabState extends State<ExamsTab> {
       bool isDone = false;
       DateTime examDate = allParsedExams[index].datum;
       String subtitle =
-          "${examDate.year}-${examDate.month}-${examDate.day} (${allParsedExams[index].orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
+          "${examDate.year}-${examDate.month}-${examDate.day} ${parseIntToWeekdayString(examDate.weekday)} (${allParsedExams[index].orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
       if (DateTime.now().compareTo(allParsedExams[index].datum) > 0) {
         isDone = true;
       }

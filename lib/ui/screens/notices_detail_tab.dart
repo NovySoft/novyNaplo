@@ -1,27 +1,21 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
-    this.title,
-    this.content,
-    this.teacher,
-    this.date,
-    this.subject,
     this.color,
+    this.notice,
     this.id,
   });
 
   final int id;
-  final String title;
-  final String content;
-  final String teacher;
-  final String date;
-  final String subject;
+  final Notice notice;
   final Color color;
 
   @override
@@ -45,7 +39,7 @@ class NoticeDetailTab extends StatelessWidget {
                 decoration: BoxDecoration(color: color),
                 child: Center(
                   child: Text(
-                    title,
+                    notice.cim,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 25, color: Colors.black),
                   ),
@@ -69,7 +63,7 @@ class NoticeDetailTab extends StatelessWidget {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            capitalize(content),
+                            capitalize(notice.tartalom),
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20.0),
                           ),
@@ -88,13 +82,16 @@ class NoticeDetailTab extends StatelessWidget {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            teacher,
+                            notice.tanar,
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ]);
                     break;
                   case 2:
+                    DateTime date = notice.datum;
+                    String dateSimplified =
+                        "${date.year}-${date.month}-${date.day} ${parseIntToWeekdayString(date.weekday)}";
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +104,7 @@ class NoticeDetailTab extends StatelessWidget {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            capitalize(date),
+                            dateSimplified,
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20.0),
                           ),
@@ -126,9 +123,9 @@ class NoticeDetailTab extends StatelessWidget {
                               fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          subject == null
+                          notice.tantargy == null
                               ? getTranslatedString("unkown")
-                              : capitalize(subject),
+                              : capitalize(notice.tantargy),
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 20.0),
                         ),
