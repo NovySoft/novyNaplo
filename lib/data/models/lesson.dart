@@ -97,11 +97,11 @@ class Lesson {
     temp.icon = parseSubjectToIcon(subject: temp.subject);
     //Homework
     if (temp.teacherHomeworkId != null) {
-      temp.teacherHomework = await NetworkHelper().getTeacherHomework(
+      /*temp.teacherHomework = await NetworkHelper().getTeacherHomework(
         temp.teacherHomeworkId,
         globals.userDetails.token,
         globals.userDetails.school,
-      );
+      );*/
     } else {
       temp.teacherHomework = new Homework();
     }

@@ -345,56 +345,56 @@ class NetworkHelper {
     }
   }
 
-  Future<Homework> getTeacherHomework(
-      int hwId, String token, String code) async {
-    //TODO First check in database
-    FirebaseCrashlytics.instance.log("getTeacherHomework");
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    double keepForDays = prefs.getDouble("howLongKeepDataForHw");
+//  Future<Homework> getTeacherHomework(
+//       int hwId, String token, String code) async {
+//     //TODO First check in database
+//     FirebaseCrashlytics.instance.log("getTeacherHomework");
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     double keepForDays = prefs.getDouble("howLongKeepDataForHw");
 
-    var header = {
-      'Authorization': 'Bearer $token',
-      'User-Agent': '$agent',
-      'Content-Type': 'application/json',
-    };
+//     var header = {
+//       'Authorization': 'Bearer $token',
+//       'User-Agent': '$agent',
+//       'Content-Type': 'application/json',
+//     };
 
-    var res = await http.get(
-        'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
-        headers: header);
-    if (res.statusCode != 200) {
-      print(res.statusCode);
-      return new Homework();
-    }
-    //Process response
-    var decoded = json.decode(res.body);
-    Homework temp = Homework.fromJson(decoded);
-    //*Add it to the database
-    await insertHomework(temp);
-    //Find the same ids
-    var matchedIds = homeworkPage.globalHomework.where((element) {
-      return element.id == temp.id;
-    });
+//     var res = await http.get(
+//         'https://$code.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/$hwId',
+//         headers: header);
+//     if (res.statusCode != 200) {
+//       print(res.statusCode);
+//       return new Homework();
+//     }
+//     //Process response
+//     var decoded = json.decode(res.body);
+//     Homework temp = Homework.fromJson(decoded);
+//     //*Add it to the database
+//     await insertHomework(temp);
+//     //Find the same ids
+//     var matchedIds = homeworkPage.globalHomework.where((element) {
+//       return element.id == temp.id;
+//     });
 
-    //Should we keep it?
-    DateTime afterDue = temp.dueDate;
-    if (keepForDays != -1) {
-      afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
-    }
+//     //Should we keep it?
+//     DateTime afterDue = temp.dueDate;
+//     if (keepForDays != -1) {
+//       afterDue = afterDue.add(Duration(days: keepForDays.toInt()));
+//     }
 
-    if (matchedIds.length == 0) {
-      if (afterDue.compareTo(DateTime.now()) >= 0) {
-        homeworkPage.globalHomework.add(temp);
-      }
-    } else {
-      var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
-        return element.id == temp.id;
-      });
-      if (afterDue.compareTo(DateTime.now()) >= 0) {
-        homeworkPage.globalHomework[matchedindex] = temp;
-      }
-    }
-    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-    return temp;
-  }
+//     if (matchedIds.length == 0) {
+//       if (afterDue.compareTo(DateTime.now()) >= 0) {
+//         homeworkPage.globalHomework.add(temp);
+//       }
+//     } else {
+//       var matchedindex = homeworkPage.globalHomework.indexWhere((element) {
+//         return element.id == temp.id;
+//       });
+//       if (afterDue.compareTo(DateTime.now()) >= 0) {
+//         homeworkPage.globalHomework[matchedindex] = temp;
+//       }
+//     }
+//     homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+//     return temp;
+//   }
   //TODO Get student homework too
 }

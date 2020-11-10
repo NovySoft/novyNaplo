@@ -27,6 +27,10 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
+import 'dart:typed_data';
+import 'dart:io';
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 
 var client = http.Client();
 
@@ -305,8 +309,11 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
-      responseJson
-          .forEach((homework) => homeworks.add(Homework.fromJson(homework)));
+      //CHECHK FOR ATTACHMENTS, because using this endpoint Kréta doesn't return it
+      //You have to query every single homework
+      for (var n in responseJson) {
+        homeworks.add(await getHomeworkId(n['Uid']));
+      }
 
       return homeworks;
     } catch (error) {
@@ -392,10 +399,34 @@ class RequestHandler {
     }
   }
 
+  static Future<Homework> getHomeworkId(String id) async {
+    if (id == null) return Homework();
+    try {
+      var response = await client.get(
+        BaseURL.kreta(globals.userDetails.school) +
+            KretaEndpoints.homeworkId(id),
+        headers: {
+          "Authorization": "Bearer ${globals.userDetails.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      var responseJson = jsonDecode(response.body);
+
+      Homework homework = Homework.fromJson(responseJson);
+
+      return homework;
+    } catch (error) {
+      print("ERROR: KretaAPI.getHomeworks: " + error.toString());
+      return null;
+    }
+  }
+
   static Future<void> getEverything() async {
     marksPage.allParsedByDate = await getEvaluations();
     examsPage.allParsedExams = await getExams();
     noticesPage.allParsedNotices = await getNotices();
+    homeworkPage.globalHomework = await getHomeworks(DateTime(2020, 11, 01));
   }
 
   static void printWrapped(String text) {

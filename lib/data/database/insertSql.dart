@@ -84,7 +84,7 @@ Future<void> insertEval(Evals eval, {bool edited}) async {
 
 Future<void> insertHomework(Homework hw, {bool edited}) async {
   FirebaseCrashlytics.instance.log("insertSingleHw");
-  // Get a reference to the database.
+  /*// Get a reference to the database.
   final Database db = await mainSql.database;
 
   List<Homework> allHw = await getAllHomework();
@@ -169,7 +169,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
         insertHomework(hw, edited: true);
       }
     }
-  }
+  }*/
 }
 
 Future<void> insertNotices(Notice notice, {bool edited}) async {
@@ -408,7 +408,7 @@ Future<void> batchInsertEval(List<Evals> evalList) async {
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
   FirebaseCrashlytics.instance.log("batchInsertHomework");
-  bool inserted = false;
+  /*bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -484,7 +484,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
 }
 
 Future<void> batchInsertAvarage(List<Avarage> avarageList) async {

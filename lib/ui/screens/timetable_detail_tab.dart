@@ -206,7 +206,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   );
                   break;
                 case 21:
-                  if (widget.lessonInfo.teacherHomework.content == null) {
+                  if (widget.lessonInfo.teacherHomework.szoveg == null) {
                     return SizedBox(
                       child: Text(
                           "${capitalize(getTranslatedString("hw"))}: ${getTranslatedString("nothing").toUpperCase()}",
@@ -223,7 +223,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold)),
                           Html(
-                            data: widget.lessonInfo.teacherHomework.content,
+                            data: widget.lessonInfo.teacherHomework.szoveg,
                             onLinkTap: (url) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
@@ -243,24 +243,26 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   }
                   break;
                 case 23:
-                  if (widget.lessonInfo.teacherHomework.content == null) {
+                  if (widget.lessonInfo.teacherHomework.szoveg == null) {
                     return SizedBox(height: 18);
                   } else {
-                    String due = widget.lessonInfo.teacherHomework.dueDate.year
+                    String due = widget
+                            .lessonInfo.teacherHomework.hataridoDatuma.year
                             .toString() +
                         "-" +
-                        widget.lessonInfo.teacherHomework.dueDate.month
+                        widget.lessonInfo.teacherHomework.hataridoDatuma.month
                             .toString() +
                         "-" +
-                        widget.lessonInfo.teacherHomework.dueDate.day
+                        widget.lessonInfo.teacherHomework.hataridoDatuma.day
                             .toString() +
                         " " +
-                        widget.lessonInfo.teacherHomework.dueDate.hour
+                        widget.lessonInfo.teacherHomework.hataridoDatuma.hour
                             .toString() +
                         ":" +
-                        widget.lessonInfo.teacherHomework.dueDate.minute
+                        widget.lessonInfo.teacherHomework.hataridoDatuma.minute
                             .toString();
-                    Duration left = widget.lessonInfo.teacherHomework.dueDate
+                    Duration left = widget
+                        .lessonInfo.teacherHomework.hataridoDatuma
                         .difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                     String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
@@ -276,7 +278,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         timer.cancel();
                       } else {
                         setState(() {
-                          left = widget.lessonInfo.teacherHomework.dueDate
+                          left = widget
+                              .lessonInfo.teacherHomework.hataridoDatuma
                               .difference(DateTime.now());
                           leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                           leftMins = (left.inMinutes % 60).toStringAsFixed(0);

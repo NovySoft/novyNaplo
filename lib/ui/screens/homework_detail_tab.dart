@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -10,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 Timer timer;
+List<Widget> downloadIcon = [];
 
 class HomeworkDetailTab extends StatefulWidget {
   const HomeworkDetailTab({
@@ -27,6 +29,9 @@ class HomeworkDetailTab extends StatefulWidget {
 class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   @override
   void initState() {
+    for (int i = 0; i < widget.hwInfo.csatolmanyok.length; i++) {
+      downloadIcon.add(Icon(MdiIcons.fileDownload));
+    }
     FirebaseCrashlytics.instance.log("Shown Homework_detail_tab");
     super.initState();
   }
@@ -51,7 +56,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
               decoration: BoxDecoration(color: widget.color),
               child: Center(
                 child: Text(
-                  widget.hwInfo.subject,
+                  widget.hwInfo.tantargy.nev,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 25, color: Colors.black),
                 ),
@@ -60,7 +65,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 6,
+              itemCount: 7,
               itemBuilder: (context, index) {
                 switch (index) {
                   case 0:
@@ -75,7 +80,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Html(
-                            data: widget.hwInfo.content,
+                            data: widget.hwInfo.szoveg,
                             onLinkTap: (url) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
@@ -91,17 +96,17 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         ]);
                     break;
                   case 1:
-                    String due = widget.hwInfo.dueDate.year.toString() +
+                    String due = widget.hwInfo.hataridoDatuma.year.toString() +
                         "-" +
-                        widget.hwInfo.dueDate.month.toString() +
+                        widget.hwInfo.hataridoDatuma.month.toString() +
                         "-" +
-                        widget.hwInfo.dueDate.day.toString() +
+                        widget.hwInfo.hataridoDatuma.day.toString() +
                         " " +
-                        widget.hwInfo.dueDate.hour.toString() +
+                        widget.hwInfo.hataridoDatuma.hour.toString() +
                         ":" +
-                        widget.hwInfo.dueDate.minute.toString();
+                        widget.hwInfo.hataridoDatuma.minute.toString();
                     Duration left =
-                        widget.hwInfo.dueDate.difference(DateTime.now());
+                        widget.hwInfo.hataridoDatuma.difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                     String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
                     String leftString =
@@ -116,8 +121,8 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         timer.cancel();
                       } else {
                         setState(() {
-                          left =
-                              widget.hwInfo.dueDate.difference(DateTime.now());
+                          left = widget.hwInfo.hataridoDatuma
+                              .difference(DateTime.now());
                           leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                           leftMins = (left.inMinutes % 60).toStringAsFixed(0);
                           leftString =
@@ -171,15 +176,68 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                     }
                     break;
                   case 2:
-                    String giveUp = widget.hwInfo.givenUp.year.toString() +
-                        "-" +
-                        widget.hwInfo.givenUp.month.toString() +
-                        "-" +
-                        widget.hwInfo.givenUp.day.toString() +
-                        " " +
-                        widget.hwInfo.givenUp.hour.toString() +
-                        ":" +
-                        widget.hwInfo.givenUp.minute.toString();
+                    if (widget.hwInfo.csatolmanyok.length == 0) {
+                      return SizedBox(height: 0, width: 0);
+                    }
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 15),
+                        Text(
+                          "${getTranslatedString("attachments")}:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                        ),
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: widget.hwInfo.csatolmanyok.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Row(
+                              children: [
+                                downloadIcon[index],
+                                SizedBox(width: 5, height: 5),
+                                GestureDetector(
+                                  onTap: () {
+                                    print(
+                                      widget.hwInfo.csatolmanyok[index].uid,
+                                    );
+                                    setState(() {
+                                      downloadIcon[index] =
+                                          Icon(MdiIcons.check);
+                                      downloadIcon = downloadIcon;
+                                    });
+                                  },
+                                  child: Text(
+                                    widget.hwInfo.csatolmanyok[index].nev,
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5, height: 30),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                    break;
+                  case 3:
+                    String giveUp =
+                        widget.hwInfo.rogzitesIdopontja.year.toString() +
+                            "-" +
+                            widget.hwInfo.rogzitesIdopontja.month.toString() +
+                            "-" +
+                            widget.hwInfo.rogzitesIdopontja.day.toString() +
+                            " " +
+                            widget.hwInfo.rogzitesIdopontja.hour.toString() +
+                            ":" +
+                            widget.hwInfo.rogzitesIdopontja.minute.toString();
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +258,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                       ],
                     );
                     break;
-                  case 3:
+                  case 4:
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +270,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           style: TextStyle(
                               fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
-                        Text(widget.hwInfo.teacher,
+                        Text(widget.hwInfo.tanar,
                             style: TextStyle(
                               fontSize: 20,
                             )),

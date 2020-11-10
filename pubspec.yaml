@@ -54,6 +54,7 @@ dependencies:
     git:
       url: https://github.com/mduccc/flutter_calendar_week
       ref: 0.4.1
+  path_provider: any
 
 flutter_icons:
   android: true

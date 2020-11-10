@@ -128,7 +128,7 @@ class _LoadingPageState extends State<LoadingPage> {
       });
       homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
       homeworkPage.globalHomework
-          .sort((a, b) => a.dueDate.compareTo(b.dueDate));
+          .sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
       //Notices
       setState(() {
         loadingText = getTranslatedString("readNotices");

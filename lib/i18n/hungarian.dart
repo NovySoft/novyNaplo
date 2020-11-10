@@ -355,4 +355,5 @@ final Map<String, String> translation = {
   "stateOfJustification": "Igazolás állapota",
   "justificationType": "Igazolás típusa",
   "Orvosi igazolás": "Orvosi igazolás",
+  "attachments": "Csatolmányok",
 };

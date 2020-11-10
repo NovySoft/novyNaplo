@@ -93,7 +93,7 @@ Future<List<Avarage>> getAllAvarages() async {
 Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   FirebaseCrashlytics.instance.log("getAllHw");
   // Get a reference to the database.
-  final Database db = await mainSql.database;
+  /*final Database db = await mainSql.database;
 
   final List<Map<String, dynamic>> maps = await db.rawQuery(
     'SELECT * FROM Homework GROUP BY content, id ORDER BY databaseId',
@@ -131,7 +131,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
       }
     });
   }
-  return tempList;
+  return tempList;*/
 }
 
 Future<List<Lesson>> getAllTimetable() async {
@@ -185,7 +185,7 @@ Future<List<Lesson>> getAllTimetable() async {
 
 Future<Homework> getHomeworkById(int id) async {
   //TODO If not found fetch it with networkHelper
-  final Database db = await mainSql.database;
+  /*final Database db = await mainSql.database;
   var answer = await db.rawQuery(
       "select * from Homework where id = ? or databaseId = ?;", [id, id]);
   Homework output = new Homework();
@@ -200,7 +200,7 @@ Future<Homework> getHomeworkById(int id) async {
   output.dueDateString = answer[0]['dueDateString'];
   output.givenUp = DateTime.parse(output.givenUpString);
   output.dueDate = DateTime.parse(output.dueDateString);
-  return output;
+  return output;*/
 }
 
 Future<List<Exam>> getAllExams() async {

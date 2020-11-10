@@ -28,6 +28,8 @@ class KretaEndpoints {
   static const timetable = "/ellenorzo/V3/Sajat/OrarendElemek";
   static const exams = "/ellenorzo/V3/Sajat/BejelentettSzamonkeresek";
   static const homeworks = "/ellenorzo/V3/Sajat/HaziFeladatok";
+  static String homeworkId(String id) =>
+      "/ellenorzo/V3/Sajat/HaziFeladatok/$id";
   static const homeworkDone = "/ellenorzo/V3/Sajat/HaziFeladatok/Megoldva";
   static const capabilities = "/ellenorzo/V3/Sajat/Intezmenyek";
 }
