@@ -23,13 +23,15 @@ String
 User userDetails =
     new User(); //Contains, password, school, username, current token.
 //* "Permanent"
-String markCardSubtitle; //Marks subtitle
-String markCardTheme; //Marks color theme
-String markCardConstColor; //If theme is constant what color is it
-String lessonCardSubtitle; //Lesson card's subtitle
-String howManyGraph; //What should we show? A pie- or a bar-chart
-bool adsEnabled; //Do we have to show ads
-bool chartAnimations; //Do we need to animate the charts
+//FIXME: Add default values
+String markCardSubtitle = "Téma"; //Marks subtitle
+String markCardTheme = "Értékelés nagysága"; //Marks color theme
+String markCardConstColor = "Orange"; //If theme is constant what color is it
+String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
+String howManyGraph =
+    "Kör diagram"; //What should we show? A pie- or a bar-chart
+bool adsEnabled = false; //Do we have to show ads
+bool chartAnimations = true; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 bool backgroundFetch = true; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =

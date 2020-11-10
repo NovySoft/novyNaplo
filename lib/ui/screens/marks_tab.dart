@@ -27,8 +27,8 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
-List<Evals> allParsedByDate;
-List<List<Evals>> allParsedBySubject;
+List<Evals> allParsedByDate = [];
+List<List<Evals>> allParsedBySubject = [];
 int selectedIndex = 0;
 bool differenSubject = false;
 final List<Tab> markTabs = <Tab>[
@@ -84,7 +84,6 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _setData() async {
-    allParsedByDate = await parseAllByDate(globals.dJson);
     colors = getRandomColors(allParsedByDate.length);
     allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
   }
@@ -137,9 +136,9 @@ class MarksTabState extends State<MarksTab>
     status = await RequestHandler.login(globals.userDetails);
 
     if (status == "OK") {
-      await RequestHandler.getHomeworks(DateTime(2020, 11, 04));
-      await NetworkHelper()
-          .getStudentInfo(globals.userDetails.token, decryptedCode);
+      await RequestHandler.getEverything();
+      /*await NetworkHelper()
+          .getStudentInfo(globals.userDetails.token, decryptedCode);*/
       await _setData();
       setState(() {
         colors = colors;

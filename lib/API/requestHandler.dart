@@ -18,6 +18,15 @@ import 'package:http/http.dart' as http;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;
+import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
+import 'package:novynaplo/ui/screens/calculator_tab.dart' as calculatorPage;
+import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
+import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
+import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 
 var client = http.Client();
 
@@ -123,7 +132,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Evals>> getEvaluations() async {
+  static Future<List<Evals>> getEvaluations({bool sort = true}) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.evaluations,
@@ -138,6 +147,10 @@ class RequestHandler {
 
       responseJson
           .forEach((evaluation) => evaluations.add(Evals.fromJson(evaluation)));
+      if (sort) {
+        evaluations
+            .sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
+      }
 
       return evaluations;
     } catch (e, s) {
@@ -251,7 +264,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Exam>> getExams() async {
+  static Future<List<Exam>> getExams({bool sort = true}) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.exams,
@@ -265,6 +278,10 @@ class RequestHandler {
       List<Exam> exams = [];
 
       responseJson.forEach((exam) => exams.add(Exam.fromJson(exam)));
+      if (sort) {
+        exams.sort((a, b) => (b.datumString + b.orarendiOraOraszama.toString())
+            .compareTo(a.datumString + a.orarendiOraOraszama.toString()));
+      }
 
       return exams;
     } catch (error) {
@@ -288,7 +305,6 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
-      printWrapped(json.encode(responseJson));
       responseJson
           .forEach((homework) => homeworks.add(Homework.fromJson(homework)));
 
@@ -372,6 +388,11 @@ class RequestHandler {
       print("ERROR: KretaAPI.getNotes: " + error.toString());
       return null;
     }
+  }
+
+  static Future<void> getEverything() async {
+    marksPage.allParsedByDate = await getEvaluations();
+    examsPage.allParsedExams = await getExams();
   }
 
   static void printWrapped(String text) {

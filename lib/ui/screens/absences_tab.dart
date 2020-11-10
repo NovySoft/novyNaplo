@@ -7,7 +7,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/charts/absencesCharts.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/misc/intToTHEnding.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -283,7 +282,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                                   .type ==
                               "Delay"
                           ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index - 1].delayTimeMinutes} ${getTranslatedString("minutes")}"
-                          : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[listIndex][index - 1].numberOfLessons)} ${getTranslatedString("lesson")})";
+                          : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${(tempAbsences[listIndex][index - 1].numberOfLessons).intToTHEnding()} ${getTranslatedString("lesson")})";
                       return AnimatedOpacity(
                         duration: Duration(milliseconds: 500),
                         opacity: opacity,
@@ -387,7 +386,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("date")}: " +
-                              "${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(absence.numberOfLessons)} ${getTranslatedString("lesson")})",
+                              "${tempDate.year}-${tempDate.month}-${tempDate.day} (${(absence.numberOfLessons).intToTHEnding()} ${getTranslatedString("lesson")})",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );

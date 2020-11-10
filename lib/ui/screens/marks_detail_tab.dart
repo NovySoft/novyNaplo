@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 class MarksDetailTab extends StatelessWidget {
@@ -59,9 +58,7 @@ class MarksDetailTab extends StatelessWidget {
               collapseMode: CollapseMode.parallax,
               stretchModes: [StretchMode.zoomBackground],
               background: Icon(
-                eval.icon == null
-                    ? parseSubjectToIcon(subject: eval.tantargy.nev)
-                    : eval.icon,
+                eval.icon,
                 size: 150,
                 color: Colors.black38,
                 textDirection: TextDirection.ltr,

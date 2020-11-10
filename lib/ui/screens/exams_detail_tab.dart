@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 class ExamsDetailTab extends StatelessWidget {
@@ -35,7 +34,7 @@ Widget _buildBody(Exam exam, Color color) {
             collapseMode: CollapseMode.parallax,
             stretchModes: [StretchMode.zoomBackground],
             background: Icon(
-              parseSubjectToIcon(subject: exam.tantargy.nev),
+              exam.icon,
               size: 150,
               color: Colors.black38,
               textDirection: TextDirection.ltr,

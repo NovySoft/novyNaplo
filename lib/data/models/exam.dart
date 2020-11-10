@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
+
 import 'leiras.dart';
 import 'osztalyCsoport.dart';
 import 'tantargy.dart';
@@ -15,6 +18,7 @@ class Exam {
   OsztalyCsoport osztalyCsoport;
   String uid;
   int id;
+  IconData icon;
 
   Exam(
       {this.bejelentesDatuma,
@@ -28,8 +32,12 @@ class Exam {
       this.uid});
 
   Exam.fromJson(Map<String, dynamic> json) {
-    bejelentesDatuma = json['BejelentesDatuma'];
-    datum = json['Datum'];
+    bejelentesDatumaString = json['BejelentesDatuma'];
+    bejelentesDatuma = bejelentesDatumaString != null
+        ? DateTime.parse(bejelentesDatumaString)
+        : DateTime(2020);
+    datumString = json['Datum'];
+    datum = datumString != null ? DateTime.parse(datumString) : DateTime(2020);
     modja = json['Modja'] != null ? new Leiras.fromJson(json['Modja']) : null;
     orarendiOraOraszama = json['OrarendiOraOraszama'];
     tanar = json['RogzitoTanarNeve'];
@@ -41,5 +49,7 @@ class Exam {
         ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
         : null;
     uid = json['Uid'];
+    id = int.parse(uid);
+    icon = parseSubjectToIcon(subject: tantargy.nev);
   }
 }

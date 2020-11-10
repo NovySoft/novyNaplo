@@ -54,10 +54,19 @@ class Evals {
         ? new Leiras.fromJson(json['ErtekFajta'])
         : null;
     jelleg = json['Jelleg'];
-    keszitesDatuma = json['KeszitesDatuma'];
-    lattamozasDatuma = json['LattamozasDatuma'];
+    keszitesDatumaString = json['KeszitesDatuma'];
+    keszitesDatuma = keszitesDatumaString != null
+        ? DateTime.parse(keszitesDatumaString)
+        : DateTime(2020);
+    lattamozasDatumaString = json['LattamozasDatuma'];
+    lattamozasDatuma = lattamozasDatumaString != null
+        ? DateTime.parse(lattamozasDatumaString)
+        : DateTime(2020);
     mod = json['Mod'] != null ? new Leiras.fromJson(json['Mod']) : null;
-    rogzitesDatuma = json['RogzitesDatuma'];
+    rogzitesDatumaString = json['RogzitesDatuma'];
+    rogzitesDatuma = rogzitesDatumaString != null
+        ? DateTime.parse(rogzitesDatumaString)
+        : DateTime(2020);
     sulySzazalekErteke = json['SulySzazalekErteke'];
     szamErtek = json['SzamErtek'];
     szovegesErtek = json['SzovegesErtek'];
@@ -72,5 +81,9 @@ class Evals {
         : null;
     sortIndex = json['SortIndex'];
     uid = json['Uid'];
+    if (tema == null) {
+      tema = mod.leiras;
+    }
+    icon = parseSubjectToIcon(subject: tantargy.nev);
   }
 }

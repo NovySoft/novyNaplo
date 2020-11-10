@@ -9,6 +9,7 @@ import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedExamsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 List<Exam> allParsedExams = [];
 List<Color> colors = [];
@@ -66,6 +67,7 @@ class _ExamsTabState extends State<ExamsTab> {
   }
 
   Widget _examBuilder(BuildContext context, int index) {
+    //TODO: Matrix and title like in absences
     if (index >= allParsedExams.length) {
       return SizedBox(
         height: 100,
@@ -73,7 +75,8 @@ class _ExamsTabState extends State<ExamsTab> {
     } else {
       bool isDone = false;
       DateTime examDate = allParsedExams[index].datum;
-      String subtitle = "${examDate.year}-${examDate.month}-${examDate.day}";
+      String subtitle =
+          "${examDate.year}-${examDate.month}-${examDate.day} (${allParsedExams[index].orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
       if (DateTime.now().compareTo(allParsedExams[index].datum) > 0) {
         isDone = true;
       }

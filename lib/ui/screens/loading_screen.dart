@@ -59,6 +59,9 @@ class _LoadingPageState extends State<LoadingPage> {
   //Runs after initState
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
+    //FIXME
+    Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+    return;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       await globals.setGlobals();
