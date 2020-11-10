@@ -4,6 +4,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/apiEndpoints.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -29,6 +31,7 @@ class HomeworkDetailTab extends StatefulWidget {
 class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   @override
   void initState() {
+    downloadIcon = [];
     for (int i = 0; i < widget.hwInfo.csatolmanyok.length; i++) {
       downloadIcon.add(Icon(MdiIcons.fileDownload));
     }
@@ -209,6 +212,18 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                       downloadIcon[index] =
                                           Icon(MdiIcons.check);
                                       downloadIcon = downloadIcon;
+                                      RequestHandler.downloadFile(
+                                        BaseURL.kreta(
+                                                globals.userDetails.school) +
+                                            KretaEndpoints
+                                                .downloadHomeworkCsatolmany(
+                                                    widget
+                                                        .hwInfo
+                                                        .csatolmanyok[index]
+                                                        .uid),
+                                        widget.hwInfo.csatolmanyok[index].nev,
+                                        widget.hwInfo.csatolmanyok[index].uid,
+                                      );
                                     });
                                   },
                                   child: Text(
