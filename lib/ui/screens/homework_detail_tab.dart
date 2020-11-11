@@ -8,6 +8,7 @@ import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -199,43 +200,44 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           shrinkWrap: true,
                           itemCount: widget.hwInfo.csatolmanyok.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Row(
-                              children: [
-                                downloadIcon[index],
-                                SizedBox(width: 5, height: 5),
-                                GestureDetector(
-                                  onTap: () {
-                                    print(
-                                      widget.hwInfo.csatolmanyok[index].uid,
-                                    );
-                                    setState(() {
-                                      downloadIcon[index] =
-                                          Icon(MdiIcons.check);
-                                      downloadIcon = downloadIcon;
-                                      RequestHandler.downloadFile(
-                                        BaseURL.kreta(
-                                                globals.userDetails.school) +
-                                            KretaEndpoints
-                                                .downloadHomeworkCsatolmany(
-                                                    widget
-                                                        .hwInfo
-                                                        .csatolmanyok[index]
-                                                        .uid),
-                                        widget.hwInfo.csatolmanyok[index].nev,
-                                        widget.hwInfo.csatolmanyok[index].uid,
-                                      );
-                                    });
-                                  },
-                                  child: Text(
+                            return GestureDetector(
+                              onTap: () async {
+                                setState(() {
+                                  downloadIcon[index] = SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(),
+                                  );
+                                });
+                                await RequestHandler.downloadFile(
+                                  BaseURL.kreta(globals.userDetails.school) +
+                                      KretaEndpoints.downloadHomeworkCsatolmany(
+                                          widget.hwInfo.csatolmanyok[index].uid,
+                                          widget.hwInfo.csatolmanyok[index]
+                                              .tipus),
+                                  widget.hwInfo.csatolmanyok[index].uid +
+                                      "." +
+                                      widget.hwInfo.csatolmanyok[index].nev,
+                                );
+                                setState(() {
+                                  downloadIcon[index] = Icon(MdiIcons.check);
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 3, height: 5),
+                                  downloadIcon[index],
+                                  SizedBox(width: 5, height: 5),
+                                  Text(
                                     widget.hwInfo.csatolmanyok[index].nev,
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 20,
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 5, height: 30),
-                              ],
+                                  SizedBox(width: 5, height: 30),
+                                ],
+                              ),
                             );
                           },
                         ),

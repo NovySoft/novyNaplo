@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/models/absence.dart';
@@ -26,6 +27,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
+import 'package:open_file/open_file.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -432,24 +434,32 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  static Future<File> downloadFile(
-      String url, String filename, String id) async {
-    http.Client client = new http.Client();
-    print(Uri.parse(url));
-    var req = await client.post(
-      Uri.parse(url),
-      headers: {
-        "Authorization": "Bearer ${globals.userDetails.token}",
-        "User-Agent": config.userAgent,
-      },
-      body: {"Id": id},
-    );
-    print(req.body);
-    print(req.statusCode);
-    var bytes = req.bodyBytes;
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    return file;
+  //TODO: Make homework attachment an own function which invokes this one
+  static Future<File> downloadFile(String url, String filename,
+      {bool open = true}) async {
+    String dir = (await getTemporaryDirectory()).path;
+    String path = '$dir/temp.' + filename;
+    File file = new File(path);
+    print(await file.exists());
+    if (await file.exists()) {
+      if (open) {
+        await OpenFile.open(path);
+      }
+      return file;
+    } else {
+      var response = await client.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${globals.userDetails.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      await file.writeAsBytes(response.bodyBytes);
+      if (open) {
+        await OpenFile.open(path);
+      }
+      return file;
+    }
   }
 }
