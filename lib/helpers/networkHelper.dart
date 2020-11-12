@@ -195,24 +195,24 @@ class NetworkHelper {
     for (var n in decoded) {
       tempLessonList.add(await Lesson.fromJson(n));
     }
-    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+    tempLessonList.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
     int index = 0;
     if (tempLessonList != null) {
       if (tempLessonList.length != 0) {
-        int beforeDay = tempLessonList[0].startDate.day;
+        int beforeDay = tempLessonList[0].kezdetIdopont.day;
         //Just a matrix
         for (var n in tempLessonList) {
-          if (n.startDate.day != beforeDay) {
+          if (n.kezdetIdopont.day != beforeDay) {
             index++;
-            beforeDay = n.startDate.day;
+            beforeDay = n.kezdetIdopont.day;
           }
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        await batchInsertLessons(
+        /*await batchInsertLessons(
           tempLessonListForDB,
           lookAtDate: true,
-        );
+        );*/
       }
     }
     return output;
@@ -269,21 +269,21 @@ class NetworkHelper {
     for (var n in decoded) {
       tempLessonList.add(await Lesson.fromJson(n));
     }
-    tempLessonList.sort((a, b) => a.startDate.compareTo(b.startDate));
+    tempLessonList.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
     int index = 0;
     if (tempLessonList != null) {
       if (tempLessonList.length != 0) {
-        int beforeDay = tempLessonList[0].startDate.day;
+        int beforeDay = tempLessonList[0].kezdetIdopont.day;
         //Just a matrix
         for (var n in tempLessonList) {
-          if (n.startDate.day != beforeDay) {
+          if (n.kezdetIdopont.day != beforeDay) {
             index++;
-            beforeDay = n.startDate.day;
+            beforeDay = n.kezdetIdopont.day;
           }
           output[index].add(n);
           tempLessonListForDB.add(n);
         }
-        await batchInsertLessons(tempLessonListForDB);
+        //await batchInsertLessons(tempLessonListForDB);
       }
     }
     return output;

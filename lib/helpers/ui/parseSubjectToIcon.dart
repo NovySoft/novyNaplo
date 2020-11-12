@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 IconData parseSubjectToIcon({@required String subject}) {
+  if (subject == null) return Icons.create;
   if (subject.toLowerCase().contains("gazdaság")) {
     return MdiIcons.cashMultiple;
   }

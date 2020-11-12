@@ -1,115 +1,116 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/leiras.dart';
+import 'package:novynaplo/data/models/tantargy.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'homework.dart';
 import 'package:novynaplo/global.dart' as globals;
 
+import 'osztalyCsoport.dart';
+
 class Lesson {
+  Leiras allapot;
+  List<String> bejelentettSzamonkeresUids;
+  String bejelentettSzamonkeresUid;
+  String datumString;
+  DateTime datum;
+  String helyettesTanarNeve;
+  bool isTanuloHaziFeladatEnabled;
+  String kezdetIdopontString;
+  DateTime kezdetIdopont;
+  String nev;
+  int oraszam;
+  int oraEvesSorszama;
+  OsztalyCsoport osztalyCsoport;
+  String haziFeladatUid;
+  bool isHaziFeladatMegoldva;
+  String tanarNeve;
+  Tantargy tantargy;
+  Leiras tanuloJelenlet;
+  String tema;
+  String teremNeve;
+  Leiras tipus;
+  String uid;
+  String vegIdopontString;
+  DateTime vegIdopont;
   int databaseId;
-  String subject;
-  String name;
-  String groupName;
-  String classroom;
-  String theme;
-  String teacher;
-  String deputyTeacherName;
-  List<dynamic> dogaNames; //Dynamic due to empty listes
-  int whichLesson;
   int id;
-  int homeWorkId;
-  int teacherHomeworkId;
-  int groupID;
-  List<dynamic> dogaIds; //Dynamic due to empty listes
-  bool homeworkEnabled;
-  DateTime date;
-  String dateString;
-  DateTime startDate;
-  String startDateString;
-  DateTime endDate;
-  String endDateString;
   IconData icon;
-  Homework teacherHomework = new Homework();
-  List<Homework> studentsHomework = [];
-  Lesson();
 
-  Map<String, dynamic> toMap() {
-    return {
-      'databaseId': databaseId,
-      'id': id,
-      'theme': theme,
-      'subject': subject,
-      'teacher': teacher,
-      'name': name,
-      'groupName': groupName,
-      'classroom': classroom,
-      'deputyTeacherName': deputyTeacherName,
-      'dogaNames': json.encode(dogaNames),
-      'whichLesson': whichLesson,
-      'homeWorkId': homeWorkId,
-      'teacherHomeworkId': teacherHomeworkId,
-      'groupID': groupID,
-      'dogaIds': json.encode(dogaIds),
-      'homeworkEnabled': homeworkEnabled ? 1 : 0,
-      'date': dateString,
-      'startDate': startDateString,
-      'endDate': endDateString,
-      //'studentsHomework': json.encode(studentsHomework),
-    };
-  }
+  Lesson(
+      {this.allapot,
+      this.bejelentettSzamonkeresUids,
+      this.bejelentettSzamonkeresUid,
+      this.datumString,
+      this.helyettesTanarNeve,
+      this.isTanuloHaziFeladatEnabled,
+      this.kezdetIdopontString,
+      this.nev,
+      this.oraszam,
+      this.oraEvesSorszama,
+      this.osztalyCsoport,
+      this.haziFeladatUid,
+      this.isHaziFeladatMegoldva,
+      this.tanarNeve,
+      this.tantargy,
+      this.tanuloJelenlet,
+      this.tema,
+      this.teremNeve,
+      this.tipus,
+      this.uid,
+      this.vegIdopontString});
 
-  //This class is an exceptional one, because we wanted to run a async function in the constructor
-  static Future<Lesson> fromJson(Map<String, dynamic> json) async {
-    Lesson temp = new Lesson();
-    //INTs
-    temp.id = json["LessonId"];
-    temp.whichLesson = json["Count"];
-    temp.homeWorkId = json["Homework"];
-    temp.groupID = json["OsztalyCsoportId"];
-    temp.teacherHomeworkId = json["TeacherHomeworkId"];
-    //Strings
-    temp.groupName = json["ClassGroup"];
-    temp.subject = capitalize(json["Subject"]);
-    temp.name = capitalize(json["Nev"]);
-    if (json["ClassRoom"].toString().startsWith("I")) {
-      temp.classroom = json["ClassRoom"];
-    } else {
-      temp.classroom = capitalize(json["ClassRoom"]);
+  Lesson.fromJson(Map<String, dynamic> json) {
+    //FIXME: Attach homework and exam object if present
+    allapot =
+        json['Allapot'] != null ? new Leiras.fromJson(json['Allapot']) : null;
+    if (json['BejelentettSzamonkeresUids'] != null) {
+      bejelentettSzamonkeresUids = [];
+      json['BejelentettSzamonkeresUids'].forEach((v) {
+        bejelentettSzamonkeresUids.add(v);
+      });
     }
-    temp.theme = json["Theme"];
-    temp.teacher = json["Teacher"];
-    temp.deputyTeacherName = json["DeputyTeacher"];
-    //DateTimes
-    temp.startDate = DateTime.parse(json["StartTime"]);
-    temp.endDate = DateTime.parse(json["EndTime"]);
-    temp.date = DateTime.parse(json["Date"]);
-    //Datetime sttring
-    temp.startDateString = json["StartTime"];
-    temp.endDateString = json["EndTime"];
-    temp.dateString = json["Date"];
-    //Booleans
-    temp.homeworkEnabled = json["IsTanuloHaziFeladatEnabled"];
-    //Lists
-    temp.dogaIds = json["BejelentettSzamonkeresIdList"];
-    temp.dogaNames = []; //TODO EZT MEGCSINÁLNI
-    //Icon
-    temp.icon = parseSubjectToIcon(subject: temp.subject);
-    //Homework
-    if (temp.teacherHomeworkId != null) {
-      /*temp.teacherHomework = await NetworkHelper().getTeacherHomework(
-        temp.teacherHomeworkId,
-        globals.userDetails.token,
-        globals.userDetails.school,
-      );*/
-    } else {
-      temp.teacherHomework = new Homework();
-    }
-    return temp;
+    bejelentettSzamonkeresUid = json['BejelentettSzamonkeresUid'];
+    datumString = json['Datum'];
+    datum = datumString != null
+        ? DateTime.parse(datumString).toLocal()
+        : DateTime(2020);
+    helyettesTanarNeve = json['HelyettesTanarNeve'];
+    isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
+    kezdetIdopontString = json['KezdetIdopont'];
+    kezdetIdopont = kezdetIdopontString != null
+        ? DateTime.parse(kezdetIdopontString).toLocal()
+        : DateTime(2020);
+    nev = json['Nev'];
+    oraszam = json['Oraszam'];
+    oraEvesSorszama = json['OraEvesSorszama'];
+    osztalyCsoport = json['OsztalyCsoport'] != null
+        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+        : null;
+    haziFeladatUid = json['HaziFeladatUid'];
+    isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
+    tanarNeve = json['TanarNeve'];
+    tantargy = json['Tantargy'] != null
+        ? new Tantargy.fromJson(json['Tantargy'])
+        : null;
+    tanuloJelenlet = json['TanuloJelenlet'] != null
+        ? new Leiras.fromJson(json['TanuloJelenlet'])
+        : null;
+    tema = json['Tema'];
+    teremNeve = json['TeremNeve'];
+    tipus = json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
+    uid = json['Uid'];
+    vegIdopontString = json['VegIdopont'];
+    vegIdopont = vegIdopontString != null
+        ? DateTime.parse(vegIdopontString).toLocal()
+        : DateTime(2020);
+    icon = parseSubjectToIcon(subject: tantargy.nev);
   }
 
   @override
   String toString() {
-    return this.name + " " + this.theme;
+    return this.datum.toLocal().toIso8601String();
   }
 }

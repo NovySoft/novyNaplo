@@ -31,15 +31,17 @@ class Notice {
   Notice.fromJson(Map<String, dynamic> json) {
     cim = json['Cim'];
     datumString = json['Datum'];
-    datum = datumString != null ? DateTime.parse(datumString) : DateTime(2020);
+    datum = datumString != null
+        ? DateTime.parse(datumString).toLocal()
+        : DateTime(2020);
     keszitesDatumaString = json['KeszitesDatuma'];
     keszitesDatuma = keszitesDatumaString != null
-        ? DateTime.parse(keszitesDatumaString)
+        ? DateTime.parse(keszitesDatumaString).toLocal()
         : DateTime(2020);
     tanar = json['KeszitoTanarNeve'];
     lattamozasDatumaString = json['LattamozasDatuma'];
     lattamozasDatuma = lattamozasDatumaString != null
-        ? DateTime.parse(lattamozasDatumaString)
+        ? DateTime.parse(lattamozasDatumaString).toLocal()
         : DateTime(2020);
     osztalyCsoport = json['OsztalyCsoport'] != null
         ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])

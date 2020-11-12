@@ -42,15 +42,15 @@ class Homework {
     }
     feladasDatumaString = json['FeladasDatuma'];
     feladasDatuma = feladasDatumaString != null
-        ? DateTime.parse(feladasDatumaString)
+        ? DateTime.parse(feladasDatumaString).toLocal()
         : DateTime(2020);
     hataridoDatumaString = json['HataridoDatuma'];
     hataridoDatuma = hataridoDatumaString != null
-        ? DateTime.parse(hataridoDatumaString)
+        ? DateTime.parse(hataridoDatumaString).toLocal()
         : DateTime(2020);
     rogzitesIdopontjaString = json['RogzitesIdopontja'];
     rogzitesIdopontja = rogzitesIdopontjaString != null
-        ? DateTime.parse(rogzitesIdopontjaString)
+        ? DateTime.parse(rogzitesIdopontjaString).toLocal()
         : DateTime(2020);
     isTanarRogzitette = json['IsTanarRogzitette'];
     isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];

@@ -24,37 +24,37 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
     now = now.add(new Duration(days: 1));
   }
   DateTime endSunday = now;
+
+  lessons.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
+  print(lessons.length);
+  tempDate = lessons[0].datum;
   for (var n in lessons) {
-    if (n.date.compareTo(startMonday) >= 0 &&
-        n.date.compareTo(endSunday) <= 0) {
-      if (tempDate == null) {
-        tempDate = n.date;
-      }
-      if (n.date.isSameDay(tempDate)) {
+    if (n.datum.compareTo(startMonday) >= 0 &&
+        n.datum.compareTo(endSunday) <= 0) {
+      if (n.datum.isSameDay(tempDate)) {
         output[index].add(n);
       } else {
-        tempDate = n.date;
+        tempDate = n.datum;
         output.add([]);
         index++;
+        output[index].add(n);
       }
 
       if (timetablePage.fetchedDayList
-              .where((element) =>
-                  element.day == n.date.day &&
-                  element.month == n.date.month &&
-                  element.year == n.date.year)
+              .where((element) => element.isSameDay(n.datum))
               .length ==
           0) {
-        timetablePage.fetchedDayList.add(n.date);
+        timetablePage.fetchedDayList.add(n.datum);
       }
       timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     } else {
-      timetablePage.fetchedDayList.removeWhere((element) =>
-          element.day == n.date.day &&
-          element.month == n.date.month &&
-          element.year == n.date.year);
+      timetablePage.fetchedDayList
+          .removeWhere((element) => element.isSameDay(n.datum));
       await deleteFromDb(n.databaseId, "Timetable");
     }
   }
+  List<dynamic> interatorList = List.from(output).expand((i) => i).toList();
+  print(interatorList.length);
+  print(output);
   return output;
 }

@@ -23,9 +23,9 @@ class Event {
   Event.fromJson(Map<String, dynamic> json) {
     id = json["EventId"];
     dateString = json["Date"];
-    date = DateTime.parse(json["Date"]);
+    date = DateTime.parse(json["Date"]).toLocal();
     endDateString = json["EndDate"];
-    endDate = DateTime.parse(json["EndDate"]);
+    endDate = DateTime.parse(json["EndDate"]).toLocal();
     content = json["Content"];
     content = content.replaceAll("\n", "<br>");
     title = json["Title"];

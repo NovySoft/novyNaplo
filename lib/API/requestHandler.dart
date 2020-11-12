@@ -15,6 +15,7 @@ import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
@@ -322,7 +323,29 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Lesson>> getTimetable(DateTime from, DateTime to) async {
+  static Future<List<List<Lesson>>> getThisWeeksLessons() async {
+    List<List<Lesson>> output = [[], [], [], [], [], [], []];
+    int monday = 1;
+    int sunday = 7;
+    DateTime now = new DateTime.now();
+    timetablePage.fetchedDayList.add(now);
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    DateTime startDate = now;
+    now = new DateTime.now();
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+      timetablePage.fetchedDayList.add(now);
+    }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+    DateTime endDate = now;
+    return makeTimetableMatrix(await getTimetableMatrix(startDate, endDate));
+  }
+
+  static Future<List<Lesson>> getTimetableMatrix(
+      DateTime from, DateTime to) async {
     if (from == null || to == null) return [];
 
     try {
@@ -330,20 +353,19 @@ class RequestHandler {
         BaseURL.kreta(globals.userDetails.school) +
             KretaEndpoints.timetable +
             "?datumTol=" +
-            from.toKretaDateString() +
+            from.toUtc().toKretaDateString() +
             "&datumIg=" +
-            to.toKretaDateString(),
+            to.toUtc().toKretaDateString(),
         headers: {
           "Authorization": "Bearer ${globals.userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
-
       List responseJson = jsonDecode(response.body);
       List<Lesson> lessons = [];
 
       responseJson.forEach((lesson) async {
-        lessons.add(await Lesson.fromJson(lesson));
+        lessons.add(Lesson.fromJson(lesson));
       });
 
       return lessons;
@@ -426,7 +448,14 @@ class RequestHandler {
     marksPage.allParsedByDate = await getEvaluations();
     examsPage.allParsedExams = await getExams();
     noticesPage.allParsedNotices = await getNotices();
-    homeworkPage.globalHomework = await getHomeworks(DateTime(2020, 11, 01));
+    homeworkPage.globalHomework = await getHomeworks(
+      DateTime.now().subtract(
+        Duration(
+          days: globals.howLongKeepDataForHw.toInt(),
+        ),
+      ),
+    );
+    timetablePage.lessonsList = await getThisWeeksLessons();
   }
 
   static void printWrapped(String text) {

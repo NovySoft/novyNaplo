@@ -41,10 +41,6 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
 
   Widget _buildBody() {
     IconData icon = widget.icon;
-    //!This is stupid, but this is the only way it works
-    if (widget.icon == null || icon == null) {
-      icon = parseSubjectToIcon(subject: widget.lessonInfo.subject);
-    }
     return SafeArea(
       child: CustomScrollView(
         slivers: [
@@ -85,8 +81,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 1:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("nameOfLesson")}: " +
-                            widget.lessonInfo.name,
+                        "${getTranslatedString("nameOfLesson")}: ${widget.lessonInfo.nev != null ? widget.lessonInfo.nev : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -94,17 +89,16 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 3:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("themeOfLesson")}: " +
-                            widget.lessonInfo.theme,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
+                      "${getTranslatedString("themeOfLesson")}: ${widget.lessonInfo.tema != null ? widget.lessonInfo.tema : getTranslatedString("unkown")}",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
                   );
                   break;
                 case 5:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("subject")}: " +
-                            widget.lessonInfo.subject,
+                        "${getTranslatedString("subject")}: ${widget.lessonInfo.tantargy.nev != null ? widget.lessonInfo.tantargy.nev : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -112,100 +106,125 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 7:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("classroom")}: " +
-                            widget.lessonInfo.classroom,
+                        "${getTranslatedString("classroom")}: ${widget.lessonInfo.teremNeve != null ? widget.lessonInfo.teremNeve : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 9:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("teacher")}: " +
-                            widget.lessonInfo.teacher,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
+                  if (widget.lessonInfo.helyettesTanarNeve != null) {
+                    return SizedBox(
+                      child: Row(
+                        children: [
+                          Text(
+                            "${getTranslatedString("deputyTeacher")}: ",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Text(
+                            "${widget.lessonInfo.helyettesTanarNeve}",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      child: Text(
+                          "${getTranslatedString("teacher")}: ${widget.lessonInfo.tanarNeve != null ? widget.lessonInfo.tanarNeve : ""}",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                  }
                   break;
                 case 11:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("deputTeacher")}: " +
-                            widget.lessonInfo.deputyTeacherName,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
+                  if (widget.lessonInfo.datum != null) {
+                    String date = widget.lessonInfo.datum.year.toString() +
+                        "-" +
+                        widget.lessonInfo.datum.month.toString() +
+                        "-" +
+                        widget.lessonInfo.datum.day.toString();
+                    return SizedBox(
+                      child: Text("${getTranslatedString("date")}: $date",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                    );
+                  } else {
+                    return SizedBox(height: 0, width: 0);
+                  }
                   break;
                 case 13:
-                  String date = widget.lessonInfo.date.year.toString() +
-                      "-" +
-                      widget.lessonInfo.date.month.toString() +
-                      "-" +
-                      widget.lessonInfo.date.day.toString();
+                  if (widget.lessonInfo.kezdetIdopont == null ||
+                      widget.lessonInfo.vegIdopont == null) {
+                    return SizedBox(height: 0, width: 0);
+                  }
+                  String startMinutes;
+                  if (widget.lessonInfo.kezdetIdopont.minute
+                      .toString()
+                      .startsWith("0")) {
+                    startMinutes =
+                        widget.lessonInfo.kezdetIdopont.minute.toString() + "0";
+                  } else {
+                    startMinutes =
+                        widget.lessonInfo.kezdetIdopont.minute.toString();
+                  }
+                  String endMinutes;
+                  if (widget.lessonInfo.vegIdopont.minute
+                      .toString()
+                      .startsWith("0")) {
+                    endMinutes =
+                        widget.lessonInfo.vegIdopont.minute.toString() + "0";
+                  } else {
+                    endMinutes = widget.lessonInfo.vegIdopont.minute.toString();
+                  }
+                  String start =
+                      widget.lessonInfo.kezdetIdopont.hour.toString() +
+                          ":" +
+                          startMinutes;
+                  String end = widget.lessonInfo.vegIdopont.hour.toString() +
+                      ":" +
+                      endMinutes;
                   return SizedBox(
-                    child: Text("${getTranslatedString("date")}: " + date,
+                    child: Text(
+                        "${getTranslatedString("startStop")}: $start - $end",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 15:
-                  String startMinutes;
-                  if (widget.lessonInfo.startDate.minute
-                      .toString()
-                      .startsWith("0")) {
-                    startMinutes =
-                        widget.lessonInfo.startDate.minute.toString() + "0";
-                  } else {
-                    startMinutes =
-                        widget.lessonInfo.startDate.minute.toString();
+                  if (widget.lessonInfo.kezdetIdopont == null ||
+                      widget.lessonInfo.vegIdopont == null) {
+                    return SizedBox(height: 0, width: 0);
                   }
-                  String endMinutes;
-                  if (widget.lessonInfo.endDate.minute
-                      .toString()
-                      .startsWith("0")) {
-                    endMinutes =
-                        widget.lessonInfo.endDate.minute.toString() + "0";
-                  } else {
-                    endMinutes = widget.lessonInfo.endDate.minute.toString();
-                  }
-                  String start = widget.lessonInfo.startDate.hour.toString() +
-                      ":" +
-                      startMinutes;
-                  String end = widget.lessonInfo.endDate.hour.toString() +
-                      ":" +
-                      endMinutes;
+                  Duration diff = widget.lessonInfo.vegIdopont
+                      .difference(widget.lessonInfo.kezdetIdopont);
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("startStop")}: " +
-                            start +
-                            " - " +
-                            end,
+                        "${getTranslatedString("period")}: ${diff.inMinutes.toString()} ${getTranslatedString("minutes")}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 17:
-                  Duration diff = widget.lessonInfo.endDate
-                      .difference(widget.lessonInfo.startDate);
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("period")}: " +
-                            diff.inMinutes.toString() +
-                            " perc",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
+                  return widget.lessonInfo.osztalyCsoport.nev != null
+                      ? SizedBox(
+                          child: Text(
+                              "${getTranslatedString("class")}: ${widget.lessonInfo.osztalyCsoport.nev}",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        )
+                      : SizedBox(height: 0, width: 0);
                   break;
                 case 19:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("class")}: " +
-                            widget.lessonInfo.groupName,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
+                  return Text(
+                      "${widget.lessonInfo.haziFeladatUid} \n ${widget.lessonInfo.bejelentettSzamonkeresUids}");
                   break;
-                case 21:
+                //FIXME: Lesson homework
+                /*case 21:
                   if (widget.lessonInfo.teacherHomework.szoveg == null) {
                     return SizedBox(
                       child: Text(
@@ -315,7 +334,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       );
                     }
                   }
-                  break;
+                  break;*/
                 case 24:
                   return SizedBox(
                     height: 250,
@@ -335,7 +354,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.lessonInfo.name)),
+      appBar: AppBar(title: Text(widget.lessonInfo.nev)),
       body: _buildBody(),
     );
   }

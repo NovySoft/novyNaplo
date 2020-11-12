@@ -24,7 +24,7 @@ class AnimatedTimetableCard extends StatelessWidget {
   @override
   Widget build(context) {
     String subTitle = getTimetableSubtitle(lessonInfo);
-    String title = lessonInfo.name;
+    String title = lessonInfo.nev;
     return PressableCard(
         onPressed: null,
         color: color,

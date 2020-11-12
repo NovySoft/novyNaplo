@@ -17,6 +17,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/widgets/AnimatedTimetableCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
@@ -54,9 +55,9 @@ class _TimetableTabState extends State<TimetableTab> {
           }
           if (tempLesson != null) break;
         }
-        _controller.jumpToDate(tempLesson.date);
+        _controller.jumpToDate(tempLesson.datum);
         setState(() {
-          _selectedDate = tempLesson.date;
+          _selectedDate = tempLesson.datum;
         });
         globals.payloadId = -1;
         Color color;
@@ -177,9 +178,7 @@ class _TimetableTabState extends State<TimetableTab> {
       if (element == null || element.length == 0) {
         return false;
       }
-      return element[0].date.year == _selectedDate.year &&
-          element[0].date.month == _selectedDate.month &&
-          element[0].date.day == _selectedDate.day;
+      return element[0].datum.isSameDay(_selectedDate);
     }));
     if (selectedLessonList.length != 0) {
       selectedLessonList = selectedLessonList[0];
@@ -333,9 +332,10 @@ class _TimetableTabState extends State<TimetableTab> {
                             child: AnimatedTimetableCard(
                               iconData: selectedLessonList[index].icon,
                               hasHomework: selectedLessonList[index]
-                                      .teacherHomework
-                                      .content !=
-                                  null,
+                                          .haziFeladatUid !=
+                                      null &&
+                                  selectedLessonList[index].haziFeladatUid !=
+                                      "",
                               color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],

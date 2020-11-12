@@ -56,16 +56,16 @@ class Evals {
     jelleg = json['Jelleg'];
     keszitesDatumaString = json['KeszitesDatuma'];
     keszitesDatuma = keszitesDatumaString != null
-        ? DateTime.parse(keszitesDatumaString)
+        ? DateTime.parse(keszitesDatumaString).toLocal()
         : DateTime(2020);
     lattamozasDatumaString = json['LattamozasDatuma'];
     lattamozasDatuma = lattamozasDatumaString != null
-        ? DateTime.parse(lattamozasDatumaString)
+        ? DateTime.parse(lattamozasDatumaString).toLocal()
         : DateTime(2020);
     mod = json['Mod'] != null ? new Leiras.fromJson(json['Mod']) : null;
     rogzitesDatumaString = json['RogzitesDatuma'];
     rogzitesDatuma = rogzitesDatumaString != null
-        ? DateTime.parse(rogzitesDatumaString)
+        ? DateTime.parse(rogzitesDatumaString).toLocal()
         : DateTime(2020);
     sulySzazalekErteke = json['SulySzazalekErteke'];
     szamErtek = json['SzamErtek'];

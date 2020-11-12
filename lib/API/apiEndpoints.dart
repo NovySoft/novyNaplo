@@ -26,6 +26,8 @@ class KretaEndpoints {
   static const classAverages =
       "/ellenorzo/V3/Sajat/Ertekelesek/Atlagok/OsztalyAtlagok";
   static const timetable = "/ellenorzo/V3/Sajat/OrarendElemek";
+  static const timetableOther =
+      "/ellenorzo/V3/Sajat/Intezmenyek/Hetirendek/Orarendi";
   static const exams = "/ellenorzo/V3/Sajat/BejelentettSzamonkeresek";
   static const homeworks = "/ellenorzo/V3/Sajat/HaziFeladatok";
   static String homeworkId(String id) =>

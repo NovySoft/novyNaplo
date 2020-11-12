@@ -34,10 +34,12 @@ class Exam {
   Exam.fromJson(Map<String, dynamic> json) {
     bejelentesDatumaString = json['BejelentesDatuma'];
     bejelentesDatuma = bejelentesDatumaString != null
-        ? DateTime.parse(bejelentesDatumaString)
+        ? DateTime.parse(bejelentesDatumaString).toLocal()
         : DateTime(2020);
     datumString = json['Datum'];
-    datum = datumString != null ? DateTime.parse(datumString) : DateTime(2020);
+    datum = datumString != null
+        ? DateTime.parse(datumString).toLocal()
+        : DateTime(2020);
     modja = json['Modja'] != null ? new Leiras.fromJson(json['Modja']) : null;
     orarendiOraOraszama = json['OrarendiOraOraszama'];
     tanar = json['RogzitoTanarNeve'];

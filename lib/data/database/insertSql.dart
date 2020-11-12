@@ -622,7 +622,7 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
   //print("BATCH INSERTED NOTICES");
 }
 
-Future<void> batchInsertLessons(List<Lesson> lessonList,
+/*Future<void> batchInsertLessons(List<Lesson> lessonList,
     {bool lookAtDate = false}) async {
   FirebaseCrashlytics.instance.log("batchInsertLessons");
   bool inserted = false;
@@ -725,7 +725,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
   if (inserted) {
     await batch.commit();
   }
-}
+}*/
 
 Future<void> batchInsertExams(List<Exam> examList) async {
   FirebaseCrashlytics.instance.log("batchInsertExams");

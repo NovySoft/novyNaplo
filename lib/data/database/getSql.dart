@@ -134,7 +134,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   return tempList;*/
 }
 
-Future<List<Lesson>> getAllTimetable() async {
+/*Future<List<Lesson>> getAllTimetable() async {
   FirebaseCrashlytics.instance.log("getAllTimetable");
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -181,7 +181,7 @@ Future<List<Lesson>> getAllTimetable() async {
     }
   }
   return outputTempList;
-}
+}*/
 
 Future<Homework> getHomeworkById(int id) async {
   //TODO If not found fetch it with networkHelper
