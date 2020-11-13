@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/leiras.dart';
 import 'package:novynaplo/data/models/tantargy.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -67,28 +69,33 @@ class Lesson {
       this.uid,
       this.vegIdopontString});
 
+  //FIXME: NULL SAFETY ON ESEMÉNYEK
   static Future<Lesson> fromJson(Map<String, dynamic> json) async {
     Lesson temp = new Lesson();
+    temp.datumString = json['Datum'];
+    temp.datum = temp.datumString != null
+        ? DateTime.parse(temp.datumString).toLocal()
+        : DateTime(2020);
     temp.allapot =
         json['Allapot'] != null ? new Leiras.fromJson(json['Allapot']) : null;
     if (json['BejelentettSzamonkeresUids'] != null) {
       temp.bejelentettSzamonkeresUids = [];
       temp.bejelentettSzamonkeresek = [];
-      json['BejelentettSzamonkeresUids'].forEach((v) {
+      int index = 0;
+      for (var v in json['BejelentettSzamonkeresUids']) {
         temp.bejelentettSzamonkeresUids.add(v);
         temp.bejelentettSzamonkeresek.add(
           examsPage.allParsedExams.firstWhere(
             (item) => item.uid == v,
-            orElse: () {},
+            orElse: () {
+              return Exam();
+            },
           ),
         );
-      });
+        index++;
+      }
     }
     temp.bejelentettSzamonkeresUid = json['BejelentettSzamonkeresUid'];
-    temp.datumString = json['Datum'];
-    temp.datum = temp.datumString != null
-        ? DateTime.parse(temp.datumString).toLocal()
-        : DateTime(2020);
     temp.helyettesTanarNeve = json['HelyettesTanarNeve'];
     temp.isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
     temp.kezdetIdopontString = json['KezdetIdopont'];
@@ -102,12 +109,18 @@ class Lesson {
         ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
         : null;
     temp.haziFeladatUid = json['HaziFeladatUid'];
-    temp.haziFeladat = homeworkPage.globalHomework.firstWhere(
-      (element) => element.uid == temp.haziFeladatUid,
-      orElse: () {
-        return null;
-      },
-    );
+    if (temp.haziFeladatUid != null) {
+      temp.haziFeladat = homeworkPage.globalHomework.firstWhere(
+        (element) => element.uid == temp.haziFeladatUid,
+        orElse: () {
+          return null;
+        },
+      );
+    }
+    if (temp.haziFeladat == null && temp.haziFeladatUid != null) {
+      temp.haziFeladat =
+          await RequestHandler.getHomeworkId(temp.haziFeladatUid);
+    }
     temp.isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
     temp.tanarNeve = json['TanarNeve'];
     temp.tantargy = json['Tantargy'] != null
@@ -125,7 +138,8 @@ class Lesson {
     temp.vegIdopont = temp.vegIdopontString != null
         ? DateTime.parse(temp.vegIdopontString).toLocal()
         : DateTime(2020);
-    temp.icon = parseSubjectToIcon(subject: temp.tantargy.nev);
+    temp.icon = parseSubjectToIcon(
+        subject: temp.tantargy == null ? "" : temp.tantargy.nev);
     return temp;
   }
 

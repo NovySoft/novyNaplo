@@ -28,30 +28,23 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
   lessons.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
   tempDate = lessons[0].datum;
   for (var n in lessons) {
-    if (n.datum.compareTo(startMonday) >= 0 &&
-        n.datum.compareTo(endSunday) <= 0) {
-      if (n.datum.isSameDay(tempDate)) {
-        output[index].add(n);
-      } else {
-        tempDate = n.datum;
-        output.add([]);
-        index++;
-        output[index].add(n);
-      }
-
-      if (timetablePage.fetchedDayList
-              .where((element) => element.isSameDay(n.datum))
-              .length ==
-          0) {
-        timetablePage.fetchedDayList.add(n.datum);
-      }
-      timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+    if (n.datum.isSameDay(tempDate)) {
+      output[index].add(n);
     } else {
-      timetablePage.fetchedDayList
-          .removeWhere((element) => element.isSameDay(n.datum));
-      await deleteFromDb(n.databaseId, "Timetable");
+      tempDate = n.datum;
+      output.add([]);
+      index++;
+      output[index].add(n);
     }
+
+    if (timetablePage.fetchedDayList
+            .where((element) => element.isSameDay(n.datum))
+            .length ==
+        0) {
+      timetablePage.fetchedDayList.add(n.datum);
+    }
+    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+    //FIXME: Handle sql deletions
   }
-  List<dynamic> interatorList = List.from(output).expand((i) => i).toList();
   return output;
 }

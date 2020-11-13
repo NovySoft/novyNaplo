@@ -3,6 +3,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -129,8 +130,9 @@ class _TimetableTabState extends State<TimetableTab> {
               return LoadingSpinner();
             });
         try {
-          lessonsList.addAll(
-              await NetworkHelper().getSpecifiedWeeksLesson(_selectedDate));
+          List<List<Lesson>> tempLessonList =
+              await RequestHandler.getSpecifiedWeeksLesson(_selectedDate);
+          lessonsList.addAll(tempLessonList);
           setState(() {
             _selectedDate = datetime;
           });

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
@@ -16,6 +17,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
@@ -323,8 +325,46 @@ class RequestHandler {
     }
   }
 
+  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(
+      DateTime date) async {
+    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+      throw Exception(getTranslatedString("noNet"));
+    }
+    List<DateTime> days = [];
+    int monday = 1;
+    int sunday = 7;
+    DateTime now = date;
+    days.add(now);
+    while (now.weekday != monday) {
+      now = now.subtract(new Duration(days: 1));
+      days.add(now);
+    }
+    DateTime startDate = now;
+    now = date;
+    while (now.weekday != sunday) {
+      now = now.add(new Duration(days: 1));
+      days.add(now);
+    }
+    days.sort((a, b) => a.compareTo(b));
+    DateTime endDate = now;
+    bool errored = false;
+    List<List<Lesson>> lessonList =
+        await getTimetableMatrix(startDate, endDate);
+    print("Körte $lessonList");
+    try {
+      return lessonList;
+    } catch (e) {
+      print("Get Specified Week's Lessons: $e");
+      errored = true;
+      return [];
+    } finally {
+      if (!errored) {
+        timetablePage.fetchedDayList.addAll(days);
+      }
+    }
+  }
+
   static Future<List<List<Lesson>>> getThisWeeksLessons() async {
-    List<List<Lesson>> output = [[], [], [], [], [], [], []];
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
@@ -341,10 +381,10 @@ class RequestHandler {
     }
     timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     DateTime endDate = now;
-    return makeTimetableMatrix(await getTimetableMatrix(startDate, endDate));
+    return await getTimetableMatrix(startDate, endDate);
   }
 
-  static Future<List<Lesson>> getTimetableMatrix(
+  static Future<List<List<Lesson>>> getTimetableMatrix(
       DateTime from, DateTime to) async {
     if (from == null || to == null) return [];
 
@@ -368,8 +408,8 @@ class RequestHandler {
         Lesson temp = await Lesson.fromJson(lesson);
         lessons.add(temp);
       }
-
-      return lessons;
+      List<List<Lesson>> output = await makeTimetableMatrix(lessons);
+      return output;
     } catch (error) {
       print("ERROR: KretaAPI.getLessons: " + error.toString());
       return null;
@@ -464,7 +504,7 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  //TODO: Make homework attachment an own function which invokes this one
+  //FIXME: Make homework attachment an own function which invokes this one
   static Future<File> downloadFile(String url, String filename,
       {bool open = true}) async {
     String dir = (await getTemporaryDirectory()).path;

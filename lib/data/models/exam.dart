@@ -54,4 +54,9 @@ class Exam {
     id = int.parse(uid);
     icon = parseSubjectToIcon(subject: tantargy.nev);
   }
+
+  @override
+  String toString() {
+    return this.modja.nev + ":" + this.tema;
+  }
 }
