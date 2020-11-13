@@ -364,9 +364,10 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Lesson> lessons = [];
 
-      responseJson.forEach((lesson) async {
-        lessons.add(Lesson.fromJson(lesson));
-      });
+      for (var lesson in responseJson) {
+        Lesson temp = await Lesson.fromJson(lesson);
+        lessons.add(temp);
+      }
 
       return lessons;
     } catch (error) {

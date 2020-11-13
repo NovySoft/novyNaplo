@@ -4,7 +4,7 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
-  if (lessons == null) return [];
+  if (lessons == null || lessons.length == 0) return [];
   //Variables
   int index = 0;
   List<List<Lesson>> output = [[]];
@@ -26,7 +26,6 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
   DateTime endSunday = now;
 
   lessons.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
-  print(lessons.length);
   tempDate = lessons[0].datum;
   for (var n in lessons) {
     if (n.datum.compareTo(startMonday) >= 0 &&
@@ -54,7 +53,5 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
     }
   }
   List<dynamic> interatorList = List.from(output).expand((i) => i).toList();
-  print(interatorList.length);
-  print(output);
   return output;
 }

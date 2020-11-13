@@ -134,10 +134,6 @@ class MarksTabState extends State<MarksTab>
     globals.userDetails.password = decryptedPass;
     globals.userDetails.school = decryptedCode;
     status = await RequestHandler.login(globals.userDetails);
-    await RequestHandler.getTimetableMatrix(
-      DateTime(2020, 11, 13),
-      DateTime(2020, 11, 13),
-    );
     if (status == "OK") {
       await RequestHandler.getEverything();
       /*await NetworkHelper()

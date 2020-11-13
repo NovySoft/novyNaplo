@@ -5,14 +5,18 @@ import 'package:novynaplo/data/models/tantargy.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
+import 'exam.dart';
 import 'homework.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 
 import 'osztalyCsoport.dart';
 
 class Lesson {
   Leiras allapot;
   List<String> bejelentettSzamonkeresUids;
+  List<Exam> bejelentettSzamonkeresek;
   String bejelentettSzamonkeresUid;
   String datumString;
   DateTime datum;
@@ -25,6 +29,7 @@ class Lesson {
   int oraEvesSorszama;
   OsztalyCsoport osztalyCsoport;
   String haziFeladatUid;
+  Homework haziFeladat;
   bool isHaziFeladatMegoldva;
   String tanarNeve;
   Tantargy tantargy;
@@ -62,51 +67,66 @@ class Lesson {
       this.uid,
       this.vegIdopontString});
 
-  Lesson.fromJson(Map<String, dynamic> json) {
-    //FIXME: Attach homework and exam object if present
-    allapot =
+  static Future<Lesson> fromJson(Map<String, dynamic> json) async {
+    Lesson temp = new Lesson();
+    temp.allapot =
         json['Allapot'] != null ? new Leiras.fromJson(json['Allapot']) : null;
     if (json['BejelentettSzamonkeresUids'] != null) {
-      bejelentettSzamonkeresUids = [];
+      temp.bejelentettSzamonkeresUids = [];
+      temp.bejelentettSzamonkeresek = [];
       json['BejelentettSzamonkeresUids'].forEach((v) {
-        bejelentettSzamonkeresUids.add(v);
+        temp.bejelentettSzamonkeresUids.add(v);
+        temp.bejelentettSzamonkeresek.add(
+          examsPage.allParsedExams.firstWhere(
+            (item) => item.uid == v,
+            orElse: () {},
+          ),
+        );
       });
     }
-    bejelentettSzamonkeresUid = json['BejelentettSzamonkeresUid'];
-    datumString = json['Datum'];
-    datum = datumString != null
-        ? DateTime.parse(datumString).toLocal()
+    temp.bejelentettSzamonkeresUid = json['BejelentettSzamonkeresUid'];
+    temp.datumString = json['Datum'];
+    temp.datum = temp.datumString != null
+        ? DateTime.parse(temp.datumString).toLocal()
         : DateTime(2020);
-    helyettesTanarNeve = json['HelyettesTanarNeve'];
-    isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
-    kezdetIdopontString = json['KezdetIdopont'];
-    kezdetIdopont = kezdetIdopontString != null
-        ? DateTime.parse(kezdetIdopontString).toLocal()
+    temp.helyettesTanarNeve = json['HelyettesTanarNeve'];
+    temp.isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
+    temp.kezdetIdopontString = json['KezdetIdopont'];
+    temp.kezdetIdopont = temp.kezdetIdopontString != null
+        ? DateTime.parse(temp.kezdetIdopontString).toLocal()
         : DateTime(2020);
-    nev = json['Nev'];
-    oraszam = json['Oraszam'];
-    oraEvesSorszama = json['OraEvesSorszama'];
-    osztalyCsoport = json['OsztalyCsoport'] != null
+    temp.nev = json['Nev'];
+    temp.oraszam = json['Oraszam'];
+    temp.oraEvesSorszama = json['OraEvesSorszama'];
+    temp.osztalyCsoport = json['OsztalyCsoport'] != null
         ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
         : null;
-    haziFeladatUid = json['HaziFeladatUid'];
-    isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
-    tanarNeve = json['TanarNeve'];
-    tantargy = json['Tantargy'] != null
+    temp.haziFeladatUid = json['HaziFeladatUid'];
+    temp.haziFeladat = homeworkPage.globalHomework.firstWhere(
+      (element) => element.uid == temp.haziFeladatUid,
+      orElse: () {
+        return null;
+      },
+    );
+    temp.isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
+    temp.tanarNeve = json['TanarNeve'];
+    temp.tantargy = json['Tantargy'] != null
         ? new Tantargy.fromJson(json['Tantargy'])
         : null;
-    tanuloJelenlet = json['TanuloJelenlet'] != null
+    temp.tanuloJelenlet = json['TanuloJelenlet'] != null
         ? new Leiras.fromJson(json['TanuloJelenlet'])
         : null;
-    tema = json['Tema'];
-    teremNeve = json['TeremNeve'];
-    tipus = json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
-    uid = json['Uid'];
-    vegIdopontString = json['VegIdopont'];
-    vegIdopont = vegIdopontString != null
-        ? DateTime.parse(vegIdopontString).toLocal()
+    temp.tema = json['Tema'];
+    temp.teremNeve = json['TeremNeve'];
+    temp.tipus =
+        json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
+    temp.uid = json['Uid'];
+    temp.vegIdopontString = json['VegIdopont'];
+    temp.vegIdopont = temp.vegIdopontString != null
+        ? DateTime.parse(temp.vegIdopontString).toLocal()
         : DateTime(2020);
-    icon = parseSubjectToIcon(subject: tantargy.nev);
+    temp.icon = parseSubjectToIcon(subject: temp.tantargy.nev);
+    return temp;
   }
 
   @override

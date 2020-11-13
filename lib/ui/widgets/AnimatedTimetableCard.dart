@@ -10,7 +10,8 @@ class AnimatedTimetableCard extends StatelessWidget {
       {this.color,
       this.onPressed,
       this.heroAnimation,
-      this.hasHomework,
+      this.hasHomework = false,
+      this.hasExam = false,
       this.lessonInfo,
       @required this.iconData});
 
@@ -18,6 +19,7 @@ class AnimatedTimetableCard extends StatelessWidget {
   final Animation<double> heroAnimation;
   final Widget onPressed;
   final bool hasHomework;
+  final bool hasExam;
   final IconData iconData;
   final Lesson lessonInfo;
 
@@ -82,13 +84,34 @@ class AnimatedTimetableCard extends StatelessWidget {
                             ]),
                           ),
                         ),
-                        hasHomework
+                        (hasHomework != hasExam) && !(hasHomework && hasExam)
                             ? Positioned(
                                 right: 8,
                                 child: Icon(
-                                  MdiIcons.bagPersonalOutline,
+                                  hasHomework
+                                      ? MdiIcons.bagPersonalOutline
+                                      : MdiIcons.clipboardText,
                                   size: 60,
                                   color: Colors.black,
+                                ),
+                              )
+                            : SizedBox(height: 0, width: 0),
+                        (hasHomework && hasExam)
+                            ? Positioned(
+                                right: 8,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      MdiIcons.bagPersonalOutline,
+                                      size: 30,
+                                      color: Colors.black,
+                                    ),
+                                    Icon(
+                                      MdiIcons.clipboardText,
+                                      size: 30,
+                                      color: Colors.black,
+                                    ),
+                                  ],
                                 ),
                               )
                             : SizedBox(height: 0, width: 0),

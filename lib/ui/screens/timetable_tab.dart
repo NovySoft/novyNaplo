@@ -336,6 +336,10 @@ class _TimetableTabState extends State<TimetableTab> {
                                       null &&
                                   selectedLessonList[index].haziFeladatUid !=
                                       "",
+                              hasExam: selectedLessonList[index]
+                                      .bejelentettSzamonkeresek
+                                      .length !=
+                                  0,
                               color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],
