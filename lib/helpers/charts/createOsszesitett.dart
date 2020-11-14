@@ -1,7 +1,7 @@
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/data/models/evals.dart';
-//import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
   double sum = 0, index = 0;
@@ -11,17 +11,17 @@ dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
       List.from(allParsedInput).expand((i) => i).toList();
   interatorList.sort((a, b) {
     //!LOOK INTO WHY EXTENSION METHODS ARENT WORKING HERE
-    if (a.date.year == b.date.year &&
-        a.date.month == b.date.month &&
-        a.date.day == b.date.day) {
-      return a.createDate.compareTo(b.createDate);
+    if (a.rogzitesDatuma.year == b.rogzitesDatuma.year &&
+        a.rogzitesDatuma.month == b.rogzitesDatuma.month &&
+        a.rogzitesDatuma.day == b.rogzitesDatuma.day) {
+      return a.keszitesDatuma.compareTo(b.keszitesDatuma);
     } else {
-      return a.date.compareTo(b.date);
+      return a.rogzitesDatuma.compareTo(b.rogzitesDatuma);
     }
   });
   for (var n in interatorList) {
-    sum += n.szamErtek * double.parse(n.weight.split("%")[0]) / 100;
-    index += 1 * double.parse(n.weight.split("%")[0]) / 100;
+    sum += n.szamErtek * n.sulySzazalekErteke / 100;
+    index += 1 * n.sulySzazalekErteke / 100;
     tempList.add(sum / index);
   }
 

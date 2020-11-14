@@ -6,7 +6,7 @@ int calcPercentFromEvalsList({@required List<Evals> evalList}) {
     List.from(evalList).map((element) {
       //Felesleges, mert nem nezunk szazalekokat
       //De azert itt hagyom, hatha ezen valtoztatni fogunk
-      if (element.form != "Percent") {
+      if (element.tipus.nev != "Szazalekos") {
         switch (element.szamErtek) {
           case 5:
             return 100;

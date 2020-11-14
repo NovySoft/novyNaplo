@@ -9,14 +9,14 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
   int index = 0;
   double numVal = 0;
   double oszto = 0;
-  for (var y in allParsedInput) {
+  for (var n in allParsedInput) {
     numVal = 0;
     oszto = 0;
     subjectMarks.add([]);
-    subjectMarks[index].add(y[0].subject);
-    for (var n in y) {
-      numVal += n.szamErtek * double.parse(n.weight.split("%")[0]) / 100;
-      oszto += 1 * double.parse(n.weight.split("%")[0]) / 100;
+    subjectMarks[index].add(n[0].tantargy.nev);
+    for (var y in n) {
+      numVal += y.szamErtek *  y.sulySzazalekErteke / 100;
+      oszto += 1 *  y.sulySzazalekErteke / 100;
       subjectMarks[index].add(numVal / oszto);
     }
     index++;

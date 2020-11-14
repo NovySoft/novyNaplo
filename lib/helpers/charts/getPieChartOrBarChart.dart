@@ -7,10 +7,10 @@ void getPieChartOrBarChart(var input) {
   int index = 0;
   String name = "";
   for (var n in input) {
-    if (n[0].subject.startsWith("magyar")) {
-      name = n[0].subject.split(" ")[1];
+    if (n[0].tantargy.nev.startsWith("magyar")) {
+      name = n[0].tantargy.nev.split(" ")[1];
     } else {
-      name = n[0].subject;
+      name = n[0].tantargy.nev;
     }
     tempData.add(new LinearPieData(index, n.length, name));
     index++;

@@ -49,6 +49,7 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
     n.sort((a, b) => a.rogzitesDatuma.compareTo(b.rogzitesDatuma));
     _index++;
   }
+  print(jegyMatrix);
   return jegyMatrix;
 }
 
