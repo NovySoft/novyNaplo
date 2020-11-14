@@ -860,7 +860,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
 }
 
 Future<void> batchInsertAbsences(List<Absence> absenceList) async {
-  FirebaseCrashlytics.instance.log("batchInsertAbsences");
+  /*FirebaseCrashlytics.instance.log("batchInsertAbsences");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
@@ -922,5 +922,5 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
 }

@@ -102,7 +102,6 @@ class NetworkHelper {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].szamErtek != 0),
       );
-      absencesPage.allParsedAbsences = await parseAllAbsences(globals.dJson);
       timetablePage.lessonsList = await getThisWeeksLessons(token, code);
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
     }

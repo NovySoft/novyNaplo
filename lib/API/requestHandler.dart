@@ -16,6 +16,7 @@ import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
@@ -196,7 +197,7 @@ class RequestHandler {
     return tempList;
   }
 
-  static Future<List<Absence>> getAbsences() async {
+  static Future<List<List<Absence>>> getAbsencesMatrix() async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.absences,
@@ -211,8 +212,8 @@ class RequestHandler {
 
       responseJson
           .forEach((absence) => absences.add(Absence.fromJson(absence)));
-
-      return absences;
+      List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
+      return outputList;
     } catch (error) {
       return null;
     }
@@ -497,6 +498,7 @@ class RequestHandler {
         ),
       ),
     );
+    absencesPage.allParsedAbsences = await getAbsencesMatrix();
     timetablePage.lessonsList = await getThisWeeksLessons();
     //Get stuff needed to make statistics
     statisticsPage.allParsedSubjects =

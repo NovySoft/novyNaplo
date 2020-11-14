@@ -2,31 +2,24 @@ import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 
-Future<List<List<Absence>>> parseAllAbsences(input) async {
-  List<Absence> tempList = [];
+Future<List<List<Absence>>> makeAbsencesMatrix(List<Absence> input) async {
+  if (input.length == 0) return [];
   List<List<Absence>> outputList = [[]];
-  var absences = input["Absences"];
-  for (var n in absences) {
-    tempList.add(new Absence.fromJson(n));
-  }
-  if (tempList.length == 0) return [];
-  tempList.sort(
-    (a, b) => (b.lessonStartTimeString + " " + b.numberOfLessons.toString())
-        .compareTo(
-      a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
+  input.sort(
+    (a, b) =>
+        (b.ora.kezdoDatumString + " " + b.ora.oraszam.toString()).compareTo(
+      a.ora.kezdoDatumString + " " + a.ora.oraszam.toString(),
     ),
   );
   int index = 0;
-  DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
-  for (var n in tempList) {
-    if (!DateTime.parse(n.lessonStartTimeString).isSameDay(dateBefore)) {
+  DateTime dateBefore = input[0].ora.kezdoDatum;
+  for (var n in input) {
+    if (!n.ora.kezdoDatum.isSameDay(dateBefore)) {
       index++;
       outputList.add([]);
-      dateBefore = DateTime.parse(n.lessonStartTimeString);
+      dateBefore = n.ora.kezdoDatum;
     }
     outputList[index].add(n);
   }
-  //Do not await as this a time critical task
-  batchInsertAbsences(tempList);
   return outputList;
 }

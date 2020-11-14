@@ -267,7 +267,7 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
     'SELECT * FROM Absences GROUP BY id ORDER BY databaseId',
   );
 
-  List<Absence> tempList = List.generate(maps.length, (i) {
+  /*List<Absence> tempList = List.generate(maps.length, (i) {
     Absence temp = new Absence();
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
@@ -294,9 +294,9 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
       a.lessonStartTimeString + " " + a.numberOfLessons.toString(),
     ),
   );
-  int index = 0;
+  int index = 0;*/
   List<List<Absence>> outputList = [[]];
-  DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
+  /*DateTime dateBefore = DateTime.parse(tempList[0].lessonStartTimeString);
   for (var n in tempList) {
     if (!DateTime.parse(n.lessonStartTimeString).isSameDay(dateBefore)) {
       index++;
@@ -304,6 +304,6 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
       dateBefore = DateTime.parse(n.lessonStartTimeString);
     }
     outputList[index].add(n);
-  }
+  }*/
   return outputList;
 }

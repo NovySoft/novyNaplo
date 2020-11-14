@@ -7,11 +7,11 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 
 Color getAbsenceCardColor(Absence absence) {
   Color color = Colors.purple;
-  if (absence.justificationState == "BeJustified") {
+  if (absence.igazolasAllapota == "Igazolando") {
     color = Colors.yellow;
-  } else if (absence.justificationState == "UnJustified") {
+  } else if (absence.igazolasAllapota == "Igazolatlan") {
     color = Colors.red;
-  } else if (absence.justificationState == "Justified") {
+  } else if (absence.igazolasAllapota == "Igazolt") {
     color = Colors.green;
   }
   return color;
