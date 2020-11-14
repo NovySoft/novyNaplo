@@ -244,7 +244,7 @@ Future<List<Event>> getAllEvents() async {
     'SELECT * FROM Events GROUP BY id, content ORDER BY databaseId',
   );
 
-  return List.generate(maps.length, (i) {
+  /*return List.generate(maps.length, (i) {
     Event temp = new Event();
     temp.databaseId = maps[i]['databaseId'];
     temp.id = maps[i]['id'];
@@ -255,7 +255,7 @@ Future<List<Event>> getAllEvents() async {
     temp.title = maps[i]['title'];
     temp.content = maps[i]['content'];
     return temp;
-  });
+  });*/
 }
 
 Future<List<List<Absence>>> getAllAbsencesMatrix() async {

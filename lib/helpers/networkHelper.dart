@@ -59,7 +59,7 @@ class NetworkHelper {
       if (res.statusCode == 200) {
         var bodyJson = json.decode(res.body);
         eventsPage.allParsedEvents = await parseEvents(bodyJson);
-        eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+        //eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
         await batchInsertEvents(eventsPage.allParsedEvents);
       }
     } catch (e, s) {

@@ -796,7 +796,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
 
 Future<void> batchInsertEvents(List<Event> eventList) async {
   FirebaseCrashlytics.instance.log("batchInsertEvents");
-  bool inserted = false;
+  /*bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
@@ -856,7 +856,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
   }
   if (inserted) {
     await batch.commit();
-  }
+  }*/
 }
 
 Future<void> batchInsertAbsences(List<Absence> absenceList) async {

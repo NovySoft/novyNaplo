@@ -1,33 +1,31 @@
 class Event {
-  int databaseId;
   int id;
-  String dateString;
-  String endDateString;
-  DateTime date;
-  DateTime endDate;
-  String title;
-  String content;
-  Event();
+  int databaseId;
+  String uid;
+  DateTime ervenyessegKezdete;
+  DateTime ervenyessegVege;
+  String cim;
+  String tartalom;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'databaseId': databaseId,
-      'id': id,
-      'dateString': dateString,
-      'endDateString': endDateString,
-      'title': title,
-      'content': content,
-    };
-  }
+  Event({
+    this.id,
+    this.ervenyessegKezdete,
+    this.ervenyessegVege,
+    this.cim,
+    this.tartalom,
+  });
 
-  Event.fromJson(Map<String, dynamic> json) {
-    id = json["EventId"];
-    dateString = json["Date"];
-    date = DateTime.parse(json["Date"]).toLocal();
-    endDateString = json["EndDate"];
-    endDate = DateTime.parse(json["EndDate"]).toLocal();
-    content = json["Content"];
-    content = content.replaceAll("\n", "<br>");
-    title = json["Title"];
+  Event.fromJson(Map json) {
+    id = json["Uid"] ?? "";
+    ervenyessegKezdete = json["ErvenyessegKezdete"] != null
+        ? DateTime.parse(json["ErvenyessegKezdete"]).toLocal()
+        : null;
+    ervenyessegVege = json["ErvenyessegVege"] != null
+        ? DateTime.parse(json["ErvenyessegVege"]).toLocal()
+        : null;
+    cim = json["Cim"] ?? "";
+    tartalom = json["Tartalom"] != null
+        ? json["Tartalom"].replaceAll("\r", "<br>").replaceAll("\n", "<br>")
+        : null;
   }
 }

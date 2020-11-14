@@ -42,13 +42,13 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        widget.eventDetails.title,
+                        widget.eventDetails.cim,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25, color: Colors.black),
                       ),
                       SizedBox(height: 15),
                       Text(
-                        widget.eventDetails.date.toString(),
+                        widget.eventDetails.ervenyessegKezdete.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
@@ -61,7 +61,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
               child: ListView(
                 children: [
                   Html(
-                    data: widget.eventDetails.content,
+                    data: widget.eventDetails.tartalom,
                     onLinkTap: (url) async {
                       if (await canLaunch(url)) {
                         await launch(url);

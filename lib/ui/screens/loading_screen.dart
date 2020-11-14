@@ -173,7 +173,8 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readEvents");
       });
       eventsPage.allParsedEvents = await getAllEvents();
-      eventsPage.allParsedEvents.sort((a, b) => b.date.compareTo(a.date));
+      eventsPage.allParsedEvents
+          .sort((a, b) => b.ervenyessegVege.compareTo(a.ervenyessegVege));
       //Absences and delays
       absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
       //DONE

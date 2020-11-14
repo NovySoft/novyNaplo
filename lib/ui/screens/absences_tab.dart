@@ -383,7 +383,6 @@ class AbsencencesDetailTab extends StatelessWidget {
                     );
                     break;
                   case 5:
-                    //FIXME: USE datetime
                     DateTime tempDate = absence.ora.kezdoDatum;
                     return SizedBox(
                       child: Text(

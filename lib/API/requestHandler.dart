@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
+import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -507,6 +508,8 @@ class RequestHandler {
       statisticsPage.allParsedSubjects
           .where((element) => element[0].szamErtek != 0),
     );
+    setUpCalculatorPage(statisticsPage.allParsedSubjects);
+    eventsPage.allParsedEvents = await getEvents();
   }
 
   static void printWrapped(String text) {
