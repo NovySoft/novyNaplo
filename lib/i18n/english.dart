@@ -359,4 +359,5 @@ final Map<String, String> translation = {
   "Orvosi igazolás": "Medical certificate",
   "attachments": "Attachments",
   "thisLessonsExams": "Exams this lesson",
+  "deputy": "Deputy",
 };

@@ -45,6 +45,7 @@ class Lesson {
   int databaseId;
   int id;
   IconData icon;
+  bool isSpecialDayEvent = false;
 
   Lesson(
       {this.allapot,
@@ -140,6 +141,9 @@ class Lesson {
         : DateTime(2020);
     temp.icon = parseSubjectToIcon(
         subject: temp.tantargy == null ? "" : temp.tantargy.nev);
+    if (temp.tantargy == null) {
+      temp.isSpecialDayEvent = true;
+    }
     return temp;
   }
 

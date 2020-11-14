@@ -22,6 +22,7 @@ import 'package:novynaplo/data/models/extensions.dart';
 
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
+Lesson specialEventDay;
 var selectedLessonList = [];
 int i = 0;
 DateTime _selectedDate = DateTime.now();
@@ -176,15 +177,32 @@ class _TimetableTabState extends State<TimetableTab> {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
+    //Get only the selected dates
     selectedLessonList = List.from(lessonsList.where((element) {
       if (element == null || element.length == 0) {
         return false;
       }
       return element[0].datum.isSameDay(_selectedDate);
     }));
+    //It is only a 1*n matrix so we get that
     if (selectedLessonList.length != 0) {
       selectedLessonList = selectedLessonList[0];
     }
+    //Is it a special day?
+    bool selected = false;
+    List<dynamic> temp = List.from(selectedLessonList);
+    temp.removeWhere((element) {
+      if (element.isSpecialDayEvent) {
+        specialEventDay = element;
+        selected = true;
+      }
+      return element.isSpecialDayEvent;
+    });
+    selectedLessonList = temp;
+    if (!selected) {
+      specialEventDay = null;
+    }
+    //Get min date
     if (minDate == null) {
       minDate = DateTime.now().subtract(Duration(days: 365));
       while (minDate.weekday != DateTime.monday) {
@@ -263,7 +281,19 @@ class _TimetableTabState extends State<TimetableTab> {
           ],
         ),
         SizedBox(
-          height: 15,
+          height: 7,
+        ),
+        AnimatedOpacity(
+          opacity: fade ? 1 : 0,
+          duration: Duration(milliseconds: 250),
+          child: Center(
+            child: specialEventDay == null
+                ? SizedBox(height: 0, width: 0)
+                : Text(specialEventDay.nev),
+          ),
+        ),
+        SizedBox(
+          height: 7,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 5.0),

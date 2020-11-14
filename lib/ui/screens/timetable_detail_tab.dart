@@ -118,7 +118,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       child: Row(
                         children: [
                           Text(
-                            "${getTranslatedString("deputyTeacher")}: ",
+                            "${getTranslatedString("deputy")}: ",
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
