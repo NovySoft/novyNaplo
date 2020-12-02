@@ -46,6 +46,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25, color: Colors.black),
                       ),
+                      //FIXME: Add ervenyesseg vege
                       SizedBox(height: 15),
                       Text(
                         widget.eventDetails.ervenyessegKezdete.toString(),

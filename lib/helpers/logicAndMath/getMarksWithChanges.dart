@@ -6,6 +6,7 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 //Legjobb, legroszabb és a köztes jegyek
 //Should change to a return function, shouldn't I?
+//FIXME: Something is not right here, some people report that the avarages are not in correct order
 void getMarksWithChanges(List<List<Evals>> input) async {
   List<AV> tempList = [];
   double sum = 0, index = 0;

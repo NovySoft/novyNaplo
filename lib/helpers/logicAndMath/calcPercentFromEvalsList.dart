@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 
 int calcPercentFromEvalsList({@required List<Evals> evalList}) {
+  //Fixme: Something is not right here
   List<int> tempList = List.from(
     List.from(evalList).map((element) {
       //Felesleges, mert nem nezunk szazalekokat
