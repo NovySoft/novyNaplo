@@ -4,6 +4,7 @@ import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 class ExamsDetailTab extends StatelessWidget {
   ExamsDetailTab({@required this.exam, this.color});
@@ -92,10 +93,9 @@ Widget _buildBody(Exam exam, Color color) {
                   );
                   break;
                 case 9:
-                  //TODO: Tanóra mutatása
                   DateTime examDate = exam.datum;
                   String subtitle =
-                      "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
+                      "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute} (${exam.orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("dateWrite")}: " + subtitle,

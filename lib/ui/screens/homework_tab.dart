@@ -12,6 +12,8 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedHomeworkCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
+//TODO make groups by date and also some kind of dropdown style lists
+//TODO: should also make a checkbox to save homework as selected
 List<Color> colors = [];
 List<Homework> globalHomework = [];
 

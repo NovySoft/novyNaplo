@@ -79,6 +79,7 @@ class ChartsDetailTab extends StatelessWidget {
                   switch (index) {
                     case 0:
                       int performancePercentage = calcPercentFromEvalsList(
+                        av: seriesList.last.data.last.value,
                         evalList: getSameSubjectEvals(
                           subject: subject,
                           sort: true,

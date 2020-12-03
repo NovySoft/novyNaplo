@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/i18n/translationProvider.dart';
 
+//FIXME Fix the background fetch errors
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',

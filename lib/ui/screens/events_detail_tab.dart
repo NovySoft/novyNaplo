@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/data/models/extensions.dart';
 
 class EventsDetailTab extends StatefulWidget {
   const EventsDetailTab({
@@ -46,10 +47,19 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25, color: Colors.black),
                       ),
-                      //FIXME: Add ervenyesseg vege
                       SizedBox(height: 15),
                       Text(
-                        widget.eventDetails.ervenyessegKezdete.toString(),
+                        widget.eventDetails.ervenyessegKezdete.toHumanString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
+                      Text(
+                        "-",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
+                      Text(
+                        widget.eventDetails.ervenyessegVege.toHumanString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),

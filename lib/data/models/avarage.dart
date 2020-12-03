@@ -18,6 +18,7 @@ class Avarage {
 }
 
 //TODO: Merge these two classes
+//FIXME: Andrew says his avarage calculations are not always right
 class AV {
   double value;
   double diffSinceLast;

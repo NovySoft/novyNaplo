@@ -213,6 +213,7 @@ class RequestHandler {
 
       responseJson
           .forEach((absence) => absences.add(Absence.fromJson(absence)));
+      //No need to sort, the make function has a builtin sorting function
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
       return outputList;
     } catch (error) {
@@ -300,7 +301,8 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Homework>> getHomeworks(DateTime fromDue) async {
+  static Future<List<Homework>> getHomeworks(DateTime fromDue,
+      {bool sort = true}) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) +
@@ -320,6 +322,7 @@ class RequestHandler {
       for (var n in responseJson) {
         homeworks.add(await getHomeworkId(n['Uid']));
       }
+      homeworks.sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
 
       return homeworks;
     } catch (error) {
@@ -351,6 +354,7 @@ class RequestHandler {
     days.sort((a, b) => a.compareTo(b));
     DateTime endDate = now;
     bool errored = false;
+    //Has builtin sorting
     List<List<Lesson>> lessonList =
         await getTimetableMatrix(startDate, endDate);
     print("Körte $lessonList");
@@ -411,6 +415,7 @@ class RequestHandler {
         Lesson temp = await Lesson.fromJson(lesson);
         lessons.add(temp);
       }
+      //Make function has builtin sorting
       List<List<Lesson>> output = await makeTimetableMatrix(lessons);
       return output;
     } catch (error) {
@@ -419,7 +424,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Event>> getEvents() async {
+  static Future<List<Event>> getEvents({bool sort = true}) async {
     try {
       var response = await client.get(
         BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.events,
@@ -433,6 +438,9 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       responseJson.forEach((json) => events.add(Event.fromJson(json)));
+      if (sort) {
+        events.sort((a, b) => b.ervenyessegVege.compareTo(a.ervenyessegVege));
+      }
 
       return events;
     } catch (error) {

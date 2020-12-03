@@ -16,7 +16,8 @@ class Event {
   });
 
   Event.fromJson(Map json) {
-    id = json["Uid"] ?? "";
+    uid = json["Uid"] ?? "";
+    id = uid == null || uid == "" ? null : int.parse(uid);
     ervenyessegKezdete = json["ErvenyessegKezdete"] != null
         ? DateTime.parse(json["ErvenyessegKezdete"]).toLocal()
         : null;

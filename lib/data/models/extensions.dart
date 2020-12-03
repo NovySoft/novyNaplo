@@ -12,6 +12,12 @@ extension MyDateTime on DateTime {
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     return formatter.format(this);
   }
+
+  //FIXME: Use this function instead of writing it manually
+  String toHumanString() {
+    DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm');
+    return formatter.format(this);
+  }
 }
 
 bool isSameDay(DateTime one, DateTime other) {

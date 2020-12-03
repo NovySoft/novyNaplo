@@ -392,6 +392,8 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 10) {
+          //FIXME: Ads stuck on logging out
+          //TODO: Save state of ads when logging out
           return ListTile(
             title: Center(
               child: Padding(

@@ -172,6 +172,7 @@ class ReportsDetailTab extends StatelessWidget {
               }
 
               int performancePercentage = calcPercentFromEvalsList(
+                av: result,
                 evalList: getSameSubjectEvals(
                   subject: eval.tantargy.nev,
                   sort: true,

@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/event.dart';
 
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -64,9 +65,7 @@ class _EventsTabState extends State<EventsTab> {
           child: AnimatedTitleSubtitleCard(
         heroAnimation: AlwaysStoppedAnimation(0),
         title: allParsedEvents[index].cim,
-        subTitle: allParsedEvents[index].tartalom.length >= 15
-            ? allParsedEvents[index].tartalom.substring(0, 15)
-            : allParsedEvents[index].tartalom,
+        subTitle: removeHTMLtags(allParsedEvents[index].tartalom),
         color: colors[index],
         onPressed: EventsDetailTab(
           color: colors[index],
