@@ -103,6 +103,11 @@ class ThemeHelper {
               TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
             },
           ),
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: Colors.blue,
+            selectionColor: Colors.blue,
+            selectionHandleColor: Colors.blue,
+          ),
           sliderTheme: SliderThemeData(
               activeTickMarkColor: Colors.orange,
               valueIndicatorColor: Colors.black,
@@ -139,6 +144,11 @@ class ThemeHelper {
               TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
             },
           ),
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: Colors.blue,
+            selectionColor: Colors.blue,
+            selectionHandleColor: Colors.blue,
+          ),
           sliderTheme: SliderThemeData(
               activeTickMarkColor: Colors.black,
               valueIndicatorColor: Colors.black,
@@ -157,7 +167,6 @@ class ThemeHelper {
           ),
           primaryColor: Colors.lightBlueAccent,
           backgroundColor: Colors.white,
-          fontFamily: 'Nunito',
           colorScheme: ColorScheme.light(),
           hintColor: Colors.lightBlue,
           inputDecorationTheme: InputDecorationTheme(

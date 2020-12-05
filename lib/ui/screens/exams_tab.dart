@@ -55,16 +55,20 @@ class _ExamsTabState extends State<ExamsTab> {
 
   Widget noNotice() {
     return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(
-        MdiIcons.emoticonHappyOutline,
-        size: 50,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MdiIcons.emoticonHappyOutline,
+            size: 50,
+          ),
+          Text(
+            "${getTranslatedString("noExam")}!",
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
-      Text(
-        "${getTranslatedString("noExam")}!",
-        textAlign: TextAlign.center,
-      )
-    ]));
+    );
   }
 
   //FIXME: Showing completed although it is not completed

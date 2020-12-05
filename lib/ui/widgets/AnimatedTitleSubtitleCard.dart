@@ -64,7 +64,6 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 25.0),
                                   ),
-                                  //FIXME: Use overflows everywhere it's possible
                                   Text(
                                     subTitle,
                                     textAlign: TextAlign.left,
