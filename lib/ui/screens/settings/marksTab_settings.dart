@@ -64,11 +64,9 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       ),
                     ],
                     onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       FirebaseCrashlytics.instance
                           .setCustomKey("markCardTheme", value);
-                      prefs.setString("markCardTheme", value);
+                      globals.prefs.setString("markCardTheme", value);
                       setState(() {
                         globals.markCardTheme = value;
                       });
@@ -123,11 +121,9 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       ),
                     ],
                     onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       FirebaseCrashlytics.instance
                           .setCustomKey("markCardSubtitle", value);
-                      prefs.setString("markCardSubtitle", value);
+                      globals.prefs.setString("markCardSubtitle", value);
                       setState(() {
                         globals.markCardSubtitle = value;
                       });
@@ -241,11 +237,9 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       ),
                     ],
                     onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       FirebaseCrashlytics.instance
                           .setCustomKey("markCardConstColor", value);
-                      prefs.setString("markCardConstColor", value);
+                      globals.prefs.setString("markCardConstColor", value);
                       setState(() {
                         globals.markCardConstColor = value;
                       });

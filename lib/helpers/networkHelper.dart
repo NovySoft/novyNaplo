@@ -116,11 +116,11 @@ class NetworkHelper {
     // ignore: unused_local_variable
     String decryptedPass, decryptedUser, decryptedCode, status;
     status = "";
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     var codeKey = encrypt.Key.fromUtf8(config.codeKey);
     final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
-    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+    final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
+    decryptedCode =
+        codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
     code = decryptedCode;
     if (globals.userDetails.tokenDate == null) {
       globals.userDetails.tokenDate = DateTime.now().subtract(
@@ -138,9 +138,10 @@ class NetworkHelper {
       var userKey = encrypt.Key.fromUtf8(config.userKey);
       final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
       final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-      decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+      decryptedUser =
+          userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
       decryptedPass =
-          passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+          passEncrypter.decrypt64(globals.prefs.getString("password"), iv: iv);
       String status = await RequestHandler.login(globals.userDetails);
       //TODO Handle errors
     }
@@ -341,7 +342,7 @@ class NetworkHelper {
 //     //TODO First check in database
 //     FirebaseCrashlytics.instance.log("getTeacherHomework");
 //     final SharedPreferences prefs = await SharedPreferences.getInstance();
-//     double keepForDays = prefs.getDouble("howLongKeepDataForHw");
+//     double keepForDays = globals.prefs.getDouble("howLongKeepDataForHw");
 
 //     var header = {
 //       'Authorization': 'Bearer $token',

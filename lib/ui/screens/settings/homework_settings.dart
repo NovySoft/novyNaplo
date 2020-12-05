@@ -18,9 +18,8 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
-        keepDataForHw = prefs.getDouble("howLongKeepDataForHw");
+        keepDataForHw = globals.prefs.getDouble("howLongKeepDataForHw");
       });
     });
     super.initState();
@@ -63,8 +62,6 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
               });
             },
             onChangeEnd: (newValue) async {
-              final SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
               setState(() {
                 if (newValue.roundToDouble() == 0 ||
                     newValue.roundToDouble() == -0) {
@@ -73,7 +70,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
                   keepDataForHw = newValue.roundToDouble();
                 }
                 globals.howLongKeepDataForHw = keepDataForHw;
-                prefs.setDouble("howLongKeepDataForHw", keepDataForHw);
+                globals.prefs.setDouble("howLongKeepDataForHw", keepDataForHw);
                 FirebaseCrashlytics.instance
                     .setCustomKey("howLongKeepDataForHw", keepDataForHw);
               });

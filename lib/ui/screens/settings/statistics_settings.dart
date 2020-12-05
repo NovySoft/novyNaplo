@@ -59,12 +59,10 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       ),
                     ],
                     onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         FirebaseCrashlytics.instance
                             .setCustomKey("howManyGraph", value);
-                        prefs.setString("howManyGraph", value);
+                        globals.prefs.setString("howManyGraph", value);
                         globals.howManyGraph = value;
                       });
                     },
@@ -77,12 +75,10 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   title: Text("${getTranslatedString("colorAv")}:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.colorAvsInStatisctics = switchOn;
                       });
-                      prefs.setBool("colorAvsInStatisctics", switchOn);
+                      globals.prefs.setBool("colorAvsInStatisctics", switchOn);
                     },
                     value: globals.colorAvsInStatisctics,
                   ),
@@ -114,12 +110,10 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (String input) async {
                           if (FormKey.formKey.currentState.validate()) {
-                            final SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
                             setState(() {
                               globals.extraSpaceUnderStat = int.parse(input);
                             });
-                            prefs.setInt(
+                            globals.prefs.setInt(
                                 "extraSpaceUnderStat", int.parse(input));
                             FirebaseCrashlytics.instance.setCustomKey(
                                 "extraSpaceUnderStat", int.parse(input));

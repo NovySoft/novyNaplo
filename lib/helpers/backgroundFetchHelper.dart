@@ -51,11 +51,10 @@ void backgroundFetch() async {
     await globals.setGlobals();
     await notifHelper.setupNotifications();
     //print(globals.notifications);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       return;
     }
-    if (prefs.getBool("backgroundFetchOnCellular") == false &&
+    if (globals.prefs.getBool("backgroundFetchOnCellular") == false &&
         await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
       return;
     }
@@ -76,7 +75,7 @@ void backgroundFetch() async {
     /*final DateTime now = DateTime.now();
     final int isolateId = Isolate.current.hashCode;
     print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");*/
-    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
     var passKey = encrypt.Key.fromUtf8(config.passKey);
     var codeKey = encrypt.Key.fromUtf8(config.codeKey);
     var userKey = encrypt.Key.fromUtf8(config.userKey);
@@ -84,7 +83,7 @@ void backgroundFetch() async {
     final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
     final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
     String decryptedCode =
-        codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+        codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
     if (decryptedCode == null || decryptedCode == "") {
       await flutterLocalNotificationsPlugin.cancel(111);
       await flutterLocalNotificationsPlugin.show(
@@ -97,9 +96,9 @@ void backgroundFetch() async {
     }
     //fixme MAKE DECRYPT HELPER
     String decryptedUser =
-        userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+        userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
     String decryptedPass =
-        passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+        passEncrypter.decrypt64(globals.prefs.getString("password"), iv: iv);
     globals.userDetails.password = decryptedPass;
     globals.userDetails.username = decryptedUser;
     globals.userDetails.school = decryptedCode;

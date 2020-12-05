@@ -69,15 +69,15 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) {
           return LoadingSpinner();
         });
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await delay(1000);
-    await globals.setGlobals();
     if (globals.verCheckOnStart) {
       await getVersion();
     }
-    if (prefs.getString("code") != null && prefs.getBool("ads") != null) {
-      FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
-      if (prefs.getBool("ads")) {
+    if (globals.prefs.getString("code") != null &&
+        globals.prefs.getBool("ads") != null) {
+      FirebaseCrashlytics.instance
+          .setCustomKey("Ads", globals.prefs.getBool("ads"));
+      if (globals.prefs.getBool("ads")) {
         adBanner.load();
         adBanner.show(
           anchorType: AnchorType.bottom,
@@ -93,13 +93,13 @@ class _LoginPageState extends State<LoginPage> {
       hasPrefs = true;
       try {
         for (var i = 0; i < 2; i++) {
-          final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+          final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
           String decryptedCode =
-              codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
+              codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
           String decryptedUser =
-              userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
-          String decryptedPass =
-              userEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+              userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
+          String decryptedPass = userEncrypter
+              .decrypt64(globals.prefs.getString("password"), iv: iv);
           codeController.text = decryptedCode;
           userController.text = decryptedUser;
           passController.text = decryptedPass;
@@ -169,10 +169,9 @@ class _LoginPageState extends State<LoginPage> {
   //TODO: Only check credentials and do the fetching on loading page.
   void auth(var context, caller) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool("isNew", false);
+      globals.prefs.setBool("isNew", false);
       globals.adsEnabled = false;
-      prefs.setBool("ads", false);
+      globals.prefs.setBool("ads", false);
       globals.adModifier = 0;
       newVersion = false;
       if (caller != "onLoad") {
@@ -225,21 +224,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> save(var context, caller) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     //Inputs
     String code = codeController.text;
     String user = userController.text;
     String pass = passController.text;
     //Encryption
     final iv = encrypt.IV.fromLength(16);
-    prefs.setString("iv", iv.base64);
+    globals.prefs.setString("iv", iv.base64);
     try {
       String encryptedPass = passEncrypter.encrypt(pass, iv: iv).base64;
       String encryptedUser = userEncrypter.encrypt(user, iv: iv).base64;
       String encryptedCode = codeEncrypter.encrypt(code, iv: iv).base64;
-      prefs.setString("password", encryptedPass);
-      prefs.setString("code", encryptedCode);
-      prefs.setString("user", encryptedUser);
+      globals.prefs.setString("password", encryptedPass);
+      globals.prefs.setString("code", encryptedCode);
+      globals.prefs.setString("user", encryptedUser);
       FirebaseAnalytics().setUserProperty(
           name: "Version", value: config.currentAppVersionCode);
       FirebaseCrashlytics.instance
@@ -276,9 +274,9 @@ class _LoginPageState extends State<LoginPage> {
     //String decryptedString = await Cipher2.decryptAesCbc128Padding7(encryptedString, key, iv);
     /*
   print("prefs:");
-  print(prefs.getString("password"));
-  print(prefs.getString("code"));
-  print(prefs.getString("user"));
+  print(globals.prefs.getString("password"));
+  print(globals.prefs.getString("code"));
+  print(globals.prefs.getString("user"));
   */
   }
 
@@ -307,9 +305,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void setNewUserPrefs() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isNew", true);
-    prefs.setBool("isNotNew", true);
+    globals.prefs.setBool("isNew", true);
+    globals.prefs.setBool("isNotNew", true);
   }
 
   @override

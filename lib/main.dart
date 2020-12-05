@@ -46,6 +46,7 @@ class NavigatorKey {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await globals.setGlobals();
   if (foundation.kDebugMode) {
     print("Firebase disabled");
     FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
@@ -58,12 +59,11 @@ void main() async {
   }
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.getBool("isNew") == false) {
+  if (globals.prefs.getBool("isNew") == false) {
     isNew = false;
   } else {
-    if (prefs.getBool("isNotNew") != null) {
-      if (prefs.getBool("isNotNew") == true) {
+    if (globals.prefs.getBool("isNotNew") != null) {
+      if (globals.prefs.getBool("isNotNew") == true) {
         isNotNew = true;
       }
     }
@@ -74,9 +74,9 @@ void main() async {
       } else {
         globals.language = "en";
       }
-      await prefs.setString("FirstOpenTime", DateTime.now().toString());
-      await prefs.setString("Language", globals.language);
-      await prefs.setBool("getVersion", true);
+      await globals.prefs.setString("FirstOpenTime", DateTime.now().toString());
+      await globals.prefs.setString("Language", globals.language);
+      await globals.prefs.setBool("getVersion", true);
     }
   }
   routes = <String, WidgetBuilder>{
@@ -100,14 +100,15 @@ void main() async {
     runApp(
       MyApp(),
     );
-    globals.fetchPeriod =
-        prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
-    globals.backgroundFetch = prefs.getBool("backgroundFetch");
+    globals.fetchPeriod = globals.prefs.getInt("fetchPeriod") == null
+        ? 60
+        : globals.prefs.getInt("fetchPeriod");
+    globals.backgroundFetch = globals.prefs.getBool("backgroundFetch");
     if (globals.backgroundFetch == null ? true : globals.backgroundFetch) {
       globals.backgroundFetchCanWakeUpPhone =
-          prefs.getBool("backgroundFetchCanWakeUpPhone") == null
+          globals.prefs.getBool("backgroundFetchCanWakeUpPhone") == null
               ? true
-              : prefs.getBool("backgroundFetchCanWakeUpPhone");
+              : globals.prefs.getBool("backgroundFetchCanWakeUpPhone");
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
       await delay(1000);

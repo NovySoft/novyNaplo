@@ -9,6 +9,7 @@ import 'dart:io' show Platform;
 
 //Variables used globally;
 //* Session
+SharedPreferences prefs;
 var dJson; //Student JSON
 var avJson; //Avarage JSON
 BuildContext globalContext; //Yes this is a global context variable
@@ -49,7 +50,6 @@ String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
 
 void resetAllGlobals() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
   delSql.clearAllTables();
   prefs.setString("code", null);
   await prefs.clear();
@@ -63,7 +63,7 @@ void resetAllGlobals() async {
 }
 
 Future<void> setGlobals() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   if (prefs.getString("FirstOpenTime") == null) {
     await prefs.setString("FirstOpenTime", DateTime.now().toString());
     await prefs.setString("LastAsked", DateTime.now().toString());

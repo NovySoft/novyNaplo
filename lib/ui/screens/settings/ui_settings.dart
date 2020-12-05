@@ -108,9 +108,7 @@ class _UIsettingsState extends State<UIsettings> {
                       ),
                     ],
                     onChanged: (String value) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setString("Language", value);
+                      await globals.prefs.setString("Language", value);
                       await FirebaseAnalytics().setUserProperty(
                         name: "Language",
                         value: value,
@@ -165,13 +163,11 @@ class _UIsettingsState extends State<UIsettings> {
                   title: Text(getTranslatedString("ads")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.adsEnabled = isOn;
                       });
                       FirebaseCrashlytics.instance.setCustomKey("Ads", isOn);
-                      prefs.setBool("ads", isOn);
+                      globals.prefs.setBool("ads", isOn);
                       FirebaseAnalytics().setUserProperty(
                           name: "Ads", value: isOn ? "ON" : "OFF");
                       globals.adModifier = isOn ? 1 : 0;
@@ -216,8 +212,6 @@ class _UIsettingsState extends State<UIsettings> {
                   title: Text(getTranslatedString("chartAnimations")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.chartAnimations = switchOn;
                       });
@@ -226,11 +220,11 @@ class _UIsettingsState extends State<UIsettings> {
                       if (switchOn) {
                         FirebaseAnalytics().setUserProperty(
                             name: "ChartAnimations", value: "YES");
-                        prefs.setBool("chartAnimations", true);
+                        globals.prefs.setBool("chartAnimations", true);
                       } else {
                         FirebaseAnalytics().setUserProperty(
                             name: "ChartAnimations", value: "NO");
-                        prefs.setBool("chartAnimations", false);
+                        globals.prefs.setBool("chartAnimations", false);
                       }
                     },
                     value: globals.chartAnimations,

@@ -60,14 +60,13 @@ class SettingsBody extends StatefulWidget {
 
 class _SettingsBodyState extends State<SettingsBody> {
   void _onLoad(var context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (main.isNew) {
       main.isNew = false;
       setState(() {
         globals.adsEnabled = true;
         globals.adModifier = 1;
       });
-      prefs.setBool("ads", true);
+      globals.prefs.setBool("ads", true);
       showDialog<void>(
           context: context,
           barrierDismissible: false,

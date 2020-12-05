@@ -62,16 +62,14 @@ class _LoadingPageState extends State<LoadingPage> {
     //FIXME
     Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
     return;
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      await globals.setGlobals();
-      if (prefs.getString("iv") == null ||
-          prefs.getString("code") == null ||
-          prefs.getString("password") == null ||
-          prefs.getString("user") == null) {
+      if (globals.prefs.getString("iv") == null ||
+          globals.prefs.getString("code") == null ||
+          globals.prefs.getString("password") == null ||
+          globals.prefs.getString("user") == null) {
         Navigator.pushReplacementNamed(context, LoginPage.tag);
-        prefs.setBool("isNew", true);
-        prefs.setBool("isNotNew", true);
+        globals.prefs.setBool("isNew", true);
+        globals.prefs.setBool("isNotNew", true);
         return;
       }
       setState(() {
@@ -82,12 +80,12 @@ class _LoadingPageState extends State<LoadingPage> {
       if (globals.verCheckOnStart) {
         await getVersion();
       }
-      if (prefs.getString("FirstOpenTime") != null) {
-        if (DateTime.parse(prefs.getString("FirstOpenTime"))
+      if (globals.prefs.getString("FirstOpenTime") != null) {
+        if (DateTime.parse(globals.prefs.getString("FirstOpenTime"))
                     .difference(DateTime.now()) >=
                 Duration(days: 14) &&
-            prefs.getBool("ShouldAsk") &&
-            DateTime.parse(prefs.getString("LastAsked"))
+            globals.prefs.getBool("ShouldAsk") &&
+            DateTime.parse(globals.prefs.getString("LastAsked"))
                     .difference(DateTime.now()) >=
                 Duration(days: 2) &&
             config.isAppPlaystoreRelease) {
@@ -98,9 +96,10 @@ class _LoadingPageState extends State<LoadingPage> {
         }
       }
       //Load ADS
-      if (prefs.getBool("ads") != null) {
-        FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
-        if (prefs.getBool("ads")) {
+      if (globals.prefs.getBool("ads") != null) {
+        FirebaseCrashlytics.instance
+            .setCustomKey("Ads", globals.prefs.getBool("ads"));
+        if (globals.prefs.getBool("ads")) {
           adBanner.load();
           adBanner.show(
             anchorType: AnchorType.bottom,
@@ -204,8 +203,8 @@ class _LoadingPageState extends State<LoadingPage> {
         "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",
       );
       Navigator.pushReplacementNamed(context, LoginPage.tag);
-      prefs.setBool("isNew", true);
-      prefs.setBool("isNotNew", true);
+      globals.prefs.setBool("isNew", true);
+      globals.prefs.setBool("isNotNew", true);
     }
   }
 
@@ -295,15 +294,14 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> showReviewWindow(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async {
             Navigator.of(context).pop();
-            prefs.setString("LastAsked", DateTime.now().toString());
-            prefs.setBool("ShouldAsk", true);
+            globals.prefs.setString("LastAsked", DateTime.now().toString());
+            globals.prefs.setBool("ShouldAsk", true);
             FirebaseAnalytics().logEvent(
               name: "seenReviewPopUp",
               parameters: {"Action": "Later"},
@@ -327,7 +325,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   } else {
                     inAppReview.openStoreListing();
                   }
-                  prefs.setBool("ShouldAsk", false);
+                  globals.prefs.setBool("ShouldAsk", false);
                   FirebaseAnalytics().logEvent(
                     name: "ratedApp",
                   );
@@ -341,8 +339,9 @@ class _LoadingPageState extends State<LoadingPage> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  prefs.setString("LastAsked", DateTime.now().toString());
-                  prefs.setBool("ShouldAsk", true);
+                  globals.prefs
+                      .setString("LastAsked", DateTime.now().toString());
+                  globals.prefs.setBool("ShouldAsk", true);
                   FirebaseAnalytics().logEvent(
                     name: "seenReviewPopUp",
                     parameters: {"Action": "Later"},
@@ -355,7 +354,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   style: TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
-                  prefs.setBool("ShouldAsk", false);
+                  globals.prefs.setBool("ShouldAsk", false);
                   Navigator.of(context).pop();
                   FirebaseAnalytics().logEvent(
                     name: "seenReviewPopUp",

@@ -117,19 +117,20 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     var decryptedPass, decryptedUser, decryptedCode, status;
-    final iv = encrypt.IV.fromBase64(prefs.getString("iv"));
+    final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
     var passKey = encrypt.Key.fromUtf8(config.passKey);
     var codeKey = encrypt.Key.fromUtf8(config.codeKey);
     var userKey = encrypt.Key.fromUtf8(config.userKey);
     final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
     final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
     final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-    decryptedCode = codeEncrypter.decrypt64(prefs.getString("code"), iv: iv);
-    decryptedUser = userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
+    decryptedCode =
+        codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
+    decryptedUser =
+        userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
     decryptedPass =
-        passEncrypter.decrypt64(prefs.getString("password"), iv: iv);
+        passEncrypter.decrypt64(globals.prefs.getString("password"), iv: iv);
     globals.userDetails.username = decryptedUser;
     globals.userDetails.password = decryptedPass;
     globals.userDetails.school = decryptedCode;

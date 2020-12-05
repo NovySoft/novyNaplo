@@ -38,12 +38,11 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
                       Text(getTranslatedString("shouldVirtualMarksCollapse")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.shouldVirtualMarksCollapse = switchOn;
                       });
-                      prefs.setBool("shouldVirtualMarksCollapse", switchOn);
+                      globals.prefs
+                          .setBool("shouldVirtualMarksCollapse", switchOn);
                       FirebaseCrashlytics.instance
                           .setCustomKey("shouldVirtualMarksCollapse", switchOn);
                     },

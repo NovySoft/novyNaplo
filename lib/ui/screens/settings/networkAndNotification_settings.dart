@@ -417,11 +417,9 @@ class _NetworkAndNotificationSettingsState
                   title: Text(getTranslatedString("notifications")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.notifications = isOn;
-                        prefs.setBool("notifications", isOn);
+                        globals.prefs.setBool("notifications", isOn);
                         FirebaseCrashlytics.instance
                             .setCustomKey("notifications", isOn);
                         FirebaseAnalytics().setUserProperty(
@@ -440,11 +438,9 @@ class _NetworkAndNotificationSettingsState
                   title: Text(getTranslatedString("verCheckOnStart")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.verCheckOnStart = isOn;
-                        prefs.setBool("getVersion", isOn);
+                        globals.prefs.setBool("getVersion", isOn);
                       });
                     },
                     value: globals.verCheckOnStart,
@@ -458,11 +454,9 @@ class _NetworkAndNotificationSettingsState
                       title: Text(getTranslatedString("backgroundFetch")),
                       trailing: Switch(
                         onChanged: (bool isOn) async {
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
                           setState(() {
                             globals.backgroundFetch = isOn;
-                            prefs.setBool("backgroundFetch", isOn);
+                            globals.prefs.setBool("backgroundFetch", isOn);
                             FirebaseCrashlytics.instance
                                 .setCustomKey("backgroundFetch", isOn);
                           });
@@ -502,11 +496,10 @@ class _NetworkAndNotificationSettingsState
                   title: Text(getTranslatedString("backgroundFetchOnCellular")),
                   trailing: Switch(
                     onChanged: (bool isOn) async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
                       setState(() {
                         globals.backgroundFetchOnCellular = isOn;
-                        prefs.setBool("backgroundFetchOnCellular", isOn);
+                        globals.prefs
+                            .setBool("backgroundFetchOnCellular", isOn);
                         FirebaseCrashlytics.instance
                             .setCustomKey("backgroundFetchOnCellular", isOn);
                       });
@@ -541,9 +534,8 @@ class _NetworkAndNotificationSettingsState
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (String input) async {
                           if (FormKey.formKeyTwo.currentState.validate()) {
-                            final SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setInt("fetchPeriod", int.parse(input));
+                            globals.prefs
+                                .setInt("fetchPeriod", int.parse(input));
                             globals.fetchPeriod = int.parse(input);
                             await AndroidAlarmManager.cancel(main.fetchAlarmID);
                             FirebaseCrashlytics.instance.log(
@@ -573,12 +565,10 @@ class _NetworkAndNotificationSettingsState
                       title: Text(getTranslatedString("fetchWakePhone")),
                       trailing: Switch(
                         onChanged: (bool isOn) async {
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
                           setState(() {
                             globals.backgroundFetchCanWakeUpPhone = isOn;
-                            prefs.setBool(
-                                "backgroundFetchCanWakeUpPhone", isOn);
+                            globals.prefs
+                                .setBool("backgroundFetchCanWakeUpPhone", isOn);
                             FirebaseCrashlytics.instance.setCustomKey(
                                 "backgroundFetchCanWakeUpPhone", isOn);
                           });
