@@ -14,7 +14,6 @@ import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
-import 'package:novynaplo/helpers/misc/shortenSubject.dart';
 import 'leiras.dart';
 import 'osztalyCsoport.dart';
 import 'tantargy.dart';

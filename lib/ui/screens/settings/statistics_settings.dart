@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FormKey {
   static final formKey = GlobalKey<FormState>(debugLabel: '_FormKey');

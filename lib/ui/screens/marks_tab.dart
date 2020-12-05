@@ -13,8 +13,6 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';

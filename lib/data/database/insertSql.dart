@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/avarage.dart';
@@ -8,10 +6,8 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';

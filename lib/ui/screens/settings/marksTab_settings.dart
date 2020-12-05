@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MarksTabSettings extends StatefulWidget {
   @override

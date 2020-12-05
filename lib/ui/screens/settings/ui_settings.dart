@@ -6,7 +6,6 @@ import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 String dropDown;
 

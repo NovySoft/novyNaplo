@@ -1,18 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/leiras.dart';
 import 'package:novynaplo/data/models/tantargy.dart';
-import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'exam.dart';
 import 'homework.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
-
 import 'osztalyCsoport.dart';
 
 class Lesson {

@@ -6,12 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/helpers/decryptionHelper.dart';
-import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/i18n/translationProvider.dart';
 

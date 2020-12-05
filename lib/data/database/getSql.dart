@@ -1,19 +1,14 @@
-import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/avarage.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/data/models/extensions.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {

@@ -1,4 +1,3 @@
-import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/models/absence.dart';
@@ -27,14 +26,12 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
-import 'package:novynaplo/ui/screens/calculator_tab.dart' as calculatorPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:open_file/open_file.dart';
-import 'dart:typed_data';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
@@ -137,7 +134,7 @@ class RequestHandler {
       Student student = Student.fromJson(responseJson);
 
       return student;
-    } catch (e, s) {
+    } catch (e) {
       return null;
     }
   }
@@ -163,7 +160,7 @@ class RequestHandler {
       }
 
       return evaluations;
-    } catch (e, s) {
+    } catch (e) {
       return null;
     }
   }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/style.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';

@@ -19,7 +19,6 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/ui/screens/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/ui/screens/loading_screen.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';

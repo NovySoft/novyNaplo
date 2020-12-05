@@ -4,7 +4,6 @@ import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 
 class HomeworkSettingsTab extends StatefulWidget {
