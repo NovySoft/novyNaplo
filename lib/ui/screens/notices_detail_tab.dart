@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
@@ -91,7 +92,7 @@ class NoticeDetailTab extends StatelessWidget {
                   case 2:
                     DateTime date = notice.datum;
                     String dateSimplified =
-                        "${date.year}-${date.month}-${date.day} ${parseIntToWeekdayString(date.weekday)}";
+                        "${date.toDayOnlyString()} ${parseIntToWeekdayString(date.weekday)}";
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,

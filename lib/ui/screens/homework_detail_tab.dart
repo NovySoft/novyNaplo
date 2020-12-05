@@ -8,7 +8,7 @@ import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/misc/delay.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -100,15 +100,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         ]);
                     break;
                   case 1:
-                    String due = widget.hwInfo.hataridoDatuma.year.toString() +
-                        "-" +
-                        widget.hwInfo.hataridoDatuma.month.toString() +
-                        "-" +
-                        widget.hwInfo.hataridoDatuma.day.toString() +
-                        " " +
-                        widget.hwInfo.hataridoDatuma.hour.toString() +
-                        ":" +
-                        widget.hwInfo.hataridoDatuma.minute.toString();
+                    String due = widget.hwInfo.hataridoDatuma.toHumanString();
                     Duration left =
                         widget.hwInfo.hataridoDatuma.difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
@@ -238,15 +230,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                     break;
                   case 3:
                     String giveUp =
-                        widget.hwInfo.rogzitesIdopontja.year.toString() +
-                            "-" +
-                            widget.hwInfo.rogzitesIdopontja.month.toString() +
-                            "-" +
-                            widget.hwInfo.rogzitesIdopontja.day.toString() +
-                            " " +
-                            widget.hwInfo.rogzitesIdopontja.hour.toString() +
-                            ":" +
-                            widget.hwInfo.rogzitesIdopontja.minute.toString();
+                        widget.hwInfo.rogzitesIdopontja.toHumanString();
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,

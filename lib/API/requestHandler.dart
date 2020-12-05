@@ -400,9 +400,9 @@ class RequestHandler {
         BaseURL.kreta(globals.userDetails.school) +
             KretaEndpoints.timetable +
             "?datumTol=" +
-            from.toUtc().toKretaDateString() +
+            from.toUtc().toDayOnlyString() +
             "&datumIg=" +
-            to.toUtc().toKretaDateString(),
+            to.toUtc().toDayOnlyString(),
         headers: {
           "Authorization": "Bearer ${globals.userDetails.token}",
           "User-Agent": config.userAgent,

@@ -2,7 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/homework.dart';
-
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -83,11 +83,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
         dueOver = true;
       }
       String subTitle = "${getTranslatedString("due")}: " +
-          globalHomework[index].hataridoDatuma.year.toString() +
-          "-" +
-          globalHomework[index].hataridoDatuma.month.toString() +
-          "-" +
-          globalHomework[index].hataridoDatuma.day.toString() +
+          globalHomework[index].hataridoDatuma.toDayOnlyString() +
           " " +
           parseIntToWeekdayString(globalHomework[index].hataridoDatuma.weekday);
       return SafeArea(

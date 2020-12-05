@@ -8,7 +8,7 @@ String shortenSubject(String input) {
       !input.toLowerCase().contains("kötlező")) {
     return "Komplex természet";
   }
-  if (input.length >= 55) {
+  if (input.length >= 30) {
     FirebaseAnalytics().logEvent(
       name: "LongSubject",
       parameters: {

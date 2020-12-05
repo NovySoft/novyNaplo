@@ -78,7 +78,7 @@ class _ExamsTabState extends State<ExamsTab> {
       bool isDone = false;
       DateTime examDate = allParsedExams[index].datum;
       String subtitle =
-          "${examDate.year}-${examDate.month}-${examDate.day} ${parseIntToWeekdayString(examDate.weekday)} (${allParsedExams[index].orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
+          "${examDate.toDayOnlyString()} ${parseIntToWeekdayString(examDate.weekday)} (${allParsedExams[index].orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
       if (DateTime.now().compareTo(allParsedExams[index].datum) > 0) {
         isDone = true;
       }

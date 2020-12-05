@@ -241,8 +241,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                     if (index == 0) {
                       DateTime tempDate =
                           tempAbsences[listIndex][0].ora.kezdoDatum;
-                      String simplifiedDate =
-                          "${tempDate.year}-${tempDate.month}-${tempDate.day}";
+                      String simplifiedDate = tempDate.toDayOnlyString();
                       return Padding(
                         padding: EdgeInsets.only(left: 15.0),
                         child: Text(
@@ -282,7 +281,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                                   .kesesPercben !=
                               null
                           ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index - 1].kesesPercben} ${getTranslatedString("minutes")}"
-                          : "${getTranslatedString("absence")}: ${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(tempAbsences[listIndex][index - 1].ora.oraszam)} ${getTranslatedString("lesson")})";
+                          : "${getTranslatedString("absence")}: ${tempDate.toDayOnlyString()} (${intToTHEnding(tempAbsences[listIndex][index - 1].ora.oraszam)} ${getTranslatedString("lesson")})";
                       return AnimatedOpacity(
                         duration: Duration(milliseconds: 500),
                         opacity: opacity,
@@ -387,7 +386,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("date")}: " +
-                              "${tempDate.year}-${tempDate.month}-${tempDate.day} (${intToTHEnding(absence.ora.oraszam)} ${getTranslatedString("lesson")})",
+                              "${tempDate.toDayOnlyString()} (${intToTHEnding(absence.ora.oraszam)} ${getTranslatedString("lesson")})",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );

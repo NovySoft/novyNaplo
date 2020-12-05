@@ -162,10 +162,9 @@ class _LoadingPageState extends State<LoadingPage> {
       });
       examsPage.allParsedExams = await getAllExams();
       examsPage.allParsedExams.sort(
-        (a, b) =>
-            (b.datum.toKretaDateString() + b.orarendiOraOraszama.toString())
-                .compareTo(
-          a.datum.toKretaDateString() + a.orarendiOraOraszama.toString(),
+        (a, b) => (b.datum.toDayOnlyString() + b.orarendiOraOraszama.toString())
+            .compareTo(
+          a.datum.toDayOnlyString() + a.orarendiOraOraszama.toString(),
         ),
       );
       //Events

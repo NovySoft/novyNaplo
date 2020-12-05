@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -18,13 +19,7 @@ String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
   } else if (globals.markCardSubtitle == "Pontos Dátum") {
     subtitle = eval.keszitesDatumaString;
   } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
-    String year = eval.keszitesDatuma.year.toString();
-    String month = eval.keszitesDatuma.month.toString();
-    String day = eval.keszitesDatuma.day.toString();
-    String hour = eval.keszitesDatuma.hour.toString();
-    String minutes = eval.keszitesDatuma.minute.toString();
-    String seconds = eval.keszitesDatuma.second.toString();
-    subtitle = "$year-$month-$day $hour:$minutes:$seconds";
+    subtitle = eval.keszitesDatuma.toHumanString();
   }
   if (subtitle == "" || subtitle == null) {
     subtitle = getTranslatedString("unkown");

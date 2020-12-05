@@ -7,7 +7,7 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -144,11 +144,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   break;
                 case 11:
                   if (widget.lessonInfo.datum != null) {
-                    String date = widget.lessonInfo.datum.year.toString() +
-                        "-" +
-                        widget.lessonInfo.datum.month.toString() +
-                        "-" +
-                        widget.lessonInfo.datum.day.toString();
+                    String date = widget.lessonInfo.datum.toDayOnlyString();
                     return SizedBox(
                       child: Text("${getTranslatedString("date")}: $date",
                           style: TextStyle(
@@ -231,21 +227,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                           widget.lessonInfo.haziFeladatUid != "") &&
                       (widget.lessonInfo.bejelentettSzamonkeresek.length !=
                           0))) {
-                    String due = widget
-                            .lessonInfo.haziFeladat.hataridoDatuma.year
-                            .toString() +
-                        "-" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.month
-                            .toString() +
-                        "-" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.day
-                            .toString() +
-                        " " +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.hour
-                            .toString() +
-                        ":" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.minute
-                            .toString();
+                    String due = widget.lessonInfo.haziFeladat.hataridoDatuma
+                        .toHumanString();
                     Duration left = widget.lessonInfo.haziFeladat.hataridoDatuma
                         .difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
@@ -364,21 +347,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
 
                   if (widget.lessonInfo.haziFeladatUid != null &&
                       widget.lessonInfo.haziFeladatUid != "") {
-                    String due = widget
-                            .lessonInfo.haziFeladat.hataridoDatuma.year
-                            .toString() +
-                        "-" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.month
-                            .toString() +
-                        "-" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.day
-                            .toString() +
-                        " " +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.hour
-                            .toString() +
-                        ":" +
-                        widget.lessonInfo.haziFeladat.hataridoDatuma.minute
-                            .toString();
+                    String due = widget.lessonInfo.haziFeladat.hataridoDatuma
+                        .toHumanString();
                     Duration left = widget.lessonInfo.haziFeladat.hataridoDatuma
                         .difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);

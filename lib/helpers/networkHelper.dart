@@ -3,7 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/calculator.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -157,22 +157,14 @@ class NetworkHelper {
       now = now.subtract(new Duration(days: 1));
       timetablePage.fetchedDayList.add(now);
     }
-    String startDate = now.year.toString() +
-        "-" +
-        now.month.toString() +
-        "-" +
-        now.day.toString();
+    String startDate = now.toDayOnlyString();
     now = date;
     while (now.weekday != sunday) {
       now = now.add(new Duration(days: 1));
       timetablePage.fetchedDayList.add(now);
     }
     timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
-    String endDate = now.year.toString() +
-        "-" +
-        now.month.toString() +
-        "-" +
-        now.day.toString();
+    String endDate = now.toDayOnlyString();
     //Make request
     var header = {
       'Authorization': 'Bearer ${globals.userDetails.token}',

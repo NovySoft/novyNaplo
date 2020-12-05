@@ -8,14 +8,13 @@ extension MyDateTime on DateTime {
         this.year == other.year;
   }
 
-  String toKretaDateString() {
+  String toDayOnlyString() {
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     return formatter.format(this);
   }
 
-  //FIXME: Use this function instead of writing it manually
   String toHumanString() {
-    DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm');
+    DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss');
     return formatter.format(this);
   }
 }

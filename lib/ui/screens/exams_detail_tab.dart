@@ -95,7 +95,7 @@ Widget _buildBody(Exam exam, Color color) {
                 case 9:
                   DateTime examDate = exam.datum;
                   String subtitle =
-                      "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute} (${exam.orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
+                      "${examDate.toHumanString()} (${exam.orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("dateWrite")}: " + subtitle,
@@ -105,8 +105,7 @@ Widget _buildBody(Exam exam, Color color) {
                   break;
                 case 11:
                   DateTime examDate = exam.bejelentesDatuma;
-                  String subtitle =
-                      "${examDate.year}-${examDate.month}-${examDate.day} ${examDate.hour}:${examDate.minute}";
+                  String subtitle = "${examDate.toHumanString()}";
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("dateGiveUp")}: " + subtitle,
