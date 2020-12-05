@@ -58,6 +58,8 @@ class AnimatedChartsTitleCard extends StatelessWidget {
                                     title,
                                     textAlign: TextAlign.left,
                                     textDirection: TextDirection.ltr,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 25.0),
                                   ),

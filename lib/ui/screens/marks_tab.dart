@@ -234,9 +234,8 @@ class MarksTabState extends State<MarksTab>
                       eval: allParsedBySubject[listIndex][index],
                     ),
                     title: capitalize(
-                            allParsedBySubject[listIndex][index].tantargy.nev) +
-                        " " +
-                        allParsedBySubject[listIndex][index].szovegesErtek,
+                      allParsedBySubject[listIndex][index].szovegesErtek,
+                    ),
                     color: color,
                     heroAnimation: AlwaysStoppedAnimation(0),
                     onPressed: MarksDetailTab(
@@ -258,9 +257,8 @@ class MarksTabState extends State<MarksTab>
                 eval: allParsedBySubject[listIndex][index],
               ),
               title: capitalize(
-                      allParsedBySubject[listIndex][index].tantargy.nev) +
-                  " " +
-                  allParsedBySubject[listIndex][index].szovegesErtek,
+                allParsedBySubject[listIndex][index].szovegesErtek,
+              ),
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(

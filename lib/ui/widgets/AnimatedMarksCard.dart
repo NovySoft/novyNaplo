@@ -29,9 +29,6 @@ class AnimatedMarksCard extends StatelessWidget {
       icon = parseSubjectToIcon(subject: eval.tantargy.nev);
     }
     double subTitleSize = 80;
-    if (subTitle.length > 30) {
-      subTitleSize = 100;
-    }
     if (onPressed != null)
       return PressableCard(
           onPressed: null,
@@ -73,6 +70,8 @@ class AnimatedMarksCard extends StatelessWidget {
                                       Text(
                                         title,
                                         textDirection: TextDirection.ltr,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 21,
@@ -82,6 +81,7 @@ class AnimatedMarksCard extends StatelessWidget {
                                       Text(
                                         subTitle,
                                         textDirection: TextDirection.ltr,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 21,

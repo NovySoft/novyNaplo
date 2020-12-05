@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void save(var context, caller) async {
+  Future<void> save(var context, caller) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     //Inputs
     String code = codeController.text;

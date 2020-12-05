@@ -23,7 +23,6 @@ String
 User userDetails =
     new User(); //Contains, password, school, username, current token.
 //* "Permanent"
-//FIXME: Add default values
 String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it

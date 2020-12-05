@@ -29,9 +29,5 @@ String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
   if (subtitle == "" || subtitle == null) {
     subtitle = getTranslatedString("unkown");
   }
-  if (subtitle.length >= trimLength) {
-    subtitle = subtitle.substring(0, trimLength - 3);
-    subtitle += "...";
-  }
   return subtitle;
 }

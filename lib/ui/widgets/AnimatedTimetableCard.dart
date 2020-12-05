@@ -69,6 +69,8 @@ class AnimatedTimetableCard extends StatelessWidget {
                                       title,
                                       textAlign: TextAlign.left,
                                       textDirection: TextDirection.ltr,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 25.0),
                                     ),
@@ -76,6 +78,7 @@ class AnimatedTimetableCard extends StatelessWidget {
                                       subTitle,
                                       textAlign: TextAlign.left,
                                       textDirection: TextDirection.ltr,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontSize: 20.0),

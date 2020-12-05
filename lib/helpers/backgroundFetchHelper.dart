@@ -95,7 +95,7 @@ void backgroundFetch() async {
       );
       return;
     }
-    //TODO MAKE DECRYPT HELPER
+    //fixme MAKE DECRYPT HELPER
     String decryptedUser =
         userEncrypter.decrypt64(prefs.getString("user"), iv: iv);
     String decryptedPass =

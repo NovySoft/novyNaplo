@@ -59,6 +59,8 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                                     title,
                                     textAlign: TextAlign.left,
                                     textDirection: TextDirection.ltr,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 25.0),
                                   ),

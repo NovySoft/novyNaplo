@@ -51,6 +51,8 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           title,
                           textDirection: TextDirection.ltr,
                           textAlign: TextAlign.left,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 21,
@@ -61,6 +63,7 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           subTitle,
                           textDirection: TextDirection.ltr,
                           textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 21,
