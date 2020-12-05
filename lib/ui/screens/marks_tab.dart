@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/decryptionHelper.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
@@ -24,7 +25,6 @@ import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
 import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 List<Evals> allParsedByDate = [];
@@ -117,24 +117,8 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    var decryptedPass, decryptedUser, decryptedCode, status;
-    final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
-    var passKey = encrypt.Key.fromUtf8(config.passKey);
-    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-    var userKey = encrypt.Key.fromUtf8(config.userKey);
-    final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-    final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-    decryptedCode =
-        codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
-    decryptedUser =
-        userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
-    decryptedPass =
-        passEncrypter.decrypt64(globals.prefs.getString("password"), iv: iv);
-    globals.userDetails.username = decryptedUser;
-    globals.userDetails.password = decryptedPass;
-    globals.userDetails.school = decryptedCode;
-    status = await RequestHandler.login(globals.userDetails);
+    await decryptUserDetails();
+    var status = await RequestHandler.login(globals.userDetails);
     if (status == "OK") {
       await RequestHandler.getEverything();
       await RequestHandler.getTimetableMatrix(

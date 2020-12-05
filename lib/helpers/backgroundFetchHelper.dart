@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/helpers/decryptionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
@@ -14,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/i18n/translationProvider.dart';
 
-//FIXME Fix the background fetch errors
+//FIXME Fix the background fetch errors, I mean we also need to rewrite this
 //FIXME:Create a notificationDispatch helper and make "contracted notifications", eg. 15 new marks
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
@@ -75,16 +76,9 @@ void backgroundFetch() async {
     /*final DateTime now = DateTime.now();
     final int isolateId = Isolate.current.hashCode;
     print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");*/
-    final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
-    var passKey = encrypt.Key.fromUtf8(config.passKey);
-    var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-    var userKey = encrypt.Key.fromUtf8(config.userKey);
-    final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-    final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-    final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-    String decryptedCode =
-        codeEncrypter.decrypt64(globals.prefs.getString("code"), iv: iv);
-    if (decryptedCode == null || decryptedCode == "") {
+    await decryptUserDetails();
+    if (globals.userDetails.school == null ||
+        globals.userDetails.school == "") {
       await flutterLocalNotificationsPlugin.cancel(111);
       await flutterLocalNotificationsPlugin.show(
         -111,
@@ -94,20 +88,12 @@ void backgroundFetch() async {
       );
       return;
     }
-    //fixme MAKE DECRYPT HELPER
-    String decryptedUser =
-        userEncrypter.decrypt64(globals.prefs.getString("user"), iv: iv);
-    String decryptedPass =
-        passEncrypter.decrypt64(globals.prefs.getString("password"), iv: iv);
-    globals.userDetails.password = decryptedPass;
-    globals.userDetails.username = decryptedUser;
-    globals.userDetails.school = decryptedCode;
     await mainSql.initDatabase();
     String status = await RequestHandler.login(globals.userDetails);
     if (status == "OK") {
       //print( globals.userDetails.token);
       String token = globals.userDetails.token;
-      await NetworkHelper().getStudentInfo(token, decryptedCode);
+      //await NetworkHelper().getStudentInfo(token, decryptedCode);
     }
     await flutterLocalNotificationsPlugin.cancel(111);
   } catch (e, s) {

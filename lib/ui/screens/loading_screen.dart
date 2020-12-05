@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
@@ -17,7 +16,6 @@ import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/config.dart' as config;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,16 +31,7 @@ import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 
-var passKey = encrypt.Key.fromUtf8(config.passKey);
-var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-var userKey = encrypt.Key.fromUtf8(config.userKey);
-final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-String decryptedCode,
-    decryptedUser,
-    decryptedPass,
-    loadingText = "${getTranslatedString("plsWait")}...";
+String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
 String agent = config.userAgent;
 var response;
