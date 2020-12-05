@@ -15,6 +15,7 @@ import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 //FIXME Fix the background fetch errors
+//FIXME:Create a notificationDispatch helper and make "contracted notifications", eg. 15 new marks
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',

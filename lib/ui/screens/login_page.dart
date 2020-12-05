@@ -22,6 +22,7 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 //FIXME: Future async functions and await
+//FIXME REWRITE EVERYTHING HERE
 TextEditingController codeController = TextEditingController();
 TextEditingController userController = TextEditingController();
 TextEditingController passController = TextEditingController();

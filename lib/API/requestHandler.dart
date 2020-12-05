@@ -318,7 +318,7 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
       //CHECHK FOR ATTACHMENTS, because using this endpoint Kréta doesn't return it
-      //You have to query every single homework
+      //You have to query every single homework, which is bullcrap but I can't change it
       for (var n in responseJson) {
         homeworks.add(await getHomeworkId(n['Uid']));
       }
@@ -525,13 +525,20 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  //FIXME: Make homework attachment an own function which invokes this one
-  static Future<File> downloadFile(String url, String filename,
-      {bool open = true}) async {
+  static Future<File> downloadHWAttachment(Csatolmanyok hwInfo) async {
+    File file = await downloadFile(
+      url: BaseURL.kreta(globals.userDetails.school) +
+          KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.tipus),
+      filename: hwInfo.uid + "." + hwInfo.nev,
+    );
+    return file;
+  }
+
+  static Future<File> downloadFile(
+      {String url, String filename, bool open = true}) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
     File file = new File(path);
-    print(await file.exists());
     if (await file.exists()) {
       if (open) {
         await OpenFile.open(path);

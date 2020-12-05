@@ -209,16 +209,8 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                     child: CircularProgressIndicator(),
                                   );
                                 });
-                                await RequestHandler.downloadFile(
-                                  BaseURL.kreta(globals.userDetails.school) +
-                                      KretaEndpoints.downloadHomeworkCsatolmany(
-                                          widget.hwInfo.csatolmanyok[index].uid,
-                                          widget.hwInfo.csatolmanyok[index]
-                                              .tipus),
-                                  widget.hwInfo.csatolmanyok[index].uid +
-                                      "." +
-                                      widget.hwInfo.csatolmanyok[index].nev,
-                                );
+                                await RequestHandler.downloadHWAttachment(
+                                    widget.hwInfo.csatolmanyok[index]);
                                 setState(() {
                                   downloadIcon[index] = Icon(MdiIcons.check);
                                 });
