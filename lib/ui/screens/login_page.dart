@@ -13,6 +13,8 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/SchoolSearchList.dart';
 import 'package:flutter/services.dart';
 
+Function resetButtonAnimation;
+
 class KeyLoaderKey {
   static final keyLoader = new GlobalKey<State>();
 }
@@ -285,9 +287,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.done,
-        onFieldSubmitted: (term) {
+        onFieldSubmitted: (term) async {
           _passFocus.unfocus();
           FirebaseAnalytics().logEvent(name: "sign_up");
+          resetInputFieldColor();
+          if (!isPressed) {
+            isPressed = true;
+            //If there is an empty field show warning and return
+            if (!checkForEmptyFields()) {
+              resetButtonAnimation();
+              await login();
+              resetButtonAnimation();
+            }
+            isPressed = false;
+          }
         },
       ),
     );

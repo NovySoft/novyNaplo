@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:novynaplo/ui/screens/login_page.dart' as login;
 
 bool squeezed = false;
 double _opacity = 1.0;
@@ -77,6 +78,12 @@ class _StateAnimationButton extends State<CircularProgressButton> {
     @required this.fontSize,
     @required this.onTap,
   });
+
+  @override
+  void initState() {
+    super.initState();
+    login.resetButtonAnimation = reset;
+  }
 
   @override
   Widget build(BuildContext context) {
