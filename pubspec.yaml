@@ -56,7 +56,7 @@ dependencies:
       ref: 0.4.1
   path_provider: any
   open_file: any
-  giffy_dialog: any
+  fluttertoast: any
 
 flutter_icons:
   android: true

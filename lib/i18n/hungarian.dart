@@ -186,7 +186,7 @@ final Map<String, String> translation = {
   "username": "Felhasználónév",
   "password": "Jelszó",
   "login": "Bejelentkezés",
-  "timeoutErr": "Hiba: Kérés timeout",
+  "timeoutErr": "Hiba: Kérés timeout. Próbáld újra később",
   "err": "Hiba",
   "noAns10": "A kérésünkre nem kaptunk választ 10 másodperc után sem!",
   "manCode": "Manuális kód megadás szükséges!",
@@ -358,4 +358,5 @@ final Map<String, String> translation = {
   "attachments": "Csatolmányok",
   "thisLessonsExams": "Dolgozatok",
   "deputy": "Helyettesítés",
+  "mustntLeaveEmpty": "Nem hagyhatod üresen!",
 };

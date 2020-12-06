@@ -1,12 +1,17 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/models/user.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
     as progressButton;
 import 'package:novynaplo/helpers/ui/animations/shake_view.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/SchoolSearchList.dart';
+import 'package:flutter/services.dart';
 
 class KeyLoaderKey {
   static final keyLoader = new GlobalKey<State>();
@@ -18,26 +23,47 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final FocusNode _codeFocus = FocusNode();
   final FocusNode _userFocus = FocusNode();
   final FocusNode _passFocus = FocusNode();
-  final TextEditingController _codeController = TextEditingController();
-  final TextEditingController userController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
-  ShakeController _shakeController;
+  final TextEditingController _schoolController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  ShakeController _userShakeController;
+  ShakeController _schoolShakeController;
   bool isPressed = false;
-  bool _isWrong = false;
+  bool _isWrongUser = false;
   bool _obscureText = true;
+  bool _isWrongSchool = false;
+  User tempUser = User();
 
   @override
   void initState() {
-    _shakeController = ShakeController(
+    _schoolShakeController = ShakeController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _userShakeController = ShakeController(
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   void togglePasswordVisibility() {
@@ -46,9 +72,91 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 
+  void resetInputFieldColor() {
+    setState(() {
+      _isWrongUser = false;
+      _isWrongSchool = false;
+    });
+  }
+
   void setNewUserPrefs() async {
     globals.prefs.setBool("isNew", true);
     globals.prefs.setBool("isNotNew", true);
+  }
+
+  Future<void> login() async {
+    tempUser.school = _schoolController.text;
+    tempUser.username = _userController.text;
+    tempUser.password = _passController.text;
+    String result = await RequestHandler.login(tempUser)
+        .timeout(Duration(seconds: 15), onTimeout: () {
+      return "TIMEOUT";
+    });
+    if (result == "OK") {
+      //FIXME Save username and go to loading page
+    } else if (result == "invalid_username_or_password") {
+      //Wrong username or password
+      setState(() {
+        _userShakeController.shake();
+        _isWrongUser = true;
+      });
+      Fluttertoast.showToast(
+        msg: getTranslatedString("wrongUserPass"),
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    } else if (result == "TIMEOUT") {
+      Fluttertoast.showToast(
+        msg: getTranslatedString("timeoutErr"),
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    } else {
+      FirebaseAnalytics().logEvent(
+        name: "unkownLoginResponse",
+        parameters: {
+          "result": result,
+        },
+      );
+      Fluttertoast.showToast(
+        msg: "${getTranslatedString('unkError')}\n $result",
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    }
+  }
+
+  bool checkForEmptyFields() {
+    if (_schoolController.text == "" ||
+        _userController.text == "" ||
+        _passController.text == "") {
+      setState(() {
+        if (_userController.text == "" || _passController.text == "") {
+          _userShakeController.shake();
+          _isWrongUser = true;
+        }
+        if (_schoolController.text == "") {
+          _schoolShakeController.shake();
+          _isWrongSchool = true;
+        }
+      });
+      Fluttertoast.showToast(
+        msg: getTranslatedString("mustntLeaveEmpty"),
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -62,39 +170,73 @@ class _LoginPageState extends State<LoginPage>
           child: Image.asset('assets/home.png')),
     );
 
-    final codeInput = TextFormField(
-      focusNode: _codeFocus,
-      controller: _codeController,
-      //TODO show list
-      textInputAction: TextInputAction.next,
-      keyboardType: TextInputType.text,
-      autofocus: false,
-      decoration: InputDecoration(
-        hintText: getTranslatedString("schId"),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+    final codeInput = ShakeView(
+      controller: _schoolShakeController,
+      child: TextFormField(
+        focusNode: _codeFocus,
+        controller: _schoolController,
+        //TODO show list
+        onChanged: (text) {
+          if (_isWrongSchool) {
+            setState(() {
+              _isWrongSchool = false;
+            });
+          }
+        },
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: getTranslatedString("schId"),
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 99, 255, 218),
+              width: 2,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide:
+                BorderSide(color: _isWrongSchool ? Colors.red : Colors.grey),
+          ),
         ),
+        onFieldSubmitted: (String input) {
+          _codeFocus.unfocus();
+          FocusScope.of(context).requestFocus(_userFocus);
+        },
       ),
-      onFieldSubmitted: (String input) {
-        _codeFocus.unfocus();
-        FocusScope.of(context).requestFocus(_userFocus);
-      },
     );
 
     final usernameInput = ShakeView(
-      controller: _shakeController,
+      controller: _userShakeController,
       child: TextFormField(
         focusNode: _userFocus,
-        controller: userController,
+        controller: _userController,
+        onChanged: (text) {
+          if (_isWrongUser) {
+            setState(() {
+              _isWrongUser = false;
+            });
+          }
+        },
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: InputDecoration(
           hintText: getTranslatedString("username"),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 99, 255, 218),
+              width: 2,
+            ),
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
-            borderSide: BorderSide(color: _isWrong ? Colors.red : Colors.grey),
+            borderSide:
+                BorderSide(color: _isWrongUser ? Colors.red : Colors.grey),
           ),
         ),
         textInputAction: TextInputAction.next,
@@ -106,11 +248,18 @@ class _LoginPageState extends State<LoginPage>
     );
 
     final passwordInput = ShakeView(
-      controller: _shakeController,
+      controller: _userShakeController,
       child: TextFormField(
         focusNode: _passFocus,
-        controller: passController,
+        controller: _passController,
         autofocus: false,
+        onChanged: (text) {
+          if (_isWrongUser) {
+            setState(() {
+              _isWrongUser = false;
+            });
+          }
+        },
         obscureText: _obscureText,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
@@ -121,9 +270,17 @@ class _LoginPageState extends State<LoginPage>
           ),
           hintText: getTranslatedString("password"),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 99, 255, 218),
+              width: 2,
+            ),
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
-            borderSide: BorderSide(color: _isWrong ? Colors.red : Colors.grey),
+            borderSide:
+                BorderSide(color: _isWrongUser ? Colors.red : Colors.grey),
           ),
         ),
         keyboardType: TextInputType.text,
@@ -145,16 +302,16 @@ class _LoginPageState extends State<LoginPage>
       text: getTranslatedString("login"),
       fontSize: 35,
       onTap: (reset) async {
-        //Fixme make actual logic here
+        resetInputFieldColor();
         if (!isPressed) {
           isPressed = true;
-          reset();
-          await Future.delayed(Duration(seconds: 3));
-          reset();
-          setState(() {
-            _isWrong = true;
-          });
-          _shakeController.shake();
+          //If there is an empty field show warning and return
+          if (!checkForEmptyFields()) {
+            reset();
+            await login();
+            reset();
+          }
+          isPressed = false;
         }
       },
     );

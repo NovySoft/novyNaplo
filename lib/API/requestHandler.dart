@@ -59,12 +59,13 @@ class RequestHandler {
       Map responseJson = jsonDecode(response.body);
 
       if (responseJson["error"] != null) {
-        return getTranslatedString(responseJson["error"]) +
-            (response.statusCode != 200 ? " ${response.statusCode}" : "");
-      } else {
+        return responseJson["error_description"];
+      } else if (response.statusCode == 200) {
         globals.userDetails.token = responseJson["access_token"];
         globals.userDetails.tokenDate = DateTime.now();
         return "OK";
+      } else {
+        return "${getTranslatedString('errWhileFetch')}: ${response.statusCode}";
       }
     } catch (e) {
       try {
@@ -90,12 +91,13 @@ class RequestHandler {
         Map responseJson = jsonDecode(response.body);
 
         if (responseJson["error"] != null) {
-          return getTranslatedString(responseJson["error"]) +
-              (response.statusCode != 200 ? " ${response.statusCode}" : "");
-        } else {
+          return responseJson["error_description"];
+        } else if (response.statusCode == 200) {
           globals.userDetails.token = responseJson["access_token"];
           globals.userDetails.tokenDate = DateTime.now();
           return "OK";
+        } else {
+          return "${getTranslatedString('errWhileFetch')}: ${response.statusCode}";
         }
       } catch (e) {
         return getTranslatedString("noAns");

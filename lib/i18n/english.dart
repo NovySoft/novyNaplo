@@ -262,7 +262,7 @@ final Map<String, String> translation = {
   "username": "Username",
   "password": "Password",
   "login": "Login",
-  "timeoutErr": "Error: request timeout",
+  "timeoutErr": "Error: request timeout. Try again later",
   "err": "Error",
   "noAns10": "We didn't get an answer to our request after 10 seconds!",
   "manCode": "Manual school id entering is required!",
@@ -360,4 +360,5 @@ final Map<String, String> translation = {
   "attachments": "Attachments",
   "thisLessonsExams": "Exams this lesson",
   "deputy": "Deputy",
+  "mustntLeaveEmpty": "You musn't leave it empty!",
 };
