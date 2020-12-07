@@ -7,6 +7,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/data/models/user.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,6 +19,17 @@ import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 int notifId = 2;
 //TODO: FIX first login notifications (disable them, when first time loging in)
 //*Normal inserts
+
+Future<void> insertUser(User user) async {
+  FirebaseCrashlytics.instance.log("insertUser");
+  final Database db = await mainSql.database;
+  await db.insert(
+    'Users',
+    user.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
+}
+
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
   FirebaseCrashlytics.instance.log("insertSingleEval");

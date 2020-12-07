@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/helpers/decryptionHelper.dart';
+import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
@@ -115,25 +117,24 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    await decryptUserDetails();
-    var status = await RequestHandler.login(globals.userDetails);
-    if (status == "OK") {
-      await RequestHandler.getEverything();
-      await RequestHandler.getTimetableMatrix(
-        DateTime(2020, 10, 26),
-        DateTime(2020, 10, 30),
-      );
-      /*await NetworkHelper()
-          .getStudentInfo(globals.userDetails.token, decryptedCode);*/
-      await _setData();
-      setState(() {
-        colors = colors;
-        allParsedByDate = allParsedByDate;
-        allParsedBySubject = allParsedBySubject;
-      });
-    } else {
-      print(status);
+    //FIXME DECRYPT HASZNÁLATA
+    List<User> allUsers = await getAllUsers();
+    for (var n in allUsers) {
+      User currentUser = decryptUserDetails(n);
+      var status = await RequestHandler.login(currentUser);
+      if (status == "OK") {
+        await RequestHandler.getEverything(currentUser);
+        await _setData();
+        setState(() {
+          colors = colors;
+          allParsedByDate = allParsedByDate;
+          allParsedBySubject = allParsedBySubject;
+        });
+      } else {
+        print(status);
+      }
     }
+
     await notifications.flutterLocalNotificationsPlugin.cancel(-111);
   }
 

@@ -3,9 +3,9 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 
-Future<User> decryptUserDetails() async {
+User decryptUserDetails(User input) {
   String decryptedPass, decryptedUser, decryptedCode;
-  final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
+  final iv = encrypt.IV.fromBase64(input.iv);
   var passKey = encrypt.Key.fromUtf8(config.passKey);
   var codeKey = encrypt.Key.fromUtf8(config.codeKey);
   var userKey = encrypt.Key.fromUtf8(config.userKey);
@@ -13,19 +13,20 @@ Future<User> decryptUserDetails() async {
   final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
   final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
   decryptedCode = codeEncrypter.decrypt64(
-    globals.prefs.getString("code"),
+    input.school,
     iv: iv,
   );
   decryptedUser = userEncrypter.decrypt64(
-    globals.prefs.getString("user"),
+    input.username,
     iv: iv,
   );
   decryptedPass = passEncrypter.decrypt64(
-    globals.prefs.getString("password"),
+    input.password,
     iv: iv,
   );
-  globals.userDetails.username = decryptedUser;
-  globals.userDetails.password = decryptedPass;
-  globals.userDetails.school = decryptedCode;
-  return globals.userDetails;
+  return User(
+    school: decryptedCode,
+    username: decryptedUser,
+    password: decryptedPass,
+  );
 }

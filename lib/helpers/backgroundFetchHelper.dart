@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/helpers/decryptionHelper.dart';
+import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
@@ -73,7 +73,8 @@ void backgroundFetch() async {
     /*final DateTime now = DateTime.now();
     final int isolateId = Isolate.current.hashCode;
     print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");*/
-    await decryptUserDetails();
+    //FIXME DECRYPT HASZNÁLATA
+    //await decryptUserDetails();
     if (globals.userDetails.school == null ||
         globals.userDetails.school == "") {
       await flutterLocalNotificationsPlugin.cancel(111);

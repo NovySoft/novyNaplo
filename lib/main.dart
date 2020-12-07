@@ -38,6 +38,7 @@ bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
+//FIXME USE flutter_linkify where possible
 class NavigatorKey {
   static final navigatorKey = GlobalKey<NavigatorState>();
 }

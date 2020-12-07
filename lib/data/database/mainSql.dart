@@ -11,50 +11,43 @@ Future<void> initDatabase() async {
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    join(await getDatabasesPath(), 'NovyNalploDatabase.db'),
+    join(await getDatabasesPath(), 'NovyNalploDatabaseV2.db'),
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) async {
       FirebaseCrashlytics.instance.log("createSqlTables");
       // Run the CREATE TABLE statement on the database.
       await db.execute(
-        "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,szamErtek INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT)",
+        "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,szamErtek INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT,userId INTEGER)",
       );
       await db.execute(
-        "CREATE TABLE Avarage (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL)",
+        "CREATE TABLE Avarage (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER)",
       );
       await db.execute(
-        "CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,id INTEGER,title TEXT,content TEXT,teacher TEXT,dateString TEXT,subject TEXT)",
+        "CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,id INTEGER,title TEXT,content TEXT,teacher TEXT,dateString TEXT,subject TEXT,userId INTEGER)",
       );
       await db.execute(
-        "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT)",
+        "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT,userId INTEGER)",
       );
       await db.execute(
-        "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT);",
+        "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT,userId INTEGER);",
       );
       await db.execute(
-        "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT);",
+        "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT,userId INTEGER);",
       );
       await db.execute(
-        "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT);",
+        "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT,userId INTEGER);",
       );
       await db.execute(
-        'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT);',
+        'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT,userId INTEGER);',
+      );
+      await db.execute(
+        'CREATE TABLE Users (databaseId INTEGER PRIMARY KEY,iv TEXT,username TEXT,password TEXT,code TEXT);',
       );
     },
 
-    onUpgrade: (Database db, int oldVersion, int newVersion) async {
-      await db.execute(
-        "CREATE TABLE IF NOT EXISTS Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT);",
-      );
-      await db.execute(
-        "CREATE TABLE IF NOT EXISTS Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT);",
-      );
-      await db.execute(
-        'CREATE TABLE IF NOT EXISTS Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT);',
-      );
-    },
+    onUpgrade: (Database db, int oldVersion, int newVersion) async {},
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 3,
+    version: 1,
   );
 }

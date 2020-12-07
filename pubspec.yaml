@@ -57,6 +57,7 @@ dependencies:
   path_provider: any
   open_file: any
   fluttertoast: any
+  flutter_linkify: any
 
 flutter_icons:
   android: true

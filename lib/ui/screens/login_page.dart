@@ -1,9 +1,13 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/database/insertSql.dart';
+import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/helpers/data/encryptionHelper.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
     as progressButton;
 import 'package:novynaplo/helpers/ui/animations/shake_view.dart';
@@ -12,8 +16,12 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/SchoolSearchList.dart';
 import 'package:flutter/services.dart';
+import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 
 Function resetButtonAnimation;
+var schoolList = [];
+School selectedSchool = School();
+final TextEditingController schoolController = TextEditingController();
 
 class KeyLoaderKey {
   static final keyLoader = new GlobalKey<State>();
@@ -29,7 +37,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final FocusNode _codeFocus = FocusNode();
   final FocusNode _userFocus = FocusNode();
   final FocusNode _passFocus = FocusNode();
-  final TextEditingController _schoolController = TextEditingController();
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   ShakeController _userShakeController;
@@ -39,6 +46,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool _obscureText = true;
   bool _isWrongSchool = false;
   User tempUser = User();
+
+  void showSelectDialog() {
+    setState(() {
+      showDialog<School>(
+          context: context,
+          builder: (BuildContext context) {
+            return new SchoolSearchList();
+          }).then((dynamic) {
+        setState(() {});
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -87,7 +106,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Future<void> login() async {
-    tempUser.school = _schoolController.text;
+    tempUser.school = selectedSchool.code;
     tempUser.username = _userController.text;
     tempUser.password = _passController.text;
     String result = await RequestHandler.login(tempUser)
@@ -95,7 +114,24 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       return "TIMEOUT";
     });
     if (result == "OK") {
-      //FIXME Save username and go to loading page
+      try {
+        User temp = await encryptUserDetails(tempUser);
+        await insertUser(temp);
+        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+      } catch (e, s) {
+        FirebaseCrashlytics.instance.recordError(
+          e,
+          s,
+          reason: "insertUser encryptUserDetails",
+        );
+        Fluttertoast.showToast(
+          msg: getTranslatedString("errRestart"),
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 18.0,
+        );
+      }
     } else if (result == "invalid_username_or_password") {
       //Wrong username or password
       setState(() {
@@ -135,7 +171,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   bool checkForEmptyFields() {
-    if (_schoolController.text == "" ||
+    if (schoolController.text == "" ||
         _userController.text == "" ||
         _passController.text == "") {
       setState(() {
@@ -143,7 +179,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           _userShakeController.shake();
           _isWrongUser = true;
         }
-        if (_schoolController.text == "") {
+        if (schoolController.text == "") {
           _schoolShakeController.shake();
           _isWrongSchool = true;
         }
@@ -176,8 +212,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       controller: _schoolShakeController,
       child: TextFormField(
         focusNode: _codeFocus,
-        controller: _schoolController,
-        //TODO show list
+        controller: schoolController,
+        readOnly: true,
+        onTap: () {
+          showSelectDialog();
+        },
         onChanged: (text) {
           if (_isWrongSchool) {
             setState(() {

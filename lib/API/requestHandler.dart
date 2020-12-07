@@ -167,34 +167,27 @@ class RequestHandler {
     }
   }
 
-  static Future<dynamic> getSchoolList() async {
+  static Future<List<School>> getSchoolList() async {
     FirebaseCrashlytics.instance.log("getSchoolList");
-    List<School> tempList = [];
-    var header = {
-      'User-Agent': '${config.userAgent}',
-      'Content-Type': 'application/json',
-    };
-    var response;
     try {
-      response = await client
-          .get(
-            BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList,
-            headers: header,
-          )
-          .timeout(const Duration(seconds: 10));
-    } on TimeoutException catch (_) {
-      return "TIMEOUT";
-    } finally {
-      client.close();
+      var response = await client.get(
+        BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList,
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': config.userAgent,
+        },
+      );
+
+      List responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      List<School> schoolList = [];
+
+      responseJson
+          .forEach((absence) => schoolList.add(School.fromJson(absence)));
+
+      return schoolList;
+    } catch (error) {
+      return null;
     }
-    if (response.statusCode != 200) {
-      return response.statusCode;
-    }
-    List<dynamic> responseJson = json.decode(utf8.decode(response.bodyBytes));
-    for (var n in responseJson) {
-      tempList.add(School.fromJson(n));
-    }
-    return tempList;
   }
 
   static Future<List<List<Absence>>> getAbsencesMatrix() async {
@@ -495,7 +488,7 @@ class RequestHandler {
     }
   }
 
-  static Future<void> getEverything() async {
+  static Future<void> getEverything(User user) async {
     marksPage.allParsedByDate = await getEvaluations();
     examsPage.allParsedExams = await getExams();
     noticesPage.allParsedNotices = await getNotices();

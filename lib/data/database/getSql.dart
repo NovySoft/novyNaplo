@@ -6,6 +6,8 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
@@ -301,4 +303,28 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
     outputList[index].add(n);
   }*/
   return outputList;
+}
+
+Future<List<User>> getAllUsers({decrypt = true}) async {
+  final Database db = await mainSql.database;
+
+  final List<Map<String, dynamic>> maps = await db.rawQuery(
+    'SELECT * FROM Users',
+  );
+
+  List<User> tempList = List.generate(maps.length, (i) {
+    User temp = new User(
+      id: maps[i]['databaseId'],
+      iv: maps[i]['iv'],
+      username: maps[i]['username'],
+      password: maps[i]['password'],
+      school: maps[i]['code'],
+    );
+    if (decrypt) {
+      return decryptUserDetails(temp);
+    }
+    return temp;
+  });
+
+  return tempList;
 }
