@@ -201,7 +201,9 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                   );
                                 });
                                 await RequestHandler.downloadHWAttachment(
-                                    widget.hwInfo.csatolmanyok[index]);
+                                  globals.currentUser,
+                                  hwInfo: widget.hwInfo.csatolmanyok[index],
+                                );
                                 setState(() {
                                   downloadIcon[index] = Icon(MdiIcons.check);
                                 });

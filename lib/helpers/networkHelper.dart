@@ -37,7 +37,7 @@ class NetworkHelper {
     return await (Connectivity().checkConnectivity());
   }
 
-  Future<void> getEvents(token, code) async {
+/*   Future<void> getEvents(token, code) async {
     FirebaseCrashlytics.instance.log("getEvents");
     try {
       var headers = {
@@ -100,7 +100,7 @@ class NetworkHelper {
     }
   }
 
-  Future<List<List<Lesson>>> getSpecifiedWeeksLesson(date) async {
+  Future<List<List<Lesson>>> getSpecifiedWeeksLesson({DateTime date}) async {
     FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
       throw Exception(getTranslatedString("noNet"));
@@ -328,7 +328,7 @@ class NetworkHelper {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'getExams');
       return [];
     }
-  }
+  } */
 
 //  Future<Homework> getTeacherHomework(
 //       int hwId, String token, String code) async {

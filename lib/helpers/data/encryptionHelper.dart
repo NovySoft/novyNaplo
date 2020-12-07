@@ -31,6 +31,9 @@ Future<User> encryptUserDetails(User user) async {
       )
       .base64;
   return User(
+    current: user.current,
+    id: user.id,
+    token: user.token,
     iv: iv.base64,
     school: encryptedCode,
     username: encryptedUser,

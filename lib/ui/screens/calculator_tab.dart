@@ -60,6 +60,7 @@ final axisTwo = charts.NumericAxisSpec(
 Color afterAvCol;
 Widget afterAvIcon;
 String afterAvDiff;
+//FIXME Nem lehet kitörölni meg ilyenek XD
 
 class FormKey {
   static final formKey = GlobalKey<FormState>();

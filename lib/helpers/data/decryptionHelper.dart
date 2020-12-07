@@ -25,6 +25,10 @@ User decryptUserDetails(User input) {
     iv: iv,
   );
   return User(
+    current: input.current,
+    token: input.token,
+    id: input.id,
+    iv: iv.base64,
     school: decryptedCode,
     username: decryptedUser,
     password: decryptedPass,

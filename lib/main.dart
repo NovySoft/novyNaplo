@@ -81,8 +81,8 @@ void main() async {
   }
   routes = <String, WidgetBuilder>{
     //FIXME rewert to normal stuff
-    "/": (context) => LoginPage(),
-    //isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
+    "/": (context) =>
+        isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
     SettingsTab.tag: (context) => SettingsTab(),

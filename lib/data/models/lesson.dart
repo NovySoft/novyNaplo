@@ -8,6 +8,7 @@ import 'homework.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 import 'osztalyCsoport.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class Lesson {
   Leiras allapot;
@@ -113,8 +114,10 @@ class Lesson {
       );
     }
     if (temp.haziFeladat == null && temp.haziFeladatUid != null) {
-      temp.haziFeladat =
-          await RequestHandler.getHomeworkId(temp.haziFeladatUid);
+      temp.haziFeladat = await RequestHandler.getHomeworkId(
+        globals.currentUser,
+        id: temp.haziFeladatUid,
+      );
     }
     temp.isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
     temp.tanarNeve = json['TanarNeve'];

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class User {
   String username;
   String password;
@@ -6,6 +8,7 @@ class User {
   String iv;
   DateTime tokenDate;
   int id;
+  bool current;
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,6 +17,7 @@ class User {
       'password': password,
       'iv': iv,
       'code': school,
+      'current': current ? 1 : 0,
     };
   }
 
@@ -24,5 +28,15 @@ class User {
     this.token,
     this.id,
     this.iv,
+    this.current,
+  });
+}
+
+class TokenResponse {
+  String status;
+  User userinfo;
+  TokenResponse({
+    @required this.status,
+    this.userinfo,
   });
 }

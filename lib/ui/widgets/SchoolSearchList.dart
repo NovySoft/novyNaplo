@@ -108,7 +108,7 @@ class _SchoolSearchListState extends State<SchoolSearchList> {
       subtitle: new Text(searchList[index].code),
       onTap: () {
         setState(() {
-          login.selectedSchool = searchList[index].code;
+          login.selectedSchool = searchList[index];
           login.schoolController.text = login.selectedSchool.name;
           Navigator.pop(context);
         });

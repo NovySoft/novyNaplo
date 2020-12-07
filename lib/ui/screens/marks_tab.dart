@@ -119,11 +119,10 @@ class MarksTabState extends State<MarksTab>
     );
     //FIXME DECRYPT HASZNÁLATA
     List<User> allUsers = await getAllUsers();
-    for (var n in allUsers) {
-      User currentUser = decryptUserDetails(n);
+    for (var currentUser in allUsers) {
       var status = await RequestHandler.login(currentUser);
-      if (status == "OK") {
-        await RequestHandler.getEverything(currentUser);
+      if (status.status == "OK") {
+        await RequestHandler.getEverything(status.userinfo);
         await _setData();
         setState(() {
           colors = colors;

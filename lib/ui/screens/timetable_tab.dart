@@ -131,8 +131,12 @@ class _TimetableTabState extends State<TimetableTab> {
               return LoadingSpinner();
             });
         try {
+          //FIXME: Valami nem működik
           List<List<Lesson>> tempLessonList =
-              await RequestHandler.getSpecifiedWeeksLesson(_selectedDate);
+              await RequestHandler.getSpecifiedWeeksLesson(
+            globals.currentUser,
+            date: _selectedDate,
+          );
           lessonsList.addAll(tempLessonList);
           setState(() {
             _selectedDate = datetime;

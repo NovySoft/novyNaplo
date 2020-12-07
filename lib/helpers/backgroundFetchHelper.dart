@@ -38,7 +38,7 @@ int notifId = 2;
 void backgroundFetch() async {
   print("BACKGROUND FETCH");
   try {
-    WidgetsFlutterBinding.ensureInitialized();
+    /*WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     FirebaseAnalytics().logEvent(name: "BackgroundFetch");
     FirebaseAnalytics()
@@ -93,7 +93,7 @@ void backgroundFetch() async {
       String token = globals.userDetails.token;
       //await NetworkHelper().getStudentInfo(token, decryptedCode);
     }
-    await flutterLocalNotificationsPlugin.cancel(111);
+    await flutterLocalNotificationsPlugin.cancel(111);*/
   } catch (e, s) {
     FirebaseCrashlytics.instance.recordError(e, s, reason: 'backgroundFetch');
     await flutterLocalNotificationsPlugin.cancel(111);

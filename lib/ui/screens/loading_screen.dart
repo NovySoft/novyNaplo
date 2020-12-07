@@ -6,6 +6,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
+import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -127,7 +128,7 @@ class _LoadingPageState extends State<LoadingPage> {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].szamErtek != 0),
       );
-      NetworkHelper().setUpCalculatorPage(statisticsPage.allParsedSubjects);
+      setUpCalculatorPage(statisticsPage.allParsedSubjects);
       //Avarages
       setState(() {
         loadingText = getTranslatedString("readAvs");

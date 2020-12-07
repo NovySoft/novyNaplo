@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/models/absence.dart';
@@ -38,7 +39,7 @@ import 'package:path_provider/path_provider.dart';
 var client = http.Client();
 
 class RequestHandler {
-  static Future<String> login(User user) async {
+  static Future<TokenResponse> login(User user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
     try {
       var response = await client.post(
@@ -59,13 +60,21 @@ class RequestHandler {
       Map responseJson = jsonDecode(response.body);
 
       if (responseJson["error"] != null) {
-        return responseJson["error_description"];
+        return TokenResponse(
+          status: responseJson["error_description"],
+        );
       } else if (response.statusCode == 200) {
-        globals.userDetails.token = responseJson["access_token"];
-        globals.userDetails.tokenDate = DateTime.now();
-        return "OK";
+        user.token = responseJson["access_token"];
+        user.tokenDate = DateTime.now();
+        return TokenResponse(
+          status: "OK",
+          userinfo: user,
+        );
       } else {
-        return "${getTranslatedString('errWhileFetch')}: ${response.statusCode}";
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
+        );
       }
     } catch (e) {
       try {
@@ -91,16 +100,26 @@ class RequestHandler {
         Map responseJson = jsonDecode(response.body);
 
         if (responseJson["error"] != null) {
-          return responseJson["error_description"];
+          return TokenResponse(
+            status: responseJson["error_description"],
+          );
         } else if (response.statusCode == 200) {
-          globals.userDetails.token = responseJson["access_token"];
-          globals.userDetails.tokenDate = DateTime.now();
-          return "OK";
+          user.token = responseJson["access_token"];
+          user.tokenDate = DateTime.now();
+          return TokenResponse(
+            status: "OK",
+            userinfo: user,
+          );
         } else {
-          return "${getTranslatedString('errWhileFetch')}: ${response.statusCode}";
+          return TokenResponse(
+            status:
+                "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
+          );
         }
       } catch (e) {
-        return getTranslatedString("noAns");
+        return TokenResponse(
+          status: getTranslatedString("noAns"),
+        );
       }
     }
   }
@@ -122,12 +141,12 @@ class RequestHandler {
     }
   }
 
-  static Future<Student> getStudentInfo() async {
+  static Future<Student> getStudentInfo(User userDetails) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.student,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.student,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -141,12 +160,13 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Evals>> getEvaluations({bool sort = true}) async {
+  static Future<List<Evals>> getEvaluations(User userDetails,
+      {bool sort = true}) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.evaluations,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -190,12 +210,12 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Absence>>> getAbsencesMatrix() async {
+  static Future<List<List<Absence>>> getAbsencesMatrix(User userDetails) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.absences,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -213,12 +233,12 @@ class RequestHandler {
     }
   }
 
-  static Future<Map<String, dynamic>> getGroups() async {
+  static Future<Map<String, dynamic>> getGroups(User userDetails) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.groups,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.groups,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -231,20 +251,20 @@ class RequestHandler {
   }
 
   //!This only throws error for now
-  static Future<List> getClassAvarage(String groupId) async {
+  static Future<List> getClassAvarage(User userDetails, String groupId) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) +
+        BaseURL.kreta(userDetails.school) +
             KretaEndpoints.classAverages +
             "?oktatasiNevelesiFeladatUid=" +
             groupId,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
 
-      print(BaseURL.kreta(globals.userDetails.school) +
+      print(BaseURL.kreta(userDetails.school) +
           KretaEndpoints.classAverages +
           "?oktatasiNevelesiFeladatUid=" +
           groupId);
@@ -267,12 +287,14 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Exam>> getExams({bool sort = true}) async {
+  static Future<List<Exam>> getExams(User userDetails,
+      {bool sort = true}) async {
     try {
+      print(userDetails);
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.exams,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -293,16 +315,16 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Homework>> getHomeworks(DateTime fromDue,
-      {bool sort = true}) async {
+  static Future<List<Homework>> getHomeworks(User userDetails,
+      {@required DateTime fromDue, bool sort = true}) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) +
+        BaseURL.kreta(userDetails.school) +
             KretaEndpoints.homeworks +
             "?datumTol=" +
             fromDue.toUtc().toIso8601String(),
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -312,7 +334,7 @@ class RequestHandler {
       //CHECHK FOR ATTACHMENTS, because using this endpoint Kréta doesn't return it
       //You have to query every single homework, which is bullcrap but I can't change it
       for (var n in responseJson) {
-        homeworks.add(await getHomeworkId(n['Uid']));
+        homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
       homeworks.sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
 
@@ -323,8 +345,8 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(
-      DateTime date) async {
+  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(User userDetails,
+      {DateTime date}) async {
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
       throw Exception(getTranslatedString("noNet"));
     }
@@ -347,8 +369,11 @@ class RequestHandler {
     DateTime endDate = now;
     bool errored = false;
     //Has builtin sorting
-    List<List<Lesson>> lessonList =
-        await getTimetableMatrix(startDate, endDate);
+    List<List<Lesson>> lessonList = await getTimetableMatrix(
+      userDetails,
+      from: startDate,
+      to: endDate,
+    );
     print("Körte $lessonList");
     try {
       return lessonList;
@@ -363,7 +388,8 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Lesson>>> getThisWeeksLessons() async {
+  static Future<List<List<Lesson>>> getThisWeeksLessons(
+      User userDetails) async {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
@@ -380,23 +406,27 @@ class RequestHandler {
     }
     timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     DateTime endDate = now;
-    return await getTimetableMatrix(startDate, endDate);
+    return await getTimetableMatrix(
+      userDetails,
+      from: startDate,
+      to: endDate,
+    );
   }
 
-  static Future<List<List<Lesson>>> getTimetableMatrix(
-      DateTime from, DateTime to) async {
+  static Future<List<List<Lesson>>> getTimetableMatrix(User userDetails,
+      {@required DateTime from, @required DateTime to}) async {
     if (from == null || to == null) return [];
 
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) +
+        BaseURL.kreta(userDetails.school) +
             KretaEndpoints.timetable +
             "?datumTol=" +
             from.toUtc().toDayOnlyString() +
             "&datumIg=" +
             to.toUtc().toDayOnlyString(),
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -416,12 +446,13 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Event>> getEvents({bool sort = true}) async {
+  static Future<List<Event>> getEvents(User userDetails,
+      {bool sort = true}) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.events,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.events,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -441,12 +472,13 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Notice>> getNotices({bool sort = true}) async {
+  static Future<List<Notice>> getNotices(User userDetails,
+      {bool sort = true}) async {
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) + KretaEndpoints.notes,
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.notes,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -465,14 +497,13 @@ class RequestHandler {
     }
   }
 
-  static Future<Homework> getHomeworkId(String id) async {
+  static Future<Homework> getHomeworkId(User userDetails, {String id}) async {
     if (id == null) return Homework();
     try {
       var response = await client.get(
-        BaseURL.kreta(globals.userDetails.school) +
-            KretaEndpoints.homeworkId(id),
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id),
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );
@@ -489,18 +520,19 @@ class RequestHandler {
   }
 
   static Future<void> getEverything(User user) async {
-    marksPage.allParsedByDate = await getEvaluations();
-    examsPage.allParsedExams = await getExams();
-    noticesPage.allParsedNotices = await getNotices();
+    marksPage.allParsedByDate = await getEvaluations(user);
+    examsPage.allParsedExams = await getExams(user);
+    noticesPage.allParsedNotices = await getNotices(user);
     homeworkPage.globalHomework = await getHomeworks(
-      DateTime.now().subtract(
+      user,
+      fromDue: DateTime.now().subtract(
         Duration(
           days: globals.howLongKeepDataForHw.toInt(),
         ),
       ),
     );
-    absencesPage.allParsedAbsences = await getAbsencesMatrix();
-    timetablePage.lessonsList = await getThisWeeksLessons();
+    absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
+    timetablePage.lessonsList = await getThisWeeksLessons(user);
     //Get stuff needed to make statistics
     statisticsPage.allParsedSubjects =
         categorizeSubjectsFromEvals(marksPage.allParsedByDate);
@@ -509,7 +541,7 @@ class RequestHandler {
           .where((element) => element[0].szamErtek != 0),
     );
     setUpCalculatorPage(statisticsPage.allParsedSubjects);
-    eventsPage.allParsedEvents = await getEvents();
+    eventsPage.allParsedEvents = await getEvents(user);
   }
 
   static void printWrapped(String text) {
@@ -517,16 +549,18 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  static Future<File> downloadHWAttachment(Csatolmanyok hwInfo) async {
+  static Future<File> downloadHWAttachment(User userDetails,
+      {Csatolmanyok hwInfo}) async {
     File file = await downloadFile(
-      url: BaseURL.kreta(globals.userDetails.school) +
+      userDetails,
+      url: BaseURL.kreta(userDetails.school) +
           KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.tipus),
       filename: hwInfo.uid + "." + hwInfo.nev,
     );
     return file;
   }
 
-  static Future<File> downloadFile(
+  static Future<File> downloadFile(User userDetails,
       {String url, String filename, bool open = true}) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
@@ -540,7 +574,7 @@ class RequestHandler {
       var response = await client.get(
         url,
         headers: {
-          "Authorization": "Bearer ${globals.userDetails.token}",
+          "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
         },
       );

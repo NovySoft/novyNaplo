@@ -41,7 +41,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT,userId INTEGER);',
       );
       await db.execute(
-        'CREATE TABLE Users (databaseId INTEGER PRIMARY KEY,iv TEXT,username TEXT,password TEXT,code TEXT);',
+        'CREATE TABLE Users (databaseId INTEGER PRIMARY KEY,iv TEXT,username TEXT,password TEXT,code TEXT, "current" INTEGER DEFAULT 0);',
       );
     },
 

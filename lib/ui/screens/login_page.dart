@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/user.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool _obscureText = true;
   bool _isWrongSchool = false;
   User tempUser = User();
+  bool isFirstUser = false;
 
   void showSelectDialog() {
     setState(() {
@@ -70,6 +72,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
     );
     super.initState();
+    setNewUserPrefs();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -101,6 +104,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   void setNewUserPrefs() async {
+    isFirstUser = (await getAllUsers(decrypt: false)).length > 0;
     globals.prefs.setBool("isNew", true);
     globals.prefs.setBool("isNotNew", true);
   }
@@ -109,13 +113,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     tempUser.school = selectedSchool.code;
     tempUser.username = _userController.text;
     tempUser.password = _passController.text;
-    String result = await RequestHandler.login(tempUser)
+    TokenResponse result = await RequestHandler.login(tempUser)
         .timeout(Duration(seconds: 15), onTimeout: () {
-      return "TIMEOUT";
+      return TokenResponse(status: "TIMEOUT");
     });
-    if (result == "OK") {
+    if (result.status == "OK") {
       try {
         User temp = await encryptUserDetails(tempUser);
+        temp.current = isFirstUser;
         await insertUser(temp);
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       } catch (e, s) {
@@ -132,7 +137,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           fontSize: 18.0,
         );
       }
-    } else if (result == "invalid_username_or_password") {
+    } else if (result.status == "invalid_username_or_password") {
       //Wrong username or password
       setState(() {
         _userShakeController.shake();
@@ -145,7 +150,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         textColor: Colors.white,
         fontSize: 18.0,
       );
-    } else if (result == "TIMEOUT") {
+    } else if (result.status == "TIMEOUT") {
       Fluttertoast.showToast(
         msg: getTranslatedString("timeoutErr"),
         gravity: ToastGravity.BOTTOM,

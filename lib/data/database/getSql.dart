@@ -11,6 +11,7 @@ import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/global.dart' as globals;
 
 // A method that retrieves all the evals from the table.
 Future<List<Evals>> getAllEvals() async {
@@ -305,7 +306,7 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
   return outputList;
 }
 
-Future<List<User>> getAllUsers({decrypt = true}) async {
+Future<List<User>> getAllUsers({bool decrypt = true}) async {
   final Database db = await mainSql.database;
 
   final List<Map<String, dynamic>> maps = await db.rawQuery(
@@ -319,12 +320,13 @@ Future<List<User>> getAllUsers({decrypt = true}) async {
       username: maps[i]['username'],
       password: maps[i]['password'],
       school: maps[i]['code'],
+      current: maps[i]['current'] == 1 ? true : false,
     );
     if (decrypt) {
       return decryptUserDetails(temp);
     }
     return temp;
   });
-
+  globals.decodedUserList = tempList;
   return tempList;
 }
