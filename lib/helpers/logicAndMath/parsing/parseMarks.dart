@@ -1,32 +1,7 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/evals.dart';
 
-Future<List<dynamic>> parseAllByDate(var input) async {
-  List<Evals> jegyArray = [];
-  var jegyek;
-  try {
-    jegyek = input["Evaluations"];
-    jegyArray = [];
-    for (var n in jegyek) {
-      jegyArray.add(Evals.fromJson(n));
-    }
-  } catch (e, s) {
-    FirebaseCrashlytics.instance.recordError(
-      e,
-      s,
-      reason: 'parseAllByDate',
-      printDetails: true,
-    );
-    return [];
-  }
-  jegyArray.sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
-  await batchInsertEval(jegyArray);
-  return jegyArray;
-}
-
 List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
-  List<Evals> jegyArray = input;
+  List<Evals> jegyArray = List.from(input);
   List<List<Evals>> jegyMatrix = [[]];
   jegyArray.sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
   String lastString = "";
@@ -49,7 +24,6 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
     n.sort((a, b) => a.rogzitesDatuma.compareTo(b.rogzitesDatuma));
     _index++;
   }
-  print(jegyMatrix);
   return jegyMatrix;
 }
 

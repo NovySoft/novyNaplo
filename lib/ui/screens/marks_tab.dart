@@ -83,7 +83,8 @@ class MarksTabState extends State<MarksTab>
     super.dispose();
   }
 
-  Future<void> _setData() async {
+  void _setData() {
+    allParsedByDate = allParsedByDate;
     colors = getRandomColors(allParsedByDate.length);
     allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
   }
@@ -123,13 +124,11 @@ class MarksTabState extends State<MarksTab>
       var status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
         await RequestHandler.getEverything(status.userinfo);
-        await _setData();
         setState(() {
-          colors = colors;
-          allParsedByDate = allParsedByDate;
-          allParsedBySubject = allParsedBySubject;
+          _setData();
         });
       } else {
+        //Fixme show toasts on errors;
         print(status);
       }
     }

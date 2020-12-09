@@ -177,8 +177,9 @@ class RequestHandler {
       responseJson
           .forEach((evaluation) => evaluations.add(Evals.fromJson(evaluation)));
       if (sort) {
-        evaluations
-            .sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
+        evaluations.sort(
+          (a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma),
+        );
       }
 
       return evaluations;
@@ -233,64 +234,9 @@ class RequestHandler {
     }
   }
 
-  static Future<Map<String, dynamic>> getGroups(User userDetails) async {
-    try {
-      var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.groups,
-        headers: {
-          "Authorization": "Bearer ${userDetails.token}",
-          "User-Agent": config.userAgent,
-        },
-      );
-
-      List responseJson = jsonDecode(response.body);
-    } catch (error) {
-      print("ERROR: KretaAPI.getGroup: " + error.toString());
-      return null;
-    }
-  }
-
-  //!This only throws error for now
-  static Future<List> getClassAvarage(User userDetails, String groupId) async {
-    try {
-      var response = await client.get(
-        BaseURL.kreta(userDetails.school) +
-            KretaEndpoints.classAverages +
-            "?oktatasiNevelesiFeladatUid=" +
-            groupId,
-        headers: {
-          "Authorization": "Bearer ${userDetails.token}",
-          "User-Agent": config.userAgent,
-        },
-      );
-
-      print(BaseURL.kreta(userDetails.school) +
-          KretaEndpoints.classAverages +
-          "?oktatasiNevelesiFeladatUid=" +
-          groupId);
-
-      dynamic responseJson = jsonDecode(response.body);
-      List averages = [];
-
-      //TODO: Create class
-      /*responseJson.forEach((average) {
-        averages.add([
-          Subject.fromJson(average["Tantargy"]),
-          average["OsztalyCsoportAtlag"]
-        ]);
-      });*/
-
-      return averages;
-    } catch (error) {
-      print("ERROR: KretaAPI.getAverages: " + error.toString());
-      return null;
-    }
-  }
-
   static Future<List<Exam>> getExams(User userDetails,
       {bool sort = true}) async {
     try {
-      print(userDetails);
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
         headers: {
@@ -374,7 +320,6 @@ class RequestHandler {
       from: startDate,
       to: endDate,
     );
-    print("Körte $lessonList");
     try {
       return lessonList;
     } catch (e) {

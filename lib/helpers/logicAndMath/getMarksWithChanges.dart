@@ -21,7 +21,6 @@ void getMarksWithChanges(List<List<Evals>> input) async {
     }
     AV temp = new AV();
     for (var y in n) {
-      print(y.szamErtek);
       sum += y.szamErtek * y.sulySzazalekErteke / 100;
       index += 1 * y.sulySzazalekErteke / 100;
       if (listIndex == n.length - 1) {
