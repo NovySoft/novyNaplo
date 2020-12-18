@@ -40,7 +40,7 @@ class NoticeDetailTab extends StatelessWidget {
                 decoration: BoxDecoration(color: color),
                 child: Center(
                   child: Text(
-                    notice.cim,
+                    notice.title,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 25, color: Colors.black),
                   ),
@@ -64,7 +64,7 @@ class NoticeDetailTab extends StatelessWidget {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            capitalize(notice.tartalom),
+                            capitalize(notice.content),
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20.0),
                           ),
@@ -83,14 +83,14 @@ class NoticeDetailTab extends StatelessWidget {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            notice.tanar,
+                            notice.teacher,
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ]);
                     break;
                   case 2:
-                    DateTime date = notice.datum;
+                    DateTime date = notice.date;
                     String dateSimplified =
                         "${date.toDayOnlyString()} ${parseIntToWeekdayString(date.weekday)}";
                     return Column(
@@ -124,9 +124,9 @@ class NoticeDetailTab extends StatelessWidget {
                               fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          notice.tantargy == null
+                          notice.subject == null
                               ? getTranslatedString("unkown")
-                              : capitalize(notice.tantargy),
+                              : capitalize(notice.subject),
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 20.0),
                         ),

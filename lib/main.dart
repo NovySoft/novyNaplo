@@ -34,7 +34,6 @@ import 'package:firebase_performance/firebase_performance.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 bool isNew = true;
-bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
@@ -62,27 +61,18 @@ void main() async {
   if (globals.prefs.getBool("isNew") == false) {
     isNew = false;
   } else {
-    if (globals.prefs.getBool("isNotNew") != null) {
-      if (globals.prefs.getBool("isNotNew") == true) {
-        isNotNew = true;
-      }
+    String languageCode = Platform.localeName.split('_')[1];
+    if (languageCode.toLowerCase().contains('hu')) {
+      globals.language = "hu";
+    } else {
+      globals.language = "en";
     }
-    if (isNotNew == false) {
-      String languageCode = Platform.localeName.split('_')[1];
-      if (languageCode.toLowerCase().contains('hu')) {
-        globals.language = "hu";
-      } else {
-        globals.language = "en";
-      }
-      await globals.prefs.setString("FirstOpenTime", DateTime.now().toString());
-      await globals.prefs.setString("Language", globals.language);
-      await globals.prefs.setBool("getVersion", true);
-    }
+    await globals.prefs.setString("FirstOpenTime", DateTime.now().toString());
+    await globals.prefs.setString("Language", globals.language);
+    await globals.prefs.setBool("getVersion", true);
   }
   routes = <String, WidgetBuilder>{
-    //FIXME rewert to normal stuff
-    "/": (context) =>
-        isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
+    "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
     SettingsTab.tag: (context) => SettingsTab(),

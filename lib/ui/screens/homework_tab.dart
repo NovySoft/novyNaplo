@@ -67,7 +67,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       );
     } else {
       //Hide if it doesn't needed
-      DateTime afterDue = globalHomework[index].hataridoDatuma;
+      DateTime afterDue = globalHomework[index].dueDate;
       if (globals.howLongKeepDataForHw != -1) {
         afterDue =
             afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
@@ -77,19 +77,18 @@ class _HomeworkTabState extends State<HomeworkTab> {
       }
 
       bool dueOver = false;
-      var left =
-          globalHomework[index].hataridoDatuma.difference(DateTime.now());
+      var left = globalHomework[index].dueDate.difference(DateTime.now());
       if (left.inMinutes / 60 < 0) {
         dueOver = true;
       }
       String subTitle = "${getTranslatedString("due")}: " +
-          globalHomework[index].hataridoDatuma.toDayOnlyString() +
+          globalHomework[index].dueDate.toDayOnlyString() +
           " " +
-          parseIntToWeekdayString(globalHomework[index].hataridoDatuma.weekday);
+          parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
       return SafeArea(
         child: AnimatedHomeworkCard(
           dueOver: dueOver,
-          title: globalHomework[index].tantargy.nev,
+          title: globalHomework[index].subject.name,
           subTitle: subTitle, //lessonsList[0][index].classroom,
           color: colors[index],
           heroAnimation: AlwaysStoppedAnimation(0),

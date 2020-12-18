@@ -85,32 +85,36 @@ class _AbsencesTabState extends State<AbsencesTab>
         List.from(tempAbsences).expand((i) => i).toList().cast<Absence>();
     if (!legendSelection.igazolando) {
       oneDAbsences
-          .removeWhere((element) => element.igazolasAllapota == "Igazolando");
+          .removeWhere((element) => element.justificationState == "Igazolando");
     }
     if (!legendSelection.igazolatlan) {
-      oneDAbsences
-          .removeWhere((element) => element.igazolasAllapota == "Igazolatlan");
+      oneDAbsences.removeWhere(
+          (element) => element.justificationState == "Igazolatlan");
     }
     if (!legendSelection.igazolt) {
       oneDAbsences
-          .removeWhere((element) => element.igazolasAllapota == "Igazolt");
+          .removeWhere((element) => element.justificationState == "Igazolt");
     }
     if (oneDAbsences.length != 0) {
       oneDAbsences.sort(
-        (a, b) =>
-            (b.ora.kezdoDatumString + " " + b.ora.oraszam.toString()).compareTo(
-          a.ora.kezdoDatumString + " " + a.ora.oraszam.toString(),
+        (a, b) => (b.lesson.startDate.toHumanString() +
+                " " +
+                b.lesson.lessonNumber.toString())
+            .compareTo(
+          a.lesson.startDate.toHumanString() +
+              " " +
+              a.lesson.lessonNumber.toString(),
         ),
       );
       List<Absence> tempList = List.from(oneDAbsences);
       List<List<Absence>> outputList = [[]];
       int index = 0;
-      DateTime dateBefore = tempList[0].ora.kezdoDatum;
+      DateTime dateBefore = tempList[0].lesson.startDate;
       for (var n in tempList) {
-        if (!(n.ora.kezdoDatum.isSameDay(dateBefore))) {
+        if (!(n.lesson.startDate.isSameDay(dateBefore))) {
           index++;
           outputList.add([]);
-          dateBefore = n.ora.kezdoDatum;
+          dateBefore = n.lesson.startDate;
         }
         outputList[index].add(n);
       }
@@ -140,32 +144,36 @@ class _AbsencesTabState extends State<AbsencesTab>
 
         if (!legendSelection.igazolando) {
           oneDAbsences.removeWhere(
-              (element) => element.igazolasAllapota == "Igazolando");
+              (element) => element.justificationState == "Igazolando");
         }
         if (!legendSelection.igazolatlan) {
           oneDAbsences.removeWhere(
-              (element) => element.igazolasAllapota == "Igazolatlan");
+              (element) => element.justificationState == "Igazolatlan");
         }
         if (!legendSelection.igazolt) {
-          oneDAbsences
-              .removeWhere((element) => element.igazolasAllapota == "Igazolt");
+          oneDAbsences.removeWhere(
+              (element) => element.justificationState == "Igazolt");
         }
         if (oneDAbsences.length != 0) {
           oneDAbsences.sort(
-            (a, b) => (b.ora.kezdoDatumString + " " + b.ora.oraszam.toString())
+            (a, b) => (b.lesson.startDate.toHumanString() +
+                    " " +
+                    b.lesson.lessonNumber.toString())
                 .compareTo(
-              a.ora.kezdoDatumString + " " + a.ora.oraszam.toString(),
+              a.lesson.startDate.toHumanString() +
+                  " " +
+                  a.lesson.lessonNumber.toString(),
             ),
           );
           List<Absence> tempList = List.from(oneDAbsences).cast<Absence>();
           List<List<Absence>> outputList = [[]];
           int index = 0;
-          DateTime dateBefore = tempList[0].ora.kezdoDatum;
+          DateTime dateBefore = tempList[0].lesson.startDate;
           for (var n in tempList) {
-            if (!isSameDay(n.ora.kezdoDatum, dateBefore)) {
+            if (!isSameDay(n.lesson.startDate, dateBefore)) {
               index++;
               outputList.add([]);
-              dateBefore = n.ora.kezdoDatum;
+              dateBefore = n.lesson.startDate;
             }
             outputList[index].add(n);
           }
@@ -240,7 +248,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       DateTime tempDate =
-                          tempAbsences[listIndex][0].ora.kezdoDatum;
+                          tempAbsences[listIndex][0].lesson.startDate;
                       String simplifiedDate = tempDate.toDayOnlyString();
                       return Padding(
                         padding: EdgeInsets.only(left: 15.0),
@@ -260,28 +268,29 @@ class _AbsencesTabState extends State<AbsencesTab>
                       Color color = getAbsenceCardColor(
                           tempAbsences[listIndex][index - 1]);
                       var animationController;
-                      if (tempAbsences[listIndex][index - 1].igazolasAllapota ==
+                      if (tempAbsences[listIndex][index - 1]
+                              .justificationState ==
                           "Igazolando") {
                         opacity = legendSelection.igazolando ? 1 : 0;
                         animationController = _animationControllerBeJustified;
                       } else if (tempAbsences[listIndex][index - 1]
-                              .igazolasAllapota ==
+                              .justificationState ==
                           "Igazolatlan") {
                         opacity = legendSelection.igazolatlan ? 1 : 0;
                         animationController = _animationControllerUnJustified;
                       } else if (tempAbsences[listIndex][index - 1]
-                              .igazolasAllapota ==
+                              .justificationState ==
                           "Igazolt") {
                         opacity = legendSelection.igazolt ? 1 : 0;
                         animationController = _animationControllerJustified;
                       }
                       DateTime tempDate =
-                          tempAbsences[listIndex][index - 1].ora.kezdoDatum;
+                          tempAbsences[listIndex][index - 1].lesson.startDate;
                       String subTitle = tempAbsences[listIndex][index - 1]
-                                  .kesesPercben !=
+                                  .delayInMinutes !=
                               null
-                          ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index - 1].kesesPercben} ${getTranslatedString("minutes")}"
-                          : "${getTranslatedString("absence")}: ${tempDate.toDayOnlyString()} (${intToTHEnding(tempAbsences[listIndex][index - 1].ora.oraszam)} ${getTranslatedString("lesson")})";
+                          ? "${getTranslatedString("delay")}: ${tempAbsences[listIndex][index - 1].delayInMinutes} ${getTranslatedString("minutes")}"
+                          : "${getTranslatedString("absence")}: ${tempDate.toDayOnlyString()} (${intToTHEnding(tempAbsences[listIndex][index - 1].lesson.lessonNumber)} ${getTranslatedString("lesson")})";
                       return AnimatedOpacity(
                         duration: Duration(milliseconds: 500),
                         opacity: opacity,
@@ -291,12 +300,11 @@ class _AbsencesTabState extends State<AbsencesTab>
                           child: AnimatedTitleSubtitleCard(
                             heroAnimation: AlwaysStoppedAnimation(0),
                             color: color,
-                            title: tempAbsences[listIndex][index - 1]
-                                    .rogzitoTanarNeve +
+                            title: tempAbsences[listIndex][index - 1].teacher +
                                 " - " +
                                 capitalize(tempAbsences[listIndex][index - 1]
-                                    .tantargy
-                                    .nev),
+                                    .subject
+                                    .name),
                             subTitle: subTitle,
                             onPressed: AbsencencesDetailTab(
                               absence: tempAbsences[listIndex][index - 1],
@@ -325,7 +333,7 @@ class AbsencencesDetailTab extends StatelessWidget {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(absence.tantargy.nev))),
+      appBar: AppBar(title: Text(capitalize(absence.subject.name))),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -339,7 +347,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                 collapseMode: CollapseMode.parallax,
                 stretchModes: [StretchMode.zoomBackground],
                 background: Icon(
-                  parseSubjectToIcon(subject: absence.tantargy.nev),
+                  parseSubjectToIcon(subject: absence.subject.name),
                   size: 150,
                   color: Colors.black38,
                   textDirection: TextDirection.ltr,
@@ -355,7 +363,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                       padding:
                           const EdgeInsets.only(left: 15, top: 16, bottom: 16),
                       child: Text(
-                        '${absence.kesesPercben != null ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
+                        '${absence.delayInMinutes != null ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -367,7 +375,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("subject")}: " +
-                              absence.tantargy.nev,
+                              absence.subject.name,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -376,17 +384,17 @@ class AbsencencesDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("teacher")}: " +
-                              absence.rogzitoTanarNeve,
+                              absence.teacher,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 5:
-                    DateTime tempDate = absence.ora.kezdoDatum;
+                    DateTime tempDate = absence.lesson.startDate;
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("date")}: " +
-                              "${tempDate.toDayOnlyString()} (${intToTHEnding(absence.ora.oraszam)} ${getTranslatedString("lesson")})",
+                              "${tempDate.toDayOnlyString()} (${intToTHEnding(absence.lesson.lessonNumber)} ${getTranslatedString("lesson")})",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
@@ -395,17 +403,17 @@ class AbsencencesDetailTab extends StatelessWidget {
                     return SizedBox(
                       child: Text(
                           "${getTranslatedString("stateOfJustification")}: " +
-                              "${getTranslatedString(absence.igazolasAllapota)}",
+                              "${getTranslatedString(absence.justificationState)}",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                     break;
                   case 9:
-                    return absence.igazolasTipusa != null
+                    return absence.justificationType != null
                         ? SizedBox(
                             child: Text(
                                 "${getTranslatedString("justificationType")}: " +
-                                    "${getTranslatedString(absence.igazolasTipusa.nev)}",
+                                    "${getTranslatedString(absence.justificationType.name)}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold)),
                           )

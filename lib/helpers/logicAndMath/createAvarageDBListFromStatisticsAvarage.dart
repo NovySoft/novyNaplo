@@ -1,17 +1,17 @@
-import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
-//Used to save avarages (created for statiscs page) to database
-List<Avarage> createAvarageDBListFromStatisticsAvarage(
+//Used to save averages (created for statiscs page) to database
+List<Average> createAverageDBListFromStatisticsAverage(
   AV bestSubject,
-  List<AV> avaragesList,
+  List<AV> averagesList,
   AV worstSubject,
 ) {
-  List<Avarage> tempList = [];
-  tempList.add(stats.bestSubjectAv.toDatabaseAvarage());
-  for (var n in avaragesList) {
-    tempList.add(n.toDatabaseAvarage());
+  List<Average> tempList = [];
+  tempList.add(stats.bestSubjectAv.toDatabaseAverage());
+  for (var n in averagesList) {
+    tempList.add(n.toDatabaseAverage());
   }
-  tempList.add(worstSubject.toDatabaseAvarage());
+  tempList.add(worstSubject.toDatabaseAverage());
   return tempList;
 }

@@ -13,10 +13,10 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     numVal = 0;
     oszto = 0;
     subjectMarks.add([]);
-    subjectMarks[index].add(n[0].tantargy.nev);
+    subjectMarks[index].add(n[0].subject.name);
     for (var y in n) {
-      numVal += y.szamErtek *  y.sulySzazalekErteke / 100;
-      oszto += 1 *  y.sulySzazalekErteke / 100;
+      numVal += y.numberValue * y.weight / 100;
+      oszto += 1 * y.weight / 100;
       subjectMarks[index].add(numVal / oszto);
     }
     index++;

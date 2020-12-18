@@ -18,10 +18,10 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 //TODO: Add option to add mark calculator marks to what if
-//TODO: add performance to mark calculator and also make avarages a before and after gauge pair
+//TODO: add performance to mark calculator and also make averages a before and after gauge pair
 List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
-List<CalculatorData> avarageList = [];
+List<CalculatorData> averageList = [];
 var currentIndex = 0;
 num currCount;
 num currSum;
@@ -393,8 +393,8 @@ class CalculatorTabState extends State<CalculatorTab>
     if (marksPage.allParsedByDate.length != 0) {
       dropdownValue = dropdownValues[0];
       currentIndex = 0;
-      currCount = avarageList[0].count;
-      currSum = avarageList[0].sum;
+      currCount = averageList[0].count;
+      currSum = averageList[0].sum;
       currentSubject = stats.allParsedSubjects[0];
     }
     getAllSubjectsAv(stats.allParsedSubjects);
@@ -555,8 +555,8 @@ class CalculatorTabState extends State<CalculatorTab>
                       currentIndex = dropdownValues.indexOf(newValue);
                       currentSubject = stats
                           .allParsedSubjects[currentIndex]; //INDEX 0 = OLDEST
-                      currCount = avarageList[currentIndex].count;
-                      currSum = avarageList[currentIndex].sum;
+                      currCount = averageList[currentIndex].count;
+                      currSum = averageList[currentIndex].sum;
                     });
                   },
                   items: dropdownValues
@@ -839,8 +839,8 @@ class CalculatorTabState extends State<CalculatorTab>
                     dropdownValue = newValue;
                     currentIndex = dropdownValues.indexOf(newValue);
                     currentSubject = stats.allParsedSubjects[currentIndex];
-                    currCount = avarageList[currentIndex].count;
-                    currSum = avarageList[currentIndex].sum;
+                    currCount = averageList[currentIndex].count;
+                    currSum = averageList[currentIndex].sum;
                   });
                 },
                 items: dropdownValues
@@ -939,8 +939,8 @@ class CalculatorTabState extends State<CalculatorTab>
     double virtualIndex = 0;
     int listArray = 0;
     for (var n in defaultValues) {
-      sum += n.szamErtek * n.sulySzazalekErteke / 100;
-      index += 1 * n.sulySzazalekErteke / 100;
+      sum += n.numberValue * n.weight / 100;
+      index += 1 * n.weight / 100;
       primaryChartData.add(new LinearMarkChartData(listArray, sum / index));
       listArray++;
     }
@@ -984,7 +984,7 @@ void reCalculate() {
   }
 }
 
-/// Get the easiest way to get to a specific avarage
+/// Get the easiest way to get to a specific average
 /// Parameters:
 ///
 /// ```dart
@@ -1114,7 +1114,7 @@ String getEasiest(num jegyek, jsz, th, elak) {
   }
 }
 
-/// How many 5's are needed to get to a specific avarage
+/// How many 5's are needed to get to a specific average
 /// Parameters:
 ///
 /// ```dart
@@ -1124,16 +1124,16 @@ String getWithFivesOnly(num jegyek, jsz, elak) {
   //JEGYEK = "Jegyeid összege"
   //JSZ = "Jegyeid száma"
   //ELAK = "Milyen átlagot szeretnél elérni"
-  num avarage = jegyek / jsz;
+  num average = jegyek / jsz;
   int index = 0;
-  if (avarage > elak) {
+  if (average > elak) {
     return "Nem lehetséges ötösökkel";
   }
-  while (avarage < elak) {
+  while (average < elak) {
     jsz++;
     jegyek += 5;
     index++;
-    avarage = jegyek / jsz;
+    average = jegyek / jsz;
   }
   return "$index ${getTranslatedString("count")} ötös";
 }

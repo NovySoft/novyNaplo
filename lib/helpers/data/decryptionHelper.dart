@@ -1,9 +1,10 @@
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 
-User decryptUserDetails(User input) {
+Student decryptUserDetails(Student input) {
   String decryptedPass, decryptedUser, decryptedCode;
   final iv = encrypt.IV.fromBase64(input.iv);
   var passKey = encrypt.Key.fromUtf8(config.passKey);
@@ -24,10 +25,20 @@ User decryptUserDetails(User input) {
     input.password,
     iv: iv,
   );
-  return User(
-    current: input.current,
-    token: input.token,
+  return Student(
     id: input.id,
+    uid: input.uid,
+    mothersName: input.mothersName,
+    adressList: input.adressList,
+    parents: input.parents,
+    name: input.name,
+    birthDay: input.birthDay,
+    placeOfBirth: input.placeOfBirth,
+    birthName: input.birthName,
+    schoolYearUid: input.schoolYearUid,
+    bankAccount: input.bankAccount,
+    institution: input.institution,
+    current: input.current,
     iv: iv.base64,
     school: decryptedCode,
     username: decryptedUser,

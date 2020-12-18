@@ -1,122 +1,232 @@
+import 'dart:convert';
+
 class Student {
-  String anyjaNeve;
-  List<String> cimek;
-  List<Gondviselok> gondviselok;
-  String intezmenyAzonosito;
-  String intezmenyNev;
-  String nev;
-  String szuletesiDatum;
-  String szuletesiHely;
-  String szuletesiNev;
-  String tanevUid;
+  String mothersName;
+  List<String> adressList;
+  List<Parent> parents;
+  String name;
+  String birthDay;
+  String placeOfBirth;
+  String birthName;
+  String schoolYearUid;
   String uid;
-  Bankszamla bankszamla;
-  Intezmeny intezmeny;
-  Student();
+  BankAccount bankAccount;
+  //Should I merge these two?
+  Institution institution;
+  String school;
+
+  String username;
+  String password;
+  String token;
+  String iv;
+  DateTime tokenDate;
+  int id;
+  bool current;
+
+  Student({
+    this.mothersName,
+    this.adressList,
+    this.parents,
+    this.name,
+    this.birthDay,
+    this.placeOfBirth,
+    this.birthName,
+    this.schoolYearUid,
+    this.uid,
+    this.bankAccount,
+    this.institution,
+    this.username,
+    this.password,
+    this.school,
+    this.token,
+    this.iv,
+    this.tokenDate,
+    this.id,
+    this.current,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'uid': uid,
+      'mothersName': mothersName,
+      'adressList': json.encode(adressList),
+      'parents': json.encode(parents),
+      'name': name,
+      'birthDay': birthDay,
+      'placeOfBirth': placeOfBirth,
+      'birthName': birthName,
+      'schoolYearUid': schoolYearUid,
+      'bankAccount': json.encode(bankAccount.toJson()),
+      'institution': json.encode(institution.toJson()),
+      'username': username,
+      'password': password,
+      'school': school,
+      'iv': iv,
+      'current': current ? 1 : 0,
+    };
+  }
 
   Student.fromJson(Map<String, dynamic> json) {
-    anyjaNeve = json['AnyjaNeve'];
-    cimek = json['Cimek'].cast<String>();
+    mothersName = json['AnyjaNeve'];
+    adressList = json['Cimek'].cast<String>();
     if (json['Gondviselok'] != null) {
-      gondviselok = new List<Gondviselok>();
+      parents = new List<Parent>();
       json['Gondviselok'].forEach((v) {
-        gondviselok.add(new Gondviselok.fromJson(v));
+        parents.add(new Parent.fromJson(v));
       });
     }
-    intezmenyAzonosito = json['IntezmenyAzonosito'];
-    intezmenyNev = json['IntezmenyNev'];
-    nev = json['Nev'];
-    szuletesiDatum = json['SzuletesiDatum'];
-    szuletesiHely = json['SzuletesiHely'];
-    szuletesiNev = json['SzuletesiNev'];
-    tanevUid = json['TanevUid'];
+    name = json['Nev'];
+    birthDay = json['SzuletesiDatum'];
+    placeOfBirth = json['SzuletesiHely'];
+    birthName = json['SzuletesiNev'];
+    schoolYearUid = json['TanevUid'];
     uid = json['Uid'];
-    bankszamla = json['Bankszamla'] != null
-        ? new Bankszamla.fromJson(json['Bankszamla'])
+    bankAccount = json['Bankszamla'] != null
+        ? new BankAccount.fromJson(json['Bankszamla'])
         : null;
-    intezmeny = json['Intezmeny'] != null
-        ? new Intezmeny.fromJson(json['Intezmeny'])
-        : null;
+    institution = json['Intezmeny'] != null
+        ? new Institution.fromJson(json['Intezmeny'])
+        : Institution();
+    institution.name = json['IntezmenyNev'];
+    institution.linkId = json['IntezmenyAzonosito'];
   }
 }
 
-class Gondviselok {
-  String emailCim;
-  String nev;
-  String telefonszam;
+class Parent {
+  String email;
+  String name;
+  String phoneNumber;
   String uid;
-  Gondviselok();
+  Parent();
 
-  Gondviselok.fromJson(Map<String, dynamic> json) {
-    emailCim = json['EmailCim'];
-    nev = json['Nev'];
-    telefonszam = json['Telefonszam'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['EmailCim'] = this.email;
+    data['Nev'] = this.name;
+    data['Telefonszam'] = this.phoneNumber;
+    data['Uid'] = this.uid;
+    return data;
+  }
+
+  static List<Parent> fromJsonList(dynamic inputJson) {
+    List<Parent> tempList = [];
+    for (var n in json.decode(inputJson)) {
+      tempList.add(Parent.fromJson(n));
+    }
+    return tempList;
+  }
+
+  Parent.fromJson(Map<String, dynamic> json) {
+    email = json['EmailCim'];
+    name = json['Nev'];
+    phoneNumber = json['Telefonszam'];
     uid = json['Uid'];
   }
 }
 
-class Bankszamla {
-  String bankszamlaSzam;
-  int bankszamlaTulajdonosTipusId;
-  String bankszamlaTulajdonosNeve;
+class BankAccount {
+  String accountNumber;
+  int accountHolderTypeId;
+  String accountHolderName;
   bool isReadOnly;
-  Bankszamla();
+  BankAccount();
 
-  Bankszamla.fromJson(Map<String, dynamic> json) {
-    bankszamlaSzam = json['BankszamlaSzam'];
-    bankszamlaTulajdonosTipusId = json['BankszamlaTulajdonosTipusId'];
-    bankszamlaTulajdonosNeve = json['BankszamlaTulajdonosNeve'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['BankszamlaSzam'] = this.accountNumber;
+    data['BankszamlaTulajdonosTipusId'] = this.accountHolderTypeId;
+    data['BankszamlaTulajdonosNeve'] = this.accountHolderName;
+    data['IsReadOnly'] = this.isReadOnly;
+    return data;
+  }
+
+  BankAccount.fromJson(Map<String, dynamic> json) {
+    accountNumber = json['BankszamlaSzam'];
+    accountHolderTypeId = json['BankszamlaTulajdonosTipusId'];
+    accountHolderName = json['BankszamlaTulajdonosNeve'];
     isReadOnly = json['IsReadOnly'];
   }
 }
 
-class Intezmeny {
+class Institution {
   String uid;
-  String rovidNev;
-  List<Rendszermodulok> rendszermodulok;
-  TestreszabasBeallitasok testreszabasBeallitasok;
-  Intezmeny();
+  String linkId;
+  String shortName;
+  String name;
+  List<SystemModules> systemModules;
+  CustomizationOptions customizationOptions;
+  Institution();
 
-  Intezmeny.fromJson(Map<String, dynamic> json) {
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Uid'] = this.uid;
+    data['RovidNev'] = this.shortName;
+    if (this.systemModules != null) {
+      data['Rendszermodulok'] =
+          this.systemModules.map((v) => v.toJson()).toList();
+    }
+    if (this.customizationOptions != null) {
+      data['TestreszabasBeallitasok'] = this.customizationOptions.toJson();
+    }
+    return data;
+  }
+
+  Institution.fromJson(Map<String, dynamic> json) {
     uid = json['Uid'];
-    rovidNev = json['RovidNev'];
+    shortName = json['RovidNev'];
     if (json['Rendszermodulok'] != null) {
-      rendszermodulok = new List<Rendszermodulok>();
+      systemModules = new List<SystemModules>();
       json['Rendszermodulok'].forEach((v) {
-        rendszermodulok.add(new Rendszermodulok.fromJson(v));
+        systemModules.add(new SystemModules.fromJson(v));
       });
     }
-    testreszabasBeallitasok = json['TestreszabasBeallitasok'] != null
-        ? new TestreszabasBeallitasok.fromJson(json['TestreszabasBeallitasok'])
+    customizationOptions = json['TestreszabasBeallitasok'] != null
+        ? new CustomizationOptions.fromJson(json['TestreszabasBeallitasok'])
         : null;
   }
 }
 
-class Rendszermodulok {
-  bool isAktiv;
-  String tipus;
-  Rendszermodulok();
+class SystemModules {
+  bool active;
+  String type;
+  SystemModules();
 
-  Rendszermodulok.fromJson(Map<String, dynamic> json) {
-    isAktiv = json['IsAktiv'];
-    tipus = json['Tipus'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['IsAktiv'] = this.active;
+    data['Tipus'] = this.type;
+    return data;
+  }
+
+  SystemModules.fromJson(Map<String, dynamic> json) {
+    active = json['IsAktiv'];
+    type = json['Tipus'];
   }
 }
 
-class TestreszabasBeallitasok {
-  bool isDiakRogzithetHaziFeladatot;
-  bool isTanorakTemajaMegtekinthetoEllenorzoben;
-  bool isOsztalyAtlagMegjeleniteseEllenorzoben;
-  int ertekelesekMegjelenitesenekKesleltetesenekMerteke;
-  TestreszabasBeallitasok();
+class CustomizationOptions {
+  bool isStudentHomeworkEnabled;
+  bool canViewThemeOfLesson;
+  bool canViewClassAV;
+  int evalShowDelay;
+  CustomizationOptions();
 
-  TestreszabasBeallitasok.fromJson(Map<String, dynamic> json) {
-    isDiakRogzithetHaziFeladatot = json['IsDiakRogzithetHaziFeladatot'];
-    isTanorakTemajaMegtekinthetoEllenorzoben =
-        json['IsTanorakTemajaMegtekinthetoEllenorzoben'];
-    isOsztalyAtlagMegjeleniteseEllenorzoben =
-        json['IsOsztalyAtlagMegjeleniteseEllenorzoben'];
-    ertekelesekMegjelenitesenekKesleltetesenekMerteke =
-        json['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['IsDiakRogzithetHaziFeladatot'] = this.isStudentHomeworkEnabled;
+    data['IsTanorakTemajaMegtekinthetoEllenorzoben'] =
+        this.canViewThemeOfLesson;
+    data['IsOsztalyAtlagMegjeleniteseEllenorzoben'] = this.canViewClassAV;
+    data['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'] =
+        this.evalShowDelay;
+    return data;
+  }
+
+  CustomizationOptions.fromJson(Map<String, dynamic> json) {
+    isStudentHomeworkEnabled = json['IsDiakRogzithetHaziFeladatot'];
+    canViewThemeOfLesson = json['IsTanorakTemajaMegtekinthetoEllenorzoben'];
+    canViewClassAV = json['IsOsztalyAtlagMegjeleniteseEllenorzoben'];
+    evalShowDelay = json['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'];
   }
 }

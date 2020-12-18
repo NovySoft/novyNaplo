@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -14,20 +15,20 @@ class MarksDetailTab extends StatelessWidget {
 
   Widget _buildBody() {
     Color markColor = Colors.purple;
-    if (eval.tipus.nev == "Szazalekos") {
-      if (eval.szamErtek >= 90) {
+    if (eval.type.name == "Szazalekos") {
+      if (eval.numberValue >= 90) {
         markColor = Colors.green;
-      } else if (eval.szamErtek >= 75) {
+      } else if (eval.numberValue >= 75) {
         markColor = Colors.lightGreen;
-      } else if (eval.szamErtek >= 60) {
+      } else if (eval.numberValue >= 60) {
         markColor = Colors.yellow[800];
-      } else if (eval.szamErtek >= 40) {
+      } else if (eval.numberValue >= 40) {
         markColor = Colors.orange;
       } else {
         markColor = Colors.red;
       }
     } else {
-      switch (eval.szamErtek) {
+      switch (eval.numberValue) {
         case 1:
           markColor = Colors.red;
           break;
@@ -79,28 +80,28 @@ class MarksDetailTab extends StatelessWidget {
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("subject")}: " + eval.tantargy.nev,
+                "${getTranslatedString("subject")}: " + eval.subject.name,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("theme")}: " + eval.tema.toString(),
+                "${getTranslatedString("theme")}: " + eval.theme.toString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("markType")}: " +
-                    eval.mod.leiras.toString(),
+                    eval.mode.description.toString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("markForm")}: " + eval.tipus.leiras,
+                "${getTranslatedString("markForm")}: " + eval.type.description,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("eval")}: " + eval.szovegesErtek,
+                "${getTranslatedString("eval")}: " + eval.textValue,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -110,7 +111,7 @@ class MarksDetailTab extends StatelessWidget {
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
-                    eval.szamErtek.toString(),
+                    eval.numberValue.toString(),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -120,25 +121,24 @@ class MarksDetailTab extends StatelessWidget {
               SizedBox(height: 10, width: 5),
               Text(
                 "${capitalize(getTranslatedString("weight"))}: " +
-                    eval.sulySzazalekErteke.toString() +
+                    eval.weight.toString() +
                     "%",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("teacher")}: " + eval.tanar,
+                "${getTranslatedString("teacher")}: " + eval.teacher,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("dateGiveUp")}: " +
-                    eval.rogzitesDatumaString,
+                "${getTranslatedString("dateGiveUp")}: " + eval.dateString,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("dateCreated")}: " +
-                    eval.keszitesDatumaString,
+                    eval.createDate.toHumanString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 500),
@@ -155,8 +155,7 @@ class MarksDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(
-          title:
-              Text(capitalize(eval.tantargy.nev + " " + eval.szovegesErtek))),
+          title: Text(capitalize(eval.subject.name + " " + eval.textValue))),
       body: _buildBody(),
     );
   }

@@ -2,16 +2,18 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:novynaplo/data/database/deleteSql.dart' as delSql;
 import 'dart:io' show Platform;
+
+import 'data/models/student.dart';
 
 //Variables used globally;
 //* Session
 SharedPreferences prefs;
 var dJson; //Student JSON
-var avJson; //Avarage JSON
+var avJson; //Average JSON
 BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
 NotificationAppLaunchDetails
@@ -21,9 +23,9 @@ int payloadId =
 String notifPayload; //Contains the prefix of the notification payload
 String
     payloadString; //Used when instead of an integer we use string as payloadId
-List<User> decodedUserList =
+List<Student> decodedUserList =
     []; //Contains, password, school, username, current token.
-User currentUser;
+Student currentUser = Student();
 //* "Permanent"
 String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
@@ -56,8 +58,6 @@ void resetAllGlobals() async {
   await prefs.clear();
   prefs.setBool("ads", adsEnabled);
   prefs.setBool("isNew", true);
-  prefs.setBool("isNotNew",
-      true); //isNotNew is for users that already loged in, but logged out later
   dJson = null;
   avJson = null;
   didFetch = false;

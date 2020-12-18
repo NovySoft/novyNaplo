@@ -9,8 +9,8 @@ void getAllSubjectsAv(input) {
     tempIndex = 0;
     for (var y in n) {
       tempIndex++;
-      sum += y.szamErtek * y.sulySzazalekErteke / 100;
-      index += 1 * y.sulySzazalekErteke / 100;
+      sum += y.numberValue * y.weight / 100;
+      index += 1 * y.weight / 100;
       stats.osszesitettAv.value = sum / index;
       if (tempIndex == n.length - 1) {
         tempValue = sum / index;

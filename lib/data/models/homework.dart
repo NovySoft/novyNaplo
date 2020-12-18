@@ -1,82 +1,76 @@
-import 'osztalyCsoport.dart';
-import 'tantargy.dart';
+import 'classGroup.dart';
+import 'subject.dart';
 
 class Homework {
-  List<Csatolmanyok> csatolmanyok;
-  String feladasDatumaString;
-  DateTime feladasDatuma;
-  String hataridoDatumaString;
-  DateTime hataridoDatuma;
-  String rogzitesIdopontjaString;
-  DateTime rogzitesIdopontja;
-  bool isTanarRogzitette;
-  bool isTanuloHaziFeladatEnabled;
-  bool isMegoldva;
-  String tanar;
-  String szoveg;
-  Tantargy tantargy;
-  OsztalyCsoport osztalyCsoport;
+  List<Attachment> attachments;
+  DateTime date;
+  DateTime dueDate;
+  DateTime createDate;
+  bool isTeacherHW;
+  bool isStudentHomeworkEnabled;
+  bool isSolved;
+  String teacher;
+  String content;
+  Subject subject;
+  ClassGroup group;
   String uid;
   int id;
 
   Homework(
-      {this.csatolmanyok,
-      this.feladasDatuma,
-      this.hataridoDatuma,
-      this.rogzitesIdopontja,
-      this.isTanarRogzitette,
-      this.isTanuloHaziFeladatEnabled,
-      this.isMegoldva,
-      this.tanar,
-      this.szoveg,
-      this.tantargy,
-      this.osztalyCsoport,
+      {this.attachments,
+      this.date,
+      this.dueDate,
+      this.createDate,
+      this.isTeacherHW,
+      this.isStudentHomeworkEnabled,
+      this.isSolved,
+      this.teacher,
+      this.content,
+      this.subject,
+      this.group,
       this.uid});
 
   Homework.fromJson(Map<String, dynamic> json) {
     if (json['Csatolmanyok'] != null) {
-      csatolmanyok = new List<Csatolmanyok>();
+      attachments = new List<Attachment>();
       json['Csatolmanyok'].forEach((v) {
-        csatolmanyok.add(new Csatolmanyok.fromJson(v));
+        attachments.add(new Attachment.fromJson(v));
       });
     }
-    feladasDatumaString = json['FeladasDatuma'];
-    feladasDatuma = feladasDatumaString != null
-        ? DateTime.parse(feladasDatumaString).toLocal()
+    date = json['FeladasDatuma'] != null
+        ? DateTime.parse(json['FeladasDatuma']).toLocal()
         : DateTime(2020);
-    hataridoDatumaString = json['HataridoDatuma'];
-    hataridoDatuma = hataridoDatumaString != null
-        ? DateTime.parse(hataridoDatumaString).toLocal()
+    dueDate = json['HataridoDatuma'] != null
+        ? DateTime.parse(json['HataridoDatuma']).toLocal()
         : DateTime(2020);
-    rogzitesIdopontjaString = json['RogzitesIdopontja'];
-    rogzitesIdopontja = rogzitesIdopontjaString != null
-        ? DateTime.parse(rogzitesIdopontjaString).toLocal()
+    createDate = json['RogzitesIdopontja'] != null
+        ? DateTime.parse(json['RogzitesIdopontja']).toLocal()
         : DateTime(2020);
-    isTanarRogzitette = json['IsTanarRogzitette'];
-    isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
-    isMegoldva = json['IsMegoldva'];
-    tanar = json['RogzitoTanarNeve'];
-    szoveg = json['Szoveg'];
-    tantargy = json['Tantargy'] != null
-        ? new Tantargy.fromJson(json['Tantargy'])
+    isTeacherHW = json['IsTanarRogzitette'];
+    isStudentHomeworkEnabled = json['IsTanuloHaziFeladatEnabled'];
+    isSolved = json['IsMegoldva'];
+    teacher = json['RogzitoTanarNeve'];
+    content = json['Szoveg'];
+    subject = json['Tantargy'] != null
+        ? new Subject.fromJson(json['Tantargy'])
         : null;
-    osztalyCsoport = json['OsztalyCsoport'] != null
-        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+    group = json['OsztalyCsoport'] != null
+        ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
     uid = json['Uid'];
   }
 }
 
-class Csatolmanyok {
+class Attachment {
   String uid;
-  String nev;
-  String tipus;
+  String name;
+  String type;
 
-  Csatolmanyok({this.uid, this.nev, this.tipus});
+  Attachment({this.uid, this.name, this.type});
 
-  Csatolmanyok.fromJson(Map<String, dynamic> json) {
+  Attachment.fromJson(Map<String, dynamic> json) {
     uid = json['Uid'];
-    nev = json['Nev'];
-    tipus = json['Tipus'];
+    name = json['Nev'];
+    type = json['Tipus'];
   }
 }

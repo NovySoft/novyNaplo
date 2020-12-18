@@ -1,4 +1,4 @@
-class Avarage {
+class Average {
   String subject;
   double ownValue;
   int databaseId;
@@ -18,7 +18,7 @@ class Avarage {
 }
 
 //TODO: Merge these two classes
-//FIXME: Andrew says his avarage calculations are not always right
+//FIXME: Andrew says his average calculations are not always right
 class AV {
   double value;
   double diffSinceLast;
@@ -30,8 +30,8 @@ class AV {
     return subject + ":" + value.toStringAsFixed(3);
   }
 
-  Avarage toDatabaseAvarage() {
-    Avarage temp = new Avarage();
+  Average toDatabaseAverage() {
+    Average temp = new Average();
     temp.ownValue = value;
     temp.subject = subject;
     return temp;

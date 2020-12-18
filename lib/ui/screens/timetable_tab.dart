@@ -57,9 +57,9 @@ class _TimetableTabState extends State<TimetableTab> {
           }
           if (tempLesson != null) break;
         }
-        _controller.jumpToDate(tempLesson.datum);
+        _controller.jumpToDate(tempLesson.date);
         setState(() {
-          _selectedDate = tempLesson.datum;
+          _selectedDate = tempLesson.date;
         });
         globals.payloadId = -1;
         Color color;
@@ -131,7 +131,6 @@ class _TimetableTabState extends State<TimetableTab> {
               return LoadingSpinner();
             });
         try {
-          //FIXME: Valami nem működik
           List<List<Lesson>> tempLessonList =
               await RequestHandler.getSpecifiedWeeksLesson(
             globals.currentUser,
@@ -186,7 +185,7 @@ class _TimetableTabState extends State<TimetableTab> {
       if (element == null || element.length == 0) {
         return false;
       }
-      return element[0].datum.isSameDay(_selectedDate);
+      return element[0].date.isSameDay(_selectedDate);
     }));
     //It is only a 1*n matrix so we get that
     if (selectedLessonList.length != 0) {
@@ -293,7 +292,7 @@ class _TimetableTabState extends State<TimetableTab> {
           child: Center(
             child: specialEventDay == null
                 ? SizedBox(height: 0, width: 0)
-                : Text(specialEventDay.nev),
+                : Text(specialEventDay.name),
           ),
         ),
         SizedBox(
@@ -368,14 +367,12 @@ class _TimetableTabState extends State<TimetableTab> {
                             child: AnimatedTimetableCard(
                               iconData: selectedLessonList[index].icon,
                               hasHomework: selectedLessonList[index]
-                                          .haziFeladatUid !=
+                                          .teacherHwUid !=
                                       null &&
-                                  selectedLessonList[index].haziFeladatUid !=
-                                      "",
-                              hasExam: selectedLessonList[index]
-                                      .bejelentettSzamonkeresek
-                                      .length !=
-                                  0,
+                                  selectedLessonList[index].teacherHwUid != "",
+                              hasExam:
+                                  selectedLessonList[index].examList.length !=
+                                      0,
                               color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],

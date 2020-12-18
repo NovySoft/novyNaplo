@@ -14,17 +14,16 @@ List<Evals> getSameSubjectEvals(
         _tempList.add(j);
       }
     }
-    _tempList.sort((a, b) => a.rogzitesDatuma.compareTo(b.rogzitesDatuma));
+    _tempList.sort((a, b) => a.date.compareTo(b.date));
     return _tempList;
   }
   _tempList = List.from(stats.allParsedSubjects.firstWhere((element) =>
-      element[0].tantargy.nev.toLowerCase() == subject.toLowerCase()));
+      element[0].subject.name.toLowerCase() == subject.toLowerCase()));
   if (onlyBefore != null) {
-    _tempList.removeWhere(
-        (element) => element.rogzitesDatuma.compareTo(onlyBefore) > 0);
+    _tempList.removeWhere((element) => element.date.compareTo(onlyBefore) > 0);
   }
   if (sort) {
-    _tempList.sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
+    _tempList.sort((a, b) => b.date.compareTo(a.date));
   }
   return List.from(_tempList);
 }

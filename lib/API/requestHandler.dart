@@ -14,7 +14,7 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
@@ -39,7 +39,7 @@ import 'package:path_provider/path_provider.dart';
 var client = http.Client();
 
 class RequestHandler {
-  static Future<TokenResponse> login(User user) async {
+  static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
     try {
       var response = await client.post(
@@ -141,7 +141,11 @@ class RequestHandler {
     }
   }
 
-  static Future<Student> getStudentInfo(User userDetails) async {
+  static Future<Student> getStudentInfo(Student userDetails,
+      {bool embedEncryptedDetails = false, Student encryptedDetails}) async {
+    if (embedEncryptedDetails && encryptedDetails == null) {
+      throw ErrorDescription("Embededable details were not given");
+    }
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.student,
@@ -153,14 +157,21 @@ class RequestHandler {
 
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
-
+      if (embedEncryptedDetails) {
+        student.id = encryptedDetails.id;
+        student.iv = encryptedDetails.iv;
+        student.school = encryptedDetails.school;
+        student.username = encryptedDetails.username;
+        student.password = encryptedDetails.password;
+        student.current = encryptedDetails.current;
+      }
       return student;
     } catch (e) {
       return null;
     }
   }
 
-  static Future<List<Evals>> getEvaluations(User userDetails,
+  static Future<List<Evals>> getEvaluations(Student userDetails,
       {bool sort = true}) async {
     try {
       var response = await client.get(
@@ -178,7 +189,7 @@ class RequestHandler {
           .forEach((evaluation) => evaluations.add(Evals.fromJson(evaluation)));
       if (sort) {
         evaluations.sort(
-          (a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma),
+          (a, b) => b.date.compareTo(a.date),
         );
       }
 
@@ -211,7 +222,8 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Absence>>> getAbsencesMatrix(User userDetails) async {
+  static Future<List<List<Absence>>> getAbsencesMatrix(
+      Student userDetails) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
@@ -234,7 +246,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Exam>> getExams(User userDetails,
+  static Future<List<Exam>> getExams(Student userDetails,
       {bool sort = true}) async {
     try {
       var response = await client.get(
@@ -250,8 +262,8 @@ class RequestHandler {
 
       responseJson.forEach((exam) => exams.add(Exam.fromJson(exam)));
       if (sort) {
-        exams.sort((a, b) => (b.datumString + b.orarendiOraOraszama.toString())
-            .compareTo(a.datumString + a.orarendiOraOraszama.toString()));
+        exams.sort((a, b) => (b.date.toString() + b.lessonNumber.toString())
+            .compareTo(a.date.toString() + a.lessonNumber.toString()));
       }
 
       return exams;
@@ -261,7 +273,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Homework>> getHomeworks(User userDetails,
+  static Future<List<Homework>> getHomeworks(Student userDetails,
       {@required DateTime fromDue, bool sort = true}) async {
     try {
       var response = await client.get(
@@ -282,7 +294,7 @@ class RequestHandler {
       for (var n in responseJson) {
         homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
-      homeworks.sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
+      homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
 
       return homeworks;
     } catch (error) {
@@ -291,7 +303,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(User userDetails,
+  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(Student userDetails,
       {DateTime date}) async {
     if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
       throw Exception(getTranslatedString("noNet"));
@@ -334,7 +346,7 @@ class RequestHandler {
   }
 
   static Future<List<List<Lesson>>> getThisWeeksLessons(
-      User userDetails) async {
+      Student userDetails) async {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
@@ -358,7 +370,7 @@ class RequestHandler {
     );
   }
 
-  static Future<List<List<Lesson>>> getTimetableMatrix(User userDetails,
+  static Future<List<List<Lesson>>> getTimetableMatrix(Student userDetails,
       {@required DateTime from, @required DateTime to}) async {
     if (from == null || to == null) return [];
 
@@ -379,7 +391,7 @@ class RequestHandler {
       List<Lesson> lessons = [];
 
       for (var lesson in responseJson) {
-        Lesson temp = await Lesson.fromJson(lesson);
+        Lesson temp = Lesson.fromJson(lesson);
         lessons.add(temp);
       }
       //Make function has builtin sorting
@@ -391,7 +403,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Event>> getEvents(User userDetails,
+  static Future<List<Event>> getEvents(Student userDetails,
       {bool sort = true}) async {
     try {
       var response = await client.get(
@@ -407,7 +419,7 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       responseJson.forEach((json) => events.add(Event.fromJson(json)));
       if (sort) {
-        events.sort((a, b) => b.ervenyessegVege.compareTo(a.ervenyessegVege));
+        events.sort((a, b) => b.endDate.compareTo(a.endDate));
       }
 
       return events;
@@ -417,7 +429,7 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Notice>> getNotices(User userDetails,
+  static Future<List<Notice>> getNotices(Student userDetails,
       {bool sort = true}) async {
     try {
       var response = await client.get(
@@ -433,7 +445,7 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       responseJson.forEach((json) => notes.add(Notice.fromJson(json)));
       if (sort) {
-        notes.sort((a, b) => b.datum.compareTo(a.datum));
+        notes.sort((a, b) => b.date.compareTo(a.date));
       }
       return notes;
     } catch (error) {
@@ -442,7 +454,8 @@ class RequestHandler {
     }
   }
 
-  static Future<Homework> getHomeworkId(User userDetails, {String id}) async {
+  static Future<Homework> getHomeworkId(Student userDetails,
+      {String id}) async {
     if (id == null) return Homework();
     try {
       var response = await client.get(
@@ -464,7 +477,10 @@ class RequestHandler {
     }
   }
 
-  static Future<void> getEverything(User user) async {
+  static Future<void> getEverything(
+    Student user, {
+    bool setData = false,
+  }) async {
     marksPage.allParsedByDate = await getEvaluations(user);
     examsPage.allParsedExams = await getExams(user);
     noticesPage.allParsedNotices = await getNotices(user);
@@ -483,7 +499,7 @@ class RequestHandler {
         categorizeSubjectsFromEvals(marksPage.allParsedByDate);
     statisticsPage.allParsedSubjectsWithoutZeros = List.from(
       statisticsPage.allParsedSubjects
-          .where((element) => element[0].szamErtek != 0),
+          .where((element) => element[0].numberValue != 0),
     );
     setUpCalculatorPage(statisticsPage.allParsedSubjects);
     eventsPage.allParsedEvents = await getEvents(user);
@@ -494,18 +510,18 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  static Future<File> downloadHWAttachment(User userDetails,
-      {Csatolmanyok hwInfo}) async {
+  static Future<File> downloadHWAttachment(Student userDetails,
+      {Attachment hwInfo}) async {
     File file = await downloadFile(
       userDetails,
       url: BaseURL.kreta(userDetails.school) +
-          KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.tipus),
-      filename: hwInfo.uid + "." + hwInfo.nev,
+          KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.type),
+      filename: hwInfo.uid + "." + hwInfo.name,
     );
     return file;
   }
 
-  static Future<File> downloadFile(User userDetails,
+  static Future<File> downloadFile(Student userDetails,
       {String url, String filename, bool open = true}) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;

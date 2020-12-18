@@ -32,7 +32,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   @override
   void initState() {
     downloadIcon = [];
-    for (int i = 0; i < widget.hwInfo.csatolmanyok.length; i++) {
+    for (int i = 0; i < widget.hwInfo.attachments.length; i++) {
       downloadIcon.add(Icon(MdiIcons.fileDownload));
     }
     FirebaseCrashlytics.instance.log("Shown Homework_detail_tab");
@@ -59,7 +59,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
               decoration: BoxDecoration(color: widget.color),
               child: Center(
                 child: Text(
-                  widget.hwInfo.tantargy.nev,
+                  widget.hwInfo.subject.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 25, color: Colors.black),
                 ),
@@ -83,7 +83,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                 fontSize: 25.0, fontWeight: FontWeight.bold),
                           ),
                           Html(
-                            data: widget.hwInfo.szoveg,
+                            data: widget.hwInfo.content,
                             onLinkTap: (url) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
@@ -99,9 +99,9 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         ]);
                     break;
                   case 1:
-                    String due = widget.hwInfo.hataridoDatuma.toHumanString();
+                    String due = widget.hwInfo.dueDate.toHumanString();
                     Duration left =
-                        widget.hwInfo.hataridoDatuma.difference(DateTime.now());
+                        widget.hwInfo.dueDate.difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                     String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
                     String leftString =
@@ -116,8 +116,8 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         timer.cancel();
                       } else {
                         setState(() {
-                          left = widget.hwInfo.hataridoDatuma
-                              .difference(DateTime.now());
+                          left =
+                              widget.hwInfo.dueDate.difference(DateTime.now());
                           leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                           leftMins = (left.inMinutes % 60).toStringAsFixed(0);
                           leftString =
@@ -171,7 +171,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                     }
                     break;
                   case 2:
-                    if (widget.hwInfo.csatolmanyok.length == 0) {
+                    if (widget.hwInfo.attachments.length == 0) {
                       return SizedBox(height: 0, width: 0);
                     }
 
@@ -189,7 +189,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                         ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: widget.hwInfo.csatolmanyok.length,
+                          itemCount: widget.hwInfo.attachments.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                               onTap: () async {
@@ -202,7 +202,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                 });
                                 await RequestHandler.downloadHWAttachment(
                                   globals.currentUser,
-                                  hwInfo: widget.hwInfo.csatolmanyok[index],
+                                  hwInfo: widget.hwInfo.attachments[index],
                                 );
                                 setState(() {
                                   downloadIcon[index] = Icon(MdiIcons.check);
@@ -214,7 +214,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                   downloadIcon[index],
                                   SizedBox(width: 5, height: 5),
                                   Text(
-                                    widget.hwInfo.csatolmanyok[index].nev,
+                                    widget.hwInfo.attachments[index].name,
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 20,
@@ -230,8 +230,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                     );
                     break;
                   case 3:
-                    String giveUp =
-                        widget.hwInfo.rogzitesIdopontja.toHumanString();
+                    String giveUp = widget.hwInfo.createDate.toHumanString();
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +263,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           style: TextStyle(
                               fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
-                        Text(widget.hwInfo.tanar,
+                        Text(widget.hwInfo.teacher,
                             style: TextStyle(
                               fontSize: 20,
                             )),

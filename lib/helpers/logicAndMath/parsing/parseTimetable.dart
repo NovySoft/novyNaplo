@@ -25,23 +25,23 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
   }
   DateTime endSunday = now;
 
-  lessons.sort((a, b) => a.kezdetIdopont.compareTo(b.kezdetIdopont));
-  tempDate = lessons[0].datum;
+  lessons.sort((a, b) => a.startDate.compareTo(b.startDate));
+  tempDate = lessons[0].date;
   for (var n in lessons) {
-    if (n.datum.isSameDay(tempDate)) {
+    if (n.date.isSameDay(tempDate)) {
       output[index].add(n);
     } else {
-      tempDate = n.datum;
+      tempDate = n.date;
       output.add([]);
       index++;
       output[index].add(n);
     }
 
     if (timetablePage.fetchedDayList
-            .where((element) => element.isSameDay(n.datum))
+            .where((element) => element.isSameDay(n.date))
             .length ==
         0) {
-      timetablePage.fetchedDayList.add(n.datum);
+      timetablePage.fetchedDayList.add(n.date);
     }
     timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     //FIXME: Handle sql deletions

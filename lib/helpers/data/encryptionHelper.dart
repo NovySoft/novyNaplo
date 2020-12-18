@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-Future<User> encryptUserDetails(User user) async {
+Future<Student> encryptUserDetails(Student user) async {
   encrypt.IV iv = encrypt.IV.fromLength(16);
   var passKey = encrypt.Key.fromUtf8(config.passKey);
   var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -30,7 +31,7 @@ Future<User> encryptUserDetails(User user) async {
         iv: iv,
       )
       .base64;
-  return User(
+  return Student(
     current: user.current,
     id: user.id,
     token: user.token,

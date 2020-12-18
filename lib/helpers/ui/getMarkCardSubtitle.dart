@@ -8,18 +8,18 @@ import 'package:novynaplo/global.dart' as globals;
 String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
   String subtitle = "undefined";
   if (globals.markCardSubtitle == "Téma") {
-    if (eval.tema != null && eval.tema != "")
-      subtitle = capitalize(eval.tema);
+    if (eval.theme != null && eval.theme != "")
+      subtitle = capitalize(eval.theme);
     else
       subtitle = getTranslatedString("unkown");
   } else if (globals.markCardSubtitle == "Tanár") {
-    subtitle = eval.tanar;
+    subtitle = eval.teacher;
   } else if (globals.markCardSubtitle == "Súly") {
-    subtitle = "${eval.sulySzazalekErteke}%";
+    subtitle = "${eval.weight}%";
   } else if (globals.markCardSubtitle == "Pontos Dátum") {
-    subtitle = eval.keszitesDatumaString;
+    subtitle = eval.createDate.toHumanString();
   } else if (globals.markCardSubtitle == "Egyszerűsített Dátum") {
-    subtitle = eval.keszitesDatuma.toHumanString();
+    subtitle = eval.createDate.toHumanString().split(" ")[0];
   }
   if (subtitle == "" || subtitle == null) {
     subtitle = getTranslatedString("unkown");

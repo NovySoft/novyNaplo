@@ -1,88 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
-import 'leiras.dart';
-import 'osztalyCsoport.dart';
-import 'tantargy.dart';
+import 'description.dart';
+import 'classGroup.dart';
+import 'subject.dart';
 
 class Evals {
-  String tanar;
-  Leiras ertekFajta;
-  String jelleg;
-  String keszitesDatumaString;
-  DateTime keszitesDatuma;
-  String lattamozasDatumaString;
-  DateTime lattamozasDatuma;
-  Leiras mod;
-  String rogzitesDatumaString;
-  DateTime rogzitesDatuma;
-  int sulySzazalekErteke;
-  int szamErtek;
-  String szovegesErtek;
-  String szovegesErtekelesRovidNev;
-  Tantargy tantargy;
-  String tema;
-  Leiras tipus;
-  OsztalyCsoport osztalyCsoport;
+  String teacher;
+  Description valueType;
+  String kindOf;
+  DateTime createDate;
+  DateTime seenDate;
+  Description mode;
+  String dateString;
+  DateTime date;
+  int weight;
+  int numberValue;
+  String textValue;
+  String shortTextValue;
+  Subject subject;
+  String theme;
+  Description type;
+  ClassGroup group;
   int sortIndex;
   String uid;
   int id;
   IconData icon;
 
   Evals(
-      {this.tanar,
-      this.ertekFajta,
-      this.jelleg,
-      this.keszitesDatuma,
-      this.lattamozasDatuma,
-      this.mod,
-      this.rogzitesDatuma,
-      this.sulySzazalekErteke,
-      this.szamErtek,
-      this.szovegesErtek,
-      this.szovegesErtekelesRovidNev,
-      this.tantargy,
-      this.tema,
-      this.tipus,
-      this.osztalyCsoport,
+      {this.teacher,
+      this.valueType,
+      this.kindOf,
+      this.createDate,
+      this.seenDate,
+      this.mode,
+      this.date,
+      this.weight,
+      this.numberValue,
+      this.textValue,
+      this.shortTextValue,
+      this.subject,
+      this.theme,
+      this.type,
+      this.group,
       this.sortIndex,
       this.uid});
 
   Evals.fromJson(Map<String, dynamic> json) {
-    tanar = json['ErtekeloTanarNeve'];
-    ertekFajta = json['ErtekFajta'] != null
-        ? new Leiras.fromJson(json['ErtekFajta'])
+    teacher = json['ErtekeloTanarNeve'];
+    valueType = json['ErtekFajta'] != null
+        ? new Description.fromJson(json['ErtekFajta'])
         : null;
-    jelleg = json['Jelleg'];
-    keszitesDatumaString = json['KeszitesDatuma'];
-    keszitesDatuma = keszitesDatumaString != null
-        ? DateTime.parse(keszitesDatumaString).toLocal()
+    kindOf = json['Jelleg'];
+    createDate = json['KeszitesDatuma'] != null
+        ? DateTime.parse(json['KeszitesDatuma']).toLocal()
         : DateTime(2020);
-    lattamozasDatumaString = json['LattamozasDatuma'];
-    lattamozasDatuma = lattamozasDatumaString != null
-        ? DateTime.parse(lattamozasDatumaString).toLocal()
+    seenDate = json['LattamozasDatuma'] != null
+        ? DateTime.parse(json['LattamozasDatuma']).toLocal()
         : DateTime(2020);
-    mod = json['Mod'] != null ? new Leiras.fromJson(json['Mod']) : null;
-    rogzitesDatumaString = json['RogzitesDatuma'];
-    rogzitesDatuma = rogzitesDatumaString != null
-        ? DateTime.parse(rogzitesDatumaString).toLocal()
+    mode = json['Mod'] != null ? new Description.fromJson(json['Mod']) : null;
+    dateString = json['RogzitesDatuma'];
+    date = dateString != null
+        ? DateTime.parse(dateString).toLocal()
         : DateTime(2020);
-    sulySzazalekErteke = json['SulySzazalekErteke'];
-    szamErtek = json['SzamErtek'];
-    szovegesErtek = json['SzovegesErtek'];
-    szovegesErtekelesRovidNev = json['SzovegesErtekelesRovidNev'];
-    tantargy = json['Tantargy'] != null
-        ? new Tantargy.fromJson(json['Tantargy'])
+    weight = json['SulySzazalekErteke'];
+    numberValue = json['SzamErtek'];
+    textValue = json['SzovegesErtek'];
+    shortTextValue = json['SzovegesErtekelesRovidNev'];
+    subject = json['Tantargy'] != null
+        ? new Subject.fromJson(json['Tantargy'])
         : null;
-    tema = json['Tema'];
-    tipus = json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
-    osztalyCsoport = json['OsztalyCsoport'] != null
-        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+    theme = json['Tema'];
+    type =
+        json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
+    group = json['OsztalyCsoport'] != null
+        ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
     sortIndex = json['SortIndex'];
     uid = json['Uid'];
-    if (tema == null) {
-      tema = mod.leiras;
+    if (theme == null) {
+      theme = mode.description;
     }
-    icon = parseSubjectToIcon(subject: tantargy.nev);
+    icon = parseSubjectToIcon(subject: subject.name);
   }
 }

@@ -7,11 +7,11 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 
 Color getAbsenceCardColor(Absence absence) {
   Color color = Colors.purple;
-  if (absence.igazolasAllapota == "Igazolando") {
+  if (absence.justificationState == "Igazolando") {
     color = Colors.yellow;
-  } else if (absence.igazolasAllapota == "Igazolatlan") {
+  } else if (absence.justificationState == "Igazolatlan") {
     color = Colors.red;
-  } else if (absence.igazolasAllapota == "Igazolt") {
+  } else if (absence.justificationState == "Igazolt") {
     color = Colors.green;
   }
   return color;
@@ -22,20 +22,20 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
   if (globals.markCardTheme == "Véletlenszerű") {
     color = marks.colors[index].shade400;
   } else if (globals.markCardTheme == "Értékelés nagysága") {
-    if (eval.tipus.nev == "Szazalekos") {
-      if (eval.szamErtek >= 90) {
+    if (eval.type.name == "Szazalekos") {
+      if (eval.numberValue >= 90) {
         color = Colors.green;
-      } else if (eval.szamErtek >= 75) {
+      } else if (eval.numberValue >= 75) {
         color = Colors.lightGreen;
-      } else if (eval.szamErtek >= 60) {
+      } else if (eval.numberValue >= 60) {
         color = Colors.yellow[800];
-      } else if (eval.szamErtek >= 40) {
+      } else if (eval.numberValue >= 40) {
         color = Colors.deepOrange;
       } else {
         color = Colors.red[900];
       }
     } else {
-      switch (eval.szamErtek) {
+      switch (eval.numberValue) {
         case 5:
           color = Colors.green;
           break;

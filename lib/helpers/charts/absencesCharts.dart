@@ -11,22 +11,22 @@ import 'package:novynaplo/global.dart' as globals;
 List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
     List<List<Absence>> input) {
   List<dynamic> inputList = List.from(input).expand((i) => i).toList();
-  final delayList = inputList.where((n) => n.kesesPercben != null);
+  final delayList = inputList.where((n) => n.delayInMinutes != null);
   int igazolandoDelay = 0, igazoltDelay = 0, igazolatlanDelay = 0;
   if (delayList.length != 0) {
     //Igazolando
     for (var n in delayList
-        .where((element) => element.igazolasAllapota == "Igazolando")) {
+        .where((element) => element.justificationState == "Igazolando")) {
       igazolandoDelay += n.delayTimeMinutes;
     }
     //Igazolt
     for (var n in delayList
-        .where((element) => element.igazolasAllapota == "Igazolt")) {
+        .where((element) => element.justificationState == "Igazolt")) {
       igazoltDelay += n.delayTimeMinutes;
     }
     //Igazolatlan
     for (var n in delayList
-        .where((element) => element.igazolasAllapota == "Igazolatlan")) {
+        .where((element) => element.justificationState == "Igazolatlan")) {
       igazolatlanDelay += n.delayTimeMinutes;
     }
   }
@@ -36,7 +36,7 @@ List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
       getTranslatedString("absences"),
       inputList
           .where((n) =>
-              n.igazolasAllapota == "Igazolando" && n.kesesPercben == null)
+              n.justificationState == "Igazolando" && n.delayInMinutes == null)
           .length,
     ),
     new AbsenceChartData(
@@ -49,8 +49,8 @@ List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
     new AbsenceChartData(
       getTranslatedString("absences"),
       inputList
-          .where(
-              (n) => n.igazolasAllapota == "Igazolt" && n.kesesPercben == null)
+          .where((n) =>
+              n.justificationState == "Igazolt" && n.delayInMinutes == null)
           .length,
     ),
     new AbsenceChartData(
@@ -64,7 +64,7 @@ List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
       getTranslatedString("absences"),
       inputList
           .where((n) =>
-              n.igazolasAllapota == "Igazolatlan" && n.kesesPercben == null)
+              n.justificationState == "Igazolatlan" && n.delayInMinutes == null)
           .length,
     ),
     new AbsenceChartData(

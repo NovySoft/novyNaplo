@@ -26,7 +26,7 @@ class AnimatedMarksCard extends StatelessWidget {
   Widget build(context) {
     IconData icon = iconData;
     if (iconData == null && eval != null) {
-      icon = parseSubjectToIcon(subject: eval.tantargy.nev);
+      icon = parseSubjectToIcon(subject: eval.subject.name);
     }
     double subTitleSize = 80;
     if (onPressed != null)

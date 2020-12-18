@@ -81,7 +81,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 1:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("nameOfLesson")}: ${widget.lessonInfo.nev != null ? widget.lessonInfo.nev : ""}",
+                        "${getTranslatedString("nameOfLesson")}: ${widget.lessonInfo.name != null ? widget.lessonInfo.name : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -89,7 +89,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 3:
                   return SizedBox(
                     child: Text(
-                      "${getTranslatedString("themeOfLesson")}: ${widget.lessonInfo.tema != null ? widget.lessonInfo.tema : getTranslatedString("unkown")}",
+                      "${getTranslatedString("themeOfLesson")}: ${widget.lessonInfo.theme != null ? widget.lessonInfo.theme : getTranslatedString("unkown")}",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
@@ -98,7 +98,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 5:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("subject")}: ${widget.lessonInfo.tantargy.nev != null ? widget.lessonInfo.tantargy.nev : ""}",
+                        "${getTranslatedString("subject")}: ${widget.lessonInfo.subject.name != null ? widget.lessonInfo.subject.name : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -106,13 +106,13 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 7:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("classroom")}: ${widget.lessonInfo.teremNeve != null ? widget.lessonInfo.teremNeve : ""}",
+                        "${getTranslatedString("classroom")}: ${widget.lessonInfo.classroom != null ? widget.lessonInfo.classroom : ""}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 9:
-                  if (widget.lessonInfo.helyettesTanarNeve != null) {
+                  if (widget.lessonInfo.deputyTeacher != null) {
                     return SizedBox(
                       child: Row(
                         children: [
@@ -125,7 +125,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                             ),
                           ),
                           Text(
-                            "${widget.lessonInfo.helyettesTanarNeve}",
+                            "${widget.lessonInfo.deputyTeacher}",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
@@ -135,15 +135,15 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   } else {
                     return SizedBox(
                       child: Text(
-                          "${getTranslatedString("teacher")}: ${widget.lessonInfo.tanarNeve != null ? widget.lessonInfo.tanarNeve : ""}",
+                          "${getTranslatedString("teacher")}: ${widget.lessonInfo.teacher != null ? widget.lessonInfo.teacher : ""}",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold)),
                     );
                   }
                   break;
                 case 11:
-                  if (widget.lessonInfo.datum != null) {
-                    String date = widget.lessonInfo.datum.toDayOnlyString();
+                  if (widget.lessonInfo.date != null) {
+                    String date = widget.lessonInfo.date.toDayOnlyString();
                     return SizedBox(
                       child: Text("${getTranslatedString("date")}: $date",
                           style: TextStyle(
@@ -154,34 +154,33 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   }
                   break;
                 case 13:
-                  if (widget.lessonInfo.kezdetIdopont == null ||
-                      widget.lessonInfo.vegIdopont == null) {
+                  if (widget.lessonInfo.startDate == null ||
+                      widget.lessonInfo.endDate == null) {
                     return SizedBox(height: 0, width: 0);
                   }
                   String startMinutes;
-                  if (widget.lessonInfo.kezdetIdopont.minute
+                  if (widget.lessonInfo.startDate.minute
                       .toString()
                       .startsWith("0")) {
                     startMinutes =
-                        widget.lessonInfo.kezdetIdopont.minute.toString() + "0";
+                        widget.lessonInfo.startDate.minute.toString() + "0";
                   } else {
                     startMinutes =
-                        widget.lessonInfo.kezdetIdopont.minute.toString();
+                        widget.lessonInfo.startDate.minute.toString();
                   }
                   String endMinutes;
-                  if (widget.lessonInfo.vegIdopont.minute
+                  if (widget.lessonInfo.endDate.minute
                       .toString()
                       .startsWith("0")) {
                     endMinutes =
-                        widget.lessonInfo.vegIdopont.minute.toString() + "0";
+                        widget.lessonInfo.endDate.minute.toString() + "0";
                   } else {
-                    endMinutes = widget.lessonInfo.vegIdopont.minute.toString();
+                    endMinutes = widget.lessonInfo.endDate.minute.toString();
                   }
-                  String start =
-                      widget.lessonInfo.kezdetIdopont.hour.toString() +
-                          ":" +
-                          startMinutes;
-                  String end = widget.lessonInfo.vegIdopont.hour.toString() +
+                  String start = widget.lessonInfo.startDate.hour.toString() +
+                      ":" +
+                      startMinutes;
+                  String end = widget.lessonInfo.endDate.hour.toString() +
                       ":" +
                       endMinutes;
                   return SizedBox(
@@ -192,12 +191,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   );
                   break;
                 case 15:
-                  if (widget.lessonInfo.kezdetIdopont == null ||
-                      widget.lessonInfo.vegIdopont == null) {
+                  if (widget.lessonInfo.startDate == null ||
+                      widget.lessonInfo.endDate == null) {
                     return SizedBox(height: 0, width: 0);
                   }
-                  Duration diff = widget.lessonInfo.vegIdopont
-                      .difference(widget.lessonInfo.kezdetIdopont);
+                  Duration diff = widget.lessonInfo.endDate
+                      .difference(widget.lessonInfo.startDate);
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("period")}: ${diff.inMinutes.toString()} ${getTranslatedString("minutes")}",
@@ -206,29 +205,27 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                   );
                   break;
                 case 17:
-                  return widget.lessonInfo.osztalyCsoport.nev != null
+                  return widget.lessonInfo.group.name != null
                       ? SizedBox(
                           child: Text(
-                              "${getTranslatedString("class")}: ${widget.lessonInfo.osztalyCsoport.nev}",
+                              "${getTranslatedString("class")}: ${widget.lessonInfo.group.name}",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold)),
                         )
                       : SizedBox(height: 0, width: 0);
                   break;
                 case 19:
-                  if (!((widget.lessonInfo.haziFeladatUid != null &&
-                          widget.lessonInfo.haziFeladatUid != "") ||
-                      (widget.lessonInfo.bejelentettSzamonkeresek.length !=
-                          0))) {
+                  if (!((widget.lessonInfo.teacherHwUid != null &&
+                          widget.lessonInfo.teacherHwUid != "") ||
+                      (widget.lessonInfo.examList.length != 0))) {
                     return SizedBox(height: 0, width: 0);
                   }
-                  if (((widget.lessonInfo.haziFeladatUid != null &&
-                          widget.lessonInfo.haziFeladatUid != "") &&
-                      (widget.lessonInfo.bejelentettSzamonkeresek.length !=
-                          0))) {
-                    String due = widget.lessonInfo.haziFeladat.hataridoDatuma
-                        .toHumanString();
-                    Duration left = widget.lessonInfo.haziFeladat.hataridoDatuma
+                  if (((widget.lessonInfo.teacherHwUid != null &&
+                          widget.lessonInfo.teacherHwUid != "") &&
+                      (widget.lessonInfo.examList.length != 0))) {
+                    String due =
+                        widget.lessonInfo.homework.dueDate.toHumanString();
+                    Duration left = widget.lessonInfo.homework.dueDate
                         .difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                     String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
@@ -244,7 +241,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         timer.cancel();
                       } else {
                         setState(() {
-                          left = widget.lessonInfo.haziFeladat.hataridoDatuma
+                          left = widget.lessonInfo.homework.dueDate
                               .difference(DateTime.now());
                           leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                           leftMins = (left.inMinutes % 60).toStringAsFixed(0);
@@ -275,7 +272,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                 children: [
                                   Html(
                                     data:
-                                        "${widget.lessonInfo.bejelentettSzamonkeresek[index].modja.leiras}: ${widget.lessonInfo.bejelentettSzamonkeresek[index].tema}",
+                                        "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
                                     onLinkTap: (url) async {
                                       if (await canLaunch(url)) {
                                         await launch(url);
@@ -295,15 +292,14 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                 ],
                               );
                             },
-                            itemCount: widget
-                                .lessonInfo.bejelentettSzamonkeresek.length,
+                            itemCount: widget.lessonInfo.examList.length,
                           ),
                           SizedBox(height: 18),
                           Text("${capitalize(getTranslatedString("hw"))}: ",
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold)),
                           Html(
-                            data: widget.lessonInfo.haziFeladat.szoveg,
+                            data: widget.lessonInfo.homework.content,
                             onLinkTap: (url) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
@@ -344,11 +340,11 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                     ));
                   }
 
-                  if (widget.lessonInfo.haziFeladatUid != null &&
-                      widget.lessonInfo.haziFeladatUid != "") {
-                    String due = widget.lessonInfo.haziFeladat.hataridoDatuma
-                        .toHumanString();
-                    Duration left = widget.lessonInfo.haziFeladat.hataridoDatuma
+                  if (widget.lessonInfo.teacherHwUid != null &&
+                      widget.lessonInfo.teacherHwUid != "") {
+                    String due =
+                        widget.lessonInfo.homework.dueDate.toHumanString();
+                    Duration left = widget.lessonInfo.homework.dueDate
                         .difference(DateTime.now());
                     String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                     String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
@@ -364,7 +360,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         timer.cancel();
                       } else {
                         setState(() {
-                          left = widget.lessonInfo.haziFeladat.hataridoDatuma
+                          left = widget.lessonInfo.homework.dueDate
                               .difference(DateTime.now());
                           leftHours = (left.inMinutes / 60).toStringAsFixed(0);
                           leftMins = (left.inMinutes % 60).toStringAsFixed(0);
@@ -388,7 +384,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold)),
                           Html(
-                            data: widget.lessonInfo.haziFeladat.szoveg,
+                            data: widget.lessonInfo.homework.content,
                             onLinkTap: (url) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
@@ -428,7 +424,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       ),
                     ));
                   }
-                  if (widget.lessonInfo.bejelentettSzamonkeresek.length != 0) {
+                  if (widget.lessonInfo.examList.length != 0) {
                     return SizedBox(
                       child: Center(
                         child: Column(
@@ -447,7 +443,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                   children: [
                                     Html(
                                       data:
-                                          "${widget.lessonInfo.bejelentettSzamonkeresek[index].modja.leiras}: ${widget.lessonInfo.bejelentettSzamonkeresek[index].tema}",
+                                          "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
                                       onLinkTap: (url) async {
                                         if (await canLaunch(url)) {
                                           await launch(url);
@@ -467,8 +463,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                   ],
                                 );
                               },
-                              itemCount: widget
-                                  .lessonInfo.bejelentettSzamonkeresek.length,
+                              itemCount: widget.lessonInfo.examList.length,
                             ),
                           ],
                         ),
@@ -495,7 +490,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   Widget build(BuildContext context) {
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.lessonInfo.nev)),
+      appBar: AppBar(title: Text(widget.lessonInfo.name)),
       body: _buildBody(),
     );
   }

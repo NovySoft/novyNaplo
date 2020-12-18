@@ -21,7 +21,7 @@ Future<void> clearAllTables() async {
   final db = await mainSql.database;
   final batch = db.batch();
   batch.delete("Evals");
-  batch.delete("Avarage");
+  batch.delete("Average");
   batch.delete("Notices");
   batch.delete("Events");
   batch.delete("Exams");

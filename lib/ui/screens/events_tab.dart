@@ -64,8 +64,8 @@ class _EventsTabState extends State<EventsTab> {
       return SafeArea(
           child: AnimatedTitleSubtitleCard(
         heroAnimation: AlwaysStoppedAnimation(0),
-        title: allParsedEvents[index].cim,
-        subTitle: removeHTMLtags(allParsedEvents[index].tartalom),
+        title: allParsedEvents[index].title,
+        subTitle: removeHTMLtags(allParsedEvents[index].content),
         color: colors[index],
         onPressed: EventsDetailTab(
           color: colors[index],

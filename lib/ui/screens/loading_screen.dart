@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
@@ -48,6 +49,11 @@ class _LoadingPageState extends State<LoadingPage> {
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
     //FIXME
+    List<Student> allUsers = await getAllUsers();
+    globals.currentUser = allUsers.firstWhere(
+      (element) => element.current,
+      orElse: () => allUsers[0],
+    );
     Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
     return;
     try {
@@ -57,7 +63,6 @@ class _LoadingPageState extends State<LoadingPage> {
           globals.prefs.getString("user") == null) {
         Navigator.pushReplacementNamed(context, LoginPage.tag);
         globals.prefs.setBool("isNew", true);
-        globals.prefs.setBool("isNotNew", true);
         return;
       }
       setState(() {
@@ -115,7 +120,7 @@ class _LoadingPageState extends State<LoadingPage> {
       });
       homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
       homeworkPage.globalHomework
-          .sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
+          .sort((a, b) => a.dueDate.compareTo(b.dueDate));
       //Notices
       setState(() {
         loadingText = getTranslatedString("readNotices");
@@ -126,10 +131,10 @@ class _LoadingPageState extends State<LoadingPage> {
           categorizeSubjectsFromEvals(marksPage.allParsedByDate);
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(
         statisticsPage.allParsedSubjects
-            .where((element) => element[0].szamErtek != 0),
+            .where((element) => element[0].numberValue != 0),
       );
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
-      //Avarages
+      //Averages
       setState(() {
         loadingText = getTranslatedString("readAvs");
       });
@@ -141,17 +146,16 @@ class _LoadingPageState extends State<LoadingPage> {
       /*timetablePage.lessonsList =
           await makeTimetableMatrix(await getAllTimetable());*/
       //Sort
-      marksPage.allParsedByDate
-          .sort((a, b) => b.rogzitesDatuma.compareTo(a.rogzitesDatuma));
+      marksPage.allParsedByDate.sort((a, b) => b.date.compareTo(a.date));
       //Exams
       setState(() {
         loadingText = getTranslatedString("readExam");
       });
       examsPage.allParsedExams = await getAllExams();
       examsPage.allParsedExams.sort(
-        (a, b) => (b.datum.toDayOnlyString() + b.orarendiOraOraszama.toString())
-            .compareTo(
-          a.datum.toDayOnlyString() + a.orarendiOraOraszama.toString(),
+        (a, b) =>
+            (b.date.toDayOnlyString() + b.lessonNumber.toString()).compareTo(
+          a.date.toDayOnlyString() + a.lessonNumber.toString(),
         ),
       );
       //Events
@@ -159,8 +163,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readEvents");
       });
       eventsPage.allParsedEvents = await getAllEvents();
-      eventsPage.allParsedEvents
-          .sort((a, b) => b.ervenyessegVege.compareTo(a.ervenyessegVege));
+      eventsPage.allParsedEvents.sort((a, b) => b.endDate.compareTo(a.endDate));
       //Absences and delays
       absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
       //DONE
@@ -192,7 +195,6 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       Navigator.pushReplacementNamed(context, LoginPage.tag);
       globals.prefs.setBool("isNew", true);
-      globals.prefs.setBool("isNotNew", true);
     }
   }
 

@@ -15,7 +15,7 @@ class ExamsDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Exams_detail_tab");
     globals.globalContext = context;
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(exam.tema))),
+      appBar: AppBar(title: Text(capitalize(exam.theme))),
       body: _buildBody(exam, color),
     );
   }
@@ -63,14 +63,15 @@ Widget _buildBody(Exam exam, Color color) {
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("subject")}: " +
-                            exam.tantargy.nev,
+                            exam.subject.name,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 3:
                   return SizedBox(
-                    child: Text("${getTranslatedString("theme")}: " + exam.tema,
+                    child: Text(
+                        "${getTranslatedString("theme")}: " + exam.theme,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -79,7 +80,7 @@ Widget _buildBody(Exam exam, Color color) {
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("examType")}: " +
-                            exam.modja.leiras,
+                            exam.mode.description,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
@@ -87,15 +88,15 @@ Widget _buildBody(Exam exam, Color color) {
                 case 7:
                   return SizedBox(
                     child: Text(
-                        "${getTranslatedString("teacher")}: " + exam.tanar,
+                        "${getTranslatedString("teacher")}: " + exam.teacher,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   );
                   break;
                 case 9:
-                  DateTime examDate = exam.datum;
+                  DateTime examDate = exam.date;
                   String subtitle =
-                      "${examDate.toHumanString()} (${exam.orarendiOraOraszama.intToTHEnding()} ${getTranslatedString("lesson")})";
+                      "${examDate.toHumanString()} (${exam.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
                   return SizedBox(
                     child: Text(
                         "${getTranslatedString("dateWrite")}: " + subtitle,
@@ -104,7 +105,7 @@ Widget _buildBody(Exam exam, Color color) {
                   );
                   break;
                 case 11:
-                  DateTime examDate = exam.bejelentesDatuma;
+                  DateTime examDate = exam.announcementDate;
                   String subtitle = "${examDate.toHumanString()}";
                   return SizedBox(
                     child: Text(

@@ -1,12 +1,12 @@
 import 'package:novynaplo/data/database/insertSql.dart';
-import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/logicAndMath/createAvarageDBListFromStatisticsAvarage.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 //Legjobb, legroszabb és a köztes jegyek
 //Should change to a return function, shouldn't I?
-//FIXME: Something is not right here, some people report that the avarages are not in correct order
+//FIXME: Something is not right here, some people report that the averages are not in correct order
 void getMarksWithChanges(List<List<Evals>> input) async {
   List<AV> tempList = [];
   double sum = 0, index = 0;
@@ -21,8 +21,8 @@ void getMarksWithChanges(List<List<Evals>> input) async {
     }
     AV temp = new AV();
     for (var y in n) {
-      sum += y.szamErtek * y.sulySzazalekErteke / 100;
-      index += 1 * y.sulySzazalekErteke / 100;
+      sum += y.numberValue * y.weight / 100;
+      index += 1 * y.weight / 100;
       if (listIndex == n.length - 1) {
         temp.diffSinceLast = sum / index;
       }
@@ -30,7 +30,7 @@ void getMarksWithChanges(List<List<Evals>> input) async {
     }
     temp.value = sum / index;
     temp.count = index.toDouble();
-    temp.subject = n[0].tantargy.nev;
+    temp.subject = n[0].subject.name;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
@@ -60,6 +60,6 @@ void getMarksWithChanges(List<List<Evals>> input) async {
   stats.allSubjectsAv.removeWhere((item) => item == tempListTwo[0]);
   stats.bestSubjectAv = tempListTwo[0];
   //We dont await it, cause this function is time critical
-  batchInsertAvarage(createAvarageDBListFromStatisticsAvarage(
+  batchInsertAverage(createAverageDBListFromStatisticsAverage(
       stats.bestSubjectAv, stats.allSubjectsAv, stats.worstSubjectAv));
 }

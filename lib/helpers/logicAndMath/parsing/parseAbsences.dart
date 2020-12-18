@@ -5,18 +5,22 @@ Future<List<List<Absence>>> makeAbsencesMatrix(List<Absence> input) async {
   if (input.length == 0) return [];
   List<List<Absence>> outputList = [[]];
   input.sort(
-    (a, b) =>
-        (b.ora.kezdoDatumString + " " + b.ora.oraszam.toString()).compareTo(
-      a.ora.kezdoDatumString + " " + a.ora.oraszam.toString(),
+    (a, b) => (b.lesson.startDate.toHumanString() +
+            " " +
+            b.lesson.lessonNumber.toString())
+        .compareTo(
+      a.lesson.startDate.toHumanString() +
+          " " +
+          a.lesson.lessonNumber.toString(),
     ),
   );
   int index = 0;
-  DateTime dateBefore = input[0].ora.kezdoDatum;
+  DateTime dateBefore = input[0].lesson.startDate;
   for (var n in input) {
-    if (!n.ora.kezdoDatum.isSameDay(dateBefore)) {
+    if (!n.lesson.startDate.isSameDay(dateBefore)) {
       index++;
       outputList.add([]);
-      dateBefore = n.ora.kezdoDatum;
+      dateBefore = n.lesson.startDate;
     }
     outputList[index].add(n);
   }

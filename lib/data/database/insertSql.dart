@@ -1,13 +1,14 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/absence.dart';
-import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,7 +21,7 @@ int notifId = 2;
 //TODO: FIX first login notifications (disable them, when first time loging in)
 //*Normal inserts
 
-Future<void> insertUser(User user) async {
+Future<void> insertUser(Student user) async {
   FirebaseCrashlytics.instance.log("insertUser");
   final Database db = await mainSql.database;
   await db.insert(
@@ -227,37 +228,37 @@ Future<void> insertNotices(Notice notice, {bool edited}) async {
   }*/
 }
 
-Future<void> insertAvarage(Avarage avarage) async {
-  FirebaseCrashlytics.instance.log("insertSingleAvarage");
+Future<void> insertAverage(Average average) async {
+  FirebaseCrashlytics.instance.log("insertSingleAverage");
   /*// Get a reference to the database.
   final Database db = await mainSql.database;
 
-  List<Avarage> allAv = await getAllAvarages();
+  List<average> allAv = await getAllAverages();
 
   var matchedAv = allAv.where((element) {
-    return (element.subject == avarage.subject);
+    return (element.subject == average.subject);
   });
   if (matchedAv.length == 0) {
     await db.insert(
-      'Avarage',
-      avarage.toMap(),
+      'average',
+      average.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   } else {
     for (var n in matchedAv) {
       //!Update didn't work so we delete and create a new one
-      if (n.ownValue != avarage.ownValue) {
-        await deleteFromDb(n.databaseId, "Avarage");
+      if (n.ownValue != average.ownValue) {
+        await deleteFromDb(n.databaseId, "average");
         if (globals.notifications) {
           String diff;
-          if (avarage.ownValue == null || n.ownValue == null) {
-            if (avarage.ownValue != null && n.ownValue == null) {
-              diff = "+${avarage.ownValue.toStringAsFixed(3)}";
+          if (average.ownValue == null || n.ownValue == null) {
+            if (average.ownValue != null && n.ownValue == null) {
+              diff = "+${average.ownValue.toStringAsFixed(3)}";
             } else {
               diff = "null";
             }
           } else {
-            double diffValue = avarage.ownValue - n.ownValue;
+            double diffValue = average.ownValue - n.ownValue;
             diff = diffValue > 0
                 ? ("+${diffValue.toStringAsFixed(3)}")
                 : diffValue.toStringAsFixed(3);
@@ -266,15 +267,15 @@ Future<void> insertAvarage(Avarage avarage) async {
           await notifHelper.flutterLocalNotificationsPlugin.show(
             notifId,
             '${getTranslatedString("avChanged")}: ' +
-                capitalize(avarage.subject),
+                capitalize(average.subject),
             '${getTranslatedString("newAv")}: ' +
-                avarage.ownValue.toString() +
+                average.ownValue.toString() +
                 " ($diff)",
             notifHelper.platformChannelSpecifics,
-            payload: "avarage ${avarage.subject}",
+            payload: "average ${average.subject}",
           );
         }
-        insertAvarage(avarage);
+        insertAverage(average);
       }
     }
   }*/
@@ -495,50 +496,50 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   }*/
 }
 
-Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
-  FirebaseCrashlytics.instance.log("batchInsertAvarage");
+Future<void> batchInsertAverage(List<Average> averageList) async {
+  FirebaseCrashlytics.instance.log("batchInsertAverage");
   bool inserted = false;
   // Get a reference to the database.
   final Database db = await mainSql.database;
   final Batch batch = db.batch();
 
-  List<Avarage> allAv = await getAllAvarages();
-  for (var avarage in avarageList) {
+  List<Average> allAv = await getAllAverages();
+  for (var average in averageList) {
     var matchedAv = allAv.where((element) {
-      return (element.subject == avarage.subject);
+      return (element.subject == average.subject);
     });
     if (matchedAv.length == 0) {
       inserted = true;
       batch.insert(
-        'Avarage',
-        avarage.toMap(),
+        'average',
+        average.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } else {
       for (var n in matchedAv) {
         //!Update didn't work so we delete and create a new one
-        if (n.ownValue != avarage.ownValue) {
+        if (n.ownValue != average.ownValue) {
           inserted = true;
           batch.delete(
-            "Avarage",
+            "average",
             where: "databaseId = ?",
             whereArgs: [n.databaseId],
           );
           batch.insert(
-            'Avarage',
-            avarage.toMap(),
+            'average',
+            average.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           if (globals.notifications) {
             String diff;
-            if (avarage.ownValue == null || n.ownValue == null) {
-              if (avarage.ownValue != null && n.ownValue == null) {
-                diff = "+${avarage.ownValue.toStringAsFixed(3)}";
+            if (average.ownValue == null || n.ownValue == null) {
+              if (average.ownValue != null && n.ownValue == null) {
+                diff = "+${average.ownValue.toStringAsFixed(3)}";
               } else {
                 diff = "null";
               }
             } else {
-              double diffValue = avarage.ownValue - n.ownValue;
+              double diffValue = average.ownValue - n.ownValue;
               diff = diffValue > 0
                   ? ("+${diffValue.toStringAsFixed(3)}")
                   : diffValue.toStringAsFixed(3);
@@ -547,12 +548,12 @@ Future<void> batchInsertAvarage(List<Avarage> avarageList) async {
             await notifHelper.flutterLocalNotificationsPlugin.show(
               notifId,
               '${getTranslatedString("avChanged")}: ' +
-                  capitalize(avarage.subject),
+                  capitalize(average.subject),
               '${getTranslatedString("newAv")}: ' +
-                  avarage.ownValue.toString() +
+                  average.ownValue.toString() +
                   " ($diff)",
               notifHelper.platformChannelSpecifics,
-              payload: "avarage ${avarage.subject}",
+              payload: "average ${average.subject}",
             );
           }
         }

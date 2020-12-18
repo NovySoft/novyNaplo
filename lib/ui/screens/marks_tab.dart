@@ -8,7 +8,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -119,16 +120,23 @@ class MarksTabState extends State<MarksTab>
       platformChannelSpecificsGetNotif,
     );
     //FIXME DECRYPT HASZNÁLATA
-    List<User> allUsers = await getAllUsers();
+    List<Student> allUsers = await getAllUsers();
     for (var currentUser in allUsers) {
-      var status = await RequestHandler.login(currentUser);
+      TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
-        await RequestHandler.getEverything(status.userinfo);
+        if (currentUser.current) {
+          globals.currentUser.token = status.userinfo.token;
+          globals.currentUser.tokenDate = status.userinfo.tokenDate;
+        }
+        await RequestHandler.getEverything(
+          status.userinfo,
+          setData: currentUser.current,
+        );
         setState(() {
           _setData();
         });
       } else {
-        //Fixme show toasts on errors;
+        //Fixme show toasts on ALL errors;
         print(status);
       }
     }
@@ -153,9 +161,9 @@ class MarksTabState extends State<MarksTab>
         subTitle: getMarkCardSubtitle(
           eval: allParsedByDate[index],
         ), //capitalize(allParsedByDate[index].theme),
-        title: capitalize(allParsedByDate[index].tantargy.nev +
+        title: capitalize(allParsedByDate[index].subject.name +
             " " +
-            allParsedByDate[index].szovegesErtek),
+            allParsedByDate[index].textValue),
         color: color,
         onPressed: MarksDetailTab(
           eval: allParsedByDate[index],
@@ -196,7 +204,7 @@ class MarksTabState extends State<MarksTab>
                 padding: EdgeInsets.only(left: 15.0),
                 child: Text(
                   capitalize(
-                          allParsedBySubject[listIndex][index].tantargy.nev) +
+                          allParsedBySubject[listIndex][index].subject.name) +
                       ":",
                   textAlign: defaultTargetPlatform == TargetPlatform.iOS
                       ? TextAlign.center
@@ -216,7 +224,7 @@ class MarksTabState extends State<MarksTab>
                       eval: allParsedBySubject[listIndex][index],
                     ),
                     title: capitalize(
-                      allParsedBySubject[listIndex][index].szovegesErtek,
+                      allParsedBySubject[listIndex][index].textValue,
                     ),
                     color: color,
                     heroAnimation: AlwaysStoppedAnimation(0),
@@ -239,7 +247,7 @@ class MarksTabState extends State<MarksTab>
                 eval: allParsedBySubject[listIndex][index],
               ),
               title: capitalize(
-                allParsedBySubject[listIndex][index].szovegesErtek,
+                allParsedBySubject[listIndex][index].textValue,
               ),
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),

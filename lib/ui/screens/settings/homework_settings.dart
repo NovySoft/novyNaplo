@@ -26,8 +26,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
 
   void updateHwTab() async {
     homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
-    homeworkPage.globalHomework
-        .sort((a, b) => a.hataridoDatuma.compareTo(b.hataridoDatuma));
+    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     homeworkPage.colors = getRandomColors(homeworkPage.globalHomework.length);
   }
 

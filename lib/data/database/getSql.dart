@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/absence.dart';
-import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -70,17 +73,17 @@ Future<List<Notice>> getAllNotices() async {
   });
 }
 
-Future<List<Avarage>> getAllAvarages() async {
-  FirebaseCrashlytics.instance.log("getAllAvarages");
+Future<List<Average>> getAllAverages() async {
+  FirebaseCrashlytics.instance.log("getAllAverages");
   // Get a reference to the database.
   final Database db = await mainSql.database;
 
   final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Avarage GROUP BY subject ORDER BY databaseId',
+    'SELECT * FROM Average GROUP BY subject ORDER BY databaseId',
   );
 
   return List.generate(maps.length, (i) {
-    Avarage temp = new Avarage();
+    Average temp = new Average();
     temp.databaseId = maps[i]['databaseId'];
     temp.subject = maps[i]['subject'];
     temp.ownValue = maps[i]['ownValue'];
@@ -306,20 +309,31 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
   return outputList;
 }
 
-Future<List<User>> getAllUsers({bool decrypt = true}) async {
+Future<List<Student>> getAllUsers({bool decrypt = true}) async {
   final Database db = await mainSql.database;
 
   final List<Map<String, dynamic>> maps = await db.rawQuery(
     'SELECT * FROM Users',
   );
 
-  List<User> tempList = List.generate(maps.length, (i) {
-    User temp = new User(
-      id: maps[i]['databaseId'],
-      iv: maps[i]['iv'],
+  List<Student> tempList = List.generate(maps.length, (i) {
+    Student temp = new Student(
+      id: maps[i]['id'],
+      uid: maps[i]['uid'],
+      mothersName: maps[i]['mothersName'],
+      adressList: json.decode(maps[i]['adressList']).cast<String>(),
+      parents: Parent.fromJsonList(maps[i]['parents']),
+      name: maps[i]['name'],
+      birthDay: maps[i]['birthDay'],
+      placeOfBirth: maps[i]['placeOfBirth'],
+      birthName: maps[i]['birthName'],
+      schoolYearUid: maps[i]['schoolYearUid'],
+      bankAccount: BankAccount.fromJson(json.decode(maps[i]['bankAccount'])),
+      institution: Institution.fromJson(json.decode(maps[i]['institution'])),
+      school: maps[i]['school'],
       username: maps[i]['username'],
       password: maps[i]['password'],
-      school: maps[i]['code'],
+      iv: maps[i]['iv'],
       current: maps[i]['current'] == 1 ? true : false,
     );
     if (decrypt) {

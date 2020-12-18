@@ -9,8 +9,8 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
   double index = 0;
   int listArray = 0;
   for (var n in input) {
-    sum += n.szamErtek * n.sulySzazalekErteke / 100;
-    index += 1 * n.sulySzazalekErteke / 100;
+    sum += n.numberValue * n.weight / 100;
+    index += 1 * n.weight / 100;
     chartData.add(new LinearMarkChartData(listArray, sum / index));
     listArray++;
   }

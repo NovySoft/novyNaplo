@@ -53,7 +53,7 @@ class ReportsDetailTab extends StatelessWidget {
             case 0:
               return Center(
                 child: Text(
-                  eval.keszitesDatuma.toString().split(".")[0],
+                  eval.createDate.toString().split(".")[0],
                   style: TextStyle(fontSize: 20),
                 ),
               );
@@ -64,13 +64,13 @@ class ReportsDetailTab extends StatelessWidget {
                   children: [
                     SizedBox(height: 5),
                     Text(
-                      capitalize((eval.tema.toLowerCase() == "dicséret" ||
-                                  eval.tema.toLowerCase() == "kitűnő"
+                      capitalize((eval.theme.toLowerCase() == "dicséret" ||
+                                  eval.theme.toLowerCase() == "kitűnő"
                               ? "${getTranslatedString("praiseworthy")} "
                               : "") +
-                          eval.tantargy.nev +
+                          eval.subject.name +
                           " " +
-                          eval.szovegesErtek),
+                          eval.textValue),
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(height: 5),
@@ -174,9 +174,9 @@ class ReportsDetailTab extends StatelessWidget {
               int performancePercentage = calcPercentFromEvalsList(
                 av: result,
                 evalList: getSameSubjectEvals(
-                  subject: eval.tantargy.nev,
+                  subject: eval.subject.name,
                   sort: true,
-                  onlyBefore: eval.rogzitesDatuma,
+                  onlyBefore: eval.date,
                 ),
               );
               Color textColPercent;

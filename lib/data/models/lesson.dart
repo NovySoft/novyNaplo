@@ -1,86 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/models/leiras.dart';
-import 'package:novynaplo/data/models/tantargy.dart';
+import 'package:novynaplo/data/models/description.dart';
+import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'exam.dart';
 import 'homework.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
-import 'osztalyCsoport.dart';
+import 'classGroup.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 class Lesson {
-  Leiras allapot;
-  List<String> bejelentettSzamonkeresUids;
-  List<Exam> bejelentettSzamonkeresek;
-  String bejelentettSzamonkeresUid;
-  String datumString;
-  DateTime datum;
-  String helyettesTanarNeve;
-  bool isTanuloHaziFeladatEnabled;
-  String kezdetIdopontString;
-  DateTime kezdetIdopont;
-  String nev;
-  int oraszam;
-  int oraEvesSorszama;
-  OsztalyCsoport osztalyCsoport;
-  String haziFeladatUid;
-  Homework haziFeladat;
-  bool isHaziFeladatMegoldva;
-  String tanarNeve;
-  Tantargy tantargy;
-  Leiras tanuloJelenlet;
-  String tema;
-  String teremNeve;
-  Leiras tipus;
+  Description state;
+  List<String> examUidList;
+  List<Exam> examList;
+  String examUid;
+  DateTime date;
+  String deputyTeacher;
+  bool isStudentHomeworkEnabled;
+  DateTime startDate;
+  String name;
+  int lessonNumber;
+  int lessonNumberYear;
+  ClassGroup group;
+  String teacherHwUid;
+  Homework homework;
+  bool isHWSolved;
+  String teacher;
+  Subject subject;
+  Description presence;
+  String theme;
+  String classroom;
+  Description type;
   String uid;
-  String vegIdopontString;
-  DateTime vegIdopont;
+  DateTime endDate;
   int databaseId;
   int id;
   IconData icon;
   bool isSpecialDayEvent = false;
 
-  Lesson(
-      {this.allapot,
-      this.bejelentettSzamonkeresUids,
-      this.bejelentettSzamonkeresUid,
-      this.datumString,
-      this.helyettesTanarNeve,
-      this.isTanuloHaziFeladatEnabled,
-      this.kezdetIdopontString,
-      this.nev,
-      this.oraszam,
-      this.oraEvesSorszama,
-      this.osztalyCsoport,
-      this.haziFeladatUid,
-      this.isHaziFeladatMegoldva,
-      this.tanarNeve,
-      this.tantargy,
-      this.tanuloJelenlet,
-      this.tema,
-      this.teremNeve,
-      this.tipus,
-      this.uid,
-      this.vegIdopontString});
+  Lesson({
+    this.state,
+    this.examUidList,
+    this.examUid,
+    this.deputyTeacher,
+    this.isStudentHomeworkEnabled,
+    this.name,
+    this.lessonNumber,
+    this.lessonNumberYear,
+    this.group,
+    this.teacherHwUid,
+    this.isHWSolved,
+    this.teacher,
+    this.subject,
+    this.presence,
+    this.theme,
+    this.classroom,
+    this.type,
+    this.uid,
+  });
 
-  //FIXME: NULL SAFETY ON ESEMÉNYEK
-  static Future<Lesson> fromJson(Map<String, dynamic> json) async {
-    Lesson temp = new Lesson();
-    temp.datumString = json['Datum'];
-    temp.datum = temp.datumString != null
-        ? DateTime.parse(temp.datumString).toLocal()
+  Lesson.fromJson(Map<String, dynamic> json) {
+    date = json['Datum'] != null
+        ? DateTime.parse(json['Datum']).toLocal()
         : DateTime(2020);
-    temp.allapot =
-        json['Allapot'] != null ? new Leiras.fromJson(json['Allapot']) : null;
+    state = json['Allapot'] != null
+        ? new Description.fromJson(json['Allapot'])
+        : null;
     if (json['BejelentettSzamonkeresUids'] != null) {
-      temp.bejelentettSzamonkeresUids = [];
-      temp.bejelentettSzamonkeresek = [];
-      int index = 0;
+      examUidList = [];
+      examList = [];
       for (var v in json['BejelentettSzamonkeresUids']) {
-        temp.bejelentettSzamonkeresUids.add(v);
-        temp.bejelentettSzamonkeresek.add(
+        examUidList.add(v);
+        examList.add(
           examsPage.allParsedExams.firstWhere(
             (item) => item.uid == v,
             orElse: () {
@@ -88,64 +80,61 @@ class Lesson {
             },
           ),
         );
-        index++;
       }
     }
-    temp.bejelentettSzamonkeresUid = json['BejelentettSzamonkeresUid'];
-    temp.helyettesTanarNeve = json['HelyettesTanarNeve'];
-    temp.isTanuloHaziFeladatEnabled = json['IsTanuloHaziFeladatEnabled'];
-    temp.kezdetIdopontString = json['KezdetIdopont'];
-    temp.kezdetIdopont = temp.kezdetIdopontString != null
-        ? DateTime.parse(temp.kezdetIdopontString).toLocal()
+    examUid = json['BejelentettSzamonkeresUid'];
+    deputyTeacher = json['HelyettesTanarNeve'];
+    isStudentHomeworkEnabled = json['IsTanuloHaziFeladatEnabled'];
+    startDate = json['KezdetIdopont'] != null
+        ? DateTime.parse(json['KezdetIdopont']).toLocal()
         : DateTime(2020);
-    temp.nev = json['Nev'];
-    temp.oraszam = json['Oraszam'];
-    temp.oraEvesSorszama = json['OraEvesSorszama'];
-    temp.osztalyCsoport = json['OsztalyCsoport'] != null
-        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+    name = json['Nev'];
+    lessonNumber = json['Oraszam'];
+    lessonNumberYear = json['OraEvesSorszama'];
+    group = json['OsztalyCsoport'] != null
+        ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
-    temp.haziFeladatUid = json['HaziFeladatUid'];
-    if (temp.haziFeladatUid != null) {
-      temp.haziFeladat = homeworkPage.globalHomework.firstWhere(
-        (element) => element.uid == temp.haziFeladatUid,
+    teacherHwUid = json['HaziFeladatUid'];
+    if (teacherHwUid != null) {
+      homework = homeworkPage.globalHomework.firstWhere(
+        (element) => element.uid == teacherHwUid,
         orElse: () {
           return null;
         },
       );
     }
-    if (temp.haziFeladat == null && temp.haziFeladatUid != null) {
-      temp.haziFeladat = await RequestHandler.getHomeworkId(
+    if (homework == null && teacherHwUid != null) {
+      RequestHandler.getHomeworkId(
         globals.currentUser,
-        id: temp.haziFeladatUid,
-      );
+        id: teacherHwUid,
+      ).then((value) {
+        homework = value;
+      });
     }
-    temp.isHaziFeladatMegoldva = json['IsHaziFeladatMegoldva'];
-    temp.tanarNeve = json['TanarNeve'];
-    temp.tantargy = json['Tantargy'] != null
-        ? new Tantargy.fromJson(json['Tantargy'])
+    isHWSolved = json['IsHaziFeladatMegoldva'];
+    teacher = json['TanarNeve'];
+    subject = json['Tantargy'] != null
+        ? new Subject.fromJson(json['Tantargy'])
         : null;
-    temp.tanuloJelenlet = json['TanuloJelenlet'] != null
-        ? new Leiras.fromJson(json['TanuloJelenlet'])
+    presence = json['TanuloJelenlet'] != null
+        ? new Description.fromJson(json['TanuloJelenlet'])
         : null;
-    temp.tema = json['Tema'];
-    temp.teremNeve = json['TeremNeve'];
-    temp.tipus =
-        json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
-    temp.uid = json['Uid'];
-    temp.vegIdopontString = json['VegIdopont'];
-    temp.vegIdopont = temp.vegIdopontString != null
-        ? DateTime.parse(temp.vegIdopontString).toLocal()
+    theme = json['Tema'];
+    classroom = json['TeremNeve'];
+    type =
+        json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
+    uid = json['Uid'];
+    endDate = json['VegIdopont'] != null
+        ? DateTime.parse(json['VegIdopont']).toLocal()
         : DateTime(2020);
-    temp.icon = parseSubjectToIcon(
-        subject: temp.tantargy == null ? "" : temp.tantargy.nev);
-    if (temp.tantargy == null) {
-      temp.isSpecialDayEvent = true;
+    icon = parseSubjectToIcon(subject: subject == null ? "" : subject.name);
+    if (subject == null) {
+      isSpecialDayEvent = true;
     }
-    return temp;
   }
 
   @override
   String toString() {
-    return this.datum.toLocal().toIso8601String();
+    return this.date.toLocal().toIso8601String();
   }
 }

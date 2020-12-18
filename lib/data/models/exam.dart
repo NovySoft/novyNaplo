@@ -1,62 +1,59 @@
 import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 
-import 'leiras.dart';
-import 'osztalyCsoport.dart';
-import 'tantargy.dart';
+import 'description.dart';
+import 'classGroup.dart';
+import 'subject.dart';
 
 class Exam {
-  String bejelentesDatumaString;
-  DateTime bejelentesDatuma;
-  String datumString;
-  DateTime datum;
-  Leiras modja;
-  int orarendiOraOraszama;
-  String tanar;
-  Tantargy tantargy;
-  String tema;
-  OsztalyCsoport osztalyCsoport;
+  DateTime announcementDate;
+  DateTime date;
+  Description mode;
+  int lessonNumber;
+  String teacher;
+  Subject subject;
+  String theme;
+  ClassGroup group;
   String uid;
   int id;
   IconData icon;
 
   Exam(
-      {this.bejelentesDatuma,
-      this.datum,
-      this.modja,
-      this.orarendiOraOraszama,
-      this.tanar,
-      this.tantargy,
-      this.tema,
-      this.osztalyCsoport,
+      {this.announcementDate,
+      this.date,
+      this.mode,
+      this.lessonNumber,
+      this.teacher,
+      this.subject,
+      this.theme,
+      this.group,
       this.uid});
 
   Exam.fromJson(Map<String, dynamic> json) {
-    bejelentesDatumaString = json['BejelentesDatuma'];
-    bejelentesDatuma = bejelentesDatumaString != null
-        ? DateTime.parse(bejelentesDatumaString).toLocal()
+    announcementDate = json['BejelentesDatuma'] != null
+        ? DateTime.parse(json['BejelentesDatuma']).toLocal()
         : DateTime(2020);
-    datumString = json['Datum'];
-    datum = datumString != null
-        ? DateTime.parse(datumString).toLocal()
+    date = json['Datum'] != null
+        ? DateTime.parse(json['Datum']).toLocal()
         : DateTime(2020);
-    modja = json['Modja'] != null ? new Leiras.fromJson(json['Modja']) : null;
-    orarendiOraOraszama = json['OrarendiOraOraszama'];
-    tanar = json['RogzitoTanarNeve'];
-    tantargy = json['Tantargy'] != null
-        ? new Tantargy.fromJson(json['Tantargy'])
+    mode =
+        json['Modja'] != null ? new Description.fromJson(json['Modja']) : null;
+    lessonNumber = json['OrarendiOraOraszama'];
+    teacher = json['RogzitoTanarNeve'];
+    subject = json['Tantargy'] != null
+        ? new Subject.fromJson(json['Tantargy'])
         : null;
-    tema = json['Temaja'];
-    osztalyCsoport = json['OsztalyCsoport'] != null
-        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+    theme = json['Temaja'];
+    group = json['OsztalyCsoport'] != null
+        ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
     uid = json['Uid'];
     id = int.parse(uid);
-    icon = parseSubjectToIcon(subject: tantargy.nev);
+    icon = parseSubjectToIcon(subject: subject.name);
   }
 
   @override
   String toString() {
-    return this.modja.nev + ":" + this.tema;
+    return this.mode.name + ":" + this.theme;
   }
 }

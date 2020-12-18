@@ -7,8 +7,10 @@ import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/models/school.dart';
-import 'package:novynaplo/data/models/user.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/encryptionHelper.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
     as progressButton;
 import 'package:novynaplo/helpers/ui/animations/shake_view.dart';
@@ -46,7 +48,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool _isWrongUser = false;
   bool _obscureText = true;
   bool _isWrongSchool = false;
-  User tempUser = User();
+  Student tempUser = Student();
   bool isFirstUser = false;
 
   void showSelectDialog() {
@@ -72,7 +74,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
     );
     super.initState();
-    setNewUserPrefs();
+    getAllUsers(decrypt: false)
+        .then((value) => isFirstUser = (value.length <= 0));
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -103,12 +106,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     });
   }
 
-  void setNewUserPrefs() async {
-    isFirstUser = (await getAllUsers(decrypt: false)).length > 0;
-    globals.prefs.setBool("isNew", true);
-    globals.prefs.setBool("isNotNew", true);
-  }
-
   Future<void> login() async {
     tempUser.school = selectedSchool.code;
     tempUser.username = _userController.text;
@@ -119,9 +116,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     });
     if (result.status == "OK") {
       try {
-        User temp = await encryptUserDetails(tempUser);
-        temp.current = isFirstUser;
-        await insertUser(temp);
+        Student finalUserObject = await encryptUserDetails(tempUser);
+        finalUserObject.current = isFirstUser;
+        finalUserObject = await RequestHandler.getStudentInfo(
+          tempUser,
+          embedEncryptedDetails: true,
+          encryptedDetails: finalUserObject,
+        );
+        await insertUser(finalUserObject);
+        await globals.prefs.setBool("isNew", false);
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       } catch (e, s) {
         FirebaseCrashlytics.instance.recordError(

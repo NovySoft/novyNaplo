@@ -95,7 +95,7 @@ Future selectNotification(String payload) async {
   if (payload != null && payload != "teszt" && payload is String) {
     print(payload.split(" ")[0] + ":" + payload.split(" ")[1]);
     globals.notifPayload = payload.split(" ")[0];
-    if (payload.split(" ")[0] == "avarage") {
+    if (payload.split(" ")[0] == "average") {
       globals.payloadId = 0;
       globals.payloadString = payload.split(" ")[1];
     } else {
@@ -268,7 +268,7 @@ Future selectNotification(String payload) async {
             .pushNamed(timetableTab.TimetableTab.tag);
         return;
         break;
-      case "avarage":
+      case "average":
         Navigator.of(globals.globalContext).pushNamed(StatisticsTab.tag);
         return;
         break;

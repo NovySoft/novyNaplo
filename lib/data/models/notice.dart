@@ -1,53 +1,45 @@
-import 'leiras.dart';
-import 'osztalyCsoport.dart';
+import 'description.dart';
+import 'classGroup.dart';
 
 class Notice {
-  String cim;
-  String datumString;
-  DateTime datum;
-  String keszitesDatumaString;
-  DateTime keszitesDatuma;
-  String tanar;
-  String lattamozasDatumaString;
-  DateTime lattamozasDatuma;
-  OsztalyCsoport osztalyCsoport;
-  String tartalom;
-  String tantargy;
-  Leiras tipus;
+  String title;
+  DateTime date;
+  DateTime createDate;
+  String teacher;
+  DateTime seenDate;
+  ClassGroup group;
+  String content;
+  String subject;
+  Description type;
   String uid;
   int id;
 
   Notice(
-      {this.cim,
-      this.datumString,
-      this.keszitesDatumaString,
-      this.tanar,
-      this.lattamozasDatumaString,
-      this.osztalyCsoport,
-      this.tartalom,
-      this.tipus,
+      {this.title,
+      this.teacher,
+      this.group,
+      this.content,
+      this.type,
       this.uid});
 
   Notice.fromJson(Map<String, dynamic> json) {
-    cim = json['Cim'];
-    datumString = json['Datum'];
-    datum = datumString != null
-        ? DateTime.parse(datumString).toLocal()
+    title = json['Cim'];
+    date = json['Datum'] != null
+        ? DateTime.parse(json['Datum']).toLocal()
         : DateTime(2020);
-    keszitesDatumaString = json['KeszitesDatuma'];
-    keszitesDatuma = keszitesDatumaString != null
-        ? DateTime.parse(keszitesDatumaString).toLocal()
+    createDate = json['KeszitesDatuma'] != null
+        ? DateTime.parse(json['KeszitesDatuma']).toLocal()
         : DateTime(2020);
-    tanar = json['KeszitoTanarNeve'];
-    lattamozasDatumaString = json['LattamozasDatuma'];
-    lattamozasDatuma = lattamozasDatumaString != null
-        ? DateTime.parse(lattamozasDatumaString).toLocal()
+    teacher = json['KeszitoTanarNeve'];
+    seenDate = json['LattamozasDatuma'] != null
+        ? DateTime.parse(json['LattamozasDatuma']).toLocal()
         : DateTime(2020);
-    osztalyCsoport = json['OsztalyCsoport'] != null
-        ? new OsztalyCsoport.fromJson(json['OsztalyCsoport'])
+    group = json['OsztalyCsoport'] != null
+        ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
-    tartalom = json['Tartalom'];
-    tipus = json['Tipus'] != null ? new Leiras.fromJson(json['Tipus']) : null;
+    content = json['Tartalom'];
+    type =
+        json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
     uid = json['Uid'];
   }
 }

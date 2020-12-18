@@ -20,7 +20,7 @@ Future<void> initDatabase() async {
         "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,szamErtek INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT,userId INTEGER)",
       );
       await db.execute(
-        "CREATE TABLE Avarage (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER)",
+        "CREATE TABLE average (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER)",
       );
       await db.execute(
         "CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,id INTEGER,title TEXT,content TEXT,teacher TEXT,dateString TEXT,subject TEXT,userId INTEGER)",
@@ -41,7 +41,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT,userId INTEGER);',
       );
       await db.execute(
-        'CREATE TABLE Users (databaseId INTEGER PRIMARY KEY,iv TEXT,username TEXT,password TEXT,code TEXT, "current" INTEGER DEFAULT 0);',
+        'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,password TEXT,school TEXT,iv TEXT,"current" INTEGER DEFAULT 0);',
       );
     },
 

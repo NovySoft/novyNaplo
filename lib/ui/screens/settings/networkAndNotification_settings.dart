@@ -269,7 +269,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("thisIsHowItWillLookLike"),
                             notifications.platformChannelSpecifics,
                             payload:
-                                'avarage ${allParsedSubjectsWithoutZeros[0][0].tantargy.nev}',
+                                'average ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
                           );
                         },
                         icon: Icon(

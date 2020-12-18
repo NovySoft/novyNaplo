@@ -9,21 +9,21 @@ void setUpCalculatorPage(List<List<Evals>> input) {
   FirebaseCrashlytics.instance.log("setUpCalculatorPage");
   calculatorPage.dropdownValues = [];
   calculatorPage.dropdownValue = "";
-  calculatorPage.avarageList = [];
+  calculatorPage.averageList = [];
   if (input != null && input != [[]]) {
     double sum, index;
     for (var n in input) {
-      calculatorPage.dropdownValues.add(capitalize(n[0].tantargy.nev));
+      calculatorPage.dropdownValues.add(capitalize(n[0].subject.name));
       sum = 0;
       index = 0;
       for (var y in n) {
-        sum += y.szamErtek * y.sulySzazalekErteke / 100;
-        index += 1 * y.sulySzazalekErteke / 100;
+        sum += y.numberValue * y.weight / 100;
+        index += 1 * y.weight / 100;
       }
       CalculatorData temp = new CalculatorData();
       temp.count = index;
       temp.sum = sum;
-      calculatorPage.avarageList.add(temp);
+      calculatorPage.averageList.add(temp);
     }
   }
   if (calculatorPage.dropdownValues.length != 0)

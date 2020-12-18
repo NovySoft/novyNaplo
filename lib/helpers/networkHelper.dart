@@ -278,7 +278,7 @@ class NetworkHelper {
     FirebaseCrashlytics.instance.log("setUpCalculatorPage");
     calculatorPage.dropdownValues = [];
     calculatorPage.dropdownValue = "";
-    calculatorPage.avarageList = [];
+    calculatorPage.averageList = [];
     if (input != null && input != [[]]) {
       double sum, index;
       for (var n in input) {
@@ -292,7 +292,7 @@ class NetworkHelper {
         CalculatorData temp = new CalculatorData();
         temp.count = index;
         temp.sum = sum;
-        calculatorPage.avarageList.add(temp);
+        calculatorPage.averageList.add(temp);
       }
     }
     if (calculatorPage.dropdownValues.length != 0)

@@ -4,7 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/data/models/avarage.dart';
+import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/charts/absencesCharts.dart';
@@ -585,9 +585,9 @@ class _StatisticsTabState extends State<StatisticsTab>
               builder: (context) => AbsencesTab(),
             ),
           );
-        } else if (globals.notifPayload == "avarage") {
+        } else if (globals.notifPayload == "average") {
           int tempIndex = allParsedSubjectsWithoutZeros.indexWhere(
-              (element) => element[0].tantargy.nev == globals.payloadString);
+              (element) => element[0].subject.name == globals.payloadString);
           Color currColor = marksPage.colors[tempIndex + 1];
           Navigator.push(
             context,
@@ -595,7 +595,7 @@ class _StatisticsTabState extends State<StatisticsTab>
               builder: (context) => ChartsDetailTab(
                 id: tempIndex,
                 subject: capitalize(
-                    allParsedSubjectsWithoutZeros[tempIndex][0].tantargy.nev),
+                    allParsedSubjectsWithoutZeros[tempIndex][0].subject.name),
                 color: currColor,
                 seriesList: createSubjectChart(
                     allParsedSubjectsWithoutZeros[tempIndex], "0"),
@@ -611,7 +611,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     _tabController = new TabController(
       vsync: this,
       length: 2,
-      initialIndex: globals.notifPayload == "avarage" ? 1 : 0,
+      initialIndex: globals.notifPayload == "average" ? 1 : 0,
     );
     super.initState();
   }
@@ -654,13 +654,13 @@ class _StatisticsTabState extends State<StatisticsTab>
     return SafeArea(
       child: AnimatedChartsTitleCard(
         title: capitalize(
-            allParsedSubjectsWithoutZeros[index - 1][0].tantargy.nev),
+            allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
         color: currColor,
         heroAnimation: AlwaysStoppedAnimation(0),
         onPressed: ChartsDetailTab(
           id: index,
           subject: capitalize(
-              allParsedSubjectsWithoutZeros[index - 1][0].tantargy.nev),
+              allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
           color: currColor,
           seriesList: createSubjectChart(
               allParsedSubjectsWithoutZeros[index - 1], index.toString()),

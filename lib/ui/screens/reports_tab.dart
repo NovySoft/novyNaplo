@@ -61,25 +61,25 @@ class _ReportsTabState extends State<ReportsTab>
     //*FirstQuarter
     firstQuarterEvaluationList = marks.allParsedByDate.where(
       (item) {
-        return item.tipus.nev == "I_ne_jegy_ertekeles" ? true : false;
+        return item.type.name == "I_ne_jegy_ertekeles" ? true : false;
       },
     ).toList();
     firstQuarterEvaluationList
-        .sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
+        .sort((a, b) => a.subject.name.compareTo(b.subject.name));
     //*HalfYear
     halfYearEvalList = marks.allParsedByDate.where(
       (item) {
-        return item.tipus.nev == "felevi_jegy_ertekeles" ? true : false;
+        return item.type.name == "felevi_jegy_ertekeles" ? true : false;
       },
     ).toList();
-    halfYearEvalList.sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
+    halfYearEvalList.sort((a, b) => a.subject.name.compareTo(b.subject.name));
     //*EndOfYear
     endOfYearEvalList = marks.allParsedByDate.where(
       (item) {
-        return item.tipus.nev == "evvegi_jegy_ertekeles" ? true : false;
+        return item.type.name == "evvegi_jegy_ertekeles" ? true : false;
       },
     ).toList();
-    endOfYearEvalList.sort((a, b) => a.tantargy.nev.compareTo(b.tantargy.nev));
+    endOfYearEvalList.sort((a, b) => a.subject.name.compareTo(b.subject.name));
     super.initState();
   }
 
@@ -118,15 +118,15 @@ class _ReportsTabState extends State<ReportsTab>
                   );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
-                          element[0].tantargy.nev.toLowerCase() ==
+                          element[0].subject.name.toLowerCase() ==
                           firstQuarterEvaluationList[index]
-                              .tantargy
-                              .nev
+                              .subject
+                              .name
                               .toLowerCase());
                   List<dynamic> chartListPoints =
                       stats.allParsedSubjects[statListIndex].where((element) {
-                    if (element.rogzitesDatuma.compareTo(
-                            firstQuarterEvaluationList[index].rogzitesDatuma) <=
+                    if (element.date.compareTo(
+                            firstQuarterEvaluationList[index].date) <=
                         0) {
                       return true;
                     } else {
@@ -136,7 +136,7 @@ class _ReportsTabState extends State<ReportsTab>
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(
-                          firstQuarterEvaluationList[index].tantargy.nev),
+                          firstQuarterEvaluationList[index].subject.name),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -146,15 +146,15 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     trailing: Text(
-                      (firstQuarterEvaluationList[index].tema.toLowerCase() ==
+                      (firstQuarterEvaluationList[index].theme.toLowerCase() ==
                                       "dicséret" ||
                                   firstQuarterEvaluationList[index]
-                                          .tema
+                                          .theme
                                           .toLowerCase() ==
                                       "kitűnő"
                               ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
-                          firstQuarterEvaluationList[index].szovegesErtek,
+                          firstQuarterEvaluationList[index].textValue,
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -166,7 +166,7 @@ class _ReportsTabState extends State<ReportsTab>
                     color: color,
                     onPressed: ReportsDetailTab(
                       title:
-                          "${getTranslatedString("FirstQuarter").toLowerCase()} ${firstQuarterEvaluationList[index].tantargy.nev}",
+                          "${getTranslatedString("FirstQuarter").toLowerCase()} ${firstQuarterEvaluationList[index].subject.name}",
                       eval: firstQuarterEvaluationList[index],
                       color: color,
                       chartList: statListIndex != -1
@@ -196,12 +196,11 @@ class _ReportsTabState extends State<ReportsTab>
                   );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
-                          element[0].tantargy.nev.toLowerCase() ==
-                          halfYearEvalList[index].tantargy.nev.toLowerCase());
+                          element[0].subject.name.toLowerCase() ==
+                          halfYearEvalList[index].subject.name.toLowerCase());
                   List<dynamic> chartListPoints =
                       stats.allParsedSubjects[statListIndex].where((element) {
-                    if (element.rogzitesDatuma.compareTo(
-                            halfYearEvalList[index].rogzitesDatuma) <=
+                    if (element.date.compareTo(halfYearEvalList[index].date) <=
                         0) {
                       return true;
                     } else {
@@ -210,7 +209,7 @@ class _ReportsTabState extends State<ReportsTab>
                   }).toList();
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
-                      capitalize(halfYearEvalList[index].tantargy.nev),
+                      capitalize(halfYearEvalList[index].subject.name),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -220,13 +219,13 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     trailing: Text(
-                      (halfYearEvalList[index].tema.toLowerCase() ==
+                      (halfYearEvalList[index].theme.toLowerCase() ==
                                       "dicséret" ||
-                                  halfYearEvalList[index].tema.toLowerCase() ==
+                                  halfYearEvalList[index].theme.toLowerCase() ==
                                       "kitűnő"
                               ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
-                          halfYearEvalList[index].szovegesErtek,
+                          halfYearEvalList[index].textValue,
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -238,7 +237,7 @@ class _ReportsTabState extends State<ReportsTab>
                     color: color,
                     onPressed: ReportsDetailTab(
                       title:
-                          "${getTranslatedString("HalfYear").toLowerCase()} ${halfYearEvalList[index].tantargy.nev}",
+                          "${getTranslatedString("HalfYear").toLowerCase()} ${halfYearEvalList[index].subject.name}",
                       eval: halfYearEvalList[index],
                       color: color,
                       chartList: statListIndex != -1
@@ -285,12 +284,11 @@ class _ReportsTabState extends State<ReportsTab>
                   );
                   int statListIndex = stats.allParsedSubjects.indexWhere(
                       (element) =>
-                          element[0].tantargy.nev.toLowerCase() ==
-                          endOfYearEvalList[index].tantargy.nev.toLowerCase());
+                          element[0].subject.name.toLowerCase() ==
+                          endOfYearEvalList[index].subject.name.toLowerCase());
                   List<dynamic> chartListPoints =
                       stats.allParsedSubjects[statListIndex].where((element) {
-                    if (element.rogzitesDatuma.compareTo(
-                            endOfYearEvalList[index].rogzitesDatuma) <=
+                    if (element.date.compareTo(endOfYearEvalList[index].date) <=
                         0) {
                       return true;
                     } else {
@@ -299,7 +297,7 @@ class _ReportsTabState extends State<ReportsTab>
                   }).toList();
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
-                      capitalize(endOfYearEvalList[index].tantargy.nev),
+                      capitalize(endOfYearEvalList[index].subject.name),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -309,13 +307,15 @@ class _ReportsTabState extends State<ReportsTab>
                       ),
                     ),
                     trailing: Text(
-                      (endOfYearEvalList[index].tema.toLowerCase() ==
+                      (endOfYearEvalList[index].theme.toLowerCase() ==
                                       "dicséret" ||
-                                  endOfYearEvalList[index].tema.toLowerCase() ==
+                                  endOfYearEvalList[index]
+                                          .theme
+                                          .toLowerCase() ==
                                       "kitűnő"
                               ? "${getTranslatedString("praiseworthy")}\n"
                               : "") +
-                          endOfYearEvalList[index].szovegesErtek,
+                          endOfYearEvalList[index].textValue,
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
@@ -327,7 +327,7 @@ class _ReportsTabState extends State<ReportsTab>
                     color: color,
                     onPressed: ReportsDetailTab(
                       title:
-                          "${getTranslatedString("EndOfYear").toLowerCase()} ${endOfYearEvalList[index].tantargy.nev}",
+                          "${getTranslatedString("EndOfYear").toLowerCase()} ${endOfYearEvalList[index].subject.name}",
                       eval: endOfYearEvalList[index],
                       color: color,
                       chartList: statListIndex != -1
