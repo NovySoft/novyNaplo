@@ -33,7 +33,7 @@ Future<Student> encryptUserDetails(Student user) async {
       .base64;
   return Student(
     current: user.current,
-    id: user.id,
+    userId: user.userId,
     token: user.token,
     iv: iv.base64,
     school: encryptedCode,

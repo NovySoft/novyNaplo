@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -7,23 +8,30 @@ Future<Database> database;
 
 Future<void> initDatabase() async {
 // Open the database and store the reference.
+  String dbPath = await getDatabasesPath();
   database = openDatabase(
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    join(await getDatabasesPath(), 'NovyNalploDatabaseV2.db'),
+    join(dbPath, 'NovyNalploDatabaseV2.db'),
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) async {
       FirebaseCrashlytics.instance.log("createSqlTables");
+      //Delete old database
+      String path = join(dbPath, 'NovyNalploDatabase.db');
+      File file = new File(path);
+      if (file.existsSync()) {
+        file.delete();
+      }
       // Run the CREATE TABLE statement on the database.
       await db.execute(
-        "CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,id INTEGER,formName TEXT,form TEXT,value TEXT,szamErtek INTEGER,teacher TEXT,'type' TEXT,subject TEXT,theme TEXT,mode TEXT,weight TEXT,dateString TEXT,createDateString TEXT,userId INTEGER)",
+        'CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,uid TEXT,teacher TEXT,valueType TEXT,kindOf TEXT,createDate TEXT,seenDate TEXT,mode TEXT,date TEXT,weight INTEGER,numberValue INTEGER,textValue TEXT,shortTextValue TEXT,subject TEXT,theme TEXT,"type" TEXT,"group" TEXT,sortIndex INTEGER,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE average (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER)",
+        "CREATE TABLE Average (databaseId INTEGER PRIMARY KEY,subject TEXT,value REAL,userId INTEGER);",
       );
       await db.execute(
-        "CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,id INTEGER,title TEXT,content TEXT,teacher TEXT,dateString TEXT,subject TEXT,userId INTEGER)",
+        'CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,title TEXT,date TEXT,createDate TEXT,teacher TEXT,seenDate TEXT,"group" TEXT,content TEXT,subject TEXT,"type" TEXT,uid TEXT,userId INTEGER);',
       );
       await db.execute(
         "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT,userId INTEGER)",

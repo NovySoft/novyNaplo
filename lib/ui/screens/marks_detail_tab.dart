@@ -132,7 +132,8 @@ class MarksDetailTab extends StatelessWidget {
               ),
               SizedBox(height: 10, width: 5),
               Text(
-                "${getTranslatedString("dateGiveUp")}: " + eval.dateString,
+                "${getTranslatedString("dateGiveUp")}: " +
+                    eval.date.toHumanString(),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),

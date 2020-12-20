@@ -27,7 +27,8 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   return jegyMatrix;
 }
 
-List<List<Evals>> sortByDateAndSubject(List<Evals> input) {
+List<List<Evals>> sortByDateAndSubject(List<Evals> inputOne) {
+  List<Evals> input = List.from(inputOne);
   input.sort((a, b) => a.subject.name.compareTo(b.subject.name));
   int _currentIndex = 0;
   List<List<Evals>> _tempArray = [[]];

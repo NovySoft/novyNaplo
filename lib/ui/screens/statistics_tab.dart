@@ -42,14 +42,14 @@ final List<Tab> statTabs = <Tab>[
 ];
 TabController _tabController;
 List<charts.Series<LinearMarkChartData, int>> allSubjectsChartData;
-AV osszesitettAv = new AV();
-AV worstSubjectAv = new AV();
-AV bestSubjectAv = new AV();
+Average osszesitettAv = new Average();
+Average worstSubjectAv = new Average();
+Average bestSubjectAv = new Average();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
 List<charts.Series<dynamic, String>> howManyFromSpecific;
 double sizedBoxHeight = 75;
-List<AV> allSubjectsAv = [];
+List<Average> allSubjectsAv = [];
 
 class StatisticsTab extends StatefulWidget {
   static String tag = 'statistics';
@@ -288,7 +288,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                               Text(
                                 "${getTranslatedString("best")} (" +
                                     capitalize(bestSubjectAv.subject) +
-                                    ") ${getTranslatedString("av")}: ",
+                                    ") ${getTranslatedString("Average")}: ",
                                 textAlign: TextAlign.start,
                                 style: new TextStyle(
                                     color: Colors.green,
@@ -406,7 +406,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                               Text(
                                 "${getTranslatedString("worst")} (" +
                                     capitalize(worstSubjectAv.subject) +
-                                    ") ${getTranslatedString("av")}: ",
+                                    ") ${getTranslatedString("Average")}: ",
                                 textAlign: TextAlign.start,
                                 style: new TextStyle(
                                     color: Colors.red,

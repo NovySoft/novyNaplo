@@ -17,19 +17,12 @@ import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 
+import 'evals.dart';
+import 'notices.dart';
+
 int notifId = 2;
 //TODO: FIX first login notifications (disable them, when first time loging in)
 //*Normal inserts
-
-Future<void> insertUser(Student user) async {
-  FirebaseCrashlytics.instance.log("insertUser");
-  final Database db = await mainSql.database;
-  await db.insert(
-    'Users',
-    user.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
-}
 
 // A function that inserts evals into the database
 Future<void> insertEval(Evals eval, {bool edited}) async {
@@ -333,87 +326,6 @@ Future<void> insertExam(Exam exam, {bool edited}) async {
 }
 
 //*Batch inserts
-// A function that inserts multiple evals into the database
-Future<void> batchInsertEval(List<Evals> evalList) async {
-  FirebaseCrashlytics.instance.log("batchInsertEval");
-  /*bool inserted = false;
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-  final Batch batch = db.batch();
-
-  //Get all evals, and see whether we should be just replacing
-  List<Evals> allEvals = await getAllEvals();
-  for (var eval in evalList) {
-    var matchedEvals = allEvals.where(
-      (element) {
-        return (element.id == eval.id && element.form == eval.form) ||
-            (element.subject == eval.subject &&
-                element.id == eval.id &&
-                element.form == eval.form);
-      },
-    );
-    if (matchedEvals.length == 0) {
-      inserted = true;
-      batch.insert(
-        'Evals',
-        eval.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      //print("notifID: $notifId");
-      if (globals.notifications) {
-        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-        await notifHelper.flutterLocalNotificationsPlugin.show(
-          notifId,
-          '${getTranslatedString("newMark")}: ' +
-              capitalize(eval.subject) +
-              " " +
-              eval.value,
-          '${getTranslatedString("theme")}: ' + eval.theme,
-          notifHelper.platformChannelSpecifics,
-          payload: "marks " + eval.id.toString(),
-        );
-      }
-    } else {
-      for (var n in matchedEvals) {
-        //!Update didn't work so we delete and create a new one
-        if ((n.szamErtek != eval.szamErtek ||
-                n.theme != eval.theme ||
-                n.dateString != eval.dateString ||
-                n.weight != eval.weight) &&
-            n.id == eval.id) {
-          inserted = true;
-          batch.delete(
-            "Evals",
-            where: "databaseId = ?",
-            whereArgs: [n.databaseId],
-          );
-          batch.insert(
-            'Evals',
-            eval.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
-          //print("notifID: $notifId");
-          if (globals.notifications) {
-            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-            await notifHelper.flutterLocalNotificationsPlugin.show(
-              notifId,
-              '${getTranslatedString("markModified")}: ' +
-                  capitalize(eval.subject) +
-                  " " +
-                  eval.value,
-              '${getTranslatedString("theme")}: ' + eval.theme,
-              notifHelper.platformChannelSpecifics,
-              payload: "marks " + eval.id.toString(),
-            );
-          }
-        }
-      }
-    }
-  }
-  if (inserted) {
-    await batch.commit();
-  }*/
-}
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
   FirebaseCrashlytics.instance.log("batchInsertHomework");
@@ -494,141 +406,6 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   if (inserted) {
     await batch.commit();
   }*/
-}
-
-Future<void> batchInsertAverage(List<Average> averageList) async {
-  FirebaseCrashlytics.instance.log("batchInsertAverage");
-  bool inserted = false;
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-  final Batch batch = db.batch();
-
-  List<Average> allAv = await getAllAverages();
-  for (var average in averageList) {
-    var matchedAv = allAv.where((element) {
-      return (element.subject == average.subject);
-    });
-    if (matchedAv.length == 0) {
-      inserted = true;
-      batch.insert(
-        'average',
-        average.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    } else {
-      for (var n in matchedAv) {
-        //!Update didn't work so we delete and create a new one
-        if (n.ownValue != average.ownValue) {
-          inserted = true;
-          batch.delete(
-            "average",
-            where: "databaseId = ?",
-            whereArgs: [n.databaseId],
-          );
-          batch.insert(
-            'average',
-            average.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
-          if (globals.notifications) {
-            String diff;
-            if (average.ownValue == null || n.ownValue == null) {
-              if (average.ownValue != null && n.ownValue == null) {
-                diff = "+${average.ownValue.toStringAsFixed(3)}";
-              } else {
-                diff = "null";
-              }
-            } else {
-              double diffValue = average.ownValue - n.ownValue;
-              diff = diffValue > 0
-                  ? ("+${diffValue.toStringAsFixed(3)}")
-                  : diffValue.toStringAsFixed(3);
-            }
-            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-            await notifHelper.flutterLocalNotificationsPlugin.show(
-              notifId,
-              '${getTranslatedString("avChanged")}: ' +
-                  capitalize(average.subject),
-              '${getTranslatedString("newAv")}: ' +
-                  average.ownValue.toString() +
-                  " ($diff)",
-              notifHelper.platformChannelSpecifics,
-              payload: "average ${average.subject}",
-            );
-          }
-        }
-      }
-    }
-  }
-  if (inserted) {
-    await batch.commit();
-  }
-}
-
-Future<void> batchInsertNotices(List<Notice> noticeList) async {
-  FirebaseCrashlytics.instance.log("batchInsertNotices");
-  /*bool inserted = false;
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-  final Batch batch = db.batch();
-
-  List<Notice> allNotices = await getAllNotices();
-  for (var notice in noticeList) {
-    var matchedNotices = allNotices.where((element) {
-      return (element.title == notice.title || element.id == notice.id);
-    });
-    if (matchedNotices.length == 0) {
-      inserted = true;
-      batch.insert(
-        'Notices',
-        notice.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      if (globals.notifications) {
-        notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-        await notifHelper.flutterLocalNotificationsPlugin.show(
-          notifId,
-          '${getTranslatedString("newNotice")}: ' + capitalize(notice.title),
-          notice.teacher,
-          notifHelper.platformChannelSpecifics,
-          payload: "notice " + notice.id.toString(),
-        );
-      }
-    } else {
-      for (var n in matchedNotices) {
-        //!Update didn't work so we delete and create a new one
-        if ((n.title != notice.title || n.content != notice.content) &&
-            n.id == notice.id) {
-          inserted = true;
-          batch.delete(
-            "Notices",
-            where: "databaseId = ?",
-            whereArgs: [n.databaseId],
-          );
-          batch.insert(
-            'Notices',
-            notice.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
-          if (globals.notifications) {
-            notifId = notifId == 111 ? notifId + 2 : notifId + 1;
-            await notifHelper.flutterLocalNotificationsPlugin.show(
-              notifId,
-              '${getTranslatedString("noticeModified")}: ' +
-                  capitalize(notice.title),
-              notice.teacher,
-              notifHelper.platformChannelSpecifics,
-              payload: "notice " + notice.id.toString(),
-            );
-          }
-        }
-      }
-    }
-  }
-  if (inserted) {
-    await batch.commit();
-  }*/
-  //print("BATCH INSERTED NOTICES");
 }
 
 /*Future<void> batchInsertLessons(List<Lesson> lessonList,

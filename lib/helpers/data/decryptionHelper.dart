@@ -26,7 +26,7 @@ Student decryptUserDetails(Student input) {
     iv: iv,
   );
   return Student(
-    id: input.id,
+    userId: input.userId,
     uid: input.uid,
     mothersName: input.mothersName,
     adressList: input.adressList,

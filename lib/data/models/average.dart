@@ -1,39 +1,23 @@
 class Average {
-  String subject;
-  double ownValue;
+  double value;
+  double diffSinceLast;
+  String subject = "";
+  double count = 0;
   int databaseId;
+  int userId;
 
   @override
   String toString() {
-    return this.subject + ": " + this.ownValue.toStringAsFixed(3);
+    return this.subject + ": " + this.value.toStringAsFixed(3);
   }
 
   Map<String, dynamic> toMap() {
     return {
       'databaseId': databaseId,
       'subject': subject,
-      'ownValue': ownValue,
+      'ownValue': value,
+      'userId': userId,
     };
   }
 }
-
-//TODO: Merge these two classes
 //FIXME: Andrew says his average calculations are not always right
-class AV {
-  double value;
-  double diffSinceLast;
-  String subject = "";
-  double count = 0;
-
-  @override
-  String toString() {
-    return subject + ":" + value.toStringAsFixed(3);
-  }
-
-  Average toDatabaseAverage() {
-    Average temp = new Average();
-    temp.ownValue = value;
-    temp.subject = subject;
-    return temp;
-  }
-}

@@ -16,63 +16,6 @@ import 'dart:async';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/global.dart' as globals;
 
-// A method that retrieves all the evals from the table.
-Future<List<Evals>> getAllEvals() async {
-  FirebaseCrashlytics.instance.log("getAllEvals");
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-
-  // Query the table for all the evals.
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Evals GROUP BY id, form ORDER BY databaseId',
-  );
-
-  // Convert the List<Map<String, dynamic> into a List<Evals>.
-  return List.generate(maps.length, (i) {
-    Evals temp = new Evals();
-    /*temp.id = maps[i]['id'];
-    temp.formName = maps[i]['formName'];
-    temp.form = maps[i]['form'];
-    temp.value = maps[i]['value'];
-    temp.szamErtek = maps[i]['szamErtek'];
-    temp.teacher = maps[i]['teacher'];
-    temp.type = maps[i]['type'];
-    temp.subject = maps[i]['subject'];
-    temp.theme = maps[i]['theme'];
-    temp.mode = maps[i]['mode'];
-    temp.weight = maps[i]['weight'];
-    temp.databaseId = maps[i]['databaseId'];
-    temp.dateString = maps[i]['dateString'];
-    temp.createDateString = maps[i]['createDateString'];
-    temp.date = DateTime.parse(temp.dateString);
-    temp.createDate = DateTime.parse(temp.createDateString);*/
-    return temp;
-  });
-}
-
-Future<List<Notice>> getAllNotices() async {
-  FirebaseCrashlytics.instance.log("getAllNotices");
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Notices GROUP BY id, content ORDER BY databaseId',
-  );
-
-  return List.generate(maps.length, (i) {
-    Notice temp = new Notice();
-    /*temp.databaseId = maps[i]['databaseId'];
-    temp.id = maps[i]['id'];
-    temp.title = maps[i]['title'];
-    temp.content = maps[i]['content'];
-    temp.teacher = maps[i]['teacher'];
-    temp.dateString = maps[i]['dateString'];
-    temp.subject = maps[i]['subject'];
-    temp.date = DateTime.parse(temp.dateString);*/
-    return temp;
-  });
-}
-
 Future<List<Average>> getAllAverages() async {
   FirebaseCrashlytics.instance.log("getAllAverages");
   // Get a reference to the database.
@@ -86,7 +29,7 @@ Future<List<Average>> getAllAverages() async {
     Average temp = new Average();
     temp.databaseId = maps[i]['databaseId'];
     temp.subject = maps[i]['subject'];
-    temp.ownValue = maps[i]['ownValue'];
+    temp.value = maps[i]['ownValue'];
     return temp;
   });
 }
@@ -307,40 +250,4 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
     outputList[index].add(n);
   }*/
   return outputList;
-}
-
-Future<List<Student>> getAllUsers({bool decrypt = true}) async {
-  final Database db = await mainSql.database;
-
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Users',
-  );
-
-  List<Student> tempList = List.generate(maps.length, (i) {
-    Student temp = new Student(
-      id: maps[i]['id'],
-      uid: maps[i]['uid'],
-      mothersName: maps[i]['mothersName'],
-      adressList: json.decode(maps[i]['adressList']).cast<String>(),
-      parents: Parent.fromJsonList(maps[i]['parents']),
-      name: maps[i]['name'],
-      birthDay: maps[i]['birthDay'],
-      placeOfBirth: maps[i]['placeOfBirth'],
-      birthName: maps[i]['birthName'],
-      schoolYearUid: maps[i]['schoolYearUid'],
-      bankAccount: BankAccount.fromJson(json.decode(maps[i]['bankAccount'])),
-      institution: Institution.fromJson(json.decode(maps[i]['institution'])),
-      school: maps[i]['school'],
-      username: maps[i]['username'],
-      password: maps[i]['password'],
-      iv: maps[i]['iv'],
-      current: maps[i]['current'] == 1 ? true : false,
-    );
-    if (decrypt) {
-      return decryptUserDetails(temp);
-    }
-    return temp;
-  });
-  globals.decodedUserList = tempList;
-  return tempList;
 }

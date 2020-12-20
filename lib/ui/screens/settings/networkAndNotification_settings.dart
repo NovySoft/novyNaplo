@@ -95,7 +95,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'marks ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
-                                    : allParsedByDate[0].id.toString()),
+                                    : allParsedByDate[0].databaseId.toString()),
                           );
                         },
                         icon: Icon(
@@ -165,7 +165,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'notice ' +
                                 (allParsedNotices.length == 0
                                     ? "0"
-                                    : allParsedNotices[0].id.toString()),
+                                    : allParsedNotices[0].uid.toString()),
                           );
                         },
                         icon: Icon(

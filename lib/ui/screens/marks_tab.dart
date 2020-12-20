@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/getSql.dart';
+import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
@@ -93,7 +94,7 @@ class MarksTabState extends State<MarksTab>
   Future<void> _refreshData() async {
     FirebaseAnalytics().logEvent(name: "RefreshData");
     FirebaseCrashlytics.instance.log("RefreshData");
-    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+    if (!(await NetworkHelper.isNetworkAvailable())) {
       await showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -119,7 +120,6 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    //FIXME DECRYPT HASZNÁLATA
     List<Student> allUsers = await getAllUsers();
     for (var currentUser in allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);

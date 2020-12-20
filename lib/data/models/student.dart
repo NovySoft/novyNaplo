@@ -20,7 +20,7 @@ class Student {
   String token;
   String iv;
   DateTime tokenDate;
-  int id;
+  int userId;
   bool current;
 
   Student({
@@ -41,13 +41,13 @@ class Student {
     this.token,
     this.iv,
     this.tokenDate,
-    this.id,
+    this.userId,
     this.current,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': userId,
       'uid': uid,
       'mothersName': mothersName,
       'adressList': json.encode(adressList),
@@ -57,8 +57,8 @@ class Student {
       'placeOfBirth': placeOfBirth,
       'birthName': birthName,
       'schoolYearUid': schoolYearUid,
-      'bankAccount': json.encode(bankAccount.toJson()),
-      'institution': json.encode(institution.toJson()),
+      'bankAccount': bankAccount.toJson(),
+      'institution': institution.toJson(),
       'username': username,
       'password': password,
       'school': school,
@@ -132,13 +132,13 @@ class BankAccount {
   bool isReadOnly;
   BankAccount();
 
-  Map<String, dynamic> toJson() {
+  String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['BankszamlaSzam'] = this.accountNumber;
     data['BankszamlaTulajdonosTipusId'] = this.accountHolderTypeId;
     data['BankszamlaTulajdonosNeve'] = this.accountHolderName;
     data['IsReadOnly'] = this.isReadOnly;
-    return data;
+    return json.encode(data);
   }
 
   BankAccount.fromJson(Map<String, dynamic> json) {
@@ -158,7 +158,7 @@ class Institution {
   CustomizationOptions customizationOptions;
   Institution();
 
-  Map<String, dynamic> toJson() {
+  String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Uid'] = this.uid;
     data['RovidNev'] = this.shortName;
@@ -169,7 +169,7 @@ class Institution {
     if (this.customizationOptions != null) {
       data['TestreszabasBeallitasok'] = this.customizationOptions.toJson();
     }
-    return data;
+    return json.encode(data);
   }
 
   Institution.fromJson(Map<String, dynamic> json) {

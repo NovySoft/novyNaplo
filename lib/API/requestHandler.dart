@@ -5,6 +5,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/data/database/evals.dart';
+import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
@@ -158,7 +160,7 @@ class RequestHandler {
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
       if (embedEncryptedDetails) {
-        student.id = encryptedDetails.id;
+        student.userId = encryptedDetails.userId;
         student.iv = encryptedDetails.iv;
         student.school = encryptedDetails.school;
         student.username = encryptedDetails.username;
@@ -185,14 +187,21 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Evals> evaluations = [];
 
-      responseJson
-          .forEach((evaluation) => evaluations.add(Evals.fromJson(evaluation)));
+      responseJson.forEach(
+        (evaluation) => evaluations.add(
+          Evals.fromJson(
+            evaluation,
+            userDetails,
+          ),
+        ),
+      );
+
       if (sort) {
         evaluations.sort(
           (a, b) => b.date.compareTo(a.date),
         );
       }
-
+      batchInsertEvals(evaluations);
       return evaluations;
     } catch (e) {
       return null;
@@ -305,7 +314,7 @@ class RequestHandler {
 
   static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(Student userDetails,
       {DateTime date}) async {
-    if (await NetworkHelper().isNetworkAvailable() == ConnectivityResult.none) {
+    if (!(await NetworkHelper.isNetworkAvailable())) {
       throw Exception(getTranslatedString("noNet"));
     }
     List<DateTime> days = [];
@@ -429,8 +438,10 @@ class RequestHandler {
     }
   }
 
-  static Future<List<Notice>> getNotices(Student userDetails,
-      {bool sort = true}) async {
+  static Future<List<Notice>> getNotices(
+    Student userDetails, {
+    bool sort = true,
+  }) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.notes,
@@ -443,10 +454,20 @@ class RequestHandler {
       List<Notice> notes = [];
 
       List responseJson = jsonDecode(response.body);
-      responseJson.forEach((json) => notes.add(Notice.fromJson(json)));
+      responseJson.forEach(
+        (json) => notes.add(
+          Notice.fromJson(
+            json,
+            userDetails,
+          ),
+        ),
+      );
+
       if (sort) {
         notes.sort((a, b) => b.date.compareTo(a.date));
       }
+
+      batchInsertNotices(notes);
       return notes;
     } catch (error) {
       print("ERROR: KretaAPI.getNotes: " + error.toString());

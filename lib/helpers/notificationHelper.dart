@@ -170,19 +170,19 @@ Future selectNotification(String payload) async {
       case "marks":
         int tempindex = marksTab.allParsedByDate.indexWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.databaseId == globals.payloadId;
           },
         );
         Evals tempEval = marksTab.allParsedByDate.firstWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.databaseId == globals.payloadId;
           },
           orElse: () {
             return new Evals();
           },
         );
         //Evals tempEval = allParsedByDate[0];
-        if (tempEval.id != null)
+        if (tempEval.databaseId != null)
           Future.delayed(Duration(milliseconds: 500), () {
             Navigator.push(
               globals.globalContext,
@@ -233,19 +233,19 @@ Future selectNotification(String payload) async {
       case "notice":
         int tempindex = noticeTab.allParsedNotices.indexWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
         );
         Notice tempNotice = noticeTab.allParsedNotices.firstWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
           orElse: () {
             return new Notice();
           },
         );
         //Evals tempEval = allParsedByDate[0];
-        if (tempNotice.id != null)
+        if (tempNotice.uid != null)
           Future.delayed(Duration(milliseconds: 500), () {
             Navigator.push(
               globals.globalContext,

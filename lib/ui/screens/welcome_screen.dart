@@ -39,6 +39,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
     FirebaseAnalytics().logEvent(name: "tutorial_begin");
     WidgetsBinding.instance.addPostFrameCallback((_) => animate());
+    globals.setGlobals();
   }
 
   @override

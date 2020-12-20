@@ -285,7 +285,7 @@ final Map<String, String> translation = {
   "hwModified": "Homwork modified",
   "newNotice": "New notice",
   "noticeModified": "Notice modified",
-  "avChanged": "average changed",
+  "avChanged": "Average changed",
   "newAv": "New average",
   "newExam": "New exam",
   "examModified": "Exam modified",

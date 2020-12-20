@@ -3,15 +3,17 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:novynaplo/data/database/evals.dart';
+import 'package:novynaplo/data/database/notices.dart';
+import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
-import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
-import 'package:novynaplo/ui/screens/login_page.dart';
+import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
@@ -48,23 +50,18 @@ class _LoadingPageState extends State<LoadingPage> {
   //Runs after initState
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
-    //FIXME
-    List<Student> allUsers = await getAllUsers();
-    globals.currentUser = allUsers.firstWhere(
-      (element) => element.current,
-      orElse: () => allUsers[0],
-    );
-    Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
-    return;
     try {
-      if (globals.prefs.getString("iv") == null ||
-          globals.prefs.getString("code") == null ||
-          globals.prefs.getString("password") == null ||
-          globals.prefs.getString("user") == null) {
-        Navigator.pushReplacementNamed(context, LoginPage.tag);
-        globals.prefs.setBool("isNew", true);
+      await globals.setGlobals();
+      List<Student> allUsers = await getAllUsers();
+      if (allUsers.length <= 0) {
+        Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);
         return;
       }
+      globals.currentUser = allUsers.firstWhere(
+        (element) => element.current,
+        orElse: () => allUsers[0],
+      );
+      //FIXME status szöveg hozzáadása
       setState(() {
         loadingText = getTranslatedString("checkVersion");
       });
@@ -106,86 +103,23 @@ class _LoadingPageState extends State<LoadingPage> {
       } else {
         globals.adsEnabled = false;
       }
-      //MARKS
+      //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");
       });
+      //FIXME Yeah we should also save, don't we?
       List<Evals> tempEvals = await getAllEvals();
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
-      marksPage.allParsedBySubject = sortByDateAndSubject(List.from(tempEvals));
-      //Homework
-      setState(() {
-        loadingText = getTranslatedString("readHw");
-      });
-      homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
-      homeworkPage.globalHomework
-          .sort((a, b) => a.dueDate.compareTo(b.dueDate));
-      //Notices
+      marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+      //*Notices
       setState(() {
         loadingText = getTranslatedString("readNotices");
       });
       noticesPage.allParsedNotices = await getAllNotices();
-      //Statisztika
-      statisticsPage.allParsedSubjects =
-          categorizeSubjectsFromEvals(marksPage.allParsedByDate);
-      statisticsPage.allParsedSubjectsWithoutZeros = List.from(
-        statisticsPage.allParsedSubjects
-            .where((element) => element[0].numberValue != 0),
-      );
-      setUpCalculatorPage(statisticsPage.allParsedSubjects);
-      //Averages
-      setState(() {
-        loadingText = getTranslatedString("readAvs");
-      });
-      getMarksWithChanges(statisticsPage.allParsedSubjectsWithoutZeros);
-      //Timetable
-      setState(() {
-        loadingText = getTranslatedString("readTimetable");
-      });
-      /*timetablePage.lessonsList =
-          await makeTimetableMatrix(await getAllTimetable());*/
-      //Sort
-      marksPage.allParsedByDate.sort((a, b) => b.date.compareTo(a.date));
-      //Exams
-      setState(() {
-        loadingText = getTranslatedString("readExam");
-      });
-      examsPage.allParsedExams = await getAllExams();
-      examsPage.allParsedExams.sort(
-        (a, b) =>
-            (b.date.toDayOnlyString() + b.lessonNumber.toString()).compareTo(
-          a.date.toDayOnlyString() + a.lessonNumber.toString(),
-        ),
-      );
-      //Events
-      setState(() {
-        loadingText = getTranslatedString("readEvents");
-      });
-      eventsPage.allParsedEvents = await getAllEvents();
-      eventsPage.allParsedEvents.sort((a, b) => b.endDate.compareTo(a.endDate));
-      //Absences and delays
-      absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
-      //DONE
-      setState(() {
-        loadingText = "${getTranslatedString("almReady")}!";
-      });
-      if (globals.notificationAppLaunchDetails.didNotificationLaunchApp) {
-        //print("NotifLaunchApp");
-        if (globals.notificationAppLaunchDetails.payload == "teszt") {
-          //print("TESZT");
-          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
-          showTesztNotificationDialog();
-        } else {
-          //print(globals.notificationAppLaunchDetails.payload);
-          marksTab.redirectPayload = true;
-          await delay(10);
-          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
-        }
-      } else {
-        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
-      }
+      //*Done
       FirebaseAnalytics().logEvent(name: "login");
+      Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
       return;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');
@@ -193,8 +127,6 @@ class _LoadingPageState extends State<LoadingPage> {
         context,
         "${getTranslatedString("errReadMem")} ($e, $s) ${getTranslatedString("restartApp")}",
       );
-      Navigator.pushReplacementNamed(context, LoginPage.tag);
-      globals.prefs.setBool("isNew", true);
     }
   }
 

@@ -100,8 +100,7 @@ class _TimetableTabState extends State<TimetableTab> {
                 item.year == _selectedDate.year)
             .length ==
         0) {
-      if (await NetworkHelper().isNetworkAvailable() ==
-          ConnectivityResult.none) {
+      if (!(await NetworkHelper.isNetworkAvailable())) {
         showDialog<void>(
             context: context,
             barrierDismissible: true,
