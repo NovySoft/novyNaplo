@@ -28,5 +28,15 @@ class Event {
     content = json["Tartalom"] != null
         ? json["Tartalom"].replaceAll("\r", "<br>").replaceAll("\n", "<br>")
         : null;
+    //As the ui shows this as an html object we parse all the links into a html tag
+    RegExp regex = RegExp(
+      r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?',
+      multiLine: true,
+      caseSensitive: false,
+    );
+    content = content.replaceAllMapped(regex, (Match m) {
+      print(m.group(0));
+      return '<a href="${m.group(0)}">${m.group(0)}</a>';
+    });
   }
 }

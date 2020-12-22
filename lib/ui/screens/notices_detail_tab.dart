@@ -1,12 +1,14 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
@@ -53,22 +55,30 @@ class NoticeDetailTab extends StatelessWidget {
                 switch (index) {
                   case 0:
                     return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15),
-                          Text(
-                            "${getTranslatedString("content")}:",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            capitalize(notice.content),
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ]);
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 15),
+                        Text(
+                          "${getTranslatedString("content")}:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                        ),
+                        Linkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            } else {
+                              throw 'Could not launch $link';
+                            }
+                          },
+                          text: capitalize(notice.content),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ],
+                    );
                     break;
                   case 1:
                     return Column(

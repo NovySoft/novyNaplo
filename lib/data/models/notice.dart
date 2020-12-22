@@ -29,19 +29,18 @@ class Notice {
   Notice.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     title = json['Cim'];
-    date = json['Datum'] != null
-        ? DateTime.parse(json['Datum']).toLocal()
-        : DateTime(2020);
+    date =
+        json['Datum'] != null ? DateTime.parse(json['Datum']).toLocal() : null;
     createDate = json['KeszitesDatuma'] != null
         ? DateTime.parse(json['KeszitesDatuma']).toLocal()
-        : DateTime(2020);
+        : null;
     teacher = json['KeszitoTanarNeve'];
     seenDate = json['LattamozasDatuma'] != null
         ? DateTime.parse(json['LattamozasDatuma']).toLocal()
-        : DateTime(2020);
+        : null;
     group = json['OsztalyCsoport'] != null
         ? new ClassGroup.fromJson(json['OsztalyCsoport'])
-        : ClassGroup(uid: 'noGroup', name: 'No group was given');
+        : null;
     content = json['Tartalom'];
     type =
         json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
@@ -51,15 +50,15 @@ class Notice {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'date': date.toIso8601String(),
-      'createDate': createDate.toIso8601String(),
+      'date': date == null ? null : date.toUtc().toIso8601String(),
+      'createDate':
+          createDate == null ? null : createDate.toUtc().toIso8601String(),
       'teacher': teacher,
-      'seenDate': seenDate.toIso8601String(),
-      'group': group.toJson(),
+      'seenDate': seenDate == null ? null : seenDate.toUtc().toIso8601String(),
+      'group': group == null ? null : group.toJson(),
       'content': content,
-      //FIXME: Subject value
-      //'subject': subject.toJson(),
-      'type': type.toJson(),
+      'subject': subject == null ? null : subject.toJson(),
+      'type': type == null ? null : type.toJson(),
       'uid': uid,
       'databaseId': databaseId,
       'userId': userId,

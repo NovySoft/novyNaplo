@@ -20,16 +20,26 @@ Future<List<Notice>> getAllNotices() async {
   return List.generate(maps.length, (i) {
     Notice temp = new Notice();
     temp.title = maps[i]['title'];
-    temp.date = DateTime.parse(maps[i]['date']).toLocal();
-    temp.createDate = DateTime.parse(maps[i]['createDate']).toLocal();
+    temp.date = maps[i]['date'] == null
+        ? null
+        : DateTime.parse(maps[i]['date']).toLocal();
+    temp.createDate = maps[i]['createDate'] == null
+        ? null
+        : DateTime.parse(maps[i]['createDate']).toLocal();
     temp.teacher = maps[i]['teacher'];
-    temp.seenDate = DateTime.parse(maps[i]['seenDate']).toLocal();
-    temp.group = ClassGroup.fromJson(json.decode(maps[i]['group']));
+    temp.seenDate = maps[i]['seenDate'] == null
+        ? null
+        : DateTime.parse(maps[i]['seenDate']).toLocal();
+    temp.group = maps[i]['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(maps[i]['group']));
     temp.content = maps[i]['content'];
     temp.subject = maps[i]['subject'] == null
         ? null
         : Subject.fromJson(json.decode(maps[i]['subject']));
-    temp.type = Description.fromJson(json.decode(maps[i]['type']));
+    temp.type = maps[i]['type'] == null
+        ? null
+        : Description.fromJson(json.decode(maps[i]['type']));
     temp.uid = maps[i]['uid'];
     temp.databaseId = maps[i]['databaseId'];
     temp.userId = maps[i]['userId'];
