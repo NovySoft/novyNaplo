@@ -304,7 +304,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'event ' +
                                 (allParsedEvents.length == 0
                                     ? "0"
-                                    : allParsedEvents[0].id.toString()),
+                                    : allParsedEvents[0].uid.toString()),
                           );
                         },
                         icon: Icon(

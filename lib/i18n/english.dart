@@ -362,4 +362,5 @@ final Map<String, String> translation = {
   "deputy": "Deputy",
   "mustntLeaveEmpty": "You musn't leave it empty!",
   "Average": "Average",
+  "setUpStatistics": "Calculating statistics",
 };

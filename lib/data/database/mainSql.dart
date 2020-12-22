@@ -43,7 +43,7 @@ Future<void> initDatabase() async {
         "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT,userId INTEGER);",
       );
       await db.execute(
-        "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY, id INTEGER, dateString TEXT, endDateString TEXT, title TEXT, content TEXT,userId INTEGER);",
+        "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY,uid TEXT,startDate TEXT,endDate TEXT,title TEXT,content TEXT,userId INTEGER);",
       );
       await db.execute(
         'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,id INTEGER,"type" TEXT,typeName TEXT,subject TEXT,delayTimeMinutes INTEGER,teacher TEXT,lessonStartTime TEXT,numberOfLessons INTEGER,creatingTime TEXT,justificationState TEXT,justificationStateName TEXT,justificationType TEXT,justificationTypeName TEXT,osztalyCsoportUid TEXT,userId INTEGER);',

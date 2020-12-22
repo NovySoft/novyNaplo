@@ -106,19 +106,19 @@ Future selectNotification(String payload) async {
       case "event":
         int tempindex = eventsPage.allParsedEvents.indexWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
         );
         Event tempEvent = eventsPage.allParsedEvents.firstWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
           orElse: () {
             return new Event();
           },
         );
         //Evals tempEval = allParsedByDate[0];
-        if (tempEvent.id != null)
+        if (tempEvent.uid != null)
           Future.delayed(Duration(milliseconds: 500), () {
             Navigator.push(
               globals.globalContext,

@@ -360,4 +360,5 @@ final Map<String, String> translation = {
   "deputy": "Helyettesítés",
   "mustntLeaveEmpty": "Nem hagyhatod üresen!",
   "Average": "Átlag",
+  "setUpStatistics": "Statisztikák számolása"
 };

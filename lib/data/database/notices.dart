@@ -17,7 +17,7 @@ Future<List<Notice>> getAllNotices() async {
     'SELECT * FROM Notices GROUP BY uid, userId ORDER BY databaseId',
   );
 
-  return List.generate(maps.length, (i) {
+  List<Notice> tempList = List.generate(maps.length, (i) {
     Notice temp = new Notice();
     temp.title = maps[i]['title'];
     temp.date = maps[i]['date'] == null
@@ -45,6 +45,8 @@ Future<List<Notice>> getAllNotices() async {
     temp.userId = maps[i]['userId'];
     return temp;
   });
+
+  return tempList;
 }
 
 Future<void> batchInsertNotices(List<Notice> noticeList) async {

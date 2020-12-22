@@ -179,29 +179,6 @@ Future<List<Exam>> getAllExams() async {
   return tempList;
 }
 
-Future<List<Event>> getAllEvents() async {
-  FirebaseCrashlytics.instance.log("getAllEvents");
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Events GROUP BY id, content ORDER BY databaseId',
-  );
-
-  /*return List.generate(maps.length, (i) {
-    Event temp = new Event();
-    temp.databaseId = maps[i]['databaseId'];
-    temp.id = maps[i]['id'];
-    temp.dateString = maps[i]['dateString'];
-    temp.endDateString = maps[i]['endDateString'];
-    temp.date = DateTime.parse(temp.dateString);
-    temp.endDate = DateTime.parse(temp.endDateString);
-    temp.title = maps[i]['title'];
-    temp.content = maps[i]['content'];
-    return temp;
-  });*/
-}
-
 Future<List<List<Absence>>> getAllAbsencesMatrix() async {
   FirebaseCrashlytics.instance.log("getAllAbsencesMatrix");
   // Get a reference to the database.

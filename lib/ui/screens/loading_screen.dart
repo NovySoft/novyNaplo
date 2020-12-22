@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/database/evals.dart';
+import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -107,16 +108,35 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readMarks");
       });
-      //FIXME Yeah we should also save, don't we?
       List<Evals> tempEvals = await getAllEvals();
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+      //*Load variables required to use the markCalculator
+      setState(() {
+        loadingText = getTranslatedString("setUpMarkCalc");
+      });
+      setUpCalculatorPage(statisticsPage.allParsedSubjects);
+      //*Load variables required to show statistics
+      setState(() {
+        loadingText = getTranslatedString("setUpStatistics");
+      });
+      statisticsPage.allParsedSubjects =
+          categorizeSubjectsFromEvals(marksPage.allParsedByDate);
+      statisticsPage.allParsedSubjectsWithoutZeros = List.from(
+        statisticsPage.allParsedSubjects
+            .where((element) => element[0].numberValue != 0),
+      );
       //*Notices
       setState(() {
         loadingText = getTranslatedString("readNotices");
       });
       noticesPage.allParsedNotices = await getAllNotices();
+      //*Events
+      setState(() {
+        loadingText = getTranslatedString("readEvents");
+      });
+      eventsPage.allParsedEvents = await getAllEvents();
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);

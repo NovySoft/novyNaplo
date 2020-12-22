@@ -1,23 +1,24 @@
+import 'package:novynaplo/data/models/student.dart';
+
 class Event {
-  int id;
   int databaseId;
   String uid;
   DateTime startDate;
   DateTime endDate;
   String title;
   String content;
+  int userId;
 
   Event({
-    this.id,
     this.startDate,
     this.endDate,
     this.title,
     this.content,
   });
 
-  Event.fromJson(Map json) {
-    uid = json["Uid"] ?? "";
-    id = uid == null || uid == "" ? null : int.parse(uid);
+  Event.fromJson(Map json, Student userDetails) {
+    userId = userDetails.userId;
+    uid = json["Uid"];
     startDate = json["ErvenyessegKezdete"] != null
         ? DateTime.parse(json["ErvenyessegKezdete"]).toLocal()
         : null;
@@ -35,8 +36,20 @@ class Event {
       caseSensitive: false,
     );
     content = content.replaceAllMapped(regex, (Match m) {
-      print(m.group(0));
       return '<a href="${m.group(0)}">${m.group(0)}</a>';
     });
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'uid': uid,
+      'startDate':
+          startDate == null ? null : startDate.toUtc().toIso8601String(),
+      'endDate': endDate == null ? null : endDate.toUtc().toIso8601String(),
+      'title': title,
+      'content': content,
+      'userId': userId,
+    };
   }
 }

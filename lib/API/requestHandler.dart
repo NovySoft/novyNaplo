@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/database/evals.dart';
+import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -432,11 +433,18 @@ class RequestHandler {
       List<Event> events = [];
 
       List responseJson = jsonDecode(response.body);
-      responseJson.forEach((json) => events.add(Event.fromJson(json)));
+      responseJson.forEach(
+        (json) => events.add(
+          Event.fromJson(
+            json,
+            userDetails,
+          ),
+        ),
+      );
       if (sort) {
         events.sort((a, b) => b.endDate.compareTo(a.endDate));
       }
-
+      batchInsertEvents(events);
       return events;
     } catch (error) {
       print("ERROR: KretaAPI.getEvents " + error.toString());
