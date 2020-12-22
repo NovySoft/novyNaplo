@@ -198,7 +198,13 @@ class RequestHandler {
 
       if (sort) {
         evaluations.sort(
-          (a, b) => b.date.compareTo(a.date),
+          (a, b) {
+            if (a.date.isSameDay(b.date)) {
+              return b.createDate.compareTo(a.createDate);
+            } else {
+              return b.date.compareTo(a.date);
+            }
+          },
         );
       }
       batchInsertEvals(evaluations);

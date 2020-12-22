@@ -37,7 +37,7 @@ String getTimetableSubtitle(Lesson input) {
     subtitle = "$diff ${getTranslatedString("min")}";
   }
   if (subtitle == "" || subtitle == null) {
-    subtitle = getTranslatedString("unkown");
+    subtitle = getTranslatedString("unknown");
   }
   if (subtitle.length >= 28) {
     subtitle = subtitle.substring(0, 25);

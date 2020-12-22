@@ -277,9 +277,9 @@ Future selectNotification(String payload) async {
         return;
         break;
     }
-    FirebaseCrashlytics.instance.log("Unkown payload: " + payload);
+    FirebaseCrashlytics.instance.log("Unknown payload: " + payload);
     FirebaseAnalytics().logEvent(
-      name: "UnkownPayload",
+      name: "UnknownPayload",
       parameters: {"payload": payload},
     );
     showDialog<void>(

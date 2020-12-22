@@ -1,4 +1,5 @@
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 
 List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   List<Evals> jegyArray = List.from(input);
@@ -6,7 +7,7 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   jegyArray.sort((a, b) => a.subject.name.compareTo(b.subject.name));
   String lastString = "";
   for (var n in jegyArray) {
-    if ((n.type.name != "Szazalekos" &&
+    if ((n.valueType.name != "Szazalekos" &&
             n.type.name != "felevi_jegy_ertekeles") ||
         n.subject.name == "Magatartas" ||
         n.subject.name == "Szorgalom") {
@@ -43,7 +44,16 @@ List<List<Evals>> sortByDateAndSubject(List<Evals> inputOne) {
       _tempArray[_currentIndex].add(n);
     }
     for (List<Evals> n in _tempArray) {
-      n.sort((a, b) => b.date.compareTo(a.date));
+      n.sort(
+        (a, b) {
+          if (a.date.isSameDay(b.date)) {
+            return b.createDate.compareTo(a.createDate);
+          } else {
+            return b.date.compareTo(a.date);
+          }
+        },
+      );
+      ;
     }
   }
   return _tempArray;

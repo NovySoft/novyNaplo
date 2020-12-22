@@ -22,7 +22,8 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
   if (globals.markCardTheme == "Véletlenszerű") {
     color = marks.colors[index].shade400;
   } else if (globals.markCardTheme == "Értékelés nagysága") {
-    if (eval.type.name == "Szazalekos") {
+    if (eval.valueType.name == "Szazalekos") {
+      //TODO: Variable percentage limits
       if (eval.numberValue >= 90) {
         color = Colors.green;
       } else if (eval.numberValue >= 75) {

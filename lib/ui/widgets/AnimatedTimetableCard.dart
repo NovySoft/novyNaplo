@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/getTimetableSubtitle.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
 
@@ -66,7 +67,7 @@ class AnimatedTimetableCard extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      title,
+                                      capitalize(title),
                                       textAlign: TextAlign.left,
                                       textDirection: TextDirection.ltr,
                                       overflow: TextOverflow.ellipsis,

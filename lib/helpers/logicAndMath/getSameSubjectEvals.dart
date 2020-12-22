@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
@@ -14,7 +15,15 @@ List<Evals> getSameSubjectEvals(
         _tempList.add(j);
       }
     }
-    _tempList.sort((a, b) => a.date.compareTo(b.date));
+    _tempList.sort(
+      (a, b) {
+        if (a.date.isSameDay(b.date)) {
+          return b.createDate.compareTo(a.createDate);
+        } else {
+          return b.date.compareTo(a.date);
+        }
+      },
+    );
     return _tempList;
   }
   _tempList = List.from(stats.allParsedSubjects.firstWhere((element) =>
@@ -23,7 +32,15 @@ List<Evals> getSameSubjectEvals(
     _tempList.removeWhere((element) => element.date.compareTo(onlyBefore) > 0);
   }
   if (sort) {
-    _tempList.sort((a, b) => b.date.compareTo(a.date));
+    _tempList.sort(
+      (a, b) {
+        if (a.date.isSameDay(b.date)) {
+          return b.createDate.compareTo(a.createDate);
+        } else {
+          return b.date.compareTo(a.date);
+        }
+      },
+    );
   }
   return List.from(_tempList);
 }

@@ -105,7 +105,7 @@ final Map<String, String> translation = {
   "noNotice": "Nincs még feljegyzésed",
   "content": "Tartalom",
   "date": "Dátum",
-  "unkown": "Ismeretlen",
+  "unknown": "Ismeretlen",
   "marks": "jegyek",
   "timetable": "órarend",
   "hws": "Házifeladatok",
@@ -359,4 +359,5 @@ final Map<String, String> translation = {
   "thisLessonsExams": "Dolgozatok",
   "deputy": "Helyettesítés",
   "mustntLeaveEmpty": "Nem hagyhatod üresen!",
+  "Average": "Átlag",
 };

@@ -163,7 +163,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       );
     } else {
       FirebaseAnalytics().logEvent(
-        name: "unkownLoginResponse",
+        name: "unknownLoginResponse",
         parameters: {
           "result": result,
         },

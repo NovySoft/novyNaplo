@@ -15,7 +15,7 @@ class MarksDetailTab extends StatelessWidget {
 
   Widget _buildBody() {
     Color markColor = Colors.purple;
-    if (eval.type.name == "Szazalekos") {
+    if (eval.valueType.name == "Szazalekos") {
       if (eval.numberValue >= 90) {
         markColor = Colors.green;
       } else if (eval.numberValue >= 75) {
@@ -91,7 +91,9 @@ class MarksDetailTab extends StatelessWidget {
               SizedBox(height: 10, width: 5),
               Text(
                 "${getTranslatedString("markType")}: " +
-                    eval.mode.description.toString(),
+                    (eval.mode == null
+                        ? getTranslatedString('unknown')
+                        : eval.mode.description.toString()),
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10, width: 5),

@@ -125,7 +125,7 @@ class NoticeDetailTab extends StatelessWidget {
                         ),
                         Text(
                           notice.subject == null
-                              ? getTranslatedString("unkown")
+                              ? getTranslatedString("unknown")
                               : capitalize(notice.subject.name),
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 20.0),

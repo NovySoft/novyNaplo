@@ -88,7 +88,7 @@ class MarksTabState extends State<MarksTab>
   void _setData() {
     allParsedByDate = allParsedByDate;
     colors = getRandomColors(allParsedByDate.length);
-    allParsedBySubject = sortByDateAndSubject(List.from(allParsedByDate));
+    allParsedBySubject = sortByDateAndSubject(allParsedByDate);
   }
 
   Future<void> _refreshData() async {

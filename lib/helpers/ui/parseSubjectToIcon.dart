@@ -135,9 +135,9 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("logika")) {
     return MdiIcons.brain;
   }
-  //LogUnkown subject so I can add that later
+  //LogUnknown subject so I can add that later
   FirebaseAnalytics().logEvent(
-    name: "UnkownSubject",
+    name: "UnknownSubject",
     parameters: {"subject": subject},
   );
   return Icons.create;

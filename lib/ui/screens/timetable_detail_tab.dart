@@ -89,7 +89,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                 case 3:
                   return SizedBox(
                     child: Text(
-                      "${getTranslatedString("themeOfLesson")}: ${widget.lessonInfo.theme != null ? widget.lessonInfo.theme : getTranslatedString("unkown")}",
+                      "${getTranslatedString("themeOfLesson")}: ${widget.lessonInfo.theme != null ? widget.lessonInfo.theme : getTranslatedString("unknown")}",
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),

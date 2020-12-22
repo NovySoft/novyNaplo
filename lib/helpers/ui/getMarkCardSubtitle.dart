@@ -11,7 +11,7 @@ String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
     if (eval.theme != null && eval.theme != "")
       subtitle = capitalize(eval.theme);
     else
-      subtitle = getTranslatedString("unkown");
+      subtitle = getTranslatedString("unknown");
   } else if (globals.markCardSubtitle == "Tanár") {
     subtitle = eval.teacher;
   } else if (globals.markCardSubtitle == "Súly") {
@@ -22,7 +22,7 @@ String getMarkCardSubtitle({@required Evals eval, int trimLength = 30}) {
     subtitle = eval.createDate.toHumanString().split(" ")[0];
   }
   if (subtitle == "" || subtitle == null) {
-    subtitle = getTranslatedString("unkown");
+    subtitle = getTranslatedString("unknown");
   }
   return subtitle;
 }
