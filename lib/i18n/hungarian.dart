@@ -360,5 +360,9 @@ final Map<String, String> translation = {
   "deputy": "Helyettesítés",
   "mustntLeaveEmpty": "Nem hagyhatod üresen!",
   "Average": "Átlag",
-  "setUpStatistics": "Statisztikák számolása"
+  "setUpStatistics": "Statisztikák számolása",
+  "noNetConnectRetry":
+      "Nincs internet kapcsolat!\nCsatlakozz az internethez, majd próbáld újra!",
+  "netRestored": "Csatlakozva az internethez",
+  "readAbsences": "Hiányzások olvasása az adatbázisból",
 };

@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/notices.dart';
@@ -252,10 +253,17 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Absence> absences = [];
 
-      responseJson
-          .forEach((absence) => absences.add(Absence.fromJson(absence)));
+      responseJson.forEach(
+        (absence) => absences.add(
+          Absence.fromJson(
+            absence,
+            userDetails,
+          ),
+        ),
+      );
       //No need to sort, the make function has a builtin sorting function
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
+      batchInsertAbsences(absences);
       return outputList;
     } catch (error) {
       return null;

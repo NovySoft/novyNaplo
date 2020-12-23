@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/notices.dart';
@@ -137,6 +138,11 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readEvents");
       });
       eventsPage.allParsedEvents = await getAllEvents();
+      //*Absences
+      setState(() {
+        loadingText = getTranslatedString("readAbsences");
+      });
+      absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);

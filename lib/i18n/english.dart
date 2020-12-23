@@ -363,4 +363,8 @@ final Map<String, String> translation = {
   "mustntLeaveEmpty": "You musn't leave it empty!",
   "Average": "Average",
   "setUpStatistics": "Calculating statistics",
+  "noNetConnectRetry":
+      "No internet connection was detected!\nConnect to the internet then try again!",
+  "netRestored": "Connection restored",
+  "readAbsences": "Reading absences from database",
 };

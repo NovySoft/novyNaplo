@@ -53,7 +53,7 @@ class _AbsencesTabState extends State<AbsencesTab>
           Absence tempAbsence;
           for (var n in allParsedAbsences) {
             for (var j in n) {
-              if (j.id == globals.payloadId) {
+              if (j.uid == globals.payloadId) {
                 tempAbsence = j;
                 break;
               }

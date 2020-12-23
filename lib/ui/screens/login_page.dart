@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,6 +14,7 @@ import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/encryptionHelper.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
     as progressButton;
 import 'package:novynaplo/helpers/ui/animations/shake_view.dart';
@@ -50,6 +54,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool _isWrongSchool = false;
   Student tempUser = Student();
   bool isFirstUser = false;
+  StreamSubscription<ConnectivityResult> networkChangeListener;
+  bool inputEnabled = true;
 
   void showSelectDialog() {
     setState(() {
@@ -80,6 +86,59 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      networkChangeListener = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) {
+          if (result == ConnectivityResult.mobile ||
+              result == ConnectivityResult.wifi) {
+            Fluttertoast.showToast(
+              msg: getTranslatedString("netRestored"),
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 18.0,
+            );
+            setState(() {
+              inputEnabled = true;
+            });
+          } else {
+            setState(() {
+              inputEnabled = false;
+            });
+          }
+        },
+      );
+      if (!(await NetworkHelper.isNetworkAvailable())) {
+        showNoNetAlert(context: context);
+        setState(() {
+          inputEnabled = false;
+        });
+      } else {
+        setState(() {
+          inputEnabled = true;
+        });
+      }
+    });
+  }
+
+  Future<void> showNoNetAlert({BuildContext context}) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(getTranslatedString("status")),
+          content: Text(getTranslatedString("noNetConnectRetry")),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -90,6 +149,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    if (networkChangeListener != null) {
+      networkChangeListener.cancel();
+    }
     super.dispose();
   }
 
@@ -219,6 +281,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final codeInput = ShakeView(
       controller: _schoolShakeController,
       child: TextFormField(
+        enabled: inputEnabled,
         focusNode: _codeFocus,
         controller: schoolController,
         readOnly: true,
@@ -237,6 +300,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         autofocus: false,
         decoration: InputDecoration(
           hintText: getTranslatedString("schId"),
+          hintStyle: inputEnabled ? null : TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -250,6 +314,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             borderSide:
                 BorderSide(color: _isWrongSchool ? Colors.red : Colors.grey),
           ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
         ),
         onFieldSubmitted: (String input) {
           _codeFocus.unfocus();
@@ -261,6 +329,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final usernameInput = ShakeView(
       controller: _userShakeController,
       child: TextFormField(
+        enabled: inputEnabled,
         focusNode: _userFocus,
         controller: _userController,
         onChanged: (text) {
@@ -274,6 +343,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         autofocus: false,
         decoration: InputDecoration(
           hintText: getTranslatedString("username"),
+          hintStyle: inputEnabled ? null : TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -287,6 +357,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             borderSide:
                 BorderSide(color: _isWrongUser ? Colors.red : Colors.grey),
           ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
         ),
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (String input) {
@@ -299,6 +373,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final passwordInput = ShakeView(
       controller: _userShakeController,
       child: TextFormField(
+        enabled: inputEnabled,
         focusNode: _passFocus,
         controller: _passController,
         autofocus: false,
@@ -318,6 +393,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             child: Icon(_obscureText ? MdiIcons.eyeOff : MdiIcons.eye),
           ),
           hintText: getTranslatedString("password"),
+          hintStyle: inputEnabled ? null : TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -330,6 +406,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(32.0),
             borderSide:
                 BorderSide(color: _isWrongUser ? Colors.red : Colors.grey),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(color: Colors.grey),
           ),
         ),
         keyboardType: TextInputType.text,
@@ -363,7 +443,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       fontSize: 35,
       onTap: (reset) async {
         resetInputFieldColor();
-        if (!isPressed) {
+        if (!inputEnabled) {
+          showNoNetAlert(context: context);
+        }
+        if (!isPressed && inputEnabled) {
           isPressed = true;
           //If there is an empty field show warning and return
           if (!checkForEmptyFields()) {
