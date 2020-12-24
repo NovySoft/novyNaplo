@@ -130,7 +130,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'hw ' +
                                 (globalHomework.length == 0
                                     ? "0"
-                                    : globalHomework[0].id.toString()),
+                                    : globalHomework[0].uid.toString()),
                           );
                         },
                         icon: Icon(

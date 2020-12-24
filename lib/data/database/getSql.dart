@@ -34,50 +34,6 @@ Future<List<Average>> getAllAverages() async {
   });
 }
 
-Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
-  FirebaseCrashlytics.instance.log("getAllHw");
-  // Get a reference to the database.
-  /*final Database db = await mainSql.database;
-
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Homework GROUP BY content, id ORDER BY databaseId',
-  );
-
-  List<Homework> tempList = List.generate(maps.length, (i) {
-    Homework temp = new Homework();
-    temp.databaseId = maps[i]['databaseId'];
-    temp.id = maps[i]['id'];
-    temp.classGroupId = maps[i]['classGroupId'];
-    temp.subject = maps[i]['subject'];
-    temp.teacher = maps[i]['teacher'];
-    temp.content = maps[i]['content'];
-    temp.givenUpString = maps[i]['givenUpString'];
-    temp.dueDateString = maps[i]['dueDateString'];
-    temp.givenUp = DateTime.parse(temp.givenUpString);
-    temp.dueDate = DateTime.parse(temp.dueDateString);
-    return temp;
-  });
-  //If we don't ignore the dueDate
-  if (ignoreDue == false) {
-    tempList.removeWhere((item) {
-      //Hide if it doesn't needed
-      DateTime afterDue = item.dueDate;
-      if (globals.howLongKeepDataForHw != -1) {
-        afterDue =
-            afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
-        if (afterDue.compareTo(DateTime.now()) < 0) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    });
-  }
-  return tempList;*/
-}
-
 /*Future<List<Lesson>> getAllTimetable() async {
   FirebaseCrashlytics.instance.log("getAllTimetable");
   // Get a reference to the database.

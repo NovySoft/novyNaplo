@@ -3,11 +3,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -200,13 +202,46 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                                     child: CircularProgressIndicator(),
                                   );
                                 });
-                                await RequestHandler.downloadHWAttachment(
-                                  globals.currentUser,
-                                  hwInfo: widget.hwInfo.attachments[index],
-                                );
-                                setState(() {
-                                  downloadIcon[index] = Icon(MdiIcons.check);
-                                });
+                                try {
+                                  await RequestHandler.downloadHWAttachment(
+                                    globals.currentUser,
+                                    hwInfo: widget.hwInfo.attachments[index],
+                                  );
+                                  setState(() {
+                                    downloadIcon[index] = Icon(MdiIcons.check);
+                                  });
+                                } catch (e, s) {
+                                  if (!(await NetworkHelper
+                                      .isNetworkAvailable())) {
+                                    Fluttertoast.showToast(
+                                      msg: getTranslatedString("noNet"),
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 18.0,
+                                    );
+                                  } else {
+                                    FirebaseCrashlytics.instance.recordError(
+                                      e,
+                                      s,
+                                      reason: 'downloadHWAttachment',
+                                      printDetails: true,
+                                    );
+                                    Fluttertoast.showToast(
+                                      //fixme change text
+                                      msg:
+                                          '${getTranslatedString("errWhileFetch")}: $e',
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 18.0,
+                                    );
+                                  }
+                                  setState(() {
+                                    downloadIcon[index] =
+                                        Icon(MdiIcons.exclamation);
+                                  });
+                                }
                               },
                               child: Row(
                                 children: [

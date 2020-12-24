@@ -1,4 +1,5 @@
 import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/helpers/misc/htmlLinkify.dart';
 
 class Event {
   int databaseId;
@@ -30,14 +31,7 @@ class Event {
         ? json["Tartalom"].replaceAll("\r", "<br>").replaceAll("\n", "<br>")
         : null;
     //As the ui shows this as an html object we parse all the links into a html tag
-    RegExp regex = RegExp(
-      r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?',
-      multiLine: true,
-      caseSensitive: false,
-    );
-    content = content.replaceAllMapped(regex, (Match m) {
-      return '<a href="${m.group(0)}">${m.group(0)}</a>';
-    });
+    content = htmlLinkify(content);
   }
 
   Map<String, dynamic> toMap() {

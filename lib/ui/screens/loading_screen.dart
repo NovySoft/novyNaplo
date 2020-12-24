@@ -6,6 +6,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
+import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -143,6 +144,11 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readAbsences");
       });
       absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
+      //*Homework
+      setState(() {
+        loadingText = getTranslatedString("readHw");
+      });
+      homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);

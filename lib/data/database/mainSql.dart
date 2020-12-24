@@ -34,7 +34,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,title TEXT,date TEXT,createDate TEXT,teacher TEXT,seenDate TEXT,"group" TEXT,content TEXT,subject TEXT,"type" TEXT,uid TEXT,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,id INTEGER,classGroupId INTEGER,subject TEXT,teacher TEXT,content TEXT,givenUpString TEXT,dueDateString TEXT,userId INTEGER)",
+        'CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,uid TEXT,attachments TEXT,date TEXT,dueDate TEXT,createDate TEXT,isTeacherHW INTEGER,isStudentHomeworkEnabled INTEGER,isSolved INTEGER,teacher TEXT,content TEXT,subject TEXT,"group" TEXT,userId INTEGER);',
       );
       await db.execute(
         "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT,userId INTEGER);",

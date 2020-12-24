@@ -200,12 +200,12 @@ Future selectNotification(String payload) async {
       case "hw":
         int tempindex = homeworkTab.globalHomework.indexWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
         );
         Homework tempHw = homeworkTab.globalHomework.firstWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
           orElse: () {
             return new Homework();
@@ -215,7 +215,7 @@ Future selectNotification(String payload) async {
           homeworkTab.colors =
               getRandomColors(homeworkTab.globalHomework.length);
         //Evals tempEval = allParsedByDate[0];
-        if (tempHw.id != null)
+        if (tempHw.uid != null)
           Future.delayed(Duration(milliseconds: 500), () {
             Navigator.push(
               globals.globalContext,

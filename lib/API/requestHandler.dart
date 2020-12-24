@@ -8,6 +8,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
+import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -319,7 +320,7 @@ class RequestHandler {
         homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
       homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-
+      batchInsertHomework(homeworks);
       return homeworks;
     } catch (error) {
       print("ERROR: KretaAPI.getHomeworks: " + error.toString());
@@ -511,8 +512,10 @@ class RequestHandler {
 
       var responseJson = jsonDecode(response.body);
 
-      Homework homework = Homework.fromJson(responseJson);
-
+      Homework homework = Homework.fromJson(
+        responseJson,
+        userDetails,
+      );
       return homework;
     } catch (error) {
       print("ERROR: KretaAPI.getHomeworks: " + error.toString());
@@ -531,7 +534,9 @@ class RequestHandler {
       user,
       fromDue: DateTime.now().subtract(
         Duration(
-          days: globals.howLongKeepDataForHw.toInt(),
+          days: globals.howLongKeepDataForHw == -1
+              ? 70
+              : globals.howLongKeepDataForHw.toInt(),
         ),
       ),
     );
