@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -7,8 +6,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/database/getSql.dart';
-import 'package:novynaplo/data/database/insertSql.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';

@@ -84,8 +84,7 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
   for (var eval in evalList) {
     var matchedEvals = allEvals.where(
       (element) {
-        return (element.uid == eval.uid &&
-            element.subject.name == eval.subject.name);
+        return (element.uid == eval.uid && element.userId == eval.userId);
       },
     );
     if (matchedEvals.length == 0) {

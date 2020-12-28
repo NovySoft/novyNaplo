@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
@@ -8,6 +7,7 @@ import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
+import 'package:novynaplo/data/database/exam.dart';
 import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/database/timetable.dart';
@@ -286,12 +286,22 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Exam> exams = [];
 
-      responseJson.forEach((exam) => exams.add(Exam.fromJson(exam)));
+      responseJson.forEach(
+        (exam) => exams.add(
+          Exam.fromJson(
+            exam,
+            userDetails,
+          ),
+        ),
+      );
       if (sort) {
-        exams.sort((a, b) => (b.date.toString() + b.lessonNumber.toString())
-            .compareTo(a.date.toString() + a.lessonNumber.toString()));
+        exams.sort((a, b) => (b.dateOfWriting.toString() +
+                b.lessonNumber.toString())
+            .compareTo(a.dateOfWriting.toString() + a.lessonNumber.toString()));
       }
-
+      batchInsertExams(
+        exams,
+      );
       return exams;
     } catch (error) {
       print("ERROR: KretaAPI.getExams: " + error.toString());

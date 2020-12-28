@@ -573,7 +573,10 @@ class _StatisticsTabState extends State<StatisticsTab>
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Statistics");
     getAllSubjectsAv(allParsedSubjectsWithoutZeros);
-    getMarksWithChanges(allParsedSubjectsWithoutZeros);
+    getMarksWithChanges(
+      allParsedSubjectsWithoutZeros,
+      globals.currentUser,
+    );
     getPieChartOrBarChart(allParsedSubjects);
     getBarChart(allParsedSubjects);
     if (globals.payloadId != -1) {

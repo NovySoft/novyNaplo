@@ -1,12 +1,13 @@
-import 'package:novynaplo/data/database/insertSql.dart';
+import 'package:novynaplo/data/database/average.dart';
 import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 //Legjobb, legroszabb és a köztes jegyek
 //Should change to a return function, shouldn't I?
 //FIXME: Something is not right here, some people report that the averages are not in correct order
-void getMarksWithChanges(List<List<Evals>> input) async {
+void getMarksWithChanges(List<List<Evals>> input, Student userDetails) async {
   List<Average> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;
@@ -19,6 +20,7 @@ void getMarksWithChanges(List<List<Evals>> input) async {
       listIndex = 1;
     }
     Average temp = new Average();
+    temp.userId = userDetails.userId;
     for (var y in n) {
       sum += y.numberValue * y.weight / 100;
       index += 1 * y.weight / 100;
@@ -59,7 +61,7 @@ void getMarksWithChanges(List<List<Evals>> input) async {
   stats.allSubjectsAv.removeWhere((item) => item == tempListTwo[0]);
   stats.bestSubjectAv = tempListTwo[0];
   //We dont await it, cause this function is time critical
-  //FIXME
-  /*batchInsertAverage(createAverageDBListFromStatisticsAverage(
-      stats.bestSubjectAv, stats.allSubjectsAv, stats.worstSubjectAv));*/
+  List<Average> dbList = [stats.bestSubjectAv, stats.worstSubjectAv];
+  dbList.addAll(stats.allSubjectsAv);
+  batchInsertAverages(dbList);
 }

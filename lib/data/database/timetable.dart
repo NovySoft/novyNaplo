@@ -5,7 +5,6 @@ import 'package:novynaplo/data/models/classGroup.dart';
 import 'package:novynaplo/data/models/description.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
@@ -138,7 +137,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
     }
     var matchedLessons = allTimetable.where(
       (element) {
-        return (element.uid == lesson.uid && element.subject == lesson.subject);
+        return (element.uid == lesson.uid && element.userId == lesson.userId);
       },
     );
 

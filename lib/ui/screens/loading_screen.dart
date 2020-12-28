@@ -6,6 +6,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/database/absences.dart';
 import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
+import 'package:novynaplo/data/database/exam.dart';
 import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
 import 'package:novynaplo/data/database/timetable.dart';
@@ -37,7 +38,6 @@ import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
-import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 
 String loadingText = "${getTranslatedString("plsWait")}...";
@@ -153,7 +153,16 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readHw");
       });
       homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
+      //*Exams
+      setState(() {
+        loadingText = getTranslatedString("readHw");
+      });
+      examsPage.allParsedExams = await getAllExams();
       //*Timetable
+      //?EXAMS AND HOMEWORK MUST BE LOADED BEFORE TIMETABLE
+      setState(() {
+        loadingText = getTranslatedString("readTimetable");
+      });
       List<Lesson> tempLessonList = await getAllTimetable();
       timetablePage.lessonsList = await makeTimetableMatrix(tempLessonList);
       //*Done

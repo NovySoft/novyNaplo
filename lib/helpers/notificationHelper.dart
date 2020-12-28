@@ -138,19 +138,19 @@ Future selectNotification(String payload) async {
       case "exam":
         int tempindex = examsPage.allParsedExams.indexWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
         );
         Exam tempExam = examsPage.allParsedExams.firstWhere(
           (element) {
-            return element.id == globals.payloadId;
+            return element.uid == globals.payloadId;
           },
           orElse: () {
             return new Exam();
           },
         );
         //Evals tempEval = allParsedByDate[0];
-        if (tempExam.id != null)
+        if (tempExam.uid != null)
           Future.delayed(Duration(milliseconds: 500), () {
             Navigator.push(
               globals.globalContext,

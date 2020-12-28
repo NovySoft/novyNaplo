@@ -77,7 +77,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   List<Homework> allHw = await getAllHomework();
   for (var hw in hwList) {
     var matchedHw = allHw.where((element) {
-      return (element.uid == hw.uid && element.subject.name == hw.subject.name);
+      return (element.uid == hw.uid && element.userId == hw.userId);
     });
     if (matchedHw.length == 0) {
       inserted = true;
@@ -119,7 +119,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
 
   List<Homework> allHw = await getAllHomework();
   var matchedHw = allHw.where((element) {
-    return (element.uid == hw.uid && element.subject.name == hw.subject.name);
+    return (element.uid == hw.uid && element.userId == hw.userId);
   });
 
   DateTime afterDue = hw.dueDate;

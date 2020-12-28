@@ -94,7 +94,7 @@ Widget _buildBody(Exam exam, Color color) {
                   );
                   break;
                 case 9:
-                  DateTime examDate = exam.date;
+                  DateTime examDate = exam.dateOfWriting;
                   String subtitle =
                       "${examDate.toHumanString()} (${exam.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
                   return SizedBox(

@@ -57,7 +57,7 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
 
   for (var notice in noticeList) {
     var matchedNotices = allNotices.where((element) {
-      return (element.title == notice.title || element.uid == notice.uid);
+      return (element.uid == notice.uid && element.userId == notice.userId);
     });
     if (matchedNotices.length == 0) {
       inserted = true;

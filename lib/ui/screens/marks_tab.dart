@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';

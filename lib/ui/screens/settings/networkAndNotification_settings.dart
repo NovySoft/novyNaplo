@@ -235,7 +235,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'exam ' +
                                 (examsPage.allParsedExams.length == 0
                                     ? "0"
-                                    : examsPage.allParsedExams[0].id
+                                    : examsPage.allParsedExams[0].uid
                                         .toString()),
                           );
                         },

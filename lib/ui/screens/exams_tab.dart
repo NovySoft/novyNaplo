@@ -80,10 +80,10 @@ class _ExamsTabState extends State<ExamsTab> {
       );
     } else {
       bool isDone = false;
-      DateTime examDate = allParsedExams[index].date;
+      DateTime examDate = allParsedExams[index].dateOfWriting;
       String subtitle =
           "${examDate.toDayOnlyString()} ${parseIntToWeekdayString(examDate.weekday)} (${allParsedExams[index].lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
-      if (DateTime.now().compareTo(allParsedExams[index].date) > 0) {
+      if (DateTime.now().compareTo(allParsedExams[index].dateOfWriting) > 0) {
         isDone = true;
       }
       return SafeArea(

@@ -37,7 +37,7 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
 
   for (var event in eventList) {
     var matchedEvents = allEvents.where((element) {
-      return (element.uid == event.uid);
+      return (element.uid == event.uid && element.userId == event.userId);
     });
     if (matchedEvents.length == 0) {
       inserted = true;

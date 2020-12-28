@@ -28,7 +28,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,uid TEXT,teacher TEXT,valueType TEXT,kindOf TEXT,createDate TEXT,seenDate TEXT,mode TEXT,date TEXT,weight INTEGER,numberValue INTEGER,textValue TEXT,shortTextValue TEXT,subject TEXT,theme TEXT,"type" TEXT,"group" TEXT,sortIndex INTEGER,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE Average (databaseId INTEGER PRIMARY KEY,subject TEXT,value REAL,userId INTEGER);",
+        "CREATE TABLE Average (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER);",
       );
       await db.execute(
         'CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,title TEXT,date TEXT,createDate TEXT,teacher TEXT,seenDate TEXT,"group" TEXT,content TEXT,subject TEXT,"type" TEXT,uid TEXT,userId INTEGER);',
@@ -40,7 +40,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,uid TEXT,state TEXT,examUidList TEXT,examUid TEXT,date TEXT,deputyTeacher TEXT,isStudentHomeworkEnabled INTEGER,startDate TEXT,name TEXT,lessonNumberDay INTEGER,lessonNumberYear INTEGER,"group" TEXT,teacherHwUid TEXT,isHWSolved INTEGER,teacher TEXT,subject TEXT,presence TEXT,theme TEXT,classroom TEXT,"type" TEXT,endDate TEXT,isSpecialDayEvent INTEGER,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT,userId INTEGER);",
+        'CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,uid TEXT,announcementDate TEXT,dateOfWriting TEXT,mode TEXT,lessonNumber INTEGER,teacher TEXT,subject TEXT,"group" TEXT,theme TEXT,userId INTEGER);',
       );
       await db.execute(
         "CREATE TABLE Events (databaseId INTEGER PRIMARY KEY,uid TEXT,startDate TEXT,endDate TEXT,title TEXT,content TEXT,userId INTEGER);",

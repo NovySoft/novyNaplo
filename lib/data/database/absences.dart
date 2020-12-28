@@ -63,7 +63,7 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
       List.from(tempAbsencesMatrix).expand((i) => i).toList();
   for (var absence in absenceList) {
     var matchedAbsences = allAbsences.where((element) {
-      return (element.uid == absence.uid);
+      return (element.uid == absence.uid && element.userId == absence.userId);
     });
     if (matchedAbsences.length == 0) {
       inserted = true;
@@ -76,7 +76,8 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
       for (var n in matchedAbsences) {
         //!Update didn't work so we delete and create a new one
         if (n.justificationState != absence.justificationState ||
-            n.justificationType.toJson() != absence.justificationType.toJson() ||
+            n.justificationType.toJson() !=
+                absence.justificationType.toJson() ||
             n.delayInMinutes != absence.delayInMinutes) {
           inserted = true;
           batch.delete(
