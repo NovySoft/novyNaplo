@@ -11,7 +11,6 @@ class BaseURL {
 
 class NovyNaploEndpoints {
   static const schoolList = "/schoolList.json";
-  static const schoolList2 = "/schoolListNew.json";
   static const header = "/kretaHeader.json";
 }
 

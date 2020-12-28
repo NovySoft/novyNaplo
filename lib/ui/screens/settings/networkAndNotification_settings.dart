@@ -200,7 +200,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'timetable ' +
                                 (lessonsList[0].length == 0
                                     ? "0"
-                                    : lessonsList[0][0].id.toString()),
+                                    : lessonsList[0][0].uid.toString()),
                           );
                         },
                         icon: Icon(

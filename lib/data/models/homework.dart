@@ -8,7 +8,7 @@ import 'subject.dart';
 
 class Homework {
   List<Attachment> attachments;
-  DateTime giveUpdate;
+  DateTime giveUpDate;
   DateTime dueDate;
   DateTime createDate;
   bool isTeacherHW;
@@ -22,24 +22,25 @@ class Homework {
   int userId;
   int databaseId;
 
-  Homework(
-      {this.attachments,
-      this.giveUpdate,
-      this.dueDate,
-      this.createDate,
-      this.isTeacherHW,
-      this.isStudentHomeworkEnabled,
-      this.isSolved,
-      this.teacher,
-      this.content,
-      this.subject,
-      this.group,
-      this.uid});
+  Homework({
+    this.attachments,
+    this.giveUpDate,
+    this.dueDate,
+    this.createDate,
+    this.isTeacherHW,
+    this.isStudentHomeworkEnabled,
+    this.isSolved,
+    this.teacher,
+    this.content,
+    this.subject,
+    this.group,
+    this.uid,
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'attachments': json.encode(attachments),
-      'date': giveUpdate == null ? null : giveUpdate.toUtc().toIso8601String(),
+      'date': giveUpDate == null ? null : giveUpDate.toUtc().toIso8601String(),
       'dueDate': dueDate == null ? null : dueDate.toUtc().toIso8601String(),
       'createDate':
           createDate == null ? null : createDate.toUtc().toIso8601String(),
@@ -64,7 +65,7 @@ class Homework {
         attachments.add(new Attachment.fromJson(v));
       });
     }
-    giveUpdate = json['FeladasDatuma'] != null
+    giveUpDate = json['FeladasDatuma'] != null
         ? DateTime.parse(json['FeladasDatuma']).toLocal()
         : DateTime(2020);
     dueDate = json['HataridoDatuma'] != null

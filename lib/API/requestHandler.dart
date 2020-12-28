@@ -10,6 +10,7 @@ import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
+import 'package:novynaplo/data/database/timetable.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
@@ -370,24 +371,26 @@ class RequestHandler {
     }
   }
 
-  static Future<List<List<Lesson>>> getThisWeeksLessons(
+  static Future<List<List<Lesson>>> getThreeWeeksLessons(
       Student userDetails) async {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
-    timetablePage.fetchedDayList.add(now);
     while (now.weekday != monday) {
       now = now.subtract(new Duration(days: 1));
-      timetablePage.fetchedDayList.add(now);
     }
-    DateTime startDate = now;
+    DateTime startDate = now.subtract(Duration(days: 7));
     now = new DateTime.now();
     while (now.weekday != sunday) {
       now = now.add(new Duration(days: 1));
+    }
+    DateTime endDate = now.add(Duration(days: 7));
+    now = startDate;
+    while (!now.isSameDay(endDate)) {
       timetablePage.fetchedDayList.add(now);
+      now = now.add(new Duration(days: 1));
     }
     timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
-    DateTime endDate = now;
     return await getTimetableMatrix(
       userDetails,
       from: startDate,
@@ -416,11 +419,18 @@ class RequestHandler {
       List<Lesson> lessons = [];
 
       for (var lesson in responseJson) {
-        Lesson temp = Lesson.fromJson(lesson);
+        Lesson temp = Lesson.fromJson(
+          lesson,
+          userDetails,
+        );
         lessons.add(temp);
       }
       //Make function has builtin sorting
       List<List<Lesson>> output = await makeTimetableMatrix(lessons);
+      batchInsertLessons(
+        lessons,
+        lookAtDate: true,
+      );
       return output;
     } catch (error) {
       print("ERROR: KretaAPI.getLessons: " + error.toString());
@@ -499,7 +509,7 @@ class RequestHandler {
   }
 
   static Future<Homework> getHomeworkId(Student userDetails,
-      {String id}) async {
+      {@required String id, bool isStandAloneCall = false}) async {
     if (id == null) return Homework();
     try {
       var response = await client.get(
@@ -516,6 +526,10 @@ class RequestHandler {
         responseJson,
         userDetails,
       );
+      if (isStandAloneCall) {
+        //This function is also called when we can't found a homework attached to a lesson, and if we found it we bsave
+        insertHomework(homework);
+      }
       return homework;
     } catch (error) {
       print("ERROR: KretaAPI.getHomeworks: " + error.toString());
@@ -535,13 +549,13 @@ class RequestHandler {
       fromDue: DateTime.now().subtract(
         Duration(
           days: globals.howLongKeepDataForHw == -1
-              ? 70
+              ? 14
               : globals.howLongKeepDataForHw.toInt(),
         ),
       ),
     );
     absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
-    timetablePage.lessonsList = await getThisWeeksLessons(user);
+    timetablePage.lessonsList = await getThreeWeeksLessons(user);
     //Get stuff needed to make statistics
     statisticsPage.allParsedSubjects =
         categorizeSubjectsFromEvals(marksPage.allParsedByDate);

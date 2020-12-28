@@ -16,7 +16,7 @@ dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
         a.createDate.day == b.createDate.day) {
       return a.createDate.toString().compareTo(b.createDate.toString());
     } else {
-      return a.giveUpdate.compareTo(b.giveUpdate);
+      return a.giveUpDate.compareTo(b.giveUpDate);
     }
   });
   for (var n in interatorList) {

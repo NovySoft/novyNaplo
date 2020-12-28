@@ -34,55 +34,6 @@ Future<List<Average>> getAllAverages() async {
   });
 }
 
-/*Future<List<Lesson>> getAllTimetable() async {
-  FirebaseCrashlytics.instance.log("getAllTimetable");
-  // Get a reference to the database.
-  final Database db = await mainSql.database;
-
-  final List<Map<String, dynamic>> maps = await db.rawQuery(
-    'SELECT * FROM Timetable GROUP BY id ORDER BY databaseId',
-  );
-
-  List<Lesson> outputTempList = List.generate(maps.length, (i) {
-    Lesson temp = new Lesson();
-    temp.databaseId = maps[i]['databaseId'];
-    temp.id = maps[i]['id'];
-    temp.theme = maps[i]['theme'];
-    temp.subject = maps[i]['subject'];
-    temp.teacher = maps[i]['teacher'];
-    temp.name = maps[i]['name'];
-    temp.groupName = maps[i]['groupName'];
-    temp.classroom = maps[i]['classroom'];
-    temp.deputyTeacherName = maps[i]['deputyTeacherName'];
-    temp.dogaNames = json.decode(maps[i]['dogaNames']);
-    temp.whichLesson = maps[i]['whichLesson'];
-    temp.homeWorkId = maps[i]['homeWorkId'];
-    temp.teacherHomeworkId = maps[i]['teacherHomeworkId'];
-    temp.groupID = maps[i]['groupID'];
-    temp.dogaIds = json.decode(maps[i]['dogaIds']);
-    temp.homeworkEnabled = maps[i]['homeworkEnabled'] == 0 ? false : true;
-
-    temp.dateString = maps[i]['date'];
-    temp.date = DateTime.parse(temp.dateString);
-
-    temp.startDateString = maps[i]['startDate'];
-    temp.startDate = DateTime.parse(temp.startDateString);
-
-    temp.endDateString = maps[i]['endDate'];
-    temp.endDate = DateTime.parse(temp.endDateString);
-    return temp;
-  });
-  //TODO LOOK INTO THIS
-  for (var n in outputTempList) {
-    if (n.teacherHomeworkId != null) {
-      n.teacherHomework = await getHomeworkById(n.teacherHomeworkId);
-    } else if (n.homeWorkId != null) {
-      n.teacherHomework = await getHomeworkById(n.homeWorkId);
-    }
-  }
-  return outputTempList;
-}*/
-
 Future<Homework> getHomeworkById(int id) async {
   //TODO If not found fetch it with networkHelper
   /*final Database db = await mainSql.database;

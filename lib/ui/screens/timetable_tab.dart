@@ -50,7 +50,7 @@ class _TimetableTabState extends State<TimetableTab> {
           for (var j in n) {
             jI++;
             if (tempLesson != null) break;
-            if (j.id == globals.payloadId) {
+            if (j.uid == globals.payloadId) {
               tempLesson = j;
               break;
             }

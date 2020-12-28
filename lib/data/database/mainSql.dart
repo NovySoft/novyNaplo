@@ -37,7 +37,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Homework (databaseId INTEGER PRIMARY KEY,uid TEXT,attachments TEXT,date TEXT,dueDate TEXT,createDate TEXT,isTeacherHW INTEGER,isStudentHomeworkEnabled INTEGER,isSolved INTEGER,teacher TEXT,content TEXT,subject TEXT,"group" TEXT,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,id INTEGER,subject TEXT,name TEXT,groupName TEXT,classroom TEXT,theme TEXT,teacher TEXT,deputyTeacherName TEXT,dogaNames TEXT,whichLesson INTEGER,homeWorkId INTEGER,teacherHomeworkId INTEGER,groupID INTEGER,dogaIds TEXT,homeworkEnabled BOOLEAN,date TEXT,startDate TEXT,endDate TEXT,userId INTEGER);",
+        'CREATE TABLE Timetable (databaseId INTEGER PRIMARY KEY,uid TEXT,state TEXT,examUidList TEXT,examUid TEXT,date TEXT,deputyTeacher TEXT,isStudentHomeworkEnabled INTEGER,startDate TEXT,name TEXT,lessonNumberDay INTEGER,lessonNumberYear INTEGER,"group" TEXT,teacherHwUid TEXT,isHWSolved INTEGER,teacher TEXT,subject TEXT,presence TEXT,theme TEXT,classroom TEXT,"type" TEXT,endDate TEXT,isSpecialDayEvent INTEGER,userId INTEGER);',
       );
       await db.execute(
         "CREATE TABLE Exams (databaseId INTEGER PRIMARY KEY,id INTEGER,dateWriteString TEXT,dateGivenUpString TEXT,subject TEXT,teacher TEXT,nameOfExam TEXT,typeOfExam TEXT,classGroupId TEXT,userId INTEGER);",

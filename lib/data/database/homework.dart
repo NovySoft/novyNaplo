@@ -7,6 +7,8 @@ import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
 
+import 'deleteSql.dart';
+
 Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   FirebaseCrashlytics.instance.log("getAllHw");
 
@@ -19,7 +21,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
     temp.attachments = maps[i]['attachments'] == null
         ? null
         : Attachment.fromJsonList(maps[i]['attachments']);
-    temp.giveUpdate = maps[i]['date'] == null
+    temp.giveUpDate = maps[i]['date'] == null
         ? null
         : DateTime.parse(maps[i]['date']).toLocal();
     temp.dueDate = maps[i]['dueDate'] == null
@@ -90,8 +92,8 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
         if (n.content != hw.content ||
             n.dueDate.toUtc().toIso8601String() !=
                 hw.dueDate.toUtc().toIso8601String() ||
-            n.giveUpdate.toUtc().toIso8601String() !=
-                hw.giveUpdate.toUtc().toIso8601String()) {
+            n.giveUpDate.toUtc().toIso8601String() !=
+                hw.giveUpDate.toUtc().toIso8601String()) {
           inserted = true;
           batch.delete(
             "Homework",
@@ -109,5 +111,56 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   }
   if (inserted) {
     await batch.commit();
+  }
+}
+
+Future<void> insertHomework(Homework hw, {bool edited}) async {
+  FirebaseCrashlytics.instance.log("insertSingleHw");
+
+  List<Homework> allHw = await getAllHomework();
+  var matchedHw = allHw.where((element) {
+    return (element.uid == hw.uid && element.subject.name == hw.subject.name);
+  });
+
+  DateTime afterDue = hw.dueDate;
+  if (globals.howLongKeepDataForHw != -1) {
+    afterDue =
+        afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
+  }
+
+  if (matchedHw.length == 0) {
+    if (afterDue.isBefore(DateTime.now())) {
+      print("OUT OF RANGE");
+      if (hw.databaseId != null && globals.howLongKeepDataForHw != -1) {
+        print("Deleted ${hw.databaseId}");
+        await deleteFromDb(hw.databaseId, "Homework");
+      }
+      return;
+    }
+    await globals.db.insert(
+      'Homework',
+      hw.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  } else {
+    for (var n in matchedHw) {
+      if (afterDue.compareTo(DateTime.now()) < 0) {
+        print("OUT OF RANGE");
+        if (n.databaseId != null && globals.howLongKeepDataForHw != -1) {
+          print("Deleted ${n.databaseId}");
+          await deleteFromDb(n.databaseId, "Homework");
+        }
+        return;
+      }
+      //!Update didn't work so we delete and create a new one
+      if (n.content != hw.content ||
+          n.dueDate.toUtc().toIso8601String() !=
+              hw.dueDate.toUtc().toIso8601String() ||
+          n.giveUpDate.toUtc().toIso8601String() !=
+              hw.giveUpDate.toUtc().toIso8601String()) {
+        await deleteFromDb(n.databaseId, "Homework");
+        insertHomework(hw, edited: true);
+      }
+    }
   }
 }

@@ -10,6 +10,7 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
   List<List<Lesson>> output = [[]];
   DateTime tempDate;
   //Find this monday and sunday
+  //FIXME We handled sql deletions here, didn't we?
   DateTime now = new DateTime.now();
   now = new DateTime(now.year, now.month, now.day);
   int monday = 1;

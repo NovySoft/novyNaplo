@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/description.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'exam.dart';
@@ -20,7 +23,7 @@ class Lesson {
   bool isStudentHomeworkEnabled;
   DateTime startDate;
   String name;
-  int lessonNumber;
+  int lessonNumberDay;
   int lessonNumberYear;
   ClassGroup group;
   String teacherHwUid;
@@ -35,7 +38,7 @@ class Lesson {
   String uid;
   DateTime endDate;
   int databaseId;
-  int id;
+  int userId;
   IconData icon;
   bool isSpecialDayEvent = false;
 
@@ -46,7 +49,7 @@ class Lesson {
     this.deputyTeacher,
     this.isStudentHomeworkEnabled,
     this.name,
-    this.lessonNumber,
+    this.lessonNumberDay,
     this.lessonNumberYear,
     this.group,
     this.teacherHwUid,
@@ -60,7 +63,38 @@ class Lesson {
     this.uid,
   });
 
-  Lesson.fromJson(Map<String, dynamic> json) {
+  Map<String, dynamic> toMap() {
+    return {
+      'databaseId': databaseId,
+      'uid': uid,
+      'state': state == null ? null : state.toJson(),
+      'examUidList': json.encode(examUidList),
+      'examUid': examUid,
+      'date': date == null ? null : date.toUtc().toIso8601String(),
+      'deputyTeacher': deputyTeacher,
+      'isStudentHomeworkEnabled': isStudentHomeworkEnabled ? 1 : 0,
+      'startDate':
+          startDate == null ? null : startDate.toUtc().toIso8601String(),
+      'name': name,
+      'lessonNumberDay': lessonNumberDay,
+      'lessonNumberYear': lessonNumberYear,
+      'group': group == null ? null : group.toJson(),
+      'teacherHwUid': teacherHwUid,
+      'isHWSolved': isHWSolved ? 1 : 0,
+      'teacher': teacher,
+      'subject': subject == null ? null : subject.toJson(),
+      'presence': presence == null ? null : presence.toJson(),
+      'theme': theme,
+      'classroom': classroom,
+      'type': type == null ? null : type.toJson(),
+      'endDate': endDate == null ? null : endDate.toUtc().toIso8601String(),
+      'isSpecialDayEvent': isSpecialDayEvent ? 1 : 0,
+      'userId': userId,
+    };
+  }
+
+  Lesson.fromJson(Map<String, dynamic> json, Student userDetails) {
+    userId = userDetails.userId;
     date = json['Datum'] != null
         ? DateTime.parse(json['Datum']).toLocal()
         : DateTime(2020);
@@ -76,6 +110,7 @@ class Lesson {
           examsPage.allParsedExams.firstWhere(
             (item) => item.uid == v,
             orElse: () {
+              //FIXME Get exam by id if not found
               return Exam();
             },
           ),
@@ -89,7 +124,7 @@ class Lesson {
         ? DateTime.parse(json['KezdetIdopont']).toLocal()
         : DateTime(2020);
     name = json['Nev'];
-    lessonNumber = json['Oraszam'];
+    lessonNumberDay = json['Oraszam'];
     lessonNumberYear = json['OraEvesSorszama'];
     group = json['OsztalyCsoport'] != null
         ? new ClassGroup.fromJson(json['OsztalyCsoport'])
@@ -107,6 +142,7 @@ class Lesson {
       RequestHandler.getHomeworkId(
         globals.currentUser,
         id: teacherHwUid,
+        isStandAloneCall: true,
       ).then((value) {
         homework = value;
       });
@@ -127,7 +163,9 @@ class Lesson {
     endDate = json['VegIdopont'] != null
         ? DateTime.parse(json['VegIdopont']).toLocal()
         : DateTime(2020);
-    icon = parseSubjectToIcon(subject: subject == null ? "" : subject.name);
+    icon = parseSubjectToIcon(
+      subject: subject == null ? "" : subject.name,
+    );
     if (subject == null) {
       isSpecialDayEvent = true;
     }

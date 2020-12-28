@@ -8,11 +8,14 @@ import 'package:novynaplo/data/database/evals.dart';
 import 'package:novynaplo/data/database/events.dart';
 import 'package:novynaplo/data/database/homework.dart';
 import 'package:novynaplo/data/database/notices.dart';
+import 'package:novynaplo/data/database/timetable.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -33,6 +36,7 @@ import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
+import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 import 'package:novynaplo/data/database/getSql.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 
@@ -149,6 +153,9 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readHw");
       });
       homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
+      //*Timetable
+      List<Lesson> tempLessonList = await getAllTimetable();
+      timetablePage.lessonsList = await makeTimetableMatrix(tempLessonList);
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
