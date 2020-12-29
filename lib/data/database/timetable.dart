@@ -100,7 +100,31 @@ Future<List<Lesson>> getAllTimetable() async {
     temp.isSpecialDayEvent = maps[i]['isSpecialDayEvent'] == 1 ? true : false;
     return temp;
   });
+  deleteOldLessonsFromList(outputTempList);
   return outputTempList;
+}
+
+void deleteOldLessonsFromList(List<Lesson> input) async {
+  Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var item in input) {
+    DateTime date = item.endDate;
+    if (item.databaseId != null) {
+      //!Delete all lessons after a month of their ending
+      date = date.add(Duration(days: 30));
+      if (date.compareTo(DateTime.now()) < 0) {
+        deleted = true;
+        batch.delete(
+          "Timetable",
+          where: "databaseId = ?",
+          whereArgs: [item.databaseId],
+        );
+      }
+    }
+  }
+  if (deleted) {
+    batch.commit();
+  }
 }
 
 Future<void> batchInsertLessons(List<Lesson> lessonList,
@@ -111,27 +135,16 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
 
   //Get all evals, and see whether we should be just replacing
   List<Lesson> allTimetable = await getAllTimetable();
-  DateTime startMonday, endSunday;
-  if (lookAtDate) {
-    DateTime now = new DateTime.now();
-    now = new DateTime(now.year, now.month, now.day);
-    int monday = 1;
-    int sunday = 7;
-    while (now.weekday != monday) {
-      now = now.subtract(new Duration(days: 1));
-    }
-    startMonday = now.subtract(Duration(days: 7));
-    now = new DateTime.now();
-    now = new DateTime(now.year, now.month, now.day);
-    while (now.weekday != sunday) {
-      now = now.add(new Duration(days: 1));
-    }
-    endSunday = now.add(Duration(days: 7));
-  }
   for (var lesson in lessonList) {
     if (lookAtDate) {
-      if (!(lesson.date.compareTo(startMonday) >= 0 &&
-          lesson.date.compareTo(endSunday) <= 0)) {
+      if (lesson.endDate
+              .add(
+                Duration(days: 30),
+              )
+              .compareTo(
+                DateTime.now(),
+              ) <
+          0) {
         break;
       }
     }

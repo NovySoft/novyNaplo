@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/global.dart' as globals;
 
-Future<void> deleteFromDb(int databaseId, String table) async {
+Future<void> deleteFromDbByID(int databaseId, String table) async {
   FirebaseCrashlytics.instance
       .log("Delete from table: $table (id: $databaseId)");
   // Get a reference to the database.
@@ -17,9 +18,7 @@ Future<void> deleteFromDb(int databaseId, String table) async {
 
 Future<void> clearAllTables() async {
   FirebaseCrashlytics.instance.log("clearAllTables");
-  // Get a reference to the database.
-  final db = await mainSql.database;
-  final batch = db.batch();
+  final batch = globals.db.batch();
   batch.delete("Evals");
   batch.delete("Average");
   batch.delete("Notices");
@@ -28,5 +27,6 @@ Future<void> clearAllTables() async {
   batch.delete("Homework");
   batch.delete("Timetable");
   batch.delete("Absences");
+  batch.delete("Users");
   await batch.commit();
 }

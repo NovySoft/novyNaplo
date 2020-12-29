@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/classGroup.dart';
 import 'package:novynaplo/data/models/homework.dart';
@@ -66,7 +65,36 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
     });
   }
   tempList.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  deleteOldHomework(tempList);
   return tempList;
+}
+
+void deleteOldHomework(List<Homework> input) async {
+  //!It is implemented as a safety measure, no matter what the user set for due date keeping homeworks will be removed from the db if they're over due with 180days
+  Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var item in input) {
+    DateTime afterDue = item.dueDate;
+    if (item.databaseId != null) {
+      if (globals.howLongKeepDataForHw == -1) {
+        afterDue = afterDue.add(Duration(days: 180));
+      } else {
+        //?If someone is not really keen on showing the homework after 14 days, we delete is after 30 days
+        afterDue = afterDue.add(Duration(days: 30));
+      }
+      if (afterDue.compareTo(DateTime.now()) < 0) {
+        deleted = true;
+        batch.delete(
+          "Homework",
+          where: "databaseId = ?",
+          whereArgs: [item.databaseId],
+        );
+      }
+    }
+  }
+  if (deleted) {
+    batch.commit();
+  }
 }
 
 Future<void> batchInsertHomework(List<Homework> hwList) async {
@@ -130,10 +158,8 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
 
   if (matchedHw.length == 0) {
     if (afterDue.isBefore(DateTime.now())) {
-      print("OUT OF RANGE");
       if (hw.databaseId != null && globals.howLongKeepDataForHw != -1) {
-        print("Deleted ${hw.databaseId}");
-        await deleteFromDb(hw.databaseId, "Homework");
+        await deleteFromDbByID(hw.databaseId, "Homework");
       }
       return;
     }
@@ -145,10 +171,8 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
   } else {
     for (var n in matchedHw) {
       if (afterDue.compareTo(DateTime.now()) < 0) {
-        print("OUT OF RANGE");
         if (n.databaseId != null && globals.howLongKeepDataForHw != -1) {
-          print("Deleted ${n.databaseId}");
-          await deleteFromDb(n.databaseId, "Homework");
+          await deleteFromDbByID(n.databaseId, "Homework");
         }
         return;
       }
@@ -158,7 +182,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
               hw.dueDate.toUtc().toIso8601String() ||
           n.giveUpDate.toUtc().toIso8601String() !=
               hw.giveUpDate.toUtc().toIso8601String()) {
-        await deleteFromDb(n.databaseId, "Homework");
+        await deleteFromDbByID(n.databaseId, "Homework");
         insertHomework(hw, edited: true);
       }
     }
