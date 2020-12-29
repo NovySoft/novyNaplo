@@ -1,6 +1,4 @@
 import 'package:novynaplo/data/models/student.dart';
-import 'package:novynaplo/data/models/tokenResponse.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 

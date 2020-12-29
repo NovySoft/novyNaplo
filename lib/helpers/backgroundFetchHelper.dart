@@ -1,15 +1,6 @@
-import 'package:connectivity/connectivity.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/helpers/data/decryptionHelper.dart';
-import 'package:novynaplo/config.dart' as config;
-import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/helpers/notificationHelper.dart' as notifHelper;
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 //FIXME Fix the background fetch errors, I mean we also need to rewrite this

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 
 var searchList = [];
 bool isFetched = false;
+TextEditingController _inputController = TextEditingController();
 
 class SchoolSearchList extends StatefulWidget {
   @override
@@ -25,6 +24,7 @@ class _SchoolSearchListState extends State<SchoolSearchList> {
           isFetched = true;
           login.schoolList = login.schoolList;
           searchList = login.schoolList;
+          updateSearch(_inputController.text);
         });
       }
     });
@@ -41,6 +41,7 @@ class _SchoolSearchListState extends State<SchoolSearchList> {
               keyboardType: TextInputType.text,
               maxLines: 1,
               autofocus: true,
+              controller: _inputController,
               onChanged: (String search) {
                 setState(() {
                   updateSearch(search);

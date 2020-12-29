@@ -1,7 +1,6 @@
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/extensions.dart';
 
 dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
   double sum = 0, index = 0;

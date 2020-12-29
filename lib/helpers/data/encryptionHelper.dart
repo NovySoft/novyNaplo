@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/models/student.dart';
-import 'package:novynaplo/data/models/tokenResponse.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 Future<Student> encryptUserDetails(Student user) async {
   encrypt.IV iv = encrypt.IV.fromLength(16);

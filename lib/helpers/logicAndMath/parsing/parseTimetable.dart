@@ -1,4 +1,3 @@
-import 'package:novynaplo/data/database/deleteSql.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
