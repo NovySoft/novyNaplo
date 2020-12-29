@@ -20,16 +20,17 @@ class Exam {
   int databaseId;
   int userId;
 
-  Exam(
-      {this.announcementDate,
-      this.dateOfWriting,
-      this.mode,
-      this.lessonNumber,
-      this.teacher,
-      this.subject,
-      this.theme,
-      this.group,
-      this.uid});
+  Exam({
+    this.announcementDate,
+    this.dateOfWriting,
+    this.mode,
+    this.lessonNumber,
+    this.teacher,
+    this.subject,
+    this.theme,
+    this.group,
+    this.uid,
+  });
 
   Map<String, dynamic> toMap() {
     return {

@@ -367,4 +367,5 @@ final Map<String, String> translation = {
       "No internet connection was detected!\nConnect to the internet then try again!",
   "netRestored": "Connection restored",
   "readAbsences": "Reading absences from database",
+  "cancelled": "Cancelled",
 };

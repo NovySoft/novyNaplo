@@ -365,4 +365,5 @@ final Map<String, String> translation = {
       "Nincs internet kapcsolat!\nCsatlakozz az internethez, majd próbáld újra!",
   "netRestored": "Csatlakozva az internethez",
   "readAbsences": "Hiányzások olvasása az adatbázisból",
+  "cancelled": "Elmaradt",
 };

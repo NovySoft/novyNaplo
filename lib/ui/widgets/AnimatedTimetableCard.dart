@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/getTimetableSubtitle.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
 
 class AnimatedTimetableCard extends StatelessWidget {
@@ -67,13 +68,27 @@ class AnimatedTimetableCard extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      capitalize(title),
+                                      lessonInfo.state.name == "Elmaradt" ||
+                                              lessonInfo.type.name == "UresOra"
+                                          ? getTranslatedString("cancelled") +
+                                              " " +
+                                              capitalize(title)
+                                          : capitalize(title),
                                       textAlign: TextAlign.left,
                                       textDirection: TextDirection.ltr,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 25.0),
+                                        color: Colors.black,
+                                        fontSize: 25.0,
+                                        decoration: lessonInfo.state.name ==
+                                                    "Elmaradt" ||
+                                                lessonInfo.type.name ==
+                                                    "UresOra"
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                        decorationThickness: 2.85,
+                                      ),
                                     ),
                                     Text(
                                       subTitle,
@@ -81,8 +96,16 @@ class AnimatedTimetableCard extends StatelessWidget {
                                       textDirection: TextDirection.ltr,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 20.0),
+                                        color: Colors.black54,
+                                        fontSize: 20.0,
+                                        decoration: lessonInfo.state.name ==
+                                                    "Elmaradt" ||
+                                                lessonInfo.type.name ==
+                                                    "UresOra"
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                        decorationThickness: 2.85,
+                                      ),
                                     ),
                                   ]),
                             ]),

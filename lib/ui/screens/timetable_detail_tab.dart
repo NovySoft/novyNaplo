@@ -2,16 +2,21 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 Timer timer;
+List<Widget> downloadIcon = [];
 
 class TimetableDetailTab extends StatefulWidget {
   const TimetableDetailTab({this.lessonInfo, this.color, @required this.icon});
@@ -28,6 +33,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable_detail_tab");
+    downloadIcon = [];
+    if(widget.lessonInfo.homework != null){
+      for (int i = 0; i < widget.lessonInfo.homework.attachments.length; i++) {
+        downloadIcon.add(Icon(MdiIcons.fileDownload));
+      }
+    }
     super.initState();
   }
 
@@ -215,131 +226,59 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                       : SizedBox(height: 0, width: 0);
                   break;
                 case 19:
-                  if (!((widget.lessonInfo.teacherHwUid != null &&
-                          widget.lessonInfo.teacherHwUid != "") ||
-                      (widget.lessonInfo.examList.length != 0))) {
-                    return SizedBox(height: 0, width: 0);
-                  }
-                  if (((widget.lessonInfo.teacherHwUid != null &&
-                          widget.lessonInfo.teacherHwUid != "") &&
-                      (widget.lessonInfo.examList.length != 0))) {
-                    String due =
-                        widget.lessonInfo.homework.dueDate.toHumanString();
-                    Duration left = widget.lessonInfo.homework.dueDate
-                        .difference(DateTime.now());
-                    String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
-                    String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
-                    String leftString =
-                        "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
-                    bool dueOver = false;
-                    if (left.inMinutes / 60 < 0) {
-                      dueOver = true;
-                    }
-                    timer =
-                        new Timer.periodic(new Duration(minutes: 1), (time) {
-                      if (!mounted) {
-                        timer.cancel();
-                      } else {
-                        setState(() {
-                          left = widget.lessonInfo.homework.dueDate
-                              .difference(DateTime.now());
-                          leftHours = (left.inMinutes / 60).toStringAsFixed(0);
-                          leftMins = (left.inMinutes % 60).toStringAsFixed(0);
-                          leftString =
-                              "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
-                          if (left.inMinutes / 60 < 0) {
-                            dueOver = true;
-                          } else {
-                            dueOver = false;
-                          }
-                        });
-                      }
-                    });
+                  if (widget.lessonInfo.examList.length != 0) {
                     return SizedBox(
-                        child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            "${capitalize(getTranslatedString("thisLessonsExams"))}: ",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          ),
-                          ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: [
-                                  Html(
-                                    data:
-                                        "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
-                                    onLinkTap: (url) async {
-                                      if (await canLaunch(url)) {
-                                        await launch(url);
-                                      } else {
-                                        FirebaseAnalytics().logEvent(
-                                          name: "LinkFail",
-                                          parameters: {"link": url},
-                                        );
-                                        throw 'Could not launch $url';
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                    width: 5,
-                                  ),
-                                ],
-                              );
-                            },
-                            itemCount: widget.lessonInfo.examList.length,
-                          ),
-                          SizedBox(height: 18),
-                          Text("${capitalize(getTranslatedString("hw"))}: ",
+                      child: Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 18),
+                            Text(
+                              "${capitalize(getTranslatedString("thisLessonsExams"))}: ",
                               style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
-                          Html(
-                            data: widget.lessonInfo.homework.content,
-                            onLinkTap: (url) async {
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                FirebaseAnalytics().logEvent(
-                                  name: "LinkFail",
-                                  parameters: {"link": url},
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: [
+                                    Html(
+                                      data:
+                                          "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
+                                      onLinkTap: (url) async {
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
+                                        } else {
+                                          FirebaseAnalytics().logEvent(
+                                            name: "LinkFail",
+                                            parameters: {"link": url},
+                                          );
+                                          throw 'Could not launch $url';
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                      width: 5,
+                                    ),
+                                  ],
                                 );
-                                throw 'Could not launch $url';
-                              }
-                            },
-                          ),
-                          SizedBox(height: 18),
-                          (dueOver)
-                              ? SizedBox(
-                                  child: Text(
-                                    "${getTranslatedString("hDue")}: " +
-                                        due +
-                                        " (${getTranslatedString("overDue")})",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
-                                  ),
-                                )
-                              : SizedBox(
-                                  child: Text(
-                                    "${getTranslatedString("hDue")}: " +
-                                        due +
-                                        " (${getTranslatedString("hLeft")}: $leftString)",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                        ],
+                              },
+                              itemCount: widget.lessonInfo.examList.length,
+                            ),
+                          ],
+                        ),
                       ),
-                    ));
+                    );
+                  } else {
+                    return SizedBox(
+                      height: 0,
+                      width: 0,
+                    );
                   }
-
+                  break;
+                case 20:
                   if (widget.lessonInfo.teacherHwUid != null &&
                       widget.lessonInfo.teacherHwUid != "") {
                     String due =
@@ -397,6 +336,132 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                               }
                             },
                           ),
+                          SizedBox(height: 5),
+                          widget.lessonInfo.homework == null
+                              ? SizedBox(
+                                  height: 0,
+                                  width: 0,
+                                )
+                              : widget.lessonInfo.homework.attachments.length ==
+                                      0
+                                  ? SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${getTranslatedString("attachments")}:",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 17.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: widget.lessonInfo.homework
+                                              .attachments.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return GestureDetector(
+                                              onTap: () async {
+                                                setState(() {
+                                                  downloadIcon[index] =
+                                                      SizedBox(
+                                                    height: 20,
+                                                    width: 20,
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                });
+                                                try {
+                                                  await RequestHandler
+                                                      .downloadHWAttachment(
+                                                    globals.currentUser,
+                                                    hwInfo: widget
+                                                        .lessonInfo
+                                                        .homework
+                                                        .attachments[index],
+                                                  );
+                                                  setState(() {
+                                                    downloadIcon[index] =
+                                                        Icon(MdiIcons.check);
+                                                  });
+                                                } catch (e, s) {
+                                                  if (!(await NetworkHelper
+                                                      .isNetworkAvailable())) {
+                                                    Fluttertoast.showToast(
+                                                      msg: getTranslatedString(
+                                                          "noNet"),
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 18.0,
+                                                    );
+                                                  } else {
+                                                    FirebaseCrashlytics.instance
+                                                        .recordError(
+                                                      e,
+                                                      s,
+                                                      reason:
+                                                          'downloadHWAttachment',
+                                                      printDetails: true,
+                                                    );
+                                                    Fluttertoast.showToast(
+                                                      //fixme change text
+                                                      msg:
+                                                          '${getTranslatedString("errWhileFetch")}: $e',
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 18.0,
+                                                    );
+                                                  }
+                                                  setState(() {
+                                                    downloadIcon[index] = Icon(
+                                                        MdiIcons.exclamation);
+                                                  });
+                                                }
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(width: 3, height: 5),
+                                                  downloadIcon[index],
+                                                  SizedBox(width: 5, height: 5),
+                                                  Text(
+                                                    widget
+                                                        .lessonInfo
+                                                        .homework
+                                                        .attachments[index]
+                                                        .name,
+                                                    style: TextStyle(
+                                                      color: Colors.blue,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width: 5, height: 30),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
                           SizedBox(height: 18),
                           (dueOver)
                               ? SizedBox(
@@ -423,51 +488,10 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         ],
                       ),
                     ));
-                  }
-                  if (widget.lessonInfo.examList.length != 0) {
+                  } else {
                     return SizedBox(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 18),
-                            Text(
-                              "${capitalize(getTranslatedString("thisLessonsExams"))}: ",
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
-                            ),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Column(
-                                  children: [
-                                    Html(
-                                      data:
-                                          "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
-                                      onLinkTap: (url) async {
-                                        if (await canLaunch(url)) {
-                                          await launch(url);
-                                        } else {
-                                          FirebaseAnalytics().logEvent(
-                                            name: "LinkFail",
-                                            parameters: {"link": url},
-                                          );
-                                          throw 'Could not launch $url';
-                                        }
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                      width: 5,
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: widget.lessonInfo.examList.length,
-                            ),
-                          ],
-                        ),
-                      ),
+                      height: 0,
+                      width: 0,
                     );
                   }
                   break;
@@ -489,8 +513,13 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   @override
   Widget build(BuildContext context) {
     globals.globalContext = context;
+    String title;
+    title = widget.lessonInfo.state.name == "Elmaradt" ||
+            widget.lessonInfo.type.name == "UresOra"
+        ? getTranslatedString("cancelled") + " " + widget.lessonInfo.name
+        : widget.lessonInfo.name;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.lessonInfo.name)),
+      appBar: AppBar(title: Text(title)),
       body: _buildBody(),
     );
   }

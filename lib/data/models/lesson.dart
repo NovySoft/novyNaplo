@@ -131,6 +131,7 @@ class Lesson {
         : null;
     teacherHwUid = json['HaziFeladatUid'];
     if (teacherHwUid != null) {
+      //Fixme: Check in the db, shouldn't we?
       homework = homeworkPage.globalHomework.firstWhere(
         (element) => element.uid == teacherHwUid,
         orElse: () {
