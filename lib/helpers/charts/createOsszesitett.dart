@@ -11,12 +11,12 @@ dynamic createOsszesitett(List<List<Evals>> allParsedInput) {
       List.from(allParsedInput).expand((i) => i).toList();
   interatorList.sort((a, b) {
     //!LOOK INTO WHY EXTENSION METHODS ARENT WORKING HERE
-    if (a.createDate.year == b.createDate.year &&
-        a.createDate.month == b.createDate.month &&
-        a.createDate.day == b.createDate.day) {
-      return a.createDate.toString().compareTo(b.createDate.toString());
+    if (a.date.year == b.date.year &&
+        a.date.month == b.date.month &&
+        a.date.day == b.date.day) {
+      return a.date.toString().compareTo(b.date.toString());
     } else {
-      return a.giveUpDate.compareTo(b.giveUpDate);
+      return a.createDate.compareTo(b.createDate);
     }
   });
   for (var n in interatorList) {

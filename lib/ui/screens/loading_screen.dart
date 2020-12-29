@@ -118,11 +118,6 @@ class _LoadingPageState extends State<LoadingPage> {
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
-      //*Load variables required to use the markCalculator
-      setState(() {
-        loadingText = getTranslatedString("setUpMarkCalc");
-      });
-      setUpCalculatorPage(statisticsPage.allParsedSubjects);
       //*Load variables required to show statistics
       setState(() {
         loadingText = getTranslatedString("setUpStatistics");
@@ -133,6 +128,11 @@ class _LoadingPageState extends State<LoadingPage> {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
+      //*Load variables required to use the markCalculator
+      setState(() {
+        loadingText = getTranslatedString("setUpMarkCalc");
+      });
+      setUpCalculatorPage(statisticsPage.allParsedSubjects);
       //*Notices
       setState(() {
         loadingText = getTranslatedString("readNotices");
