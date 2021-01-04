@@ -366,4 +366,5 @@ final Map<String, String> translation = {
   "netRestored": "Csatlakozva az internethez",
   "readAbsences": "Hiányzások olvasása az adatbázisból",
   "cancelled": "Elmaradt",
+  "migrateDB": "Adatbázis frissítése a legújabb verzióra!",
 };

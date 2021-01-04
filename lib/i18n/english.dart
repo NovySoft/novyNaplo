@@ -368,4 +368,5 @@ final Map<String, String> translation = {
   "netRestored": "Connection restored",
   "readAbsences": "Reading absences from database",
   "cancelled": "Cancelled",
+  "migrateDB": "Migrating database to the latest version!",
 };

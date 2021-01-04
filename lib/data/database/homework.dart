@@ -5,7 +5,6 @@ import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
-
 import 'deleteSql.dart';
 
 Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {

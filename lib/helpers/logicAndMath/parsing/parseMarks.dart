@@ -53,7 +53,6 @@ List<List<Evals>> sortByDateAndSubject(List<Evals> inputOne) {
           }
         },
       );
-      ;
     }
   }
   return _tempArray;

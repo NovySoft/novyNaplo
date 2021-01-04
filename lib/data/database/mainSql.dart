@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -17,12 +16,6 @@ Future<void> initDatabase() async {
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) async {
       FirebaseCrashlytics.instance.log("createSqlTables");
-      //Delete old database
-      String path = join(dbPath, 'NovyNalploDatabase.db');
-      File file = new File(path);
-      if (file.existsSync()) {
-        file.delete();
-      }
       // Run the CREATE TABLE statement on the database.
       await db.execute(
         'CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,uid TEXT,teacher TEXT,valueType TEXT,kindOf TEXT,createDate TEXT,seenDate TEXT,mode TEXT,date TEXT,weight INTEGER,numberValue INTEGER,textValue TEXT,shortTextValue TEXT,subject TEXT,theme TEXT,"type" TEXT,"group" TEXT,sortIndex INTEGER,userId INTEGER);',
