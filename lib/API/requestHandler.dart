@@ -523,6 +523,26 @@ class RequestHandler {
   static Future<Homework> getHomeworkId(Student userDetails,
       {@required String id, bool isStandAloneCall = false}) async {
     if (id == null) return Homework();
+    if (userDetails.token == null) {
+      if (userDetails.userId != null) {
+        if (globals.currentUser.name == userDetails.name &&
+            globals.currentUser.token != null) {
+          userDetails.token = globals.currentUser.token;
+        } else {
+          TokenResponse temp = await RequestHandler.login(userDetails);
+          if (temp.status == "OK") {
+            userDetails = temp.userinfo;
+            if (userDetails.current) {
+              globals.currentUser.token = userDetails.token;
+            }
+          } else {
+            return Homework();
+          }
+        }
+      } else {
+        return Homework();
+      }
+    }
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id),
@@ -531,7 +551,6 @@ class RequestHandler {
           "User-Agent": config.userAgent,
         },
       );
-
       var responseJson = jsonDecode(response.body);
 
       Homework homework = Homework.fromJson(

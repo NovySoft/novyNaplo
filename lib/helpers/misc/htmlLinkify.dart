@@ -1,6 +1,7 @@
 String htmlLinkify(String input) {
   if (input.contains("href")) {
     //Sometimes kreta is nice enough to put the link tag automatically, so we dont have to
+    //And we return if it contains once, because if it contains once then all links SHOULD be put inside link tags
     //FIXME rewrite regex to ignore links that have the prefix href="
     return input;
   } else {
