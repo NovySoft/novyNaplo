@@ -65,3 +65,37 @@ void getMarksWithChanges(List<List<Evals>> input, Student userDetails) async {
   dbList.addAll(stats.allSubjectsAv);
   batchInsertAverages(dbList);
 }
+
+void onlyCalcAndInsertAverages(
+  List<List<Evals>> input,
+  Student userDetails,
+) {
+  List<Average> tempList = [];
+  double sum = 0, index = 0;
+  int listIndex = 0;
+  for (var n in input) {
+    index = 0;
+    sum = 0;
+    if (n.length == 1) {
+      listIndex = 0;
+    } else {
+      listIndex = 1;
+    }
+    Average temp = new Average();
+    temp.userId = userDetails.userId;
+    for (var y in n) {
+      sum += y.numberValue * y.weight / 100;
+      index += 1 * y.weight / 100;
+      if (listIndex == n.length - 1) {
+        temp.diffSinceLast = sum / index;
+      }
+      listIndex++;
+    }
+    temp.value = sum / index;
+    temp.count = index.toDouble();
+    temp.subject = n[0].subject.name;
+    temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
+    tempList.add(temp);
+  }
+  batchInsertAverages(tempList);
+}

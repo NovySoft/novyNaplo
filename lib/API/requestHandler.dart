@@ -23,6 +23,7 @@ import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:http/http.dart' as http;
+import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
@@ -552,30 +553,59 @@ class RequestHandler {
     Student user, {
     bool setData = false,
   }) async {
-    marksPage.allParsedByDate = await getEvaluations(user);
-    examsPage.allParsedExams = await getExams(user);
-    noticesPage.allParsedNotices = await getNotices(user);
-    homeworkPage.globalHomework = await getHomeworks(
-      user,
-      fromDue: DateTime.now().subtract(
-        Duration(
-          days: globals.howLongKeepDataForHw == -1
-              ? 14
-              : globals.howLongKeepDataForHw.toInt(),
+    setData = false;
+    if (setData) {
+      marksPage.allParsedByDate = await getEvaluations(user);
+      examsPage.allParsedExams = await getExams(user);
+      noticesPage.allParsedNotices = await getNotices(user);
+      homeworkPage.globalHomework = await getHomeworks(
+        user,
+        fromDue: DateTime.now().subtract(
+          Duration(
+            days: 14,
+          ),
         ),
-      ),
-    );
-    absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
-    timetablePage.lessonsList = await getThreeWeeksLessons(user);
-    //Get stuff needed to make statistics
-    statisticsPage.allParsedSubjects =
-        categorizeSubjectsFromEvals(marksPage.allParsedByDate);
-    statisticsPage.allParsedSubjectsWithoutZeros = List.from(
-      statisticsPage.allParsedSubjects
-          .where((element) => element[0].numberValue != 0),
-    );
-    setUpCalculatorPage(statisticsPage.allParsedSubjects);
-    eventsPage.allParsedEvents = await getEvents(user);
+      );
+      absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
+      timetablePage.lessonsList = await getThreeWeeksLessons(user);
+      //Get stuff needed to make statistics
+      statisticsPage.allParsedSubjects =
+          categorizeSubjectsFromEvals(marksPage.allParsedByDate);
+      statisticsPage.allParsedSubjectsWithoutZeros = List.from(
+        statisticsPage.allParsedSubjects
+            .where((element) => element[0].numberValue != 0),
+      );
+      setUpCalculatorPage(statisticsPage.allParsedSubjects);
+      eventsPage.allParsedEvents = await getEvents(user);
+      onlyCalcAndInsertAverages(
+        statisticsPage.allParsedSubjectsWithoutZeros,
+        user,
+      );
+    } else {
+      List<Evals> tempEvals = await getEvaluations(user);
+      await getExams(user);
+      await getNotices(user);
+      await getHomeworks(
+        user,
+        fromDue: DateTime.now().subtract(
+          Duration(
+            days: 14,
+          ),
+        ),
+      );
+      await getAbsencesMatrix(user);
+      await getThreeWeeksLessons(user);
+      await getEvents(user);
+      onlyCalcAndInsertAverages(
+        List.from(categorizeSubjectsFromEvals(tempEvals))
+            .where(
+              (element) => element[0].numberValue != 0,
+            )
+            .toList()
+            .cast<List<Evals>>(),
+        user,
+      );
+    }
   }
 
   static void printWrapped(String text) {
@@ -583,8 +613,10 @@ class RequestHandler {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  static Future<File> downloadHWAttachment(Student userDetails,
-      {Attachment hwInfo}) async {
+  static Future<File> downloadHWAttachment(
+    Student userDetails, {
+    Attachment hwInfo,
+  }) async {
     File file = await downloadFile(
       userDetails,
       url: BaseURL.kreta(userDetails.school) +
@@ -594,8 +626,12 @@ class RequestHandler {
     return file;
   }
 
-  static Future<File> downloadFile(Student userDetails,
-      {String url, String filename, bool open = true}) async {
+  static Future<File> downloadFile(
+    Student userDetails, {
+    String url,
+    String filename,
+    bool open = true,
+  }) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
     File file = new File(path);
