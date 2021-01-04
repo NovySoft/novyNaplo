@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
@@ -20,6 +22,8 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/SchoolSearchList.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as fpath;
 
 Function resetButtonAnimation;
 var schoolList = [];
@@ -32,6 +36,14 @@ class KeyLoaderKey {
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
+  const LoginPage({
+    this.userDetails,
+    this.isAutoFill = false,
+  });
+
+  final Student userDetails;
+  final bool isAutoFill;
+
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
@@ -83,6 +95,47 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       DeviceOrientation.portraitDown,
     ]);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.isAutoFill) {
+        String path =
+            fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
+        File file = new File(path);
+        if (file.existsSync()) {
+          file.deleteSync();
+          //Delete old database
+        }
+        if (widget.userDetails.school == null ||
+            widget.userDetails.username == null ||
+            widget.userDetails.password == null) {
+          Fluttertoast.showToast(
+            msg: getTranslatedString("errWhileMigratingManLogin"),
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 18.0,
+          );
+        } else {
+          setState(() {
+            //Set school
+            schoolController.text = widget.userDetails.school;
+            selectedSchool.code = widget.userDetails.school;
+            //Set username
+            _userController.text = widget.userDetails.username;
+            //Set password
+            _passController.text = widget.userDetails.password;
+          });
+          showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return SpinnerDialog();
+            },
+          );
+          isPressed = true;
+          resetButtonAnimation();
+          await login();
+          resetButtonAnimation();
+        }
+      }
       networkChangeListener = Connectivity().onConnectivityChanged.listen(
         (ConnectivityResult result) {
           if (result == ConnectivityResult.mobile ||
@@ -183,6 +236,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         );
         await insertUser(finalUserObject);
         await globals.prefs.setBool("isNew", false);
+        if (widget.isAutoFill) {
+          Navigator.of(
+            KeyLoaderKey.keyLoader.currentContext,
+            rootNavigator: true,
+          ).pop();
+        }
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       } catch (e, s) {
         FirebaseCrashlytics.instance.recordError(
@@ -475,6 +534,40 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SpinnerDialog extends StatefulWidget {
+  @override
+  SpinnerDialogState createState() => new SpinnerDialogState();
+}
+
+class SpinnerDialogState extends State<SpinnerDialog> {
+  String loadingText = getTranslatedString("plsWait");
+  @override
+  Widget build(BuildContext context) {
+    globals.globalContext = context;
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: SimpleDialog(
+        key: KeyLoaderKey.keyLoader,
+        backgroundColor: Colors.black54,
+        children: <Widget>[
+          Center(
+            child: Column(
+              children: [
+                SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                SizedBox(height: 10),
+                Text(
+                  getTranslatedString("migrateDB"),
+                  style: TextStyle(color: Colors.blueAccent),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

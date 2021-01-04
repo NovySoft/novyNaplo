@@ -12,7 +12,7 @@ Future<void> initDatabase() async {
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    join(dbPath, 'NovyNalploDatabaseV2.db'),
+    join(dbPath, 'NovyNaploDatabaseV2.db'),
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) async {
       FirebaseCrashlytics.instance.log("createSqlTables");

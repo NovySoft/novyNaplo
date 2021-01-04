@@ -36,8 +36,7 @@ import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
-import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' as fpath;
 import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -62,7 +61,9 @@ class _LoadingPageState extends State<LoadingPage> {
       await globals.setGlobals();
       List<Student> allUsers = await getAllUsers();
       if (allUsers.length <= 0) {
-        String path = join(await getDatabasesPath(), 'NovyNalploDatabase.db');
+        //Yes I know I misspelled it, live with it
+        String path =
+            fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
         File file = new File(path);
         if (file.existsSync()) {
           //file.delete();
@@ -73,7 +74,10 @@ class _LoadingPageState extends State<LoadingPage> {
             Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);
             return;
           } else {
-            var decryptedPass, decryptedUser, decryptedCode, status;
+            FirebaseAnalytics().logEvent(
+              name: "migrateDB",
+            );
+            var decryptedPass, decryptedUser, decryptedCode;
             final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
             var passKey = encrypt.Key.fromUtf8(config.passKey);
             var codeKey = encrypt.Key.fromUtf8(config.codeKey);
@@ -93,9 +97,20 @@ class _LoadingPageState extends State<LoadingPage> {
               globals.prefs.getString("password"),
               iv: iv,
             );
-            print("Code: $decryptedCode");
-            print("User: $decryptedUser");
-            print("Pass: $decryptedPass");
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => loginPage.LoginPage(
+                  isAutoFill: true,
+                  userDetails: Student(
+                    school: decryptedCode,
+                    username: decryptedUser,
+                    password: decryptedPass,
+                  ),
+                ),
+              ),
+            );
+            return;
           }
         } else {
           Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);

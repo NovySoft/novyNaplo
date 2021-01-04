@@ -369,4 +369,5 @@ final Map<String, String> translation = {
   "readAbsences": "Reading absences from database",
   "cancelled": "Cancelled",
   "migrateDB": "Migrating database to the latest version!",
+  "errWhileMigratingManLogin": "Error while migrating, please log in manually!",
 };

@@ -367,4 +367,6 @@ final Map<String, String> translation = {
   "readAbsences": "Hiányzások olvasása az adatbázisból",
   "cancelled": "Elmaradt",
   "migrateDB": "Adatbázis frissítése a legújabb verzióra!",
+  "errWhileMigratingManLogin":
+      "Hiba a frissítés közben, kérlek lépj be manuálisan!",
 };
