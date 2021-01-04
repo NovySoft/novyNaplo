@@ -149,8 +149,11 @@ class RequestHandler {
     }
   }
 
-  static Future<Student> getStudentInfo(Student userDetails,
-      {bool embedEncryptedDetails = false, Student encryptedDetails}) async {
+  static Future<Student> getStudentInfo(
+    Student userDetails, {
+    bool embedEncryptedDetails = false,
+    Student encryptedDetails,
+  }) async {
     if (embedEncryptedDetails && encryptedDetails == null) {
       throw ErrorDescription("Embededable details were not given");
     }
@@ -174,13 +177,21 @@ class RequestHandler {
         student.current = encryptedDetails.current;
       }
       return student;
-    } catch (e) {
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getStudentInfo',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<List<Evals>> getEvaluations(Student userDetails,
-      {bool sort = true}) async {
+  static Future<List<Evals>> getEvaluations(
+    Student userDetails, {
+    bool sort = true,
+  }) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations,
@@ -215,7 +226,13 @@ class RequestHandler {
       }
       batchInsertEvals(evaluations);
       return evaluations;
-    } catch (e) {
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getEvaluations',
+        printDetails: true,
+      );
       return null;
     }
   }
@@ -238,13 +255,20 @@ class RequestHandler {
           .forEach((absence) => schoolList.add(School.fromJson(absence)));
 
       return schoolList;
-    } catch (error) {
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getSchoolList',
+        printDetails: true,
+      );
       return null;
     }
   }
 
   static Future<List<List<Absence>>> getAbsencesMatrix(
-      Student userDetails) async {
+    Student userDetails,
+  ) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
@@ -269,13 +293,21 @@ class RequestHandler {
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
       batchInsertAbsences(absences);
       return outputList;
-    } catch (error) {
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getAbsencesMatrix',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<List<Exam>> getExams(Student userDetails,
-      {bool sort = true}) async {
+  static Future<List<Exam>> getExams(
+    Student userDetails, {
+    bool sort = true,
+  }) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
@@ -305,14 +337,22 @@ class RequestHandler {
         exams,
       );
       return exams;
-    } catch (error) {
-      print("ERROR: KretaAPI.getExams: " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getExams',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<List<Homework>> getHomeworks(Student userDetails,
-      {@required DateTime fromDue, bool sort = true}) async {
+  static Future<List<Homework>> getHomeworks(
+    Student userDetails, {
+    @required DateTime fromDue,
+    bool sort = true,
+  }) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) +
@@ -335,14 +375,21 @@ class RequestHandler {
       homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
       batchInsertHomework(homeworks);
       return homeworks;
-    } catch (error) {
-      print("ERROR: KretaAPI.getHomeworks: " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getHomeworks',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(Student userDetails,
-      {DateTime date}) async {
+  static Future<List<List<Lesson>>> getSpecifiedWeeksLesson(
+    Student userDetails, {
+    DateTime date,
+  }) async {
     if (!(await NetworkHelper.isNetworkAvailable())) {
       throw Exception(getTranslatedString("noNet"));
     }
@@ -372,8 +419,14 @@ class RequestHandler {
     );
     try {
       return lessonList;
-    } catch (e) {
+    } catch (e, s) {
       print("Get Specified Week's Lessons: $e");
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getSpecifiedWeeksLesson',
+        printDetails: true,
+      );
       errored = true;
       return [];
     } finally {
@@ -384,7 +437,8 @@ class RequestHandler {
   }
 
   static Future<List<List<Lesson>>> getThreeWeeksLessons(
-      Student userDetails) async {
+    Student userDetails,
+  ) async {
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
@@ -410,8 +464,11 @@ class RequestHandler {
     );
   }
 
-  static Future<List<List<Lesson>>> getTimetableMatrix(Student userDetails,
-      {@required DateTime from, @required DateTime to}) async {
+  static Future<List<List<Lesson>>> getTimetableMatrix(
+    Student userDetails, {
+    @required DateTime from,
+    @required DateTime to,
+  }) async {
     if (from == null || to == null) return [];
 
     try {
@@ -444,14 +501,21 @@ class RequestHandler {
         lookAtDate: true,
       );
       return output;
-    } catch (error) {
-      print("ERROR: KretaAPI.getLessons: " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getTimetableMatrix',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<List<Event>> getEvents(Student userDetails,
-      {bool sort = true}) async {
+  static Future<List<Event>> getEvents(
+    Student userDetails, {
+    bool sort = true,
+  }) async {
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.events,
@@ -477,8 +541,13 @@ class RequestHandler {
       }
       batchInsertEvents(events);
       return events;
-    } catch (error) {
-      print("ERROR: KretaAPI.getEvents " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getEvents',
+        printDetails: true,
+      );
       return null;
     }
   }
@@ -514,14 +583,22 @@ class RequestHandler {
 
       batchInsertNotices(notes);
       return notes;
-    } catch (error) {
-      print("ERROR: KretaAPI.getNotes: " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getNotices',
+        printDetails: true,
+      );
       return null;
     }
   }
 
-  static Future<Homework> getHomeworkId(Student userDetails,
-      {@required String id, bool isStandAloneCall = false}) async {
+  static Future<Homework> getHomeworkId(
+    Student userDetails, {
+    @required String id,
+    bool isStandAloneCall = false,
+  }) async {
     if (id == null) return Homework();
     if (userDetails.token == null) {
       if (userDetails.userId != null) {
@@ -562,8 +639,13 @@ class RequestHandler {
         insertHomework(homework);
       }
       return homework;
-    } catch (error) {
-      print("ERROR: KretaAPI.getHomeworks: " + error.toString());
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getHomeworkId',
+        printDetails: true,
+      );
       return null;
     }
   }
