@@ -237,6 +237,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         await insertUser(finalUserObject);
         await globals.prefs.setBool("isNew", false);
         if (widget.isAutoFill) {
+          //*Delete the prefs version of login data
+          globals.prefs.remove("code");
+          globals.prefs.remove("user");
+          globals.prefs.remove("password");
+          //Pop the loading spinner
           Navigator.of(
             KeyLoaderKey.keyLoader.currentContext,
             rootNavigator: true,
