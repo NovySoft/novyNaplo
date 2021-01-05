@@ -11,7 +11,7 @@ import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/main.dart' as main;
 import '../events_tab.dart';
@@ -56,12 +56,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'teszt',
                           );
                         },
@@ -86,12 +85,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'marks ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
@@ -121,12 +119,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'hw ' +
                                 (globalHomework.length == 0
                                     ? "0"
@@ -156,12 +153,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'notice ' +
                                 (allParsedNotices.length == 0
                                     ? "0"
@@ -191,12 +187,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'timetable ' +
                                 (lessonsList[0].length == 0
                                     ? "0"
@@ -226,12 +221,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'exam ' +
                                 (examsPage.allParsedExams.length == 0
                                     ? "0"
@@ -262,12 +256,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload:
                                 'average ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
                           );
@@ -295,12 +288,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'event ' +
                                 (allParsedEvents.length == 0
                                     ? "0"
@@ -330,12 +322,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
-                          await notifications.flutterLocalNotificationsPlugin
-                              .show(
+                          await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            notifications.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecifics,
                             payload: 'absence ' +
                                 (allParsedAbsences.length == 0
                                     ? "0"

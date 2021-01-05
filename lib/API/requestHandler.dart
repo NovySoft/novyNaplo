@@ -155,7 +155,7 @@ class RequestHandler {
     Student encryptedDetails,
   }) async {
     if (embedEncryptedDetails && encryptedDetails == null) {
-      throw ErrorDescription("Embededable details were not given");
+      throw ErrorDescription("Encrypted details were not given");
     }
     try {
       var response = await client.get(

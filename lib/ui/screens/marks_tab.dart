@@ -71,7 +71,9 @@ class MarksTabState extends State<MarksTab>
       }
       if (redirectPayload) {
         redirectPayload = false;
-        selectNotification(globals.notificationAppLaunchDetails.payload);
+        NotificationHelper.selectNotification(
+          globals.notificationAppLaunchDetails.payload,
+        );
       }
     });
     super.initState();
@@ -111,7 +113,7 @@ class MarksTabState extends State<MarksTab>
       );
       return;
     }
-    await notifications.flutterLocalNotificationsPlugin.show(
+    await NotificationHelper.show(
       -111,
       getTranslatedString("gettingData"),
       '${getTranslatedString("currGetData")}...',
@@ -138,7 +140,7 @@ class MarksTabState extends State<MarksTab>
       }
     }
 
-    await notifications.flutterLocalNotificationsPlugin.cancel(-111);
+    await NotificationHelper.cancel(-111);
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {
