@@ -11,7 +11,6 @@ class TimetableSettings extends StatefulWidget {
 class _TimetableSettingsState extends State<TimetableSettings> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("timetableSettings")),

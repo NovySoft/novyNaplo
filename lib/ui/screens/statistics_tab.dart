@@ -63,7 +63,6 @@ class _StatisticsTabState extends State<StatisticsTab>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(StatisticsTab.title),
@@ -579,42 +578,9 @@ class _StatisticsTabState extends State<StatisticsTab>
     );
     getPieChartOrBarChart(allParsedSubjects);
     getBarChart(allParsedSubjects);
-    if (globals.payloadId != -1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (globals.notifPayload == "absence") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AbsencesTab(),
-            ),
-          );
-        } else if (globals.notifPayload == "average") {
-          int tempIndex = allParsedSubjectsWithoutZeros.indexWhere(
-              (element) => element[0].subject.name == globals.payloadString);
-          Color currColor = marksPage.colors[tempIndex + 1];
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChartsDetailTab(
-                id: tempIndex,
-                subject: capitalize(
-                    allParsedSubjectsWithoutZeros[tempIndex][0].subject.name),
-                color: currColor,
-                seriesList: createSubjectChart(
-                    allParsedSubjectsWithoutZeros[tempIndex], "0"),
-                animate: globals.chartAnimations,
-              ),
-            ),
-          );
-          globals.payloadId = -1;
-          globals.notifPayload = "";
-        }
-      });
-    }
     _tabController = new TabController(
       vsync: this,
       length: 2,
-      initialIndex: globals.notifPayload == "average" ? 1 : 0,
     );
     super.initState();
   }

@@ -59,7 +59,11 @@ class NotificationHelper {
         onSelectNotification: selectNotification);
   }
 
-  static Future<void> selectNotification(String payload) async {}
+  static Future<void> selectNotification(String payload) async {
+    FirebaseCrashlytics.instance
+        .log("selectNotification received (payload $payload)");
+    print(payload);
+  }
 
   static Future<void> Function(
     int,

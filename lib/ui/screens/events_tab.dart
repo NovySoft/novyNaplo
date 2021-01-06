@@ -34,7 +34,6 @@ class _EventsTabState extends State<EventsTab> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("events")),

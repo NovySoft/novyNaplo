@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/exam.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/data/models/extensions.dart';
@@ -13,7 +12,6 @@ class ExamsDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Exams_detail_tab");
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(exam.theme))),
       body: _buildBody(exam, color),

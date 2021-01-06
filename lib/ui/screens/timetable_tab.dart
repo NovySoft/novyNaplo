@@ -41,45 +41,6 @@ class _TimetableTabState extends State<TimetableTab> {
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable");
     _selectedDate = DateTime.now();
-    if (globals.payloadId != -1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Lesson tempLesson;
-        int jI = -1;
-        for (var n in lessonsList) {
-          for (var j in n) {
-            jI++;
-            if (tempLesson != null) break;
-            if (j.uid == globals.payloadId) {
-              tempLesson = j;
-              break;
-            }
-          }
-          if (tempLesson != null) break;
-        }
-        _controller.jumpToDate(tempLesson.date);
-        setState(() {
-          _selectedDate = tempLesson.date;
-        });
-        globals.payloadId = -1;
-        Color color;
-        if (jI >= marksPage.colors.length) {
-          color = getRandomColors(1)[0];
-          marksPage.colors.add(color);
-        } else {
-          color = marksPage.colors[jI];
-        }
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TimetableDetailTab(
-              icon: tempLesson.icon,
-              color: color,
-              lessonInfo: tempLesson,
-            ),
-          ),
-        );
-      });
-    }
     super.initState();
   }
 
@@ -177,7 +138,6 @@ class _TimetableTabState extends State<TimetableTab> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     //Get only the selected dates
     selectedLessonList = List.from(lessonsList.where((element) {
       if (element == null || element.length == 0) {

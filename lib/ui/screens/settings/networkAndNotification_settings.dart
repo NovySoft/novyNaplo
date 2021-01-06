@@ -35,7 +35,6 @@ class SendTestNotif extends StatefulWidget {
 class _SendTestNotifState extends State<SendTestNotif> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("sendTestNotifs")),
@@ -93,7 +92,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             payload: 'marks ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
-                                    : allParsedByDate[0].databaseId.toString()),
+                                    : allParsedByDate[0].uid.toString()),
                           );
                         },
                         icon: Icon(
@@ -364,7 +363,6 @@ class _NetworkAndNotificationSettingsState
     extends State<NetworkAndNotificationSettings> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("networkAndNotificationSettings")),

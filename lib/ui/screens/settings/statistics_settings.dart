@@ -29,7 +29,6 @@ class _StatisticSettingsState extends State<StatisticSettings> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("statisticSettings")),

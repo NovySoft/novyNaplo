@@ -1,6 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,15 +14,11 @@ import 'data/models/student.dart';
 SharedPreferences prefs;
 var dJson; //Student JSON
 var avJson; //Average JSON
-BuildContext globalContext; //Yes this is a global context variable
 bool didFetch = false; //True if we fetched the data, false if we didn't
 NotificationAppLaunchDetails
     notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
-int payloadId =
-    -1; //Payload id, contains id of the notification we want to show
-String notifPayload; //Contains the prefix of the notification payload
 String
-    payloadString; //Used when instead of an integer we use string as payloadId
+    notifPayload; //Contains the payload of the notification that was pressed until the proper page is shown
 List<Student> decodedUserList =
     []; //Contains, password, school, username, current token.
 Database db;

@@ -34,7 +34,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable_detail_tab");
     downloadIcon = [];
-    if(widget.lessonInfo.homework != null){
+    if (widget.lessonInfo.homework != null) {
       for (int i = 0; i < widget.lessonInfo.homework.attachments.length; i++) {
         downloadIcon.add(Icon(MdiIcons.fileDownload));
       }
@@ -512,7 +512,6 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     String title;
     title = widget.lessonInfo.state.name == "Elmaradt" ||
             widget.lessonInfo.type.name == "UresOra"

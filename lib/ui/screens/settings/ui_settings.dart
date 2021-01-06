@@ -36,7 +36,6 @@ class _UIsettingsState extends State<UIsettings> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("UI ${getTranslatedString("settings")}"),

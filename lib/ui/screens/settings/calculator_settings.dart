@@ -21,7 +21,6 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("markCalculatorSettings")),

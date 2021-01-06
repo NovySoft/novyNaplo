@@ -329,7 +329,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -553,7 +552,6 @@ class SpinnerDialogState extends State<SpinnerDialog> {
   String loadingText = getTranslatedString("plsWait");
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return new WillPopScope(
       onWillPop: () async => false,
       child: SimpleDialog(

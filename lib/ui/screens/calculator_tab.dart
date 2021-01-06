@@ -404,7 +404,6 @@ class CalculatorTabState extends State<CalculatorTab>
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       drawer: GlobalDrawer.getDrawer(CalculatorTab.tag, context),
       appBar: AppBar(

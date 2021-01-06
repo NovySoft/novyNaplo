@@ -2,7 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
@@ -86,7 +85,6 @@ class _ReportsTabState extends State<ReportsTab>
   @override
   Widget build(BuildContext context) {
     //TODO Add a contracted card to reports
-    globals.globalContext = context;
     return Scaffold(
       drawer: GlobalDrawer.getDrawer(ReportsTab.tag, context),
       appBar: AppBar(

@@ -22,7 +22,6 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("marksTabSettings")),

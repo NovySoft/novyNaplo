@@ -39,7 +39,6 @@ class _HomeworkTabState extends State<HomeworkTab> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(HomeworkTab.title),

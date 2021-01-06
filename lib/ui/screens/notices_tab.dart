@@ -25,7 +25,6 @@ class NoticesTab extends StatefulWidget {
 class _NoticesTabState extends State<NoticesTab> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(NoticesTab.title),

@@ -47,33 +47,6 @@ class _AbsencesTabState extends State<AbsencesTab>
       duration: Duration(milliseconds: 500),
       vsync: this,
     );
-    if (globals.payloadId != -1) {
-      if (globals.notifPayload == "absence") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Absence tempAbsence;
-          for (var n in allParsedAbsences) {
-            for (var j in n) {
-              if (j.uid == globals.payloadId) {
-                tempAbsence = j;
-                break;
-              }
-            }
-          }
-          if (tempAbsence != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AbsencencesDetailTab(
-                  absence: tempAbsence,
-                  color: getAbsenceCardColor(tempAbsence),
-                ),
-              ),
-            );
-          }
-          globals.payloadId = -1;
-        });
-      }
-    }
     Future.delayed(Duration(milliseconds: 600), () {
       _animationControllerJustified.forward();
       _animationControllerUnJustified.forward();
@@ -331,7 +304,6 @@ class AbsencencesDetailTab extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(title: Text(capitalize(absence.subject.name))),
       body: SafeArea(

@@ -14,7 +14,6 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
@@ -37,7 +36,6 @@ final List<Tab> markTabs = <Tab>[
 String label, labelBefore;
 TabController _tabController;
 List<dynamic> colors;
-bool redirectPayload = false;
 
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
@@ -68,12 +66,6 @@ class MarksTabState extends State<MarksTab>
       if (!globals.didFetch) {
         globals.didFetch = true;
         androidRefreshKey.currentState?.show();
-      }
-      if (redirectPayload) {
-        redirectPayload = false;
-        NotificationHelper.selectNotification(
-          globals.notificationAppLaunchDetails.payload,
-        );
       }
     });
     super.initState();
@@ -263,7 +255,6 @@ class MarksTabState extends State<MarksTab>
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
       appBar: AppBar(

@@ -19,7 +19,6 @@ class DatabaseSettings extends StatefulWidget {
 class _DatabaseSettingsState extends State<DatabaseSettings> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("dbSettings")),

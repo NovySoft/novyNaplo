@@ -118,7 +118,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ErrorWidget.builder = ErrorMessageBuilder.build();
-    globals.globalContext = context;
     return new DynamicTheme(
       defaultBrightness: Brightness.dark,
       data: (brightness) => ThemeHelper().getTheme(brightness),

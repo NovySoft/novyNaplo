@@ -38,7 +38,6 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(SettingsTab.title),
@@ -91,7 +90,6 @@ class _SettingsBodyState extends State<SettingsBody> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
       itemCount: 11 + globals.adModifier,
@@ -430,7 +428,6 @@ class LogOutDialog extends StatefulWidget {
 
 class _LogOutDialogState extends State<LogOutDialog> {
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return new AlertDialog(
       title: new Text(getTranslatedString("logOut")),
       content: Text(
@@ -469,7 +466,6 @@ class AdsDialog extends StatefulWidget {
 
 class _AdsDialogState extends State<AdsDialog> {
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return new AlertDialog(
       title: new Text(getTranslatedString("ads")),
       content: Text(

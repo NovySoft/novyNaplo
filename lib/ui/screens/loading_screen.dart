@@ -247,7 +247,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     final logo = CircleAvatar(
       backgroundColor: Colors.grey,
       radius: 75.0,

@@ -50,7 +50,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Scaffold(
       body: welcomeBody(),
     );
@@ -433,7 +432,6 @@ class PeopleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    globals.globalContext = context;
     return Column(
       children: <Widget>[
         Text(
