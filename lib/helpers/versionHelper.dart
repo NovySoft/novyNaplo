@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:in_app_update/in_app_update.dart';
 import 'dart:io' show Platform;
@@ -32,7 +33,15 @@ Future<void> getVersion() async {
       }
     }
   } catch (e, s) {
-    Crashlytics.instance.recordError(e, s, context: 'getVersion');
+    if (e.runtimeType == PlatformException) {
+      return;
+    }
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'getVersion',
+      printDetails: true,
+    );
     return;
   }
   return;

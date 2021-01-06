@@ -4,7 +4,13 @@
 String passKey = "NovyNovyNovyNovy"; //
 String codeKey = "NovyNovyNovyNovy"; //
 String userKey = "NovyNovyNovyNovy"; //
-String currAgent = "Novy.Kreta"; //Probably will change in future
+//Probably will change in future, agent used in network requests
+//Please make sure these two variables are always the same
+final String defaultUserAgent = "Novy.Kreta";
+String userAgent = "Novy.Kreta";
+//Client Id used to login
+final String clientId = "kreta-ellenorzo-mobile";
+final String userAgentFallback = "hu.ekreta.student/1.0.5/Android/0/0";
 
 //menuLogo
 String menuLogo = "assets/home.png";
@@ -18,7 +24,7 @@ String bannerUnitId = "ca-app-pub-6768960612393878/1881515932";
 //Production key: "ca-app-pub-6768960612393878/1881515932"
 
 //App version, so I can do special version names:
-String currentAppVersionCode = "V1.0.4+16";
+String currentAppVersionCode = "V1.0.6+21 APIv3 Alpha1";
 
 //Is the app final release? (aka is/was in version.json)
 //!If false don't do the new version check

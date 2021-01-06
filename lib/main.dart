@@ -1,75 +1,80 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:novynaplo/functions/utils.dart';
 import 'package:novynaplo/helpers/errorHandlingHelper.dart';
-import 'package:novynaplo/helpers/themeHelper.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
+import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:novynaplo/screens/avarages_tab.dart';
-import 'package:novynaplo/screens/events_tab.dart';
-import 'package:novynaplo/screens/marks_tab.dart';
-import 'package:novynaplo/screens/reports_tab.dart';
-import 'package:novynaplo/screens/settings/settings_tab.dart';
-import 'package:novynaplo/screens/login_page.dart';
-import 'package:novynaplo/screens/notices_tab.dart';
-import 'package:novynaplo/screens/statistics_tab.dart';
-import 'package:novynaplo/screens/timetable_tab.dart';
-import 'package:novynaplo/screens/calculator_tab.dart';
-import 'package:novynaplo/screens/welcome_screen.dart';
+import 'package:novynaplo/ui/screens/events_tab.dart';
+import 'package:novynaplo/ui/screens/marks_tab.dart';
+import 'package:novynaplo/ui/screens/reports_tab.dart';
+import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
+import 'package:novynaplo/ui/screens/login_page.dart';
+import 'package:novynaplo/ui/screens/notices_tab.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart';
+import 'package:novynaplo/ui/screens/timetable_tab.dart';
+import 'package:novynaplo/ui/screens/calculator_tab.dart';
+import 'package:novynaplo/ui/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:novynaplo/screens/loading_screen.dart';
-import 'package:novynaplo/screens/homework_tab.dart';
-import 'package:novynaplo/screens/exams_tab.dart';
+import 'package:novynaplo/ui/screens/loading_screen.dart';
+import 'package:novynaplo/ui/screens/homework_tab.dart';
+import 'package:novynaplo/ui/screens/exams_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/helpers/notificationHelper.dart' as notifications;
+import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
+import 'package:novynaplo/helpers/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' as foundation show kDebugMode;
+import 'package:firebase_performance/firebase_performance.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
-final navigatorKey = GlobalKey<NavigatorState>();
 bool isNew = true;
-bool isNotNew = false;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
+//FIXME USE flutter_linkify where possible
+class NavigatorKey {
+  static final navigatorKey = GlobalKey<NavigatorState>();
+}
+
 void main() async {
-  //Change to true if needed
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.getBool("isNew") == false) {
+  await Firebase.initializeApp();
+  await globals.setGlobals();
+  if (foundation.kDebugMode) {
+    print("Firebase disabled");
+    FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
+  } else {
+    FirebaseAnalytics().setAnalyticsCollectionEnabled(true);
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
+  }
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  if (globals.prefs.getBool("isNew") == false) {
     isNew = false;
   } else {
-    if (prefs.getBool("isNotNew") != null) {
-      if (prefs.getBool("isNotNew") == true) {
-        isNotNew = true;
-      }
+    String languageCode = Platform.localeName.split('_')[1];
+    if (languageCode.toLowerCase().contains('hu')) {
+      globals.language = "hu";
+    } else {
+      globals.language = "en";
     }
-    if (isNotNew == false) {
-      String languageCode = Platform.localeName.split('_')[1];
-      if (languageCode.toLowerCase().contains('hu')) {
-        globals.language = "hu";
-      } else {
-        globals.language = "en";
-      }
-      await prefs.setString("FirstOpenTime", DateTime.now().toString());
-      await prefs.setString("Language", globals.language);
-      await prefs.setBool("getVersion", true);
-    }
+    await globals.prefs.setString("FirstOpenTime", DateTime.now().toString());
+    await globals.prefs.setString("Language", globals.language);
+    await globals.prefs.setBool("getVersion", true);
   }
   routes = <String, WidgetBuilder>{
-    "/": (context) =>
-        isNew && isNotNew == false ? WelcomeScreen() : LoadingPage(),
+    "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
     MarksTab.tag: (context) => MarksTab(),
-    AvaragesTab.tag: (context) => AvaragesTab(),
     SettingsTab.tag: (context) => SettingsTab(),
     NoticesTab.tag: (context) => NoticesTab(),
     StatisticsTab.tag: (context) => StatisticsTab(),
@@ -80,23 +85,24 @@ void main() async {
     EventsTab.tag: (context) => EventsTab(),
     ReportsTab.tag: (context) => ReportsTab(),
   };
-  runZoned(() async {
+  runZonedGuarded(() async {
     await mainSql.initDatabase();
-    await notifications.setupNotifications();
+    await NotificationHelper.setupNotifications();
     runApp(
       MyApp(),
     );
-    globals.fetchPeriod =
-        prefs.getInt("fetchPeriod") == null ? 60 : prefs.getInt("fetchPeriod");
-    globals.backgroundFetch = prefs.getBool("backgroundFetch");
-    if (globals.backgroundFetch == null ? false : globals.backgroundFetch) {
+    globals.fetchPeriod = globals.prefs.getInt("fetchPeriod") == null
+        ? 60
+        : globals.prefs.getInt("fetchPeriod");
+    globals.backgroundFetch = globals.prefs.getBool("backgroundFetch");
+    if (globals.backgroundFetch == null ? true : globals.backgroundFetch) {
       globals.backgroundFetchCanWakeUpPhone =
-          prefs.getBool("backgroundFetchCanWakeUpPhone") == null
+          globals.prefs.getBool("backgroundFetchCanWakeUpPhone") == null
               ? true
-              : prefs.getBool("backgroundFetchCanWakeUpPhone");
+              : globals.prefs.getBool("backgroundFetchCanWakeUpPhone");
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
-      await sleep(1000);
+      await delay(1000);
       await AndroidAlarmManager.periodic(
         Duration(minutes: globals.fetchPeriod),
         fetchAlarmID,
@@ -105,7 +111,7 @@ void main() async {
         rescheduleOnReboot: globals.backgroundFetchCanWakeUpPhone,
       );
     }
-  }, onError: Crashlytics.instance.recordError);
+  }, FirebaseCrashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {
@@ -122,7 +128,7 @@ class MyApp extends StatelessWidget {
             ErrorWidget.builder = ErrorMessageBuilder.build();
             return widget;
           },
-          navigatorKey: navigatorKey,
+          navigatorKey: NavigatorKey.navigatorKey,
           theme: theme,
           title: 'Novy Napló',
           debugShowCheckedModeBanner: false,

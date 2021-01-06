@@ -1,9 +1,12 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ErrorMessageBuilder {
   static ErrorWidgetBuilder build() {
     ErrorWidgetBuilder func = (FlutterErrorDetails errorDetails) {
+      FirebaseCrashlytics.instance
+          .log("Shown error screen (${errorDetails.exception})");
       ErrorMessage errorMessage = ErrorMessage(errorDetails);
       return BlueScreenErrorMessageTheme.build(errorMessage);
     };
@@ -30,11 +33,22 @@ class ErrorMessage {
 
   ErrorMessage(FlutterErrorDetails errorDetails) {
     List<String> listStacktrace = errorDetails.stack.toString().split("\n");
-    title =
-        errorDetails.toString(minLevel: DiagnosticLevel.debug).split("\n")[2];
-    message =
-        errorDetails.toString(minLevel: DiagnosticLevel.info).split("\n")[3];
-    info = errorDetails.toString(minLevel: DiagnosticLevel.info).split("\n")[5];
+    if (errorDetails
+            .toString(minLevel: DiagnosticLevel.debug)
+            .split("\n")
+            .length >=
+        6) {
+      title =
+          errorDetails.toString(minLevel: DiagnosticLevel.debug).split("\n")[2];
+      message =
+          errorDetails.toString(minLevel: DiagnosticLevel.info).split("\n")[3];
+      info =
+          errorDetails.toString(minLevel: DiagnosticLevel.info).split("\n")[5];
+    } else {
+      title = errorDetails.toString(minLevel: DiagnosticLevel.debug);
+      message = "";
+      info = "";
+    }
     exception = errorDetails.toStringShort();
     stacktrace = List();
 
@@ -57,8 +71,8 @@ class ErrorMessage {
 
 class BlueScreenErrorMessageTheme {
   static Widget build(ErrorMessage errorMessage) {
-    return Scaffold(
-      body: Directionality(
+    return Material(
+      child: Directionality(
           textDirection: TextDirection.ltr,
           child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
