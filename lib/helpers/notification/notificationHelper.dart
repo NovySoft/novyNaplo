@@ -14,14 +14,14 @@ class NotificationHelper {
   static Future<void> setupNotifications() async {
     FirebaseCrashlytics.instance.log("setupNotifications");
     vibrationPattern = new Int64List(4);
-    vibrationPattern[0] = 0;
-    vibrationPattern[1] = 1000;
-    vibrationPattern[2] = 500;
-    vibrationPattern[3] = 1000;
+    vibrationPattern[0] = 300;
+    vibrationPattern[1] = 100;
+    vibrationPattern[2] = 300;
+    vibrationPattern[3] = 300;
     androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      'novynaplo01',
       'novynaplo',
-      'Channel for sending novyNaplo notifications',
+      'novynaplo',
+      'Channel for sending novyNaplo main notifications',
       importance: Importance.high,
       priority: Priority.high,
       enableVibration: true,
