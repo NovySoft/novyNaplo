@@ -1,12 +1,11 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:novynaplo/data/database/deleteSql.dart' as delSql;
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
 
+import 'data/database/databaseHelper.dart';
 import 'data/models/student.dart';
 
 //Variables used globally;
@@ -50,7 +49,7 @@ String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
 
 void resetAllGlobals() async {
-  delSql.clearAllTables();
+  DatabaseHelper.clearAllTables();
   prefs.setString("code", null);
   await prefs.clear();
   prefs.setBool("ads", adsEnabled);
@@ -62,7 +61,6 @@ void resetAllGlobals() async {
 
 Future<void> setGlobals() async {
   prefs = await SharedPreferences.getInstance();
-  db = await mainSql.database;
   if (prefs.getString("FirstOpenTime") == null) {
     await prefs.setString("FirstOpenTime", DateTime.now().toString());
     await prefs.setString("LastAsked", DateTime.now().toString());

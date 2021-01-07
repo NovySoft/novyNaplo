@@ -5,13 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
-import 'package:novynaplo/data/database/absences.dart';
-import 'package:novynaplo/data/database/evals.dart';
-import 'package:novynaplo/data/database/events.dart';
-import 'package:novynaplo/data/database/exam.dart';
-import 'package:novynaplo/data/database/homework.dart';
-import 'package:novynaplo/data/database/notices.dart';
-import 'package:novynaplo/data/database/timetable.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
@@ -46,6 +40,7 @@ import 'package:path_provider/path_provider.dart';
 
 var client = http.Client();
 
+//FIXME: Detect password changes
 class RequestHandler {
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
@@ -224,7 +219,7 @@ class RequestHandler {
           },
         );
       }
-      batchInsertEvals(evaluations);
+      DatabaseHelper.batchInsertEvals(evaluations);
       return evaluations;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -291,7 +286,7 @@ class RequestHandler {
       );
       //No need to sort, the make function has a builtin sorting function
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
-      batchInsertAbsences(absences);
+      DatabaseHelper.batchInsertAbsences(absences);
       return outputList;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -333,7 +328,7 @@ class RequestHandler {
                 b.lessonNumber.toString())
             .compareTo(a.dateOfWriting.toString() + a.lessonNumber.toString()));
       }
-      batchInsertExams(
+      DatabaseHelper.batchInsertExams(
         exams,
       );
       return exams;
@@ -373,7 +368,7 @@ class RequestHandler {
         homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
       homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-      batchInsertHomework(homeworks);
+      DatabaseHelper.batchInsertHomework(homeworks);
       return homeworks;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -496,7 +491,7 @@ class RequestHandler {
       }
       //Make function has builtin sorting
       List<List<Lesson>> output = await makeTimetableMatrix(lessons);
-      batchInsertLessons(
+      DatabaseHelper.batchInsertLessons(
         lessons,
         lookAtDate: true,
       );
@@ -539,7 +534,7 @@ class RequestHandler {
       if (sort) {
         events.sort((a, b) => b.endDate.compareTo(a.endDate));
       }
-      batchInsertEvents(events);
+      DatabaseHelper.batchInsertEvents(events);
       return events;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -580,8 +575,7 @@ class RequestHandler {
       if (sort) {
         notes.sort((a, b) => b.date.compareTo(a.date));
       }
-
-      batchInsertNotices(notes);
+      DatabaseHelper.batchInsertNotices(notes);
       return notes;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -636,7 +630,7 @@ class RequestHandler {
       );
       if (isStandAloneCall) {
         //This function is also called when we can't found a homework attached to a lesson, and if we found it we bsave
-        insertHomework(homework);
+        DatabaseHelper.insertHomework(homework);
       }
       return homework;
     } catch (e, s) {

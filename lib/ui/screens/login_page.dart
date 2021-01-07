@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/database/users.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
     );
     super.initState();
-    getAllUsers(decrypt: false)
+    DatabaseHelper.getAllUsers(decrypt: false)
         .then((value) => isFirstUser = (value.length <= 0));
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -234,7 +234,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           embedEncryptedDetails: true,
           encryptedDetails: finalUserObject,
         );
-        await insertUser(finalUserObject);
+        await DatabaseHelper.insertUser(finalUserObject);
         await globals.prefs.setBool("isNew", false);
         if (widget.isAutoFill) {
           //*Delete the prefs version of login data

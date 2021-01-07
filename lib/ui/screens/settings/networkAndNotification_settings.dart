@@ -11,7 +11,7 @@ import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/helpers/notificationHelper.dart';
+import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/main.dart' as main;
 import '../events_tab.dart';

@@ -1,4 +1,4 @@
-import 'package:novynaplo/data/database/average.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
@@ -63,7 +63,7 @@ void getMarksWithChanges(List<List<Evals>> input, Student userDetails) async {
   //We dont await it, cause this function is time critical
   List<Average> dbList = [stats.bestSubjectAv, stats.worstSubjectAv];
   dbList.addAll(stats.allSubjectsAv);
-  batchInsertAverages(dbList);
+  DatabaseHelper.batchInsertAverages(dbList);
 }
 
 void onlyCalcAndInsertAverages(
@@ -97,5 +97,5 @@ void onlyCalcAndInsertAverages(
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
-  batchInsertAverages(tempList);
+  DatabaseHelper.batchInsertAverages(tempList);
 }

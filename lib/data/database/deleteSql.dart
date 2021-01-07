@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
 import 'package:novynaplo/global.dart' as globals;
 
 Future<void> deleteFromDbByID(int databaseId, String table) async {
   FirebaseCrashlytics.instance
       .log("Delete from table: $table (id: $databaseId)");
   // Get a reference to the database.
-  final db = await mainSql.database;
+  final db = globals.db;
 
   await db.delete(
     table,

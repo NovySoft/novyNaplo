@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/helpers/errorHandlingHelper.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
@@ -24,8 +25,7 @@ import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-import 'package:novynaplo/helpers/notificationHelper.dart';
+import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
 import 'dart:io' show Platform;
@@ -86,7 +86,7 @@ void main() async {
     ReportsTab.tag: (context) => ReportsTab(),
   };
   runZonedGuarded(() async {
-    await mainSql.initDatabase();
+    await DatabaseHelper.initDatabase();
     await NotificationHelper.setupNotifications();
     runApp(
       MyApp(),

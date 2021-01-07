@@ -1,6 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/data/database/homework.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -25,7 +25,9 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
   }
 
   void updateHwTab() async {
-    homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
+    homeworkPage.globalHomework = await DatabaseHelper.getAllHomework(
+      ignoreDue: false,
+    );
     homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     homeworkPage.colors = getRandomColors(homeworkPage.globalHomework.length);
   }

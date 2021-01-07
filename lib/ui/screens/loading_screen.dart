@@ -1,18 +1,10 @@
 import 'dart:io';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:novynaplo/data/database/absences.dart';
-import 'package:novynaplo/data/database/evals.dart';
-import 'package:novynaplo/data/database/events.dart';
-import 'package:novynaplo/data/database/exam.dart';
-import 'package:novynaplo/data/database/homework.dart';
-import 'package:novynaplo/data/database/notices.dart';
-import 'package:novynaplo/data/database/timetable.dart';
-import 'package:novynaplo/data/database/users.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/student.dart';
@@ -59,7 +51,7 @@ class _LoadingPageState extends State<LoadingPage> {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
     try {
       await globals.setGlobals();
-      List<Student> allUsers = await getAllUsers();
+      List<Student> allUsers = await DatabaseHelper.getAllUsers();
       if (allUsers.length <= 0) {
         //Yes I know I misspelled it, live with it
         String path =
@@ -167,7 +159,7 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readMarks");
       });
-      List<Evals> tempEvals = await getAllEvals();
+      List<Evals> tempEvals = await DatabaseHelper.getAllEvals();
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
@@ -190,33 +182,35 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readNotices");
       });
-      noticesPage.allParsedNotices = await getAllNotices();
+      noticesPage.allParsedNotices = await DatabaseHelper.getAllNotices();
       //*Events
       setState(() {
         loadingText = getTranslatedString("readEvents");
       });
-      eventsPage.allParsedEvents = await getAllEvents();
+      eventsPage.allParsedEvents = await DatabaseHelper.getAllEvents();
       //*Absences
       setState(() {
         loadingText = getTranslatedString("readAbsences");
       });
-      absencesPage.allParsedAbsences = await getAllAbsencesMatrix();
+      absencesPage.allParsedAbsences =
+          await DatabaseHelper.getAllAbsencesMatrix();
       //*Homework
       setState(() {
         loadingText = getTranslatedString("readHw");
       });
-      homeworkPage.globalHomework = await getAllHomework(ignoreDue: false);
+      homeworkPage.globalHomework =
+          await DatabaseHelper.getAllHomework(ignoreDue: false);
       //*Exams
       setState(() {
         loadingText = getTranslatedString("readHw");
       });
-      examsPage.allParsedExams = await getAllExams();
+      examsPage.allParsedExams = await DatabaseHelper.getAllExams();
       //*Timetable
       //?EXAMS AND HOMEWORK MUST BE LOADED BEFORE TIMETABLE
       setState(() {
         loadingText = getTranslatedString("readTimetable");
       });
-      List<Lesson> tempLessonList = await getAllTimetable();
+      List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable();
       timetablePage.lessonsList = await makeTimetableMatrix(tempLessonList);
       //*Done
       FirebaseAnalytics().logEvent(name: "login");

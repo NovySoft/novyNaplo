@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
-import 'package:novynaplo/data/database/users.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/helpers/notificationHelper.dart';
+import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
@@ -111,7 +111,7 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    List<Student> allUsers = await getAllUsers();
+    List<Student> allUsers = await DatabaseHelper.getAllUsers();
     for (var currentUser in allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {

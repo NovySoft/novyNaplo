@@ -3,12 +3,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/data/database/deleteSql.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:novynaplo/data/database/mainSql.dart' as mainSql;
-
 import 'dbExplorer/sqlite_viewer.dart';
 
 class DatabaseSettings extends StatefulWidget {
@@ -79,7 +77,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                             .logEvent(name: "clear_database");
                                         FirebaseCrashlytics.instance
                                             .log("clear_database");
-                                        await clearAllTables();
+                                        await DatabaseHelper.clearAllTables();
                                         Navigator.of(context).pop();
                                         _ackAlert(context,
                                             "Adatbázis sikeresen törölve");
@@ -191,7 +189,7 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (term) async {
-              final Database db = await mainSql.database;
+              final Database db = globals.db;
               if (term.toLowerCase().contains("insert")) {
                 int tempId = await db.rawInsert(term);
                 result = "inserted at id: " + tempId.toString();
