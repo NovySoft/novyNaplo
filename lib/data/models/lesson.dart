@@ -160,7 +160,11 @@ class Lesson {
     classroom = json['TeremNeve'];
     type =
         json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
-    uid = json['Uid'];
+    try {
+      uid = json['Uid'].split(',')[0];
+    } catch (e) {
+      uid = json['Uid'];
+    }
     endDate = json['VegIdopont'] != null
         ? DateTime.parse(json['VegIdopont']).toLocal()
         : DateTime(2020);

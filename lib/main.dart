@@ -9,6 +9,7 @@ import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/reports_tab.dart';
@@ -84,6 +85,7 @@ void main() async {
     ExamsTab.tag: (context) => ExamsTab(),
     EventsTab.tag: (context) => EventsTab(),
     ReportsTab.tag: (context) => ReportsTab(),
+    AbsencesTab.tag: (context) => AbsencesTab(),
   };
   runZonedGuarded(() async {
     await DatabaseHelper.initDatabase();

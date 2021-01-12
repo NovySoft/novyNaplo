@@ -21,6 +21,8 @@ AbsencesBarChartLegendSelection legendSelectionBefore =
 var listener;
 
 class AbsencesTab extends StatefulWidget {
+  static String tag = "absences";
+
   @override
   _AbsencesTabState createState() => _AbsencesTabState();
 }

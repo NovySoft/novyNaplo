@@ -141,7 +141,11 @@ class Evals {
         ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
     sortIndex = json['SortIndex'];
-    uid = json['Uid'];
+    try {
+      uid = json['Uid'].split(',')[0];
+    } catch (e) {
+      uid = json['Uid'];
+    }
     if (theme == null) {
       if (mode != null) {
         theme = mode.description;

@@ -215,6 +215,7 @@ class _LoadingPageState extends State<LoadingPage> {
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
+      globals.isLoaded = true;
       return;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');

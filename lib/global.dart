@@ -1,6 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
@@ -10,18 +9,18 @@ import 'data/models/student.dart';
 
 //Variables used globally;
 //* Session
-SharedPreferences prefs;
+SharedPreferences prefs; //Global shared preferences
 var dJson; //Student JSON
 var avJson; //Average JSON
 bool didFetch = false; //True if we fetched the data, false if we didn't
-NotificationAppLaunchDetails
-    notificationAppLaunchDetails; //!Doesn't seem to work, but i'll use it nevertheless
+bool isLoaded =
+    false; //Stores whether the app has passed the loading stage, this variable is used to delay and show notifications
 String
     notifPayload; //Contains the payload of the notification that was pressed until the proper page is shown
 List<Student> decodedUserList =
     []; //Contains, password, school, username, current token.
-Database db;
-Student currentUser = Student();
+Database db; //Global database access
+Student currentUser = Student(); //The currently shown user
 //* "Permanent"
 String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
