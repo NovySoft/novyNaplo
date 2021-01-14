@@ -1,9 +1,5 @@
-import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/models/classGroup.dart';
-import 'package:novynaplo/data/models/description.dart';
 import 'package:novynaplo/data/models/notice.dart';
-import 'package:novynaplo/data/models/subject.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 

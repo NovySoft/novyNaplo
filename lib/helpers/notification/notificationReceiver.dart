@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
@@ -11,15 +12,16 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
-import 'package:novynaplo/ui/screens/exams_tab.dart';
+import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
+import 'package:novynaplo/ui/screens/exams_tab.dart' as examsTab;
 import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
-import 'package:novynaplo/ui/screens/statistics_tab.dart';
-import 'package:novynaplo/ui/screens/timetable_tab.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as statsTab;
+import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 
 class NotificationReceiver {
   static Future<void> selectNotification(String payload) async {
@@ -55,13 +57,14 @@ class NotificationReceiver {
             globalWaitAndPushNamed(noticesTab.NoticesTab.tag);
             break;
           case "timetable":
-            globalWaitAndPushNamed(TimetableTab.tag);
+            globalWaitAndPushNamed(timetableTab.TimetableTab.tag);
             break;
           case "exam":
-            globalWaitAndPushNamed(ExamsTab.tag);
+            globalWaitAndPushNamed(examsTab.ExamsTab.tag);
             break;
           case "average":
-            globalWaitAndPushNamed(StatisticsTab.tag);
+            //No need to go to the average tab, we show the multichart graph
+            globalWaitAndPushNamed(statsTab.StatisticsTab.tag);
             break;
           case "event":
             globalWaitAndPushNamed(EventsTab.tag);
@@ -109,7 +112,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange data was not found in the loaded items
+              //?Strange, data was not found in the loaded items
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Evals WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -160,7 +163,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange data was not found in the loaded items
+              //?Strange, data was not found in the loaded items
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Homework WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -207,7 +210,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange data was not found in the loaded items
+              //?Strange, data was not found in the loaded items
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Notices WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -247,13 +250,63 @@ class NotificationReceiver {
             }
             break;
           case "timetable":
-            globalWaitAndPushNamed(TimetableTab.tag);
+            //FIXME: Timetable is a bit more complex....
             break;
           case "exam":
-            globalWaitAndPushNamed(ExamsTab.tag);
+            int tempIndex = examsTab.allParsedExams.indexWhere(
+              (element) {
+                return element.uid == payloadUid &&
+                    element.userId == payloadUserId;
+              },
+            );
+            if (tempIndex == -1) {
+              //?Strange, data was not found in the loaded items
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Exams WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more than 1 result
+                globalWaitAndPushNamed(examsTab.ExamsTab.tag);
+              } else {
+                //*Parse and show from database
+                Exam tempExam = Exam.fromSqlite(maps[0]);
+                globalWaitAndPushNamed(examsTab.ExamsTab.tag).then(
+                  (value) => globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => ExamsDetailTab(
+                        exam: tempExam,
+                        color: getRandomColors(1)[0],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            } else {
+              //?Data is in the parsed list
+              Exam tempExam = examsTab.allParsedExams[tempIndex];
+              globalWaitAndPushNamed(examsTab.ExamsTab.tag).then(
+                (value) => globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => ExamsDetailTab(
+                      exam: tempExam,
+                      color: examsTab.colors.length <= tempIndex
+                          ? getRandomColors(1)[0]
+                          : examsTab.colors[tempIndex],
+                    ),
+                  ),
+                ),
+              );
+            }
             break;
           case "average":
-            globalWaitAndPushNamed(StatisticsTab.tag);
+            globalWaitAndPush(
+              MaterialPageRoute(
+                builder: (context) => statsTab.StatisticsTab(
+                  startOnSubjects: true,
+                ),
+              ),
+            ); //.then show the average, not easy as if not found we need to parse from db
             break;
           case "event":
             globalWaitAndPushNamed(EventsTab.tag);

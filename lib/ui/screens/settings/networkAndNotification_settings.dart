@@ -225,7 +225,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'exam ' +
+                            payload: 'exam 1 ' +
                                 (examsPage.allParsedExams.length == 0
                                     ? "0"
                                     : examsPage.allParsedExams[0].uid
@@ -261,7 +261,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
                             payload:
-                                'average ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
+                                'average 1 ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
                           );
                         },
                         icon: Icon(

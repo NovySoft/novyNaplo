@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
@@ -50,6 +52,31 @@ class Exam {
       'databaseId': databaseId,
       'userId': userId,
     };
+  }
+
+  Exam.fromSqlite(Map<String, dynamic> map) {
+    announcementDate = map['announcementDate'] == null
+        ? null
+        : DateTime.parse(map['announcementDate']).toLocal();
+    dateOfWriting = map['dateOfWriting'] == null
+        ? null
+        : DateTime.parse(map['dateOfWriting']).toLocal();
+    mode = map['mode'] == null
+        ? null
+        : Description.fromJson(json.decode(map['mode']));
+    lessonNumber = map['lessonNumber'];
+    teacher = map['teacher'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    theme = map['theme'];
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    databaseId = map['databaseId'];
+    userId = map['userId'];
+    uid = map['uid'];
+    icon = parseSubjectToIcon(subject: subject.name);
   }
 
   Exam.fromJson(Map<String, dynamic> json, Student userDetails) {

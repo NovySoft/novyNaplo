@@ -52,8 +52,13 @@ double sizedBoxHeight = 75;
 List<Average> allSubjectsAv = [];
 
 class StatisticsTab extends StatefulWidget {
+  StatisticsTab({
+    this.startOnSubjects = false,
+  });
+
   static String tag = 'statistics';
   static String title = getTranslatedString("statistics");
+  final bool startOnSubjects;
 
   @override
   _StatisticsTabState createState() => _StatisticsTabState();
@@ -61,6 +66,24 @@ class StatisticsTab extends StatefulWidget {
 
 class _StatisticsTabState extends State<StatisticsTab>
     with TickerProviderStateMixin {
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.log("Shown Statistics");
+    getAllSubjectsAv(allParsedSubjectsWithoutZeros);
+    getMarksWithChanges(
+      allParsedSubjectsWithoutZeros,
+      globals.currentUser,
+    );
+    getPieChartOrBarChart(allParsedSubjects);
+    getBarChart(allParsedSubjects);
+    _tabController = new TabController(
+      vsync: this,
+      length: 2,
+      initialIndex: widget.startOnSubjects ? 1 : 0,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -566,23 +589,6 @@ class _StatisticsTabState extends State<StatisticsTab>
             }
           }).toList()),
     );
-  }
-
-  @override
-  void initState() {
-    FirebaseCrashlytics.instance.log("Shown Statistics");
-    getAllSubjectsAv(allParsedSubjectsWithoutZeros);
-    getMarksWithChanges(
-      allParsedSubjectsWithoutZeros,
-      globals.currentUser,
-    );
-    getPieChartOrBarChart(allParsedSubjects);
-    getBarChart(allParsedSubjects);
-    _tabController = new TabController(
-      vsync: this,
-      length: 2,
-    );
-    super.initState();
   }
 
   Widget noMarks() {
