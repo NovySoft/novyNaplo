@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
@@ -11,7 +12,8 @@ import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/absences_tab.dart';
-import 'package:novynaplo/ui/screens/events_tab.dart';
+import 'package:novynaplo/ui/screens/events_detail_tab.dart';
+import 'package:novynaplo/ui/screens/events_tab.dart' as eventsTab;
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsTab;
 import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
@@ -67,7 +69,7 @@ class NotificationReceiver {
             globalWaitAndPushNamed(statsTab.StatisticsTab.tag);
             break;
           case "event":
-            globalWaitAndPushNamed(EventsTab.tag);
+            globalWaitAndPushNamed(eventsTab.EventsTab.tag);
             break;
           case "absence":
             globalWaitAndPushNamed(AbsencesTab.tag);
@@ -309,7 +311,51 @@ class NotificationReceiver {
             ); //.then show the average, not easy as if not found we need to parse from db
             break;
           case "event":
-            globalWaitAndPushNamed(EventsTab.tag);
+            int tempIndex = eventsTab.allParsedEvents.indexWhere(
+              (element) {
+                return element.uid == payloadUid &&
+                    element.userId == payloadUserId;
+              },
+            );
+            if (tempIndex == -1) {
+              //?Strange, data was not found in the loaded items
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Events WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more than 1 result
+                globalWaitAndPushNamed(eventsTab.EventsTab.tag);
+              } else {
+                //*Parse and show from database
+                Event tempEvent = Event.fromSqlite(maps[0]);
+                globalWaitAndPushNamed(eventsTab.EventsTab.tag).then(
+                  (value) => globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => EventsDetailTab(
+                        eventDetails: tempEvent,
+                        color: getRandomColors(1)[0],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            } else {
+              //?Data is in the parsed list
+              Event tempEvent = eventsTab.allParsedEvents[tempIndex];
+              globalWaitAndPushNamed(eventsTab.EventsTab.tag).then(
+                (value) => globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => EventsDetailTab(
+                      eventDetails: tempEvent,
+                      color: eventsTab.colors.length <= tempIndex
+                          ? getRandomColors(1)[0]
+                          : eventsTab.colors[tempIndex],
+                    ),
+                  ),
+                ),
+              );
+            }
             break;
           case "absence":
             globalWaitAndPushNamed(AbsencesTab.tag);

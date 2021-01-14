@@ -292,7 +292,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'event ' +
+                            payload: 'event 1 ' +
                                 (allParsedEvents.length == 0
                                     ? "0"
                                     : allParsedEvents[0].uid.toString()),

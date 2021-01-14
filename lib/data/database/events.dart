@@ -11,18 +11,7 @@ Future<List<Event>> getAllEvents() async {
   );
 
   List<Event> tempList = List.generate(maps.length, (i) {
-    Event temp = new Event();
-    temp.databaseId = maps[i]['databaseId'];
-    temp.uid = maps[i]['uid'];
-    temp.startDate = maps[i]['startDate'] == null
-        ? null
-        : DateTime.parse(maps[i]['startDate']).toLocal();
-    temp.endDate = maps[i]['endDate'] == null
-        ? null
-        : DateTime.parse(maps[i]['endDate']).toLocal();
-    temp.title = maps[i]['title'];
-    temp.content = maps[i]['content'];
-    temp.userId = maps[i]['userId'];
+    Event temp = new Event.fromSqlite(maps[i]);
     return temp;
   });
   tempList.sort((a, b) => b.endDate.compareTo(a.endDate));

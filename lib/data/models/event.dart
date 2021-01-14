@@ -17,6 +17,20 @@ class Event {
     this.content,
   });
 
+  Event.fromSqlite(Map<String, dynamic> map) {
+    databaseId = map['databaseId'];
+    uid = map['uid'];
+    startDate = map['startDate'] == null
+        ? null
+        : DateTime.parse(map['startDate']).toLocal();
+    endDate = map['endDate'] == null
+        ? null
+        : DateTime.parse(map['endDate']).toLocal();
+    title = map['title'];
+    content = map['content'];
+    userId = map['userId'];
+  }
+
   Event.fromJson(Map json, Student userDetails) {
     userId = userDetails.userId;
     uid = json["Uid"];
