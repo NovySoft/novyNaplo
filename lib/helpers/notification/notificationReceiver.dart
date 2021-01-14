@@ -7,12 +7,15 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesTab;
+import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsTab;
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
@@ -305,13 +308,47 @@ class NotificationReceiver {
             }
             break;
           case "average":
-            globalWaitAndPush(
-              MaterialPageRoute(
-                builder: (context) => statsTab.StatisticsTab(
-                  startOnSubjects: true,
+            //!THIS DOESN'T WORK WITH MULTIUSER
+            int tempIndex = statsTab.allParsedSubjectsWithoutZeros
+                .indexWhere((element) => element[0].subject.name == payloadUid);
+            if (tempIndex == -1) {
+              //TODO: Write the db logic too
+              globalWaitAndPush(
+                MaterialPageRoute(
+                  builder: (context) => statsTab.StatisticsTab(
+                    startOnSubjects: true,
+                  ),
                 ),
-              ),
-            ); //.then show the average, not easy as if not found we need to parse from db
+              );
+            } else {
+              Color currColor = marksTab.colors[tempIndex + 1];
+
+              globalWaitAndPush(
+                MaterialPageRoute(
+                  builder: (context) => statsTab.StatisticsTab(
+                    startOnSubjects: true,
+                  ),
+                ),
+              ).then((value) {
+                globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => ChartsDetailTab(
+                      id: tempIndex,
+                      subject: capitalize(statsTab
+                          .allParsedSubjectsWithoutZeros[tempIndex][0]
+                          .subject
+                          .name),
+                      color: currColor,
+                      seriesList: createSubjectChart(
+                          statsTab.allParsedSubjectsWithoutZeros[tempIndex],
+                          tempIndex.toString()),
+                      animate: globals.chartAnimations,
+                    ),
+                  ),
+                );
+              });
+            }
+
             break;
           case "event":
             int tempIndex = eventsTab.allParsedEvents.indexWhere(
