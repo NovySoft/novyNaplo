@@ -12,7 +12,7 @@ String shortenSubject(String input) {
     FirebaseAnalytics().logEvent(
       name: "LongSubject",
       parameters: {
-        "Subject": input,
+        "subject": input,
       },
     );
   }

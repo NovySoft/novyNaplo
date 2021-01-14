@@ -60,7 +60,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'teszt',
+                            payload: 'test',
                           );
                         },
                         icon: Icon(
@@ -89,7 +89,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'marks ' +
+                            payload: 'marks 1 ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
                                     : allParsedByDate[0].uid.toString()),

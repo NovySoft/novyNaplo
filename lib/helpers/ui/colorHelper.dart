@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 
@@ -20,7 +21,11 @@ Color getAbsenceCardColor(Absence absence) {
 Color getMarkCardColor({@required Evals eval, @required int index}) {
   Color color;
   if (globals.markCardTheme == "Véletlenszerű") {
-    color = marks.colors[index].shade400;
+    if (marks.colors.length <= index) {
+      color = getRandomColors(1)[0];
+    } else {
+      color = marks.colors[index];
+    }
   } else if (globals.markCardTheme == "Értékelés nagysága") {
     if (eval.valueType.name == "Szazalekos") {
       //TODO: Variable percentage limits

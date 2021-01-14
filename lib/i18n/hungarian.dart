@@ -369,4 +369,5 @@ final Map<String, String> translation = {
   "migrateDB": "Adatbázis frissítése a legújabb verzióra!",
   "errWhileMigratingManLogin":
       "Hiba a frissítés közben, kérlek lépj be manuálisan!",
+  "missingUserId": "Hiányzó felhasználó azonosító!",
 };

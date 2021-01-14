@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
@@ -51,6 +53,45 @@ class Evals {
   @override
   String toString() {
     return this.subject.name + ":" + this.date.toString();
+  }
+
+  Evals.fromSqlite(Map<String, dynamic> map) {
+    databaseId = map['databaseId'];
+    userId = map['userId'];
+    uid = map['uid'];
+    teacher = map['teacher'];
+    valueType = map['valueType'] == null
+        ? null
+        : Description.fromJson(json.decode(map['valueType']));
+    kindOf = map['kindOf'];
+    createDate = map['createDate'] == null
+        ? null
+        : DateTime.parse(map['createDate']).toLocal();
+    seenDate = map['seenDate'] == null
+        ? null
+        : DateTime.parse(map['seenDate']).toLocal();
+    mode = map['mode'] == null
+        ? null
+        : Description.fromJson(json.decode(map['mode']));
+    date = map['date'] == null ? null : DateTime.parse(map['date']).toLocal();
+    weight = map['weight'];
+    numberValue = map['numberValue'];
+    textValue = map['textValue'];
+    shortTextValue = map['shortTextValue'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    theme = map['theme'];
+    type = map['type'] == null
+        ? null
+        : Description.fromJson(json.decode(map['type']));
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    sortIndex = map['sortIndex'];
+    icon = subject != null
+        ? parseSubjectToIcon(subject: subject.name)
+        : Icons.create;
   }
 
   Evals.fromJson(Map<String, dynamic> json, Student userDetails) {
