@@ -6,6 +6,8 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -27,6 +29,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statsTab;
+import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 
 class NotificationReceiver {
@@ -258,7 +261,66 @@ class NotificationReceiver {
             }
             break;
           case "timetable":
-            //FIXME: Timetable is a bit more complex....
+            Lesson tempLesson = timetableTab.lessonsList
+                .expand((element) => element)
+                .firstWhere((element) {
+              return element.uid == payloadUid &&
+                  element.userId == payloadUserId;
+            }, orElse: () {
+              return null;
+            });
+
+            if (tempLesson == null) {
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Timetable WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more than 1 result
+                globalWaitAndPushNamed(timetableTab.TimetableTab.tag);
+              } else {
+                Lesson tempLesson = Lesson.fromSqlite(maps[0]);
+                globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => timetableTab.TimetableTab(
+                      jumpToDate: tempLesson.date,
+                    ),
+                  ),
+                ).then((value) {
+                  globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => TimetableDetailTab(
+                        icon: tempLesson.icon,
+                        color: getRandomColors(1)[0],
+                        lessonInfo: tempLesson,
+                      ),
+                    ),
+                  );
+                });
+              }
+            } else {
+              List<Lesson> _tempList = timetableTab.lessonsList.firstWhere(
+                  (element) => element[0].date.isSameDay(tempLesson.date));
+              int colorIndex = _tempList.indexWhere((element) =>
+                  element.uid == payloadUid && element.userId == payloadUserId);
+              globalWaitAndPush(
+                MaterialPageRoute(
+                  builder: (context) => timetableTab.TimetableTab(
+                    jumpToDate: tempLesson.date,
+                  ),
+                ),
+              ).then((value) {
+                globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => TimetableDetailTab(
+                      icon: tempLesson.icon,
+                      color: marksTab.colors[colorIndex],
+                      lessonInfo: tempLesson,
+                    ),
+                  ),
+                );
+              });
+            }
             break;
           case "exam":
             int tempIndex = examsTab.allParsedExams.indexWhere(

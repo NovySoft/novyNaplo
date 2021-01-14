@@ -191,7 +191,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'timetable ' +
+                            payload: 'timetable 1 ' +
                                 (lessonsList[0].length == 0
                                     ? "0"
                                     : lessonsList[0][0].uid.toString()),

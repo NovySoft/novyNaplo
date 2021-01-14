@@ -93,6 +93,83 @@ class Lesson {
     };
   }
 
+  Lesson.fromSqlite(Map<String, dynamic> map) {
+    state = map['state'] == null
+        ? null
+        : Description.fromJson(json.decode(map['state']));
+    var tempExamUidList = json.decode(map['examUidList']);
+    examUidList =
+        tempExamUidList == null ? null : tempExamUidList.cast<String>();
+    if (examUidList != null) {
+      examList = [];
+      for (var v in examUidList) {
+        examList.add(
+          examsPage.allParsedExams.firstWhere(
+            (item) => item.uid == v,
+            orElse: () {
+              //FIXME Get exam by id if not found
+              return Exam();
+            },
+          ),
+        );
+      }
+    }
+    examUid = map['examUid'];
+    date = map['date'] == null ? null : DateTime.parse(map['date']).toLocal();
+    deputyTeacher = map['deputyTeacher'];
+    isStudentHomeworkEnabled =
+        map['isStudentHomeworkEnabled'] == 1 ? true : false;
+    startDate = map['startDate'] == null
+        ? null
+        : DateTime.parse(map['startDate']).toLocal();
+    name = map['name'];
+    lessonNumberDay = map['lessonNumberDay'];
+    lessonNumberYear = map['lessonNumberYear'];
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    teacherHwUid = map['teacherHwUid'];
+    if (teacherHwUid != null) {
+      homework = homeworkPage.globalHomework.firstWhere(
+        (element) => element.uid == teacherHwUid,
+        orElse: () {
+          Homework homework = Homework();
+          RequestHandler.getHomeworkId(
+            globals.currentUser,
+            id: teacherHwUid,
+            isStandAloneCall: true,
+          ).then((value) {
+            homework = value;
+          });
+          return homework;
+        },
+      );
+    }
+    isHWSolved = map['teacherHwUid'] == 1 ? true : false;
+    teacher = map['teacher'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    presence = map['presence'] == null
+        ? null
+        : Description.fromJson(json.decode(map['presence']));
+    theme = map['theme'];
+    classroom = map['classroom'];
+    type = map['type'] == null
+        ? null
+        : Description.fromJson(json.decode(map['type']));
+    uid = map['uid'];
+    endDate = map['endDate'] == null
+        ? null
+        : DateTime.parse(map['endDate']).toLocal();
+    databaseId = map['databaseId'];
+    userId = map['userId'];
+    icon = parseSubjectToIcon(
+      subject: subject == null ? "" : subject.name,
+    );
+    isSpecialDayEvent = map['isSpecialDayEvent'] == 1 ? true : false;
+  }
+
   Lesson.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     date = json['Datum'] != null

@@ -31,7 +31,11 @@ bool fade = true;
 DateTime minDate;
 
 class TimetableTab extends StatefulWidget {
+  TimetableTab({this.jumpToDate});
+
   static String tag = 'timetable';
+  final DateTime jumpToDate;
+
   @override
   _TimetableTabState createState() => _TimetableTabState();
 }
@@ -41,6 +45,14 @@ class _TimetableTabState extends State<TimetableTab> {
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable");
     _selectedDate = DateTime.now();
+    if (widget.jumpToDate != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controller.jumpToDate(widget.jumpToDate);
+        setState(() {
+          _selectedDate = widget.jumpToDate;
+        });
+      });
+    }
     super.initState();
   }
 
