@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -10,7 +11,8 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';
-import 'package:novynaplo/ui/screens/homework_tab.dart';
+import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
+import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/ui/screens/notices_tab.dart';
@@ -45,7 +47,7 @@ class NotificationReceiver {
             globalWaitAndPushNamed(marksTab.MarksTab.tag);
             break;
           case "hw":
-            globalWaitAndPushNamed(HomeworkTab.tag);
+            globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag);
             break;
           case "notice":
             globalWaitAndPushNamed(NoticesTab.tag);
@@ -105,7 +107,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              print("NOT FOUND");
+              //?Strange data was not found in the loaded items
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Evals WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -131,6 +133,7 @@ class NotificationReceiver {
                 );
               }
             } else {
+              //?Data is in the parsed list
               Evals tempEval = marksTab.allParsedByDate[tempIndex];
               globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
                 (value) => globalWaitAndPush(
@@ -148,7 +151,51 @@ class NotificationReceiver {
             }
             break;
           case "hw":
-            globalWaitAndPushNamed(HomeworkTab.tag);
+            int tempIndex = homeworkTab.globalHomework.indexWhere(
+              (element) {
+                return element.uid == payloadUid &&
+                    element.userId == payloadUserId;
+              },
+            );
+            if (tempIndex == -1) {
+              //?Strange data was not found in the loaded items
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Homework WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more results
+                globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag);
+              } else {
+                //*Parse and show
+                Homework tempHw = Homework.fromSqlite(maps[0]);
+                globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag).then(
+                  (value) => globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => HomeworkDetailTab(
+                        hwInfo: tempHw,
+                        color: getRandomColors(1)[0],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            } else {
+              //?Data is in the parsed list
+              Homework tempHw = homeworkTab.globalHomework[tempIndex];
+              globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag).then(
+                (value) => globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => HomeworkDetailTab(
+                      hwInfo: tempHw,
+                      color: homeworkTab.colors.length <= tempIndex
+                          ? getRandomColors(1)[0]
+                          : homeworkTab.colors[tempIndex],
+                    ),
+                  ),
+                ),
+              );
+            }
             break;
           case "notice":
             globalWaitAndPushNamed(NoticesTab.tag);

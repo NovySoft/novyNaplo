@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:novynaplo/data/models/classGroup.dart';
 import 'package:novynaplo/data/models/homework.dart';
-import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
@@ -15,34 +12,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   );
 
   List<Homework> tempList = List.generate(maps.length, (i) {
-    Homework temp = new Homework();
-    temp.attachments = maps[i]['attachments'] == null
-        ? null
-        : Attachment.fromJsonList(maps[i]['attachments']);
-    temp.giveUpDate = maps[i]['date'] == null
-        ? null
-        : DateTime.parse(maps[i]['date']).toLocal();
-    temp.dueDate = maps[i]['dueDate'] == null
-        ? null
-        : DateTime.parse(maps[i]['dueDate']).toLocal();
-    temp.createDate = maps[i]['createDate'] == null
-        ? null
-        : DateTime.parse(maps[i]['createDate']).toLocal();
-    temp.isTeacherHW = maps[i]['isTeacherHW'] == 1 ? true : false;
-    temp.isStudentHomeworkEnabled =
-        maps[i]['isStudentHomeworkEnabled'] == 1 ? true : false;
-    temp.isSolved = maps[i]['isSolved'] == 1 ? true : false;
-    temp.teacher = maps[i]['teacher'];
-    temp.content = maps[i]['content'];
-    temp.subject = maps[i]['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(maps[i]['subject']));
-    temp.group = maps[i]['group'] == null
-        ? null
-        : ClassGroup.fromJson(json.decode(maps[i]['group']));
-    temp.uid = maps[i]['uid'];
-    temp.userId = maps[i]['userId'];
-    temp.databaseId = maps[i]['databaseId'];
+    Homework temp = new Homework.fromSqlite(maps[i]);
     return temp;
   });
   //If we don't ignore the dueDate

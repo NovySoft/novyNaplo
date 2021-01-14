@@ -57,6 +57,35 @@ class Homework {
     };
   }
 
+  Homework.fromSqlite(Map<String, dynamic> map) {
+    attachments = map['attachments'] == null
+        ? null
+        : Attachment.fromJsonList(map['attachments']);
+    giveUpDate =
+        map['date'] == null ? null : DateTime.parse(map['date']).toLocal();
+    dueDate = map['dueDate'] == null
+        ? null
+        : DateTime.parse(map['dueDate']).toLocal();
+    createDate = map['createDate'] == null
+        ? null
+        : DateTime.parse(map['createDate']).toLocal();
+    isTeacherHW = map['isTeacherHW'] == 1 ? true : false;
+    isStudentHomeworkEnabled =
+        map['isStudentHomeworkEnabled'] == 1 ? true : false;
+    isSolved = map['isSolved'] == 1 ? true : false;
+    teacher = map['teacher'];
+    content = map['content'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    uid = map['uid'];
+    userId = map['userId'];
+    databaseId = map['databaseId'];
+  }
+
   Homework.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     if (json['Csatolmanyok'] != null) {

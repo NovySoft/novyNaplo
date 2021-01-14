@@ -123,7 +123,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'hw ' +
+                            payload: 'hw 1 ' +
                                 (globalHomework.length == 0
                                     ? "0"
                                     : globalHomework[0].uid.toString()),
