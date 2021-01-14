@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
@@ -10,6 +11,7 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
+import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
@@ -33,6 +35,7 @@ import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 
 class NotificationReceiver {
+  //!THIS DOESN'T WORK WITH MULTIUSER
   static Future<void> selectNotification(String payload) async {
     try {
       if (payload == null) {
@@ -370,18 +373,56 @@ class NotificationReceiver {
             }
             break;
           case "average":
-            //!THIS DOESN'T WORK WITH MULTIUSER
             int tempIndex = statsTab.allParsedSubjectsWithoutZeros
                 .indexWhere((element) => element[0].subject.name == payloadUid);
+
             if (tempIndex == -1) {
-              //TODO: Write the db logic too
-              globalWaitAndPush(
-                MaterialPageRoute(
-                  builder: (context) => statsTab.StatisticsTab(
-                    startOnSubjects: true,
-                  ),
-                ),
+              List<Evals> _tempEvals = await DatabaseHelper.getAllEvals();
+              List<List<Evals>> _tempMatrix =
+                  categorizeSubjectsFromEvals(_tempEvals);
+              List<List<Evals>> _tempMatrixWithoutZeros = List.from(
+                _tempMatrix.where((element) => element[0].numberValue != 0),
               );
+              int tempIndexTwo = _tempMatrixWithoutZeros.indexWhere(
+                (element) => element[0].subject.name == payloadUid,
+              );
+              if (tempIndexTwo == -1) {
+                globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => statsTab.StatisticsTab(
+                      startOnSubjects: true,
+                    ),
+                  ),
+                );
+              } else {
+                Color currColor = marksTab.colors[tempIndexTwo + 1];
+
+                globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => statsTab.StatisticsTab(
+                      startOnSubjects: true,
+                    ),
+                  ),
+                ).then((value) {
+                  globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => ChartsDetailTab(
+                        id: tempIndexTwo,
+                        subject: capitalize(
+                            _tempMatrixWithoutZeros[tempIndexTwo][0]
+                                .subject
+                                .name),
+                        color: currColor,
+                        seriesList: createSubjectChart(
+                          _tempMatrixWithoutZeros[tempIndexTwo],
+                          tempIndexTwo.toString(),
+                        ),
+                        animate: globals.chartAnimations,
+                      ),
+                    ),
+                  );
+                });
+              }
             } else {
               Color currColor = marksTab.colors[tempIndex + 1];
 
