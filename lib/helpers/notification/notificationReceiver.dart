@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -15,7 +16,8 @@ import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkTab;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
-import 'package:novynaplo/ui/screens/notices_tab.dart';
+import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
+import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
 
@@ -50,7 +52,7 @@ class NotificationReceiver {
             globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag);
             break;
           case "notice":
-            globalWaitAndPushNamed(NoticesTab.tag);
+            globalWaitAndPushNamed(noticesTab.NoticesTab.tag);
             break;
           case "timetable":
             globalWaitAndPushNamed(TimetableTab.tag);
@@ -113,10 +115,10 @@ class NotificationReceiver {
                 [payloadUserId, payloadUid],
               );
               if (maps.length != 1) {
-                //?0 or more results
+                //?0 or more than 1 result
                 globalWaitAndPushNamed(marksTab.MarksTab.tag);
               } else {
-                //*Parse and show
+                //*Parse and show from database
                 Evals tempEval = Evals.fromSqlite(maps[0]);
                 globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
                   (value) => globalWaitAndPush(
@@ -164,10 +166,10 @@ class NotificationReceiver {
                 [payloadUserId, payloadUid],
               );
               if (maps.length != 1) {
-                //?0 or more results
+                //?0 or more than 1 result
                 globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag);
               } else {
-                //*Parse and show
+                //*Parse and show from database
                 Homework tempHw = Homework.fromSqlite(maps[0]);
                 globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag).then(
                   (value) => globalWaitAndPush(
@@ -198,7 +200,51 @@ class NotificationReceiver {
             }
             break;
           case "notice":
-            globalWaitAndPushNamed(NoticesTab.tag);
+            int tempIndex = noticesTab.allParsedNotices.indexWhere(
+              (element) {
+                return element.uid == payloadUid &&
+                    element.userId == payloadUserId;
+              },
+            );
+            if (tempIndex == -1) {
+              //?Strange data was not found in the loaded items
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Notices WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more than 1 result
+                globalWaitAndPushNamed(noticesTab.NoticesTab.tag);
+              } else {
+                //*Parse and show from database
+                Notice tempNotice = Notice.fromSqlite(maps[0]);
+                globalWaitAndPushNamed(noticesTab.NoticesTab.tag).then(
+                  (value) => globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => NoticeDetailTab(
+                        notice: tempNotice,
+                        color: getRandomColors(1)[0],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            } else {
+              //?Data is in the parsed list
+              Notice tempNotice = noticesTab.allParsedNotices[tempIndex];
+              globalWaitAndPushNamed(noticesTab.NoticesTab.tag).then(
+                (value) => globalWaitAndPush(
+                  MaterialPageRoute(
+                    builder: (context) => NoticeDetailTab(
+                      notice: tempNotice,
+                      color: noticesTab.colors.length <= tempIndex
+                          ? getRandomColors(1)[0]
+                          : noticesTab.colors[tempIndex],
+                    ),
+                  ),
+                ),
+              );
+            }
             break;
           case "timetable":
             globalWaitAndPushNamed(TimetableTab.tag);

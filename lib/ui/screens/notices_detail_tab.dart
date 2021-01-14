@@ -14,10 +14,8 @@ class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
     this.color,
     this.notice,
-    this.id,
   });
 
-  final int id;
   final Notice notice;
   final Color color;
 

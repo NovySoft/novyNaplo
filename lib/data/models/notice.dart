@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
 
@@ -45,6 +47,31 @@ class Notice {
     type =
         json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
     uid = json['Uid'];
+  }
+
+  Notice.fromSqlite(Map<String, dynamic> map) {
+    title = map['title'];
+    date = map['date'] == null ? null : DateTime.parse(map['date']).toLocal();
+    createDate = map['createDate'] == null
+        ? null
+        : DateTime.parse(map['createDate']).toLocal();
+    teacher = map['teacher'];
+    seenDate = map['seenDate'] == null
+        ? null
+        : DateTime.parse(map['seenDate']).toLocal();
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    content = map['content'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    type = map['type'] == null
+        ? null
+        : Description.fromJson(json.decode(map['type']));
+    uid = map['uid'];
+    databaseId = map['databaseId'];
+    userId = map['userId'];
   }
 
   Map<String, dynamic> toMap() {

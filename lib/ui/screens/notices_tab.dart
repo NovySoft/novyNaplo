@@ -80,16 +80,16 @@ Widget _noticesBuilder(BuildContext context, int index) {
   } else {
     Color currColor = colors[index];
     return SafeArea(
-        child: AnimatedTitleSubtitleCard(
-      title: allParsedNotices[index].title,
-      subTitle: allParsedNotices[index].teacher,
-      color: currColor,
-      heroAnimation: AlwaysStoppedAnimation(0),
-      onPressed: NoticeDetailTab(
+      child: AnimatedTitleSubtitleCard(
+        title: allParsedNotices[index].title,
+        subTitle: allParsedNotices[index].teacher,
         color: currColor,
-        id: index,
-        notice: allParsedNotices[index],
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: NoticeDetailTab(
+          color: currColor,
+          notice: allParsedNotices[index],
+        ),
       ),
-    ));
+    );
   }
 }
