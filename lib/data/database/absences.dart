@@ -16,40 +16,10 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
   );
 
   List<Absence> tempList = List.generate(maps.length, (i) {
-    Absence temp = new Absence();
-    temp.databaseId = maps[i]['databaseId'];
-    temp.justificationState = maps[i]['justificationState'];
-    temp.justificationType = maps[i]['justificationType'] == null
-        ? null
-        : Description.fromJson(json.decode(maps[i]['justificationType']));
-    temp.delayInMinutes = maps[i]['delayInMinutes'];
-    temp.uid = maps[i]['uid'];
-    temp.mode = maps[i]['mode'] == null
-        ? null
-        : Description.fromJson(json.decode(maps[i]['mode']));
-    temp.date = maps[i]['date'] == null
-        ? null
-        : DateTime.parse(maps[i]['date']).toLocal();
-    temp.lesson = maps[i]['lesson'] == null
-        ? null
-        : AbsenceLesson.fromJson(json.decode(maps[i]['lesson']));
-    temp.teacher = maps[i]['teacher'];
-    temp.subject = maps[i]['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(maps[i]['subject']));
-    temp.type = maps[i]['type'] == null
-        ? null
-        : Description.fromJson(json.decode(maps[i]['type']));
-    temp.group = maps[i]['group'] == null
-        ? null
-        : ClassGroup.fromJson(json.decode(maps[i]['group']));
-    temp.createDate = maps[i]['createDate'] == null
-        ? null
-        : DateTime.parse(maps[i]['createDate']).toLocal();
-    temp.userId = maps[i]['userId'];
-
+    Absence temp = new Absence.fromSqlite(maps[i]);
     return temp;
   });
+
   return makeAbsencesMatrix(tempList);
 }
 

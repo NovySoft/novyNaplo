@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
@@ -11,7 +12,7 @@ import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/ui/screens/absences_tab.dart';
+import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesTab;
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsTab;
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
@@ -72,7 +73,9 @@ class NotificationReceiver {
             globalWaitAndPushNamed(eventsTab.EventsTab.tag);
             break;
           case "absence":
-            globalWaitAndPushNamed(AbsencesTab.tag);
+            globalWaitAndPushNamed(statsTab.StatisticsTab.tag).then(
+              (value) => globalWaitAndPushNamed(absencesTab.AbsencesTab.tag),
+            );
             break;
           case "test":
             Fluttertoast.showToast(
@@ -358,7 +361,68 @@ class NotificationReceiver {
             }
             break;
           case "absence":
-            globalWaitAndPushNamed(AbsencesTab.tag);
+            Absence tempItem = absencesTab.allParsedAbsences
+                .expand((element) => element)
+                .firstWhere((element) {
+              return element.uid == payloadUid &&
+                  element.userId == payloadUserId;
+            }, orElse: () {
+              return null;
+            });
+
+            if (tempItem == null) {
+              //?Strange, data was not found in the loaded items
+              final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+                'SELECT * FROM Absences WHERE userId = ? and uid = ? GROUP BY uid, userId',
+                [payloadUserId, payloadUid],
+              );
+              if (maps.length != 1) {
+                //?0 or more than 1 result
+                globalWaitAndPushNamed(statsTab.StatisticsTab.tag).then(
+                  (value) => globalWaitAndPushNamed(
+                    absencesTab.AbsencesTab.tag,
+                  ),
+                );
+              } else {
+                //*Parse and show from database
+                Absence tempAbsence = Absence.fromSqlite(maps[0]);
+                globalWaitAndPushNamed(statsTab.StatisticsTab.tag)
+                    .then(
+                      (value) => globalWaitAndPushNamed(
+                        absencesTab.AbsencesTab.tag,
+                      ),
+                    )
+                    .then(
+                      (value) => globalWaitAndPush(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              absencesTab.AbsencencesDetailTab(
+                            absence: tempAbsence,
+                            color: getAbsenceCardColor(tempAbsence),
+                          ),
+                        ),
+                      ),
+                    );
+              }
+            } else {
+              //?Data is in the parsed list
+              globalWaitAndPushNamed(statsTab.StatisticsTab.tag)
+                  .then(
+                    (value) => globalWaitAndPushNamed(
+                      absencesTab.AbsencesTab.tag,
+                    ),
+                  )
+                  .then(
+                    (value) => globalWaitAndPush(
+                      MaterialPageRoute(
+                        builder: (context) => absencesTab.AbsencencesDetailTab(
+                          absence: tempItem,
+                          color: getAbsenceCardColor(tempItem),
+                        ),
+                      ),
+                    ),
+                  );
+            }
             break;
           default:
             Fluttertoast.showToast(

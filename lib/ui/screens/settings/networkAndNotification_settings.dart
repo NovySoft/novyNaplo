@@ -326,7 +326,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecifics,
-                            payload: 'absence ' +
+                            payload: 'absence 1 ' +
                                 (allParsedAbsences.length == 0
                                     ? "0"
                                     : allParsedAbsences[0][0].uid.toString()),

@@ -34,6 +34,37 @@ class Absence {
       this.group,
       this.uid});
 
+  Absence.fromSqlite(Map<String, dynamic> map) {
+    databaseId = map['databaseId'];
+    justificationState = map['justificationState'];
+    justificationType = map['justificationType'] == null
+        ? null
+        : Description.fromJson(json.decode(map['justificationType']));
+    delayInMinutes = map['delayInMinutes'];
+    uid = map['uid'];
+    mode = map['mode'] == null
+        ? null
+        : Description.fromJson(json.decode(map['mode']));
+    date = map['date'] == null ? null : DateTime.parse(map['date']).toLocal();
+    lesson = map['lesson'] == null
+        ? null
+        : AbsenceLesson.fromJson(json.decode(map['lesson']));
+    teacher = map['teacher'];
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromJson(json.decode(map['subject']));
+    type = map['type'] == null
+        ? null
+        : Description.fromJson(json.decode(map['type']));
+    group = map['group'] == null
+        ? null
+        : ClassGroup.fromJson(json.decode(map['group']));
+    createDate = map['createDate'] == null
+        ? null
+        : DateTime.parse(map['createDate']).toLocal();
+    userId = map['userId'];
+  }
+
   Absence.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     justificationState = json['IgazolasAllapota'];
