@@ -1,7 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/absence.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<List<List<Absence>>> getAllAbsencesMatrix() async {
@@ -38,6 +42,17 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
         absence.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      NotificationDispatcher.toBeDispatchedNotifications.absences.add(
+        NotificationData(
+          title:
+              '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? getTranslatedString("newAbsence") : getTranslatedString("newDelay")}: ',
+          subtitle:
+              "${absence.date.toDayOnlyString()} (${absence.lesson.lessonNumber} ${getTranslatedString("lesson")})",
+          userId: absence.userId,
+          uid: absence.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedAbsences) {
         //!Update didn't work so we delete and create a new one
@@ -55,6 +70,17 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
             'Absences',
             absence.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.absences.add(
+            NotificationData(
+              title:
+                  '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? getTranslatedString("editedAbsence") : getTranslatedString("editedDelay")}:',
+              subtitle:
+                  "${getTranslatedString(absence.justificationState)}: ${absence.subject} - ${absence.teacher}",
+              userId: absence.userId,
+              uid: absence.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }

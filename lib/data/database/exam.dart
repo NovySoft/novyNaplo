@@ -1,5 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -34,6 +38,16 @@ Future<void> batchInsertExams(List<Exam> examList) async {
         exam.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      NotificationDispatcher.toBeDispatchedNotifications.exams.add(
+        NotificationData(
+          title: '${getTranslatedString("newExam")}: ' +
+              capitalize(exam.subject.name),
+          subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
+          userId: exam.userId,
+          uid: exam.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedExams) {
         //!Update didn't work so we delete and create a new one
@@ -53,6 +67,16 @@ Future<void> batchInsertExams(List<Exam> examList) async {
             'Exams',
             exam.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.exams.add(
+            NotificationData(
+              title: '${getTranslatedString("examModified")}: ' +
+                  capitalize(exam.subject.name),
+              subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
+              userId: exam.userId,
+              uid: exam.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }

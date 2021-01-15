@@ -1,6 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -50,7 +54,18 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
         eval.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      //FIXME Notification dispatch
+      NotificationDispatcher.toBeDispatchedNotifications.marks.add(
+        NotificationData(
+          title: '${getTranslatedString("newMark")}: ' +
+              capitalize(eval.subject.name) +
+              " " +
+              eval.textValue,
+          subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
+          userId: eval.userId,
+          uid: eval.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedEvals) {
         //!Update didn't work so we delete and create a new one
@@ -70,6 +85,18 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
             'Evals',
             eval.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.marks.add(
+            NotificationData(
+              title: '${getTranslatedString("markModified")}: ' +
+                  capitalize(eval.subject.name) +
+                  " " +
+                  eval.textValue,
+              subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
+              userId: eval.userId,
+              uid: eval.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }

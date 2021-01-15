@@ -1,6 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<List<Average>> getAllAverages() async {
@@ -52,6 +56,31 @@ Future<void> batchInsertAverages(List<Average> averageList) async {
             'Average',
             average.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          String diff;
+          if (average.value == null || n.value == null) {
+            if (average.value != null && n.value == null) {
+              diff = "+${average.value.toStringAsFixed(3)}";
+            } else {
+              diff = "null";
+            }
+          } else {
+            double diffValue = average.value - n.value;
+            diff = diffValue > 0
+                ? ("+${diffValue.toStringAsFixed(3)}")
+                : diffValue.toStringAsFixed(3);
+          }
+          NotificationDispatcher.toBeDispatchedNotifications.averages.add(
+            NotificationData(
+              title: '${getTranslatedString("avChanged")}: ' +
+                  capitalize(average.subject),
+              subtitle: '${getTranslatedString("newAv")}: ' +
+                  average.value.toStringAsFixed(5) +
+                  " ($diff)",
+              userId: average.userId,
+              uid: average.subject,
+              notificationType: "Edited",
+            ),
           );
         }
       }

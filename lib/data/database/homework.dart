@@ -1,6 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
 
@@ -83,6 +88,17 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
         hw.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+        NotificationData(
+          title:
+              '${getTranslatedString("newHw")}: ' + capitalize(hw.subject.name),
+          subtitle:
+              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+          userId: hw.userId,
+          uid: hw.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedHw) {
         //!Update didn't work so we delete and create a new one
@@ -101,6 +117,17 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
             'Homework',
             hw.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+            NotificationData(
+              title: '${getTranslatedString("hwModified")}: ' +
+                  capitalize(hw.subject.name),
+              subtitle:
+                  "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+              userId: hw.userId,
+              uid: hw.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }
@@ -137,6 +164,31 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
       hw.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    if (edited) {
+      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+        NotificationData(
+          title: '${getTranslatedString("hwModified")}: ' +
+              capitalize(hw.subject.name),
+          subtitle:
+              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+          userId: hw.userId,
+          uid: hw.uid,
+          notificationType: "Edited",
+        ),
+      );
+    } else {
+      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+        NotificationData(
+          title:
+              '${getTranslatedString("newHw")}: ' + capitalize(hw.subject.name),
+          subtitle:
+              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+          userId: hw.userId,
+          uid: hw.uid,
+          notificationType: "New",
+        ),
+      );
+    }
   } else {
     for (var n in matchedHw) {
       if (afterDue.compareTo(DateTime.now()) < 0) {

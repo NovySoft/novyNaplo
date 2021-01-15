@@ -1,6 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<List<Event>> getAllEvents() async {
@@ -35,6 +38,15 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
         event.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      NotificationDispatcher.toBeDispatchedNotifications.events.add(
+        NotificationData(
+          title: '${getTranslatedString("newEvent")}: ',
+          subtitle: event.title,
+          userId: event.userId,
+          uid: event.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedEvents) {
         //!Update didn't work so we delete and create a new one
@@ -52,6 +64,15 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
             'Events',
             event.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.events.add(
+            NotificationData(
+              title: '${getTranslatedString("editedEvent")}: ',
+              subtitle: event.title,
+              userId: event.userId,
+              uid: event.uid,
+              notificationType: "New",
+            ),
           );
         }
       }

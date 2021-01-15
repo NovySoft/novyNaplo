@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/lesson.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -101,6 +106,28 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
             'Timetable',
             lesson.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          String subTitle = "";
+          if (lesson.theme != null && lesson.theme != "") {
+            subTitle = lesson.theme;
+          } else if (lesson.teacher != null && lesson.teacher != "") {
+            subTitle = lesson.teacher;
+          } else if (lesson.deputyTeacher != null &&
+              lesson.deputyTeacher != "") {
+            subTitle = lesson.deputyTeacher;
+          } else {
+            subTitle = lesson.classroom;
+          }
+          NotificationDispatcher.toBeDispatchedNotifications.timetables.add(
+            NotificationData(
+              title: '${getTranslatedString("editedLesson")}: ' +
+                  capitalize(lesson.subject.name) +
+                  " (${parseIntToWeekdayString(lesson.date.weekday)})",
+              subtitle: subTitle,
+              userId: lesson.userId,
+              uid: lesson.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }

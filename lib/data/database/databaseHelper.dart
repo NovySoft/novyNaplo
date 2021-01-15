@@ -20,6 +20,7 @@ import 'timetable.dart' as timetable;
 import 'users.dart' as users;
 import 'mainSql.dart' as main;
 
+///List of pointers to the corresponding functions
 class DatabaseHelper {
   static Future<List<List<Absence>>> Function() getAllAbsencesMatrix =
       absences.getAllAbsencesMatrix;

@@ -1,5 +1,9 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
+import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -38,6 +42,16 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
         notice.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+      NotificationDispatcher.toBeDispatchedNotifications.notices.add(
+        NotificationData(
+          title: '${getTranslatedString("newNotice")}: ' +
+              capitalize(notice.title),
+          subtitle: notice.teacher,
+          userId: notice.userId,
+          uid: notice.uid,
+          notificationType: "New",
+        ),
+      );
     } else {
       for (var n in matchedNotices) {
         //!Update didn't work so we delete and create a new one
@@ -53,6 +67,16 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
             'Notices',
             notice.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          NotificationDispatcher.toBeDispatchedNotifications.notices.add(
+            NotificationData(
+              title: '${getTranslatedString("noticeModified")}: ' +
+                  capitalize(notice.title),
+              subtitle: notice.teacher,
+              userId: notice.userId,
+              uid: notice.uid,
+              notificationType: "Edited",
+            ),
           );
         }
       }
