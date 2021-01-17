@@ -369,7 +369,7 @@ class _NetworkAndNotificationSettingsState
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4 + (globals.backgroundFetch ? 3 : 0),
+          itemCount: 5 + (globals.backgroundFetch ? 3 : 0),
           // ignore: missing_return
           itemBuilder: (context, index) {
             switch (index) {
@@ -421,7 +421,26 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 2:
-                //*asd
+                return ListTile(
+                  enabled: globals.notifications,
+                  title: Text(getTranslatedString("collapseNotifications")),
+                  trailing: Switch(
+                    onChanged: globals.notifications
+                        ? (bool isOn) async {
+                            setState(() {
+                              globals.collapseNotifications = isOn;
+                              globals.prefs
+                                  .setBool("collapseNotifications", isOn);
+                            });
+                          }
+                        : null,
+                    value: globals.notifications == false
+                        ? false
+                        : globals.collapseNotifications,
+                  ),
+                );
+                break;
+              case 3:
                 return ListTile(
                   title: Text(getTranslatedString("verCheckOnStart")),
                   trailing: Switch(
@@ -435,7 +454,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 3:
+              case 4:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -479,7 +498,7 @@ class _NetworkAndNotificationSettingsState
                   ],
                 );
                 break;
-              case 4:
+              case 5:
                 return ListTile(
                   title: Text(getTranslatedString("backgroundFetchOnCellular")),
                   trailing: Switch(
@@ -496,7 +515,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 5:
+              case 6:
                 return ListTile(
                   title: Text(
                       "${getTranslatedString("timeBetweenFetches")} (30-500${getTranslatedString("minutes")}):"),
@@ -546,7 +565,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 6:
+              case 7:
                 return Column(
                   children: <Widget>[
                     ListTile(

@@ -371,4 +371,5 @@ final Map<String, String> translation = {
   "migrateDB": "Migrating database to the latest version!",
   "errWhileMigratingManLogin": "Error while migrating, please log in manually!",
   "missingUserId": "Missing user id in notification!",
+  "collapseNotifications": "Summarize notifications",
 };

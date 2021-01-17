@@ -3,10 +3,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
-
 import 'data/database/databaseHelper.dart';
 import 'data/models/student.dart';
 
+//FIXME: Delete all unused variables
 //Variables used globally;
 //* Session
 SharedPreferences prefs; //Global shared preferences
@@ -46,13 +46,15 @@ bool colorAvsInStatisctics =
     true; //Should we color the name of subjects based on their values
 String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
+bool collapseNotifications =
+    true; //Automatically collapse all notifications, on by default
 
 void resetAllGlobals() async {
   DatabaseHelper.clearAllTables();
   prefs.setString("code", null);
   await prefs.clear();
-  prefs.setBool("ads", adsEnabled);
-  prefs.setBool("isNew", true);
+  await prefs.setBool("ads", adsEnabled);
+  await prefs.setBool("isNew", true);
   dJson = null;
   avJson = null;
   didFetch = false;
@@ -68,7 +70,7 @@ Future<void> setGlobals() async {
   if (prefs.getBool("getVersion") != null) {
     verCheckOnStart = prefs.getBool("getVersion");
   } else {
-    prefs.setBool("getVersion", true);
+    await prefs.setBool("getVersion", true);
     verCheckOnStart = true;
   }
 
@@ -102,7 +104,7 @@ Future<void> setGlobals() async {
   if (prefs.getBool("colorAvsInStatisctics") != null) {
     colorAvsInStatisctics = prefs.getBool("colorAvsInStatisctics");
   } else {
-    prefs.setBool("colorAvsInStatisctics", true);
+    await prefs.setBool("colorAvsInStatisctics", true);
     colorAvsInStatisctics = true;
   }
 
@@ -118,7 +120,7 @@ Future<void> setGlobals() async {
   if (prefs.getBool("notifications") != null) {
     notifications = prefs.getBool("notifications");
   } else {
-    prefs.setBool("notifications", true);
+    await prefs.setBool("notifications", true);
     notifications = true;
   }
   FirebaseCrashlytics.instance.setCustomKey("notifications", notifications);
@@ -130,7 +132,7 @@ Future<void> setGlobals() async {
   if (prefs.getBool("backgroundFetchOnCellular") != null) {
     backgroundFetchOnCellular = prefs.getBool("backgroundFetchOnCellular");
   } else {
-    prefs.setBool("backgroundFetchOnCellular", false);
+    await prefs.setBool("backgroundFetchOnCellular", false);
     backgroundFetchOnCellular = false;
   }
   FirebaseCrashlytics.instance.setCustomKey(
@@ -147,7 +149,7 @@ Future<void> setGlobals() async {
 
   if (prefs.getBool("backgroundFetch") == null) {
     backgroundFetch = true;
-    prefs.setBool("backgroundFetch", true);
+    await prefs.setBool("backgroundFetch", true);
   } else {
     backgroundFetch = prefs.getBool("backgroundFetch");
   }
@@ -155,7 +157,7 @@ Future<void> setGlobals() async {
 
   if (prefs.getBool("backgroundFetchCanWakeUpPhone") == null) {
     backgroundFetchCanWakeUpPhone = true;
-    prefs.setBool("backgroundFetchCanWakeUpPhone", true);
+    await prefs.setBool("backgroundFetchCanWakeUpPhone", true);
   } else {
     backgroundFetchCanWakeUpPhone =
         prefs.getBool("backgroundFetchCanWakeUpPhone");
@@ -181,7 +183,7 @@ Future<void> setGlobals() async {
 
   if (prefs.getBool("shouldVirtualMarksCollapse") == null) {
     shouldVirtualMarksCollapse = false;
-    prefs.setBool("shouldVirtualMarksCollapse", false);
+    await prefs.setBool("shouldVirtualMarksCollapse", false);
   } else {
     shouldVirtualMarksCollapse = prefs.getBool("shouldVirtualMarksCollapse");
   }
@@ -190,48 +192,56 @@ Future<void> setGlobals() async {
     shouldVirtualMarksCollapse,
   );
 
-  if (prefs.getString("markCardSubtitle") == null && markCardSubtitle == null) {
+  if (prefs.getString("markCardSubtitle") == null) {
     markCardSubtitle = "Téma";
     prefs.setString("markCardSubtitle", "Téma");
-  } else if (markCardSubtitle == null) {
+  } else {
     markCardSubtitle = prefs.getString("markCardSubtitle");
   }
   FirebaseCrashlytics.instance
       .setCustomKey("markCardSubtitle", markCardSubtitle);
 
-  if (prefs.getString("markCardConstColor") == null &&
-      markCardConstColor == null) {
+  if (prefs.getString("markCardConstColor") == null) {
     markCardConstColor = "Green";
     prefs.setString("markCardConstColor", "Green");
-  } else if (markCardConstColor == null) {
+  } else {
     markCardConstColor = prefs.getString("markCardConstColor");
   }
   FirebaseCrashlytics.instance
       .setCustomKey("markCardConstColor", markCardConstColor);
 
-  if (prefs.getString("lessonCardSubtitle") == null &&
-      lessonCardSubtitle == null) {
+  if (prefs.getString("lessonCardSubtitle") == null) {
     lessonCardSubtitle = "Tanterem";
     prefs.setString("lessonCardSubtitle", "Tanterem");
-  } else if (lessonCardSubtitle == null) {
+  } else {
     lessonCardSubtitle = prefs.getString("lessonCardSubtitle");
   }
   FirebaseCrashlytics.instance
       .setCustomKey("lessonCardSubtitle", lessonCardSubtitle);
 
-  if (prefs.getString("markCardTheme") == null && markCardTheme == null) {
+  if (prefs.getString("markCardTheme") == null) {
     markCardTheme = "Véletlenszerű";
     prefs.setString("markCardTheme", "Véletlenszerű");
-  } else if (markCardTheme == null) {
+  } else {
     markCardTheme = prefs.getString("markCardTheme");
   }
   FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
 
-  if (prefs.getBool("chartAnimations") == null && chartAnimations == null) {
+  if (prefs.getBool("chartAnimations") == null) {
     chartAnimations = true;
-    prefs.setBool("chartAnimations", true);
-  } else if (chartAnimations == null) {
+    await prefs.setBool("chartAnimations", true);
+  } else {
     chartAnimations = prefs.getBool("chartAnimations");
   }
   FirebaseCrashlytics.instance.setCustomKey("ChartAnimations", chartAnimations);
+
+  if (prefs.getBool("collapseNotifications") == null) {
+    collapseNotifications = true;
+    await prefs.setBool("collapseNotifications", true);
+  } else {
+    collapseNotifications = prefs.getBool("collapseNotifications");
+  }
+
+  FirebaseCrashlytics.instance
+      .setCustomKey("collapseNotifications", collapseNotifications);
 }

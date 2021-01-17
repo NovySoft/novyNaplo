@@ -370,4 +370,5 @@ final Map<String, String> translation = {
   "errWhileMigratingManLogin":
       "Hiba a frissítés közben, kérlek lépj be manuálisan!",
   "missingUserId": "Hiányzó felhasználó azonosító!",
+  "collapseNotifications": "Értesítések összefoglalása",
 };
