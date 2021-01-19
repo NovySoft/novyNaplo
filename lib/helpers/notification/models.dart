@@ -5,16 +5,23 @@ class NotificationData {
   String title;
   String subtitle;
   String uid;
+  String payload;
   int userId;
-  //New or changed, doesn't matter on averages and timetable
-  String notificationType = "New";
+  //I it edited doesn't matter on averages and timetable
+  bool isEdited = false;
+
+  @override
+  String toString() {
+    return title;
+  }
 
   NotificationData({
     @required this.title,
     @required this.subtitle,
     @required this.uid,
     @required this.userId,
-    @required this.notificationType,
+    @required this.isEdited,
+    @required this.payload,
   });
 }
 
@@ -28,6 +35,28 @@ class ToBeDispatchedNotifications {
   List<NotificationData> averages = [];
   List<NotificationData> events = [];
   List<NotificationData> absences = [];
+
+  int getAllLength() {
+    return marks.length +
+        homeworks.length +
+        notices.length +
+        timetables.length +
+        exams.length +
+        averages.length +
+        events.length +
+        absences.length;
+  }
+
+  List<NotificationData> listOfAllNotifications() => [
+        ...marks,
+        ...homeworks,
+        ...notices,
+        ...timetables,
+        ...exams,
+        ...averages,
+        ...events,
+        ...absences
+      ];
 
   ToBeDispatchedNotifications();
 }
@@ -69,4 +98,18 @@ class WhichToCollapse {
   }
 
   WhichToCollapse();
+}
+
+//This is the same as above, but it uses matrixes, to store the notifications, by userId
+class ToBeDispatchedNotificationsMatrix {
+  List<List<NotificationData>> marks = [];
+  List<List<NotificationData>> homeworks = [];
+  List<List<NotificationData>> notices = [];
+  List<List<NotificationData>> timetables = [];
+  List<List<NotificationData>> exams = [];
+  List<List<NotificationData>> averages = [];
+  List<List<NotificationData>> events = [];
+  List<List<NotificationData>> absences = [];
+
+  ToBeDispatchedNotificationsMatrix();
 }

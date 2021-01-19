@@ -44,7 +44,8 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
           subtitle: event.title,
           userId: event.userId,
           uid: event.uid,
-          notificationType: "New",
+          payload: "event ${event.userId} ${event.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -71,7 +72,8 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
               subtitle: event.title,
               userId: event.userId,
               uid: event.uid,
-              notificationType: "New",
+              payload: "event ${event.userId} ${event.uid}",
+              isEdited: false,
             ),
           );
         }

@@ -15,7 +15,7 @@ String getTranslatedString(String input, {List<String> replaceVariables}) {
   if (tempString != null) {
     for (var i = 0; i < replaceVariables.length; i++) {
       //?{0} ?{1}
-      tempString.replaceAll("?{$i}", replaceVariables[i]);
+      tempString = tempString.replaceAll("?{$i}", replaceVariables[i]);
     }
     return tempString;
   }

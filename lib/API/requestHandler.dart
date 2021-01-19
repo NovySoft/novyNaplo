@@ -23,6 +23,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
@@ -648,7 +649,6 @@ class RequestHandler {
     Student user, {
     bool setData = false,
   }) async {
-    setData = false;
     if (setData) {
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);
@@ -701,6 +701,7 @@ class RequestHandler {
         user,
       );
     }
+    await NotificationDispatcher.dispatchNotifications();
   }
 
   static void printWrapped(String text) {

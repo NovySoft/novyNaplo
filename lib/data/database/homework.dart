@@ -96,7 +96,8 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
               "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
           userId: hw.userId,
           uid: hw.uid,
-          notificationType: "New",
+          payload: "hw ${hw.userId} ${hw.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -126,7 +127,8 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
                   "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
               userId: hw.userId,
               uid: hw.uid,
-              notificationType: "Edited",
+              payload: "hw ${hw.userId} ${hw.uid}",
+              isEdited: true,
             ),
           );
         }
@@ -173,7 +175,8 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
               "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
           userId: hw.userId,
           uid: hw.uid,
-          notificationType: "Edited",
+          payload: "hw ${hw.userId} ${hw.uid}",
+          isEdited: true,
         ),
       );
     } else {
@@ -185,7 +188,8 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
               "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
           userId: hw.userId,
           uid: hw.uid,
-          notificationType: "New",
+          payload: "hw ${hw.userId} ${hw.uid}",
+          isEdited: false,
         ),
       );
     }

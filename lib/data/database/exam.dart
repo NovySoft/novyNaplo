@@ -45,7 +45,8 @@ Future<void> batchInsertExams(List<Exam> examList) async {
           subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
           userId: exam.userId,
           uid: exam.uid,
-          notificationType: "New",
+          payload: "exam ${exam.userId} ${exam.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -75,7 +76,8 @@ Future<void> batchInsertExams(List<Exam> examList) async {
               subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
               userId: exam.userId,
               uid: exam.uid,
-              notificationType: "Edited",
+              payload: "exam ${exam.userId} ${exam.uid}",
+              isEdited: true,
             ),
           );
         }

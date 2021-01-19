@@ -126,7 +126,8 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
               subtitle: subTitle,
               userId: lesson.userId,
               uid: lesson.uid,
-              notificationType: "Edited",
+              payload: "timetable ${lesson.userId} ${lesson.uid}",
+              isEdited: true,
             ),
           );
         }

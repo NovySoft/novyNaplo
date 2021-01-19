@@ -79,7 +79,8 @@ Future<void> batchInsertAverages(List<Average> averageList) async {
                   " ($diff)",
               userId: average.userId,
               uid: average.subject,
-              notificationType: "Edited",
+              payload: "average ${average.userId} ${average.subject}",
+              isEdited: true,
             ),
           );
         }

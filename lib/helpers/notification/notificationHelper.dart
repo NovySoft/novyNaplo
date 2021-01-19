@@ -23,6 +23,7 @@ class NotificationHelper {
       'novynaplo',
       'novynaplo',
       'Channel for sending novyNaplo main notifications',
+      groupKey: "novynaplo",
       importance: Importance.high,
       priority: Priority.high,
       enableVibration: true,
@@ -60,10 +61,10 @@ class NotificationHelper {
   }
 
   static Future<void> Function(
-    int,
-    String,
-    String,
-    NotificationDetails, {
+    int id,
+    String title,
+    String body,
+    NotificationDetails notificationDetails, {
     String payload,
   }) show = flutterLocalNotificationsPlugin.show;
 

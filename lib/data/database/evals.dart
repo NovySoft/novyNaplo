@@ -63,7 +63,8 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
           subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
           userId: eval.userId,
           uid: eval.uid,
-          notificationType: "New",
+          payload: "marks ${eval.userId} ${eval.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -95,7 +96,8 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
               subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
               userId: eval.userId,
               uid: eval.uid,
-              notificationType: "Edited",
+              payload: "marks ${eval.userId} ${eval.uid}",
+              isEdited: true,
             ),
           );
         }

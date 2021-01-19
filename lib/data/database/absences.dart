@@ -50,7 +50,8 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
               "${absence.date.toDayOnlyString()} (${absence.lesson.lessonNumber} ${getTranslatedString("lesson")})",
           userId: absence.userId,
           uid: absence.uid,
-          notificationType: "New",
+          payload: "absence ${absence.userId} ${absence.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -79,7 +80,8 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
                   "${getTranslatedString(absence.justificationState)}: ${absence.subject} - ${absence.teacher}",
               userId: absence.userId,
               uid: absence.uid,
-              notificationType: "Edited",
+              payload: "absence ${absence.userId} ${absence.uid}",
+              isEdited: true,
             ),
           );
         }

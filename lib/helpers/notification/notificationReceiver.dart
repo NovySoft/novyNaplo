@@ -49,6 +49,7 @@ class NotificationReceiver {
       String payloadPrefix = payload.split(" ")[0];
       String payloadUid;
       int payloadUserId;
+      //?prefix userId uid
       if (payload.split(" ").length > 1) {
         payloadUserId = int.parse(payload.split(" ")[1]);
       }

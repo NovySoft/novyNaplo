@@ -49,7 +49,8 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
           subtitle: notice.teacher,
           userId: notice.userId,
           uid: notice.uid,
-          notificationType: "New",
+          payload: "notice ${notice.userId} ${notice.uid}",
+          isEdited: false,
         ),
       );
     } else {
@@ -75,7 +76,8 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
               subtitle: notice.teacher,
               userId: notice.userId,
               uid: notice.uid,
-              notificationType: "Edited",
+              payload: "notice ${notice.userId} ${notice.uid}",
+              isEdited: true,
             ),
           );
         }

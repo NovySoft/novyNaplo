@@ -109,22 +109,18 @@ class _StateAnimationButton extends State<CircularProgressButton> {
                   squeezed ? SQUEEZED_BORDER_RADIUS : borderRadius.toDouble()),
               color: backgroundColor,
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                AnimatedOpacity(
-                  child: Text(
-                    "${this.text}",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: fontSize < 18.0 ? fontSize : 18.0,
-                    ),
+            child: Center(
+              child: AnimatedOpacity(
+                child: Text(
+                  "${this.text}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: fontSize < 18.0 ? fontSize : 18.0,
                   ),
-                  opacity: _opacity,
-                  duration: Duration(seconds: 1),
                 ),
-              ],
+                opacity: _opacity,
+                duration: Duration(seconds: 1),
+              ),
             ),
           ),
         ),

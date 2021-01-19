@@ -49,3 +49,15 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
   globals.decodedUserList = tempList;
   return tempList;
 }
+
+Future<String> getUsersNameFromUserId(int userId) async {
+  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    'SELECT name, nickname FROM Users WHERE id = ?',
+    [userId],
+  );
+  if (maps[0]["nickname"] == null) {
+    return maps[0]["name"];
+  } else {
+    return maps[0]["nickname"];
+  }
+}
