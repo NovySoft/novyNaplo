@@ -187,6 +187,8 @@ class Evals {
     } catch (e) {
       uid = json['Uid'];
     }
+    //We need this, stupid kreta, I hate them for this....
+    uid = uid + kindOf + "${date.year}${date.month}${date.day}";
     if (theme == null) {
       if (mode != null) {
         theme = mode.description;

@@ -128,6 +128,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
               uid: lesson.uid,
               payload: "timetable ${lesson.userId} ${lesson.uid}",
               isEdited: true,
+              day: parseIntToWeekdayString(lesson.date.weekday),
             ),
           );
         }

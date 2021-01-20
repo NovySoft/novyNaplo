@@ -7,7 +7,10 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 //Legjobb, legroszabb és a köztes jegyek
 //Should change to a return function, shouldn't I?
 //FIXME: Something is not right here, some people report that the averages are not in correct order
-void getMarksWithChanges(List<List<Evals>> input, Student userDetails) async {
+Future<void> getMarksWithChanges(
+  List<List<Evals>> input,
+  Student userDetails,
+) async {
   List<Average> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;
@@ -63,13 +66,13 @@ void getMarksWithChanges(List<List<Evals>> input, Student userDetails) async {
   //We dont await it, cause this function is time critical
   List<Average> dbList = [stats.bestSubjectAv, stats.worstSubjectAv];
   dbList.addAll(stats.allSubjectsAv);
-  DatabaseHelper.batchInsertAverages(dbList);
+  await DatabaseHelper.batchInsertAverages(dbList);
 }
 
-void onlyCalcAndInsertAverages(
+Future<void> onlyCalcAndInsertAverages(
   List<List<Evals>> input,
   Student userDetails,
-) {
+) async {
   List<Average> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;
@@ -97,5 +100,5 @@ void onlyCalcAndInsertAverages(
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
-  DatabaseHelper.batchInsertAverages(tempList);
+  await DatabaseHelper.batchInsertAverages(tempList);
 }

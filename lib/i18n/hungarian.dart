@@ -386,4 +386,6 @@ final Map<String, String> translation = {
   "eventXnewAndXchanged": "?{0} új és ?{1} módosult elem a faliújságon",
   "absenceXsChanged": "?{0} hiányzásai megváltoztak!",
   "absenceXnewAndXchanged": "?{0} új és ?{1} módosult hiányzás",
+  "timetableXsChanged": "?{0} órái megváltoztak",
+  "timetableXnewAndXchanged": "?{0} óra módosult (?{1})",
 };

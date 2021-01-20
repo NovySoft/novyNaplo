@@ -10,6 +10,9 @@ class NotificationData {
   //I it edited doesn't matter on averages and timetable
   bool isEdited = false;
 
+  //Used to store the day in timetable notifications
+  String day;
+
   @override
   String toString() {
     return title;
@@ -22,6 +25,7 @@ class NotificationData {
     @required this.userId,
     @required this.isEdited,
     @required this.payload,
+    this.day,
   });
 }
 

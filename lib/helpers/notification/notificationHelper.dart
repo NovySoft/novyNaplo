@@ -9,7 +9,15 @@ class NotificationHelper {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   static AndroidNotificationDetails androidPlatformChannelSpecifics;
   static IOSNotificationDetails iOSPlatformChannelSpecifics;
+
+  ///Normal notification, alert summary only behaviour
   static NotificationDetails platformChannelSpecifics;
+
+  ///Alert all behaviour
+  static NotificationDetails platformChannelSpecificsAlertAll;
+
+  ///The summary notification
+  static NotificationDetails platformChannelSpecificsSummary;
   static Int64List vibrationPattern;
 
   static Future<void> setupNotifications() async {
@@ -19,11 +27,13 @@ class NotificationHelper {
     vibrationPattern[1] = 100;
     vibrationPattern[2] = 300;
     vibrationPattern[3] = 300;
+    //Normal notifications when summarizing
     androidPlatformChannelSpecifics = new AndroidNotificationDetails(
       'novynaplo',
       'novynaplo',
       'Channel for sending novyNaplo main notifications',
-      groupKey: "novynaplo",
+      groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
+      groupAlertBehavior: GroupAlertBehavior.summary,
       importance: Importance.high,
       priority: Priority.high,
       enableVibration: true,
@@ -40,6 +50,58 @@ class NotificationHelper {
     platformChannelSpecifics = new NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
+    );
+
+    //? Alert all notifications
+    var androidPlatformChannelSpecificsAlertAll =
+        new AndroidNotificationDetails(
+      'novynaplo',
+      'novynaplo',
+      'Channel for sending novyNaplo main notifications',
+      groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
+      groupAlertBehavior: GroupAlertBehavior.all,
+      importance: Importance.high,
+      priority: Priority.high,
+      enableVibration: true,
+      vibrationPattern: vibrationPattern,
+      color: Color.fromARGB(255, 255, 165, 0),
+      visibility: NotificationVisibility.private,
+      ledColor: Colors.orange,
+      ledOnMs: 1000,
+      ledOffMs: 1000,
+      enableLights: true,
+      playSound: true,
+    );
+    var iOSPlatformChannelSpecificsAlertAll = new IOSNotificationDetails();
+    platformChannelSpecificsAlertAll = new NotificationDetails(
+      android: androidPlatformChannelSpecificsAlertAll,
+      iOS: iOSPlatformChannelSpecificsAlertAll,
+    );
+
+    //?Summary notifications
+    var androidPlatformChannelSpecificsSummary = new AndroidNotificationDetails(
+      'novynaplo',
+      'novynaplo',
+      'Channel for sending novyNaplo main notifications',
+      groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
+      setAsGroupSummary: true,
+      groupAlertBehavior: GroupAlertBehavior.summary,
+      importance: Importance.high,
+      priority: Priority.high,
+      enableVibration: true,
+      vibrationPattern: vibrationPattern,
+      color: Color.fromARGB(255, 255, 165, 0),
+      visibility: NotificationVisibility.private,
+      ledColor: Colors.orange,
+      ledOnMs: 1000,
+      ledOffMs: 1000,
+      enableLights: true,
+      playSound: true,
+    );
+    var iOSPlatformChannelSpecificsSummary = new IOSNotificationDetails();
+    platformChannelSpecificsSummary = new NotificationDetails(
+      android: androidPlatformChannelSpecificsSummary,
+      iOS: iOSPlatformChannelSpecificsSummary,
     );
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     var initializationSettingsAndroid =
@@ -71,4 +133,7 @@ class NotificationHelper {
   static Future<void> Function(
     int,
   ) cancel = flutterLocalNotificationsPlugin.cancel;
+
+  static Future<void> Function() cancelAll =
+      flutterLocalNotificationsPlugin.cancelAll;
 }

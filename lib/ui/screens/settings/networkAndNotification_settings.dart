@@ -59,7 +59,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'test',
                           );
                         },
@@ -88,7 +88,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'marks 1 ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
@@ -122,7 +122,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'hw 1 ' +
                                 (globalHomework.length == 0
                                     ? "0"
@@ -156,7 +156,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'notice 1 ' +
                                 (allParsedNotices.length == 0
                                     ? "0"
@@ -190,7 +190,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'timetable 1 ' +
                                 (lessonsList[0].length == 0
                                     ? "0"
@@ -224,7 +224,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'exam 1 ' +
                                 (examsPage.allParsedExams.length == 0
                                     ? "0"
@@ -259,7 +259,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload:
                                 'average 1 ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
                           );
@@ -291,7 +291,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'event 1 ' +
                                 (allParsedEvents.length == 0
                                     ? "0"
@@ -325,7 +325,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             1,
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecifics,
+                            NotificationHelper.platformChannelSpecificsAlertAll,
                             payload: 'absence 1 ' +
                                 (allParsedAbsences.length == 0
                                     ? "0"

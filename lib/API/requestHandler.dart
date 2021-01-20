@@ -672,7 +672,7 @@ class RequestHandler {
       );
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
       eventsPage.allParsedEvents = await getEvents(user);
-      onlyCalcAndInsertAverages(
+      await onlyCalcAndInsertAverages(
         statisticsPage.allParsedSubjectsWithoutZeros,
         user,
       );
@@ -691,7 +691,7 @@ class RequestHandler {
       await getAbsencesMatrix(user);
       await getThreeWeeksLessons(user);
       await getEvents(user);
-      onlyCalcAndInsertAverages(
+      await onlyCalcAndInsertAverages(
         List.from(categorizeSubjectsFromEvals(tempEvals))
             .where(
               (element) => element[0].numberValue != 0,

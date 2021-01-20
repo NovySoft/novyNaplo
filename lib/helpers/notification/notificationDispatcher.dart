@@ -10,12 +10,12 @@ class NotificationDispatcher {
 
   static Future<void> dispatchNotifications() async {
     int notifId = 1;
+    List<NotificationData> notificationList = [];
     if (globals.collapseNotifications) {
       ToBeDispatchedNotifications collapsedNotifications =
           await collapseNotifications(
         NotificationDispatcher.toBeDispatchedNotifications,
       );
-      print(collapsedNotifications.listOfAllNotifications());
       if (collapsedNotifications.getAllLength() > 20) {
         //You've got more than twenty new notifications, even when collapsed
         await NotificationHelper.show(
@@ -29,34 +29,54 @@ class NotificationDispatcher {
                   .toString(),
             ],
           ),
-          NotificationHelper.platformChannelSpecifics,
+          NotificationHelper.platformChannelSpecificsAlertAll,
         );
       } else {
-        //Less or equal to 20 notifications when collapsed, send them
-        for (var n in collapsedNotifications.listOfAllNotifications()) {
-          await NotificationHelper.show(
-            notifId,
-            n.title,
-            n.subtitle,
-            NotificationHelper.platformChannelSpecifics,
-            payload: n.payload,
-          );
-          notifId++;
-        }
+        notificationList = collapsedNotifications.listOfAllNotifications();
       }
     } else {
-      //Who would in their right mind would want this? Send all of the notifs
-      for (var n in NotificationDispatcher.toBeDispatchedNotifications
-          .listOfAllNotifications()) {
-        await NotificationHelper.show(
-          notifId,
-          n.title,
-          n.subtitle,
-          NotificationHelper.platformChannelSpecifics,
-          payload: n.payload,
-        );
+      notificationList = NotificationDispatcher.toBeDispatchedNotifications
+          .listOfAllNotifications();
+    }
+
+    if (notificationList.length != 0) {
+      //Delete older notifications
+      await NotificationHelper.cancelAll();
+      //Go through all of the new notifications
+      for (var i = 0; i < notificationList.length + 1; i++) {
+        if (i == notificationList.length) {
+          //End everything with a summary
+          //But summaries only work if we got more than 3 notifications to group
+          if (notificationList.length > 3) {
+            await NotificationHelper.show(
+              notifId,
+              getTranslatedString("NewNotifications"),
+              getTranslatedString(
+                "yougotXnotifs",
+                replaceVariables: [
+                  (notificationList.length - 1).toString(),
+                ],
+              ),
+              NotificationHelper.platformChannelSpecificsSummary,
+              payload: "marks",
+            );
+          }
+        } else {
+          await NotificationHelper.show(
+            notifId,
+            notificationList[i].title,
+            notificationList[i].subtitle,
+            notificationList.length > 3
+                ? NotificationHelper.platformChannelSpecifics
+                : NotificationHelper.platformChannelSpecificsAlertAll,
+            payload: notificationList[i].payload,
+          );
+        }
         notifId++;
       }
     }
+    //Clear already sent notifications
+    NotificationDispatcher.toBeDispatchedNotifications =
+        ToBeDispatchedNotifications();
   }
 }

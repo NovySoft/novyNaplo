@@ -25,7 +25,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.marks.add(matrixInput.marks[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.marks.add(
         await createNotificationData(
           matrixInput.marks[0],
@@ -52,7 +52,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.notices.add(matrixInput.notices[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.notices.add(
         await createNotificationData(
           matrixInput.notices[0],
@@ -79,7 +79,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.homeworks.add(matrixInput.homeworks[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.homeworks.add(
         await createNotificationData(
           matrixInput.homeworks[0],
@@ -106,7 +106,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.exams.add(matrixInput.exams[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.exams.add(
         await createNotificationData(
           matrixInput.exams[0],
@@ -133,7 +133,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.events.add(matrixInput.events[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.events.add(
         await createNotificationData(
           matrixInput.events[0],
@@ -160,7 +160,7 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       //If it's a single notif it is good to go.
       output.absences.add(matrixInput.absences[0][0]);
     } else {
-      //Othervise create a collapsed one
+      //Otherwise create a collapsed one
       output.absences.add(
         await createNotificationData(
           matrixInput.absences[0],
@@ -169,6 +169,42 @@ Future<ToBeDispatchedNotifications> collapseNotifications(
       );
     }
   }
+
+  //? Timetable
+  if (matrixInput.timetables.length > 1) {
+    //If we are dealing with multiple users than send one notification for each user
+    for (var n in matrixInput.timetables) {
+      output.timetables.add(
+        await createNotificationData(
+          n,
+          "timetable",
+        ),
+      );
+    }
+  } else if (matrixInput.timetables.length != 0) {
+    //Single user? No problem
+    if (matrixInput.timetables[0].length == 1) {
+      //If it's a single notif it is good to go.
+      output.timetables.add(matrixInput.timetables[0][0]);
+    } else {
+      //Otherwise create a collapsed one
+      output.timetables.add(
+        await createNotificationData(
+          matrixInput.timetables[0],
+          "timetable",
+        ),
+      );
+    }
+  }
+
+  //? Average
+  if (matrixInput.averages.length != 0) {
+    //All average notification should be sent
+    for (var n in matrixInput.averages) {
+      output.averages.addAll(n);
+    }
+  }
+
   return output;
 }
 
@@ -179,6 +215,29 @@ Future<NotificationData> createNotificationData(
   String username = await getUsersNameFromUserId(
     inputNotifications[0].userId,
   );
+  if (notificationType == "timetable") {
+    Set<String> dayList = Set();
+    for (var n in inputNotifications) {
+      dayList.add(n.day);
+    }
+    return NotificationData(
+      title: getTranslatedString(
+        "${notificationType}XsChanged",
+        replaceVariables: [username],
+      ),
+      subtitle: getTranslatedString(
+        "${notificationType}XnewAndXchanged",
+        replaceVariables: [
+          inputNotifications.length.toString(),
+          dayList.join(", "),
+        ],
+      ),
+      uid: null,
+      userId: inputNotifications[0].userId,
+      isEdited: false,
+      payload: notificationType,
+    );
+  }
   int editedItemLength = inputNotifications
       .where(
         (element) => element.isEdited,
