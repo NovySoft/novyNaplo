@@ -135,8 +135,10 @@ class _ReportsTabState extends State<ReportsTab>
                     leading: Text(
                       capitalize(
                           firstQuarterEvaluationList[index].subject.name),
-                      textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.left,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,
@@ -208,8 +210,10 @@ class _ReportsTabState extends State<ReportsTab>
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(halfYearEvalList[index].subject.name),
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       textDirection: TextDirection.ltr,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,
@@ -296,8 +300,10 @@ class _ReportsTabState extends State<ReportsTab>
                   return AnimatedLeadingTrailingCard(
                     leading: Text(
                       capitalize(endOfYearEvalList[index].subject.name),
-                      textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.left,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,

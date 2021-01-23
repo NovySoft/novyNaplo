@@ -34,19 +34,37 @@ class AnimatedLeadingTrailingCard extends StatelessWidget {
                 closedBuilder:
                     (BuildContext context, VoidCallback openContainer) {
                   return SizedBox(
-                    height: 100,
-                    child: Stack(
-                      alignment: Alignment.centerLeft,
+                    height: 150,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Positioned(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: leading,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Expanded(
+                                child: FractionallySizedBox(
+                                  alignment: Alignment.centerLeft,
+                                  widthFactor: 0.65,
+                                  heightFactor: 1,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: leading,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Positioned(
-                          right: 8,
-                          child: trailing,
+                        Row(
+                          children: [
+                            trailing,
+                            SizedBox(
+                              width: 7,
+                            ),
+                          ],
                         ),
                       ],
                     ),
