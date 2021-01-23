@@ -46,6 +46,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
           userId: exam.userId,
           uid: exam.uid,
           payload: "exam ${exam.userId} ${exam.uid}",
+          additionalKey: exam.subject.name,
           isEdited: false,
         ),
       );
@@ -77,6 +78,7 @@ Future<void> batchInsertExams(List<Exam> examList) async {
               userId: exam.userId,
               uid: exam.uid,
               payload: "exam ${exam.userId} ${exam.uid}",
+              additionalKey: exam.subject.name,
               isEdited: true,
             ),
           );

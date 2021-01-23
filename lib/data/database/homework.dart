@@ -99,7 +99,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
-          subject: hw.subject.name,
+          additionalKey: hw.subject.name,
           isEdited: false,
         ),
       );
@@ -131,7 +131,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
               userId: hw.userId,
               uid: hw.uid,
               payload: "hw ${hw.userId} ${hw.uid}",
-              subject: hw.subject.name,
+              additionalKey: hw.subject.name,
               isEdited: true,
             ),
           );
@@ -183,7 +183,7 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
-          subject: hw.subject.name,
+          additionalKey: hw.subject.name,
           isEdited: true,
         ),
       );
@@ -197,7 +197,7 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
-          subject: hw.subject.name,
+          additionalKey: hw.subject.name,
           isEdited: false,
         ),
       );

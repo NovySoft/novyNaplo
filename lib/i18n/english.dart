@@ -382,7 +382,7 @@ final Map<String, String> translation = {
   "noticeXsChanged": "?{0}'s notices changed!",
   "noticeXnewAndXchanged": "?{0} new and ?{1} modified notices",
   "examXsChanged": "?{0}'s upcoming exams changed!",
-  "examXnewAndXchanged": "?{0} new and ?{1} modified upcoming exams",
+  "examXnewAndXchanged": "?{0} new and ?{1} modified upcoming exams (?{2})",
   "eventXsChanged": "?{0}'s events changed!",
   "eventXnewAndXchanged": "?{0} new and ?{1} modified event on noticeboard",
   "absenceXsChanged": "?{0}'s absences changed!",

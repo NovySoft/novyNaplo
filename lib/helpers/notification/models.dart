@@ -10,11 +10,8 @@ class NotificationData {
   //I it edited doesn't matter on averages and timetable
   bool isEdited = false;
 
-  //Used to store the day in timetable notifications
-  String day;
-
-  //Store subject in homework notifications
-  String subject;
+  //Store additional informations
+  String additionalKey;
 
   @override
   String toString() {
@@ -28,8 +25,7 @@ class NotificationData {
     @required this.userId,
     @required this.isEdited,
     @required this.payload,
-    this.day,
-    this.subject,
+    this.additionalKey,
   });
 }
 

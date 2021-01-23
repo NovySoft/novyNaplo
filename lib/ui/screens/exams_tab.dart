@@ -42,7 +42,7 @@ class _ExamsTabState extends State<ExamsTab> {
 
   Widget _body(BuildContext context) {
     if (allParsedExams.length == 0) {
-      return noNotice();
+      return noExam();
     } else {
       return ListView.builder(
         itemCount: allParsedExams.length + globals.adModifier,
@@ -52,7 +52,7 @@ class _ExamsTabState extends State<ExamsTab> {
     }
   }
 
-  Widget noNotice() {
+  Widget noExam() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

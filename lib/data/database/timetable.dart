@@ -118,19 +118,21 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
           } else {
             subTitle = lesson.classroom;
           }
-          NotificationDispatcher.toBeDispatchedNotifications.timetables.add(
-            NotificationData(
-              title: '${getTranslatedString("editedLesson")}: ' +
-                  capitalize(lesson.subject.name) +
-                  " (${parseIntToWeekdayString(lesson.date.weekday)})",
-              subtitle: subTitle,
-              userId: lesson.userId,
-              uid: lesson.uid,
-              payload: "timetable ${lesson.userId} ${lesson.uid}",
-              isEdited: true,
-              day: parseIntToWeekdayString(lesson.date.weekday),
-            ),
-          );
+          if (lesson.subject != null) {
+            NotificationDispatcher.toBeDispatchedNotifications.timetables.add(
+              NotificationData(
+                title: '${getTranslatedString("editedLesson")}: ' +
+                    capitalize(lesson.subject.name) +
+                    " (${parseIntToWeekdayString(lesson.date.weekday)})",
+                subtitle: subTitle,
+                userId: lesson.userId,
+                uid: lesson.uid,
+                payload: "timetable ${lesson.userId} ${lesson.uid}",
+                isEdited: true,
+                additionalKey: parseIntToWeekdayString(lesson.date.weekday),
+              ),
+            );
+          }
         }
       }
     }

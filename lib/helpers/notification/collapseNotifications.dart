@@ -215,59 +215,34 @@ Future<NotificationData> createNotificationData(
   String username = await getUsersNameFromUserId(
     inputNotifications[0].userId,
   );
-  if (notificationType == "timetable") {
-    Set<String> dayList = Set();
-    for (var n in inputNotifications) {
-      dayList.add(n.day);
-    }
-    return NotificationData(
-      title: getTranslatedString(
-        "${notificationType}XsChanged",
-        replaceVariables: [username],
-      ),
-      subtitle: getTranslatedString(
-        "${notificationType}XnewAndXchanged",
-        replaceVariables: [
-          inputNotifications.length.toString(),
-          dayList.join(", "),
-        ],
-      ),
-      uid: null,
-      userId: inputNotifications[0].userId,
-      isEdited: false,
-      payload: notificationType,
-    );
-  }
+
   int editedItemLength = inputNotifications
       .where(
         (element) => element.isEdited,
       )
       .length;
   int newItemLength = inputNotifications.length - editedItemLength;
-  if (notificationType == "hw") {
-    Set<String> subjectList = Set();
+  List<String> replaceVariables = [
+    newItemLength.toString(),
+    editedItemLength.toString(),
+  ];
+
+  //These notifications have additional info to be displayed
+  if (notificationType == "hw" ||
+      notificationType == "timetable" ||
+      notificationType == "exam") {
+    Set<String> additionalKeySet = Set();
     for (var n in inputNotifications) {
-      subjectList.add(n.subject);
+      additionalKeySet.add(n.additionalKey);
     }
-    return NotificationData(
-      title: getTranslatedString(
-        "${notificationType}XsChanged",
-        replaceVariables: [username],
-      ),
-      subtitle: getTranslatedString(
-        "${notificationType}XnewAndXchanged",
-        replaceVariables: [
-          newItemLength.toString(),
-          editedItemLength.toString(),
-          subjectList.join(", "),
-        ],
-      ),
-      uid: null,
-      userId: inputNotifications[0].userId,
-      isEdited: false,
-      payload: notificationType,
-    );
+    if (notificationType == "timetable") {
+      replaceVariables[0] = inputNotifications.length.toString();
+      replaceVariables[1] = additionalKeySet.join(", ");
+    } else {
+      replaceVariables.add(additionalKeySet.join(", "));
+    }
   }
+
   return NotificationData(
     title: getTranslatedString(
       "${notificationType}XsChanged",
@@ -275,10 +250,7 @@ Future<NotificationData> createNotificationData(
     ),
     subtitle: getTranslatedString(
       "${notificationType}XnewAndXchanged",
-      replaceVariables: [
-        newItemLength.toString(),
-        editedItemLength.toString(),
-      ],
+      replaceVariables: replaceVariables,
     ),
     uid: null,
     userId: inputNotifications[0].userId,
