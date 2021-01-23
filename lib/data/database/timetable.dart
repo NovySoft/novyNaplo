@@ -27,7 +27,7 @@ Future<List<Lesson>> getAllTimetable() async {
 void deleteOldLessonsFromList(List<Lesson> input) async {
   Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var item in input) {
+  for (var item in List.from(input)) {
     DateTime date = item.endDate;
     if (item.databaseId != null) {
       //!Delete all lessons after a month of their ending
@@ -90,7 +90,7 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
                 n.name != lesson.name ||
                 n.classroom != lesson.classroom ||
                 n.teacherHwUid != lesson.teacherHwUid ||
-                json.encode(n.examUidList) != json.encode(n.examUidList) ||
+                json.encode(n.examUidList) != json.encode(lesson.examUidList) ||
                 n.startDate.toUtc().toIso8601String() !=
                     lesson.startDate.toUtc().toIso8601String() ||
                 n.endDate.toUtc().toIso8601String() !=

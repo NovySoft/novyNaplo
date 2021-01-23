@@ -5,6 +5,7 @@ import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/models/description.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'exam.dart';
 import 'homework.dart';
@@ -242,6 +243,18 @@ class Lesson {
     } catch (e) {
       uid = json['Uid'];
     }
+    if (subject != null) {
+      //A tantárgy nem változik, de ha lehet a uid-t hagyjuk el
+      if (subject.category.uid.split(",").length <= 1) {
+        uid += subject.category.uid;
+      } else {
+        uid += subject.category.uid.split(",")[1];
+      }
+    }
+    if (date != null) {
+      //És a dátum (nap,hónap,év) se kéne, hogy változzon
+      uid += date.toDayOnlyString();
+    }
     endDate = json['VegIdopont'] != null
         ? DateTime.parse(json['VegIdopont']).toLocal()
         : DateTime(2020);
@@ -250,7 +263,10 @@ class Lesson {
     );
     if (subject == null) {
       isSpecialDayEvent = true;
+      uid += "SpecialDayEvent";
     }
+
+    //Someone please explain to kréta what UNIQUE identifier means, because they have MULTIPLE SAME UIDS
   }
 
   @override

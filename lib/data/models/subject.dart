@@ -5,15 +5,15 @@ import 'description.dart';
 
 class Subject {
   String uid;
-  Description kategory;
+  Description category;
   String name;
   String shortName;
 
-  Subject({this.uid, this.kategory, this.name});
+  Subject({this.uid, this.category, this.name});
 
   Subject.fromJson(Map<String, dynamic> inpJson) {
     uid = inpJson['Uid'];
-    kategory = inpJson['Kategoria'] != null
+    category = inpJson['Kategoria'] != null
         ? new Description.fromJson(inpJson['Kategoria'].runtimeType == String
             ? json.decode(inpJson['Kategoria'])
             : inpJson['Kategoria'])
@@ -25,7 +25,7 @@ class Subject {
   String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Uid'] = this.uid;
-    data['Kategoria'] = this.kategory;
+    data['Kategoria'] = this.category;
     data['Nev'] = this.name;
     return json.encode(data);
   }

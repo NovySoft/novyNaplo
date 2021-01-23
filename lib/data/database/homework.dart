@@ -108,6 +108,9 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
                 hw.dueDate.toUtc().toIso8601String() ||
             n.giveUpDate.toUtc().toIso8601String() !=
                 hw.giveUpDate.toUtc().toIso8601String()) {
+          print("""n.content != hw.content: ${n.content != hw.content}
+              n.dueDate.toUtc().toIso8601String(): ${n.dueDate.toUtc().toIso8601String() != hw.dueDate.toUtc().toIso8601String()}
+              n.giveUpDate.toUtc().toIso8601String(): ${n.giveUpDate.toUtc().toIso8601String() != hw.giveUpDate.toUtc().toIso8601String()}""");
           inserted = true;
           batch.delete(
             "Homework",

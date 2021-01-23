@@ -29,6 +29,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 //TODO Make subject color constant
+//FIXME: Keepalives, once loaded
 
 final List<Tab> statTabs = <Tab>[
   Tab(

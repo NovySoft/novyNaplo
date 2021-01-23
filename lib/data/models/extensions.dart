@@ -8,11 +8,13 @@ extension MyDateTime on DateTime {
         this.year == other.year;
   }
 
+  ///Return date in yyyy-MM-dd
   String toDayOnlyString() {
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     return formatter.format(this);
   }
 
+  ///Return date in yyyy-MM-dd hh:mm:ss
   String toHumanString() {
     DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss');
     return formatter.format(this);
