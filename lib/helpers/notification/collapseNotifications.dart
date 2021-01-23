@@ -244,6 +244,30 @@ Future<NotificationData> createNotificationData(
       )
       .length;
   int newItemLength = inputNotifications.length - editedItemLength;
+  if (notificationType == "hw") {
+    Set<String> subjectList = Set();
+    for (var n in inputNotifications) {
+      subjectList.add(n.subject);
+    }
+    return NotificationData(
+      title: getTranslatedString(
+        "${notificationType}XsChanged",
+        replaceVariables: [username],
+      ),
+      subtitle: getTranslatedString(
+        "${notificationType}XnewAndXchanged",
+        replaceVariables: [
+          newItemLength.toString(),
+          editedItemLength.toString(),
+          subjectList.join(", "),
+        ],
+      ),
+      uid: null,
+      userId: inputNotifications[0].userId,
+      isEdited: false,
+      payload: notificationType,
+    );
+  }
   return NotificationData(
     title: getTranslatedString(
       "${notificationType}XsChanged",

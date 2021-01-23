@@ -99,6 +99,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
+          subject: hw.subject.name,
           isEdited: false,
         ),
       );
@@ -130,6 +131,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
               userId: hw.userId,
               uid: hw.uid,
               payload: "hw ${hw.userId} ${hw.uid}",
+              subject: hw.subject.name,
               isEdited: true,
             ),
           );
@@ -142,7 +144,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   }
 }
 
-Future<void> insertHomework(Homework hw, {bool edited}) async {
+Future<void> insertHomework(Homework hw, {bool edited = false}) async {
   FirebaseCrashlytics.instance.log("insertSingleHw");
 
   //We need everything that is in the db, so ignore due removing
@@ -181,6 +183,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
+          subject: hw.subject.name,
           isEdited: true,
         ),
       );
@@ -194,6 +197,7 @@ Future<void> insertHomework(Homework hw, {bool edited}) async {
           userId: hw.userId,
           uid: hw.uid,
           payload: "hw ${hw.userId} ${hw.uid}",
+          subject: hw.subject.name,
           isEdited: false,
         ),
       );

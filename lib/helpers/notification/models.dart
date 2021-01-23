@@ -13,6 +13,9 @@ class NotificationData {
   //Used to store the day in timetable notifications
   String day;
 
+  //Store subject in homework notifications
+  String subject;
+
   @override
   String toString() {
     return title;
@@ -26,6 +29,7 @@ class NotificationData {
     @required this.isEdited,
     @required this.payload,
     this.day,
+    this.subject,
   });
 }
 

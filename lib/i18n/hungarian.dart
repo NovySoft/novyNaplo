@@ -377,7 +377,7 @@ final Map<String, String> translation = {
   "marksXsChanged": "?{0} jegyei megváltoztak!",
   "marksXnewAndXchanged": "?{0} új és ?{1} módosult jegy",
   "hwXsChanged": "?{0} házifeladatai megváltoztak!",
-  "hwXnewAndXchanged": "?{0} új és ?{1} módosult házifeladat",
+  "hwXnewAndXchanged": "?{0} új és ?{1} módosult házifeladat (?{2})",
   "noticeXsChanged": "?{0} feljegyzései megváltoztak!",
   "noticeXnewAndXchanged": "?{0} új és ?{1} módosult feljegyzés",
   "examXsChanged": "?{0} bejelentett dolgozatai megváltoztak!",
