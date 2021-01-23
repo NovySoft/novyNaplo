@@ -8,9 +8,10 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   String lastString = "";
   for (var n in jegyArray) {
     if ((n.valueType.name != "Szazalekos" &&
+            //A félévi jegyek nem számítanak, de a magatartás és szorgalom igen
             n.type.name != "felevi_jegy_ertekeles") ||
-        n.subject.name == "Magatartas" ||
-        n.subject.name == "Szorgalom") {
+        n.kindOf == "Magatartas" ||
+        n.kindOf == "Szorgalom") {
       if (n.subject.name != lastString) {
         jegyMatrix.add([]);
         lastString = n.subject.name;
