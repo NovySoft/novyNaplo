@@ -20,6 +20,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
     Homework temp = new Homework.fromSqlite(maps[i]);
     return temp;
   });
+
   //If we don't ignore the dueDate
   if (ignoreDue == false) {
     tempList.removeWhere((item) {
@@ -53,7 +54,7 @@ void deleteOldHomework(List<Homework> input) async {
       if (globals.howLongKeepDataForHw == -1) {
         afterDue = afterDue.add(Duration(days: 180));
       } else {
-        //?If someone is not really keen on showing the homework after 14 days, we delete is after 30 days
+        //?If someone is not really keen on showing the homework after 14 days, we delete it after 30 days
         afterDue = afterDue.add(Duration(days: 30));
       }
       if (afterDue.compareTo(DateTime.now()) < 0) {
@@ -76,7 +77,8 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   bool inserted = false;
   final Batch batch = globals.db.batch();
 
-  List<Homework> allHw = await getAllHomework();
+  //We need everything that is in the db, so ignore due removing
+  List<Homework> allHw = await getAllHomework(ignoreDue: true);
   for (var hw in hwList) {
     var matchedHw = allHw.where((element) {
       return (element.uid == hw.uid && element.userId == hw.userId);
@@ -108,9 +110,6 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
                 hw.dueDate.toUtc().toIso8601String() ||
             n.giveUpDate.toUtc().toIso8601String() !=
                 hw.giveUpDate.toUtc().toIso8601String()) {
-          print("""n.content != hw.content: ${n.content != hw.content}
-              n.dueDate.toUtc().toIso8601String(): ${n.dueDate.toUtc().toIso8601String() != hw.dueDate.toUtc().toIso8601String()}
-              n.giveUpDate.toUtc().toIso8601String(): ${n.giveUpDate.toUtc().toIso8601String() != hw.giveUpDate.toUtc().toIso8601String()}""");
           inserted = true;
           batch.delete(
             "Homework",
@@ -146,15 +145,18 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
 Future<void> insertHomework(Homework hw, {bool edited}) async {
   FirebaseCrashlytics.instance.log("insertSingleHw");
 
-  List<Homework> allHw = await getAllHomework();
+  //We need everything that is in the db, so ignore due removing
+  List<Homework> allHw = await getAllHomework(ignoreDue: true);
   var matchedHw = allHw.where((element) {
     return (element.uid == hw.uid && element.userId == hw.userId);
   });
 
   DateTime afterDue = hw.dueDate;
-  if (globals.howLongKeepDataForHw != -1) {
-    afterDue =
-        afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
+  if (globals.howLongKeepDataForHw == -1) {
+    afterDue = afterDue.add(Duration(days: 180));
+  } else {
+    //?If someone is not really keen on showing the homework after 14 days, we delete it after 30 days
+    afterDue = afterDue.add(Duration(days: 30));
   }
 
   if (matchedHw.length == 0) {
