@@ -47,7 +47,7 @@ class ReportsDetailTab extends StatelessWidget {
         title: Text(capitalize(title)),
       ),
       body: ListView.builder(
-        itemCount: 7,
+        itemCount: 6 + globals.adModifier,
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
@@ -158,8 +158,7 @@ class ReportsDetailTab extends StatelessWidget {
               );
               break;
             case 5:
-              var result = avList.map((m) => m.value).reduce((a, b) => a + b) /
-                  avList.length;
+              double result = avList.last.value;
               Color textCol;
               if (result >= 4) {
                 textCol = Colors.green;
