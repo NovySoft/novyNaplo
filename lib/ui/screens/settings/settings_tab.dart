@@ -439,7 +439,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
           child: Text(getTranslatedString("yes")),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
-            globals.resetAllGlobals();
+            await globals.resetAllGlobals();
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

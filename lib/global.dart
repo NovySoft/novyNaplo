@@ -5,13 +5,19 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
 import 'data/database/databaseHelper.dart';
 import 'data/models/student.dart';
+import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;
+import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
+import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
+import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
+import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
+import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 //FIXME: Delete all unused variables
 //Variables used globally;
 //* Session
 SharedPreferences prefs; //Global shared preferences
-var dJson; //Student JSON
-var avJson; //Average JSON
 bool didFetch = false; //True if we fetched the data, false if we didn't
 bool isLoaded =
     false; //Stores whether the app has passed the loading stage, this variable is used to delay and show notifications
@@ -49,15 +55,23 @@ String language =
 bool collapseNotifications =
     true; //Automatically collapse all notifications, on by default
 
-void resetAllGlobals() async {
-  DatabaseHelper.clearAllTables();
+Future<void> resetAllGlobals() async {
+  await DatabaseHelper.clearAllTables();
   prefs.setString("code", null);
   await prefs.clear();
   await prefs.setBool("ads", adsEnabled);
   await prefs.setBool("isNew", true);
-  dJson = null;
-  avJson = null;
   didFetch = false;
+  marksPage.allParsedByDate = null;
+  marksPage.allParsedBySubject = null;
+  statisticsPage.allParsedSubjects = null;
+  statisticsPage.allParsedSubjectsWithoutZeros = null;
+  noticesPage.allParsedNotices = null;
+  eventsPage.allParsedEvents = null;
+  absencesPage.allParsedAbsences = null;
+  homeworkPage.globalHomework = null;
+  examsPage.allParsedExams = null;
+  timetablePage.lessonsList = null;
 }
 
 Future<void> setGlobals() async {
