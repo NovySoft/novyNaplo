@@ -262,7 +262,12 @@ class _TimetableTabState extends State<TimetableTab> {
           child: Center(
             child: specialEventDay == null
                 ? SizedBox(height: 0, width: 0)
-                : Text(specialEventDay.name),
+                : Text(
+                    specialEventDay.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
           ),
         ),
         SizedBox(
