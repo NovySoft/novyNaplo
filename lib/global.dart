@@ -62,16 +62,16 @@ Future<void> resetAllGlobals() async {
   await prefs.setBool("ads", adsEnabled);
   await prefs.setBool("isNew", true);
   didFetch = false;
-  marksPage.allParsedByDate = null;
-  marksPage.allParsedBySubject = null;
-  statisticsPage.allParsedSubjects = null;
-  statisticsPage.allParsedSubjectsWithoutZeros = null;
-  noticesPage.allParsedNotices = null;
-  eventsPage.allParsedEvents = null;
-  absencesPage.allParsedAbsences = null;
-  homeworkPage.globalHomework = null;
-  examsPage.allParsedExams = null;
-  timetablePage.lessonsList = null;
+  marksPage.allParsedByDate = [];
+  marksPage.allParsedBySubject = [];
+  statisticsPage.allParsedSubjects = [];
+  statisticsPage.allParsedSubjectsWithoutZeros = [];
+  noticesPage.allParsedNotices = [];
+  eventsPage.allParsedEvents = [];
+  absencesPage.allParsedAbsences = [];
+  homeworkPage.globalHomework = [];
+  examsPage.allParsedExams = [];
+  timetablePage.lessonsList = [];
 }
 
 Future<void> setGlobals() async {
