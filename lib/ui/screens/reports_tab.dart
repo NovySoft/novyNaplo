@@ -155,7 +155,7 @@ class _ReportsTabState extends State<ReportsTab>
               itemBuilder: (BuildContext context, int index) {
                 if (reportMaps[tabName].length <= index) {
                   return SizedBox(
-                    height: 60,
+                    height: 100,
                   );
                 }
                 Color color = getMarkCardColor(

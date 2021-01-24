@@ -140,7 +140,7 @@ class ReportsDetailTab extends StatelessWidget {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.center,
+                    alignment: WrapAlignment.start,
                     children: <Widget>[
                       Text(
                           "${capitalize(title)} ${getTranslatedString("av")}: " +
