@@ -287,11 +287,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       FirebaseAnalytics().logEvent(
         name: "unknownLoginResponse",
         parameters: {
-          "result": result,
+          "result": result.status,
         },
       );
       Fluttertoast.showToast(
-        msg: "${getTranslatedString('unkError')}\n $result",
+        msg: "${getTranslatedString('unkError')}\n ${result.status}",
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
         textColor: Colors.white,

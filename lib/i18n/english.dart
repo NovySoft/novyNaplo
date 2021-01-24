@@ -389,4 +389,6 @@ final Map<String, String> translation = {
   "absenceXnewAndXchanged": "?{0} new and ?{1} modified absences",
   "timetableXsChanged": "?{0}'s lessons changed!",
   "timetableXnewAndXchanged": "?{0} lessons have been modified (?{1})",
+  "kretaUpgradeOrWrongCred":
+      "This usually means that kréta is updating/under maintenance or in rare cases it may also mean that you entered an incorrect username/password!",
 };

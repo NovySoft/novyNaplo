@@ -63,9 +63,12 @@ class RequestHandler {
 
       Map responseJson = jsonDecode(response.body);
 
-      if (responseJson["error"] != null) {
+      if (responseJson["error"] != null ||
+          responseJson["error_description"] != null) {
         return TokenResponse(
-          status: responseJson["error_description"],
+          status: responseJson["error_description"] != null
+              ? responseJson["error_description"]
+              : responseJson["error"],
         );
       } else if (response.statusCode == 200) {
         user.token = responseJson["access_token"];
@@ -74,74 +77,32 @@ class RequestHandler {
           status: "OK",
           userinfo: user,
         );
+      } else if (response.statusCode == 403 ||
+          response.statusCode == 401 ||
+          response.statusCode == 500 ||
+          response.statusCode == 502 ||
+          response.statusCode == 503) {
+        //Kreta is probably updating
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgradeOrWrongCred')}",
+        );
       } else {
         return TokenResponse(
           status:
               "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
         );
       }
-    } catch (e) {
-      try {
-        //Try the V3 header instead of our own one
-        if (config.userAgent == config.defaultUserAgent) {
-          config.userAgent = await getV3Header();
-        }
-        var response = await client.post(
-          BaseURL.KRETA_IDP + KretaEndpoints.token,
-          body: {
-            "userName": user.username,
-            "password": user.password,
-            "institute_code": user.school,
-            "grant_type": "password",
-            "client_id": config.clientId
-          },
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": config.userAgent,
-          },
-        );
-
-        Map responseJson = jsonDecode(response.body);
-
-        if (responseJson["error"] != null) {
-          return TokenResponse(
-            status: responseJson["error_description"],
-          );
-        } else if (response.statusCode == 200) {
-          user.token = responseJson["access_token"];
-          user.tokenDate = DateTime.now();
-          return TokenResponse(
-            status: "OK",
-            userinfo: user,
-          );
-        } else {
-          return TokenResponse(
-            status:
-                "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
-          );
-        }
-      } catch (e) {
-        return TokenResponse(
-          status: getTranslatedString("noAns"),
-        );
-      }
-    }
-  }
-
-  //Get header from my api
-  static Future<String> getV3Header() async {
-    FirebaseCrashlytics.instance.log("getV3Header");
-    var response = await client.get(
-      BaseURL.NOVY_NAPLO + NovyNaploEndpoints.header,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": config.userAgent,
-      },
-    );
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)["V3header"];
-    } else {
-      return config.userAgentFallback;
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'login',
+        printDetails: true,
+      );
+      return TokenResponse(
+        status: "${getTranslatedString('unkError')}: \n $e",
+      );
     }
   }
 

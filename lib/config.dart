@@ -5,12 +5,9 @@ String passKey = "NovyNovyNovyNovy"; //
 String codeKey = "NovyNovyNovyNovy"; //
 String userKey = "NovyNovyNovyNovy"; //
 //Probably will change in future, agent used in network requests
-//Please make sure these two variables are always the same
-final String defaultUserAgent = "Novy.Kreta";
-String userAgent = "Novy.Kreta";
+String userAgent = "Novy.Naplo.APIV3";
 //Client Id used to login
 final String clientId = "kreta-ellenorzo-mobile";
-final String userAgentFallback = "hu.ekreta.student/1.0.5/Android/0/0";
 
 //menuLogo
 String menuLogo = "assets/home.png";
