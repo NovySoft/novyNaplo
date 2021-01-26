@@ -114,12 +114,10 @@ class NotificationHelper {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     NotificationAppLaunchDetails notificationAppLaunchDetails =
         await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    if (notificationAppLaunchDetails.didNotificationLaunchApp) {
-      NotificationReceiver.selectNotification(
-          notificationAppLaunchDetails.payload);
-    }
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: NotificationReceiver.selectNotification);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: NotificationReceiver.selectNotification,
+    );
   }
 
   static Future<void> Function(

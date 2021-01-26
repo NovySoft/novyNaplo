@@ -214,8 +214,7 @@ class _LoadingPageState extends State<LoadingPage> {
       timetablePage.lessonsList = await makeTimetableMatrix(tempLessonList);
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
-      Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
-      globals.isLoaded = true;
+      await Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
       return;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');

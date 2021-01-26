@@ -11,6 +11,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -61,12 +62,17 @@ class MarksTabState extends State<MarksTab>
     FirebaseCrashlytics.instance.log("Shown Marks");
     //setup tabcontroller
     _tabController = new TabController(vsync: this, length: 2);
-    //Payload handling and fetching data
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    //Fetching data
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!globals.didFetch) {
         globals.didFetch = true;
         androidRefreshKey.currentState?.show();
       }
+    });
+    //Handle loaded state
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await delay(500);
+      globals.isLoaded = true;
     });
     super.initState();
   }
