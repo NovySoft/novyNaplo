@@ -118,7 +118,7 @@ class Evals {
     if ((json["SzamErtek"] == 0 || json["SzamErtek"] == null) &&
         valueType.name != "Szazalekos") {
       switch (json["SzovegesErtek"]) {
-        case "Elégtelen":
+        case "Hanyag":
           numberValue = 1;
           break;
         case "Rossz":
@@ -167,10 +167,13 @@ class Evals {
           numberValue = 4;
         } else if (textValue.toLowerCase().contains("megfelelő")) {
           numberValue = 3;
+        } else if (textValue.toLowerCase().contains("rossz")) {
+          numberValue = 2;
+        } else if (textValue.toLowerCase().contains("hanyag")) {
+          numberValue = 1;
         } else {
           numberValue = 0;
         }
-        //FIXME Mi a többi érték?
       }
     }
     shortTextValue = json['SzovegesErtekelesRovidNev'];
