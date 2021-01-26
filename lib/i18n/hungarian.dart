@@ -10,7 +10,7 @@ final Map<String, String> translation = {
   "backgroundFetchOnCellular": "Háttér lekérések mobilnetről",
   "timeBetweenFetches": "Automatikus lekérések időköze",
   "minutes": "perc",
-  "mustBeBetween30And50": "Az értéknek 30 és 500 között kell lenie",
+  "mustBeBetween30And500": "Az értéknek 30 és 500 között kell lenie",
   "fetchWakePhone": "A lekérés felkeltheti a telefont (ajánlott)",
   "offlineDb": "Adatbázis használata\n(Offline mód)",
   "dbOffWarning":

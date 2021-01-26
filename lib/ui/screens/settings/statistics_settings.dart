@@ -100,6 +100,11 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                           if (value.isEmpty) {
                             return getTranslatedString("cantLeaveEmpty");
                           }
+                          if (value.length > 6) {
+                            return getTranslatedString(
+                              "mustBeBeetween1and500",
+                            );
+                          }
                           if (int.parse(value) > 500 || int.parse(value) <= 0) {
                             return getTranslatedString("mustBeBeetween1and500");
                           }

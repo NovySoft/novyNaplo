@@ -238,7 +238,6 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                           printDetails: true,
                         );
                         Fluttertoast.showToast(
-                          //fixme change text
                           msg: '${getTranslatedString("errWhileFetch")}: $e',
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.red,

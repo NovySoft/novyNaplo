@@ -239,10 +239,16 @@ class CalculatorTabState extends State<CalculatorTab>
                                 if (value.isEmpty) {
                                   return getTranslatedString("cantLeaveEmpty");
                                 }
+                                if (value.length > 6) {
+                                  return getTranslatedString(
+                                    "mustBeBeetween1and1000",
+                                  );
+                                }
                                 if (int.parse(value) > 1000 ||
                                     int.parse(value) <= 0) {
                                   return getTranslatedString(
-                                      "mustBeBeetween1and1000");
+                                    "mustBeBeetween1and1000",
+                                  );
                                 }
                                 return null;
                               },
@@ -294,6 +300,11 @@ class CalculatorTabState extends State<CalculatorTab>
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return getTranslatedString("cantLeaveEmpty");
+                                }
+                                if (value.length > 6) {
+                                  return getTranslatedString(
+                                    "mustBeBeetween1and100",
+                                  );
                                 }
                                 if (int.parse(value) > 100 ||
                                     int.parse(value) <= 0) {

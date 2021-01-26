@@ -113,7 +113,6 @@ class _LoadingPageState extends State<LoadingPage> {
         (element) => element.current,
         orElse: () => allUsers[0],
       );
-      //FIXME status szöveg hozzáadása
       setState(() {
         loadingText = getTranslatedString("checkVersion");
       });

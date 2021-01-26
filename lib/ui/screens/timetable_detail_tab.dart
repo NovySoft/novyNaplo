@@ -412,7 +412,6 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                                             printDetails: true,
                                           );
                                           Fluttertoast.showToast(
-                                            //fixme change text
                                             msg:
                                                 '${getTranslatedString("errWhileFetch")}: $e',
                                             gravity: ToastGravity.BOTTOM,

@@ -49,7 +49,7 @@ final Map<String, String> translation = {
   "timeBetweenFetches": "Time between requests",
   "minutes": "minutes",
   "cantLeaveEmpty": "You can't leave this empty",
-  "mustBeBetween30And50": "The value must be between 30 and 50",
+  "mustBeBetween30And500": "The value must be between 30 and 500",
   "fetchWakePhone": "Background requests can wake up the phone (recommended)",
   "dbSettings": "Database settings",
   "db": "database",

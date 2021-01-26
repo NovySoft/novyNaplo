@@ -4,7 +4,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 //FIXME Fix the background fetch errors, I mean we also need to rewrite this
-//FIXME:Create a notificationDispatch helper and make "contracted notifications", eg. 15 new marks
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',

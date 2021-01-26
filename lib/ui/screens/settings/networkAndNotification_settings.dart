@@ -533,8 +533,13 @@ class _NetworkAndNotificationSettingsState
                           if (value.isEmpty) {
                             return getTranslatedString("cantLeaveEmpty");
                           }
+                          if (value.length > 6) {
+                            return getTranslatedString(
+                              "mustBeBetween30And500",
+                            );
+                          }
                           if (int.parse(value) > 500 || int.parse(value) < 30) {
-                            return getTranslatedString("mustBeBetween30And50");
+                            return getTranslatedString("mustBeBetween30And500");
                           }
                           return null;
                         },
