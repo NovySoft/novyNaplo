@@ -160,17 +160,27 @@ class ChartsDetailTab extends StatelessWidget {
                       );
                       break;
                     case 1:
-                      return SizedBox(
-                          height: 500,
-                          child: new charts.LineChart(
-                            seriesList,
-                            behaviors: [new charts.PanAndZoomBehavior()],
-                            animate: animate,
-                            domainAxis: axisTwo,
-                            primaryMeasureAxis: axis,
-                            defaultRenderer: new charts.LineRendererConfig(
-                                includePoints: true),
-                          ));
+                      return Row(
+                        children: [
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: 500,
+                              child: new charts.LineChart(
+                                seriesList,
+                                behaviors: [new charts.PanAndZoomBehavior()],
+                                animate: animate,
+                                domainAxis: axisTwo,
+                                primaryMeasureAxis: axis,
+                                defaultRenderer: new charts.LineRendererConfig(
+                                    includePoints: true),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                       break;
                     default:
                       return SizedBox(
