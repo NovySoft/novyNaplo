@@ -14,17 +14,12 @@ import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
-//FIXME: Delete all unused variables
 //Variables used globally;
 //* Session
 SharedPreferences prefs; //Global shared preferences
 bool didFetch = false; //True if we fetched the data, false if we didn't
 bool isLoaded =
     false; //Stores whether the app has passed the loading stage, this variable is used to delay and show notifications
-String
-    notifPayload; //Contains the payload of the notification that was pressed until the proper page is shown
-List<Student> decodedUserList =
-    []; //Contains, password, school, username, current token.
 Database db; //Global database access
 Student currentUser = Student(); //The currently shown user
 //* "Permanent"

@@ -46,7 +46,6 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
     }
     return temp;
   });
-  globals.decodedUserList = tempList;
   return tempList;
 }
 

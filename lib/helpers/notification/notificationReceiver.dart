@@ -45,7 +45,6 @@ class NotificationReceiver {
       FirebaseCrashlytics.instance
           .log("selectNotification received (payload $payload)");
 
-      globals.notifPayload = payload.toString();
       String payloadPrefix = payload.split(" ")[0];
       String payloadUid;
       int payloadUserId;

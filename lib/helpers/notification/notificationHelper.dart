@@ -112,8 +112,6 @@ class NotificationHelper {
       iOS: initializationSettingsIOS,
     );
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    NotificationAppLaunchDetails notificationAppLaunchDetails =
-        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: NotificationReceiver.selectNotification,
