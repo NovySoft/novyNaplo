@@ -782,27 +782,46 @@ class CalculatorTabState extends State<CalculatorTab>
           SizedBox(
             height: 20,
           ),
-          Text(
-            dropdownValue +
-                " ${getTranslatedString("avBefore")}: " +
-                (currSum / currCount).toStringAsFixed(3),
-            textAlign: TextAlign.start,
-            style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                dropdownValue +
-                    " ${getTranslatedString("avAfter")}: " +
-                    tantargyiAtlagUtanna.toStringAsFixed(3),
-                textAlign: TextAlign.start,
-                style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              SizedBox(
+                width: 10,
               ),
-              afterAvIcon,
-              Text(
-                afterAvDiff,
-                style: TextStyle(color: afterAvCol),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dropdownValue +
+                          " ${getTranslatedString("avBefore")}: " +
+                          (currSum / currCount).toStringAsFixed(3),
+                      textAlign: TextAlign.start,
+                      style: new TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          dropdownValue +
+                              " ${getTranslatedString("avAfter")}: " +
+                              tantargyiAtlagUtanna.toStringAsFixed(3),
+                          textAlign: TextAlign.start,
+                          style: new TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        afterAvIcon,
+                        Text(
+                          afterAvDiff,
+                          style: TextStyle(color: afterAvCol),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               )
             ],
           ),

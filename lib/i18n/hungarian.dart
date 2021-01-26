@@ -97,7 +97,7 @@ final Map<String, String> translation = {
   "bySubject": "Tantárgy szerint",
   "combinedAv": "Összesített átlag",
   "best": "Legjobb",
-  "worst": "Legroszabb",
+  "worst": "Legrosszabb",
   "marksFromSubjects": "Jegyek száma bizonyos tantárgyakból",
   "marksDistribution": "Jegyek számának eloszlása",
   "countOfSpecMarks": "Bizonyos jegyek száma",

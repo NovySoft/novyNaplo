@@ -71,249 +71,250 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
             child: ListView.builder(
               itemCount: 7,
               itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${capitalize(getTranslatedString("hw"))}: ",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Html(
-                            data: widget.hwInfo.content,
-                            onLinkTap: (url) async {
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                FirebaseAnalytics().logEvent(
-                                  name: "LinkFail",
-                                  parameters: {"link": url},
-                                );
-                                throw 'Could not launch $url';
-                              }
-                            },
-                          ),
-                        ]);
-                    break;
-                  case 1:
-                    String due = widget.hwInfo.dueDate.toHumanString();
-                    Duration left =
-                        widget.hwInfo.dueDate.difference(DateTime.now());
-                    String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
-                    String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
-                    String leftString =
-                        "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
-                    bool dueOver = false;
-                    if (left.inMinutes / 60 < 0) {
-                      dueOver = true;
-                    }
-                    timer =
-                        new Timer.periodic(new Duration(minutes: 1), (time) {
-                      if (!mounted) {
-                        timer.cancel();
-                      } else {
-                        setState(() {
-                          left =
-                              widget.hwInfo.dueDate.difference(DateTime.now());
-                          leftHours = (left.inMinutes / 60).toStringAsFixed(0);
-                          leftMins = (left.inMinutes % 60).toStringAsFixed(0);
-                          leftString =
-                              "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
-                          if (left.inMinutes / 60 < 0) {
-                            dueOver = true;
-                          } else {
-                            dueOver = false;
-                          }
-                        });
-                      }
-                    });
-                    if (dueOver) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15),
-                          Text(
-                            "${getTranslatedString("hDue")}: ",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(due + " (${getTranslatedString("overDue")})",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red)),
-                        ],
-                      );
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15),
-                          Text(
-                            "${getTranslatedString("hDue")}: ",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                              "$due (${getTranslatedString("hLeft")}: $leftString)",
-                              style: TextStyle(
-                                fontSize: 20,
-                              )),
-                        ],
-                      );
-                    }
-                    break;
-                  case 2:
-                    if (widget.hwInfo.attachments.length == 0) {
-                      return SizedBox(height: 0, width: 0);
-                    }
-
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text(
-                          "${getTranslatedString("attachments")}:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: widget.hwInfo.attachments.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: () async {
-                                setState(() {
-                                  downloadIcon[index] = SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(),
-                                  );
-                                });
-                                try {
-                                  await RequestHandler.downloadHWAttachment(
-                                    globals.currentUser,
-                                    hwInfo: widget.hwInfo.attachments[index],
-                                  );
-                                  setState(() {
-                                    downloadIcon[index] = Icon(MdiIcons.check);
-                                  });
-                                } catch (e, s) {
-                                  if (!(await NetworkHelper
-                                      .isNetworkAvailable())) {
-                                    Fluttertoast.showToast(
-                                      msg: getTranslatedString("noNet"),
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 18.0,
-                                    );
-                                  } else {
-                                    FirebaseCrashlytics.instance.recordError(
-                                      e,
-                                      s,
-                                      reason: 'downloadHWAttachment',
-                                      printDetails: true,
-                                    );
-                                    Fluttertoast.showToast(
-                                      //fixme change text
-                                      msg:
-                                          '${getTranslatedString("errWhileFetch")}: $e',
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 18.0,
-                                    );
-                                  }
-                                  setState(() {
-                                    downloadIcon[index] =
-                                        Icon(MdiIcons.exclamation);
-                                  });
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  SizedBox(width: 3, height: 5),
-                                  downloadIcon[index],
-                                  SizedBox(width: 5, height: 5),
-                                  Text(
-                                    widget.hwInfo.attachments[index].name,
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5, height: 30),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                    break;
-                  case 3:
-                    String giveUp = widget.hwInfo.createDate.toHumanString();
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text(
-                          "${getTranslatedString("dateGiveUp")}: ",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          giveUp,
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    );
-                    break;
-                  case 4:
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text(
-                          "${getTranslatedString("givenUpBy")}:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(widget.hwInfo.teacher,
-                            style: TextStyle(
-                              fontSize: 20,
-                            )),
-                      ],
-                    );
-                    break;
-                  default:
-                    return SizedBox(
-                      height: 50,
-                    );
-                }
+                Widget child = getHomeworkDetails(context, index);
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: child,
+                    ),
+                  ],
+                );
               },
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget getHomeworkDetails(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${capitalize(getTranslatedString("hw"))}: ",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              Html(
+                data: widget.hwInfo.content,
+                onLinkTap: (url) async {
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                    FirebaseAnalytics().logEvent(
+                      name: "LinkFail",
+                      parameters: {"link": url},
+                    );
+                    throw 'Could not launch $url';
+                  }
+                },
+              ),
+            ]);
+        break;
+      case 1:
+        String due = widget.hwInfo.dueDate.toHumanString();
+        Duration left = widget.hwInfo.dueDate.difference(DateTime.now());
+        String leftHours = (left.inMinutes / 60).toStringAsFixed(0);
+        String leftMins = (left.inMinutes % 60).toStringAsFixed(0);
+        String leftString =
+            "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
+        bool dueOver = false;
+        if (left.inMinutes / 60 < 0) {
+          dueOver = true;
+        }
+        timer = new Timer.periodic(new Duration(minutes: 1), (time) {
+          if (!mounted) {
+            timer.cancel();
+          } else {
+            setState(() {
+              left = widget.hwInfo.dueDate.difference(DateTime.now());
+              leftHours = (left.inMinutes / 60).toStringAsFixed(0);
+              leftMins = (left.inMinutes % 60).toStringAsFixed(0);
+              leftString =
+                  "$leftHours ${getTranslatedString("yHrs")} ${getTranslatedString("and")} $leftMins ${getTranslatedString("yMins")}";
+              if (left.inMinutes / 60 < 0) {
+                dueOver = true;
+              } else {
+                dueOver = false;
+              }
+            });
+          }
+        });
+        if (dueOver) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "${getTranslatedString("hDue")}: ",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              Text(due + " (${getTranslatedString("overDue")})",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red)),
+            ],
+          );
+        } else {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "${getTranslatedString("hDue")}: ",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              Text("$due (${getTranslatedString("hLeft")}: $leftString)",
+                  style: TextStyle(
+                    fontSize: 20,
+                  )),
+            ],
+          );
+        }
+        break;
+      case 2:
+        if (widget.hwInfo.attachments.length == 0) {
+          return SizedBox(height: 0, width: 0);
+        }
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              "${getTranslatedString("attachments")}:",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: widget.hwInfo.attachments.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      downloadIcon[index] = SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(),
+                      );
+                    });
+                    try {
+                      await RequestHandler.downloadHWAttachment(
+                        globals.currentUser,
+                        hwInfo: widget.hwInfo.attachments[index],
+                      );
+                      setState(() {
+                        downloadIcon[index] = Icon(MdiIcons.check);
+                      });
+                    } catch (e, s) {
+                      if (!(await NetworkHelper.isNetworkAvailable())) {
+                        Fluttertoast.showToast(
+                          msg: getTranslatedString("noNet"),
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 18.0,
+                        );
+                      } else {
+                        FirebaseCrashlytics.instance.recordError(
+                          e,
+                          s,
+                          reason: 'downloadHWAttachment',
+                          printDetails: true,
+                        );
+                        Fluttertoast.showToast(
+                          //fixme change text
+                          msg: '${getTranslatedString("errWhileFetch")}: $e',
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 18.0,
+                        );
+                      }
+                      setState(() {
+                        downloadIcon[index] = Icon(MdiIcons.exclamation);
+                      });
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      SizedBox(width: 3, height: 5),
+                      downloadIcon[index],
+                      SizedBox(width: 5, height: 5),
+                      Text(
+                        widget.hwInfo.attachments[index].name,
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 20,
+                        ),
+                      ),
+                      SizedBox(width: 5, height: 30),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+        break;
+      case 3:
+        String giveUp = widget.hwInfo.createDate.toHumanString();
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              "${getTranslatedString("dateGiveUp")}: ",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              giveUp,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ],
+        );
+        break;
+      case 4:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              "${getTranslatedString("givenUpBy")}:",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            Text(widget.hwInfo.teacher,
+                style: TextStyle(
+                  fontSize: 20,
+                )),
+          ],
+        );
+        break;
+      default:
+        return SizedBox(
+          height: 50,
+        );
+    }
   }
 }

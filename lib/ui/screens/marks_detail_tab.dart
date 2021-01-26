@@ -78,72 +78,100 @@ class MarksDetailTab extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("subject")}: " + eval.subject.name,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${getTranslatedString("subject")}: " +
+                              eval.subject.name,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("theme")}: " +
+                              eval.theme.toString(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("markType")}: " +
+                              (eval.mode == null
+                                  ? getTranslatedString('unknown')
+                                  : eval.mode.description.toString()),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("markForm")}: " +
+                              eval.type.description,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("eval")}: " + eval.textValue,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: markColor,
+                          ),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
+                              eval.numberValue.toString(),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: markColor,
+                          ),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${capitalize(getTranslatedString("weight"))}: " +
+                              eval.weight.toString() +
+                              "%",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("teacher")}: " + eval.teacher,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("dateGiveUp")}: " +
+                              eval.date.toHumanString(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10, width: 5),
+                        Text(
+                          "${getTranslatedString("dateCreated")}: " +
+                              eval.createDate.toHumanString(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 500),
+                      ],
+                    ),
+                  )
+                ],
               ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("theme")}: " + eval.theme.toString(),
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("markType")}: " +
-                    (eval.mode == null
-                        ? getTranslatedString('unknown')
-                        : eval.mode.description.toString()),
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("markForm")}: " + eval.type.description,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("eval")}: " + eval.textValue,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: markColor,
-                ),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
-                    eval.numberValue.toString(),
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: markColor,
-                ),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${capitalize(getTranslatedString("weight"))}: " +
-                    eval.weight.toString() +
-                    "%",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("teacher")}: " + eval.teacher,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("dateGiveUp")}: " +
-                    eval.date.toHumanString(),
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10, width: 5),
-              Text(
-                "${getTranslatedString("dateCreated")}: " +
-                    eval.createDate.toHumanString(),
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 500),
             ]),
           ),
         ],

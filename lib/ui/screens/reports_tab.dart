@@ -148,7 +148,6 @@ class _ReportsTabState extends State<ReportsTab>
             } else if (tab.text == getTranslatedString("EndOfYear")) {
               tabName = "EndOfYear";
             }
-            print(reportMaps[tabName]);
             return ListView.builder(
               itemCount: reportMaps[tabName].length + globals.adModifier,
               padding: EdgeInsets.symmetric(vertical: 12),

@@ -49,104 +49,116 @@ class NoticeDetailTab extends StatelessWidget {
             child: ListView.builder(
               itemCount: 4 + globals.adModifier,
               itemBuilder: (context, index) {
-                switch (index) {
-                  case 0:
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text(
-                          "${getTranslatedString("content")}:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
-                        Linkify(
-                          onOpen: (link) async {
-                            if (await canLaunch(link.url)) {
-                              await launch(link.url);
-                            } else {
-                              throw 'Could not launch $link';
-                            }
-                          },
-                          text: capitalize(notice.content),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ],
-                    );
-                    break;
-                  case 1:
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15),
-                          Text(
-                            "${getTranslatedString("teacher")}:",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            notice.teacher,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ]);
-                    break;
-                  case 2:
-                    DateTime date = notice.date;
-                    String dateSimplified =
-                        "${date.toDayOnlyString()} ${parseIntToWeekdayString(date.weekday)}";
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15),
-                          Text(
-                            "${getTranslatedString("date")}:",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            dateSimplified,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ]);
-                    break;
-                  case 3:
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text(
-                          "${getTranslatedString("subject")}:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          notice.subject == null
-                              ? getTranslatedString("unknown")
-                              : capitalize(notice.subject.name),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ],
-                    );
-                    break;
-                }
-                return SizedBox(height: 250, width: 10);
+                Widget child = getNoticesDetails(context, index);
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: child,
+                    ),
+                  ],
+                );
               },
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget getNoticesDetails(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              "${getTranslatedString("content")}:",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            Linkify(
+              onOpen: (link) async {
+                if (await canLaunch(link.url)) {
+                  await launch(link.url);
+                } else {
+                  throw 'Could not launch $link';
+                }
+              },
+              text: capitalize(notice.content),
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ],
+        );
+        break;
+      case 1:
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "${getTranslatedString("teacher")}:",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                notice.teacher,
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ]);
+        break;
+      case 2:
+        DateTime date = notice.date;
+        String dateSimplified =
+            "${date.toDayOnlyString()} ${parseIntToWeekdayString(date.weekday)}";
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "${getTranslatedString("date")}:",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                dateSimplified,
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ]);
+        break;
+      case 3:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            Text(
+              "${getTranslatedString("subject")}:",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              notice.subject == null
+                  ? getTranslatedString("unknown")
+                  : capitalize(notice.subject.name),
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ],
+        );
+        break;
+      default:
+        return SizedBox(height: 250, width: 10);
+        break;
+    }
   }
 }

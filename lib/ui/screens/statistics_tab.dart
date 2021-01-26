@@ -220,14 +220,25 @@ class _StatisticsTabState extends State<StatisticsTab>
                                 : Color.fromARGB(100, 48, 48, 48),
                             transitionDuration: Duration(milliseconds: 550),
                             openBuilder: (_, __) => AbsencesTab(),
-                            closedBuilder: (_, callback) => SizedBox(
-                              height: 300,
-                              width: double.infinity,
-                              child: AbsencesBarChart(
-                                reDraw: true,
-                                callback: callback,
-                                defaultHiddenSeries: hiddenSeries,
-                              ),
+                            closedBuilder: (_, callback) => Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 300,
+                                    width: double.infinity,
+                                    child: AbsencesBarChart(
+                                      reDraw: true,
+                                      callback: callback,
+                                      defaultHiddenSeries: hiddenSeries,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -235,6 +246,8 @@ class _StatisticsTabState extends State<StatisticsTab>
                       break;
                     case 1:
                       return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 15),
                           Center(
@@ -244,27 +257,39 @@ class _StatisticsTabState extends State<StatisticsTab>
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(
-                            height: 500 +
-                                sizedBoxHeight +
-                                globals.extraSpaceUnderStat,
-                            child: charts.NumericComboChart(
-                              createAllSubjectChartData(
-                                  allParsedSubjectsWithoutZeros),
-                              animate: globals.chartAnimations,
-                              domainAxis: axisTwo,
-                              primaryMeasureAxis: axis,
-                              // Configure the default renderer as a line renderer. This will be used
-                              // for any series that does not define a rendererIdKey.
-                              defaultRenderer: new charts.LineRendererConfig(
-                                  includePoints: true),
-                              behaviors: [
-                                new charts.SeriesLegend(
-                                  position: charts.BehaviorPosition.end,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 500 +
+                                      sizedBoxHeight +
+                                      globals.extraSpaceUnderStat,
+                                  child: charts.NumericComboChart(
+                                    createAllSubjectChartData(
+                                        allParsedSubjectsWithoutZeros),
+                                    animate: globals.chartAnimations,
+                                    domainAxis: axisTwo,
+                                    primaryMeasureAxis: axis,
+                                    // Configure the default renderer as a line renderer. This will be used
+                                    // for any series that does not define a rendererIdKey.
+                                    defaultRenderer:
+                                        new charts.LineRendererConfig(
+                                            includePoints: true),
+                                    behaviors: [
+                                      new charts.SeriesLegend(
+                                        position: charts.BehaviorPosition.end,
+                                      ),
+                                      new charts.PanAndZoomBehavior()
+                                    ],
+                                  ),
                                 ),
-                                new charts.PanAndZoomBehavior()
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       );
@@ -282,6 +307,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 "${getTranslatedString("combinedAv")}: " +
                                     osszesitettAv.value.toStringAsFixed(3),
@@ -308,6 +336,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 "${getTranslatedString("best")} (" +
                                     capitalize(bestSubjectAv.subject) +
@@ -394,6 +425,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                               return Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: <Widget>[
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   Text(
                                     capitalize(allSubjectsAv[index].subject) +
                                         ": ",
@@ -426,6 +460,9 @@ class _StatisticsTabState extends State<StatisticsTab>
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 "${getTranslatedString("worst")} (" +
                                     capitalize(worstSubjectAv.subject) +
@@ -465,7 +502,10 @@ class _StatisticsTabState extends State<StatisticsTab>
                               ? "${getTranslatedString("marksFromSubjects")}:"
                               : "${getTranslatedString("marksDistribution")}:",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                       break;
@@ -531,45 +571,64 @@ class _StatisticsTabState extends State<StatisticsTab>
                         child: Text(
                           "${getTranslatedString("countOfSpecMarks")}:",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       );
                       break;
                     case 11:
-                      return SizedBox(
-                        height: 400,
-                        width: double.infinity,
-                        child: charts.BarChart(
-                          howManyFromMarks,
-                          animate: globals.chartAnimations,
-                          domainAxis: new charts.OrdinalAxisSpec(
-                              renderSpec: charts.SmallTickRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                            fontSize: 15,
-                            color: charts.MaterialPalette.blue.shadeDefault,
-                          ))),
-                          primaryMeasureAxis: new charts.NumericAxisSpec(
-                              renderSpec: charts.GridlineRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                            fontSize: 15,
-                            color: charts.MaterialPalette.blue.shadeDefault,
-                          ))),
-                          defaultRenderer: new charts.BarRendererConfig(
-                              barRendererDecorator: new charts
-                                      .BarLabelDecorator<String>(
-                                  insideLabelStyleSpec:
-                                      new charts.TextStyleSpec(
-                                          color: charts.MaterialPalette.white),
-                                  outsideLabelStyleSpec:
-                                      new charts.TextStyleSpec(
-                                          color: DynamicTheme.of(context)
-                                                      .brightness ==
-                                                  Brightness.dark
-                                              ? charts.MaterialPalette.white
-                                              : charts.MaterialPalette.black)),
-                              cornerStrategy:
-                                  const charts.ConstCornerStrategy(30)),
-                        ),
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: 400,
+                              width: double.infinity,
+                              child: charts.BarChart(
+                                howManyFromMarks,
+                                animate: globals.chartAnimations,
+                                domainAxis: new charts.OrdinalAxisSpec(
+                                    renderSpec: charts.SmallTickRendererSpec(
+                                        labelStyle: charts.TextStyleSpec(
+                                  fontSize: 15,
+                                  color:
+                                      charts.MaterialPalette.blue.shadeDefault,
+                                ))),
+                                primaryMeasureAxis: new charts.NumericAxisSpec(
+                                    renderSpec: charts.GridlineRendererSpec(
+                                        labelStyle: charts.TextStyleSpec(
+                                  fontSize: 15,
+                                  color:
+                                      charts.MaterialPalette.blue.shadeDefault,
+                                ))),
+                                defaultRenderer: new charts.BarRendererConfig(
+                                    barRendererDecorator:
+                                        new charts.BarLabelDecorator<String>(
+                                            insideLabelStyleSpec:
+                                                new charts.TextStyleSpec(
+                                                    color: charts
+                                                        .MaterialPalette.white),
+                                            outsideLabelStyleSpec:
+                                                new charts.TextStyleSpec(
+                                                    color: DynamicTheme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? charts.MaterialPalette
+                                                            .white
+                                                        : charts.MaterialPalette
+                                                            .black)),
+                                    cornerStrategy:
+                                        const charts.ConstCornerStrategy(30)),
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                       break;
                     default:

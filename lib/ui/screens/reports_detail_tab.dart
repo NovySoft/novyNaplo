@@ -123,36 +123,47 @@ class ReportsDetailTab extends StatelessWidget {
                   color: diffColor,
                 );
               }
-              return Column(
+              return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 15),
-                  Text(
-                      "${getTranslatedString("worst")} ${getTranslatedString("av")}: " +
-                          sortableList.first.value.toStringAsFixed(3),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Text(
-                      "${getTranslatedString("best")} ${getTranslatedString("av")}: " +
-                          sortableList.last.value.toStringAsFixed(3),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.start,
-                    children: <Widget>[
-                      Text(
-                          "${capitalize(title)} ${getTranslatedString("av")}: " +
-                              avList.last.value.toStringAsFixed(3),
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      diffIcon,
-                      Text(
-                        "${(avList.last.value - avList.first.value).toStringAsFixed(3)}",
-                        style: TextStyle(color: diffColor),
-                      ),
-                    ],
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 15),
+                        Text(
+                            "${getTranslatedString("worst")} ${getTranslatedString("av")}: " +
+                                sortableList.first.value.toStringAsFixed(3),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text(
+                            "${getTranslatedString("best")} ${getTranslatedString("av")}: " +
+                                sortableList.last.value.toStringAsFixed(3),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                "${capitalize(title)} ${getTranslatedString("av")}: " +
+                                    avList.last.value.toStringAsFixed(3),
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                            diffIcon,
+                            Text(
+                              "${(avList.last.value - avList.first.value).toStringAsFixed(3)}",
+                              style: TextStyle(color: diffColor),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );

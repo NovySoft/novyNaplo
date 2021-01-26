@@ -43,83 +43,17 @@ Widget _buildBody(Exam exam, Color color) {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              switch (index) {
-                case 0:
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, top: 16, bottom: 16),
-                    child: Text(
-                      '${getTranslatedString("examInfo")}:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  );
-                  break;
-                case 1:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("subject")}: " +
-                            exam.subject.name,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 3:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("theme")}: " + exam.theme,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 5:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("examType")}: " +
-                            exam.mode.description,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 7:
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("teacher")}: " + exam.teacher,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 9:
-                  DateTime examDate = exam.dateOfWriting;
-                  String subtitle =
-                      "${examDate.toHumanString()} (${exam.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("dateWrite")}: " + subtitle,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 11:
-                  DateTime examDate = exam.announcementDate;
-                  String subtitle = "${examDate.toHumanString()}";
-                  return SizedBox(
-                    child: Text(
-                        "${getTranslatedString("dateGiveUp")}: " + subtitle,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  );
-                  break;
-                case 12:
-                  return SizedBox(
-                    height: 250,
-                  );
-                  break;
-                default:
-                  return SizedBox(height: 10);
-              }
+              Widget child = getExamDetails(exam, context, index);
+              return Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: child,
+                  ),
+                ],
+              );
             },
             childCount: 13,
           ),
@@ -127,4 +61,70 @@ Widget _buildBody(Exam exam, Color color) {
       ],
     ),
   );
+}
+
+Widget getExamDetails(Exam exam, BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return Padding(
+        padding: const EdgeInsets.only(left: 15, top: 16, bottom: 16),
+        child: Text(
+          '${getTranslatedString("examInfo")}:',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+      break;
+    case 1:
+      return SizedBox(
+        child: Text("${getTranslatedString("subject")}: " + exam.subject.name,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 3:
+      return SizedBox(
+        child: Text("${getTranslatedString("theme")}: " + exam.theme,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 5:
+      return SizedBox(
+        child: Text(
+            "${getTranslatedString("examType")}: " + exam.mode.description,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 7:
+      return SizedBox(
+        child: Text("${getTranslatedString("teacher")}: " + exam.teacher,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 9:
+      DateTime examDate = exam.dateOfWriting;
+      String subtitle =
+          "${examDate.toHumanString()} (${exam.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
+      return SizedBox(
+        child: Text("${getTranslatedString("dateWrite")}: " + subtitle,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 11:
+      DateTime examDate = exam.announcementDate;
+      String subtitle = "${examDate.toHumanString()}";
+      return SizedBox(
+        child: Text("${getTranslatedString("dateGiveUp")}: " + subtitle,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      );
+      break;
+    case 12:
+      return SizedBox(
+        height: 250,
+      );
+      break;
+    default:
+      return SizedBox(height: 10);
+  }
 }
