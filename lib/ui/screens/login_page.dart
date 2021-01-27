@@ -283,7 +283,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         textColor: Colors.white,
         fontSize: 18.0,
       );
+    } else if (result.status.contains(getTranslatedString('errWhileFetch')) ||
+        result.status.contains(getTranslatedString('unkError'))) {
+      //'Handled error'
+      Fluttertoast.showToast(
+        msg: result.status,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     } else {
+      //Well this should never run.... but let's keep this here just in case
       FirebaseAnalytics().logEvent(
         name: "unknownLoginResponse",
         parameters: {

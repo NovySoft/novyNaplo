@@ -393,4 +393,6 @@ final Map<String, String> translation = {
   "Egyéb": "Egyéb",
   "Szülői igazolás": "Szülői igazolás",
   "orvosi_igazolas": "Orvosi igazolás",
+  "kretaUpgrade":
+      "A kréta frissít vagy karbantartás alatt van! \n Próbáld újra később!",
 };

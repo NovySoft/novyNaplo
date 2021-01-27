@@ -77,6 +77,12 @@ class RequestHandler {
           status: "OK",
           userinfo: user,
         );
+      } else if (response.headers.containsKey("x-maintenance-mode")) {
+        //Kreta is 100% to be updating
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgrade')}",
+        );
       } else if (response.statusCode == 403 ||
           response.statusCode == 401 ||
           response.statusCode == 500 ||
