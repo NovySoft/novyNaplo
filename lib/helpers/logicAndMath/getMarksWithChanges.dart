@@ -5,8 +5,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 //Legjobb, legroszabb és a köztes jegyek
-//Should change to a return function, shouldn't I?
-//FIXME: Something is not right here, some people report that the averages are not in correct order
+//TODO: Should change to a return function, shouldn't I?
 Future<void> getMarksWithChanges(
   List<List<Evals>> input,
   Student userDetails,
@@ -14,6 +13,7 @@ Future<void> getMarksWithChanges(
   List<Average> tempList = [];
   double sum = 0, index = 0;
   int listIndex = 0;
+  int nonWeightedCount = 0;
   for (var n in input) {
     index = 0;
     sum = 0;
@@ -22,6 +22,7 @@ Future<void> getMarksWithChanges(
     } else {
       listIndex = 1;
     }
+    nonWeightedCount = 0;
     Average temp = new Average();
     temp.userId = userDetails.userId;
     for (var y in n) {
@@ -31,42 +32,34 @@ Future<void> getMarksWithChanges(
         temp.diffSinceLast = sum / index;
       }
       listIndex++;
+      nonWeightedCount++;
     }
     temp.value = sum / index;
     temp.count = index.toDouble();
+    temp.nonWeightedCount = nonWeightedCount;
     temp.subject = n[0].subject.name;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
-  tempList.sort((a, b) =>
-      b.value.toStringAsFixed(3).compareTo(a.value.toStringAsFixed(3)));
-  index = 0;
-  List<Average> tempListTwo = [];
-  tempList.removeWhere((item) =>
-      item.value == double.nan || item.value.isNaN || item.value == null);
-  double curValue = tempList[0].value;
-  stats.worstSubjectAv = tempList.last;
-  stats.allSubjectsAv = tempList;
-  if (tempList.length > 1) {
-    //Find the better subject based on count
-    while (curValue == tempList[index.toInt()].value) {
-      tempListTwo.add(tempList[index.toInt()]);
-      index++;
-      if (index.toInt() <= tempList.length) {
-        curValue = -1;
-      }
+  //?First sort by the values
+  tempList.sort((a, b) => b.value.compareTo(a.value));
+  //?Create matrix based on values
+  List<List<Average>> tempMatrix = [];
+  double lastAv = -1;
+  for (var n in tempList) {
+    if (lastAv != n.value) {
+      lastAv = n.value;
+      tempMatrix.add([]);
     }
-  } else {
-    tempListTwo.add(tempList[0]);
+    tempMatrix.last.add(n);
   }
-  tempListTwo.sort((a, b) => b.count.compareTo(a.count));
-  stats.allSubjectsAv.removeLast();
-  stats.allSubjectsAv.removeWhere((item) => item == tempListTwo[0]);
-  stats.bestSubjectAv = tempListTwo[0];
-  //We dont await it, cause this function is time critical
-  List<Average> dbList = [stats.bestSubjectAv, stats.worstSubjectAv];
-  dbList.addAll(stats.allSubjectsAv);
-  await DatabaseHelper.batchInsertAverages(dbList);
+  for (var i = 0; i < tempMatrix.length; i++) {
+    tempMatrix[i].sort(
+      (a, b) => b.nonWeightedCount.compareTo(a.nonWeightedCount),
+    );
+  }
+  stats.allSubjectsAv = List.from(tempMatrix.expand((element) => element));
+  await DatabaseHelper.batchInsertAverages(tempList);
 }
 
 Future<void> onlyCalcAndInsertAverages(

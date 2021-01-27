@@ -76,7 +76,7 @@ class Exam {
     databaseId = map['databaseId'];
     userId = map['userId'];
     uid = map['uid'];
-    icon = parseSubjectToIcon(subject: subject.name);
+    icon = parseSubjectToIcon(subject: subject.fullName);
   }
 
   Exam.fromJson(Map<String, dynamic> json, Student userDetails) {
@@ -99,7 +99,7 @@ class Exam {
         ? new ClassGroup.fromJson(json['OsztalyCsoport'])
         : null;
     uid = json['Uid'];
-    icon = parseSubjectToIcon(subject: subject.name);
+    icon = parseSubjectToIcon(subject: subject.fullName);
   }
 
   @override

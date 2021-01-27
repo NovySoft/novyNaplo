@@ -136,9 +136,11 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.brain;
   }
   //LogUnknown subject so I can add that later
-  FirebaseAnalytics().logEvent(
-    name: "UnknownSubject",
-    parameters: {"subject": subject},
-  );
+  if (subject.isNotEmpty) {
+    FirebaseAnalytics().logEvent(
+      name: "UnknownSubject",
+      parameters: {"subject": subject},
+    );
+  }
   return Icons.create;
 }

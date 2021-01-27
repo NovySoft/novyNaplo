@@ -7,7 +7,7 @@ class Subject {
   String uid;
   Description category;
   String name;
-  String shortName;
+  String fullName;
 
   Subject({this.uid, this.category, this.name});
 
@@ -18,15 +18,15 @@ class Subject {
             ? json.decode(inpJson['Kategoria'])
             : inpJson['Kategoria'])
         : null;
-    name = inpJson['Nev'];
-    shortName = shortenSubject(name);
+    fullName = inpJson['Nev'];
+    name = shortenSubject(inpJson['Nev']);
   }
 
   String toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Uid'] = this.uid;
     data['Kategoria'] = this.category;
-    data['Nev'] = this.name;
+    data['Nev'] = this.fullName;
     return json.encode(data);
   }
 }

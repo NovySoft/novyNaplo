@@ -6,9 +6,15 @@ class Average {
   int databaseId;
   int userId;
 
+  int nonWeightedCount;
+
   @override
   String toString() {
-    return this.subject + ": " + this.value.toStringAsFixed(3);
+    return this.subject +
+        ": " +
+        this.value.toStringAsFixed(3) +
+        ": " +
+        this.nonWeightedCount.toStringAsFixed(3);
   }
 
   Map<String, dynamic> toMap() {

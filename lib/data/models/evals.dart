@@ -90,7 +90,7 @@ class Evals {
         : ClassGroup.fromJson(json.decode(map['group']));
     sortIndex = map['sortIndex'];
     icon = subject != null
-        ? parseSubjectToIcon(subject: subject.name)
+        ? parseSubjectToIcon(subject: subject.fullName)
         : Icons.create;
   }
 
@@ -202,7 +202,7 @@ class Evals {
     }
     icon = subject.name == null
         ? Icons.create
-        : parseSubjectToIcon(subject: subject.name);
+        : parseSubjectToIcon(subject: subject.fullName);
   }
 
   Map<String, dynamic> toMap() {

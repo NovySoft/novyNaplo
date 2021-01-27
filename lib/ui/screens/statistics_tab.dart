@@ -44,8 +44,6 @@ final List<Tab> statTabs = <Tab>[
 TabController _tabController;
 List<charts.Series<LinearMarkChartData, int>> allSubjectsChartData;
 Average osszesitettAv = new Average();
-Average worstSubjectAv = new Average();
-Average bestSubjectAv = new Average();
 List<charts.Series> pieList;
 List<charts.Series<dynamic, String>> howManyFromMarks;
 List<charts.Series<dynamic, String>> howManyFromSpecific;
@@ -108,8 +106,8 @@ class _StatisticsTabState extends State<StatisticsTab>
               sizedBoxHeight = 0;
             }
             if (tab.text == getTranslatedString("general")) {
-              Color avColor, worstAvColor, bestAvColor;
-              Icon avIcon, worstAvIcon, bestAvIcon;
+              Color avColor;
+              Icon avIcon;
               setState(() {
                 if (osszesitettAv.diffSinceLast == 0) {
                   avColor = Colors.orange;
@@ -123,36 +121,6 @@ class _StatisticsTabState extends State<StatisticsTab>
                 } else if (osszesitettAv.diffSinceLast > 0) {
                   avColor = Colors.green;
                   avIcon = Icon(Icons.keyboard_arrow_up, color: avColor);
-                }
-                if (worstSubjectAv.diffSinceLast == 0) {
-                  worstAvColor = Colors.orange;
-                  worstAvIcon = Icon(
-                    Icons.linear_scale,
-                    color: worstAvColor,
-                  );
-                } else if (worstSubjectAv.diffSinceLast < 0) {
-                  worstAvColor = Colors.red;
-                  worstAvIcon =
-                      Icon(Icons.keyboard_arrow_down, color: worstAvColor);
-                } else if (worstSubjectAv.diffSinceLast > 0) {
-                  worstAvColor = Colors.green;
-                  worstAvIcon =
-                      Icon(Icons.keyboard_arrow_up, color: worstAvColor);
-                }
-                if (bestSubjectAv.diffSinceLast == 0) {
-                  bestAvColor = Colors.orange;
-                  bestAvIcon = Icon(
-                    Icons.linear_scale,
-                    color: bestAvColor,
-                  );
-                } else if (bestSubjectAv.diffSinceLast < 0) {
-                  bestAvColor = Colors.red;
-                  bestAvIcon =
-                      Icon(Icons.keyboard_arrow_down, color: bestAvColor);
-                } else if (bestSubjectAv.diffSinceLast > 0) {
-                  bestAvColor = Colors.green;
-                  bestAvIcon =
-                      Icon(Icons.keyboard_arrow_up, color: bestAvColor);
                 }
               });
               final axis = charts.NumericAxisSpec(
@@ -329,173 +297,101 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 4:
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "${getTranslatedString("best")} (" +
-                                    capitalize(bestSubjectAv.subject) +
-                                    ") ${getTranslatedString("Average")}: ",
-                                textAlign: TextAlign.start,
-                                style: new TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                bestSubjectAv.value.toStringAsFixed(3),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              bestAvIcon,
-                              Text(
-                                bestSubjectAv.diffSinceLast.toStringAsFixed(3),
-                                style:
-                                    TextStyle(color: bestAvColor, fontSize: 18),
-                              ),
-                            ],
+                        children: [
+                          SizedBox(
+                            width: 10,
                           ),
-                          SizedBox(height: 8, width: 15),
+                          Expanded(
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                Color diffColor;
+                                Widget diffIcon;
+                                Average currentAv = allSubjectsAv[index];
+                                if (currentAv.diffSinceLast == 0) {
+                                  diffColor = Colors.orange;
+                                  diffIcon = Icon(
+                                    Icons.linear_scale,
+                                    color: diffColor,
+                                  );
+                                } else if (currentAv.diffSinceLast < 0) {
+                                  diffColor = Colors.red;
+                                  diffIcon = Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: diffColor,
+                                  );
+                                } else if (currentAv.diffSinceLast > 0) {
+                                  diffColor = Colors.green;
+                                  diffIcon = Icon(
+                                    Icons.keyboard_arrow_up,
+                                    color: diffColor,
+                                  );
+                                }
+                                Color avgColor =
+                                    DynamicTheme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black;
+                                if (globals.colorAvsInStatisctics) {
+                                  if (currentAv.value == null) {
+                                    avgColor = (Colors.red);
+                                  } else if (currentAv.value < 2.5) {
+                                    avgColor = (Colors.redAccent[700]);
+                                  } else if (currentAv.value < 3 &&
+                                      currentAv.value >= 2.5) {
+                                    avgColor = (Colors.redAccent);
+                                  } else if (currentAv.value < 4 &&
+                                      currentAv.value >= 3) {
+                                    avgColor = (Colors.yellow[800]);
+                                  } else {
+                                    avgColor = (Colors.green);
+                                  }
+                                }
+                                return Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      capitalize(currentAv.subject) + ": ",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 18, color: avgColor),
+                                    ),
+                                    Text(
+                                      currentAv.value.toStringAsFixed(3),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    diffIcon,
+                                    Text(
+                                      currentAv.diffSinceLast
+                                          .toStringAsFixed(3),
+                                      style: TextStyle(
+                                          color: diffColor, fontSize: 18),
+                                    )
+                                  ],
+                                );
+                              },
+                              separatorBuilder: (context, index) => SizedBox(
+                                height: 8,
+                              ),
+                              itemCount: allSubjectsAv.length,
+                            ),
+                          )
                         ],
                       );
                       break;
                     case 5:
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 8, width: 15),
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: allSubjectsAv.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Color diffColor;
-                              Widget diffIcon;
-                              if (allSubjectsAv[index].diffSinceLast == 0) {
-                                diffColor = Colors.orange;
-                                diffIcon = Icon(
-                                  Icons.linear_scale,
-                                  color: diffColor,
-                                );
-                              } else if (allSubjectsAv[index].diffSinceLast <
-                                  0) {
-                                diffColor = Colors.red;
-                                diffIcon = Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: diffColor,
-                                );
-                              } else if (allSubjectsAv[index].diffSinceLast >
-                                  0) {
-                                diffColor = Colors.green;
-                                diffIcon = Icon(
-                                  Icons.keyboard_arrow_up,
-                                  color: diffColor,
-                                );
-                              }
-                              Color avgColor =
-                                  DynamicTheme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black;
-                              if (globals.colorAvsInStatisctics) {
-                                if (allSubjectsAv[index].value == null) {
-                                  avgColor = (Colors.red);
-                                } else if (allSubjectsAv[index].value < 2.5) {
-                                  avgColor = (Colors.redAccent[700]);
-                                } else if (allSubjectsAv[index].value < 3 &&
-                                    allSubjectsAv[index].value >= 2.5) {
-                                  avgColor = (Colors.redAccent);
-                                } else if (allSubjectsAv[index].value < 4 &&
-                                    allSubjectsAv[index].value >= 3) {
-                                  avgColor = (Colors.yellow[800]);
-                                } else {
-                                  avgColor = (Colors.green);
-                                }
-                              }
-                              return Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    capitalize(allSubjectsAv[index].subject) +
-                                        ": ",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontSize: 18, color: avgColor),
-                                  ),
-                                  Text(
-                                    allSubjectsAv[index]
-                                        .value
-                                        .toStringAsFixed(3),
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  diffIcon,
-                                  Text(
-                                    allSubjectsAv[index]
-                                        .diffSinceLast
-                                        .toStringAsFixed(3),
-                                    style: TextStyle(
-                                        color: diffColor, fontSize: 18),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                          SizedBox(height: 8, width: 15),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "${getTranslatedString("worst")} (" +
-                                    capitalize(worstSubjectAv.subject) +
-                                    ") ${getTranslatedString("Average")}: ",
-                                textAlign: TextAlign.start,
-                                style: new TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                worstSubjectAv.value.toStringAsFixed(3),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              worstAvIcon,
-                              Text(
-                                worstSubjectAv.diffSinceLast.toStringAsFixed(3),
-                                style: TextStyle(
-                                    color: worstAvColor, fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ],
-                      );
-                      break;
-                    case 6:
                       return SizedBox(
                         height: 25,
                       );
                       break;
-                    case 7:
+                    case 6:
                       return Center(
                         child: Text(
                           globals.howManyGraph == "Kör diagram"
@@ -509,7 +405,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ),
                       );
                       break;
-                    case 8:
+                    case 7:
                       //TODO: Fix chart labels
                       if (globals.howManyGraph == "Kör diagram") {
                         return SizedBox(
@@ -566,7 +462,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         height: 25,
                       );
                       break;
-                    case 10:
+                    case 9:
                       return Center(
                         child: Text(
                           "${getTranslatedString("countOfSpecMarks")}:",
@@ -578,7 +474,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         ),
                       );
                       break;
-                    case 11:
+                    case 10:
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

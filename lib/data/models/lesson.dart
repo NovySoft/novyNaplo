@@ -166,7 +166,7 @@ class Lesson {
     databaseId = map['databaseId'];
     userId = map['userId'];
     icon = parseSubjectToIcon(
-      subject: subject == null ? "" : subject.name,
+      subject: subject == null ? "" : subject.fullName,
     );
     isSpecialDayEvent = map['isSpecialDayEvent'] == 1 ? true : false;
   }
@@ -259,7 +259,7 @@ class Lesson {
         ? DateTime.parse(json['VegIdopont']).toLocal()
         : DateTime(2020);
     icon = parseSubjectToIcon(
-      subject: subject == null ? "" : subject.name,
+      subject: subject == null ? "" : subject.fullName,
     );
     if (subject == null) {
       isSpecialDayEvent = true;

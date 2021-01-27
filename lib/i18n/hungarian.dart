@@ -389,5 +389,8 @@ final Map<String, String> translation = {
   "timetableXsChanged": "?{0} órái megváltoztak",
   "timetableXnewAndXchanged": "?{0} óra módosult (?{1})",
   "kretaUpgradeOrWrongCred":
-      "Ez általában azt jelenti, hogy a kréta frissít/karbantartás alatt van, de ritka esetekben azt is jelentheti, hogy rosszul adtad meg a felhasználóneved/jelszavad."
+      "Ez általában azt jelenti, hogy a kréta frissít/karbantartás alatt van, de ritka esetekben azt is jelentheti, hogy rosszul adtad meg a felhasználóneved/jelszavad.",
+  "Egyéb": "Egyéb",
+  "Szülői igazolás": "Szülői igazolás",
+  "orvosi_igazolas": "Orvosi igazolás",
 };
