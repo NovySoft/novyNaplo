@@ -137,7 +137,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     color: charts.MaterialPalette.blue.shadeDefault),
               ));
               return ListView.builder(
-                itemCount: 12 + globals.adModifier,
+                itemCount: 11 + globals.adModifier,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
                   List<String> hiddenSeries = [];
@@ -457,7 +457,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                         );
                       }
                       break;
-                    case 9:
+                    case 8:
                       return SizedBox(
                         height: 25,
                       );
