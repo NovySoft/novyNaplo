@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -88,5 +89,21 @@ Future<void> batchInsertExams(List<Exam> examList) async {
   }
   if (inserted) {
     await batch.commit();
+  }
+}
+
+Future<Exam> getExamById(String id, Student user) async {
+  FirebaseCrashlytics.instance.log("getAllExams");
+  final List<Map<String, dynamic>> maps = await globals.db
+      .rawQuery('SELECT * FROM Exams WHERE userId = ? and uid = ?', [
+    user.userId,
+    id,
+  ]);
+
+  if (maps.length != 0) {
+    Exam temp = new Exam.fromSqlite(maps[0]);
+    return temp;
+  } else {
+    return null;
   }
 }

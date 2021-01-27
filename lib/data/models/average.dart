@@ -26,4 +26,3 @@ class Average {
     };
   }
 }
-//FIXME: Andrew says his average calculations are not always right

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/database/exam.dart';
 import 'package:novynaplo/data/models/description.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
@@ -108,8 +109,15 @@ class Lesson {
           examsPage.allParsedExams.firstWhere(
             (item) => item.uid == v,
             orElse: () {
-              //FIXME Get exam by id if not found
-              return Exam();
+              Exam temp;
+              getExamById(v, map['userId']).then((value) {
+                temp = value;
+              });
+              if (temp == null) {
+                return temp;
+              } else {
+                return Exam();
+              }
             },
           ),
         );
@@ -188,8 +196,15 @@ class Lesson {
           examsPage.allParsedExams.firstWhere(
             (item) => item.uid == v,
             orElse: () {
-              //FIXME Get exam by id if not found
-              return Exam();
+              Exam temp;
+              getExamById(v, userDetails).then((value) {
+                temp = value;
+              });
+              if (temp == null) {
+                return temp;
+              } else {
+                return Exam();
+              }
             },
           ),
         );
@@ -209,22 +224,20 @@ class Lesson {
         : null;
     teacherHwUid = json['HaziFeladatUid'];
     if (teacherHwUid != null) {
-      //Fixme: Check in the db, shouldn't we?
       homework = homeworkPage.globalHomework.firstWhere(
         (element) => element.uid == teacherHwUid,
         orElse: () {
-          return null;
+          Homework temp;
+          RequestHandler.getHomeworkId(
+            globals.currentUser,
+            id: teacherHwUid,
+            isStandAloneCall: true,
+          ).then((value) {
+            temp = value;
+          });
+          return temp;
         },
       );
-    }
-    if (homework == null && teacherHwUid != null) {
-      RequestHandler.getHomeworkId(
-        globals.currentUser,
-        id: teacherHwUid,
-        isStandAloneCall: true,
-      ).then((value) {
-        homework = value;
-      });
     }
     isHWSolved = json['IsHaziFeladatMegoldva'];
     teacher = json['TanarNeve'];
