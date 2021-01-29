@@ -20,6 +20,8 @@ Future<List<Notice>> getAllNotices() async {
     return temp;
   });
 
+  tempList.sort((a, b) => b.date.compareTo(a.date));
+
   return tempList;
 }
 
