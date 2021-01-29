@@ -395,4 +395,6 @@ final Map<String, String> translation = {
   "orvosi_igazolas": "Orvosi igazolás",
   "kretaUpgrade":
       "A kréta frissít vagy karbantartás alatt van! \n Próbáld újra később!",
+  "XPassWrong": "?{0} jelszava megváltozott",
+  "ComeAndChangePass": "Nyisd meg az appot és add meg újra a jelszavadat!",
 };

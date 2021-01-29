@@ -397,4 +397,6 @@ final Map<String, String> translation = {
   "orvosi_igazolas": "Medical Justification",
   "kretaUpgrade":
       "Kréta is updating or under maintenance at the moment! \n Please try again later!",
+  "XPassWrong": "?{0}'s password has changed",
+  "ComeAndChangePass": "Open the app and re-enter your password",
 };

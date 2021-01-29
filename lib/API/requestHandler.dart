@@ -668,7 +668,9 @@ class RequestHandler {
         user,
       );
     }
-    await NotificationDispatcher.dispatchNotifications();
+    if (globals.notifications) {
+      await NotificationDispatcher.dispatchNotifications();
+    }
   }
 
   static void printWrapped(String text) {

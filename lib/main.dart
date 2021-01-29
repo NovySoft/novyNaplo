@@ -93,15 +93,9 @@ void main() async {
     runApp(
       MyApp(),
     );
-    globals.fetchPeriod = globals.prefs.getInt("fetchPeriod") == null
-        ? 60
-        : globals.prefs.getInt("fetchPeriod");
-    globals.backgroundFetch = globals.prefs.getBool("backgroundFetch");
-    if (globals.backgroundFetch == null ? true : globals.backgroundFetch) {
-      globals.backgroundFetchCanWakeUpPhone =
-          globals.prefs.getBool("backgroundFetchCanWakeUpPhone") == null
-              ? true
-              : globals.prefs.getBool("backgroundFetchCanWakeUpPhone");
+    globals.fetchPeriod = globals.fetchPeriod;
+    globals.backgroundFetch = globals.backgroundFetch;
+    if (globals.backgroundFetch) {
       await AndroidAlarmManager.initialize();
       await AndroidAlarmManager.cancel(fetchAlarmID);
       await delay(1000);

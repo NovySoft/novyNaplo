@@ -1,7 +1,18 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:novynaplo/API/requestHandler.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
+import 'package:novynaplo/data/database/users.dart';
+import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/config.dart' as config;
+import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 
 //FIXME Fix the background fetch errors, I mean we also need to rewrite this
 var androidFetchDetail = new AndroidNotificationDetails(
@@ -19,16 +30,12 @@ var androidFetchDetail = new AndroidNotificationDetails(
 var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
 var platformChannelSpecificsGetNotif = new NotificationDetails(
     android: androidFetchDetail, iOS: iOSPlatformChannelSpecifics);
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    new FlutterLocalNotificationsPlugin();
-AndroidNotificationDetails sendNotification;
-NotificationDetails platformChannelSpecificsSendNotif;
 int notifId = 2;
 
 void backgroundFetch() async {
   print("BACKGROUND FETCH");
   try {
-    /*WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     FirebaseAnalytics().logEvent(name: "BackgroundFetch");
     FirebaseAnalytics()
@@ -37,61 +44,58 @@ void backgroundFetch() async {
         .setCustomKey("Version", config.currentAppVersionCode);
     FirebaseCrashlytics.instance.log("backgroundFetch started");
     await globals.setGlobals();
-    await notifHelper.setupNotifications();
-    //print(globals.notifications);
+    await NotificationHelper.setupNotifications();
+    await DatabaseHelper.initDatabase();
+    //Check for network connectivity
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       return;
     }
-    if (globals.prefs.getBool("backgroundFetchOnCellular") == false &&
+    if (globals.backgroundFetchOnCellular == false &&
         await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
       return;
     }
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    await flutterLocalNotificationsPlugin.show(
-      111,
+    await NotificationHelper.show(
+      -111,
       getTranslatedString("gettingData"),
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    /*final DateTime now = DateTime.now();
-    final int isolateId = Isolate.current.hashCode;
-    print("[$now] Hello, world! isolate=$isolateId function='$backgroundFetch'");*/
-    //FIXME DECRYPT HASZNÁLATA
-    //await decryptUserDetails();
-    if (globals.userDetails.school == null ||
-        globals.userDetails.school == "") {
-      await flutterLocalNotificationsPlugin.cancel(111);
-      await flutterLocalNotificationsPlugin.show(
-        -111,
-        '${getTranslatedString("errWhileFetch")}:',
-        "Decryption error",
-        platformChannelSpecificsSendNotif,
-      );
-      return;
+    List<Student> allUsers = await DatabaseHelper.getAllUsers();
+    int errorNotifId = -1;
+    for (var currentUser in allUsers) {
+      TokenResponse status = await RequestHandler.login(currentUser);
+      if (status.status == "OK") {
+        await RequestHandler.getEverything(
+          status.userinfo,
+          setData: false,
+        );
+      } else if (status.status == "invalid_username_or_password") {
+        String name = await getUsersNameFromUserId(currentUser.userId);
+        //FIXME: Also we need to handle this later
+        await NotificationHelper.show(
+          errorNotifId,
+          '${getTranslatedString("XPassWrong", replaceVariables: [name])}',
+          '${getTranslatedString("ComeAndChangePass")}',
+          NotificationHelper.platformChannelSpecificsAlertAll,
+        );
+        errorNotifId -= 1;
+      }
+      //NO ELSE, BECAUSE HERE WE JUST IGNORE ERRORS
     }
-    await mainSql.initDatabase();
-    String status = await RequestHandler.login(globals.userDetails);
-    if (status == "OK") {
-      //print( globals.userDetails.token);
-      String token = globals.userDetails.token;
-      //await NetworkHelper().getStudentInfo(token, decryptedCode);
-    }
-    await flutterLocalNotificationsPlugin.cancel(111);*/
+    await NotificationHelper.cancel(-111);
   } catch (e, s) {
-    FirebaseCrashlytics.instance.recordError(e, s, reason: 'backgroundFetch');
-    await flutterLocalNotificationsPlugin.cancel(111);
-    await flutterLocalNotificationsPlugin.show(
+    FirebaseCrashlytics.instance.recordError(
+      e,
+      s,
+      reason: 'backgroundFetch',
+      printDetails: true,
+    );
+    await NotificationHelper.cancel(-111);
+    await NotificationHelper.show(
       -111,
       '${getTranslatedString("errWhileFetch")}',
       e.toString(),
-      platformChannelSpecificsSendNotif,
+      NotificationHelper.platformChannelSpecificsAlertAll,
     );
   }
 }
