@@ -14,7 +14,6 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 
-//FIXME Fix the background fetch errors, I mean we also need to rewrite this
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',

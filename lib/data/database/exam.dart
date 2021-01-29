@@ -19,6 +19,8 @@ Future<List<Exam>> getAllExams() async {
     return temp;
   });
 
+  tempList.sort((a, b) => b.dateOfWriting.compareTo(a.dateOfWriting));
+
   return tempList;
 }
 
