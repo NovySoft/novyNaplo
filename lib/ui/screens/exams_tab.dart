@@ -70,7 +70,6 @@ class _ExamsTabState extends State<ExamsTab> {
     );
   }
 
-  //FIXME: Showing completed although it is not completed
   Widget _examBuilder(BuildContext context, int index) {
     //TODO: Matrix and title like in absences
     if (index >= allParsedExams.length) {
