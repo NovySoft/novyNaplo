@@ -41,7 +41,6 @@ import 'package:path_provider/path_provider.dart';
 
 var client = http.Client();
 
-//FIXME: Detect password changes
 class RequestHandler {
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");

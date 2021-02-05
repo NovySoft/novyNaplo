@@ -40,7 +40,7 @@ bool verCheckOnStart =
     true; //Should we check for updates upon startup, can be slow, but reminds user to update
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
-int fetchPeriod = 60; //After how many minutes should we fetch the new data?
+int fetchPeriod = 30; //After how many minutes should we fetch the new data?
 bool notifications = true; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
@@ -149,8 +149,8 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getInt("fetchPeriod") == null) {
-    fetchPeriod = 60;
-    prefs.setInt("fetchPeriod", 60);
+    fetchPeriod = 30;
+    prefs.setInt("fetchPeriod", 30);
   } else {
     fetchPeriod = prefs.getInt("fetchPeriod");
   }

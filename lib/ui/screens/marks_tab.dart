@@ -17,6 +17,7 @@ import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
+import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -150,8 +151,9 @@ class MarksTabState extends State<MarksTab>
         );
         break;
       } else {
-        //Fixme show toasts on ALL errors;
-        print(status);
+        ErrorToast.showErrorToast(
+          status.status,
+        );
       }
     }
 

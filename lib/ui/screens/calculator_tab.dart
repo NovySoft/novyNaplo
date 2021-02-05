@@ -60,7 +60,6 @@ final axisTwo = charts.NumericAxisSpec(
 Color afterAvCol;
 Widget afterAvIcon;
 String afterAvDiff;
-//FIXME Nem lehet kitörölni meg ilyenek, avagy a törlés gomb valamiért néha nem működik a mi van menü ablaknál XD
 
 class FormKey {
   static final formKey = GlobalKey<FormState>();

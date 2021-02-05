@@ -4,7 +4,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
@@ -13,6 +12,8 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/encryptionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/helpers/toasts/errorToast.dart';
+import 'package:novynaplo/helpers/toasts/okToast.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
     as progressButton;
 import 'package:novynaplo/helpers/ui/animations/shake_view.dart';
@@ -102,12 +103,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (widget.userDetails.school == null ||
             widget.userDetails.username == null ||
             widget.userDetails.password == null) {
-          Fluttertoast.showToast(
-            msg: getTranslatedString("errWhileMigratingManLogin"),
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 18.0,
+          ErrorToast.showErrorToast(
+            getTranslatedString("errWhileMigratingManLogin"),
           );
         } else {
           String userName = widget.userDetails.nickname != null
@@ -125,12 +122,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               replaceVariables: [userName],
             );
           });
-          Fluttertoast.showToast(
-            msg: getTranslatedString("reEnterPass"),
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 18.0,
+          ErrorToast.showErrorToast(
+            getTranslatedString("reEnterPass"),
           );
         }
       }
@@ -145,12 +138,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (widget.userDetails.school == null ||
             widget.userDetails.username == null ||
             widget.userDetails.password == null) {
-          Fluttertoast.showToast(
-            msg: getTranslatedString("errWhileMigratingManLogin"),
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 18.0,
+          ErrorToast.showErrorToast(
+            getTranslatedString("errWhileMigratingManLogin"),
           );
         } else {
           setState(() {
@@ -179,12 +168,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         (ConnectivityResult result) {
           if (result == ConnectivityResult.mobile ||
               result == ConnectivityResult.wifi) {
-            Fluttertoast.showToast(
-              msg: getTranslatedString("netRestored"),
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 18.0,
+            OkToast.showOkToast(
+              getTranslatedString("netRestored"),
             );
             setState(() {
               inputEnabled = true;
@@ -298,12 +283,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           s,
           reason: "insertUser encryptUserDetails",
         );
-        Fluttertoast.showToast(
-          msg: getTranslatedString("errRestart"),
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 18.0,
+        ErrorToast.showErrorToast(
+          getTranslatedString("errRestart"),
         );
       }
     } else if (result.status == "invalid_username_or_password") {
@@ -312,45 +293,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _userShakeController.shake();
         _isWrongUser = true;
       });
-      Fluttertoast.showToast(
-        msg: getTranslatedString("wrongUserPass"),
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 18.0,
+      ErrorToast.showErrorToast(
+        getTranslatedString("wrongUserPass"),
       );
     } else if (result.status == "TIMEOUT") {
-      Fluttertoast.showToast(
-        msg: getTranslatedString("timeoutErr"),
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 18.0,
+      ErrorToast.showErrorToast(
+        getTranslatedString("timeoutErr"),
       );
     } else if (result.status.contains(getTranslatedString('errWhileFetch')) ||
         result.status.contains(getTranslatedString('unkError'))) {
       //'Handled error'
-      Fluttertoast.showToast(
-        msg: result.status,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 18.0,
-      );
-    } else {
-      //Well this should never run.... but let's keep this here just in case
-      FirebaseAnalytics().logEvent(
-        name: "unknownLoginResponse",
-        parameters: {
-          "result": result.status,
-        },
-      );
-      Fluttertoast.showToast(
-        msg: "${getTranslatedString('unkError')}\n ${result.status}",
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 18.0,
+      ErrorToast.showErrorToast(
+        result.status,
       );
     }
   }
@@ -369,12 +323,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           _isWrongSchool = true;
         }
       });
-      Fluttertoast.showToast(
-        msg: getTranslatedString("mustntLeaveEmpty"),
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 18.0,
+      ErrorToast.showErrorToast(
+        getTranslatedString("mustntLeaveEmpty"),
       );
       return true;
     } else {

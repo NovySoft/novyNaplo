@@ -1,6 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -14,6 +13,7 @@ import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
+import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -87,33 +87,15 @@ class NotificationReceiver {
             );
             break;
           case "test":
-            Fluttertoast.showToast(
-              msg: getTranslatedString("pressTestNotif"),
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 18.0,
-            );
+            ErrorToast.showErrorToast(getTranslatedString("pressTestNotif"));
             break;
           default:
-            Fluttertoast.showToast(
-              msg: getTranslatedString("unkPayload"),
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 18.0,
-            );
+            ErrorToast.showErrorToast(getTranslatedString("unkPayload"));
             break;
         }
       } else {
         if (payloadUserId == null) {
-          Fluttertoast.showToast(
-            msg: getTranslatedString("missingUserId"),
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 18.0,
-          );
+          ErrorToast.showErrorToast(getTranslatedString("missingUserId"));
           return;
         }
         //*If content is suplied, then we should fetch it and show it specifically
@@ -565,13 +547,7 @@ class NotificationReceiver {
             }
             break;
           default:
-            Fluttertoast.showToast(
-              msg: getTranslatedString("unkPayload"),
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 18.0,
-            );
+            ErrorToast.showErrorToast(getTranslatedString("unkPayload"));
             break;
         }
       }
