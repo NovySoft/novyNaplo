@@ -52,7 +52,6 @@ bool collapseNotifications =
 
 Future<void> resetAllGlobals() async {
   await DatabaseHelper.clearAllTables();
-  prefs.setString("code", null);
   await prefs.clear();
   await prefs.setBool("ads", adsEnabled);
   await prefs.setBool("isNew", true);

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
-import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/ui/widgets/AdsDialog.dart';
 
 String dropDown;
 
@@ -165,7 +165,7 @@ class _UIsettingsState extends State<UIsettings> {
                         globals.adsEnabled = isOn;
                       });
                       FirebaseCrashlytics.instance.setCustomKey("Ads", isOn);
-                      globals.prefs.setBool("ads", isOn);
+                      await globals.prefs.setBool("ads", isOn);
                       FirebaseAnalytics().setUserProperty(
                           name: "Ads", value: isOn ? "ON" : "OFF");
                       globals.adModifier = isOn ? 1 : 0;

@@ -1,14 +1,11 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
-import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'calculator_settings.dart';
@@ -57,20 +54,6 @@ class SettingsBody extends StatefulWidget {
 
 class _SettingsBodyState extends State<SettingsBody> {
   void _onLoad(var context) async {
-    if (main.isNew) {
-      main.isNew = false;
-      setState(() {
-        globals.adsEnabled = true;
-        globals.adModifier = 1;
-      });
-      globals.prefs.setBool("ads", true);
-      showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return AdsDialog();
-          });
-    }
     if (globals.markCardTheme == "Egyszínű") {
       setState(() {
         indexModifier = 1;
@@ -387,7 +370,6 @@ class _SettingsBodyState extends State<SettingsBody> {
             ),
           );
         } else if (index == 10) {
-          //FIXME: Ads stuck on logging out
           return ListTile(
             title: Center(
               child: Padding(
@@ -451,36 +433,6 @@ class _LogOutDialogState extends State<LogOutDialog> {
         FlatButton(
           child: Text(getTranslatedString("no")),
           onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class AdsDialog extends StatefulWidget {
-  @override
-  _AdsDialogState createState() => new _AdsDialogState();
-}
-
-class _AdsDialogState extends State<AdsDialog> {
-  Widget build(BuildContext context) {
-    return new AlertDialog(
-      title: new Text(getTranslatedString("ads")),
-      content: Text(
-        getTranslatedString("turnOnAds"),
-        textAlign: TextAlign.left,
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('OK'),
-          onPressed: () async {
-            globals.adsEnabled = true;
-            adBanner.load();
-            adBanner.show(
-              anchorType: AnchorType.bottom,
-            );
             Navigator.of(context).pop();
           },
         ),

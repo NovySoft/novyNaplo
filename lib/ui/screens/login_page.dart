@@ -398,7 +398,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         enabled: inputEnabled && !widget.isEditing,
         style: TextStyle(
           color: inputEnabled && !widget.isEditing
-              ? Theme.of(context).textTheme.subtitle1
+              ? Theme.of(context).textTheme.subtitle1.color
               : Colors.grey,
         ),
         focusNode: _codeFocus,
@@ -453,7 +453,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         enabled: inputEnabled && !widget.isEditing,
         style: TextStyle(
           color: inputEnabled && !widget.isEditing
-              ? Theme.of(context).textTheme.subtitle1
+              ? Theme.of(context).textTheme.subtitle1.color
               : Colors.grey,
         ),
         focusNode: _userFocus,

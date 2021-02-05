@@ -9,6 +9,7 @@ import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
+import 'package:novynaplo/helpers/handleNewUser.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -26,6 +27,7 @@ import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'dart:async';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/main.dart' as main;
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];
@@ -68,6 +70,9 @@ class MarksTabState extends State<MarksTab>
       if (!globals.didFetch) {
         globals.didFetch = true;
         androidRefreshKey.currentState?.show();
+      }
+      if (main.isNew) {
+        handleNewUser(context);
       }
     });
     //Handle loaded state
