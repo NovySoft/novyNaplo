@@ -71,4 +71,6 @@ class DatabaseHelper {
   static Future<void> Function() initDatabase = main.initDatabase;
 
   static Future<void> Function(Student) updatePassword = users.updatePassword;
+
+  static Future<void> Function(Student, bool) setFetched = users.setFetched;
 }

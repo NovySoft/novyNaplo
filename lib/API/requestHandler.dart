@@ -667,7 +667,7 @@ class RequestHandler {
         user,
       );
     }
-    if (globals.notifications) {
+    if (globals.notifications && user.fetched) {
       await NotificationDispatcher.dispatchNotifications();
     }
   }

@@ -136,6 +136,13 @@ class MarksTabState extends State<MarksTab>
           status.userinfo,
           setData: currentUser.current,
         );
+        if (!currentUser.fetched) {
+          currentUser.fetched = true;
+          DatabaseHelper.setFetched(
+            currentUser,
+            true,
+          );
+        }
         setState(() {
           _setData();
         });

@@ -41,6 +41,7 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
       password: maps[i]['password'],
       iv: maps[i]['iv'],
       current: maps[i]['current'] == 1 ? true : false,
+      fetched: maps[i]['fetched'] == 1 ? true : false,
     );
     if (decrypt) {
       return decryptUserDetails(temp);
@@ -67,5 +68,12 @@ Future<void> updatePassword(Student user) async {
   await globals.db.rawUpdate(
     "UPDATE Users SET password = ? WHERE id = ? OR uid = ?",
     [user.password, user.userId, user.uid],
+  );
+}
+
+Future<void> setFetched(Student user, bool value) async {
+  await globals.db.rawUpdate(
+    "UPDATE Users SET fetched = ? WHERE id = ? OR uid = ?",
+    [value ? 1 : 0, user.userId, user.uid],
   );
 }

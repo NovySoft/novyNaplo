@@ -23,23 +23,10 @@ Student decryptUserDetails(Student input) {
     input.password,
     iv: iv,
   );
-  return Student(
-    userId: input.userId,
-    uid: input.uid,
-    mothersName: input.mothersName,
-    addressList: input.addressList,
-    parents: input.parents,
-    name: input.name,
-    birthDay: input.birthDay,
-    placeOfBirth: input.placeOfBirth,
-    birthName: input.birthName,
-    schoolYearUid: input.schoolYearUid,
-    bankAccount: input.bankAccount,
-    institution: input.institution,
-    current: input.current,
-    iv: iv.base64,
-    school: decryptedCode,
-    username: decryptedUser,
-    password: decryptedPass,
-  );
+  Student output = Student.from(input);
+  output.iv = iv.base64;
+  output.school = decryptedCode;
+  output.username = decryptedUser;
+  output.password = decryptedPass;
+  return output;
 }

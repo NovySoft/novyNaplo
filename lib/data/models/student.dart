@@ -23,6 +23,7 @@ class Student {
   DateTime tokenDate;
   int userId;
   bool current;
+  bool fetched = false;
 
   Student({
     this.mothersName,
@@ -45,7 +46,30 @@ class Student {
     this.tokenDate,
     this.userId,
     this.current,
+    this.fetched,
   });
+
+  Student.from(Student input) {
+    userId = input.userId;
+    uid = input.uid;
+    mothersName = input.mothersName;
+    addressList = input.addressList;
+    parents = input.parents;
+    name = input.name;
+    nickname = input.nickname;
+    birthDay = input.birthDay;
+    placeOfBirth = input.placeOfBirth;
+    birthName = input.birthName;
+    schoolYearUid = input.schoolYearUid;
+    bankAccount = input.bankAccount;
+    institution = input.institution;
+    current = input.current;
+    iv = input.iv;
+    school = input.school;
+    username = input.username;
+    password = input.password;
+    fetched = input.fetched;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -67,6 +91,7 @@ class Student {
       'school': school,
       'iv': iv,
       'current': current ? 1 : 0,
+      'fetched': fetched ? 1 : 0,
     };
   }
 
