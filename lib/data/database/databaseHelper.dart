@@ -69,4 +69,6 @@ class DatabaseHelper {
       users.getAllUsers;
 
   static Future<void> Function() initDatabase = main.initDatabase;
+
+  static Future<void> Function(Student) updatePassword = users.updatePassword;
 }

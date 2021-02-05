@@ -26,9 +26,10 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
       userId: maps[i]['id'],
       uid: maps[i]['uid'],
       mothersName: maps[i]['mothersName'],
-      adressList: json.decode(maps[i]['adressList']).cast<String>(),
+      addressList: json.decode(maps[i]['adressList']).cast<String>(),
       parents: Parent.fromJsonList(maps[i]['parents']),
       name: maps[i]['name'],
+      nickname: maps[i]['nickname'],
       birthDay: maps[i]['birthDay'],
       placeOfBirth: maps[i]['placeOfBirth'],
       birthName: maps[i]['birthName'],
@@ -59,4 +60,12 @@ Future<String> getUsersNameFromUserId(int userId) async {
   } else {
     return maps[0]["nickname"];
   }
+}
+
+Future<void> updatePassword(Student user) async {
+  FirebaseCrashlytics.instance.log("updatePassword");
+  await globals.db.rawUpdate(
+    "UPDATE Users SET password = ? WHERE id = ? OR uid = ?",
+    [user.password, user.userId, user.uid],
+  );
 }

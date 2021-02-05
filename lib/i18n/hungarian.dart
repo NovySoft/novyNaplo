@@ -397,4 +397,6 @@ final Map<String, String> translation = {
       "A kréta frissít vagy karbantartás alatt van! \n Próbáld újra később!",
   "XPassWrong": "?{0} jelszava megváltozott",
   "ComeAndChangePass": "Nyisd meg az appot és add meg újra a jelszavadat!",
+  "reEnterPass": "Kérlek add meg újra a jelszavadat!",
+  "currEditing": "Jelenleg ?{0} jelszavát változtatod",
 };

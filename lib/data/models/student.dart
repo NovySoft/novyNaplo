@@ -2,9 +2,10 @@ import 'dart:convert';
 
 class Student {
   String mothersName;
-  List<String> adressList;
+  List<String> addressList;
   List<Parent> parents;
   String name;
+  String nickname;
   String birthDay;
   String placeOfBirth;
   String birthName;
@@ -25,9 +26,10 @@ class Student {
 
   Student({
     this.mothersName,
-    this.adressList,
+    this.addressList,
     this.parents,
     this.name,
+    this.nickname,
     this.birthDay,
     this.placeOfBirth,
     this.birthName,
@@ -50,9 +52,10 @@ class Student {
       'id': userId,
       'uid': uid,
       'mothersName': mothersName,
-      'adressList': json.encode(adressList),
+      'adressList': json.encode(addressList),
       'parents': json.encode(parents),
       'name': name,
+      'nickname': nickname,
       'birthDay': birthDay,
       'placeOfBirth': placeOfBirth,
       'birthName': birthName,
@@ -69,7 +72,7 @@ class Student {
 
   Student.fromJson(Map<String, dynamic> json) {
     mothersName = json['AnyjaNeve'];
-    adressList = json['Cimek'].cast<String>();
+    addressList = json['Cimek'].cast<String>();
     if (json['Gondviselok'] != null) {
       parents = new List<Parent>();
       json['Gondviselok'].forEach((v) {

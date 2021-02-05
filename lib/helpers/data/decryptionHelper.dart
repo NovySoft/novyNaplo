@@ -27,7 +27,7 @@ Student decryptUserDetails(Student input) {
     userId: input.userId,
     uid: input.uid,
     mothersName: input.mothersName,
-    adressList: input.adressList,
+    addressList: input.addressList,
     parents: input.parents,
     name: input.name,
     birthDay: input.birthDay,

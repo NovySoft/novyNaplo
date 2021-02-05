@@ -68,9 +68,9 @@ void backgroundFetch() async {
           status.userinfo,
           setData: false,
         );
+        FirebaseAnalytics().logEvent(name: "BackgroundFetchSuccess");
       } else if (status.status == "invalid_username_or_password") {
         String name = await getUsersNameFromUserId(currentUser.userId);
-        //FIXME: Also we need to handle this later
         await NotificationHelper.show(
           errorNotifId,
           '${getTranslatedString("XPassWrong", replaceVariables: [name])}',
@@ -78,11 +78,18 @@ void backgroundFetch() async {
           NotificationHelper.platformChannelSpecificsAlertAll,
         );
         errorNotifId -= 1;
+      } else {
+        FirebaseAnalytics().logEvent(
+          name: "BackgroundFetchFail",
+          parameters: {
+            "status": status.status,
+          },
+        );
       }
-      //NO ELSE, BECAUSE HERE WE JUST IGNORE ERRORS
     }
     await NotificationHelper.cancel(-111);
   } catch (e, s) {
+    FirebaseAnalytics().logEvent(name: "BackgroundFetchError");
     FirebaseCrashlytics.instance.recordError(
       e,
       s,

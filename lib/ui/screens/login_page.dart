@@ -39,10 +39,12 @@ class LoginPage extends StatefulWidget {
   const LoginPage({
     this.userDetails,
     this.isAutoFill = false,
+    this.isEditing = false,
   });
 
   final Student userDetails;
   final bool isAutoFill;
+  final bool isEditing;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -64,6 +66,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool isFirstUser = false;
   StreamSubscription<ConnectivityResult> networkChangeListener;
   bool inputEnabled = true;
+  String textBoxContent = "";
 
   void showSelectDialog() {
     setState(() {
@@ -95,6 +98,42 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       DeviceOrientation.portraitDown,
     ]);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.isEditing) {
+        if (widget.userDetails.school == null ||
+            widget.userDetails.username == null ||
+            widget.userDetails.password == null) {
+          Fluttertoast.showToast(
+            msg: getTranslatedString("errWhileMigratingManLogin"),
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 18.0,
+          );
+        } else {
+          String userName = widget.userDetails.nickname != null
+              ? widget.userDetails.nickname
+              : widget.userDetails.name;
+          setState(() {
+            //Set school
+            schoolController.text = widget.userDetails.school;
+            selectedSchool.code = widget.userDetails.school;
+            //Set username
+            _userController.text = widget.userDetails.username;
+            //Set text for editing
+            textBoxContent = getTranslatedString(
+              "currEditing",
+              replaceVariables: [userName],
+            );
+          });
+          Fluttertoast.showToast(
+            msg: getTranslatedString("reEnterPass"),
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 18.0,
+          );
+        }
+      }
       if (widget.isAutoFill) {
         String path =
             fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
@@ -234,18 +273,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           embedEncryptedDetails: true,
           encryptedDetails: finalUserObject,
         );
-        await DatabaseHelper.insertUser(finalUserObject);
-        await globals.prefs.setBool("isNew", false);
-        if (widget.isAutoFill) {
-          //*Delete the prefs version of login data
-          globals.prefs.remove("code");
-          globals.prefs.remove("user");
-          globals.prefs.remove("password");
-          //Pop the loading spinner
-          Navigator.of(
-            KeyLoaderKey.keyLoader.currentContext,
-            rootNavigator: true,
-          ).pop();
+        if (widget.isEditing) {
+          finalUserObject.userId = widget.userDetails.userId;
+          await DatabaseHelper.updatePassword(finalUserObject);
+        } else {
+          await DatabaseHelper.insertUser(finalUserObject);
+          await globals.prefs.setBool("isNew", false);
+          if (widget.isAutoFill) {
+            //*Delete the prefs version of login data
+            globals.prefs.remove("code");
+            globals.prefs.remove("user");
+            globals.prefs.remove("password");
+            //Pop the loading spinner
+            Navigator.of(
+              KeyLoaderKey.keyLoader.currentContext,
+              rootNavigator: true,
+            ).pop();
+          }
         }
         Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
       } catch (e, s) {
@@ -351,7 +395,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final codeInput = ShakeView(
       controller: _schoolShakeController,
       child: TextFormField(
-        enabled: inputEnabled,
+        enabled: inputEnabled && !widget.isEditing,
+        style: TextStyle(
+          color: inputEnabled && !widget.isEditing
+              ? Theme.of(context).textTheme.subtitle1
+              : Colors.grey,
+        ),
         focusNode: _codeFocus,
         controller: schoolController,
         readOnly: true,
@@ -370,7 +419,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         autofocus: false,
         decoration: InputDecoration(
           hintText: getTranslatedString("schId"),
-          hintStyle: inputEnabled ? null : TextStyle(color: Colors.grey),
+          hintStyle: inputEnabled && !widget.isEditing
+              ? null
+              : TextStyle(color: Colors.grey),
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32.0),
@@ -399,7 +450,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final usernameInput = ShakeView(
       controller: _userShakeController,
       child: TextFormField(
-        enabled: inputEnabled,
+        enabled: inputEnabled && !widget.isEditing,
+        style: TextStyle(
+          color: inputEnabled && !widget.isEditing
+              ? Theme.of(context).textTheme.subtitle1
+              : Colors.grey,
+        ),
         focusNode: _userFocus,
         controller: _userController,
         onChanged: (text) {
@@ -537,7 +593,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
             logo,
-            SizedBox(height: 48),
+            SizedBox(height: 24),
+            Center(
+              child: Text(
+                textBoxContent,
+              ),
+            ),
+            SizedBox(height: 24),
             codeInput,
             SizedBox(height: 8.0),
             usernameInput,
