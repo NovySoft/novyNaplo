@@ -53,12 +53,6 @@ void backgroundFetch() async {
         await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
       return;
     }
-    await NotificationHelper.show(
-      -111,
-      getTranslatedString("gettingData"),
-      '${getTranslatedString("currGetData")}...',
-      platformChannelSpecificsGetNotif,
-    );
     List<Student> allUsers = await DatabaseHelper.getAllUsers();
     int errorNotifId = -1;
     for (var currentUser in allUsers) {
@@ -87,7 +81,6 @@ void backgroundFetch() async {
         );
       }
     }
-    await NotificationHelper.cancel(-111);
   } catch (e, s) {
     FirebaseAnalytics().logEvent(name: "BackgroundFetchError");
     FirebaseCrashlytics.instance.recordError(
@@ -96,7 +89,6 @@ void backgroundFetch() async {
       reason: 'backgroundFetch',
       printDetails: true,
     );
-    await NotificationHelper.cancel(-111);
     await NotificationHelper.show(
       -111,
       '${getTranslatedString("errWhileFetch")}',
