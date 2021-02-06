@@ -95,7 +95,6 @@ android {
             signingConfig signingConfigs.release
         }
         debug{
-            signingConfig signingConfigs.debug
             zipAlignEnabled false
         }
     }
