@@ -22,18 +22,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        env:
-          KEYJKS: ${{ secrets.KEYJKS }}
-          KEYPROPERTIES: ${{ secrets.KEYPROPERTIES }}
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: 'stable'
       - name: Install dependencies
         run: flutter pub get
       - name: Setup keystore
+        env:
+          KEYJKS: ${{ secrets.KEYJKS }}
+          KEYPROPERTIES: ${{ secrets.KEYPROPERTIES }}
         run: |
           cd android
-          echo "$KEYPROPERTIES"
           wget "$KEYPROPERTIES" -O key.properties
       - name: Build apk
         run: flutter build apk --no-shrink --release --verbose
