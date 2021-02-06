@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.4.0
-        with:
-          channel: 'stable'
         env:
           KEYJKS: ${{ secrets.KEYJKS }}
           KEYPROPERTIES: ${{ secrets.KEYPROPERTIES }}
+      - uses: subosito/flutter-action@v1.4.0
+        with:
+          channel: 'stable'
       - name: Install dependencies
         run: flutter pub get
       - name: Setup keystore
