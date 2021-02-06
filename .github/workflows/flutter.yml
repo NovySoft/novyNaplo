@@ -7,7 +7,6 @@ jobs:
       name: Analyze
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: 'stable'
@@ -21,7 +20,6 @@ jobs:
     name: Build apk for android
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: 'stable'
