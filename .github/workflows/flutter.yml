@@ -33,6 +33,9 @@ jobs:
           KEYPROPERTIES: ${{ secrets.KEYPROPERTIES }}
         run: |
           cd android
-          wget "$KEYPROPERTIES" -O key.properties
+          wget "$KEYPROPERTIES" -O key.properties &> /dev/null
+          cd app
+          wget "$KEYJKS" -O key.jks &> /dev/null
+          cd ../../
       - name: Build apk
         run: flutter build apk --no-shrink --release --verbose
