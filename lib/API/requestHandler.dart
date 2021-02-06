@@ -94,8 +94,7 @@ class RequestHandler {
       );
 
       bool isKretaUpdating = await checkForKretaUpdatingStatus(user);
-      if (isKretaUpdating ||
-          response.headers.containsKey("x-maintenance-mode")) {
+      if (isKretaUpdating) {
         return TokenResponse(
           status:
               "${getTranslatedString('errWhileFetch')}:\n${getTranslatedString('kretaUpgrade')}",
@@ -124,7 +123,7 @@ class RequestHandler {
           response.statusCode == 500 ||
           response.statusCode == 502 ||
           response.statusCode == 503) {
-        //Kreta is probably updating
+        //Kreta IDP is probably updating
         return TokenResponse(
           status:
               "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgradeOrWrongCred')}",

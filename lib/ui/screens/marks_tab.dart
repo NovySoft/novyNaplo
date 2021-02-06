@@ -158,7 +158,8 @@ class MarksTabState extends State<MarksTab>
         );
         break;
       } else {
-        ErrorToast.showErrorToast(
+        ErrorToast.showErrorToastLong(
+          context,
           status.status,
         );
       }
