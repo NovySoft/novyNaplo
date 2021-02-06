@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'collapseNotifications.dart';
@@ -9,6 +10,7 @@ class NotificationDispatcher {
       ToBeDispatchedNotifications();
 
   static Future<void> dispatchNotifications() async {
+    FirebaseCrashlytics.instance.log("dispatchNotifications");
     int notifId = 1;
     List<NotificationData> notificationList = [];
     if (globals.collapseNotifications) {

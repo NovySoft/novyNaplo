@@ -43,6 +43,7 @@ var client = http.Client();
 
 class RequestHandler {
   static Future<bool> checkForKretaUpdatingStatus(Student userDetails) async {
+    FirebaseCrashlytics.instance.log("checkForKretaUpdatingStatus");
     //!Important
     /*
     Always check the school site for updating as the school site handles the data and 
@@ -152,6 +153,7 @@ class RequestHandler {
     bool embedEncryptedDetails = false,
     Student encryptedDetails,
   }) async {
+    FirebaseCrashlytics.instance.log("getStudentInfo");
     if (embedEncryptedDetails && encryptedDetails == null) {
       throw ErrorDescription("Encrypted details were not given");
     }
@@ -190,6 +192,7 @@ class RequestHandler {
     Student userDetails, {
     bool sort = true,
   }) async {
+    FirebaseCrashlytics.instance.log("getEvaluations");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations,
@@ -267,6 +270,7 @@ class RequestHandler {
   static Future<List<List<Absence>>> getAbsencesMatrix(
     Student userDetails,
   ) async {
+    FirebaseCrashlytics.instance.log("getAbsencesMatrix");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
@@ -306,6 +310,7 @@ class RequestHandler {
     Student userDetails, {
     bool sort = true,
   }) async {
+    FirebaseCrashlytics.instance.log("getExams");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
@@ -351,6 +356,7 @@ class RequestHandler {
     @required DateTime fromDue,
     bool sort = true,
   }) async {
+    FirebaseCrashlytics.instance.log("getHomeworks");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) +
@@ -388,6 +394,7 @@ class RequestHandler {
     Student userDetails, {
     DateTime date,
   }) async {
+    FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
     if (!(await NetworkHelper.isNetworkAvailable())) {
       throw Exception(getTranslatedString("noNet"));
     }
@@ -437,6 +444,7 @@ class RequestHandler {
   static Future<List<List<Lesson>>> getThreeWeeksLessons(
     Student userDetails,
   ) async {
+    FirebaseCrashlytics.instance.log("getThreeWeeksLessons");
     int monday = 1;
     int sunday = 7;
     DateTime now = new DateTime.now();
@@ -467,6 +475,7 @@ class RequestHandler {
     @required DateTime from,
     @required DateTime to,
   }) async {
+    FirebaseCrashlytics.instance.log("getTimetableMatrix");
     if (from == null || to == null) return [];
 
     try {
@@ -514,6 +523,7 @@ class RequestHandler {
     Student userDetails, {
     bool sort = true,
   }) async {
+    FirebaseCrashlytics.instance.log("getEvents");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.events,
@@ -554,6 +564,7 @@ class RequestHandler {
     Student userDetails, {
     bool sort = true,
   }) async {
+    FirebaseCrashlytics.instance.log("getNotices");
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.notes,
@@ -596,6 +607,7 @@ class RequestHandler {
     @required String id,
     bool isStandAloneCall = false,
   }) async {
+    FirebaseCrashlytics.instance.log("getHomeworkId");
     if (id == null) return Homework();
     if (userDetails.token == null) {
       if (userDetails.userId != null) {
@@ -651,6 +663,7 @@ class RequestHandler {
     Student user, {
     bool setData = false,
   }) async {
+    FirebaseCrashlytics.instance.log("getEverything");
     if (setData) {
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);
