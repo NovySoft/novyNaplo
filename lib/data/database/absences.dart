@@ -29,8 +29,8 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   final Batch batch = globals.db.batch();
 
   List<List<Absence>> tempAbsencesMatrix = await getAllAbsencesMatrix();
-  List<dynamic> allAbsences =
-      List.from(tempAbsencesMatrix).expand((i) => i).toList();
+  List<Absence> allAbsences =
+      List.from(tempAbsencesMatrix).expand((i) => i).toList().cast<Absence>();
   for (var absence in absenceList) {
     var matchedAbsences = allAbsences.where((element) {
       return (element.uid == absence.uid && element.userId == absence.userId);
@@ -89,6 +89,37 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
     }
   }
   if (inserted) {
+    await batch.commit();
+  }
+  handleEvalsDeletion(
+    remoteAbsences: absenceList,
+    localAbsences: allAbsences,
+  );
+}
+
+Future<void> handleEvalsDeletion({
+  List<Absence> remoteAbsences,
+  List<Absence> localAbsences,
+}) async {
+  // Get a reference to the database.
+  final Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var local in localAbsences) {
+    if (remoteAbsences.indexWhere(
+          (element) =>
+              element.uid == local.uid && element.userId == local.userId,
+        ) ==
+        -1) {
+      deleted = true;
+      print("Local absence doesn't exist in remote $local ${local.databaseId}");
+      batch.delete(
+        "Absences",
+        where: "databaseId = ?",
+        whereArgs: [local.databaseId],
+      );
+    }
+  }
+  if (deleted) {
     await batch.commit();
   }
 }

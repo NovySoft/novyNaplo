@@ -8,6 +8,7 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:flutter/foundation.dart';
 
 Future<List<Lesson>> getAllTimetable() async {
   FirebaseCrashlytics.instance.log("getAllTimetable");
@@ -138,6 +139,39 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
     }
   }
   if (inserted) {
+    await batch.commit();
+  }
+  handleTimetableDeletion(
+    remoteLessons: lessonList,
+    localLessons: allTimetable,
+  );
+}
+
+Future<void> handleTimetableDeletion({
+  @required List<Lesson> remoteLessons,
+  @required List<Lesson> localLessons,
+}) async {
+  // Get a reference to the database.
+  final Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var local in localLessons) {
+    if (remoteLessons.indexWhere(
+          (element) =>
+              element.uid == local.uid && element.userId == local.userId,
+        ) ==
+        -1) {
+      deleted = true;
+      print(
+        "Local timetable item doesn't exist in remote $local ${local.databaseId}",
+      );
+      batch.delete(
+        "Timetable",
+        where: "databaseId = ?",
+        whereArgs: [local.databaseId],
+      );
+    }
+  }
+  if (deleted) {
     await batch.commit();
   }
 }

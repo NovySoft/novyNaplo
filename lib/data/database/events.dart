@@ -5,6 +5,7 @@ import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 
 Future<List<Event>> getAllEvents() async {
   FirebaseCrashlytics.instance.log("getAllEvents");
@@ -81,6 +82,33 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
     }
   }
   if (inserted) {
+    await batch.commit();
+  }
+}
+
+Future<void> handleEventDeletion({
+  @required List<Event> remoteEvents,
+  @required List<Event> localEvents,
+}) async {
+  // Get a reference to the database.
+  final Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var local in localEvents) {
+    if (remoteEvents.indexWhere(
+          (element) =>
+              element.uid == local.uid && element.userId == local.userId,
+        ) ==
+        -1) {
+      deleted = true;
+      print("Local event doesn't exist in remote $local ${local.databaseId}");
+      batch.delete(
+        "Events",
+        where: "databaseId = ?",
+        whereArgs: [local.databaseId],
+      );
+    }
+  }
+  if (deleted) {
     await batch.commit();
   }
 }

@@ -7,6 +7,7 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:flutter/foundation.dart';
 
 Future<List<Evals>> getAllEvals() async {
   FirebaseCrashlytics.instance.log("getAllEvals");
@@ -105,6 +106,37 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
     }
   }
   if (inserted) {
+    await batch.commit();
+  }
+  handleEvalsDeletion(
+    remoteEvals: evalList,
+    localEvals: allEvals,
+  );
+}
+
+Future<void> handleEvalsDeletion({
+  @required List<Evals> remoteEvals,
+  @required List<Evals> localEvals,
+}) async {
+  // Get a reference to the database.
+  final Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var local in localEvals) {
+    if (remoteEvals.indexWhere(
+          (element) =>
+              element.uid == local.uid && element.userId == local.userId,
+        ) ==
+        -1) {
+      deleted = true;
+      print("Local eval doesn't exist in remote $local ${local.databaseId}");
+      batch.delete(
+        "Evals",
+        where: "databaseId = ?",
+        whereArgs: [local.databaseId],
+      );
+    }
+  }
+  if (deleted) {
     await batch.commit();
   }
 }

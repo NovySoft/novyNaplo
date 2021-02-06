@@ -8,6 +8,7 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
+import 'package:flutter/foundation.dart';
 
 Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   FirebaseCrashlytics.instance.log("getAllHw");
@@ -142,6 +143,10 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   if (inserted) {
     await batch.commit();
   }
+  handleHomeworkDeletion(
+    remoteHomework: hwList,
+    localHomework: allHw,
+  );
 }
 
 Future<void> insertHomework(Homework hw, {bool edited = false}) async {
@@ -220,5 +225,34 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
         insertHomework(hw, edited: true);
       }
     }
+  }
+}
+
+Future<void> handleHomeworkDeletion({
+  @required List<Homework> remoteHomework,
+  @required List<Homework> localHomework,
+}) async {
+  // Get a reference to the database.
+  final Batch batch = globals.db.batch();
+  bool deleted = false;
+  for (var local in localHomework) {
+    if (remoteHomework.indexWhere(
+          (element) =>
+              element.uid == local.uid && element.userId == local.userId,
+        ) ==
+        -1) {
+      deleted = true;
+      print(
+        "Local homework doesn't exist in remote $local ${local.databaseId}",
+      );
+      batch.delete(
+        "Homework",
+        where: "databaseId = ?",
+        whereArgs: [local.databaseId],
+      );
+    }
+  }
+  if (deleted) {
+    await batch.commit();
   }
 }
