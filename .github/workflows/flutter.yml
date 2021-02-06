@@ -33,9 +33,6 @@ jobs:
       - name: Setup keystore
         run: |
           cd android
-          wget "$KEYPROPERTIES" -O key.properties &> /dev/null
-          cd app
-          wget "$KEYJKS" -O key.jks &> /dev/null
-          cd ../../
+          wget "$KEYPROPERTIES" -O key.properties
       - name: Build apk
         run: flutter build apk --no-shrink --release --verbose
