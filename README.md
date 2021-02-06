@@ -1,6 +1,7 @@
 # Novy Napló
 
 [![time tracker](https://wakatime.com/badge/github/NovySoft/novyNaplo.svg)](https://wakatime.com/badge/github/NovySoft/novyNaplo)
+![flutter](https://github.com/NovySoft/novyNaplo/workflows/flutter/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08d8ae48160409997ea32cf95d1a64f)](https://www.codacy.com/manual/Legolaszstudio/novyNaplo?utm_source=github.com&utm_medium=referral&utm_content=NovySoft/novyNaplo&utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/48e75a94f1484016fa8a/maintainability)](https://codeclimate.com/github/NovySoft/novyNaplo/maintainability)
 [![CodeScene Code Health](https://codescene.io/projects/11066/status-badges/code-health)](https://codescene.io/projects/11066)
