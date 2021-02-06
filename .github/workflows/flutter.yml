@@ -31,11 +31,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Setup keystore
-        run: pwd
-        run: cd android
-        run: wget "$KEYPROPERTIES" -O key.properties &> /dev/null
-        run: cd app
-        run: wget "$KEYJKS" -O key.jks &> /dev/null
-        run: cd ../../
+        run: |
+          cd android
+          wget "$KEYPROPERTIES" -O key.properties &> /dev/null
+          cd app
+          wget "$KEYJKS" -O key.jks &> /dev/null
+          cd ../../
       - name: Build apk
         run: flutter build apk --no-shrink --release --verbose
