@@ -96,6 +96,7 @@ android {
         }
         debug{
             zipAlignEnabled false
+            signingConfig signingConfigs.release
         }
     }
 }
