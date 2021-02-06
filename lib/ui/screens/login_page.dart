@@ -300,10 +300,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       ErrorToast.showErrorToast(
         getTranslatedString("timeoutErr"),
       );
-    } else if (result.status.contains(getTranslatedString('errWhileFetch')) ||
-        result.status.contains(getTranslatedString('unkError'))) {
+    } else {
       //'Handled error'
-      ErrorToast.showErrorToast(
+      ErrorToast.showErrorToastLong(
+        context,
         result.status,
       );
     }

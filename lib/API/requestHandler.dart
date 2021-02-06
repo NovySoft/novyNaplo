@@ -42,6 +42,39 @@ import 'package:path_provider/path_provider.dart';
 var client = http.Client();
 
 class RequestHandler {
+  static Future<bool> checkForKretaUpdatingStatus(Student userDetails) async {
+    //!Important
+    /*
+    Always check the school site for updating as the school site handles the data and 
+    the IDP server is completly independent from the school site. This means that the idp maybe working, but
+    the school site can be offline at the same time*/
+    try {
+      var response = await client.get(
+        BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin,
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        print("FRISSÍT");
+        printWrapped(response.body);
+        print(response.statusCode);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'checkForKretaUpdatingStatus',
+        printDetails: true,
+      );
+      return false;
+    }
+  }
+
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
     try {
@@ -60,6 +93,15 @@ class RequestHandler {
         },
       );
 
+      bool isKretaUpdating = await checkForKretaUpdatingStatus(user);
+      if (isKretaUpdating ||
+          response.headers.containsKey("x-maintenance-mode")) {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}:\n${getTranslatedString('kretaUpgrade')}",
+        );
+      }
+
       Map responseJson = jsonDecode(response.body);
 
       if (responseJson["error"] != null ||
@@ -76,14 +118,9 @@ class RequestHandler {
           status: "OK",
           userinfo: user,
         );
-      } else if (response.headers.containsKey("x-maintenance-mode")) {
-        //Kreta is 100% to be updating
-        return TokenResponse(
-          status:
-              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgrade')}",
-        );
-      } else if (response.statusCode == 403 ||
+      } else if (response.statusCode == 400 ||
           response.statusCode == 401 ||
+          response.statusCode == 403 ||
           response.statusCode == 500 ||
           response.statusCode == 502 ||
           response.statusCode == 503) {
