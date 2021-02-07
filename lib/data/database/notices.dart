@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -107,6 +108,12 @@ Future<void> handleNoticeDeletion({
         -1) {
       deleted = true;
       print("Local notice doesn't exist in remote $local ${local.databaseId}");
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "notices",
+        },
+      );
       batch.delete(
         "Notices",
         where: "databaseId = ?",

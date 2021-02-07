@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
@@ -129,6 +130,12 @@ Future<void> handleEvalsDeletion({
         -1) {
       deleted = true;
       print("Local eval doesn't exist in remote $local ${local.databaseId}");
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "evals",
+        },
+      );
       batch.delete(
         "Evals",
         where: "databaseId = ?",

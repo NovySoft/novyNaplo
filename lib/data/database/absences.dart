@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
@@ -116,6 +117,12 @@ Future<void> handleEvalsDeletion({
         "Absences",
         where: "databaseId = ?",
         whereArgs: [local.databaseId],
+      );
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "absence",
+        },
       );
     }
   }

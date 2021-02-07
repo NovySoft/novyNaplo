@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/extensions.dart';
@@ -244,6 +245,12 @@ Future<void> handleHomeworkDeletion({
       deleted = true;
       print(
         "Local homework doesn't exist in remote $local ${local.databaseId}",
+      );
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "homeworks",
+        },
       );
       batch.delete(
         "Homework",

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/student.dart';
@@ -114,6 +115,12 @@ Future<void> handleExamDeletion({
         -1) {
       deleted = true;
       print("Local exam doesn't exist in remote $local ${local.databaseId}");
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "exams",
+        },
+      );
       batch.delete(
         "Exams",
         where: "databaseId = ?",

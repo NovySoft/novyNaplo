@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -101,6 +102,12 @@ Future<void> handleEventDeletion({
         -1) {
       deleted = true;
       print("Local event doesn't exist in remote $local ${local.databaseId}");
+      FirebaseAnalytics().logEvent(
+        name: "RemoteDeletion",
+        parameters: {
+          "dataType": "events",
+        },
+      );
       batch.delete(
         "Events",
         where: "databaseId = ?",
