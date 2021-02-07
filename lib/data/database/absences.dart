@@ -102,6 +102,8 @@ Future<void> handleEvalsDeletion({
   List<Absence> remoteAbsences,
   List<Absence> localAbsences,
 }) async {
+  if (remoteAbsences == null) return;
+  if (remoteAbsences.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

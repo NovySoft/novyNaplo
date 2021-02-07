@@ -119,6 +119,8 @@ Future<void> handleEvalsDeletion({
   @required List<Evals> remoteEvals,
   @required List<Evals> localEvals,
 }) async {
+  if (remoteEvals == null) return;
+  if (remoteEvals.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

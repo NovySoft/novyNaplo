@@ -104,6 +104,8 @@ Future<void> handleExamDeletion({
   @required List<Exam> remoteExams,
   @required List<Exam> localExams,
 }) async {
+  if (remoteExams == null) return;
+  if (remoteExams.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

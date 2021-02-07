@@ -2,7 +2,10 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
-Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
+Future<List<List<Lesson>>> makeTimetableMatrix(
+  List<Lesson> lessons, {
+  bool addToFetchDayList = true,
+}) async {
   if (lessons == null || lessons.length == 0) return [];
   //Variables
   int index = 0;
@@ -21,13 +24,15 @@ Future<List<List<Lesson>>> makeTimetableMatrix(List<Lesson> lessons) async {
       output[index].add(n);
     }
 
-    if (timetablePage.fetchedDayList
-            .where((element) => element.isSameDay(n.date))
-            .length ==
-        0) {
-      timetablePage.fetchedDayList.add(n.date);
+    if (addToFetchDayList) {
+      if (timetablePage.fetchedDayList
+              .where((element) => element.isSameDay(n.date))
+              .length ==
+          0) {
+        timetablePage.fetchedDayList.add(n.date);
+      }
+      timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
     }
-    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
   }
   return output;
 }

@@ -66,10 +66,9 @@ class _TimetableTabState extends State<TimetableTab> {
       fade = true;
     });
     if (fetchedDayList
-            .where((item) =>
-                item.day == _selectedDate.day &&
-                item.month == _selectedDate.month &&
-                item.year == _selectedDate.year)
+            .where(
+              (item) => item.isSameDay(_selectedDate),
+            )
             .length ==
         0) {
       if (!(await NetworkHelper.isNetworkAvailable())) {

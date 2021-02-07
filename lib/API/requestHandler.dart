@@ -56,7 +56,9 @@ class RequestHandler {
         headers: {
           "User-Agent": config.userAgent,
         },
-      );
+      ).timeout(Duration(seconds: 30), onTimeout: () {
+        return http.Response("Timeout", 408);
+      });
 
       if (response.statusCode != 200) {
         print("FRISSÍT");
@@ -80,6 +82,15 @@ class RequestHandler {
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
     try {
+      //First check for kreta status then continue loging in
+      bool isKretaUpdating = await checkForKretaUpdatingStatus(user);
+      if (isKretaUpdating) {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}:\n${getTranslatedString('kretaUpgrade')}",
+        );
+      }
+
       var response = await client.post(
         BaseURL.KRETA_IDP + KretaEndpoints.token,
         body: {
@@ -94,14 +105,6 @@ class RequestHandler {
           "User-Agent": config.userAgent,
         },
       );
-
-      bool isKretaUpdating = await checkForKretaUpdatingStatus(user);
-      if (isKretaUpdating) {
-        return TokenResponse(
-          status:
-              "${getTranslatedString('errWhileFetch')}:\n${getTranslatedString('kretaUpgrade')}",
-        );
-      }
 
       Map responseJson = jsonDecode(response.body);
 
@@ -395,35 +398,36 @@ class RequestHandler {
     Student userDetails, {
     DateTime date,
   }) async {
-    FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
-    if (!(await NetworkHelper.isNetworkAvailable())) {
-      throw Exception(getTranslatedString("noNet"));
-    }
-    List<DateTime> days = [];
-    int monday = 1;
-    int sunday = 7;
-    DateTime now = date;
-    days.add(now);
-    while (now.weekday != monday) {
-      now = now.subtract(new Duration(days: 1));
-      days.add(now);
-    }
-    DateTime startDate = now;
-    now = date;
-    while (now.weekday != sunday) {
-      now = now.add(new Duration(days: 1));
-      days.add(now);
-    }
-    days.sort((a, b) => a.compareTo(b));
-    DateTime endDate = now;
     bool errored = false;
-    //Has builtin sorting
-    List<List<Lesson>> lessonList = await getTimetableMatrix(
-      userDetails,
-      from: startDate,
-      to: endDate,
-    );
+    List<DateTime> days = [];
     try {
+      FirebaseCrashlytics.instance.log("getSpecifiedWeeksLesson");
+      if (!(await NetworkHelper.isNetworkAvailable())) {
+        throw Exception(getTranslatedString("noNet"));
+      }
+      int monday = 1;
+      int sunday = 7;
+      DateTime now = date;
+      days.add(now);
+      while (now.weekday != monday) {
+        now = now.subtract(new Duration(days: 1));
+        days.add(now);
+      }
+      DateTime startDate = now;
+      now = date;
+      while (now.weekday != sunday) {
+        now = now.add(new Duration(days: 1));
+        days.add(now);
+      }
+      days.sort((a, b) => a.compareTo(b));
+      DateTime endDate = now;
+      //Has builtin sorting
+      List<List<Lesson>> lessonList = await getTimetableMatrix(
+        userDetails,
+        from: startDate,
+        to: endDate,
+      );
+
       return lessonList;
     } catch (e, s) {
       print("Get Specified Week's Lessons: $e");
@@ -673,7 +677,7 @@ class RequestHandler {
         user,
         fromDue: DateTime.now().subtract(
           Duration(
-            days: 14,
+            days: 31,
           ),
         ),
       );
@@ -700,7 +704,7 @@ class RequestHandler {
         user,
         fromDue: DateTime.now().subtract(
           Duration(
-            days: 14,
+            days: 31,
           ),
         ),
       );

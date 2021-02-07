@@ -210,7 +210,10 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readTimetable");
       });
       List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable();
-      timetablePage.lessonsList = await makeTimetableMatrix(tempLessonList);
+      timetablePage.lessonsList = await makeTimetableMatrix(
+        tempLessonList,
+        addToFetchDayList: false,
+      );
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       await Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);

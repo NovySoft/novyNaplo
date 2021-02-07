@@ -91,6 +91,8 @@ Future<void> handleEventDeletion({
   @required List<Event> remoteEvents,
   @required List<Event> localEvents,
 }) async {
+  if (remoteEvents == null) return;
+  if (remoteEvents.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

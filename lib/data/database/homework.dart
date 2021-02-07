@@ -26,7 +26,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
   //If we don't ignore the dueDate
   if (ignoreDue == false) {
     tempList.removeWhere((item) {
-      //Hide if it doesn't needed
+      //Hide if it isn't needed in the UI
       DateTime afterDue = item.dueDate;
       if (globals.howLongKeepDataForHw != -1) {
         afterDue =
@@ -47,18 +47,12 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
 }
 
 void deleteOldHomework(List<Homework> input) async {
-  //!It is implemented as a safety measure, no matter what the user set for due date keeping homeworks will be removed from the db if they're over due with 180days
   Batch batch = globals.db.batch();
   bool deleted = false;
   for (var item in input) {
     DateTime afterDue = item.dueDate;
     if (item.databaseId != null) {
-      if (globals.howLongKeepDataForHw == -1) {
-        afterDue = afterDue.add(Duration(days: 180));
-      } else {
-        //?If someone is not really keen on showing the homework after 14 days, we delete it after 30 days
-        afterDue = afterDue.add(Duration(days: 30));
-      }
+      afterDue = afterDue.add(Duration(days: 30));
       if (afterDue.compareTo(DateTime.now()) < 0) {
         deleted = true;
         batch.delete(
@@ -82,63 +76,69 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   //We need everything that is in the db, so ignore due removing
   List<Homework> allHw = await getAllHomework(ignoreDue: true);
   for (var hw in hwList) {
-    var matchedHw = allHw.where((element) {
-      return (element.uid == hw.uid && element.userId == hw.userId);
-    });
-    if (matchedHw.length == 0) {
-      inserted = true;
-      batch.insert(
-        'Homework',
-        hw.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-        NotificationData(
-          title:
-              '${getTranslatedString("newHw")}: ' + capitalize(hw.subject.name),
-          subtitle:
-              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-          userId: hw.userId,
-          uid: hw.uid,
-          payload: "hw ${hw.userId} ${hw.uid}",
-          additionalKey: hw.subject.name,
-          isEdited: false,
-        ),
-      );
-    } else {
-      for (var n in matchedHw) {
-        //!Update didn't work so we delete and create a new one
-        if (n.content != hw.content ||
-            n.dueDate.toUtc().toIso8601String() !=
-                hw.dueDate.toUtc().toIso8601String() ||
-            n.giveUpDate.toUtc().toIso8601String() !=
-                hw.giveUpDate.toUtc().toIso8601String()) {
-          inserted = true;
-          batch.delete(
-            "Homework",
-            where: "databaseId = ?",
-            whereArgs: [n.databaseId],
-          );
-          batch.insert(
-            'Homework',
-            hw.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
-          NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-            NotificationData(
-              title: '${getTranslatedString("hwModified")}: ' +
-                  capitalize(hw.subject.name),
-              subtitle:
-                  "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-              userId: hw.userId,
-              uid: hw.uid,
-              payload: "hw ${hw.userId} ${hw.uid}",
-              additionalKey: hw.subject.name,
-              isEdited: true,
-            ),
-          );
+    DateTime afterDue = hw.dueDate;
+    afterDue = afterDue.add(Duration(days: 30));
+    if (!afterDue.isBefore(DateTime.now())) {
+      var matchedHw = allHw.where((element) {
+        return (element.uid == hw.uid && element.userId == hw.userId);
+      });
+      if (matchedHw.length == 0) {
+        inserted = true;
+        batch.insert(
+          'Homework',
+          hw.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+          NotificationData(
+            title: '${getTranslatedString("newHw")}: ' +
+                capitalize(hw.subject.name),
+            subtitle:
+                "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+            userId: hw.userId,
+            uid: hw.uid,
+            payload: "hw ${hw.userId} ${hw.uid}",
+            additionalKey: hw.subject.name,
+            isEdited: false,
+          ),
+        );
+      } else {
+        for (var n in matchedHw) {
+          //!Update didn't work so we delete and create a new one
+          if (n.content != hw.content ||
+              n.dueDate.toUtc().toIso8601String() !=
+                  hw.dueDate.toUtc().toIso8601String() ||
+              n.giveUpDate.toUtc().toIso8601String() !=
+                  hw.giveUpDate.toUtc().toIso8601String()) {
+            inserted = true;
+            batch.delete(
+              "Homework",
+              where: "databaseId = ?",
+              whereArgs: [n.databaseId],
+            );
+            batch.insert(
+              'Homework',
+              hw.toMap(),
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
+            NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+              NotificationData(
+                title: '${getTranslatedString("hwModified")}: ' +
+                    capitalize(hw.subject.name),
+                subtitle:
+                    "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+                userId: hw.userId,
+                uid: hw.uid,
+                payload: "hw ${hw.userId} ${hw.uid}",
+                additionalKey: hw.subject.name,
+                isEdited: true,
+              ),
+            );
+          }
         }
       }
+    } else {
+      print("HW OUT OF DATE ${hw.dueDate}");
     }
   }
   if (inserted) {
@@ -160,16 +160,11 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
   });
 
   DateTime afterDue = hw.dueDate;
-  if (globals.howLongKeepDataForHw == -1) {
-    afterDue = afterDue.add(Duration(days: 180));
-  } else {
-    //?If someone is not really keen on showing the homework after 14 days, we delete it after 30 days
-    afterDue = afterDue.add(Duration(days: 30));
-  }
+  afterDue = afterDue.add(Duration(days: 30));
 
   if (matchedHw.length == 0) {
     if (afterDue.isBefore(DateTime.now())) {
-      if (hw.databaseId != null && globals.howLongKeepDataForHw != -1) {
+      if (hw.databaseId != null) {
         await deleteFromDbByID(hw.databaseId, "Homework");
       }
       return;
@@ -211,7 +206,7 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
   } else {
     for (var n in matchedHw) {
       if (afterDue.compareTo(DateTime.now()) < 0) {
-        if (n.databaseId != null && globals.howLongKeepDataForHw != -1) {
+        if (n.databaseId != null) {
           await deleteFromDbByID(n.databaseId, "Homework");
         }
         return;
@@ -233,6 +228,8 @@ Future<void> handleHomeworkDeletion({
   @required List<Homework> remoteHomework,
   @required List<Homework> localHomework,
 }) async {
+  if (remoteHomework == null) return;
+  if (remoteHomework.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

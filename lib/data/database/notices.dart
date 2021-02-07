@@ -97,6 +97,8 @@ Future<void> handleNoticeDeletion({
   @required List<Notice> remoteNotices,
   @required List<Notice> localNotices,
 }) async {
+  if (remoteNotices == null) return;
+  if (remoteNotices.length == 0) return;
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
