@@ -4,7 +4,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 IconData parseSubjectToIcon({@required String subject}) {
   if (subject == null) return Icons.create;
-  if (subject.toLowerCase().contains("gazdaság")) {
+  if (subject.toLowerCase().contains("gazdaság") ||
+      subject.toLowerCase().contains("pénz")) {
     return MdiIcons.cashMultiple;
   }
   if ((subject.toLowerCase().contains("etika") ||
@@ -95,7 +96,8 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("napközi")) {
     return MdiIcons.basketball;
   }
-  if (subject.toLowerCase().contains("természet") ||
+  if (subject.toLowerCase().contains("környezet") ||
+      subject.toLowerCase().contains("természet") ||
       subject.toLowerCase().contains("kkterm")) {
     return MdiIcons.tree;
   }
@@ -134,6 +136,53 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("logika")) {
     return MdiIcons.brain;
+  }
+  if (subject.toLowerCase().contains("biblia")) {
+    return MdiIcons.bookCross;
+  }
+  if (subject.toLowerCase().contains("szerver")) {
+    return MdiIcons.server;
+  }
+  if (subject.toLowerCase().contains("szerver")) {
+    return MdiIcons.server;
+  }
+  if (subject.toLowerCase().contains("iroda") &&
+      (subject.toLowerCase().contains("szoftver") ||
+          subject.toLowerCase().contains("alkalmazás"))) {
+    return MdiIcons.microsoftPowerpoint;
+  }
+  if (subject.toLowerCase().contains("gépészet")) {
+    return MdiIcons.cogs;
+  }
+  if (subject.toLowerCase().contains("írás")) {
+    return MdiIcons.fountainPenTip;
+  }
+  if (subject.toLowerCase().contains("hegeszt") ||
+      subject.toLowerCase().contains("forraszt")) {
+    //TODO: Keresni hegesztőt, még mielőtt valaki megől emiatt
+    return MdiIcons.solderingIron;
+  }
+  if (subject.toLowerCase().contains("elektronika")) {
+    return MdiIcons.memory;
+  }
+  if (subject.toLowerCase().contains("elektrotechnika")) {
+    return MdiIcons.connection;
+  }
+  if (subject.toLowerCase().contains("adó")) {
+    return MdiIcons.filePercent;
+  }
+  if (subject.toLowerCase().contains("rendvédelem")) {
+    return MdiIcons.policeBadge;
+  }
+  if (subject.toLowerCase().contains("vagyonvédelem")) {
+    return MdiIcons.shieldHome;
+  }
+  if (subject.toLowerCase().contains("magánbiztonság") ||
+      subject.toLowerCase().contains("önvédelem")) {
+    return MdiIcons.karate;
+  }
+  if (subject.toLowerCase().contains("linux")) {
+    return MdiIcons.linux;
   }
   //LogUnknown subject so I can add that later
   if (subject.isNotEmpty) {

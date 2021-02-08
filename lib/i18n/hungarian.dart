@@ -401,4 +401,5 @@ final Map<String, String> translation = {
   "currEditing": "Jelenleg ?{0} jelszavát változtatod",
   "turnOnAdsNewUser":
       "A reklámok bekapcsolásával segíteted a projekt fejlesztését elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
+  "enableAds": "Reklámok bekapcsolása?",
 };

@@ -50,7 +50,6 @@ class _LoadingPageState extends State<LoadingPage> {
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
     try {
-      await globals.setGlobals();
       List<Student> allUsers = await DatabaseHelper.getAllUsers();
       if (allUsers.length <= 0) {
         //Yes I know I misspelled it, live with it
@@ -123,12 +122,12 @@ class _LoadingPageState extends State<LoadingPage> {
       }
       if (globals.prefs.getString("FirstOpenTime") != null) {
         if (DateTime.parse(globals.prefs.getString("FirstOpenTime"))
-                    .difference(DateTime.now()) >=
-                Duration(days: 14) &&
+                .toUtc()
+                .isBefore(DateTime.now().toUtc().subtract(Duration(days: 7))) &&
             globals.prefs.getBool("ShouldAsk") &&
             DateTime.parse(globals.prefs.getString("LastAsked"))
-                    .difference(DateTime.now()) >=
-                Duration(days: 2) &&
+                .toUtc()
+                .isBefore(DateTime.now().toUtc().subtract(Duration(days: 2))) &&
             config.isAppPlaystoreRelease) {
           setState(() {
             loadingText = getTranslatedString("reviewProcess");

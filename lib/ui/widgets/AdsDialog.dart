@@ -42,7 +42,7 @@ class AdsDialogNewUser extends StatefulWidget {
 class _AdsDialogNewUserState extends State<AdsDialogNewUser> {
   Widget build(BuildContext context) {
     return new AlertDialog(
-      title: new Text(getTranslatedString("ads")),
+      title: new Text(getTranslatedString("enableAds")),
       content: Text(
         getTranslatedString("turnOnAdsNewUser"),
         textAlign: TextAlign.left,

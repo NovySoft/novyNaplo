@@ -403,4 +403,5 @@ final Map<String, String> translation = {
   "currEditing": "Currently changing password of ?{0}",
   "turnOnAdsNewUser":
       "By turning on ads you help support the project and also you agree to the admob privacy policy and to the fact that google might collect some information about you (and might share it with 3rd parties). You also agree that the collected information might be used to show relevant ads.",
+  "enableAds": "Enable ads?",
 };
