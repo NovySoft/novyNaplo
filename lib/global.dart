@@ -41,6 +41,7 @@ bool verCheckOnStart =
 int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 30; //After how many minutes should we fetch the new data?
+int splitChartLength = 17;
 bool notifications = true; //Should we send notifications
 double howLongKeepDataForHw = 7; //How long should we show homeworks (in days)
 bool colorAvsInStatisctics =
@@ -84,6 +85,12 @@ Future<void> setGlobals() async {
 
   if (prefs.getBool("ShouldAsk") == null) {
     await prefs.setBool("ShouldAsk", true);
+  }
+
+  if (prefs.getInt("splitChartLength") == null) {
+    prefs.setInt("splitChartLength", splitChartLength);
+  } else {
+    splitChartLength = prefs.getInt("splitChartLength");
   }
 
   if (prefs.getBool("ads") != null) {

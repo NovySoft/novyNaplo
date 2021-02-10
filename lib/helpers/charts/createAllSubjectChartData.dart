@@ -1,7 +1,9 @@
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/logicAndMath/getRandomBetween.dart';
+import 'package:novynaplo/global.dart' as globals;
 
+//TODO: Refactor
 List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     var allParsedInput) {
   var linearMarkDataList = [];
@@ -62,9 +64,7 @@ List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(var input) {
   int index = 0;
   for (var n in input) {
     tempList = [];
-    for (var y in n) {
-      tempList.add(y);
-    }
+    tempList.addAll(n);
     if (chartTempList.length == 0) {
       chartTempList = [
         charts.MaterialPalette.green.shadeDefault,
@@ -83,8 +83,13 @@ List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(var input) {
     var rndInt = getRandomIntBetween(0, chartTempList.length);
     var color = chartTempList[rndInt];
     chartTempList.removeAt(rndInt);
+    //Subject name splitting
+    String subjectName = tempList[0].id;
+    if (subjectName.length > globals.splitChartLength) {
+      subjectName = subjectName.substring(0, globals.splitChartLength) + "...";
+    }
     returnList.add(new charts.Series<LinearMarkChartData, int>(
-        id: tempList[0].id,
+        id: subjectName,
         colorFn: (_, __) => color,
         domainFn: (LinearMarkChartData marks, _) => marks.count,
         measureFn: (LinearMarkChartData marks, _) => marks.value,

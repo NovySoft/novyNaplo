@@ -18,7 +18,6 @@ import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
-
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
@@ -234,6 +233,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                               ),
                               Expanded(
                                 child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
                                   height: 500 +
                                       sizedBoxHeight +
                                       globals.extraSpaceUnderStat,
