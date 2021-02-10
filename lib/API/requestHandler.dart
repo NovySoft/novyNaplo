@@ -375,11 +375,12 @@ class RequestHandler {
 
       List responseJson = jsonDecode(response.body);
       List<Homework> homeworks = [];
-      //CHECHK FOR ATTACHMENTS, because using this endpoint Kréta doesn't return it
+      //CHECK FOR ATTACHMENTS, because using this endpoint Kréta doesn't return it
       //You have to query every single homework, which is bullcrap but I can't change it
       for (var n in responseJson) {
         homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
+      homeworks.removeWhere((element) => element == null);
       homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
       DatabaseHelper.batchInsertHomework(homeworks);
       return homeworks;

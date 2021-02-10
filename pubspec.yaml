@@ -39,6 +39,7 @@ dependencies:
   firebase_admob: any
   url_launcher: any
   material_design_icons_flutter: any
+  flutter_icons: any
   sqflite: any
   animations: any
   flutter_html: any
