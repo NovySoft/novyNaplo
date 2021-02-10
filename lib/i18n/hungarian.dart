@@ -334,6 +334,7 @@ final Map<String, String> translation = {
   "absences": "Hiányzások",
   "BeJustified": "Igazolandó",
   "Justified": "Igazolt",
+  "Igazolt": "Igazolt",
   "UnJustified": "Igazolatlan",
   "Igazolatlan": "Igazolatlan",
   "marksAndAvs": "Jegyek és átlagok",
