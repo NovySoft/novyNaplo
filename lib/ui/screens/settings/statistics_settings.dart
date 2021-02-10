@@ -35,7 +35,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3 + globals.adModifier,
+          itemCount: 4 + globals.adModifier,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -125,6 +125,35 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                       ),
                     ),
                   ),
+                );
+                break;
+              case 3:
+                return Column(
+                  children: [
+                    SizedBox(height: 5),
+                    Text(
+                      "${getTranslatedString('splitText')} ${globals.splitChartLength}",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Slider(
+                      value: globals.splitChartLength.toDouble(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          globals.splitChartLength = newValue.toInt();
+                        });
+                      },
+                      onChangeEnd: (endValue) {
+                        globals.prefs.setInt(
+                          "splitChartLength",
+                          endValue.toInt(),
+                        );
+                      },
+                      min: 5,
+                      max: 30,
+                      divisions: 25,
+                      label: globals.splitChartLength.toStringAsFixed(0),
+                    ),
+                  ],
                 );
                 break;
               default:
