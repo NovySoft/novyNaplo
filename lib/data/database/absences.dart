@@ -59,8 +59,8 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
       for (var n in matchedAbsences) {
         //!Update didn't work so we delete and create a new one
         if (n.justificationState != absence.justificationState ||
-            n.justificationType.toJson() !=
-                absence.justificationType.toJson() ||
+            (n.justificationType == null ? "" : n.justificationType.toJson()) !=
+            (absence.justificationType == null ? "" : absence.justificationType.toJson())  ||
             n.delayInMinutes != absence.delayInMinutes) {
           inserted = true;
           batch.delete(

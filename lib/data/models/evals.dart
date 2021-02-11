@@ -19,7 +19,7 @@ class Evals {
   Description mode;
   DateTime date;
   int weight;
-  int numberValue;
+  double numberValue;
   double numberValueAsMark; //Used to calculate statistics
   String textValue;
   String shortTextValue;
@@ -138,7 +138,7 @@ class Evals {
           break;
       }
     } else {
-      numberValue = json["SzamErtek"];
+      numberValue = double.parse(json["SzamErtek"].toString());
     }
     textValue = json['SzovegesErtek'];
     if (numberValue == 0 || numberValue == null) {
@@ -151,7 +151,7 @@ class Evals {
       RegExpMatch value = regex.firstMatch(textValue);
       numberValue = value == null
           ? 0
-          : int.parse(
+          : double.parse(
               value.group(0).split("%")[0],
             );
       if (value != null) {
@@ -161,15 +161,21 @@ class Evals {
           name: "Szazalekos",
         );
       } else {
-        if (textValue.toLowerCase().contains("kiváló")) {
+        if (textValue.toLowerCase().contains("kiváló") ||
+            textValue.toLowerCase().contains("jeles") ||
+            textValue.toLowerCase().contains("példás")) {
           numberValue = 5;
         } else if (textValue.toLowerCase().contains("jó")) {
           numberValue = 4;
-        } else if (textValue.toLowerCase().contains("megfelelő")) {
+        } else if (textValue.toLowerCase().contains("megfelelő") ||
+            textValue.toLowerCase().contains("közepes") ||
+            textValue.toLowerCase().contains("változó")) {
           numberValue = 3;
-        } else if (textValue.toLowerCase().contains("rossz")) {
+        } else if (textValue.toLowerCase().contains("rossz") ||
+            textValue.toLowerCase().contains("elégséges") ||
+            textValue.toLowerCase().contains("hanyag")) {
           numberValue = 2;
-        } else if (textValue.toLowerCase().contains("hanyag")) {
+        } else if (textValue.toLowerCase().contains("elégtelen")) {
           numberValue = 1;
         } else {
           numberValue = 0;

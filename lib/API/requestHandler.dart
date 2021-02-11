@@ -58,6 +58,7 @@ class RequestHandler {
           "User-Agent": config.userAgent,
         },
       ).timeout(Duration(seconds: 30), onTimeout: () {
+        //FIXME: Valami nem ok, néha timeoutol
         return http.Response("Timeout", 408);
       });
 

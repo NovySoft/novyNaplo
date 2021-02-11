@@ -56,6 +56,7 @@ Future<void> resetAllGlobals() async {
   await prefs.clear();
   await prefs.setBool("ads", adsEnabled);
   await prefs.setBool("isNew", true);
+  await prefs.setString("Language", language);
   didFetch = false;
   marksPage.allParsedByDate = [];
   marksPage.allParsedBySubject = [];
@@ -102,11 +103,15 @@ Future<void> setGlobals() async {
     language = prefs.getString("Language");
   } else {
     //String countryCode = Platform.localeName.split('_')[0];
-    String languageCode = Platform.localeName.split('_')[1];
-    if (languageCode.toLowerCase().contains('hu')) {
-      language = "hu";
-    } else {
+    if (Platform.localeName == null) {
       language = "en";
+    } else {
+      String languageCode = Platform.localeName.split('_')[1];
+      if (languageCode.toLowerCase().contains('hu')) {
+        language = "hu";
+      } else {
+        language = "en";
+      }
     }
     prefs.setString("Language", language);
   }
