@@ -318,6 +318,32 @@ class _SettingsBodyState extends State<SettingsBody> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         onPressed: () async {
+                          String link = "https://www.facebook.com/NovySoftware";
+                          if (await canLaunch(link)) {
+                            await launch(link);
+                          } else {
+                            FirebaseAnalytics().logEvent(
+                              name: "LinkFail",
+                              parameters: {"link": link},
+                            );
+                            throw 'Could not launch $link';
+                          }
+                        },
+                        icon: Icon(MdiIcons.facebookMessenger,
+                            color: Colors.black),
+                        label: Text('Bug report (Messenger)',
+                            style: TextStyle(color: Colors.black)))),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: SizedBox(
+                    height: 38,
+                    width: double.infinity,
+                    child: RaisedButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: () async {
                           String link =
                               "https://github.com/NovySoft/novyNaplo/issues/new/choose";
                           if (await canLaunch(link)) {
