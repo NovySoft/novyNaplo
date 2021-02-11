@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 String shortenSubject(String input) {
+  //TODO: Custom röviditések
   if (input.toLowerCase().contains("kötelező komplex természettudomány")) {
     return "KKterm";
   }
