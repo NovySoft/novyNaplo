@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -64,6 +65,9 @@ class RequestHandler {
         print("FRISSÍT");
         printWrapped(response.body);
         print(response.statusCode);
+        FirebaseAnalytics().logEvent(
+          name: "KretaUpdating",
+        );
         return true;
       } else {
         return false;
