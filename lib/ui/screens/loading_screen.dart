@@ -171,6 +171,9 @@ class _LoadingPageState extends State<LoadingPage> {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
+      statisticsPage.allParsedSubjectsWithoutZeros.sort(
+        (a, b) => a[0].sortIndex.compareTo(b[0].sortIndex),
+      );
       //*Load variables required to use the markCalculator
       setState(() {
         loadingText = getTranslatedString("setUpMarkCalc");

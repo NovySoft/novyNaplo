@@ -56,5 +56,6 @@ List<List<Evals>> sortByDateAndSubject(List<Evals> inputOne) {
       );
     }
   }
+  _tempArray.sort((a, b) => a[0].sortIndex.compareTo(b[0].sortIndex));
   return _tempArray;
 }
