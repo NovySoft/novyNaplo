@@ -695,6 +695,9 @@ class RequestHandler {
         statisticsPage.allParsedSubjects
             .where((element) => element[0].numberValue != 0),
       );
+      statisticsPage.allParsedSubjectsWithoutZeros.sort(
+        (a, b) => a[0].sortIndex.compareTo(b[0].sortIndex),
+      );
       setUpCalculatorPage(statisticsPage.allParsedSubjects);
       eventsPage.allParsedEvents = await getEvents(user);
       await onlyCalcAndInsertAverages(

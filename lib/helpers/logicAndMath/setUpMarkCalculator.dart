@@ -12,7 +12,11 @@ void setUpCalculatorPage(List<List<Evals>> input) {
   calculatorPage.averageList = [];
   if (input != null && input != [[]]) {
     double sum, index;
-    for (var n in input) {
+    List<List<Evals>> evalList = List.from(input);
+    evalList.sort(
+      (a, b) => a[0].sortIndex.compareTo(b[0].sortIndex),
+    );
+    for (var n in evalList) {
       calculatorPage.dropdownValues.add(capitalize(n[0].subject.name));
       sum = 0;
       index = 0;
