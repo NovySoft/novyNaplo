@@ -165,15 +165,51 @@ class _ReportsTabState extends State<ReportsTab>
                     (element) =>
                         element[0].subject.name.toLowerCase() ==
                         reportMaps[tabName][index].subject.name.toLowerCase());
-                List<dynamic> chartListPoints =
-                    stats.allParsedSubjects[statListIndex].where((element) {
-                  if (element.date.compareTo(reportMaps[tabName][index].date) <=
-                      0) {
-                    return true;
-                  } else {
-                    return false;
+                List<Evals> chartListPoints = [];
+                if (statListIndex != -1) {
+                  chartListPoints =
+                      stats.allParsedSubjects[statListIndex].where((element) {
+                    if (element.date
+                            .compareTo(reportMaps[tabName][index].date) <=
+                        0) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  }).toList();
+                }
+                String value = reportMaps[tabName][index].textValue;
+                if (value.length > 10) {
+                  switch (reportMaps[tabName][index].numberValue.round()) {
+                    case 5:
+                      value = "Jeles(5)";
+                      break;
+                    case 4:
+                      value = "Jó(4)";
+                      break;
+                    case 3:
+                      value = "Közepes(3)";
+                      break;
+                    case 2:
+                      value = "Elégséges(2)";
+                      break;
+                    case 1:
+                      value = "Elégtelen(1)";
+                      break;
+                    default:
+                      value = value.substring(0, 7) + "...";
+                      break;
                   }
-                }).toList();
+                }
+                String trailingText = (reportMaps[tabName][index]
+                                    .theme
+                                    .toLowerCase() ==
+                                "dicséret" ||
+                            reportMaps[tabName][index].theme.toLowerCase() ==
+                                "kitűnő"
+                        ? "${getTranslatedString("praiseworthy")}\n"
+                        : "") +
+                    value;
                 return AnimatedLeadingTrailingCard(
                   leading: Text(
                     capitalize(reportMaps[tabName][index].subject.name),
@@ -188,15 +224,7 @@ class _ReportsTabState extends State<ReportsTab>
                     ),
                   ),
                   trailing: Text(
-                    (reportMaps[tabName][index].theme.toLowerCase() ==
-                                    "dicséret" ||
-                                reportMaps[tabName][index]
-                                        .theme
-                                        .toLowerCase() ==
-                                    "kitűnő"
-                            ? "${getTranslatedString("praiseworthy")}\n"
-                            : "") +
-                        reportMaps[tabName][index].textValue,
+                    trailingText,
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: TextStyle(

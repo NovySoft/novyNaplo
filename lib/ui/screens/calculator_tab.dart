@@ -505,32 +505,37 @@ class CalculatorTabState extends State<CalculatorTab>
       virtualMarks[index].count = input.count;
       virtualMarks[index].szamErtek = input.szamErtek;
     });
+    createWhatIfChartAndMarks(
+      defaultValues: currentSubject,
+      id: "whatIfChart",
+      virtualValues: virtualMarks,
+    );
   }
 
   void setAvAfter(double input) {
-    if (currSum / currCount == input) {
-      afterAvCol = Colors.yellow;
-      afterAvDiff = "0";
-      afterAvIcon = Icon(
-        Icons.linear_scale,
-        color: Colors.yellow,
-      );
-    } else if (currSum / currCount > input) {
-      afterAvCol = Colors.red;
-      afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
-      afterAvIcon = Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.red,
-      );
-    } else {
-      afterAvCol = Colors.green;
-      afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
-      afterAvIcon = Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.green,
-      );
-    }
     setState(() {
+      if (currSum / currCount == input) {
+        afterAvCol = Colors.yellow;
+        afterAvDiff = "0";
+        afterAvIcon = Icon(
+          Icons.linear_scale,
+          color: Colors.yellow,
+        );
+      } else if (currSum / currCount > input) {
+        afterAvCol = Colors.red;
+        afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
+        afterAvIcon = Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.red,
+        );
+      } else {
+        afterAvCol = Colors.green;
+        afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
+        afterAvIcon = Icon(
+          Icons.keyboard_arrow_up,
+          color: Colors.green,
+        );
+      }
       tantargyiAtlagUtanna = input;
     });
   }
@@ -586,7 +591,7 @@ class CalculatorTabState extends State<CalculatorTab>
             ],
           ),
           SizedBox(
-            height: 50,
+            height: 25,
           ),
           DecoratedBox(
             decoration: new BoxDecoration(border: Border.all()),
@@ -759,6 +764,11 @@ class CalculatorTabState extends State<CalculatorTab>
                 setState(() {
                   virtualMarks = [];
                 });
+                createWhatIfChartAndMarks(
+                  defaultValues: currentSubject,
+                  id: "whatIfChart",
+                  virtualValues: virtualMarks,
+                );
               },
               icon: Icon(
                 MdiIcons.delete,
@@ -768,25 +778,6 @@ class CalculatorTabState extends State<CalculatorTab>
                 getTranslatedString("delAll"),
                 style: TextStyle(color: Colors.black),
               ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 500,
-            child: new charts.NumericComboChart(
-              createWhatIfChartAndMarks(
-                defaultValues: currentSubject,
-                id: "whatIfChart",
-                virtualValues: virtualMarks,
-              ),
-              behaviors: [new charts.PanAndZoomBehavior()],
-              animate: false,
-              domainAxis: axisTwo,
-              primaryMeasureAxis: axis,
-              defaultRenderer:
-                  new charts.LineRendererConfig(includePoints: true),
             ),
           ),
           SizedBox(
@@ -834,6 +825,25 @@ class CalculatorTabState extends State<CalculatorTab>
                 ),
               )
             ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 500,
+            child: new charts.NumericComboChart(
+              createWhatIfChartAndMarks(
+                defaultValues: currentSubject,
+                id: "whatIfChart",
+                virtualValues: virtualMarks,
+              ),
+              behaviors: [new charts.PanAndZoomBehavior()],
+              animate: false,
+              domainAxis: axisTwo,
+              primaryMeasureAxis: axis,
+              defaultRenderer:
+                  new charts.LineRendererConfig(includePoints: true),
+            ),
           ),
           globals.adsEnabled
               ? SizedBox(

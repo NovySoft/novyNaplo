@@ -39,9 +39,16 @@ class ReportsDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Reports_detail_tab");
-    List<LinearMarkChartData> avList = List.from(chartList[0].data);
-    if (avList.length == 0)
-      avList = [LinearMarkChartData(0, 0), LinearMarkChartData(1, 0)];
+    List<LinearMarkChartData> avList = [];
+    List<charts.Series<dynamic, num>> chartPointList = [];
+    if (chartList != null) {
+      if (chartList.length > 0) {
+        avList = List.from(chartList[0].data);
+        chartPointList = chartList;
+      }
+    } else {
+      avList = [LinearMarkChartData(0, 0)];
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
@@ -61,17 +68,31 @@ class ReportsDetailTab extends StatelessWidget {
             case 1:
               return Center(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 5),
-                    Text(
-                      capitalize((eval.theme.toLowerCase() == "dicséret" ||
-                                  eval.theme.toLowerCase() == "kitűnő"
-                              ? "${getTranslatedString("praiseworthy")} "
-                              : "") +
-                          eval.subject.name +
-                          " " +
-                          eval.textValue),
-                      style: TextStyle(fontSize: 20),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Text(
+                            capitalize((eval.theme.toLowerCase() ==
+                                            "dicséret" ||
+                                        eval.theme.toLowerCase() == "kitűnő"
+                                    ? "${getTranslatedString("praiseworthy")} "
+                                    : "") +
+                                eval.subject.name +
+                                " " +
+                                eval.textValue),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                      ],
                     ),
                     SizedBox(height: 5),
                   ],
@@ -82,7 +103,7 @@ class ReportsDetailTab extends StatelessWidget {
               return SizedBox(
                 height: 200,
                 child: new charts.LineChart(
-                  chartList,
+                  chartPointList,
                   behaviors: [new charts.PanAndZoomBehavior()],
                   animate: globals.chartAnimations,
                   domainAxis: axisTwo,

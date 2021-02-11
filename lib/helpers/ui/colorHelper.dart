@@ -41,7 +41,7 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
         color = Colors.red[900];
       }
     } else {
-      switch (eval.numberValue) {
+      switch (eval.numberValue.round()) {
         case 5:
           color = Colors.green;
           break;

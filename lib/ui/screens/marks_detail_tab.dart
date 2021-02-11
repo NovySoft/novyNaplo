@@ -27,7 +27,7 @@ class MarksDetailTab extends StatelessWidget {
         markColor = Colors.red;
       }
     } else {
-      switch (eval.numberValue) {
+      switch (eval.numberValue.round()) {
         case 1:
           markColor = Colors.red;
           break;

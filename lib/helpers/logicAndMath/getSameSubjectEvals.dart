@@ -26,8 +26,14 @@ List<Evals> getSameSubjectEvals(
     );
     return _tempList;
   }
-  _tempList = List.from(stats.allParsedSubjects.firstWhere((element) =>
-      element[0].subject.name.toLowerCase() == subject.toLowerCase()));
+  _tempList = List.from(
+    stats.allParsedSubjects.firstWhere(
+        (element) =>
+            element[0].subject.name.toLowerCase() == subject.toLowerCase(),
+        orElse: () {
+      return [];
+    }),
+  );
   if (onlyBefore != null) {
     _tempList.removeWhere((element) => element.date.compareTo(onlyBefore) > 0);
   }
