@@ -17,6 +17,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
+//Fixme: This is garbage, REFACTOR when updgrading to mark calc V2
 //TODO: Add option to add mark calculator marks to what if
 //TODO: add performance to mark calculator and also make averages a before and after gauge pair
 List<String> dropdownValues = [];
@@ -45,6 +46,7 @@ final FocusNode _weightFocus = FocusNode();
 final FocusNode _countFocus = FocusNode();
 final SlidableController slidableController = SlidableController();
 List<Evals> currentSubject = [];
+List<LinearMarkChartData> secondaryChartData = [];
 final axis = charts.NumericAxisSpec(
     renderSpec: charts.GridlineRendererSpec(
         labelStyle: charts.TextStyleSpec(
@@ -580,6 +582,11 @@ class CalculatorTabState extends State<CalculatorTab>
                       currCount = averageList[currentIndex].count;
                       currSum = averageList[currentIndex].sum;
                     });
+                    createWhatIfChartAndMarks(
+                      defaultValues: currentSubject,
+                      id: "whatIfChart",
+                      virtualValues: virtualMarks,
+                    );
                   },
                   items: dropdownValues
                       .map<DropdownMenuItem<String>>((String value) {
@@ -697,6 +704,11 @@ class CalculatorTabState extends State<CalculatorTab>
                                   setState(() {
                                     virtualMarks[index].count -= 1;
                                   });
+                                  createWhatIfChartAndMarks(
+                                    defaultValues: currentSubject,
+                                    id: "whatIfChart",
+                                    virtualValues: virtualMarks,
+                                  );
                                 }
                               },
                             ),
@@ -712,6 +724,11 @@ class CalculatorTabState extends State<CalculatorTab>
                                   setState(() {
                                     virtualMarks[index].count += 1;
                                   });
+                                  createWhatIfChartAndMarks(
+                                    defaultValues: currentSubject,
+                                    id: "whatIfChart",
+                                    virtualValues: virtualMarks,
+                                  );
                                 }
                               },
                             ),
@@ -898,6 +915,11 @@ class CalculatorTabState extends State<CalculatorTab>
                     currCount = averageList[currentIndex].count;
                     currSum = averageList[currentIndex].sum;
                   });
+                  createWhatIfChartAndMarks(
+                    defaultValues: currentSubject,
+                    id: "whatIfChart",
+                    virtualValues: virtualMarks,
+                  );
                 },
                 items: dropdownValues
                     .map<DropdownMenuItem<String>>((String value) {
@@ -988,11 +1010,9 @@ class CalculatorTabState extends State<CalculatorTab>
       List<VirtualMarks> virtualValues,
       String id}) {
     List<LinearMarkChartData> primaryChartData = [];
-    List<LinearMarkChartData> secondaryChartData = [];
+    secondaryChartData = [];
     double sum = 0;
     double index = 0;
-    double virtualSum = 0;
-    double virtualIndex = 0;
     int listArray = 0;
     for (var n in defaultValues) {
       sum += n.numberValue * n.weight / 100;
@@ -1004,16 +1024,12 @@ class CalculatorTabState extends State<CalculatorTab>
     for (var n in virtualValues) {
       for (var i = 0; i < n.count; i++) {
         sum += n.szamErtek * n.weight / 100;
-        virtualSum += n.szamErtek * n.weight / 100;
         index += 1 * n.weight / 100;
-        virtualIndex += 1 * n.weight / 100;
         secondaryChartData.add(new LinearMarkChartData(listArray, sum / index));
         listArray++;
       }
     }
-    //ONLY WORKS WHEN SETSTATE IS OUTSIDE OF THIS FUNCTION
-    //STRANGE..
-    setAvAfter((currSum + virtualSum) / (currCount + virtualIndex));
+    setAvAfter(secondaryChartData.last.value);
     return [
       new charts.Series<LinearMarkChartData, int>(
         id: id + "secondary",
