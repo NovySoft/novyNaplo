@@ -44,7 +44,10 @@ import 'package:path_provider/path_provider.dart';
 var client = http.Client();
 
 class RequestHandler {
-  static Future<bool> checkForKretaUpdatingStatus(Student userDetails) async {
+  static Future<bool> checkForKretaUpdatingStatus(
+    Student userDetails, {
+    bool retry = false,
+  }) async {
     FirebaseCrashlytics.instance.log("checkForKretaUpdatingStatus");
     //!Important
     /*
@@ -69,6 +72,13 @@ class RequestHandler {
         FirebaseAnalytics().logEvent(
           name: "KretaUpdating",
         );
+        if (retry) {
+          bool isKretaUpdating = await checkForKretaUpdatingStatus(
+            userDetails,
+            retry: false,
+          );
+          return isKretaUpdating;
+        }
         return true;
       } else {
         return false;
@@ -88,7 +98,10 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
     try {
       //First check for kreta status then continue loging in
-      bool isKretaUpdating = await checkForKretaUpdatingStatus(user);
+      bool isKretaUpdating = await checkForKretaUpdatingStatus(
+        user,
+        retry: true,
+      );
       if (isKretaUpdating) {
         return TokenResponse(
           status:
