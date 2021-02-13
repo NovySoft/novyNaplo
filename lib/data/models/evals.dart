@@ -148,7 +148,7 @@ class Evals {
         multiLine: true,
         caseSensitive: false,
       );
-      RegExpMatch value = regex.firstMatch(textValue);
+      RegExpMatch value = regex.firstMatch(textValue.replaceAll(",", "."));
       numberValue = value == null
           ? 0
           : double.parse(

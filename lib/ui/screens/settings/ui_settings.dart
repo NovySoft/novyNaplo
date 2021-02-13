@@ -177,7 +177,6 @@ class _UIsettingsState extends State<UIsettings> {
                               return AdsDialog();
                             });
                       } else {
-                        adBanner.dispose();
                         showDialog<void>(
                           context: context,
                           barrierDismissible: true,
@@ -199,6 +198,7 @@ class _UIsettingsState extends State<UIsettings> {
                             );
                           },
                         );
+                        adBanner.dispose();
                       }
                     },
                     value: globals.adsEnabled,

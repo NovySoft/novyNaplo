@@ -405,4 +405,5 @@ final Map<String, String> translation = {
   "enableAds": "Reklámok bekapcsolása?",
   "splitText": "Szöveg tördelése grafikonnál:",
   "Igazolando": "Igazolandó",
+  "thxForSupporting": "Köszönjük, hogy támogatja a projektet!",
 };
