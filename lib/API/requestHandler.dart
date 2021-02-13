@@ -61,17 +61,10 @@ class RequestHandler {
           "User-Agent": config.userAgent,
         },
       ).timeout(Duration(seconds: 30), onTimeout: () {
-        //FIXME: Valami nem ok, néha timeoutol
         return http.Response("Timeout", 408);
       });
 
       if (response.statusCode != 200) {
-        print("FRISSÍT");
-        printWrapped(response.body);
-        print(response.statusCode);
-        FirebaseAnalytics().logEvent(
-          name: "KretaUpdating",
-        );
         if (retry) {
           bool isKretaUpdating = await checkForKretaUpdatingStatus(
             userDetails,
@@ -79,6 +72,12 @@ class RequestHandler {
           );
           return isKretaUpdating;
         }
+        print("FRISSÍT");
+        printWrapped(response.body);
+        print(response.statusCode);
+        FirebaseAnalytics().logEvent(
+          name: "KretaUpdating",
+        );
         return true;
       } else {
         return false;

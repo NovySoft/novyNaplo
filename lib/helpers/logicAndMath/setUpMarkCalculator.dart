@@ -27,6 +27,7 @@ void setUpCalculatorPage(List<List<Evals>> input) {
       CalculatorData temp = new CalculatorData();
       temp.count = index;
       temp.sum = sum;
+      temp.name = n[0].subject.name;
       calculatorPage.averageList.add(temp);
     }
   }

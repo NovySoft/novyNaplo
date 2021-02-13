@@ -59,6 +59,7 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   for (var n in outputList) {
     n.sort((a, b) => a.date.compareTo(b.date));
   }
+  outputList.sort((a, b) => a[0].sortIndex.compareTo(b[0].sortIndex));
   return outputList;
 }
 
