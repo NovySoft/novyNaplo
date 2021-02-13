@@ -96,6 +96,7 @@ void backgroundFetch() async {
       NotificationHelper.platformChannelSpecificsAlertAll,
     );
   } finally {
+    print("BACKGROUND ENDED");
     FirebaseCrashlytics.instance.log("BackgroundFetch ended");
   }
 }

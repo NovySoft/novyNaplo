@@ -2,7 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -10,7 +9,6 @@ import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
-import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
 
 Map<String, List<Evals>> reportMaps = {
@@ -161,14 +159,14 @@ class _ReportsTabState extends State<ReportsTab>
                   eval: reportMaps[tabName][index],
                   index: index,
                 );
-                int statListIndex = stats.allParsedSubjects.indexWhere(
+                int statListIndex = marks.allParsedBySubject.indexWhere(
                     (element) =>
                         element[0].subject.name.toLowerCase() ==
                         reportMaps[tabName][index].subject.name.toLowerCase());
                 List<Evals> chartListPoints = [];
                 if (statListIndex != -1) {
                   chartListPoints =
-                      stats.allParsedSubjects[statListIndex].where((element) {
+                      marks.allParsedBySubject[statListIndex].where((element) {
                     if (element.date
                             .compareTo(reportMaps[tabName][index].date) <=
                         0) {
@@ -239,9 +237,7 @@ class _ReportsTabState extends State<ReportsTab>
                         "${getTranslatedString(tabName).toLowerCase()} ${reportMaps[tabName][index].subject.name}",
                     eval: reportMaps[tabName][index],
                     color: color,
-                    chartList: statListIndex != -1
-                        ? createSubjectChart(chartListPoints, index.toString())
-                        : null,
+                    inputList: chartListPoints,
                   ),
                 );
               },

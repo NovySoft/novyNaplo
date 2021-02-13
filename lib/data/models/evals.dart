@@ -20,7 +20,6 @@ class Evals {
   DateTime date;
   int weight;
   double numberValue;
-  double numberValueAsMark; //Used to calculate statistics
   String textValue;
   String shortTextValue;
   Subject subject;
@@ -52,6 +51,7 @@ class Evals {
 
   @override
   String toString() {
+    //return this.valueType.name;
     return this.subject.name + ":" + this.date.toString();
   }
 
@@ -235,4 +235,14 @@ class Evals {
       'sortIndex': sortIndex,
     };
   }
+
+  //These marks should not be calculated in averages
+  static List<String> nonAvTypes = [
+    "I_ne_jegy_ertekeles",
+    "felevi_jegy_ertekeles",
+    "II_ne_jegy_ertekeles",
+    "III_ne_jegy_ertekeles",
+    "evvegi_jegy_ertekeles",
+    "IV_ne_jegy_ertekeles",
+  ];
 }

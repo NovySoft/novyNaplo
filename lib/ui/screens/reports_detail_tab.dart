@@ -5,6 +5,7 @@ import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/calcPercentFromEvalsList.dart';
 import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -15,13 +16,13 @@ class ReportsDetailTab extends StatelessWidget {
     @required this.eval,
     @required this.color,
     @required this.title,
-    @required this.chartList,
+    @required this.inputList,
   });
 
   final Evals eval;
   final Color color;
   final String title;
-  final List<charts.Series> chartList;
+  final List<Evals> inputList;
 
   final axis = charts.NumericAxisSpec(
       renderSpec: charts.GridlineRendererSpec(
@@ -39,14 +40,19 @@ class ReportsDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Reports_detail_tab");
-    List<LinearMarkChartData> avList = [];
+    List<LinearMarkChartData> avList = [LinearMarkChartData(0, 0)];
+    List<charts.Series<dynamic, num>> chartList = [];
+    if (inputList.length > 0) {
+      chartList = createSubjectChart(inputList, inputList[0].subject.name);
+    }
     List<charts.Series<dynamic, num>> chartPointList = [];
     if (chartList != null) {
       if (chartList.length > 0) {
         avList = List.from(chartList[0].data);
         chartPointList = chartList;
       }
-    } else {
+    }
+    if (avList.length <= 0) {
       avList = [LinearMarkChartData(0, 0)];
     }
     return Scaffold(

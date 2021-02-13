@@ -3,25 +3,30 @@ import 'package:customgauge/customgauge.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/chartData.dart';
+import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/charts/createOsszesitett.dart';
+import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/calcPercentFromEvalsList.dart';
 import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 class ChartsDetailTab extends StatelessWidget {
   ChartsDetailTab({
     this.subject,
     this.color,
     this.id,
-    this.seriesList,
+    this.inputList,
     this.animate,
   });
 
   final int id;
   final String subject;
   final Color color;
-  final List<charts.Series> seriesList;
+  final List<Evals> inputList;
   final bool animate;
 
   final axis = charts.NumericAxisSpec(
@@ -39,6 +44,17 @@ class ChartsDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<charts.Series<LinearMarkChartData, int>> seriesList = [];
+    if (inputList.length > 0) {
+      if (inputList[0].subject.name == "Összesített") {
+        seriesList = createOsszesitett(stats.allParsedSubjectsWithoutZeros);
+      } else {
+        seriesList = createSubjectChart(
+          inputList,
+          inputList[0].subject.name,
+        );
+      }
+    }
     FirebaseCrashlytics.instance.log("Shown Charts_detail_tab");
     Color textCol;
     if (seriesList.last.data.last.value >= 4) {

@@ -1,8 +1,9 @@
 import 'package:novynaplo/data/models/chartData.dart';
+import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:charts_flutter/flutter.dart' as charts;
 
-void getBarChart(input) {
+void getBarChart(List<List<Evals>> input) {
   List<MarkForBars> data = [
     //WARN do not modify order!
     new MarkForBars('1', 0), //0
@@ -13,7 +14,7 @@ void getBarChart(input) {
   ];
   for (var n in input) {
     for (var y in n) {
-      switch (y.numberValue) {
+      switch (y.numberValue.round()) {
         case 5:
           data[4].count++;
           break;
