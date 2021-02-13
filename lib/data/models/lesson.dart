@@ -110,12 +110,16 @@ class Lesson {
             (item) => item.uid == v,
             orElse: () {
               Exam temp;
-              getExamById(v, map['userId']).then((value) {
+              getExamById(
+                v,
+                Student(userId: map['userId']),
+              ).then((value) {
                 temp = value;
               });
               if (temp == null) {
                 return temp;
               } else {
+                //Sadly there is no way to fetch exam by id in kreta
                 return Exam();
               }
             },
