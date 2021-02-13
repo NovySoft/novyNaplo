@@ -57,9 +57,12 @@ final axisTwo = charts.NumericAxisSpec(
   labelStyle: charts.TextStyleSpec(
       fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
 ));
-Color afterAvCol;
-Widget afterAvIcon;
-String afterAvDiff;
+Color afterAvCol = Colors.yellow;
+String afterAvDiff = "0";
+Widget afterAvIcon = Icon(
+  Icons.linear_scale,
+  color: Colors.yellow,
+);
 
 class FormKey {
   static final formKey = GlobalKey<FormState>();
@@ -497,6 +500,11 @@ class CalculatorTabState extends State<CalculatorTab>
         virtualMarks.add(input);
       });
     }
+    createWhatIfChartAndMarks(
+      defaultValues: currentSubject,
+      id: "whatIfChart",
+      virtualValues: virtualMarks,
+    );
   }
 
   void editVirtualMark({VirtualMarks input, int index}) {
@@ -651,6 +659,11 @@ class CalculatorTabState extends State<CalculatorTab>
                               setState(() {
                                 virtualMarks.removeAt(index);
                               });
+                              createWhatIfChartAndMarks(
+                                defaultValues: currentSubject,
+                                id: "whatIfChart",
+                                virtualValues: virtualMarks,
+                              );
                             },
                             child: Container(
                               color: numValColor, //COLOR OF CARD
@@ -725,6 +738,11 @@ class CalculatorTabState extends State<CalculatorTab>
                                 setState(() {
                                   virtualMarks.removeAt(index);
                                 });
+                                createWhatIfChartAndMarks(
+                                  defaultValues: currentSubject,
+                                  id: "whatIfChart",
+                                  virtualValues: virtualMarks,
+                                );
                               },
                             ),
                           ],

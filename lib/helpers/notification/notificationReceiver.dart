@@ -9,7 +9,6 @@ import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/data/models/notice.dart';
-import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
@@ -395,10 +394,7 @@ class NotificationReceiver {
                                 .subject
                                 .name),
                         color: currColor,
-                        seriesList: createSubjectChart(
-                          _tempMatrixWithoutZeros[tempIndexTwo],
-                          tempIndexTwo.toString(),
-                        ),
+                        inputList: _tempMatrixWithoutZeros[tempIndexTwo],
                         animate: globals.chartAnimations,
                       ),
                     ),
@@ -424,9 +420,8 @@ class NotificationReceiver {
                           .subject
                           .name),
                       color: currColor,
-                      seriesList: createSubjectChart(
+                      inputList:
                           statsTab.allParsedSubjectsWithoutZeros[tempIndex],
-                          tempIndex.toString()),
                       animate: globals.chartAnimations,
                     ),
                   ),

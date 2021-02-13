@@ -27,6 +27,11 @@ class LinearMarkChartData {
   String id;
 
   LinearMarkChartData(this.count, this.value, {this.id});
+
+  @override
+  String toString() {
+    return "${this.id}: ${this.count} ${this.value}";
+  }
 }
 
 class LinearPieData {

@@ -143,7 +143,7 @@ final Map<String, String> translation = {
   "edit": "Edit",
   "noVmark": "You have got no virtual mark",
   "addSomeVmark": "Create some with the plus button!",
-  "VmarkSlide": "By sliding the cards you can find usefull settings!",
+  "VmarkSlide": "By sliding the cards you can find useful settings!",
   "delAll": "Delete all",
   "avBefore": "average before",
   "avAfter": "average after",

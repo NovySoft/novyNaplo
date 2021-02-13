@@ -7,10 +7,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/helpers/charts/absencesCharts.dart';
 import 'package:novynaplo/helpers/charts/createAllSubjectChartData.dart';
-import 'package:novynaplo/helpers/charts/createOsszesitett.dart';
-import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/charts/getBarChart.dart';
 import 'package:novynaplo/helpers/charts/getPieChartOrBarChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
@@ -20,7 +19,7 @@ import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
+import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
@@ -97,7 +96,7 @@ class _StatisticsTabState extends State<StatisticsTab>
           controller: _tabController,
           children: statTabs.map((Tab tab) {
             if (allParsedSubjects.length == 0 ||
-                marksPage.allParsedByDate.length == 0) return noMarks();
+                marks.allParsedByDate.length == 0) return noMarks();
             if (allParsedSubjects.length > 15) {
               sizedBoxHeight =
                   ((allParsedSubjects.length - 15) * 23).toDouble();
@@ -565,7 +564,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
-    Color currColor = marksPage.colors[index];
+    Color currColor = marks.colors[index];
     if (index == 0) {
       return SafeArea(
         child: AnimatedChartsTitleCard(
@@ -576,11 +575,20 @@ class _StatisticsTabState extends State<StatisticsTab>
             id: index,
             subject: capitalize(getTranslatedString("contracted")),
             color: currColor,
-            seriesList: createOsszesitett(allParsedSubjectsWithoutZeros),
+            inputList: [Evals(subject: Subject(name: "Összesített"))],
             animate: globals.chartAnimations,
           ),
         ),
       );
+    }
+    int statListIndex = marks.allParsedBySubject.indexWhere((element) =>
+        element[0].subject.name.toLowerCase() ==
+        allParsedSubjectsWithoutZeros[index - 1][0].subject.name.toLowerCase());
+    List<Evals> chartListPoints = [];
+    if (statListIndex != -1) {
+      chartListPoints = List.from(marks.allParsedBySubject[statListIndex]);
+    } else if (allParsedSubjectsWithoutZeros[index - 1].length > 0) {
+      chartListPoints = List.from(allParsedSubjectsWithoutZeros[index - 1]);
     }
     return SafeArea(
       child: AnimatedChartsTitleCard(
@@ -593,8 +601,7 @@ class _StatisticsTabState extends State<StatisticsTab>
           subject: capitalize(
               allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
           color: currColor,
-          seriesList: createSubjectChart(
-              allParsedSubjectsWithoutZeros[index - 1], index.toString()),
+          inputList: chartListPoints,
           animate: globals.chartAnimations,
         ),
       ),
