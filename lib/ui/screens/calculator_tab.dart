@@ -452,13 +452,9 @@ class CalculatorTabState extends State<CalculatorTab>
                     tooltip: getTranslatedString("addVmark"),
                     elevation: 10,
                   ),
-                  globals.adsEnabled
-                      ? SizedBox(
-                          height: 90,
-                        )
-                      : SizedBox(
-                          height: 15,
-                        ),
+                  SizedBox(
+                    height: 15,
+                  ),
                 ]),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.endFloat,
@@ -880,11 +876,7 @@ class CalculatorTabState extends State<CalculatorTab>
                   new charts.LineRendererConfig(includePoints: true),
             ),
           ),
-          globals.adsEnabled
-              ? SizedBox(
-                  height: 150,
-                )
-              : SizedBox(height: 100),
+          SizedBox(height: 100),
         ],
       ),
     );

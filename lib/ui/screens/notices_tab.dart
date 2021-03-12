@@ -5,8 +5,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
-
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
@@ -51,7 +49,7 @@ Widget _body(BuildContext context) {
     return noNotice();
   } else {
     return ListView.builder(
-      itemCount: allParsedNotices.length + globals.adModifier,
+      itemCount: allParsedNotices.length,
       padding: EdgeInsets.symmetric(vertical: 12),
       itemBuilder: _noticesBuilder,
     );

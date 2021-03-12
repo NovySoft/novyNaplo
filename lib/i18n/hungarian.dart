@@ -1,8 +1,5 @@
 final Map<String, String> translation = {
   "Welcome to novynaplo": "Üdv a Novy Naplóban!",
-  "adsOffRestart": "A reklámok kikapcsolásához indítsd újra az applikációt",
-  "turnOnAds":
-      "A reklámok bekapcsolásával elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
   "notifTurnOnWarn":
       "Figyelem!\nAz értesítések bekapcsolása bekapcsolja az adatbázis használatát is (offline módot)!",
   "backgroundFetchTurnOnWarning":
@@ -168,11 +165,10 @@ final Map<String, String> translation = {
       "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
   "thirdParty": "Harmadik felek és adatgyűjtés",
   "useThirdParties":
-      "Az alkalmazás bizonyos külső szolgáltatásokat is használ (admob,firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak. Az egyetlen adat amit tárolunk rólad (CSAK A TESZT VERZIÓBAN) az a neved. Amenyiben a playstore-ból vagy az appstore-ból tölttötted le az applikációt, akkor nem tárolunk rólad semmilyen adatot.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+      "Az alkalmazás bizonyos külső szolgáltatásokat is használ (firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
   "contributors": "Akik az apphoz hozzájárultak:",
   "leadDev": "Fő fejlesztő",
   "markCalcDev": "Jegyszámoló programja",
-  "adsMaker": "Reklámok",
   "jsDev": "JS programozó",
   "designTip": "Design tanácsadó",
   "mainDonator": "Fő finanszírozó",
@@ -205,7 +201,6 @@ final Map<String, String> translation = {
   "fours": "négyest",
   "fives": "ötöst",
   "theme": "Téma",
-  "ads": "Reklámok",
   "chartAnimations": "Grafikon animációk",
   "bright": "Világos",
   "dark": "Sötét",
@@ -246,13 +241,6 @@ final Map<String, String> translation = {
   "newVersion": "Új verzió",
   "details": "Részletek",
   "update": "Frissítés",
-  "searchForUpdate": "Frissítések keresés",
-  "downloadBetaTest": "Béta verzió letöltése",
-  "currVersion": "Jelenlegi verzió",
-  "latestBetaVersion": "Legújabb béta verzió",
-  "latestPlayVersion": "Legújabb play verzió",
-  "isAppFinal": "Az applikáció végleges",
-  "isAppPlay": "Az applikáció playstore változat",
   "timetableSubtitle": "Órarend alcím",
   "classroom": "Tanterem",
   "teacher": "Tanár",
@@ -303,13 +291,8 @@ final Map<String, String> translation = {
   "praiseworthy": "Dicséretes",
   "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
   "performance": "Teljesítmény",
-  "verCheckOnStart": "Automatikus verzió ellenőrzés",
-  "review": "Értékelés",
-  "plsRateUs":
-      "Szia!\n\n-Élvezed a novynaplót?\n-Igen/Nem/Talán?\n\nEl mondanád nekünk a véleményedet az app áruházban?",
   "later": "Később",
   "never": "Soha",
-  "reviewProcess": "Értékelés ablak",
   "dbExplorer": "Adatbázis böngésző",
   "MON": "H",
   "TUE": "K",
@@ -400,10 +383,7 @@ final Map<String, String> translation = {
   "ComeAndChangePass": "Nyisd meg az appot és add meg újra a jelszavadat!",
   "reEnterPass": "Kérlek add meg újra a jelszavadat!",
   "currEditing": "Jelenleg ?{0} jelszavát változtatod",
-  "turnOnAdsNewUser":
-      "A reklámok bekapcsolásával segíteted a projekt fejlesztését elfogadod az Admob privacy policity-t és azt hogy a Google bizonyos információkat gyűjthet rólad (és oszthat meg harmadik félel), és azt is elfogadod, hogy ezen információk segítségével számodra releváns hírdetések fognak megjelenni.",
-  "enableAds": "Reklámok bekapcsolása?",
   "splitText": "Szöveg tördelése grafikonnál:",
   "Igazolando": "Igazolandó",
-  "thxForSupporting": "Köszönjük, hogy támogatja a projektet!",
+  "prManager": "Public Relations",
 };

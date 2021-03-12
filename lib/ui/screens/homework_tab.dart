@@ -53,7 +53,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       return noHomework();
     } else {
       return ListView.builder(
-        itemCount: globalHomework.length + globals.adModifier,
+        itemCount: globalHomework.length,
         itemBuilder: _listBuilder,
       );
     }

@@ -289,11 +289,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           CircleAvatar(radius: 65.0, child: Image.asset('assets/firebase.png')),
     );
 
-    final admob = Hero(
-      tag: 'hero',
-      child: CircleAvatar(radius: 65.0, child: Image.asset('assets/admob.png')),
-    );
-
     return Center(
       child: ListView(
         shrinkWrap: true,
@@ -303,10 +298,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               firebase,
-              SizedBox(
-                width: 15,
-              ),
-              admob,
             ],
           ),
           SizedBox(height: 5.0),
@@ -383,7 +374,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         PeopleCard(name: "Novy", job: getTranslatedString("leadDev")),
         PeopleCard(
             name: "Zoller András", job: getTranslatedString("markCalcDev")),
-        PeopleCard(name: "Gáti Gergely", job: getTranslatedString("adsMaker")),
+        PeopleCard(name: "Gáti Gergely", job: getTranslatedString("prManager")),
         PeopleCard(name: "Dallos Levente", job: getTranslatedString("jsDev")),
         PeopleCard(
             name: "Gáspár Bernát", job: getTranslatedString("designTip")),

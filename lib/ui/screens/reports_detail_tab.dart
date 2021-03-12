@@ -60,7 +60,7 @@ class ReportsDetailTab extends StatelessWidget {
         title: Text(capitalize(title)),
       ),
       body: ListView.builder(
-        itemCount: 6 + globals.adModifier,
+        itemCount: 6,
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:

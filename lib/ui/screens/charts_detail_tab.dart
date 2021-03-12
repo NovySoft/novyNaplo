@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/charts/createOsszesitett.dart';
 import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/calcPercentFromEvalsList.dart';
@@ -89,7 +88,7 @@ class ChartsDetailTab extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 2 + globals.adModifier,
+                itemCount: 2,
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
                     case 0:

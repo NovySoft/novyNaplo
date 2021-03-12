@@ -3,7 +3,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/lesson.dart';
@@ -14,10 +13,7 @@ import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/config.dart' as config;
-import 'package:novynaplo/helpers/versionHelper.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
@@ -112,47 +108,8 @@ class _LoadingPageState extends State<LoadingPage> {
         (element) => element.current,
         orElse: () => allUsers[0],
       );
-      setState(() {
-        loadingText = getTranslatedString("checkVersion");
-      });
       FirebaseCrashlytics.instance
           .setCustomKey("Version", config.currentAppVersionCode);
-      if (globals.verCheckOnStart) {
-        await getVersion();
-      }
-      if (globals.prefs.getString("FirstOpenTime") != null) {
-        if (DateTime.parse(globals.prefs.getString("FirstOpenTime"))
-                .toUtc()
-                .isBefore(DateTime.now().toUtc().subtract(Duration(days: 7))) &&
-            globals.prefs.getBool("ShouldAsk") &&
-            DateTime.parse(globals.prefs.getString("LastAsked"))
-                .toUtc()
-                .isBefore(DateTime.now().toUtc().subtract(Duration(days: 2))) &&
-            config.isAppPlaystoreRelease) {
-          setState(() {
-            loadingText = getTranslatedString("reviewProcess");
-          });
-          await showReviewWindow(context);
-        }
-      }
-      //Load ADS
-      if (globals.prefs.getBool("ads") != null) {
-        FirebaseCrashlytics.instance
-            .setCustomKey("Ads", globals.prefs.getBool("ads"));
-        if (globals.prefs.getBool("ads")) {
-          adBanner.load();
-          adBanner.show(
-            anchorType: AnchorType.bottom,
-          );
-          globals.adsEnabled = true;
-          globals.adModifier = 1;
-        } else {
-          globals.adModifier = 0;
-          globals.adsEnabled = false;
-        }
-      } else {
-        globals.adsEnabled = false;
-      }
       //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");
@@ -232,7 +189,6 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: config.adMob);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       onLoad(context);
     });
@@ -308,82 +264,6 @@ class _LoadingPageState extends State<LoadingPage> {
               },
             ),
           ],
-        );
-      },
-    );
-  }
-
-  Future<void> showReviewWindow(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
-            Navigator.of(context).pop();
-            globals.prefs.setString("LastAsked", DateTime.now().toString());
-            globals.prefs.setBool("ShouldAsk", true);
-            FirebaseAnalytics().logEvent(
-              name: "seenReviewPopUp",
-              parameters: {"Action": "Later"},
-            );
-            return true;
-          },
-          child: AlertDialog(
-            title: Text(getTranslatedString("review")),
-            content: Text(getTranslatedString("plsRateUs")),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  getTranslatedString("yes"),
-                  style: TextStyle(color: Colors.green),
-                ),
-                onPressed: () async {
-                  final InAppReview inAppReview = InAppReview.instance;
-
-                  if (await inAppReview.isAvailable()) {
-                    inAppReview.requestReview();
-                  } else {
-                    inAppReview.openStoreListing();
-                  }
-                  globals.prefs.setBool("ShouldAsk", false);
-                  FirebaseAnalytics().logEvent(
-                    name: "ratedApp",
-                  );
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text(
-                  getTranslatedString("later"),
-                  style: TextStyle(color: Colors.orange),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  globals.prefs
-                      .setString("LastAsked", DateTime.now().toString());
-                  globals.prefs.setBool("ShouldAsk", true);
-                  FirebaseAnalytics().logEvent(
-                    name: "seenReviewPopUp",
-                    parameters: {"Action": "Later"},
-                  );
-                },
-              ),
-              FlatButton(
-                child: Text(
-                  getTranslatedString("never"),
-                  style: TextStyle(color: Colors.red),
-                ),
-                onPressed: () {
-                  globals.prefs.setBool("ShouldAsk", false);
-                  Navigator.of(context).pop();
-                  FirebaseAnalytics().logEvent(
-                    name: "seenReviewPopUp",
-                    parameters: {"Action": "Never"},
-                  );
-                },
-              ),
-            ],
-          ),
         );
       },
     );

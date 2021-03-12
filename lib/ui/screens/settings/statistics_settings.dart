@@ -35,7 +35,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4 + globals.adModifier,
+          itemCount: 4,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:

@@ -135,7 +135,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                     color: charts.MaterialPalette.blue.shadeDefault),
               ));
               return ListView.builder(
-                itemCount: 11 + globals.adModifier,
+                itemCount: 11,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 itemBuilder: (BuildContext context, int index) {
                   List<String> hiddenSeries = [];
@@ -537,8 +537,7 @@ class _StatisticsTabState extends State<StatisticsTab>
             } else {
               return ListView.builder(
                   itemCount: allParsedSubjectsWithoutZeros.length +
-                      1 + //+1 due to összesített
-                      globals.adModifier,
+                      1, //+1 due to összesített
                   padding: EdgeInsets.symmetric(vertical: 12),
                   itemBuilder: _chartsListBuilder);
             }

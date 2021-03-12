@@ -29,16 +29,12 @@ String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
-bool adsEnabled = false; //Do we have to show ads
 bool chartAnimations = true; //Do we need to animate the charts
 bool shouldVirtualMarksCollapse = false; //Should we group virtual marks
 bool backgroundFetch = true; //Should we fetch data in the background?
 bool backgroundFetchCanWakeUpPhone =
     true; //Should we wake the phone up to fetch data?
 bool backgroundFetchOnCellular = false; //Should we fetch on cellular data
-bool verCheckOnStart =
-    true; //Should we check for updates upon startup, can be slow, but reminds user to update
-int adModifier = 0;
 int extraSpaceUnderStat = 0; //How many extra padding do we need?
 int fetchPeriod = 30; //After how many minutes should we fetch the new data?
 int splitChartLength = 17;
@@ -54,7 +50,6 @@ bool collapseNotifications =
 Future<void> resetAllGlobals() async {
   await DatabaseHelper.clearAllTables();
   await prefs.clear();
-  await prefs.setBool("ads", adsEnabled);
   await prefs.setBool("isNew", true);
   await prefs.setString("Language", language);
   didFetch = false;
@@ -77,13 +72,6 @@ Future<void> setGlobals() async {
     await prefs.setString("LastAsked", DateTime.now().toString());
   }
 
-  if (prefs.getBool("getVersion") != null) {
-    verCheckOnStart = prefs.getBool("getVersion");
-  } else {
-    await prefs.setBool("getVersion", true);
-    verCheckOnStart = true;
-  }
-
   if (prefs.getBool("ShouldAsk") == null) {
     await prefs.setBool("ShouldAsk", true);
   }
@@ -92,12 +80,6 @@ Future<void> setGlobals() async {
     prefs.setInt("splitChartLength", splitChartLength);
   } else {
     splitChartLength = prefs.getInt("splitChartLength");
-  }
-
-  if (prefs.getBool("ads") != null) {
-    FirebaseCrashlytics.instance.setCustomKey("Ads", prefs.getBool("ads"));
-    adsEnabled = prefs.getBool("ads");
-    if (adsEnabled) adModifier = 1;
   }
   if (prefs.getString("Language") != null) {
     language = prefs.getString("Language");
