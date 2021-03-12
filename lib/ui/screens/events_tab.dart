@@ -2,8 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/event.dart';
-
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
@@ -48,7 +46,7 @@ class _EventsTabState extends State<EventsTab> {
       return noEvent();
     } else {
       return ListView.builder(
-        itemCount: allParsedEvents.length + globals.adModifier,
+        itemCount: allParsedEvents.length,
         itemBuilder: _listBuilder,
       );
     }

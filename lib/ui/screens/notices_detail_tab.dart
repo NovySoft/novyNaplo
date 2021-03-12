@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/extensions.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -47,7 +46,7 @@ class NoticeDetailTab extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 4 + globals.adModifier,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 Widget child = getNoticesDetails(context, index);
                 return Row(

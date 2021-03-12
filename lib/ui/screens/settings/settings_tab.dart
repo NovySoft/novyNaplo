@@ -75,7 +75,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 11 + globals.adModifier,
+      itemCount: 11,
       // ignore: missing_return
       itemBuilder: (context, index) {
         if (index == 0) {

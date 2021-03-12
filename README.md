@@ -13,19 +13,6 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
-## Letöltés
-
-- Playstoreból:
-
-[![Szerezd meg: Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/hu_badge_web_generic.png)](https://play.google.com/store/apps/details?id=novy.vip.novynaplo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
-
-### Amennyiben nem zavar, hogy az alkalmazás hibákat tartalmazhat és szeretnél hozzájárulni az applikáció fejlesztéséhez, javasoljuk a béta tesztelést
-
-- Teszt verzió playstoreon:
-[Legújabb béta verzió letöltése](https://play.google.com/apps/testing/novy.vip.novynaplo)
-
-### A github releases használata **megszűnt**
-
 ## Jelenlegi funkciók
 
 - Jegyek megtekintése
@@ -78,8 +65,6 @@ Novy teljesen nem eredeti kréta kliense.
 - **firebase_crashlytics**: Applikáció összeomlás esetén jelenti a fontos összeonlási adatokat
 - **firebase_analytics**: Az applikáció használatáról jelent fontos adatokat (ki melyik gombot nyomja meg, milyen gyors az api válasz és egyebek)
 - **firebase_performance**: Az internet lekérések sebbeségét figyeli
-- **firebase_admob**: Alsó reklám csík megjelnítése
-- **admob_flutter**: Natív reklámok
 - **material_design_icons_flutter**: Ikon kiegészítő csomag
 - **sqflite**: Kliens oldali sql (adattárolás)
 - **animations**: Animációk kezelése
@@ -88,7 +73,6 @@ Novy teljesen nem eredeti kréta kliense.
 - **customgauge**: A kis sebbeség óra szerüség
 - **flutter_local_notifications**: Értesítések küldése
 - **android_alarm_manager**: Háttér lekérések időzítése
-- **in_app_update**: Playstore frissítések jelzése
 
 ## Felhasznált kódok
 
@@ -113,5 +97,3 @@ Novy teljesen nem eredeti kréta kliense.
 - [WakaTime](https://wakatime.com/) Ajánlott a letöltése, így összegezni tudjuk, hogy mennyi fölösleges órát tölttöttünk kód írással ;)
 - [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments) Az én kis komment kiemelő pluginom, mert különböző kommenteket különböztetek meg
 - [TabNine](https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode) Egy kis kód kiegesztő plugin, ajánlom a használatát
-
-### A Google Play és a Google Play-logó a Google LLC védjegyei

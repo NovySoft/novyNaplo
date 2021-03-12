@@ -41,7 +41,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
-        itemCount: 9 + globals.adModifier,
+        itemCount: 9,
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
@@ -441,20 +441,6 @@ class _NetworkAndNotificationSettingsState
                 );
                 break;
               case 3:
-                return ListTile(
-                  title: Text(getTranslatedString("verCheckOnStart")),
-                  trailing: Switch(
-                    onChanged: (bool isOn) async {
-                      setState(() {
-                        globals.verCheckOnStart = isOn;
-                        globals.prefs.setBool("getVersion", isOn);
-                      });
-                    },
-                    value: globals.verCheckOnStart,
-                  ),
-                );
-                break;
-              case 4:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -498,7 +484,7 @@ class _NetworkAndNotificationSettingsState
                   ],
                 );
                 break;
-              case 5:
+              case 4:
                 return ListTile(
                   title: Text(getTranslatedString("backgroundFetchOnCellular")),
                   trailing: Switch(
@@ -515,7 +501,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 6:
+              case 5:
                 return ListTile(
                   title: Text(
                       "${getTranslatedString("timeBetweenFetches")} (30-500${getTranslatedString("minutes")}):"),
@@ -570,7 +556,7 @@ class _NetworkAndNotificationSettingsState
                   ),
                 );
                 break;
-              case 7:
+              case 6:
                 return Column(
                   children: <Widget>[
                     ListTile(
@@ -619,7 +605,6 @@ class _NetworkAndNotificationSettingsState
                         value: globals.backgroundFetchCanWakeUpPhone,
                       ),
                     ),
-                    SizedBox(height: 100, width: 10),
                   ],
                 );
                 break;

@@ -9,7 +9,6 @@ import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
-import 'package:novynaplo/helpers/handleNewUser.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -73,7 +72,8 @@ class MarksTabState extends State<MarksTab>
         androidRefreshKey.currentState?.show();
       }
       if (main.isNew) {
-        handleNewUser(context);
+        //!Handle new users here
+        main.isNew = false;
       }
     });
     //Handle loaded state
@@ -310,8 +310,7 @@ class MarksTabState extends State<MarksTab>
                     ? noMarks()
                     : ListView.builder(
                         shrinkWrap: true,
-                        itemCount: allParsedByDate.length +
-                            (globals.adsEnabled ? 1 : 0),
+                        itemCount: allParsedByDate.length,
                         padding: EdgeInsets.symmetric(vertical: 12),
                         itemBuilder: _dateListBuilder,
                       ),
@@ -326,8 +325,7 @@ class MarksTabState extends State<MarksTab>
                     ? noMarks()
                     : ListView.builder(
                         shrinkWrap: true,
-                        itemCount: allParsedBySubject.length +
-                            (globals.adsEnabled ? 1 : 0),
+                        itemCount: allParsedBySubject.length,
                         padding: EdgeInsets.symmetric(vertical: 12),
                         itemBuilder: _subjectListBuilder,
                       ),

@@ -2,10 +2,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/ui/adHelper.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/ui/widgets/AdsDialog.dart';
 
 String dropDown;
 
@@ -42,7 +40,7 @@ class _UIsettingsState extends State<UIsettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4 + globals.adModifier,
+          itemCount: 4,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -157,55 +155,6 @@ class _UIsettingsState extends State<UIsettings> {
                 );
                 break;
               case 2:
-                return ListTile(
-                  title: Text(getTranslatedString("ads")),
-                  trailing: Switch(
-                    onChanged: (bool isOn) async {
-                      setState(() {
-                        globals.adsEnabled = isOn;
-                      });
-                      FirebaseCrashlytics.instance.setCustomKey("Ads", isOn);
-                      await globals.prefs.setBool("ads", isOn);
-                      FirebaseAnalytics().setUserProperty(
-                          name: "Ads", value: isOn ? "ON" : "OFF");
-                      globals.adModifier = isOn ? 1 : 0;
-                      if (isOn) {
-                        showDialog<void>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return AdsDialog();
-                            });
-                      } else {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (_) {
-                            return new AlertDialog(
-                              title: new Text(getTranslatedString("ads")),
-                              content: Text(
-                                getTranslatedString("adsOffRestart"),
-                                textAlign: TextAlign.left,
-                              ),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('OK'),
-                                  onPressed: () async {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        adBanner.dispose();
-                      }
-                    },
-                    value: globals.adsEnabled,
-                  ),
-                );
-                break;
-              case 3:
                 return ListTile(
                   title: Text(getTranslatedString("chartAnimations")),
                   trailing: Switch(

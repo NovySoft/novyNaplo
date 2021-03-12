@@ -2,8 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/exam.dart';
-
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
@@ -45,7 +43,7 @@ class _ExamsTabState extends State<ExamsTab> {
       return noExam();
     } else {
       return ListView.builder(
-        itemCount: allParsedExams.length + globals.adModifier,
+        itemCount: allParsedExams.length,
         padding: EdgeInsets.symmetric(vertical: 12),
         itemBuilder: _examBuilder,
       );

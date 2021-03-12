@@ -5,7 +5,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
 
 class EventsDetailTab extends StatefulWidget {
@@ -91,7 +90,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                       ),
                     },
                   ),
-                  SizedBox(height: globals.adsEnabled ? 150 : 10),
+                  SizedBox(height: 10),
                 ],
               ),
             ),

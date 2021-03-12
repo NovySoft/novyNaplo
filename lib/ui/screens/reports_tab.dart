@@ -9,7 +9,6 @@ import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
-import 'package:novynaplo/global.dart' as globals;
 
 Map<String, List<Evals>> reportMaps = {
   "FirstQuarter": [],
@@ -147,7 +146,7 @@ class _ReportsTabState extends State<ReportsTab>
               tabName = "EndOfYear";
             }
             return ListView.builder(
-              itemCount: reportMaps[tabName].length + globals.adModifier,
+              itemCount: reportMaps[tabName].length,
               padding: EdgeInsets.symmetric(vertical: 12),
               itemBuilder: (BuildContext context, int index) {
                 if (reportMaps[tabName].length <= index) {

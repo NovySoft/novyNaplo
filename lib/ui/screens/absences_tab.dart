@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/charts/absencesCharts.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
@@ -208,7 +207,7 @@ class _AbsencesTabState extends State<AbsencesTab>
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: tempAbsences.length + globals.adModifier,
+              itemCount: tempAbsences.length,
               itemBuilder: (context, listIndex) {
                 if (listIndex >= tempAbsences.length) {
                   return SizedBox(

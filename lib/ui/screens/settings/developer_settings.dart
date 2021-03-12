@@ -23,7 +23,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4 + globals.adModifier,
+          itemCount: 4,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -247,7 +247,7 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3 + globals.adModifier,
+          itemCount: 3,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
