@@ -20,6 +20,9 @@ class NotificationHelper {
   static NotificationDetails platformChannelSpecificsSummary;
   static Int64List vibrationPattern;
 
+  //Notification launch
+  static bool didNotificationLaunchApp = false;
+
   static Future<void> setupNotifications() async {
     FirebaseCrashlytics.instance.log("setupNotifications");
     vibrationPattern = new Int64List(4);
@@ -112,9 +115,18 @@ class NotificationHelper {
       iOS: initializationSettingsIOS,
     );
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    final NotificationAppLaunchDetails notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    didNotificationLaunchApp =
+        notificationAppLaunchDetails.didNotificationLaunchApp;
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: NotificationReceiver.selectNotification,
+      onSelectNotification: (String payload) async {
+        await NotificationReceiver.selectNotification(
+          payload,
+          didNotificationLaunchApp,
+        );
+      },
     );
   }
 

@@ -17,8 +17,10 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
       ? true
       : false;
   for (var n in manipulableData) {
-    if (!Evals.nonAvTypes.contains(n.type.name)) {
-      if (n.valueType.name == "Szazalekos") {
+    if (!Evals.nonAvTypes.contains(n.type.name) ||
+        n.kindOf == "Magatartas" ||
+        n.kindOf == "Szorgalom") {
+      if (n.valueType.name == "Szazalekos" ) {
         if (isSzovegesOnly) {
           //Convert percentage mark to a normal one
           double markValue = (n.numberValue / 100) * 5;

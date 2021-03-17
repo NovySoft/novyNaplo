@@ -11,6 +11,7 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/colorHelper.dart';
@@ -32,10 +33,16 @@ import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statsTab;
 import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
+import 'notificationHelper.dart';
+//FIXME: Do not use random colors
 
 class NotificationReceiver {
   //!THIS DOESN'T WORK WITH MULTIUSER
-  static Future<void> selectNotification(String payload) async {
+  static Future<void> selectNotification(
+    String payload,
+    bool appLaunchedApp,
+  ) async {
+    await waitUntil(() => globals.isDataLoaded);
     try {
       if (payload == null) {
         return;
@@ -59,7 +66,7 @@ class NotificationReceiver {
       if (payloadUid == null || payloadUid == "") {
         switch (payloadPrefix) {
           case "marks":
-            globalWaitAndPushNamed(marksTab.MarksTab.tag);
+            if (!appLaunchedApp) globalWaitAndPushNamed(marksTab.MarksTab.tag);
             break;
           case "hw":
             globalWaitAndPushNamed(homeworkTab.HomeworkTab.tag);
@@ -118,8 +125,8 @@ class NotificationReceiver {
               } else {
                 //*Parse and show from database
                 Evals tempEval = Evals.fromSqlite(maps[0]);
-                globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
-                  (value) => globalWaitAndPush(
+                if (appLaunchedApp) {
+                  globalWaitAndPush(
                     MaterialPageRoute(
                       builder: (context) => MarksDetailTab(
                         eval: tempEval,
@@ -129,14 +136,28 @@ class NotificationReceiver {
                         ),
                       ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
+                    (value) => globalWaitAndPush(
+                      MaterialPageRoute(
+                        builder: (context) => MarksDetailTab(
+                          eval: tempEval,
+                          color: getMarkCardColor(
+                            eval: tempEval,
+                            index: 0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
               }
             } else {
               //?Data is in the parsed list
               Evals tempEval = marksTab.allParsedByDate[tempIndex];
-              globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
-                (value) => globalWaitAndPush(
+              if (appLaunchedApp) {
+                globalWaitAndPush(
                   MaterialPageRoute(
                     builder: (context) => MarksDetailTab(
                       eval: tempEval,
@@ -146,8 +167,22 @@ class NotificationReceiver {
                       ),
                     ),
                   ),
-                ),
-              );
+                );
+              } else {
+                globalWaitAndPushNamed(marksTab.MarksTab.tag).then(
+                  (value) => globalWaitAndPush(
+                    MaterialPageRoute(
+                      builder: (context) => MarksDetailTab(
+                        eval: tempEval,
+                        color: getMarkCardColor(
+                          eval: tempEval,
+                          index: tempIndex,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
             }
             break;
           case "hw":
@@ -553,6 +588,10 @@ class NotificationReceiver {
         reason: 'Handle notification select',
         printDetails: true,
       );
+    } finally {
+      if (appLaunchedApp) {
+        NotificationHelper.didNotificationLaunchApp = false;
+      }
     }
   }
 }

@@ -175,6 +175,7 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
+      globals.isDataLoaded = true;
       await Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
       return;
     } catch (e, s) {
