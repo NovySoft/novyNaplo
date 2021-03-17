@@ -18,8 +18,10 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 //* Session
 SharedPreferences prefs; //Global shared preferences
 bool didFetch = false; //True if we fetched the data, false if we didn't
-bool isLoaded =
+bool isNavigatorLoaded =
     false; //Stores whether the app has passed the loading stage, this variable is used to delay and show notifications
+bool isDataLoaded =
+    false; //Whether app data has been loaded, and we can start fetching data for notifications
 Database db; //Global database access
 Student currentUser = Student(); //The currently shown user
 //* "Permanent"

@@ -5,25 +5,27 @@ import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/main.dart';
 
 Future<void> globalWaitAndPushNamed(String tag) async {
-  if (globals.isLoaded && NavigatorKey.navigatorKey.currentState != null) {
+  if (globals.isNavigatorLoaded &&
+      NavigatorKey.navigatorKey.currentState != null) {
     NavigatorKey.navigatorKey.currentState.pushNamed(tag);
   } else {
-    await waitUntil(() => globals.isLoaded);
+    await waitUntil(() => globals.isNavigatorLoaded);
     print("LOADED");
-    await delay(100);
-    await NavigatorKey.navigatorKey.currentState.pushNamed(tag);
+    await delay(500);
+    NavigatorKey.navigatorKey.currentState.pushNamed(tag);
   }
-  await delay(100);
+  await delay(500);
 }
 
 Future<void> globalWaitAndPush(Route route) async {
-  if (globals.isLoaded && NavigatorKey.navigatorKey.currentState != null) {
+  if (globals.isNavigatorLoaded &&
+      NavigatorKey.navigatorKey.currentState != null) {
     NavigatorKey.navigatorKey.currentState.push(route);
   } else {
-    await waitUntil(() => globals.isLoaded);
+    await waitUntil(() => globals.isNavigatorLoaded);
     print("LOADED");
-    await delay(100);
+    await delay(500);
     NavigatorKey.navigatorKey.currentState.push(route);
   }
-  await delay(100);
+  await delay(500);
 }

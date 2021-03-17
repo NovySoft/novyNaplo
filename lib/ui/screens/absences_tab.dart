@@ -330,80 +330,101 @@ class AbsencencesDetailTab extends StatelessWidget {
             SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
-                switch (index) {
-                  case 0:
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 15, top: 16, bottom: 16),
-                      child: Text(
-                        '${absence.delayInMinutes != null ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: 11,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          switch (index) {
+                            case 0:
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, top: 16, bottom: 16),
+                                child: Text(
+                                  '${absence.delayInMinutes != null ? getTranslatedString("delayInfo") : getTranslatedString("absenceInfo")}:',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
+                              break;
+                            case 1:
+                              return SizedBox(
+                                child: Text(
+                                    "${getTranslatedString("subject")}: " +
+                                        absence.subject.name,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              );
+                              break;
+                            case 3:
+                              return SizedBox(
+                                child: Text(
+                                    "${getTranslatedString("teacher")}: " +
+                                        absence.teacher,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              );
+                              break;
+                            case 5:
+                              DateTime tempDate = absence.lesson.startDate;
+                              return SizedBox(
+                                child: Text(
+                                    "${getTranslatedString("date")}: " +
+                                        "${tempDate.toDayOnlyString()} (${intToTHEnding(absence.lesson.lessonNumber)} ${getTranslatedString("lesson")})",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              );
+                              break;
+                            case 7:
+                              return SizedBox(
+                                child: Text(
+                                    "${getTranslatedString("stateOfJustification")}: " +
+                                        "${getTranslatedString(absence.justificationState)}",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              );
+                              break;
+                            case 9:
+                              return absence.justificationType != null
+                                  ? SizedBox(
+                                      child: Text(
+                                          "${getTranslatedString("justificationType")}: " +
+                                              "${getTranslatedString(absence.justificationType.name)}",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    )
+                                  : SizedBox(
+                                      width: 0,
+                                      height: 0,
+                                    );
+                              break;
+                            case 10:
+                              return SizedBox(
+                                height: 250,
+                              );
+                              break;
+                            default:
+                              return SizedBox(height: 10);
+                          }
+                        },
                       ),
-                    );
-                    break;
-                  case 1:
-                    return SizedBox(
-                      child: Text(
-                          "${getTranslatedString("subject")}: " +
-                              absence.subject.name,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    );
-                    break;
-                  case 3:
-                    return SizedBox(
-                      child: Text(
-                          "${getTranslatedString("teacher")}: " +
-                              absence.teacher,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    );
-                    break;
-                  case 5:
-                    DateTime tempDate = absence.lesson.startDate;
-                    return SizedBox(
-                      child: Text(
-                          "${getTranslatedString("date")}: " +
-                              "${tempDate.toDayOnlyString()} (${intToTHEnding(absence.lesson.lessonNumber)} ${getTranslatedString("lesson")})",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    );
-                    break;
-                  case 7:
-                    return SizedBox(
-                      child: Text(
-                          "${getTranslatedString("stateOfJustification")}: " +
-                              "${getTranslatedString(absence.justificationState)}",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                    );
-                    break;
-                  case 9:
-                    return absence.justificationType != null
-                        ? SizedBox(
-                            child: Text(
-                                "${getTranslatedString("justificationType")}: " +
-                                    "${getTranslatedString(absence.justificationType.name)}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
-                          )
-                        : SizedBox(
-                            width: 0,
-                            height: 0,
-                          );
-                    break;
-                  case 10:
-                    return SizedBox(
-                      height: 250,
-                    );
-                    break;
-                  default:
-                    return SizedBox(height: 10);
-                }
-              }, childCount: 11),
+                    ),
+                  ],
+                );
+              }, childCount: 1),
             ),
           ],
         ),
