@@ -987,8 +987,21 @@ class CalculatorTabState extends State<CalculatorTab>
           SizedBox(
             height: 50,
           ),
-          Text(text1,
-              style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  text1,
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(width: 10),
+            ],
+          ),
           SizedBox(
             height: 250,
           ),
