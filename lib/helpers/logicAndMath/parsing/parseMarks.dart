@@ -2,6 +2,9 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 
 List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
+  if (input == null) {
+    return [];
+  }
   List<Evals> jegyArray = List.from(input);
   List<List<Evals>> jegyMatrix = [];
   jegyArray.sort((a, b) => a.subject.name.compareTo(b.subject.name));
