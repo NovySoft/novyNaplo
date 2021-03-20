@@ -234,8 +234,9 @@ final Map<String, String> translation = {
       "This application may contain multiple errors and bugs, you can file these at novysoftware@gmail.com, or on the project's github repository (NovySoft/NovyNaplo), where you can also share your ideas and contribute to the project!",
   "thirdParty": "Third parties and privacy",
   "useThirdParties":
-      "This application uses third party softwares (firebase), which might share some data to third parties (google, facebook, etc.). This data is not personal, they are for general debugging purposes.\nFor any data leaks NovySoftware can not be held responsible for.",
+      "This application uses third party softwares (firebase), to measure speed and report issues back to us. By default, they're enabled, but you can disable them in the settings. No personal information leaves your device.",
   "contributors": "Contributors:",
+  "appreciate": "Take a moment to appreciate them",
   "leadDev": "Lead developer",
   "markCalcDev": "Developer of the mark calculator",
   "jsDev": "JS developer",
@@ -387,4 +388,7 @@ final Map<String, String> translation = {
   "currEditing": "Currently changing password of ?{0}",
   "splitText": "Split graph text:",
   "prManager": "Public Relations",
+  "getStarted": "Let's get started!",
+  "done": "Done",
+  "skip": "Skip",
 };
