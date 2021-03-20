@@ -165,8 +165,9 @@ final Map<String, String> translation = {
       "Az alkalmazás több hibát is tartalmazhat, ezeket a novysoftware@gmail.com címen tudod bejelenteni, vagy a projekt hivatalos GitHub oldalán (NovySoft/NovyNaplo), ahol megoldásaid/ötleteidet is meg tudod osztani a hibával kapcsolatosan!",
   "thirdParty": "Harmadik felek és adatgyűjtés",
   "useThirdParties":
-      "Az alkalmazás bizonyos külső szolgáltatásokat is használ (firebase), amik megoszthatják adataidat harmadik félel is (google, facebook, stb.). Ezek a megosztott adatok nem személyesek, hanem általános hibakeresésre szolgálóak.\nBármilyen adat kiszárvárgásért a NovySoft nem tehető felelősé",
+      "Az alkalmazás külső féltől származó szoftvereket használ (firebase), hogy figyelje az alkalmazás teljesítményét és visszajelezze nekünk, ha esetleg valamilyen hiba történne. Ha ezt nem szeretnéd, akkor kikapcsolhatod a beállításokban. Személyes adatok nem hagyják el az eszközödet.",
   "contributors": "Akik az apphoz hozzájárultak:",
+  "appreciate": "Nekik köszönheted az applikációt",
   "leadDev": "Fő fejlesztő",
   "markCalcDev": "Jegyszámoló programja",
   "jsDev": "JS programozó",
@@ -386,4 +387,7 @@ final Map<String, String> translation = {
   "splitText": "Szöveg tördelése grafikonnál:",
   "Igazolando": "Igazolandó",
   "prManager": "Public Relations",
+  "getStarted": "Vágjunk bele!",
+  "done": "Tovább",
+  "skip": "Átugrás",
 };
