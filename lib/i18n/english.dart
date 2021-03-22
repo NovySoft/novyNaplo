@@ -392,4 +392,5 @@ final Map<String, String> translation = {
   "done": "Done",
   "skip": "Skip",
   "darker": "Darker",
+  "delayInMinutes": "Delay in minutes",
 };

@@ -3,6 +3,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/global.dart' as globals;
 //TODO: Implement different text types (title, subtitle, etc...)
+//TODO: Implement style analytics
 
 class ThemeHelper {
   static List<Color> myGradientList = [

@@ -386,6 +386,28 @@ class AbsencencesDetailTab extends StatelessWidget {
                                         fontWeight: FontWeight.bold)),
                               );
                               break;
+                            case 6:
+                              return absence.delayInMinutes != null
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Text(
+                                            "${getTranslatedString("delay")}: ${absence.delayInMinutes} ${getTranslatedString("minutes")}",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold)),
+                                        SizedBox(height: 10),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      width: 0,
+                                      height: 0,
+                                    );
+                              break;
                             case 7:
                               return SizedBox(
                                 child: Text(

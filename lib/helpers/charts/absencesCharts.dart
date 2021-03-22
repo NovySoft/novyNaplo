@@ -10,24 +10,25 @@ import 'package:novynaplo/global.dart' as globals;
 
 List<charts.Series<AbsenceChartData, String>> createAbsencesChartData(
     List<List<Absence>> input) {
-  List<dynamic> inputList = List.from(input).expand((i) => i).toList();
+  List<Absence> inputList =
+      List.from(input).expand((i) => i).toList().cast<Absence>();
   final delayList = inputList.where((n) => n.delayInMinutes != null);
   int igazolandoDelay = 0, igazoltDelay = 0, igazolatlanDelay = 0;
   if (delayList.length != 0) {
     //Igazolando
     for (var n in delayList
         .where((element) => element.justificationState == "Igazolando")) {
-      igazolandoDelay += n.delayTimeMinutes;
+      igazolandoDelay += n.delayInMinutes;
     }
     //Igazolt
     for (var n in delayList
         .where((element) => element.justificationState == "Igazolt")) {
-      igazoltDelay += n.delayTimeMinutes;
+      igazoltDelay += n.delayInMinutes;
     }
     //Igazolatlan
     for (var n in delayList
         .where((element) => element.justificationState == "Igazolatlan")) {
-      igazolatlanDelay += n.delayTimeMinutes;
+      igazolatlanDelay += n.delayInMinutes;
     }
   }
 
