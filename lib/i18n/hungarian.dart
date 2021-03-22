@@ -391,4 +391,5 @@ final Map<String, String> translation = {
   "done": "Tovább",
   "skip": "Átugrás",
   "darker": "Sötétebb",
+  "delayInMinutes": "Késés percben",
 };
