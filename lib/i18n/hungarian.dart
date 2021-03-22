@@ -390,4 +390,5 @@ final Map<String, String> translation = {
   "getStarted": "Vágjunk bele!",
   "done": "Tovább",
   "skip": "Átugrás",
+  "darker": "Sötétebb",
 };

@@ -244,6 +244,9 @@ class ReportsDetailTab extends StatelessWidget {
                   Wrap(
                     children: <Widget>[
                       CustomGauge(
+                        needleColor: globals.darker
+                            ? Colors.white.withOpacity(0.5)
+                            : Colors.black.withOpacity(0.5),
                         gaugeSize: 200,
                         minValue: 1,
                         maxValue: 5,
@@ -264,6 +267,9 @@ class ReportsDetailTab extends StatelessWidget {
                         ),
                       ),
                       CustomGauge(
+                        needleColor: globals.darker
+                            ? Colors.white.withOpacity(0.5)
+                            : Colors.black.withOpacity(0.5),
                         gaugeSize: 200,
                         minValue: 0,
                         maxValue: 100,

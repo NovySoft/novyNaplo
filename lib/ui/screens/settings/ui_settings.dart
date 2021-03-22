@@ -19,8 +19,11 @@ class _UIsettingsState extends State<UIsettings> {
       (_) {
         setState(() {
           dropDown = Theme.of(context).brightness == Brightness.light
-              ? "Világos"
-              : "Sötét";
+              ? "Light"
+              : Theme.of(context).brightness == Brightness.dark &&
+                      globals.darker
+                  ? "Darker"
+                  : "Dark";
         });
       },
     );
@@ -49,33 +52,52 @@ class _UIsettingsState extends State<UIsettings> {
                   trailing: DropdownButton<String>(
                     items: [
                       DropdownMenuItem(
-                        value: "Sötét",
+                        value: "Dark",
                         child: Text(
                           getTranslatedString("dark"),
                         ),
                       ),
                       DropdownMenuItem(
-                        value: "Világos",
+                        value: "Darker",
+                        child: Text(
+                          getTranslatedString("darker"),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: "Light",
                         child: Text(
                           getTranslatedString("bright"),
                         ),
                       ),
                     ],
                     onChanged: (String value) {
-                      if (value == "Világos") {
+                      if (value == "Light") {
+                        globals.prefs.setBool("darker", false);
+                        globals.darker = false;
                         ThemeHelper()
                             .changeBrightness(context, Brightness.light);
                         FirebaseAnalytics()
                             .setUserProperty(name: "Theme", value: "Bright");
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Bright");
-                      } else {
+                      } else if (value == "Dark") {
+                        globals.prefs.setBool("darker", false);
+                        globals.darker = false;
                         ThemeHelper()
                             .changeBrightness(context, Brightness.dark);
                         FirebaseAnalytics()
                             .setUserProperty(name: "Theme", value: "Dark");
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Dark");
+                      } else if (value == "Darker") {
+                        globals.prefs.setBool("darker", true);
+                        globals.darker = true;
+                        ThemeHelper()
+                            .changeBrightness(context, Brightness.dark);
+                        FirebaseAnalytics()
+                            .setUserProperty(name: "Theme", value: "Darker");
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("Theme", "Darker");
                       }
                       setState(() {
                         dropDown = value;

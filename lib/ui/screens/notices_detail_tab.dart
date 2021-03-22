@@ -88,7 +88,7 @@ class NoticeDetailTab extends StatelessWidget {
                   throw 'Could not launch $link';
                 }
               },
-              text: capitalize(notice.content),
+              text: notice.content,
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 20.0),
             ),

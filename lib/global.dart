@@ -48,6 +48,7 @@ String language =
     "hu"; //Language to show stuff in, defualts to hungarian as you can see
 bool collapseNotifications =
     true; //Automatically collapse all notifications, on by default
+bool darker = false; //Darker theme
 
 Future<void> resetAllGlobals() async {
   await DatabaseHelper.clearAllTables();
@@ -110,6 +111,13 @@ Future<void> setGlobals() async {
   } else {
     await prefs.setBool("colorAvsInStatisctics", true);
     colorAvsInStatisctics = true;
+  }
+
+  if (prefs.getBool("darker") != null) {
+    darker = prefs.getBool("darker");
+  } else {
+    await prefs.setBool("darker", false);
+    darker = false;
   }
 
   if (prefs.getDouble("howLongKeepDataForHw") != null) {

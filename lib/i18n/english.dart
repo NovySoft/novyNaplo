@@ -391,4 +391,5 @@ final Map<String, String> translation = {
   "getStarted": "Let's get started!",
   "done": "Done",
   "skip": "Skip",
+  "darker": "Darker",
 };

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:novynaplo/global.dart' as globals;
 //TODO: Implement different text types (title, subtitle, etc...)
 
 class ThemeHelper {
@@ -90,12 +91,73 @@ class ThemeHelper {
   ];
 
   ThemeData getTheme(brightness) {
-    if (brightness == Brightness.dark) {
+    if (brightness == Brightness.dark && globals.darker) {
+      FirebaseCrashlytics.instance.setCustomKey("Theme", "Darker");
+      return new ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+          },
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: Color(0xFF212121),
+          selectionHandleColor: Color(0xFF212121),
+        ),
+        sliderTheme: SliderThemeData(
+          activeTickMarkColor: Colors.lightBlue,
+          valueIndicatorColor: Colors.grey,
+          overlayColor: Colors.lightBlue,
+          thumbColor: Colors.lightBlue,
+          activeTrackColor: Colors.lightBlue,
+          inactiveTrackColor: Colors.grey,
+          valueIndicatorTextStyle: TextStyle(color: Colors.white),
+        ),
+        dividerColor: Colors.grey,
+        textTheme: TextTheme(
+          subtitle1: TextStyle(color: Colors.white),
+          headline6: TextStyle(color: Colors.white),
+        ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Color(0xFF212121),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          foregroundColor: Colors.white,
+          backgroundColor: Color(0xFF212121),
+        ),
+        accentColor: Colors.white,
+        backgroundColor: Colors.black,
+        scaffoldBackgroundColor: Colors.black,
+        primarySwatch: MaterialColor(0xFF212121, {
+          50: Color.fromRGBO(133, 33, 33, .1),
+          100: Color.fromRGBO(33, 33, 33, .2),
+          200: Color.fromRGBO(33, 33, 33, .3),
+          300: Color.fromRGBO(33, 33, 33, .4),
+          400: Color.fromRGBO(33, 33, 33, .5),
+          500: Color.fromRGBO(33, 33, 33, .6),
+          600: Color.fromRGBO(33, 33, 33, .7),
+          700: Color.fromRGBO(33, 33, 33, .8),
+          800: Color.fromRGBO(33, 33, 33, .9),
+          900: Color.fromRGBO(33, 33, 33, 1),
+        }),
+        primaryColor: Color(0xFF212121),
+        brightness: Brightness.dark,
+        hintColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(
+            color: Colors.white,
+          ),
+          fillColor: Colors.black,
+          hintStyle: TextStyle(color: Colors.white),
+          focusColor: Color(0xFF212121),
+        ),
+      );
+    } else if (brightness == Brightness.dark) {
       FirebaseCrashlytics.instance.setCustomKey("Theme", "Dark");
-    } else {
-      FirebaseCrashlytics.instance.setCustomKey("Theme", "Bright");
-    }
-    if (brightness == Brightness.dark) {
       return new ThemeData(
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
@@ -107,6 +169,10 @@ class ThemeHelper {
             cursorColor: Colors.blue,
             selectionColor: Colors.blue,
             selectionHandleColor: Colors.blue,
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.orange,
           ),
           sliderTheme: SliderThemeData(
               activeTickMarkColor: Colors.orange,
@@ -121,6 +187,7 @@ class ThemeHelper {
               headline6: TextStyle(color: Colors.black)),
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.orange,
+            textTheme: ButtonTextTheme.primary,
           ),
           backgroundColor: Colors.black,
           primarySwatch: Colors.orange,
@@ -137,6 +204,7 @@ class ThemeHelper {
             focusColor: Colors.orange,
           ));
     } else {
+      FirebaseCrashlytics.instance.setCustomKey("Theme", "Bright");
       return new ThemeData(
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
@@ -166,6 +234,10 @@ class ThemeHelper {
             buttonColor: Colors.lightBlueAccent,
           ),
           primaryColor: Colors.lightBlueAccent,
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.lightBlueAccent,
+          ),
           backgroundColor: Colors.white,
           colorScheme: ColorScheme.light(),
           hintColor: Colors.lightBlue,

@@ -176,14 +176,18 @@ class _StatisticsTabState extends State<StatisticsTab>
                             tappable: false,
                             closedElevation: 0,
                             openElevation: 0,
-                            openColor: DynamicTheme.of(context).brightness ==
-                                    Brightness.light
-                                ? Colors.white
-                                : Color.fromARGB(100, 48, 48, 48),
-                            closedColor: DynamicTheme.of(context).brightness ==
-                                    Brightness.light
-                                ? Colors.white
-                                : Color.fromARGB(100, 48, 48, 48),
+                            openColor: globals.darker
+                                ? Colors.black
+                                : DynamicTheme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.white
+                                    : Color.fromARGB(100, 48, 48, 48),
+                            closedColor: globals.darker
+                                ? Colors.black
+                                : DynamicTheme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.white
+                                    : Color.fromARGB(100, 48, 48, 48),
                             transitionDuration: Duration(milliseconds: 550),
                             openBuilder: (_, __) => AbsencesTab(),
                             closedBuilder: (_, callback) => Row(
