@@ -405,7 +405,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                                     )
                                   : SizedBox(
                                       width: 0,
-                                      height: 0,
+                                      height: 10,
                                     );
                               break;
                             case 7:

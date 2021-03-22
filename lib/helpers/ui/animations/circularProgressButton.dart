@@ -114,6 +114,7 @@ class _StateAnimationButton extends State<CircularProgressButton> {
                 child: Text(
                   "${this.text}",
                   style: TextStyle(
+                    color: Theme.of(context).textTheme.headline6.color,
                     fontSize: fontSize < 18.0 ? fontSize : 18.0,
                   ),
                 ),

@@ -76,7 +76,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           builder: (BuildContext context) {
             return new SchoolSearchList();
           }).then((dynamic) {
-        setState(() {});
+        setState(() {
+          _isWrongSchool = false;
+        });
       });
     });
   }

@@ -24,9 +24,11 @@ class _SchoolSearchListState extends State<SchoolSearchList> {
           isFetched = true;
           login.schoolList = login.schoolList;
           searchList = login.schoolList;
-          updateSearch(_inputController.text);
         });
       }
+      setState(() {
+        updateSearch(_inputController.text);
+      });
     });
     super.initState();
   }
