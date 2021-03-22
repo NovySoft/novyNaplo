@@ -106,6 +106,9 @@ class _TimetableTabState extends State<TimetableTab> {
             globals.currentUser,
             date: _selectedDate,
           );
+          if (tempLessonList == null) {
+            throw "Invalid server response!";
+          }
           lessonsList.addAll(tempLessonList);
           setState(() {
             _selectedDate = datetime;
