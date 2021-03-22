@@ -211,8 +211,9 @@ class _TimetableTabState extends State<TimetableTab> {
           pressedDateStyle:
               TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
           dateBackgroundColor: Colors.transparent,
-          backgroundColor:
-              DynamicTheme.of(context).brightness == Brightness.light
+          backgroundColor: globals.darker
+              ? Colors.black
+              : DynamicTheme.of(context).brightness == Brightness.light
                   ? Colors.white
                   : Colors.grey[850],
           dayOfWeek: [
@@ -277,7 +278,7 @@ class _TimetableTabState extends State<TimetableTab> {
           child: Container(
             height: 2.0,
             width: double.infinity,
-            color: Colors.black,
+            color: globals.darker ? Colors.white : Colors.black,
           ),
         ),
         Expanded(

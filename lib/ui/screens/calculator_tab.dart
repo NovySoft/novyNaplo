@@ -59,11 +59,11 @@ final axisTwo = charts.NumericAxisSpec(
   labelStyle: charts.TextStyleSpec(
       fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
 ));
-Color afterAvCol = Colors.yellow;
+Color afterAvCol = Colors.orange;
 String afterAvDiff = "0";
 Widget afterAvIcon = Icon(
   Icons.linear_scale,
-  color: Colors.yellow,
+  color: Colors.orange,
 );
 
 class FormKey {
@@ -444,10 +444,6 @@ class CalculatorTabState extends State<CalculatorTab>
                     onPressed: () {
                       cardModal(context: context, isEditing: false);
                     },
-                    backgroundColor:
-                        DynamicTheme.of(context).brightness == Brightness.dark
-                            ? Colors.orange
-                            : Colors.lightBlueAccent,
                     child: Icon(MdiIcons.plus),
                     tooltip: getTranslatedString("addVmark"),
                     elevation: 10,
@@ -521,11 +517,11 @@ class CalculatorTabState extends State<CalculatorTab>
   void setAvAfter(double input) {
     setState(() {
       if (currSum / currCount == input) {
-        afterAvCol = Colors.yellow;
+        afterAvCol = Colors.orange;
         afterAvDiff = "0";
         afterAvIcon = Icon(
           Icons.linear_scale,
-          color: Colors.yellow,
+          color: Colors.orange,
         );
       } else if (currSum / currCount > input) {
         afterAvCol = Colors.red;
@@ -605,7 +601,26 @@ class CalculatorTabState extends State<CalculatorTab>
             height: 25,
           ),
           DecoratedBox(
-            decoration: new BoxDecoration(border: Border.all()),
+            decoration: new BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                left: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                right: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                bottom: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
             child: SizedBox(
               height: 250,
               child: virtualMarks.length != 0
@@ -803,11 +818,9 @@ class CalculatorTabState extends State<CalculatorTab>
               },
               icon: Icon(
                 MdiIcons.delete,
-                color: Colors.black,
               ),
               label: Text(
                 getTranslatedString("delAll"),
-                style: TextStyle(color: Colors.black),
               ),
             ),
           ),
@@ -968,21 +981,31 @@ class CalculatorTabState extends State<CalculatorTab>
             divisions: 10,
             label: turesHatar.toString(),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 1.0),
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+          Row(
+            children: [
+              SizedBox(
+                width: 12,
               ),
-              onPressed: () {
-                setState(() {
-                  reCalculate();
-                });
-              },
-              padding: EdgeInsets.all(12),
-              child: Text(getTranslatedString("go"),
-                  style: TextStyle(color: Colors.black)),
-            ),
+              Expanded(
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      reCalculate();
+                    });
+                  },
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    getTranslatedString("go"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+            ],
           ),
           SizedBox(
             height: 50,

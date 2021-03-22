@@ -98,17 +98,16 @@ class _SettingsBodyState extends State<SettingsBody> {
                       children: <Widget>[
                         Icon(
                           MdiIcons.televisionGuide,
-                          color: Colors.black,
                         ),
                         SizedBox(height: 1, width: 5),
                         Icon(
                           MdiIcons.translate,
-                          color: Colors.black,
                         ),
                       ],
                     ),
-                    label: Text('UI ${getTranslatedString("settings")}',
-                        style: TextStyle(color: Colors.black))),
+                    label: Text(
+                      'UI ${getTranslatedString("settings")}',
+                    )),
               ),
             ),
           );
@@ -131,10 +130,10 @@ class _SettingsBodyState extends State<SettingsBody> {
                     },
                     icon: Icon(
                       Icons.create,
-                      color: Colors.black,
                     ),
-                    label: Text(getTranslatedString("marksTabSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    label: Text(
+                      getTranslatedString("marksTabSettings"),
+                    )),
               ),
             ),
           );
@@ -155,9 +154,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             builder: (context) => TimetableSettings()),
                       );
                     },
-                    icon: Icon(Icons.today, color: Colors.black),
-                    label: Text(getTranslatedString("timetableSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    icon: Icon(
+                      Icons.today,
+                    ),
+                    label: Text(
+                      getTranslatedString("timetableSettings"),
+                    )),
               ),
             ),
           );
@@ -178,10 +180,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             builder: (context) => HomeworkSettingsTab()),
                       );
                     },
-                    icon:
-                        Icon(MdiIcons.bagPersonalOutline, color: Colors.black),
-                    label: Text(getTranslatedString("homeworkSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    icon: Icon(
+                      MdiIcons.bagPersonalOutline,
+                    ),
+                    label: Text(
+                      getTranslatedString("homeworkSettings"),
+                    )),
               ),
             ),
           );
@@ -202,10 +206,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             builder: (context) => StatisticSettings()),
                       );
                     },
-                    icon: Icon(MdiIcons.chartScatterPlotHexbin,
-                        color: Colors.black),
-                    label: Text(getTranslatedString("statisticSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    icon: Icon(
+                      MdiIcons.chartScatterPlotHexbin,
+                    ),
+                    label: Text(
+                      getTranslatedString("statisticSettings"),
+                    )),
               ),
             ),
           );
@@ -226,9 +232,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             builder: (context) => CalculatorSettings()),
                       );
                     },
-                    icon: Icon(MdiIcons.calculator, color: Colors.black),
-                    label: Text(getTranslatedString("markCalculatorSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    icon: Icon(
+                      MdiIcons.calculator,
+                    ),
+                    label: Text(
+                      getTranslatedString("markCalculatorSettings"),
+                    )),
               ),
             ),
           );
@@ -252,14 +261,18 @@ class _SettingsBodyState extends State<SettingsBody> {
                     },
                     icon: Row(
                       children: <Widget>[
-                        Icon(MdiIcons.accessPointNetwork, color: Colors.black),
+                        Icon(
+                          MdiIcons.accessPointNetwork,
+                        ),
                         SizedBox(width: 2),
-                        Icon(MdiIcons.bellRing, color: Colors.black),
+                        Icon(
+                          MdiIcons.bellRing,
+                        ),
                       ],
                     ),
                     label: Text(
-                        getTranslatedString("networkAndNotificationSettings"),
-                        style: TextStyle(color: Colors.black))),
+                      getTranslatedString("networkAndNotificationSettings"),
+                    )),
               ),
             ),
           );
@@ -281,9 +294,16 @@ class _SettingsBodyState extends State<SettingsBody> {
                             builder: (context) => DeveloperSettings()),
                       );
                     },
-                    icon: Icon(MdiIcons.codeTagsCheck, color: Colors.black),
-                    label: Text(getTranslatedString("developerSettings"),
-                        style: TextStyle(color: Colors.black))),
+                    icon: Icon(
+                      MdiIcons.codeTagsCheck,
+                      color: Colors.black,
+                    ),
+                    label: Text(
+                      getTranslatedString("developerSettings"),
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
               ),
             ),
           );
@@ -304,9 +324,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                           await _ackAlert(context,
                               "${getTranslatedString("youCanWriteToTheFollowingEmail")}\nnovysoftware@gmail.com");
                         },
-                        icon: Icon(MdiIcons.emailSend, color: Colors.black),
-                        label: Text('Bug report (Email)',
-                            style: TextStyle(color: Colors.black)))),
+                        icon: Icon(
+                          MdiIcons.emailSend,
+                        ),
+                        label: Text(
+                          'Bug report (Email)',
+                        ))),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -329,10 +352,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             throw 'Could not launch $link';
                           }
                         },
-                        icon: Icon(MdiIcons.facebookMessenger,
-                            color: Colors.black),
-                        label: Text('Bug report (Messenger)',
-                            style: TextStyle(color: Colors.black)))),
+                        icon: Icon(
+                          MdiIcons.facebookMessenger,
+                        ),
+                        label: Text(
+                          'Bug report (Messenger)',
+                        ))),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -356,9 +381,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             throw 'Could not launch $link';
                           }
                         },
-                        icon: Icon(Icons.bug_report, color: Colors.black),
-                        label: Text('Bug report (Github)',
-                            style: TextStyle(color: Colors.black)))),
+                        icon: Icon(
+                          Icons.bug_report,
+                        ),
+                        label: Text(
+                          'Bug report (Github)',
+                        ))),
               ),
             ])),
           );
@@ -388,10 +416,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                             ),
                           );
                         },
-                        icon: Icon(MdiIcons.cellphoneInformation,
-                            color: Colors.black),
-                        label: Text(getTranslatedString("appInfo"),
-                            style: TextStyle(color: Colors.black)))),
+                        icon: Icon(
+                          MdiIcons.cellphoneInformation,
+                        ),
+                        label: Text(
+                          getTranslatedString("appInfo"),
+                        ))),
               ),
             ),
           );
@@ -415,9 +445,12 @@ class _SettingsBodyState extends State<SettingsBody> {
                                 return LogOutDialog();
                               });
                         },
-                        icon: Icon(MdiIcons.logout, color: Colors.black),
-                        label: Text(getTranslatedString("logOut"),
-                            style: TextStyle(color: Colors.black)))),
+                        icon: Icon(
+                          MdiIcons.logout,
+                        ),
+                        label: Text(
+                          getTranslatedString("logOut"),
+                        ))),
               ),
             ),
           );

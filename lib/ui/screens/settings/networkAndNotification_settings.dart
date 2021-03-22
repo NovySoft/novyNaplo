@@ -51,24 +51,25 @@ class _SendTestNotifState extends State<SendTestNotif> {
                     height: 38,
                     width: double.infinity,
                     child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        onPressed: () async {
-                          await NotificationHelper.show(
-                            1,
-                            getTranslatedString("testNotif"),
-                            getTranslatedString("thisIsHowItWillLookLike"),
-                            NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'test',
-                          );
-                        },
-                        icon: Icon(
-                          MdiIcons.bellRing,
-                          color: Colors.black,
-                        ),
-                        label: Text(getTranslatedString("sendTestNotif"),
-                            style: TextStyle(color: Colors.black))),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      onPressed: () async {
+                        await NotificationHelper.show(
+                          1,
+                          getTranslatedString("testNotif"),
+                          getTranslatedString("thisIsHowItWillLookLike"),
+                          NotificationHelper.platformChannelSpecificsAlertAll,
+                          payload: 'test',
+                        );
+                      },
+                      icon: Icon(
+                        MdiIcons.bellRing,
+                      ),
+                      label: Text(
+                        getTranslatedString("sendTestNotif"),
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -97,12 +98,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("marks")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("marks")})",
+                        )),
                   ),
                 ),
               );
@@ -131,12 +131,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("hw")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("hw")})",
+                        )),
                   ),
                 ),
               );
@@ -165,12 +164,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("notice")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("notice")})",
+                        )),
                   ),
                 ),
               );
@@ -199,12 +197,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("timetable")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("timetable")})",
+                        )),
                   ),
                 ),
               );
@@ -234,12 +231,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("exam")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("exam")})",
+                        )),
                   ),
                 ),
               );
@@ -266,12 +262,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("av")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("av")})",
+                        )),
                   ),
                 ),
               );
@@ -300,12 +295,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("event")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("event")})",
+                        )),
                   ),
                 ),
               );
@@ -334,12 +328,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                         },
                         icon: Icon(
                           MdiIcons.bellRing,
-                          color: Colors.black,
                         ),
                         label: Text(
-                            getTranslatedString("sendTestNotif") +
-                                " (${getTranslatedString("absencesAndDelays")})",
-                            style: TextStyle(color: Colors.black))),
+                          getTranslatedString("sendTestNotif") +
+                              " (${getTranslatedString("absencesAndDelays")})",
+                        )),
                   ),
                 ),
               );
@@ -392,10 +385,10 @@ class _NetworkAndNotificationSettingsState
                           },
                           icon: Icon(
                             MdiIcons.bellRing,
-                            color: Colors.black,
                           ),
-                          label: Text(getTranslatedString("sendTestNotifs"),
-                              style: TextStyle(color: Colors.black))),
+                          label: Text(
+                            getTranslatedString("sendTestNotifs"),
+                          )),
                     ),
                   ),
                 );

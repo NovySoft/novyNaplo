@@ -12,6 +12,7 @@ import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
+import 'package:novynaplo/global.dart' as globals;
 
 class ChartsDetailTab extends StatelessWidget {
   ChartsDetailTab({
@@ -127,6 +128,9 @@ class ChartsDetailTab extends StatelessWidget {
                           Wrap(
                             children: <Widget>[
                               CustomGauge(
+                                needleColor: globals.darker
+                                    ? Colors.white.withOpacity(0.5)
+                                    : Colors.black.withOpacity(0.5),
                                 gaugeSize: 200,
                                 minValue: 1,
                                 maxValue: 5,
@@ -149,6 +153,9 @@ class ChartsDetailTab extends StatelessWidget {
                                 ),
                               ),
                               CustomGauge(
+                                needleColor: globals.darker
+                                    ? Colors.white.withOpacity(0.5)
+                                    : Colors.black.withOpacity(0.5),
                                 gaugeSize: 200,
                                 minValue: 0,
                                 maxValue: 100,

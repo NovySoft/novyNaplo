@@ -67,7 +67,9 @@ class _DataListState extends State<DataList> {
             }, tableCellBuilder: (value) {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-                decoration: BoxDecoration(border: Border.all(width: 0.5)),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 0.5),
+                ),
                 child: Text(
                   value,
                   textAlign: TextAlign.center,

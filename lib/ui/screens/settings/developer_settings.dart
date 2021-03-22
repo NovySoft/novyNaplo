@@ -98,8 +98,9 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                             MdiIcons.databaseRemove,
                             color: Colors.black,
                           ),
-                          label: Text(getTranslatedString("deleteDB"),
-                              style: TextStyle(color: Colors.black))),
+                          label: Text(
+                            getTranslatedString("deleteDB"),
+                          )),
                     ),
                   ),
                 );
@@ -125,8 +126,9 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                             MdiIcons.databaseImport,
                             color: Colors.black,
                           ),
-                          label: Text(getTranslatedString("runRawSQL"),
-                              style: TextStyle(color: Colors.black))),
+                          label: Text(
+                            getTranslatedString("runRawSQL"),
+                          )),
                     ),
                   ),
                 );
@@ -149,8 +151,9 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                           },
                           icon: Icon(MdiIcons.databaseSearch,
                               color: Colors.black),
-                          label: Text(getTranslatedString("dbExplorer"),
-                              style: TextStyle(color: Colors.black))),
+                          label: Text(
+                            getTranslatedString("dbExplorer"),
+                          )),
                     ),
                   ),
                 );
@@ -289,8 +292,9 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                           },
                           icon:
                               Icon(MdiIcons.databaseEdit, color: Colors.black),
-                          label: Text(getTranslatedString("dbSettings"),
-                              style: TextStyle(color: Colors.black))),
+                          label: Text(
+                            getTranslatedString("dbSettings"),
+                          )),
                     ),
                   ),
                 );
