@@ -255,6 +255,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       try {
         Student finalUserObject = await encryptUserDetails(tempUser);
         finalUserObject.current = isFirstUser;
+        //Fixme, also get student info on every fetch
         finalUserObject = await RequestHandler.getStudentInfo(
           tempUser,
           embedEncryptedDetails: true,
@@ -266,6 +267,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         } else {
           await DatabaseHelper.insertUser(finalUserObject);
           await globals.prefs.setBool("isNew", false);
+
+          Student nonEncrypted = finalUserObject;
+          nonEncrypted.username = tempUser.username;
+          nonEncrypted.password = tempUser.password;
+          nonEncrypted.school = tempUser.school;
+          globals.currentUser = nonEncrypted;
+
           if (widget.isAutoFill) {
             //*Delete the prefs version of login data
             globals.prefs.remove("code");

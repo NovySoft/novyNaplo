@@ -41,6 +41,7 @@ import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+//FIXME: Validate current token and request new if expired
 var client = http.Client();
 
 class RequestHandler {
@@ -446,6 +447,11 @@ class RequestHandler {
         to: endDate,
       );
 
+      if (lessonList == null) {
+        errored = true;
+        return null;
+      }
+
       return lessonList;
     } catch (e, s) {
       print("Get Specified Week's Lessons: $e");
@@ -467,30 +473,40 @@ class RequestHandler {
   static Future<List<List<Lesson>>> getThreeWeeksLessons(
     Student userDetails,
   ) async {
-    FirebaseCrashlytics.instance.log("getThreeWeeksLessons");
-    int monday = 1;
-    int sunday = 7;
-    DateTime now = new DateTime.now();
-    while (now.weekday != monday) {
-      now = now.subtract(new Duration(days: 1));
+    try {
+      FirebaseCrashlytics.instance.log("getThreeWeeksLessons");
+      int monday = 1;
+      int sunday = 7;
+      DateTime now = new DateTime.now();
+      while (now.weekday != monday) {
+        now = now.subtract(new Duration(days: 1));
+      }
+      DateTime startDate = now.subtract(Duration(days: 7));
+      now = new DateTime.now();
+      while (now.weekday != sunday) {
+        now = now.add(new Duration(days: 1));
+      }
+      DateTime endDate = now.add(Duration(days: 7));
+      now = startDate;
+      while (!now.isSameDay(endDate)) {
+        timetablePage.fetchedDayList.add(now);
+        now = now.add(new Duration(days: 1));
+      }
+      timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
+      return await getTimetableMatrix(
+        userDetails,
+        from: startDate,
+        to: endDate,
+      );
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getThreeWeeksLessons',
+        printDetails: true,
+      );
+      return null;
     }
-    DateTime startDate = now.subtract(Duration(days: 7));
-    now = new DateTime.now();
-    while (now.weekday != sunday) {
-      now = now.add(new Duration(days: 1));
-    }
-    DateTime endDate = now.add(Duration(days: 7));
-    now = startDate;
-    while (!now.isSameDay(endDate)) {
-      timetablePage.fetchedDayList.add(now);
-      now = now.add(new Duration(days: 1));
-    }
-    timetablePage.fetchedDayList.sort((a, b) => a.compareTo(b));
-    return await getTimetableMatrix(
-      userDetails,
-      from: startDate,
-      to: endDate,
-    );
   }
 
   static Future<List<List<Lesson>>> getTimetableMatrix(

@@ -49,6 +49,11 @@ class Student {
     this.fetched,
   });
 
+  @override
+  String toString() {
+    return this.name + ":" + this.tokenDate.toString() + ":" + this.school;
+  }
+
   Student.from(Student input) {
     userId = input.userId;
     uid = input.uid;
