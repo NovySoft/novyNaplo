@@ -6,7 +6,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/48e75a94f1484016fa8a/maintainability)](https://codeclimate.com/github/NovySoft/novyNaplo/maintainability)
 [![CodeScene Code Health](https://codescene.io/projects/11066/status-badges/code-health)](https://codescene.io/projects/11066)
 [![CodeScene System Mastery](https://codescene.io/projects/11066/status-badges/system-mastery)](https://codescene.io/projects/11066)
-[![HitCount](http://hits.dwyl.io/NovySoft/novyNaplo.svg)](http://hits.dwyl.io/NovySoft/novyNaplo)
 [![Discord](https://img.shields.io/discord/737612284389621845.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/TJYpV2E)
 [![Open Source Helpers](https://www.codetriage.com/novysoft/novynaplo/badges/users.svg)](https://www.codetriage.com/novysoft/novynaplo)
 
