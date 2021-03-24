@@ -440,6 +440,23 @@ class RequestHandler {
       }
       days.sort((a, b) => a.compareTo(b));
       DateTime endDate = now;
+      if (userDetails.tokenDate.isBefore(
+        DateTime.now().subtract(
+          Duration(
+            minutes: 25,
+          ),
+        ),
+      )) {
+        TokenResponse res = await login(userDetails);
+        if (res.status == "OK") {
+          if (userDetails.current) {
+            globals.currentUser.token = res.userinfo.token;
+            globals.currentUser.tokenDate = res.userinfo.tokenDate;
+          }
+          userDetails.token = res.userinfo.token;
+          userDetails.tokenDate = res.userinfo.tokenDate;
+        }
+      }
       //Has builtin sorting
       List<List<Lesson>> lessonList = await getTimetableMatrix(
         userDetails,
