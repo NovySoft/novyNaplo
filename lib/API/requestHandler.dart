@@ -793,6 +793,23 @@ class RequestHandler {
     Student userDetails, {
     Attachment hwInfo,
   }) async {
+    if (userDetails.tokenDate.isBefore(
+      DateTime.now().subtract(
+        Duration(
+          minutes: 25,
+        ),
+      ),
+    )) {
+      TokenResponse res = await login(userDetails);
+      if (res.status == "OK") {
+        if (userDetails.current) {
+          globals.currentUser.token = res.userinfo.token;
+          globals.currentUser.tokenDate = res.userinfo.tokenDate;
+        }
+        userDetails.token = res.userinfo.token;
+        userDetails.tokenDate = res.userinfo.tokenDate;
+      }
+    }
     File file = await downloadFile(
       userDetails,
       url: BaseURL.kreta(userDetails.school) +
