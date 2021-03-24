@@ -74,10 +74,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        //TODO: Check if the commented out code below fixes libflutter.so issues
-        /*ndk {
-            abiFilters 'armeabi-v7a'
-        }*/
     }
     signingConfigs {
         release {
