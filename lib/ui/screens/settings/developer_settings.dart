@@ -62,6 +62,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                               barrierDismissible: true,
                               builder: (_) {
                                 return AlertDialog(
+                                  elevation: globals.darker ? 0 : 24,
                                   title:
                                       new Text(getTranslatedString("delete")),
                                   content: Text(
@@ -96,7 +97,6 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                           },
                           icon: Icon(
                             MdiIcons.databaseRemove,
-                            color: Colors.black,
                           ),
                           label: Text(
                             getTranslatedString("deleteDB"),
@@ -124,7 +124,6 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                           },
                           icon: Icon(
                             MdiIcons.databaseImport,
-                            color: Colors.black,
                           ),
                           label: Text(
                             getTranslatedString("runRawSQL"),
@@ -149,8 +148,9 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                               MaterialPageRoute(builder: (_) => DatabaseList()),
                             );
                           },
-                          icon: Icon(MdiIcons.databaseSearch,
-                              color: Colors.black),
+                          icon: Icon(
+                            MdiIcons.databaseSearch,
+                          ),
                           label: Text(
                             getTranslatedString("dbExplorer"),
                           )),
@@ -216,7 +216,26 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
           ),
           SizedBox(height: 15),
           DecoratedBox(
-            decoration: new BoxDecoration(border: Border.all()),
+            decoration: new BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                left: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                right: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+                bottom: BorderSide(
+                  width: 1.0,
+                  color: globals.darker ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
             child: SizedBox(
               height: 250,
               child: ListView(
@@ -290,8 +309,9 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                                   builder: (context) => DatabaseSettings()),
                             );
                           },
-                          icon:
-                              Icon(MdiIcons.databaseEdit, color: Colors.black),
+                          icon: Icon(
+                            MdiIcons.databaseEdit,
+                          ),
                           label: Text(
                             getTranslatedString("dbSettings"),
                           )),
@@ -314,6 +334,7 @@ Future<void> _ackAlert(BuildContext context, String content) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        elevation: globals.darker ? 0 : 24,
         title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[

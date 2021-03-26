@@ -470,6 +470,7 @@ class LogOutDialog extends StatefulWidget {
 class _LogOutDialogState extends State<LogOutDialog> {
   Widget build(BuildContext context) {
     return new AlertDialog(
+      elevation: globals.darker ? 0 : 24,
       title: new Text(getTranslatedString("logOut")),
       content: Text(
         getTranslatedString("sureLogout"),
@@ -506,6 +507,7 @@ Future<void> _ackAlert(BuildContext context, String content) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        elevation: globals.darker ? 0 : 24,
         title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[

@@ -157,6 +157,7 @@ class _UIsettingsState extends State<UIsettings> {
                                 //! Fix complexity: high
                               },
                               child: AlertDialog(
+                                elevation: globals.darker ? 0 : 24,
                                 title: Text(getTranslatedString("status")),
                                 content:
                                     Text(getTranslatedString("langRestart")),

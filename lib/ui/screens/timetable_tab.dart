@@ -77,6 +77,7 @@ class _TimetableTabState extends State<TimetableTab> {
             barrierDismissible: true,
             builder: (_) {
               return AlertDialog(
+                elevation: globals.darker ? 0 : 24,
                 title: Text(getTranslatedString("status")),
                 content: SingleChildScrollView(
                   child: Column(children: <Widget>[
@@ -128,6 +129,7 @@ class _TimetableTabState extends State<TimetableTab> {
               barrierDismissible: true,
               builder: (_) {
                 return AlertDialog(
+                  elevation: globals.darker ? 0 : 24,
                   title: Text(getTranslatedString("status")),
                   content: SingleChildScrollView(
                     child: Column(children: <Widget>[

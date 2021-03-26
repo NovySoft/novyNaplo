@@ -101,6 +101,7 @@ class CalculatorTabState extends State<CalculatorTab>
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
+            elevation: globals.darker ? 0 : 24,
             title: Text(isEditing
                 ? getTranslatedString("editMark")
                 : '${getTranslatedString("addMark")}:'),

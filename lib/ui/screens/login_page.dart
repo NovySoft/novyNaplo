@@ -201,6 +201,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          elevation: globals.darker ? 0 : 24,
           title: Text(getTranslatedString("status")),
           content: Text(getTranslatedString("noNetConnectRetry")),
           actions: <Widget>[
