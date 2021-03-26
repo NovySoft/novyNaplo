@@ -9,7 +9,6 @@ String getTimetableSubtitle(Lesson input) {
   } else if (globals.lessonCardSubtitle == "Óra témája") {
     subtitle = input.theme;
   } else if (globals.lessonCardSubtitle == "Tanár") {
-    //TODO: Lehet, hogy elmaradt az óra...
     if (input.teacher != null || input.teacher != "") {
       subtitle = input.teacher;
     } else {

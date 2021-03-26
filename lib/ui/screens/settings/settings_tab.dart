@@ -349,7 +349,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                       ),
-                      foregroundColor:
+                      backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     onPressed: () async {
@@ -488,6 +488,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                           ),
                         ),
                         onPressed: () async {
+                          //FIXME: About dialog still has elevation
                           showAboutDialog(
                             context: context,
                             applicationName: "Novy Napló",
