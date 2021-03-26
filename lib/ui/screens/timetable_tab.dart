@@ -85,7 +85,7 @@ class _TimetableTabState extends State<TimetableTab> {
                   ]),
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('Ok'),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -138,7 +138,7 @@ class _TimetableTabState extends State<TimetableTab> {
                     ]),
                   ),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('Ok'),
                       onPressed: () {
                         Navigator.of(context).pop();

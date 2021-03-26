@@ -353,13 +353,13 @@ class CalculatorTabState extends State<CalculatorTab>
                   ),
                 )),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text(getTranslatedString("cancel")),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Ok'),
                 onPressed: () {
                   if (FormKey.formKey.currentState.validate()) {
@@ -802,9 +802,13 @@ class CalculatorTabState extends State<CalculatorTab>
             ),
           ),
           Center(
-            child: RaisedButton.icon(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+            child: ElevatedButton.icon(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
               ),
               onPressed: () async {
                 setState(() {
@@ -987,16 +991,19 @@ class CalculatorTabState extends State<CalculatorTab>
                 width: 12,
               ),
               Expanded(
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
                   ),
                   onPressed: () {
                     setState(() {
                       reCalculate();
                     });
                   },
-                  padding: EdgeInsets.all(12),
                   child: Text(
                     getTranslatedString("go"),
                   ),

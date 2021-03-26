@@ -52,9 +52,14 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                     child: SizedBox(
                       height: 38,
                       width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
                           ),
                           onPressed: () async {
                             showDialog<void>(
@@ -70,7 +75,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                     textAlign: TextAlign.left,
                                   ),
                                   actions: <Widget>[
-                                    FlatButton(
+                                    TextButton(
                                       child: Text(getTranslatedString("yes"),
                                           style: TextStyle(color: Colors.red)),
                                       onPressed: () async {
@@ -84,7 +89,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                             "Adatbázis sikeresen törölve");
                                       },
                                     ),
-                                    FlatButton(
+                                    TextButton(
                                       child: Text(getTranslatedString("no")),
                                       onPressed: () {
                                         Navigator.of(context).pop();
@@ -111,9 +116,14 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                     child: SizedBox(
                       height: 38,
                       width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
                           ),
                           onPressed: () async {
                             Navigator.push(
@@ -138,9 +148,14 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                     child: SizedBox(
                       height: 38,
                       width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
                           ),
                           onPressed: () async {
                             Navigator.push(
@@ -298,9 +313,14 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                     child: SizedBox(
                       height: 38,
                       width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
                           ),
                           onPressed: () async {
                             Navigator.push(
@@ -338,7 +358,7 @@ Future<void> _ackAlert(BuildContext context, String content) async {
         title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();

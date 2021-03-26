@@ -107,7 +107,7 @@ class MarksTabState extends State<MarksTab>
             title: Text(getTranslatedString("status")),
             content: Text(getTranslatedString("noNet")),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('Ok'),
                 onPressed: () {
                   Navigator.of(context).pop();

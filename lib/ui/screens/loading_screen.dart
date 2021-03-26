@@ -259,7 +259,7 @@ class _LoadingPageState extends State<LoadingPage> {
           title: Text(getTranslatedString("status")),
           content: Text(content),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();

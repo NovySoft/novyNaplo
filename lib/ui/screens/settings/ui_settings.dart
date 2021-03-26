@@ -162,7 +162,7 @@ class _UIsettingsState extends State<UIsettings> {
                                 content:
                                     Text(getTranslatedString("langRestart")),
                                 actions: <Widget>[
-                                  FlatButton(
+                                  TextButton(
                                     child: Text('Ok'),
                                     onPressed: null,
                                   ),

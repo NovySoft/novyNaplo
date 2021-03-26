@@ -104,7 +104,7 @@ class Student {
     mothersName = json['AnyjaNeve'];
     addressList = json['Cimek'].cast<String>();
     if (json['Gondviselok'] != null) {
-      parents = new List<Parent>();
+      parents = <Parent>[];
       json['Gondviselok'].forEach((v) {
         parents.add(new Parent.fromJson(v));
       });
@@ -209,7 +209,7 @@ class Institution {
     uid = json['Uid'];
     shortName = json['RovidNev'];
     if (json['Rendszermodulok'] != null) {
-      systemModules = new List<SystemModules>();
+      systemModules = <SystemModules>[];
       json['Rendszermodulok'].forEach((v) {
         systemModules.add(new SystemModules.fromJson(v));
       });

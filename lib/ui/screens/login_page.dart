@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           title: Text(getTranslatedString("status")),
           content: Text(getTranslatedString("noNetConnectRetry")),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();

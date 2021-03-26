@@ -84,9 +84,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -117,9 +121,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -143,9 +151,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -169,9 +181,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -195,9 +211,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -221,9 +241,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -247,9 +271,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -282,9 +310,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
                   ),
                   onPressed: () async {
                     Navigator.push(
@@ -310,10 +342,15 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -344,9 +381,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await _ackAlert(context,
@@ -364,9 +406,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           String link = "https://www.facebook.com/NovySoftware";
@@ -392,9 +439,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           String link =
@@ -426,9 +478,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           showAboutDialog(
@@ -461,9 +518,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           showDialog<void>(
@@ -505,7 +567,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
         textAlign: TextAlign.left,
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text(getTranslatedString("yes")),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
@@ -518,7 +580,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
             );
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(getTranslatedString("no")),
           onPressed: () {
             Navigator.of(context).pop();
@@ -539,7 +601,7 @@ Future<void> _ackAlert(BuildContext context, String content) async {
         title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();
