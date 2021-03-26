@@ -392,4 +392,8 @@ final Map<String, String> translation = {
   "skip": "Átugrás",
   "darker": "Sötétebb",
   "delayInMinutes": "Késés percben",
+  "privacySettings": "Adatvédelmi beállítások",
+  "Analytics": "Analitika",
+  "PerfM": "Teljesítmény figyelés",
+  "Crashlytics": "Összeomlás jelentés",
 };

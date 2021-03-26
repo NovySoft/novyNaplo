@@ -393,4 +393,8 @@ final Map<String, String> translation = {
   "skip": "Skip",
   "darker": "Darker",
   "delayInMinutes": "Delay in minutes",
+  "privacySettings": "Privacy settings",
+  "Analytics": "Analytics",
+  "PerfM": "Performance monitoring",
+  "Crashlytics": "Crash reporting",
 };

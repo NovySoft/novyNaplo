@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:novynaplo/ui/screens/settings/firebase_settings.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -75,8 +76,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 11,
-      // ignore: missing_return
+      itemCount: 12,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -283,6 +283,34 @@ class _SettingsBodyState extends State<SettingsBody> {
                 height: 38,
                 width: double.infinity,
                 child: RaisedButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FirebaseSettings(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.incognitoCircle,
+                  ),
+                  label: Text(
+                    getTranslatedString("privacySettings"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 8) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: RaisedButton.icon(
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
@@ -307,7 +335,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 8) {
+        } else if (index == 9) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -390,7 +418,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 9) {
+        } else if (index == 10) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -425,7 +453,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
+        } else if (index == 11) {
           return ListTile(
             title: Center(
               child: Padding(
