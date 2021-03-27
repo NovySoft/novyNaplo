@@ -37,7 +37,7 @@ class _UIsettingsState extends State<UIsettings> {
 
   void disableDarkCards() {
     //Marks card
-    globals.markCardTheme = "Véletlenszerű";
+    globals.markCardTheme = "Értékelés nagysága";
     FirebaseCrashlytics.instance.setCustomKey(
       "markCardTheme",
       globals.markCardTheme,
@@ -55,6 +55,16 @@ class _UIsettingsState extends State<UIsettings> {
     globals.prefs.setString(
       "timetableCardTheme",
       globals.timetableCardTheme,
+    );
+    //Homework card
+    globals.homeworkCardTheme = "Véletlenszerű";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "homeworkCardTheme",
+      globals.homeworkCardTheme,
+    );
+    globals.prefs.setString(
+      "homeworkCardTheme",
+      globals.homeworkCardTheme,
     );
   }
 

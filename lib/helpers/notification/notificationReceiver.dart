@@ -14,6 +14,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
+import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -225,9 +226,10 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => HomeworkDetailTab(
                       hwInfo: tempHw,
-                      color: homeworkTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : homeworkTab.colors[tempIndex],
+                      color: getHomeworkCardColor(
+                        hw: tempHw,
+                        index: tempIndex,
+                      ),
                     ),
                   ),
                 ),

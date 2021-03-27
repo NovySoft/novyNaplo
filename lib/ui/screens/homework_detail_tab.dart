@@ -62,10 +62,17 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                 child: Text(
                   widget.hwInfo.subject.name,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 25, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: globals.homeworkCardTheme == "Dark"
+                          ? Colors.grey[350]
+                          : Colors.black),
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Expanded(
             child: ListView.builder(

@@ -50,7 +50,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
         ),
       );
     else if (globals.markCardTheme == "Dark") {
-      globals.markCardTheme = "Véletlenszerű";
+      globals.markCardTheme = "Értékelés nagysága";
       FirebaseCrashlytics.instance.setCustomKey(
         "markCardTheme",
         globals.markCardTheme,

@@ -74,6 +74,7 @@ final Map<String, String> translation = {
   "period": "Period",
   "marksCardColorTheme": "Marks card color theme",
   "timetableCardTheme": "Timetable card color theme",
+  "homeworkCardColor": "Homework card color theme",
   "random": "Random",
   "evaulationValue": "Evaulation value",
   "oneColor": "One color",

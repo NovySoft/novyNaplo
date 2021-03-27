@@ -249,6 +249,7 @@ final Map<String, String> translation = {
   "period": "Időtartam",
   "marksCardColorTheme": "Jegy kártyák színe",
   "timetableCardTheme": "Órarend kártyák színe",
+  "homeworkCardColor": "Házifeladat kártyák színe",
   "random": "Véletlen",
   "evaulationValue": "Értékelés nagysága",
   "oneColor": "Egyszínű",
