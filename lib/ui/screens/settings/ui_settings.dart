@@ -99,6 +99,17 @@ class _UIsettingsState extends State<UIsettings> {
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Darker");
                       }
+                      if (!globals.darker && globals.markCardTheme == "Dark") {
+                        globals.markCardTheme = "Véletlenszerű";
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "markCardTheme",
+                          globals.markCardTheme,
+                        );
+                        globals.prefs.setString(
+                          "markCardTheme",
+                          globals.markCardTheme,
+                        );
+                      }
                       setState(() {
                         dropDown = value;
                       });

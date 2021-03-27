@@ -8,6 +8,7 @@ import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 List<Notice> allParsedNotices = [];
 var colors = getRandomColors(allParsedNotices.length);
@@ -27,6 +28,8 @@ class _NoticesTabState extends State<NoticesTab> {
       appBar: AppBar(
         title: Text(NoticesTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(NoticesTab.tag, context),
       body: _body(context),
     );

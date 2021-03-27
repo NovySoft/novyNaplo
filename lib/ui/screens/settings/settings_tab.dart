@@ -40,6 +40,8 @@ class _SettingsTabState extends State<SettingsTab> {
       appBar: AppBar(
         title: Text(SettingsTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(SettingsTab.tag, context),
       body: SettingsBody(),
     );

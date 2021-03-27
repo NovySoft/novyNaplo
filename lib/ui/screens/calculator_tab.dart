@@ -420,6 +420,8 @@ class CalculatorTabState extends State<CalculatorTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(CalculatorTab.tag, context),
       appBar: AppBar(
         title: Text(CalculatorTab.title),

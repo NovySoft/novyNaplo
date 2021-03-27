@@ -67,6 +67,8 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
   } else if (globals.markCardTheme == "Színátmenetes") {
     color = ThemeHelper
         .myGradientList[(ThemeHelper.myGradientList.length - index - 1).abs()];
+  } else if (globals.markCardTheme == "Dark") {
+    color = Color(0xFF212121);
   } else {
     color = Colors.red;
   }

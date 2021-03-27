@@ -43,6 +43,8 @@ class _HomeworkTabState extends State<HomeworkTab> {
       appBar: AppBar(
         title: Text(HomeworkTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(HomeworkTab.tag, context),
       body: _body(),
     );

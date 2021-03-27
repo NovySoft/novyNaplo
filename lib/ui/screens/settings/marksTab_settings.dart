@@ -10,8 +10,56 @@ class MarksTabSettings extends StatefulWidget {
 }
 
 class _MarksTabSettingsState extends State<MarksTabSettings> {
+  List<DropdownMenuItem<String>> _dropDownItems = [
+    DropdownMenuItem(
+      value: "Véletlenszerű",
+      child: Text(
+        getTranslatedString("random"),
+      ),
+    ),
+    DropdownMenuItem(
+      value: "Értékelés nagysága",
+      child: Text(
+        getTranslatedString("evaulationValue"),
+      ),
+    ),
+    DropdownMenuItem(
+      value: "Egyszínű",
+      child: Text(
+        getTranslatedString("oneColor"),
+      ),
+    ),
+    DropdownMenuItem(
+      value: "Színátmenetes",
+      child: Text(
+        getTranslatedString("gradient"),
+      ),
+    ),
+  ];
+
   @override
   void initState() {
+    if (globals.darker)
+      _dropDownItems.insert(
+        3,
+        DropdownMenuItem(
+          value: "Dark",
+          child: Text(
+            getTranslatedString("dark"),
+          ),
+        ),
+      );
+    else if (globals.markCardTheme == "Dark") {
+      globals.markCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "markCardTheme",
+        globals.markCardTheme,
+      );
+      globals.prefs.setString(
+        "markCardTheme",
+        globals.markCardTheme,
+      );
+    }
     super.initState();
   }
 
@@ -35,36 +83,16 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 return ListTile(
                   title: Text("${getTranslatedString("marksCardColorTheme")}:"),
                   trailing: DropdownButton<String>(
-                    items: [
-                      DropdownMenuItem(
-                        value: "Véletlenszerű",
-                        child: Text(
-                          getTranslatedString("random"),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "Értékelés nagysága",
-                        child: Text(
-                          getTranslatedString("evaulationValue"),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "Egyszínű",
-                        child: Text(
-                          getTranslatedString("oneColor"),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "Színátmenetes",
-                        child: Text(
-                          getTranslatedString("gradient"),
-                        ),
-                      ),
-                    ],
+                    items: _dropDownItems,
                     onChanged: (String value) async {
-                      FirebaseCrashlytics.instance
-                          .setCustomKey("markCardTheme", value);
-                      globals.prefs.setString("markCardTheme", value);
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "markCardTheme",
+                        value,
+                      );
+                      globals.prefs.setString(
+                        "markCardTheme",
+                        value,
+                      );
                       setState(() {
                         globals.markCardTheme = value;
                       });

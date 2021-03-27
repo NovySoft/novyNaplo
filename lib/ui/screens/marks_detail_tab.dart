@@ -5,6 +5,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});
@@ -60,7 +61,9 @@ class MarksDetailTab extends StatelessWidget {
               background: Icon(
                 eval.icon,
                 size: 150,
-                color: Colors.black38,
+                color: globals.markCardTheme == "Dark"
+                    ? Colors.grey[350]
+                    : Colors.black38,
                 textDirection: TextDirection.ltr,
               ),
             ),

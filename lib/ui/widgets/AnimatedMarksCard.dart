@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedMarksCard extends StatelessWidget {
   AnimatedMarksCard(
@@ -73,7 +74,9 @@ class AnimatedMarksCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: globals.markCardTheme == "Dark"
+                                              ? Colors.grey[350]
+                                              : Colors.black,
                                           fontSize: 21,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -83,7 +86,9 @@ class AnimatedMarksCard extends StatelessWidget {
                                         textDirection: TextDirection.ltr,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: globals.markCardTheme == "Dark"
+                                              ? Colors.grey[350]
+                                              : Colors.black,
                                           fontSize: 21,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -96,7 +101,9 @@ class AnimatedMarksCard extends StatelessWidget {
                               child: Icon(
                                 icon,
                                 size: playButtonSize,
-                                color: Colors.black38,
+                                color: globals.markCardTheme == "Dark"
+                                    ? Colors.grey[350]
+                                    : Colors.black38,
                                 textDirection: TextDirection.ltr,
                               ),
                             ),
@@ -111,20 +118,24 @@ class AnimatedMarksCard extends StatelessWidget {
           ));
     else
       return SizedBox(
-          height: 250,
-          width: double.infinity,
-          child: Container(
-              color: color,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(
-                    icon,
-                    size: playButtonSize,
-                    color: Colors.black38,
-                    textDirection: TextDirection.ltr,
-                  ),
-                ],
-              )));
+        height: 250,
+        width: double.infinity,
+        child: Container(
+          color: color,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(
+                icon,
+                size: playButtonSize,
+                color: globals.markCardTheme == "Dark"
+                    ? Colors.grey[350]
+                    : Colors.black38,
+                textDirection: TextDirection.ltr,
+              ),
+            ],
+          ),
+        ),
+      );
   }
 }
