@@ -73,6 +73,7 @@ final Map<String, String> translation = {
   "startStop": "Beggining-Ending",
   "period": "Period",
   "marksCardColorTheme": "Marks card color theme",
+  "timetableCardTheme": "Timetable card color theme",
   "random": "Random",
   "evaulationValue": "Evaulation value",
   "oneColor": "One color",

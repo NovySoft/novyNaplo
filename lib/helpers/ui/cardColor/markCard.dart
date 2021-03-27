@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
-
-Color getAbsenceCardColor(Absence absence) {
-  Color color = Colors.purple;
-  if (absence.justificationState == "Igazolando") {
-    color = Colors.yellow;
-  } else if (absence.justificationState == "Igazolatlan") {
-    color = Colors.red;
-  } else if (absence.justificationState == "Igazolt") {
-    color = Colors.green;
-  }
-  return color;
-}
 
 Color getMarkCardColor({@required Evals eval, @required int index}) {
   Color color;

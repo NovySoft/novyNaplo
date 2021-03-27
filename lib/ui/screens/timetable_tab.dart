@@ -7,10 +7,9 @@ import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/cardColor/timetableCard.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
-import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -338,13 +337,10 @@ class _TimetableTabState extends State<TimetableTab> {
                               height: 100,
                             );
                           }
-                          Color color;
-                          if (index >= marksPage.colors.length) {
-                            color = getRandomColors(1)[0];
-                            marksPage.colors.add(color);
-                          } else {
-                            color = marksPage.colors[index];
-                          }
+                          Color color = getTimetableCardColor(
+                            lesson: selectedLessonList[index],
+                            index: index,
+                          );
                           return SafeArea(
                             child: AnimatedTimetableCard(
                               iconData: selectedLessonList[index].icon,

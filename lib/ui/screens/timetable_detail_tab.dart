@@ -67,7 +67,9 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
               background: Icon(
                 icon,
                 size: 150,
-                color: Colors.black38,
+                color: globals.timetableCardTheme == "Dark"
+                    ? Colors.grey[350]
+                    : Colors.black38,
                 textDirection: TextDirection.ltr,
               ),
             ),

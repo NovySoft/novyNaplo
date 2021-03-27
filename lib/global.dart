@@ -29,6 +29,7 @@ String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
+String timetableCardTheme = "Véletlenszerű"; //Timetable card's theme
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -232,12 +233,23 @@ Future<void> setGlobals() async {
       .setCustomKey("lessonCardSubtitle", lessonCardSubtitle);
 
   if (prefs.getString("markCardTheme") == null) {
-    markCardTheme = "Véletlenszerű";
-    prefs.setString("markCardTheme", "Véletlenszerű");
+    markCardTheme = "Értékelés nagysága";
+    prefs.setString("markCardTheme", "Értékelés nagysága");
   } else {
     markCardTheme = prefs.getString("markCardTheme");
   }
   FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
+
+  if (prefs.getString("timetableCardTheme") == null) {
+    timetableCardTheme = "Véletlenszerű";
+    prefs.setString("timetableCardTheme", timetableCardTheme);
+  } else {
+    timetableCardTheme = prefs.getString("timetableCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "timetableCardTheme",
+    timetableCardTheme,
+  );
 
   if (prefs.getBool("chartAnimations") == null) {
     chartAnimations = true;

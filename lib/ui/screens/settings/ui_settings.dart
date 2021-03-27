@@ -35,6 +35,29 @@ class _UIsettingsState extends State<UIsettings> {
     super.dispose();
   }
 
+  void disableDarkCards() {
+    //Marks card
+    globals.markCardTheme = "Véletlenszerű";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "markCardTheme",
+      globals.markCardTheme,
+    );
+    globals.prefs.setString(
+      "markCardTheme",
+      globals.markCardTheme,
+    );
+    //Timetable card
+    globals.timetableCardTheme = "Véletlenszerű";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "timetableCardTheme",
+      globals.timetableCardTheme,
+    );
+    globals.prefs.setString(
+      "timetableCardTheme",
+      globals.timetableCardTheme,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,17 +122,8 @@ class _UIsettingsState extends State<UIsettings> {
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Darker");
                       }
-                      if (!globals.darker && globals.markCardTheme == "Dark") {
-                        globals.markCardTheme = "Véletlenszerű";
-                        FirebaseCrashlytics.instance.setCustomKey(
-                          "markCardTheme",
-                          globals.markCardTheme,
-                        );
-                        globals.prefs.setString(
-                          "markCardTheme",
-                          globals.markCardTheme,
-                        );
-                      }
+                      if (!globals.darker && globals.markCardTheme == "Dark")
+                        disableDarkCards();
                       setState(() {
                         dropDown = value;
                       });

@@ -14,7 +14,6 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -33,7 +32,10 @@ import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statsTab;
 import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
+import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'notificationHelper.dart';
+
 //FIXME: Do not use random colors
 
 class NotificationReceiver {

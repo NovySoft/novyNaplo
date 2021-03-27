@@ -17,7 +17,6 @@ import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
@@ -28,6 +27,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'dart:async';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/main.dart' as main;
+import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];

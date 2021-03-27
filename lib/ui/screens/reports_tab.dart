@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
+import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
