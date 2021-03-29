@@ -351,13 +351,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                     height: 38,
                     width: double.infinity,
                     child: ElevatedButton.icon(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-              ),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                        ),
                         onPressed: () async {
                           await NotificationHelper.show(
                             1,
@@ -417,13 +418,14 @@ class _NetworkAndNotificationSettingsState
                       height: 38,
                       width: double.infinity,
                       child: ElevatedButton.icon(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-              ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
+                          ),
                           onPressed: () async {
                             Navigator.push(
                               context,

@@ -15,6 +15,7 @@ import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -274,9 +275,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => NoticeDetailTab(
                       notice: tempNotice,
-                      color: noticesTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : noticesTab.colors[tempIndex],
+                      color: getNoticesAndEventsCardColor(tempIndex),
                     ),
                   ),
                 ),
@@ -507,9 +506,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => EventsDetailTab(
                       eventDetails: tempEvent,
-                      color: eventsTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : eventsTab.colors[tempIndex],
+                      color: getNoticesAndEventsCardColor(tempIndex),
                     ),
                   ),
                 ),

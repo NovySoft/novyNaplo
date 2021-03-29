@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
 import 'package:novynaplo/ui/screens/events_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
@@ -11,7 +11,6 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 List<Event> allParsedEvents = [];
-List<Color> colors = [];
 
 class EventsTab extends StatefulWidget {
   static String tag = "Events-tab";
@@ -23,11 +22,6 @@ class _EventsTabState extends State<EventsTab> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Events");
-    if (colors.length == 0 ||
-        colors == [] ||
-        colors.length < allParsedEvents.length) {
-      colors = getRandomColors(allParsedEvents.length);
-    }
     super.initState();
   }
 
@@ -61,14 +55,18 @@ class _EventsTabState extends State<EventsTab> {
         height: 100,
       );
     } else {
+      Color currColor = getNoticesAndEventsCardColor(index);
       return SafeArea(
           child: AnimatedTitleSubtitleCard(
+        textColor: globals.noticesAndEventsCardTheme == "Dark"
+            ? Colors.grey[350]
+            : Colors.black,
         heroAnimation: AlwaysStoppedAnimation(0),
         title: allParsedEvents[index].title,
         subTitle: removeHTMLtags(allParsedEvents[index].content),
-        color: colors[index],
+        color: currColor,
         onPressed: EventsDetailTab(
-          color: colors[index],
+          color: currColor,
           eventDetails: allParsedEvents[index],
         ),
       ));

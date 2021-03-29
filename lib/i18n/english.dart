@@ -75,6 +75,7 @@ final Map<String, String> translation = {
   "marksCardColorTheme": "Marks card color theme",
   "timetableCardTheme": "Timetable card color theme",
   "homeworkCardColor": "Homework card color theme",
+  "noticesAndEventsCardColor": "Notices and events color theme",
   "random": "Random",
   "evaulationValue": "Evaulation value",
   "oneColor": "One color",
@@ -399,4 +400,5 @@ final Map<String, String> translation = {
   "Analytics": "Analytics",
   "PerfM": "Performance monitoring",
   "Crashlytics": "Crash reporting",
+  "noticesAndEventsSettings": "Notices and events settings",
 };

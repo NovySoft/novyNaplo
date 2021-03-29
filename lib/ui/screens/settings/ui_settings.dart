@@ -37,35 +37,41 @@ class _UIsettingsState extends State<UIsettings> {
 
   void disableDarkCards() {
     //Marks card
-    globals.markCardTheme = "Értékelés nagysága";
-    FirebaseCrashlytics.instance.setCustomKey(
-      "markCardTheme",
-      globals.markCardTheme,
-    );
-    globals.prefs.setString(
-      "markCardTheme",
-      globals.markCardTheme,
-    );
+    if (globals.markCardTheme == "Dark") {
+      globals.markCardTheme = "Értékelés nagysága";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "markCardTheme",
+        globals.markCardTheme,
+      );
+      globals.prefs.setString(
+        "markCardTheme",
+        globals.markCardTheme,
+      );
+    }
     //Timetable card
-    globals.timetableCardTheme = "Véletlenszerű";
-    FirebaseCrashlytics.instance.setCustomKey(
-      "timetableCardTheme",
-      globals.timetableCardTheme,
-    );
-    globals.prefs.setString(
-      "timetableCardTheme",
-      globals.timetableCardTheme,
-    );
+    if (globals.timetableCardTheme == "Dark") {
+      globals.timetableCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "timetableCardTheme",
+        globals.timetableCardTheme,
+      );
+      globals.prefs.setString(
+        "timetableCardTheme",
+        globals.timetableCardTheme,
+      );
+    }
     //Homework card
-    globals.homeworkCardTheme = "Véletlenszerű";
-    FirebaseCrashlytics.instance.setCustomKey(
-      "homeworkCardTheme",
-      globals.homeworkCardTheme,
-    );
-    globals.prefs.setString(
-      "homeworkCardTheme",
-      globals.homeworkCardTheme,
-    );
+    if (globals.homeworkCardTheme == "Dark") {
+      globals.homeworkCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "homeworkCardTheme",
+        globals.homeworkCardTheme,
+      );
+      globals.prefs.setString(
+        "homeworkCardTheme",
+        globals.homeworkCardTheme,
+      );
+    }
   }
 
   @override
@@ -132,8 +138,7 @@ class _UIsettingsState extends State<UIsettings> {
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Darker");
                       }
-                      if (!globals.darker && globals.markCardTheme == "Dark")
-                        disableDarkCards();
+                      if (!globals.darker) disableDarkCards();
                       setState(() {
                         dropDown = value;
                       });

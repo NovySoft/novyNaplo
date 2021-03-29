@@ -8,6 +8,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
@@ -40,7 +41,11 @@ class NoticeDetailTab extends StatelessWidget {
                   child: Text(
                     notice.title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: globals.noticesAndEventsCardTheme == "Dark"
+                            ? Colors.grey[350]
+                            : Colors.black),
                   ),
                 )),
           ),

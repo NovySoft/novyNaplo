@@ -274,6 +274,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                           child: AnimatedTitleSubtitleCard(
                             heroAnimation: AlwaysStoppedAnimation(0),
                             color: color,
+                            textColor: Colors.black,
                             title: tempAbsences[listIndex][index - 1].teacher +
                                 " - " +
                                 capitalize(tempAbsences[listIndex][index - 1]

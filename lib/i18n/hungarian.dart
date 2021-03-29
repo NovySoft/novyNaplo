@@ -250,6 +250,7 @@ final Map<String, String> translation = {
   "marksCardColorTheme": "Jegy kártyák színe",
   "timetableCardTheme": "Órarend kártyák színe",
   "homeworkCardColor": "Házifeladat kártyák színe",
+  "noticesAndEventsCardColor": "Feljegyzés és faliújság kártyák színe",
   "random": "Véletlen",
   "evaulationValue": "Értékelés nagysága",
   "oneColor": "Egyszínű",
@@ -398,4 +399,5 @@ final Map<String, String> translation = {
   "Analytics": "Analitika",
   "PerfM": "Teljesítmény figyelés",
   "Crashlytics": "Összeomlás jelentés",
+  "noticesAndEventsSettings": "Feljegyzések és faliújság beállításai",
 };

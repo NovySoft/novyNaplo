@@ -34,7 +34,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
         ),
       );
     else if (globals.homeworkCardTheme == "Dark") {
-      globals.homeworkCardTheme = "Értékelés nagysága";
+      globals.homeworkCardTheme = "Véletlenszerű";
       FirebaseCrashlytics.instance.setCustomKey(
         "homeworkCardTheme",
         globals.homeworkCardTheme,
