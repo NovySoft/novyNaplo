@@ -251,6 +251,7 @@ final Map<String, String> translation = {
   "timetableCardTheme": "Órarend kártyák színe",
   "homeworkCardColor": "Házifeladat kártyák színe",
   "examsCardColor": "Dolgozat kártyák színe",
+  "statisticsCardColor": "Statisztika kártyák színe",
   "noticesAndEventsCardColor": "Feljegyzés és faliújság kártyák színe",
   "random": "Véletlen",
   "evaulationValue": "Értékelés nagysága",

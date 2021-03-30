@@ -15,6 +15,7 @@ import 'package:novynaplo/helpers/charts/getPieChartOrBarChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/ui/cardColor/statiscticsCard.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -569,7 +570,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
-    Color currColor = marks.colors[index];
+    Color currColor = getStatiscticsCardColor(index);
     if (index == 0) {
       return SafeArea(
         child: AnimatedChartsTitleCard(

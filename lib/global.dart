@@ -34,6 +34,7 @@ String homeworkCardTheme = "Véletlenszerű"; //Homework card's theme
 String noticesAndEventsCardTheme =
     "Véletlenszerű"; //Notices and exams card's theme
 String examsCardTheme = "Véletlenszerű"; //Exams card's theme
+String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -275,6 +276,17 @@ Future<void> setGlobals() async {
   FirebaseCrashlytics.instance.setCustomKey(
     "examsCardTheme",
     examsCardTheme,
+  );
+
+  if (prefs.getString("statisticsCardTheme") == null) {
+    statisticsCardTheme = "Véletlenszerű";
+    prefs.setString("statisticsCardTheme", statisticsCardTheme);
+  } else {
+    statisticsCardTheme = prefs.getString("statisticsCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "statisticsCardTheme",
+    statisticsCardTheme,
   );
 
   if (prefs.getString("noticesAndEventsCardTheme") == null) {

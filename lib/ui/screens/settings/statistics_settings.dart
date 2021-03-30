@@ -17,8 +17,38 @@ class StatisticSettings extends StatefulWidget {
 }
 
 class _StatisticSettingsState extends State<StatisticSettings> {
+  List<DropdownMenuItem<String>> _dropDownItems = [
+    DropdownMenuItem(
+      value: "Véletlenszerű",
+      child: Text(
+        getTranslatedString("random"),
+      ),
+    ),
+  ];
+
   @override
   void initState() {
+    if (globals.darker)
+      _dropDownItems.insert(
+        1,
+        DropdownMenuItem(
+          value: "Dark",
+          child: Text(
+            getTranslatedString("dark"),
+          ),
+        ),
+      );
+    else if (globals.statisticsCardTheme == "Dark") {
+      globals.statisticsCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "statisticsCardTheme",
+        globals.statisticsCardTheme,
+      );
+      globals.prefs.setString(
+        "statisticsCardTheme",
+        globals.statisticsCardTheme,
+      );
+    }
     super.initState();
   }
 
@@ -35,7 +65,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4,
+          itemCount: 5,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -70,6 +100,25 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 break;
               case 1:
                 return ListTile(
+                  title: Text("${getTranslatedString("statisticsCardColor")}:"),
+                  trailing: DropdownButton<String>(
+                    items: _dropDownItems,
+                    onChanged: (String value) async {
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "statisticsCardTheme",
+                        value,
+                      );
+                      globals.prefs.setString("statisticsCardTheme", value);
+                      setState(() {
+                        globals.statisticsCardTheme = value;
+                      });
+                    },
+                    value: globals.statisticsCardTheme,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
                   title: Text("${getTranslatedString("colorAv")}:"),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
@@ -82,7 +131,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 2:
+              case 3:
                 return ListTile(
                   title: Text(
                       "${getTranslatedString("extraSpaceUnderStat")} (1-500px):"),
@@ -127,7 +176,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                   ),
                 );
                 break;
-              case 3:
+              case 4:
                 return Column(
                   children: [
                     SizedBox(height: 5),
