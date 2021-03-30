@@ -51,12 +51,7 @@ void main() async {
     FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
-  } else {
-    FirebaseAnalytics().setAnalyticsCollectionEnabled(true);
-    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   }
-
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   if (globals.prefs.getBool("isNew") == false) {
     isNew = false;

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
+import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
+import 'package:novynaplo/global.dart' as globals;
 
 Map<String, List<Evals>> reportMaps = {
   "FirstQuarter": [],
@@ -121,6 +122,8 @@ class _ReportsTabState extends State<ReportsTab>
   Widget build(BuildContext context) {
     //TODO Add a contracted card to reports
     return Scaffold(
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(ReportsTab.tag, context),
       appBar: AppBar(
         title: Text(ReportsTab.title),
@@ -215,7 +218,9 @@ class _ReportsTabState extends State<ReportsTab>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: globals.markCardTheme == "Dark"
+                          ? Colors.grey[350]
+                          : Colors.black,
                       fontSize: 21,
                       fontWeight: FontWeight.w500,
                     ),
@@ -225,7 +230,9 @@ class _ReportsTabState extends State<ReportsTab>
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: globals.markCardTheme == "Dark"
+                          ? Colors.grey[350]
+                          : Colors.black,
                       fontSize: 21,
                       fontWeight: FontWeight.w500,
                     ),

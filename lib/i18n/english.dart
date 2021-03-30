@@ -11,6 +11,7 @@ final Map<String, String> translation = {
   "timetableSettings": "Timetable page's settings",
   "homeworkSettings": "Homework page's settings",
   "statisticSettings": "Statistics page's settings",
+  "examSettings": "Exam page's settings",
   "markCalculatorSettings": "Mark calculator's settings",
   "networkAndNotificationSettings": "Network and notification settings",
   "developerSettings": "Developer settings",
@@ -73,6 +74,12 @@ final Map<String, String> translation = {
   "startStop": "Beggining-Ending",
   "period": "Period",
   "marksCardColorTheme": "Marks card color theme",
+  "timetableCardTheme": "Timetable card color theme",
+  "homeworkCardColor": "Homework card color theme",
+  "noticesAndEventsCardColor": "Notices and events color theme",
+  "examsCardColor": "Exam card color theme",
+  "statisticsCardColor": "Statistics card color theme",
+  "forceDarkCards": "Use dark cards",
   "random": "Random",
   "evaulationValue": "Evaulation value",
   "oneColor": "One color",
@@ -393,4 +400,15 @@ final Map<String, String> translation = {
   "skip": "Skip",
   "darker": "Darker",
   "delayInMinutes": "Delay in minutes",
+  "privacySettings": "Privacy settings",
+  "Analytics": "Analytics",
+  "PerfM": "Performance monitoring",
+  "Crashlytics": "Crash reporting",
+  "noticesAndEventsSettings": "Notices and events settings",
+  "disableCrashlytics":
+      "If you disable crash reporting, then we cannot see and resolve crashes and problems with the application.",
+  "disableAnalytics":
+      "If you disable analytics, then we cannot see how you use the application and improve your experience.\nAlso analytics is used to report back unknown subjects/icons/translations.",
+  "disablePerformance":
+      "If you disable performance monitoring, then we cannot see and improve loading times.",
 };

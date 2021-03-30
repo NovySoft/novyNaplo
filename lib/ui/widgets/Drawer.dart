@@ -21,6 +21,7 @@ import 'package:novynaplo/global.dart' as globals;
 class GlobalDrawer {
   static Widget getDrawer(String screen, BuildContext context) {
     return Drawer(
+      elevation: globals.darker ? 0 : 16,
       child: Container(
         color: globals.darker
             ? Colors.black

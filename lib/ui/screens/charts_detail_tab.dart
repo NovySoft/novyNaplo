@@ -82,7 +82,9 @@ class ChartsDetailTab extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 25,
-                        color: Colors.black,
+                        color: globals.statisticsCardTheme == "Dark"
+                            ? Colors.grey[350]
+                            : Colors.black,
                       ),
                     ),
                   )),

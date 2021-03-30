@@ -14,7 +14,9 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
+import 'package:novynaplo/helpers/ui/cardColor/examsCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -33,7 +35,10 @@ import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statsTab;
 import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
+import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'notificationHelper.dart';
+
 //FIXME: Do not use random colors
 
 class NotificationReceiver {
@@ -223,9 +228,10 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => HomeworkDetailTab(
                       hwInfo: tempHw,
-                      color: homeworkTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : homeworkTab.colors[tempIndex],
+                      color: getHomeworkCardColor(
+                        hw: tempHw,
+                        index: tempIndex,
+                      ),
                     ),
                   ),
                 ),
@@ -270,9 +276,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => NoticeDetailTab(
                       notice: tempNotice,
-                      color: noticesTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : noticesTab.colors[tempIndex],
+                      color: getNoticesAndEventsCardColor(tempIndex),
                     ),
                   ),
                 ),
@@ -379,9 +383,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => ExamsDetailTab(
                       exam: tempExam,
-                      color: examsTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : examsTab.colors[tempIndex],
+                      color: getExamsCardColor(tempIndex),
                     ),
                   ),
                 ),
@@ -503,9 +505,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => EventsDetailTab(
                       eventDetails: tempEvent,
-                      color: eventsTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : eventsTab.colors[tempIndex],
+                      color: getNoticesAndEventsCardColor(tempIndex),
                     ),
                   ),
                 ),

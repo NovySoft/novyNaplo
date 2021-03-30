@@ -5,7 +5,7 @@ import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
 import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -14,7 +14,6 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 //TODO make groups by date and also some kind of dropdown style lists
 //TODO: should also make a checkbox to save homework as selected
-List<Color> colors = [];
 List<Homework> globalHomework = [];
 
 class HomeworkTab extends StatefulWidget {
@@ -29,11 +28,6 @@ class _HomeworkTabState extends State<HomeworkTab> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Homeworks");
-    if (colors.length == 0 ||
-        colors == [] ||
-        colors.length < globalHomework.length) {
-      colors = getRandomColors(globalHomework.length);
-    }
     super.initState();
   }
 
@@ -43,6 +37,8 @@ class _HomeworkTabState extends State<HomeworkTab> {
       appBar: AppBar(
         title: Text(HomeworkTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(HomeworkTab.tag, context),
       body: _body(),
     );
@@ -84,15 +80,19 @@ class _HomeworkTabState extends State<HomeworkTab> {
           globalHomework[index].dueDate.toDayOnlyString() +
           " " +
           parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
+      Color color = getHomeworkCardColor(
+        hw: globalHomework[index],
+        index: index,
+      );
       return SafeArea(
         child: AnimatedHomeworkCard(
           dueOver: dueOver,
           title: globalHomework[index].subject.name,
           subTitle: subTitle, //lessonsList[0][index].classroom,
-          color: colors[index],
+          color: color,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: HomeworkDetailTab(
-            color: colors[index],
+            color: color,
             hwInfo: globalHomework[index],
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:flutter_html/style.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class EventsDetailTab extends StatefulWidget {
   const EventsDetailTab({
@@ -45,23 +46,43 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                       Text(
                         widget.eventDetails.title,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 25, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: globals.noticesAndEventsCardTheme == "Dark"
+                              ? Colors.grey[350]
+                              : Colors.black,
+                        ),
                       ),
                       SizedBox(height: 15),
                       Text(
                         widget.eventDetails.startDate.toHumanString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: globals.noticesAndEventsCardTheme == "Dark"
+                              ? Colors.grey[350]
+                              : Colors.black,
+                        ),
                       ),
                       Text(
                         "-",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: globals.noticesAndEventsCardTheme == "Dark"
+                              ? Colors.grey[350]
+                              : Colors.black,
+                        ),
                       ),
                       Text(
                         widget.eventDetails.endDate.toHumanString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 15, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: globals.noticesAndEventsCardTheme == "Dark"
+                              ? Colors.grey[350]
+                              : Colors.black,
+                        ),
                       ),
                     ],
                   ),

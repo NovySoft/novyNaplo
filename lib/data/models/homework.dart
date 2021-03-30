@@ -89,7 +89,7 @@ class Homework {
   Homework.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     if (json['Csatolmanyok'] != null) {
-      attachments = new List<Attachment>();
+      attachments = <Attachment>[];
       json['Csatolmanyok'].forEach((v) {
         attachments.add(new Attachment.fromJson(v));
       });

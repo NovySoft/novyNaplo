@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:novynaplo/ui/screens/settings/firebase_settings.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -8,6 +9,8 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/config.dart' as config;
+import 'examsSettings.dart';
+import 'noticesAndEvents_settings.dart';
 import 'calculator_settings.dart';
 import 'developer_settings.dart';
 import 'homework_settings.dart';
@@ -39,6 +42,8 @@ class _SettingsTabState extends State<SettingsTab> {
       appBar: AppBar(
         title: Text(SettingsTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(SettingsTab.tag, context),
       body: SettingsBody(),
     );
@@ -75,8 +80,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 11,
-      // ignore: missing_return
+      itemCount: 13,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -84,9 +88,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -117,9 +125,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -143,9 +155,13 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -169,9 +185,43 @@ class _SettingsBodyState extends State<SettingsBody> {
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ExamSettingsTab()),
+                      );
+                    },
+                    icon: Icon(
+                      MdiIcons.clipboardText,
+                    ),
+                    label: Text(
+                      getTranslatedString("examSettings"),
+                    )),
+              ),
+            ),
+          );
+        } else if (index == 4) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -189,15 +239,54 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 5) {
           return ListTile(
             title: Center(
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NoticesAndEventsSettings(),
+                        ),
+                      );
+                    },
+                    icon: Row(
+                      children: <Widget>[
+                        Icon(Icons.layers),
+                        SizedBox(width: 2),
+                        Icon(MdiIcons.pin),
+                      ],
+                    ),
+                    label: Text(
+                      getTranslatedString("noticesAndEventsSettings"),
+                    )),
+              ),
+            ),
+          );
+        } else if (index == 6) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -215,15 +304,19 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 5) {
+        } else if (index == 7) {
           return ListTile(
             title: Center(
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -241,15 +334,19 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 6) {
+        } else if (index == 8) {
           return ListTile(
             title: Center(
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -276,16 +373,53 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 7) {
+        } else if (index == 9) {
           return ListTile(
             title: Center(
               child: SizedBox(
                 height: 38,
                 width: double.infinity,
-                child: RaisedButton.icon(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FirebaseSettings(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.incognitoCircle,
+                  ),
+                  label: Text(
+                    getTranslatedString("privacySettings"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 10) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     onPressed: () async {
                       Navigator.push(
@@ -307,7 +441,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 8) {
+        } else if (index == 11) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -316,9 +450,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await _ackAlert(context,
@@ -336,9 +475,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           String link = "https://www.facebook.com/NovySoftware";
@@ -364,9 +508,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           String link =
@@ -390,7 +539,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 9) {
+        } else if (index == 12) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -398,11 +547,17 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
+                          //FIXME: About dialog still has elevation
                           showAboutDialog(
                             context: context,
                             applicationName: "Novy Napló",
@@ -425,7 +580,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
+        } else if (index == 13) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -433,9 +588,14 @@ class _SettingsBodyState extends State<SettingsBody> {
                 child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           showDialog<void>(
@@ -470,13 +630,14 @@ class LogOutDialog extends StatefulWidget {
 class _LogOutDialogState extends State<LogOutDialog> {
   Widget build(BuildContext context) {
     return new AlertDialog(
+      elevation: globals.darker ? 0 : 24,
       title: new Text(getTranslatedString("logOut")),
       content: Text(
         getTranslatedString("sureLogout"),
         textAlign: TextAlign.left,
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text(getTranslatedString("yes")),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
@@ -489,7 +650,7 @@ class _LogOutDialogState extends State<LogOutDialog> {
             );
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(getTranslatedString("no")),
           onPressed: () {
             Navigator.of(context).pop();
@@ -506,10 +667,11 @@ Future<void> _ackAlert(BuildContext context, String content) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        elevation: globals.darker ? 0 : 24,
         title: Text(getTranslatedString("status")),
         content: Text(content),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();

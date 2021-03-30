@@ -7,7 +7,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/helpers/charts/absencesCharts.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
-import 'package:novynaplo/helpers/ui/colorHelper.dart';
+import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 
@@ -274,6 +274,7 @@ class _AbsencesTabState extends State<AbsencesTab>
                           child: AnimatedTitleSubtitleCard(
                             heroAnimation: AlwaysStoppedAnimation(0),
                             color: color,
+                            textColor: Colors.black,
                             title: tempAbsences[listIndex][index - 1].teacher +
                                 " - " +
                                 capitalize(tempAbsences[listIndex][index - 1]

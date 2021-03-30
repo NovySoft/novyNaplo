@@ -50,9 +50,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
                       ),
                       onPressed: () async {
                         await NotificationHelper.show(
@@ -80,9 +85,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -113,9 +123,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -146,9 +161,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -179,9 +199,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -212,9 +237,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -246,9 +276,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -277,9 +312,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -310,9 +350,14 @@ class _SendTestNotifState extends State<SendTestNotif> {
                   child: SizedBox(
                     height: 38,
                     width: double.infinity,
-                    child: RaisedButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                    child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
                         ),
                         onPressed: () async {
                           await NotificationHelper.show(
@@ -372,9 +417,14 @@ class _NetworkAndNotificationSettingsState
                     child: SizedBox(
                       height: 38,
                       width: double.infinity,
-                      child: RaisedButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
                           ),
                           onPressed: () async {
                             Navigator.push(

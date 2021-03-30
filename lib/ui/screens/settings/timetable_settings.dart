@@ -9,6 +9,41 @@ class TimetableSettings extends StatefulWidget {
 }
 
 class _TimetableSettingsState extends State<TimetableSettings> {
+  List<DropdownMenuItem<String>> _dropDownItems = [
+    DropdownMenuItem(
+      value: "Véletlenszerű",
+      child: Text(
+        getTranslatedString("random"),
+      ),
+    ),
+  ];
+
+  @override
+  void initState() {
+    if (globals.darker)
+      _dropDownItems.insert(
+        1,
+        DropdownMenuItem(
+          value: "Dark",
+          child: Text(
+            getTranslatedString("dark"),
+          ),
+        ),
+      );
+    else if (globals.timetableCardTheme == "Dark") {
+      globals.timetableCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "timetableCardTheme",
+        globals.timetableCardTheme,
+      );
+      globals.prefs.setString(
+        "timetableCardTheme",
+        globals.timetableCardTheme,
+      );
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +52,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 1,
+          itemCount: 2,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -65,6 +100,28 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                       });
                     },
                     value: globals.lessonCardSubtitle,
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  title: Text("${getTranslatedString("timetableCardTheme")}:"),
+                  trailing: DropdownButton<String>(
+                    items: _dropDownItems,
+                    onChanged: (String value) async {
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "timetableCardTheme",
+                        value,
+                      );
+                      globals.prefs.setString(
+                        "timetableCardTheme",
+                        value,
+                      );
+                      setState(() {
+                        globals.timetableCardTheme = value;
+                      });
+                    },
+                    value: globals.timetableCardTheme,
                   ),
                 );
                 break;

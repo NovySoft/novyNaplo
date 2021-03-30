@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedSubjectsCard extends StatelessWidget {
   AnimatedSubjectsCard(
@@ -54,7 +55,9 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: globals.markCardTheme == "Dark"
+                                ? Colors.grey[350]
+                                : Colors.black,
                             fontSize: 21,
                             fontWeight: FontWeight.w500,
                           ),
@@ -65,7 +68,9 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: globals.markCardTheme == "Dark"
+                                ? Colors.grey[350].withOpacity(0.9)
+                                : Colors.black,
                             fontSize: 21,
                             fontWeight: FontWeight.normal,
                           ),

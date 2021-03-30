@@ -29,6 +29,12 @@ String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
+String timetableCardTheme = "Véletlenszerű"; //Timetable card's theme
+String homeworkCardTheme = "Véletlenszerű"; //Homework card's theme
+String noticesAndEventsCardTheme =
+    "Véletlenszerű"; //Notices and exams card's theme
+String examsCardTheme = "Véletlenszerű"; //Exams card's theme
+String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -232,12 +238,67 @@ Future<void> setGlobals() async {
       .setCustomKey("lessonCardSubtitle", lessonCardSubtitle);
 
   if (prefs.getString("markCardTheme") == null) {
-    markCardTheme = "Véletlenszerű";
-    prefs.setString("markCardTheme", "Véletlenszerű");
+    markCardTheme = "Értékelés nagysága";
+    prefs.setString("markCardTheme", "Értékelés nagysága");
   } else {
     markCardTheme = prefs.getString("markCardTheme");
   }
   FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
+
+  if (prefs.getString("timetableCardTheme") == null) {
+    timetableCardTheme = "Véletlenszerű";
+    prefs.setString("timetableCardTheme", timetableCardTheme);
+  } else {
+    timetableCardTheme = prefs.getString("timetableCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "timetableCardTheme",
+    timetableCardTheme,
+  );
+
+  if (prefs.getString("homeworkCardTheme") == null) {
+    homeworkCardTheme = "Véletlenszerű";
+    prefs.setString("homeworkCardTheme", homeworkCardTheme);
+  } else {
+    homeworkCardTheme = prefs.getString("homeworkCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "homeworkCardTheme",
+    homeworkCardTheme,
+  );
+
+  if (prefs.getString("examsCardTheme") == null) {
+    examsCardTheme = "Véletlenszerű";
+    prefs.setString("examsCardTheme", examsCardTheme);
+  } else {
+    examsCardTheme = prefs.getString("examsCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "examsCardTheme",
+    examsCardTheme,
+  );
+
+  if (prefs.getString("statisticsCardTheme") == null) {
+    statisticsCardTheme = "Véletlenszerű";
+    prefs.setString("statisticsCardTheme", statisticsCardTheme);
+  } else {
+    statisticsCardTheme = prefs.getString("statisticsCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "statisticsCardTheme",
+    statisticsCardTheme,
+  );
+
+  if (prefs.getString("noticesAndEventsCardTheme") == null) {
+    noticesAndEventsCardTheme = "Véletlenszerű";
+    prefs.setString("noticesAndEventsCardTheme", noticesAndEventsCardTheme);
+  } else {
+    noticesAndEventsCardTheme = prefs.getString("noticesAndEventsCardTheme");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "noticesAndEventsCardTheme",
+    noticesAndEventsCardTheme,
+  );
 
   if (prefs.getBool("chartAnimations") == null) {
     chartAnimations = true;

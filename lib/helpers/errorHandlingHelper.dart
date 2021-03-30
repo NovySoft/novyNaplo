@@ -50,7 +50,7 @@ class ErrorMessage {
       info = "";
     }
     exception = errorDetails.toStringShort();
-    stacktrace = List();
+    stacktrace = <RowErrorStacktrace>[];
 
     for (String stacktrace in listStacktrace) {
       List<String> msg = stacktrace.split("     ");
@@ -160,7 +160,7 @@ class BlueScreenErrorMessageTheme {
   }
 
   static List<Widget> buildRowStacktraceWidget(ErrorMessage errorMessage) {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = <Widget>[];
     for (RowErrorStacktrace row in errorMessage.stacktrace) {
       listWidget.add(Container(
         padding: EdgeInsets.all(16),

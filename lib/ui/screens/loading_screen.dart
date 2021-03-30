@@ -255,10 +255,11 @@ class _LoadingPageState extends State<LoadingPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          elevation: globals.darker ? 0 : 24,
           title: Text(getTranslatedString("status")),
           content: Text(content),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();

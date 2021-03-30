@@ -8,11 +8,13 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
     @required this.color,
     @required this.subTitle,
     @required this.onPressed,
+    @required this.textColor,
     this.heroAnimation,
   });
 
   final String title, subTitle;
   final Color color;
+  final Color textColor;
   final Animation<double> heroAnimation;
   final Widget onPressed;
 
@@ -62,7 +64,7 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 25.0),
+                                        color: textColor, fontSize: 25.0),
                                   ),
                                   Text(
                                     subTitle,
@@ -70,7 +72,8 @@ class AnimatedTitleSubtitleCard extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: Colors.black54, fontSize: 20.0),
+                                        color: textColor.withOpacity(0.9),
+                                        fontSize: 20.0),
                                   ),
                                 ]),
                           ),

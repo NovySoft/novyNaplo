@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/global.dart' as globals;
-//TODO: Implement different text types (title, subtitle, etc...)
-//TODO: Implement style analytics
 
 class ThemeHelper {
   static List<Color> myGradientList = [
@@ -119,10 +117,17 @@ class ThemeHelper {
         textTheme: TextTheme(
           subtitle1: TextStyle(color: Colors.white),
           headline6: TextStyle(color: Colors.white),
+          button: TextStyle(color: Colors.white),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+          ),
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Color(0xFF212121),
         ),
+        buttonColor: Color(0xFF212121),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF212121),
@@ -176,25 +181,28 @@ class ThemeHelper {
             backgroundColor: Colors.orange,
           ),
           sliderTheme: SliderThemeData(
-              activeTickMarkColor: Colors.orange,
-              valueIndicatorColor: Colors.black,
-              overlayColor: Colors.orange,
-              thumbColor: Colors.black,
-              activeTrackColor: Colors.orange,
-              valueIndicatorTextStyle: TextStyle(color: Colors.orange)),
+            activeTickMarkColor: Colors.orange,
+            valueIndicatorColor: Colors.black,
+            overlayColor: Colors.orange,
+            thumbColor: Colors.black,
+            activeTrackColor: Colors.orange,
+            valueIndicatorTextStyle: TextStyle(color: Colors.orange),
+          ),
           dividerColor: Colors.orange,
           textTheme: TextTheme(
-              subtitle1: TextStyle(color: Colors.orange),
-              headline6: TextStyle(color: Colors.black)),
+            subtitle1: TextStyle(color: Colors.orange),
+            headline6: TextStyle(color: Colors.black),
+            button: TextStyle(color: Colors.black),
+          ),
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.orange,
             textTheme: ButtonTextTheme.primary,
           ),
+          buttonColor: Colors.orange,
           backgroundColor: Colors.black,
           primarySwatch: Colors.orange,
           primaryColor: Colors.orange,
           brightness: Brightness.dark,
-          colorScheme: ColorScheme.dark(),
           hintColor: Colors.red,
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: TextStyle(
@@ -219,28 +227,31 @@ class ThemeHelper {
             selectionHandleColor: Colors.blue,
           ),
           sliderTheme: SliderThemeData(
-              activeTickMarkColor: Colors.black,
-              valueIndicatorColor: Colors.black,
-              overlayColor: Colors.black,
-              thumbColor: Colors.black,
-              activeTrackColor: Colors.black,
+              inactiveTickMarkColor: Colors.black,
+              activeTickMarkColor: Colors.lightBlueAccent,
+              valueIndicatorColor: Colors.lightBlueAccent,
+              overlayColor: Colors.lightBlueAccent,
+              thumbColor: Colors.lightBlueAccent,
+              activeTrackColor: Colors.lightBlueAccent,
               valueIndicatorTextStyle: TextStyle(color: Colors.white)),
           dividerColor: Colors.black,
           textTheme: TextTheme(
-              subtitle1: TextStyle(color: Colors.black),
-              headline6: TextStyle(color: Colors.black)),
+            subtitle1: TextStyle(color: Colors.black),
+            headline6: TextStyle(color: Colors.black),
+            button: TextStyle(color: Colors.black),
+          ),
           brightness: Brightness.light,
           primarySwatch: Colors.lightBlue,
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.lightBlueAccent,
           ),
+          buttonColor: Colors.lightBlueAccent,
           primaryColor: Colors.lightBlueAccent,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: Colors.black,
             backgroundColor: Colors.lightBlueAccent,
           ),
           backgroundColor: Colors.white,
-          colorScheme: ColorScheme.light(),
           hintColor: Colors.lightBlue,
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: TextStyle(

@@ -3,14 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/notice.dart';
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 List<Notice> allParsedNotices = [];
-var colors = getRandomColors(allParsedNotices.length);
 
 class NoticesTab extends StatefulWidget {
   static String tag = 'notices';
@@ -27,6 +27,8 @@ class _NoticesTabState extends State<NoticesTab> {
       appBar: AppBar(
         title: Text(NoticesTab.title),
       ),
+      drawerScrimColor:
+          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(NoticesTab.tag, context),
       body: _body(context),
     );
@@ -36,11 +38,6 @@ class _NoticesTabState extends State<NoticesTab> {
   void initState() {
     super.initState();
     FirebaseCrashlytics.instance.log("Shown Notices");
-    if (colors == [] ||
-        colors == null ||
-        colors.length < allParsedNotices.length) {
-      colors = getRandomColors(allParsedNotices.length);
-    }
   }
 }
 
@@ -76,9 +73,12 @@ Widget _noticesBuilder(BuildContext context, int index) {
       height: 100,
     );
   } else {
-    Color currColor = colors[index];
+    Color currColor = getNoticesAndEventsCardColor(index);
     return SafeArea(
       child: AnimatedTitleSubtitleCard(
+        textColor: globals.noticesAndEventsCardTheme == "Dark"
+            ? Colors.grey[350]
+            : Colors.black,
         title: allParsedNotices[index].title,
         subTitle: allParsedNotices[index].teacher,
         color: currColor,
