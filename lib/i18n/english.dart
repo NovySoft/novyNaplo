@@ -79,6 +79,7 @@ final Map<String, String> translation = {
   "noticesAndEventsCardColor": "Notices and events color theme",
   "examsCardColor": "Exam card color theme",
   "statisticsCardColor": "Statistics card color theme",
+  "forceDarkCards": "Use dark cards",
   "random": "Random",
   "evaulationValue": "Evaulation value",
   "oneColor": "One color",

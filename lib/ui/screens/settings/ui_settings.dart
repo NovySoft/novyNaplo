@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -13,8 +14,24 @@ class UIsettings extends StatefulWidget {
 }
 
 class _UIsettingsState extends State<UIsettings> {
+  Widget status = Icon(
+    MdiIcons.closeCircle, /*check*/
+  );
+
   @override
   void initState() {
+    if (globals.markCardTheme == "Dark" &&
+        globals.timetableCardTheme == "Dark" &&
+        globals.homeworkCardTheme == "Dark" &&
+        globals.examsCardTheme == "Dark" &&
+        globals.noticesAndEventsCardTheme == "Dark" &&
+        globals.statisticsCardTheme == "Dark") {
+      status = Icon(MdiIcons.check);
+    } else {
+      status = Icon(
+        MdiIcons.closeCircle, /*check*/
+      );
+    }
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         setState(() {
@@ -33,6 +50,69 @@ class _UIsettingsState extends State<UIsettings> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void setDarkCards() {
+    //Marks
+    globals.markCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "markCardTheme",
+      globals.markCardTheme,
+    );
+    globals.prefs.setString(
+      "markCardTheme",
+      globals.markCardTheme,
+    );
+    //Timetable
+    globals.timetableCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "timetableCardTheme",
+      globals.timetableCardTheme,
+    );
+    globals.prefs.setString(
+      "timetableCardTheme",
+      globals.timetableCardTheme,
+    );
+    //Homework
+    globals.homeworkCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "homeworkCardTheme",
+      globals.homeworkCardTheme,
+    );
+    globals.prefs.setString(
+      "homeworkCardTheme",
+      globals.homeworkCardTheme,
+    );
+    //Exams
+    globals.examsCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "examsCardTheme",
+      globals.examsCardTheme,
+    );
+    globals.prefs.setString(
+      "examsCardTheme",
+      globals.examsCardTheme,
+    );
+    //Notices and events
+    globals.noticesAndEventsCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "noticesAndEventsCardTheme",
+      globals.noticesAndEventsCardTheme,
+    );
+    globals.prefs.setString(
+      "noticesAndEventsCardTheme",
+      globals.noticesAndEventsCardTheme,
+    );
+    //Statistics
+    globals.statisticsCardTheme = "Dark";
+    FirebaseCrashlytics.instance.setCustomKey(
+      "statisticsCardTheme",
+      globals.statisticsCardTheme,
+    );
+    globals.prefs.setString(
+      "statisticsCardTheme",
+      globals.statisticsCardTheme,
+    );
   }
 
   void disableDarkCards() {
@@ -84,6 +164,30 @@ class _UIsettingsState extends State<UIsettings> {
         globals.examsCardTheme,
       );
     }
+    //Notices and events card
+    if (globals.noticesAndEventsCardTheme == "Dark") {
+      globals.noticesAndEventsCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "noticesAndEventsCardTheme",
+        globals.noticesAndEventsCardTheme,
+      );
+      globals.prefs.setString(
+        "noticesAndEventsCardTheme",
+        globals.noticesAndEventsCardTheme,
+      );
+    }
+    //Statistics
+    if (globals.statisticsCardTheme == "Dark") {
+      globals.statisticsCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "statisticsCardTheme",
+        globals.statisticsCardTheme,
+      );
+      globals.prefs.setString(
+        "statisticsCardTheme",
+        globals.statisticsCardTheme,
+      );
+    }
   }
 
   @override
@@ -94,7 +198,7 @@ class _UIsettingsState extends State<UIsettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 4,
+          itemCount: 3 + (globals.darker ? 1 : 0),
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -250,6 +354,48 @@ class _UIsettingsState extends State<UIsettings> {
                       }
                     },
                     value: globals.chartAnimations,
+                  ),
+                );
+                break;
+              case 3:
+                return ListTile(
+                  title: Center(
+                    child: SizedBox(
+                      height: 38,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            status = SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(),
+                            );
+                          });
+                          await Future.delayed(
+                            Duration(milliseconds: 250),
+                            () => setDarkCards(),
+                          );
+                          setState(() {
+                            status = Icon(
+                              MdiIcons.check,
+                            );
+                          });
+                        },
+                        icon: status,
+                        label: Text(
+                          getTranslatedString("forceDarkCards"),
+                        ),
+                      ),
+                    ),
                   ),
                 );
                 break;

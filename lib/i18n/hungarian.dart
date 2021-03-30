@@ -254,6 +254,7 @@ final Map<String, String> translation = {
   "statisticsCardColor": "Statisztika kártyák színe",
   "noticesAndEventsCardColor": "Feljegyzés és faliújság kártyák színe",
   "random": "Véletlen",
+  "forceDarkCards": "Sötét kártyák használása",
   "evaulationValue": "Értékelés nagysága",
   "oneColor": "Egyszínű",
   "marksCardSubtitle": "Jegykártyák alcíme",
