@@ -14,6 +14,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/waitWhile.dart';
 import 'package:novynaplo/helpers/navigation/globalKeyNavigation.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
+import 'package:novynaplo/helpers/ui/cardColor/examsCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
@@ -382,9 +383,7 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => ExamsDetailTab(
                       exam: tempExam,
-                      color: examsTab.colors.length <= tempIndex
-                          ? getRandomColors(1)[0]
-                          : examsTab.colors[tempIndex],
+                      color: getExamsCardColor(tempIndex),
                     ),
                   ),
                 ),

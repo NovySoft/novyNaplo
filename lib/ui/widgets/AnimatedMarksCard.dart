@@ -88,6 +88,7 @@ class AnimatedMarksCard extends StatelessWidget {
                                         style: TextStyle(
                                           color: globals.markCardTheme == "Dark"
                                               ? Colors.grey[350]
+                                                  .withOpacity(0.9)
                                               : Colors.black,
                                           fontSize: 21,
                                           fontWeight: FontWeight.normal,

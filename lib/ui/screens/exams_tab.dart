@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/cardColor/examsCard.dart';
 import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedExamsCard.dart';
@@ -12,7 +12,6 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
 
 List<Exam> allParsedExams = [];
-List<Color> colors = [];
 
 class ExamsTab extends StatefulWidget {
   static String tag = 'exams-page';
@@ -24,7 +23,6 @@ class _ExamsTabState extends State<ExamsTab> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Exams");
-    colors = getRandomColors(allParsedExams.length);
     super.initState();
   }
 
@@ -87,15 +85,16 @@ class _ExamsTabState extends State<ExamsTab> {
           0) {
         isDone = true;
       }
+      Color currColor = getExamsCardColor(index);
       return SafeArea(
         child: AnimatedExamsCard(
           isDone: isDone,
           title: allParsedExams[index].theme,
           subTitle: subtitle,
-          color: colors[index],
+          color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: ExamsDetailTab(
-            color: colors[index],
+            color: currColor,
             exam: allParsedExams[index],
           ),
         ),

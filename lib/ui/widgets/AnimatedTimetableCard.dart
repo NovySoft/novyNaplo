@@ -99,10 +99,10 @@ class AnimatedTimetableCard extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color:
-                                          globals.timetableCardTheme == "Dark"
-                                              ? Colors.grey[350]
-                                              : Colors.black54,
+                                      color: globals.timetableCardTheme ==
+                                              "Dark"
+                                          ? Colors.grey[350].withOpacity(0.9)
+                                          : Colors.black54,
                                       fontSize: 20.0,
                                       decoration: lessonInfo.state.name ==
                                                   "Elmaradt" ||

@@ -1,5 +1,5 @@
 String removeHTMLtags(String htmlText) {
   RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
-  return htmlText.replaceAll(exp, '');
+  String temp = htmlText.replaceAll("<br>", " ");
+  return temp.replaceAll(exp, '').trim();
 }

@@ -72,6 +72,18 @@ class _UIsettingsState extends State<UIsettings> {
         globals.homeworkCardTheme,
       );
     }
+    //Exam card
+    if (globals.examsCardTheme == "Dark") {
+      globals.examsCardTheme = "Véletlenszerű";
+      FirebaseCrashlytics.instance.setCustomKey(
+        "examsCardTheme",
+        globals.examsCardTheme,
+      );
+      globals.prefs.setString(
+        "examsCardTheme",
+        globals.examsCardTheme,
+      );
+    }
   }
 
   @override

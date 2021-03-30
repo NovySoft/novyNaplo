@@ -9,6 +9,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/config.dart' as config;
+import 'examsSettings.dart';
 import 'noticesAndEvents_settings.dart';
 import 'calculator_settings.dart';
 import 'developer_settings.dart';
@@ -196,6 +197,36 @@ class _SettingsBodyState extends State<SettingsBody> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                            builder: (context) => ExamSettingsTab()),
+                      );
+                    },
+                    icon: Icon(
+                      MdiIcons.clipboardText,
+                    ),
+                    label: Text(
+                      getTranslatedString("examSettings"),
+                    )),
+              ),
+            ),
+          );
+        } else if (index == 4) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                             builder: (context) => HomeworkSettingsTab()),
                       );
                     },
@@ -208,7 +239,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 4) {
+        } else if (index == 5) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -243,7 +274,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 5) {
+        } else if (index == 6) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -273,7 +304,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 6) {
+        } else if (index == 7) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -303,7 +334,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 7) {
+        } else if (index == 8) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -342,7 +373,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 8) {
+        } else if (index == 9) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -374,7 +405,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 9) {
+        } else if (index == 10) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -410,7 +441,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
+        } else if (index == 11) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -508,7 +539,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 11) {
+        } else if (index == 12) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -549,7 +580,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 12) {
+        } else if (index == 13) {
           return ListTile(
             title: Center(
               child: Padding(

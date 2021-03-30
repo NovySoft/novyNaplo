@@ -4,6 +4,7 @@ import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class ExamsDetailTab extends StatelessWidget {
   ExamsDetailTab({@required this.exam, this.color});
@@ -35,7 +36,9 @@ Widget _buildBody(Exam exam, Color color) {
             background: Icon(
               exam.icon,
               size: 150,
-              color: Colors.black38,
+              color: globals.examsCardTheme == "Dark"
+                  ? Colors.grey[350]
+                  : Colors.black38,
               textDirection: TextDirection.ltr,
             ),
           ),

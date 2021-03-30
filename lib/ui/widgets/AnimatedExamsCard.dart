@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedExamsCard extends StatelessWidget {
   AnimatedExamsCard({
@@ -65,7 +66,10 @@ class AnimatedExamsCard extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 25.0),
+                                        color: globals.examsCardTheme == "Dark"
+                                            ? Colors.grey[350]
+                                            : Colors.black,
+                                        fontSize: 25.0),
                                   ),
                                   Text(
                                     subTitle,
@@ -73,7 +77,10 @@ class AnimatedExamsCard extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: Colors.black54, fontSize: 20.0),
+                                        color: globals.examsCardTheme == "Dark"
+                                            ? Colors.grey[350].withOpacity(0.9)
+                                            : Colors.black54,
+                                        fontSize: 20.0),
                                   ),
                                 ]),
                           ),
