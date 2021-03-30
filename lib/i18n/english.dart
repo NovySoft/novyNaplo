@@ -405,4 +405,10 @@ final Map<String, String> translation = {
   "PerfM": "Performance monitoring",
   "Crashlytics": "Crash reporting",
   "noticesAndEventsSettings": "Notices and events settings",
+  "disableCrashlytics":
+      "If you disable crash reporting, then we cannot see and resolve crashes and problems with the application.",
+  "disableAnalytics":
+      "If you disable analytics, then we cannot see how you use the application and improve your experience.\nAlso analytics is used to report back unknown subjects/icons/translations.",
+  "disablePerformance":
+      "If you disable performance monitoring, then we cannot see and improve loading times.",
 };

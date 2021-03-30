@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 
+//Fixme: "Warnings when disabled"
 class FirebaseSettings extends StatefulWidget {
   @override
   _FirebaseSettingsState createState() => _FirebaseSettingsState();
@@ -46,6 +47,32 @@ class _FirebaseSettingsState extends State<FirebaseSettings> {
                   title: Text(getTranslatedString("Crashlytics")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
+                      if (!switchOn) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              elevation: globals.darker ? 0 : 24,
+                              title: Text(getTranslatedString("status")),
+                              content: SingleChildScrollView(
+                                child: Column(children: <Widget>[
+                                  Text(getTranslatedString(
+                                    "disableCrashlytics",
+                                  )),
+                                ]),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                       setState(() {
                         _crashlytics = switchOn;
                       });
@@ -61,6 +88,32 @@ class _FirebaseSettingsState extends State<FirebaseSettings> {
                   title: Text(getTranslatedString("Analytics")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
+                      if (!switchOn) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              elevation: globals.darker ? 0 : 24,
+                              title: Text(getTranslatedString("status")),
+                              content: SingleChildScrollView(
+                                child: Column(children: <Widget>[
+                                  Text(getTranslatedString(
+                                    "disableAnalytics",
+                                  )),
+                                ]),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                       setState(() {
                         _analytics = switchOn;
                       });
@@ -77,6 +130,32 @@ class _FirebaseSettingsState extends State<FirebaseSettings> {
                   title: Text(getTranslatedString("PerfM")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
+                      if (!switchOn) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              elevation: globals.darker ? 0 : 24,
+                              title: Text(getTranslatedString("status")),
+                              content: SingleChildScrollView(
+                                child: Column(children: <Widget>[
+                                  Text(getTranslatedString(
+                                    "disablePerformance",
+                                  )),
+                                ]),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                       setState(() {
                         _performance = switchOn;
                       });

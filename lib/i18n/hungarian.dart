@@ -16,7 +16,7 @@ final Map<String, String> translation = {
       "Biztosan ki szeretnéd törölni az adatbázisokat?\nEz nem fordítható vissza",
   "runRawSQL": "Nyers sql script",
   "developerSettingsWarning":
-      "Minden amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nMinden itt történő dologért NEM vállalunk felelőséget",
+      "Minden, amit itt csinálsz kárt tehet az alkalmazásban/készülékedben.\nSemmilyen itt történő dologért NEM vállalunk felelőséget",
   "homeworkKeepFor": "Határidő után meddig mutassuk a házit?",
   "forDay": "napig",
   "forInfinity": "Végtelenig",
@@ -404,4 +404,10 @@ final Map<String, String> translation = {
   "Crashlytics": "Összeomlás jelentés",
   "noticesAndEventsSettings": "Feljegyzések és faliújság beállításai",
   "examSettings": "Dolgozat oldal beállításai",
+  "disableCrashlytics":
+      "Ha kikapcsolod az összeomlás jelentést, akkor nem látjuk és nem tudjuk megjavítani az alkalmazás hibáit.",
+  "disableAnalytics":
+      "Ha kikapcsolod az analisztikát, akkor nem látjuk hogyan használod az alkalmazást és nem tudjuk követni az aktív felhasználóink számát.\nAnalisztika kikapcsolása szintén kikapcsolja az ismeretlen tantárgy/ikon/fordítás visszajelentést is.",
+  "disablePerformance":
+      "Ha kikapcsolod a teljesítmény figyelést, akkor nem látjuk milyen gyors az alkalmazás, és nem tudjuk javítani a betöltési időket.",
 };
