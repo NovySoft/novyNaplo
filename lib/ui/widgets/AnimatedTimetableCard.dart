@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/getTimetableSubtitle.dart';
+import 'package:novynaplo/helpers/ui/textColor/timetableCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -29,6 +30,7 @@ class AnimatedTimetableCard extends StatelessWidget {
   @override
   Widget build(context) {
     String subTitle = getTimetableSubtitle(lessonInfo);
+    Color txtColor = getTimetableCardTextColor(lesson: lessonInfo);
     String title = lessonInfo.name;
     return PressableCard(
       onPressed: null,
@@ -80,10 +82,7 @@ class AnimatedTimetableCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     style: TextStyle(
-                                      color:
-                                          globals.timetableCardTheme == "Dark"
-                                              ? Colors.grey[350]
-                                              : Colors.black,
+                                      color: txtColor,
                                       fontSize: 25.0,
                                       decoration: lessonInfo.state.name ==
                                                   "Elmaradt" ||
@@ -99,10 +98,7 @@ class AnimatedTimetableCard extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: globals.timetableCardTheme ==
-                                              "Dark"
-                                          ? Colors.grey[350].withOpacity(0.9)
-                                          : Colors.black54,
+                                      color: txtColor.withOpacity(0.9),
                                       fontSize: 20.0,
                                       decoration: lessonInfo.state.name ==
                                                   "Elmaradt" ||

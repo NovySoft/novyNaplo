@@ -58,7 +58,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 2,
+          itemCount: 2 + (globals.timetableCardTheme == "Dark" ? 1 : 0),
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -131,9 +131,30 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                   ),
                 );
                 break;
+              case 2:
+                return ListTile(
+                  leading: Text("${getTranslatedString("textColSubject")}:"),
+                  trailing: Switch(
+                    value: globals.timetableTextColSubject,
+                    onChanged: (switchVal) {
+                      globals.prefs.setBool(
+                        "timetableTextColSubject",
+                        switchVal,
+                      );
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "timetableTextColSubject",
+                        switchVal,
+                      );
+                      setState(() {
+                        globals.timetableTextColSubject = switchVal;
+                      });
+                    },
+                  ),
+                );
+                break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
-            return SizedBox(height: 10, width: 10);
           }),
     );
   }

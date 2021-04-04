@@ -25,7 +25,8 @@ class _UIsettingsState extends State<UIsettings> {
         globals.homeworkCardTheme == "Dark" &&
         globals.examsCardTheme == "Dark" &&
         globals.noticesAndEventsCardTheme == "Dark" &&
-        globals.statisticsCardTheme == "Dark") {
+        globals.statisticsCardTheme == "Dark" &&
+        globals.timetableTextColSubject) {
       status = Icon(MdiIcons.check);
     } else {
       status = Icon(
@@ -72,6 +73,16 @@ class _UIsettingsState extends State<UIsettings> {
     globals.prefs.setString(
       "timetableCardTheme",
       globals.timetableCardTheme,
+    );
+    //Timetable text
+    globals.timetableTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "timetableTextColSubject",
+      globals.timetableTextColSubject,
+    );
+    globals.prefs.setBool(
+      "timetableTextColSubject",
+      globals.timetableTextColSubject,
     );
     //Homework
     globals.homeworkCardTheme = "Dark";
@@ -138,6 +149,18 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "timetableCardTheme",
         globals.timetableCardTheme,
+      );
+    }
+    //Timetable text
+    if (globals.timetableTextColSubject) {
+      globals.timetableTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "timetableTextColSubject",
+        globals.timetableTextColSubject,
+      );
+      globals.prefs.setBool(
+        "timetableTextColSubject",
+        globals.timetableTextColSubject,
       );
     }
     //Homework card

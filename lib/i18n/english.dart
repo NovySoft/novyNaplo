@@ -413,4 +413,5 @@ final Map<String, String> translation = {
   "disablePerformance":
       "If you disable performance monitoring, then we cannot see and improve loading times.",
   "subjectColors": "Subject coloring",
+  "textColSubject": "Text color based on subject color",
 };
