@@ -37,7 +37,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
         ),
       );
     else if (globals.timetableCardTheme == "Dark") {
-      globals.timetableCardTheme = "Véletlenszerű";
+      globals.timetableCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "timetableCardTheme",
         globals.timetableCardTheme,

@@ -29,7 +29,7 @@ String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
-String timetableCardTheme = "Véletlenszerű"; //Timetable card's theme
+String timetableCardTheme = "Subject"; //Timetable card's theme
 String homeworkCardTheme = "Véletlenszerű"; //Homework card's theme
 String noticesAndEventsCardTheme =
     "Véletlenszerű"; //Notices and exams card's theme
@@ -246,7 +246,7 @@ Future<void> setGlobals() async {
   FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
 
   if (prefs.getString("timetableCardTheme") == null) {
-    timetableCardTheme = "Véletlenszerű";
+    timetableCardTheme = "Subject";
     prefs.setString("timetableCardTheme", timetableCardTheme);
   } else {
     timetableCardTheme = prefs.getString("timetableCardTheme");
