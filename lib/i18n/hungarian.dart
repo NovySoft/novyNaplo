@@ -133,6 +133,7 @@ final Map<String, String> translation = {
   "readNotices": "Feljegyzések olvasása az adatbázisból",
   "readAvs": "Átlagok olvasása az adatbázisból",
   "readTimetable": "Órarend olvasása az adatbázisból",
+  "readTimetableColors": "Tantárgy színek olvasása az adatbázisból",
   "readExam": "Dolgozatok olvasása az adatbázisból",
   "readEvents": "Faliújság olvasása az adatbázisból",
   "almReady": "Mindjárt kész",
@@ -410,4 +411,5 @@ final Map<String, String> translation = {
       "Ha kikapcsolod az analisztikát, akkor nem látjuk hogyan használod az alkalmazást és nem tudjuk követni az aktív felhasználóink számát.\nAnalisztika kikapcsolása szintén kikapcsolja az ismeretlen tantárgy/ikon/fordítás visszajelentést is.",
   "disablePerformance":
       "Ha kikapcsolod a teljesítmény figyelést, akkor nem látjuk milyen gyors az alkalmazás, és nem tudjuk javítani a betöltési időket.",
+  "subjectColors": "Tantárgyak színe",
 };

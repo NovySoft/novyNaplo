@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-const _myListOfRandomColors = [
+const myListOfRandomColors = [
   Colors.red,
   Colors.blue,
   Colors.teal,
@@ -29,7 +29,7 @@ final _random = Random();
 List<Color> getRandomColors(int amount) {
   if (amount == null) amount = 10;
   return List<Color>.generate(amount, (index) {
-    return _myListOfRandomColors[_random.nextInt(_myListOfRandomColors.length)];
+    return myListOfRandomColors[_random.nextInt(myListOfRandomColors.length)];
     //return _myListOfRandomColors[2];
   });
 }

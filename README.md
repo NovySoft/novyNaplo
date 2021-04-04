@@ -78,6 +78,7 @@ Novy teljesen nem eredeti kréta kliense.
 - **Bejelentkezési oldal:** [https://github.com/putraxor/flutter-login-ui](https://github.com/putraxor/flutter-login-ui)
 - **Háttér logika, néhány design ötlet:** [https://github.com/boapps/Szivacs-Naplo](https://github.com/boapps/Szivacs-Naplo)
 - **Api lekérések:** [https://github.com/boapps/e-kreta-api-docs](https://github.com/boapps/e-kreta-api-docs)
+- **Az új api V3:** [https://github.com/filc/naplo](https://github.com/filc/naplo)
 
 ## Betűtípusok
 
@@ -87,7 +88,6 @@ Novy teljesen nem eredeti kréta kliense.
 
 - **Lassú betöltés/leragadás a homokóránál** a lassú krétás válasz miatt történik (amennyiben nem, akkor hibakódot kell látnod)
 - **Hibás tanár/tantárgy név** az eredeti krétában van elírva a tanár/tantárgy neve, ez nem az applikáció hibája
-- **Tantárgy nézet bugos**, szétesnek és/vagy összekeverednek a tárgyak. (FIX hamarosan, meg van a hiba forrása)
 
 ### Nem látod a hibádat? Csinálj egy hiba ticketet
 

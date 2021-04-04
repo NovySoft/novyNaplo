@@ -16,13 +16,19 @@ class _TimetableSettingsState extends State<TimetableSettings> {
         getTranslatedString("random"),
       ),
     ),
+    DropdownMenuItem(
+      value: "Subject",
+      child: Text(
+        getTranslatedString("subject"),
+      ),
+    ),
   ];
 
   @override
   void initState() {
     if (globals.darker)
       _dropDownItems.insert(
-        1,
+        2,
         DropdownMenuItem(
           value: "Dark",
           child: Text(

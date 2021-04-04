@@ -19,6 +19,7 @@ import 'notices.dart' as notices;
 import 'timetable.dart' as timetable;
 import 'users.dart' as users;
 import 'mainSql.dart' as main;
+import 'colors.dart' as colors;
 
 ///List of pointers to the corresponding functions
 class DatabaseHelper {
@@ -73,4 +74,7 @@ class DatabaseHelper {
   static Future<void> Function(Student) updatePassword = users.updatePassword;
 
   static Future<void> Function(Student, bool) setFetched = users.setFetched;
+
+  static Future<Map<String, int>> Function() getAllColors = colors.getAllColors;
+  static Future<void> Function(String, int) insertColor = colors.insertColor;
 }

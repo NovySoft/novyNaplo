@@ -210,6 +210,7 @@ final Map<String, String> translation = {
   "readNotices": "Reading notifications from database",
   "readAvs": "Reading averages from database",
   "readTimetable": "Reading timetable from database",
+  "readTimetableColors": "Reading subject colors from database",
   "readExam": "Reading exams from database",
   "readEvents": "Reading events from database",
   "almReady": "Almost ready",
@@ -411,4 +412,5 @@ final Map<String, String> translation = {
       "If you disable analytics, then we cannot see how you use the application and improve your experience.\nAlso analytics is used to report back unknown subjects/icons/translations.",
   "disablePerformance":
       "If you disable performance monitoring, then we cannot see and improve loading times.",
+  "subjectColors": "Subject coloring",
 };

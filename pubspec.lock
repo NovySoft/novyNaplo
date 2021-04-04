@@ -390,6 +390,13 @@ packages:
       url: "https://github.com/mduccc/flutter_calendar_week"
     source: git
     version: "0.3.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_html:
     dependency: "direct main"
     description:
