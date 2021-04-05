@@ -16,6 +16,12 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
         getTranslatedString("random"),
       ),
     ),
+    DropdownMenuItem(
+      value: "Subject",
+      child: Text(
+        getTranslatedString("subject"),
+      ),
+    ),
   ];
 
   @override
@@ -52,7 +58,7 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
-        itemCount: 1,
+        itemCount: 1 + (globals.examsCardTheme == "Dark" ? 1 : 0),
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
@@ -69,8 +75,42 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
                     setState(() {
                       globals.examsCardTheme = value;
                     });
+                    if (value != "Dark" && globals.examsTextColSubject) {
+                      globals.prefs.setBool(
+                        "examsTextColSubject",
+                        false,
+                      );
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "examsTextColSubject",
+                        false,
+                      );
+                      setState(() {
+                        globals.examsTextColSubject = false;
+                      });
+                    }
                   },
                   value: globals.examsCardTheme,
+                ),
+              );
+              break;
+            case 1:
+              return ListTile(
+                leading: Text("${getTranslatedString("textColSubject")}:"),
+                trailing: Switch(
+                  value: globals.examsTextColSubject,
+                  onChanged: (switchVal) {
+                    globals.prefs.setBool(
+                      "examsTextColSubject",
+                      switchVal,
+                    );
+                    FirebaseCrashlytics.instance.setCustomKey(
+                      "examsTextColSubject",
+                      switchVal,
+                    );
+                    setState(() {
+                      globals.examsTextColSubject = switchVal;
+                    });
+                  },
                 ),
               );
               break;

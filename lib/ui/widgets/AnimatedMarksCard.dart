@@ -75,7 +75,7 @@ class AnimatedMarksCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         style: TextStyle(
-                                          color: getmarkCardTextColor(
+                                          color: getMarkCardTextColor(
                                             eval: eval,
                                           ),
                                           fontSize: 21,
@@ -87,7 +87,7 @@ class AnimatedMarksCard extends StatelessWidget {
                                         textDirection: TextDirection.ltr,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: getmarkCardTextColor(
+                                          color: getMarkCardTextColor(
                                             eval: eval,
                                           ).withOpacity(0.9),
                                           fontSize: 21,

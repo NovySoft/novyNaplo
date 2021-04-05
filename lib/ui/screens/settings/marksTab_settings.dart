@@ -117,6 +117,19 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                           indexModifier = 0;
                         });
                       }
+                      if (value != "Dark" && globals.marksTextColSubject) {
+                        globals.prefs.setBool(
+                          "marksTextColSubject",
+                          false,
+                        );
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "marksTextColSubject",
+                          false,
+                        );
+                        setState(() {
+                          globals.marksTextColSubject = false;
+                        });
+                      }
                     },
                     value: globals.markCardTheme,
                   ),

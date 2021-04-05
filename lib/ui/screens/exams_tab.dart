@@ -85,13 +85,17 @@ class _ExamsTabState extends State<ExamsTab> {
           0) {
         isDone = true;
       }
-      Color currColor = getExamsCardColor(index);
+      Color currColor = getExamsCardColor(
+        index,
+        exam: allParsedExams[index],
+      );
       return SafeArea(
         child: AnimatedExamsCard(
           isDone: isDone,
           title: allParsedExams[index].theme,
           subTitle: subtitle,
           color: currColor,
+          exam: allParsedExams[index],
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: ExamsDetailTab(
             color: currColor,

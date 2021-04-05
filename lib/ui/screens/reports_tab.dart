@@ -219,7 +219,7 @@ class _ReportsTabState extends State<ReportsTab>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: getmarkCardTextColor(
+                      color: getMarkCardTextColor(
                         eval: reportMaps[tabName][index],
                       ),
                       fontSize: 21,
@@ -231,7 +231,7 @@ class _ReportsTabState extends State<ReportsTab>
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: TextStyle(
-                      color: getmarkCardTextColor(
+                      color: getMarkCardTextColor(
                         eval: reportMaps[tabName][index],
                       ),
                       fontSize: 21,

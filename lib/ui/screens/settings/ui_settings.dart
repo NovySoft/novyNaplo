@@ -104,6 +104,16 @@ class _UIsettingsState extends State<UIsettings> {
       "examsCardTheme",
       globals.examsCardTheme,
     );
+    //Exams text
+    globals.examsTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "examsTextColSubject",
+      globals.examsTextColSubject,
+    );
+    globals.prefs.setBool(
+      "examsTextColSubject",
+      globals.examsTextColSubject,
+    );
     //Notices and events
     globals.noticesAndEventsCardTheme = "Dark";
     FirebaseCrashlytics.instance.setCustomKey(
@@ -197,6 +207,18 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "examsCardTheme",
         globals.examsCardTheme,
+      );
+    }
+    //Exams card text
+    if (globals.examsTextColSubject) {
+      globals.examsTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "examsTextColSubject",
+        globals.examsTextColSubject,
+      );
+      globals.prefs.setBool(
+        "examsTextColSubject",
+        globals.examsTextColSubject,
       );
     }
     //Notices and events card

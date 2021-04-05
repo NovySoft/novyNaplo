@@ -126,6 +126,19 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                       setState(() {
                         globals.timetableCardTheme = value;
                       });
+                      if (value != "Dark" && globals.timetableTextColSubject) {
+                        globals.prefs.setBool(
+                          "timetableTextColSubject",
+                          false,
+                        );
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "timetableTextColSubject",
+                          false,
+                        );
+                        setState(() {
+                          globals.timetableTextColSubject = false;
+                        });
+                      }
                     },
                     value: globals.timetableCardTheme,
                   ),

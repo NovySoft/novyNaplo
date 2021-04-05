@@ -3,7 +3,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/ui/subjectColor.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-Color getmarkCardTextColor({@required Evals eval}) {
+Color getMarkCardTextColor({@required Evals eval}) {
   Color color = Colors.black;
   if (globals.marksTextColSubject) {
     color = getColorBasedOnSubject(eval.subject.fullName.toLowerCase());

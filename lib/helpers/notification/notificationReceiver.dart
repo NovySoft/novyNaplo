@@ -383,7 +383,10 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => ExamsDetailTab(
                       exam: tempExam,
-                      color: getExamsCardColor(tempIndex),
+                      color: getExamsCardColor(
+                        tempIndex,
+                        exam: tempExam,
+                      ),
                     ),
                   ),
                 ),

@@ -58,7 +58,7 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: getmarkCardTextColor(
+                            color: getMarkCardTextColor(
                               eval: eval,
                             ),
                             fontSize: 21,
@@ -71,7 +71,7 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: getmarkCardTextColor(
+                            color: getMarkCardTextColor(
                               eval: eval,
                             ).withOpacity(0.9),
                             fontSize: 21,
