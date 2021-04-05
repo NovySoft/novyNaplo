@@ -245,6 +245,7 @@ class MarksTabState extends State<MarksTab>
                 height: 106,
                 child: SafeArea(
                   child: AnimatedSubjectsCard(
+                    eval: allParsedBySubject[listIndex][index],
                     subTitle: getMarkCardSubtitle(
                       eval: allParsedBySubject[listIndex][index],
                     ),
@@ -268,6 +269,7 @@ class MarksTabState extends State<MarksTab>
           height: 106,
           child: SafeArea(
             child: AnimatedSubjectsCard(
+              eval: allParsedBySubject[listIndex][index],
               subTitle: getMarkCardSubtitle(
                 eval: allParsedBySubject[listIndex][index],
               ),

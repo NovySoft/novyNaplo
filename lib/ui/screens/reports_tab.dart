@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
+import 'package:novynaplo/helpers/ui/textColor/markCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
@@ -218,9 +219,9 @@ class _ReportsTabState extends State<ReportsTab>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: globals.markCardTheme == "Dark"
-                          ? Colors.grey[350]
-                          : Colors.black,
+                      color: getmarkCardTextColor(
+                        eval: reportMaps[tabName][index],
+                      ),
                       fontSize: 21,
                       fontWeight: FontWeight.w500,
                     ),
@@ -230,9 +231,9 @@ class _ReportsTabState extends State<ReportsTab>
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: TextStyle(
-                      color: globals.markCardTheme == "Dark"
-                          ? Colors.grey[350]
-                          : Colors.black,
+                      color: getmarkCardTextColor(
+                        eval: reportMaps[tabName][index],
+                      ),
                       fontSize: 21,
                       fontWeight: FontWeight.w500,
                     ),

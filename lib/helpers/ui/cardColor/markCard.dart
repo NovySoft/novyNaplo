@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/subjectColor.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 
@@ -56,6 +57,8 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
         .myGradientList[(ThemeHelper.myGradientList.length - index - 1).abs()];
   } else if (globals.markCardTheme == "Dark") {
     color = Color(0xFF212121);
+  } else if (globals.markCardTheme == "Subject") {
+    color = getColorBasedOnSubject(eval.subject.fullName.toLowerCase());
   } else {
     color = Colors.red;
   }

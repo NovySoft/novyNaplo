@@ -37,6 +37,7 @@ String examsCardTheme = "Véletlenszerű"; //Exams card's theme
 String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
 bool timetableTextColSubject =
     false; //Timetable text color based on subject color?
+bool marksTextColSubject = false; //Marks text color based on subject color?
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -196,6 +197,17 @@ Future<void> setGlobals() async {
   FirebaseCrashlytics.instance.setCustomKey(
     "timetableTextColSubject",
     timetableTextColSubject,
+  );
+
+  if (prefs.getBool("marksTextColSubject") == null) {
+    marksTextColSubject = false;
+    await prefs.setBool("marksTextColSubject", marksTextColSubject);
+  } else {
+    marksTextColSubject = prefs.getBool("marksTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "marksTextColSubject",
+    marksTextColSubject,
   );
 
   if (prefs.getString("howManyGraph") == null) {

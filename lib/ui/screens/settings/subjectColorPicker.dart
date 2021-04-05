@@ -3,8 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
-import 'package:novynaplo/helpers/ui/cardColor/timetableCard.dart'
-    as timetableCardColorMgr;
+import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 
 class SubjectColorPicker extends StatefulWidget {
   @override
@@ -37,8 +36,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
               child: Text('OK'),
               onPressed: () {
                 setState(() {
-                  timetableCardColorMgr.subjectColorMap[input.key] =
-                      pickerColor.value;
+                  subjectColors.subjectColorMap[input.key] = pickerColor.value;
                   reFreshColors();
                 });
                 //Also update database
@@ -63,11 +61,11 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
 
   void reFreshColors() {
     colorList = [];
-    colorList.addAll(timetableCardColorMgr.subjectColorMap.entries);
+    colorList.addAll(subjectColors.subjectColorMap.entries);
     colorList.sort((a, b) => a.key.compareTo(b.key));
   }
 
-// ValueChanged<Color> callback
+  // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
   }

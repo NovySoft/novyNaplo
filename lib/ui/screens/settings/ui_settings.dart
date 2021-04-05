@@ -139,6 +139,18 @@ class _UIsettingsState extends State<UIsettings> {
         globals.markCardTheme,
       );
     }
+    //Marks card text
+    if (globals.marksTextColSubject) {
+      globals.marksTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+      globals.prefs.setBool(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+    }
     //Timetable card
     if (globals.timetableCardTheme == "Dark") {
       globals.timetableCardTheme = "Subject";

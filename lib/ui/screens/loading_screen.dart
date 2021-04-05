@@ -27,8 +27,7 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 import 'package:path/path.dart' as fpath;
 import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:novynaplo/helpers/ui/cardColor/timetableCard.dart'
-    as timetableCardColorMgr;
+import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -179,8 +178,7 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readTimetableColors");
       });
-      timetableCardColorMgr.subjectColorMap =
-          await DatabaseHelper.getAllColors();
+      subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       globals.isDataLoaded = true;

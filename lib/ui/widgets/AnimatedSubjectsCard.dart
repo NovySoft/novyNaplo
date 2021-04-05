@@ -1,7 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/ui/textColor/markCard.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedSubjectsCard extends StatelessWidget {
   AnimatedSubjectsCard(
@@ -9,13 +10,15 @@ class AnimatedSubjectsCard extends StatelessWidget {
       this.title,
       this.color,
       this.heroAnimation,
-      this.onPressed});
+      this.onPressed,
+      this.eval});
 
   final String subTitle;
   final String title;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
+  final Evals eval;
 
   double get playButtonSize => 100 + 50 * heroAnimation.value;
 
@@ -55,9 +58,9 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: globals.markCardTheme == "Dark"
-                                ? Colors.grey[350]
-                                : Colors.black,
+                            color: getmarkCardTextColor(
+                              eval: eval,
+                            ),
                             fontSize: 21,
                             fontWeight: FontWeight.w500,
                           ),
@@ -68,9 +71,9 @@ class AnimatedSubjectsCard extends StatelessWidget {
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: globals.markCardTheme == "Dark"
-                                ? Colors.grey[350].withOpacity(0.9)
-                                : Colors.black,
+                            color: getmarkCardTextColor(
+                              eval: eval,
+                            ).withOpacity(0.9),
                             fontSize: 21,
                             fontWeight: FontWeight.normal,
                           ),
