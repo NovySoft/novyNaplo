@@ -37,7 +37,7 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
         ),
       );
     else if (globals.examsCardTheme == "Dark") {
-      globals.examsCardTheme = "Véletlenszerű";
+      globals.examsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "examsCardTheme",
         globals.examsCardTheme,

@@ -86,9 +86,10 @@ class _HomeworkTabState extends State<HomeworkTab> {
       );
       return SafeArea(
         child: AnimatedHomeworkCard(
+          homework: globalHomework[index],
           dueOver: dueOver,
           title: globalHomework[index].subject.name,
-          subTitle: subTitle, //lessonsList[0][index].classroom,
+          subTitle: subTitle,
           color: color,
           heroAnimation: AlwaysStoppedAnimation(0),
           onPressed: HomeworkDetailTab(

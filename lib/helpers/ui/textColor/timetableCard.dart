@@ -5,7 +5,7 @@ import 'package:novynaplo/helpers/ui/subjectColor.dart';
 
 Color getTimetableCardTextColor({@required Lesson lesson}) {
   Color color = Colors.black;
-  if (globals.timetableTextColSubject) {
+  if (globals.timetableTextColSubject && globals.timetableCardTheme == "Dark") {
     color = getColorBasedOnSubject(lesson.subject.fullName.toLowerCase());
   } else if (globals.timetableCardTheme == "Dark") {
     color = Colors.grey[350];

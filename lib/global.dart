@@ -30,7 +30,7 @@ String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
 String timetableCardTheme = "Subject"; //Timetable card's theme
-String homeworkCardTheme = "Véletlenszerű"; //Homework card's theme
+String homeworkCardTheme = "Subject"; //Homework card's theme
 String noticesAndEventsCardTheme =
     "Véletlenszerű"; //Notices and exams card's theme
 String examsCardTheme = "Subject"; //Exams card's theme
@@ -38,7 +38,9 @@ String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
 bool timetableTextColSubject =
     false; //Timetable text color based on subject color?
 bool marksTextColSubject = false; //Marks text color based on subject color?
-bool examsTextColSubject = false; //Marks text color based on subject color?
+bool examsTextColSubject = false; //Exams text color based on subject color?
+bool homeworkTextColSubject =
+    false; //Homework text color based on subject color?
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -222,6 +224,17 @@ Future<void> setGlobals() async {
     examsTextColSubject,
   );
 
+  if (prefs.getBool("homeworkTextColSubject") == null) {
+    homeworkTextColSubject = false;
+    await prefs.setBool("homeworkTextColSubject", examsTextColSubject);
+  } else {
+    examsTextColSubject = prefs.getBool("homeworkTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "examsTextColSubject",
+    examsTextColSubject,
+  );
+
   if (prefs.getString("howManyGraph") == null) {
     howManyGraph = "Kör diagram";
     prefs.setString("howManyGraph", howManyGraph);
@@ -294,7 +307,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("homeworkCardTheme") == null) {
-    homeworkCardTheme = "Véletlenszerű";
+    homeworkCardTheme = "Subject";
     prefs.setString("homeworkCardTheme", homeworkCardTheme);
   } else {
     homeworkCardTheme = prefs.getString("homeworkCardTheme");
@@ -305,7 +318,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("examsCardTheme") == null) {
-    examsCardTheme = "Véletlenszerű";
+    examsCardTheme = "Subject";
     prefs.setString("examsCardTheme", examsCardTheme);
   } else {
     examsCardTheme = prefs.getString("examsCardTheme");

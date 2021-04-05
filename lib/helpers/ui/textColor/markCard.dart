@@ -5,7 +5,7 @@ import 'package:novynaplo/global.dart' as globals;
 
 Color getMarkCardTextColor({@required Evals eval}) {
   Color color = Colors.black;
-  if (globals.marksTextColSubject) {
+  if (globals.marksTextColSubject && globals.markCardTheme == "Dark") {
     color = getColorBasedOnSubject(eval.subject.fullName.toLowerCase());
   } else if (globals.markCardTheme == "Dark") {
     color = Colors.grey[350];

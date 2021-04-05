@@ -4,7 +4,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/helpers/ui/textColor/examsCard.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedExamsCard extends StatelessWidget {
   AnimatedExamsCard({

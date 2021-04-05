@@ -187,7 +187,7 @@ class _UIsettingsState extends State<UIsettings> {
     }
     //Homework card
     if (globals.homeworkCardTheme == "Dark") {
-      globals.homeworkCardTheme = "Véletlenszerű";
+      globals.homeworkCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "homeworkCardTheme",
         globals.homeworkCardTheme,
@@ -197,9 +197,21 @@ class _UIsettingsState extends State<UIsettings> {
         globals.homeworkCardTheme,
       );
     }
+    //Homework card text
+    if (globals.homeworkTextColSubject) {
+      globals.homeworkTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "homeworkTextColSubject",
+        globals.homeworkTextColSubject,
+      );
+      globals.prefs.setBool(
+        "homeworkTextColSubject",
+        globals.homeworkTextColSubject,
+      );
+    }
     //Exam card
     if (globals.examsCardTheme == "Dark") {
-      globals.examsCardTheme = "Véletlenszerű";
+      globals.examsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "examsCardTheme",
         globals.examsCardTheme,

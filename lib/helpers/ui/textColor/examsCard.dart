@@ -5,7 +5,7 @@ import 'package:novynaplo/global.dart' as globals;
 
 Color getExamsCardTextColor({@required Exam exam}) {
   Color color = Colors.black;
-  if (globals.examsTextColSubject) {
+  if (globals.examsTextColSubject && globals.examsCardTheme == "Dark") {
     color = getColorBasedOnSubject(exam.subject.fullName.toLowerCase());
   } else if (globals.examsCardTheme == "Dark") {
     color = Colors.grey[350];

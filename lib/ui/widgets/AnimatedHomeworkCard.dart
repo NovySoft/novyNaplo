@@ -1,8 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/helpers/ui/textColor/homeworkCard.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedHomeworkCard extends StatelessWidget {
   AnimatedHomeworkCard({
@@ -12,6 +13,7 @@ class AnimatedHomeworkCard extends StatelessWidget {
     this.onPressed,
     this.heroAnimation,
     this.dueOver,
+    this.homework,
   });
 
   final String title, subTitle;
@@ -19,6 +21,7 @@ class AnimatedHomeworkCard extends StatelessWidget {
   final Animation<double> heroAnimation;
   final Widget onPressed;
   final bool dueOver;
+  final Homework homework;
 
   @override
   Widget build(context) {
@@ -66,10 +69,9 @@ class AnimatedHomeworkCard extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color:
-                                            globals.homeworkCardTheme == "Dark"
-                                                ? Colors.grey[350]
-                                                : Colors.black,
+                                        color: getHomeworkCardTextColor(
+                                          hw: homework,
+                                        ),
                                         fontSize: 25.0),
                                   ),
                                   Text(
@@ -78,10 +80,9 @@ class AnimatedHomeworkCard extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: globals.homeworkCardTheme ==
-                                                "Dark"
-                                            ? Colors.grey[350].withOpacity(0.9)
-                                            : Colors.black54,
+                                        color: getHomeworkCardTextColor(
+                                          hw: homework,
+                                        ).withOpacity(0.9),
                                         fontSize: 20.0),
                                   ),
                                 ]),
