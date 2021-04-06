@@ -1,4 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/data/models/subject.dart';
 
 var chartColorList = [
   charts.MaterialPalette.green.shadeDefault,
@@ -25,8 +26,9 @@ class LinearMarkChartData {
   final int count;
   final double value;
   String id;
+  Subject subject;
 
-  LinearMarkChartData(this.count, this.value, {this.id});
+  LinearMarkChartData(this.count, this.value, {this.id, this.subject});
 
   @override
   String toString() {

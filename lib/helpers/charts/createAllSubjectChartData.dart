@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:novynaplo/helpers/logicAndMath/getRandomBetween.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/ui/subjectColor.dart';
 
 //TODO: Refactor
 List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
@@ -15,7 +16,7 @@ List<charts.Series<LinearMarkChartData, int>> createAllSubjectChartData(
     numVal = 0;
     oszto = 0;
     subjectMarks.add([]);
-    subjectMarks[index].add(n[0].subject.name);
+    subjectMarks[index].add(n[0].subject);
     for (var y in n) {
       numVal += y.numberValue * y.weight / 100;
       oszto += 1 * y.weight / 100;
@@ -36,7 +37,14 @@ List<LinearMarkChartData> makeLinearMarkChartData(var list) {
   int locIndex = 0;
   for (var n in list) {
     if (locIndex != 0 && !n.isNaN) {
-      returnList.add(new LinearMarkChartData(locIndex - 1, n, id: list[0]));
+      returnList.add(
+        new LinearMarkChartData(
+          locIndex - 1,
+          n,
+          id: list[0].name,
+          subject: list[0],
+        ),
+      );
     }
     locIndex++;
   }
@@ -47,54 +55,29 @@ List<charts.Series<LinearMarkChartData, int>> makeChartReturnList(var input) {
   input.removeWhere((item) => item.length == 0 || item == []);
   List<charts.Series<LinearMarkChartData, int>> returnList = [];
   List<LinearMarkChartData> tempList = [];
-  var chartTempList = [
-    charts.MaterialPalette.green.shadeDefault,
-    charts.MaterialPalette.blue.shadeDefault,
-    charts.MaterialPalette.red.shadeDefault,
-    charts.MaterialPalette.deepOrange.shadeDefault,
-    charts.MaterialPalette.lime.shadeDefault,
-    charts.MaterialPalette.purple.shadeDefault,
-    charts.MaterialPalette.cyan.shadeDefault,
-    charts.MaterialPalette.yellow.shadeDefault,
-    charts.MaterialPalette.indigo.shadeDefault,
-    charts.MaterialPalette.pink.shadeDefault,
-    charts.MaterialPalette.teal.shadeDefault,
-  ];
-  // ignore: unused_local_variable
-  int index = 0;
+
   for (var n in input) {
     tempList = [];
     tempList.addAll(n);
-    if (chartTempList.length == 0) {
-      chartTempList = [
-        charts.MaterialPalette.green.shadeDefault,
-        charts.MaterialPalette.blue.shadeDefault,
-        charts.MaterialPalette.red.shadeDefault,
-        charts.MaterialPalette.deepOrange.shadeDefault,
-        charts.MaterialPalette.lime.shadeDefault,
-        charts.MaterialPalette.purple.shadeDefault,
-        charts.MaterialPalette.cyan.shadeDefault,
-        charts.MaterialPalette.yellow.shadeDefault,
-        charts.MaterialPalette.indigo.shadeDefault,
-        charts.MaterialPalette.pink.shadeDefault,
-        charts.MaterialPalette.teal.shadeDefault,
-      ];
-    }
-    var rndInt = getRandomIntBetween(0, chartTempList.length);
-    var color = chartTempList[rndInt];
-    chartTempList.removeAt(rndInt);
+    Color subjColor = getColorBasedOnSubject(tempList[0].subject);
+    charts.Color color = charts.Color(
+      r: subjColor.red,
+      g: subjColor.green,
+      b: subjColor.blue,
+      a: subjColor.alpha,
+    );
     //Subject name splitting
     String subjectName = tempList[0].id;
     if (subjectName.length > globals.splitChartLength) {
       subjectName = subjectName.substring(0, globals.splitChartLength) + "...";
     }
     returnList.add(new charts.Series<LinearMarkChartData, int>(
-        id: subjectName,
-        colorFn: (_, __) => color,
-        domainFn: (LinearMarkChartData marks, _) => marks.count,
-        measureFn: (LinearMarkChartData marks, _) => marks.value,
-        data: tempList));
-    index++;
+      id: subjectName,
+      colorFn: (_, __) => color,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
+      data: tempList,
+    ));
   }
   return returnList;
 }
