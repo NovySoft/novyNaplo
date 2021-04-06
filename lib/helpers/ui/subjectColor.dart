@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart' as rndColor;
 import 'package:novynaplo/helpers/logicAndMath/getRandomBetween.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 
 Map<String, int> subjectColorMap = new Map<String, int>();
 
-Color getColorBasedOnSubject(String subject) {
+Color getColorBasedOnSubject(Subject subject) {
   Color color = Colors.purple;
-  if (subjectColorMap[subject] == null) {
+  if (subjectColorMap[subject.category.name] == null) {
     //Create color and add it to db
     bool found = false;
     for (var i = 0; i < rndColor.myListOfRandomColors.length; i++) {
@@ -37,14 +38,15 @@ Color getColorBasedOnSubject(String subject) {
         ),
       );
     }
-    subjectColorMap[subject] = color.value;
+    subjectColorMap[subject.category.name] = color.value;
     DatabaseHelper.insertColor(
-      subject,
+      subject.category.name,
       color.value,
+      subject.fullName,
     );
   } else {
     //It already exists, no worries
-    color = Color(subjectColorMap[subject]);
+    color = Color(subjectColorMap[subject.category.name]);
   }
   return color;
 }

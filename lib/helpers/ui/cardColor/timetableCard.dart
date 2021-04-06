@@ -17,7 +17,7 @@ Color getTimetableCardColor({@required Lesson lesson, @required int index}) {
   } else if (globals.timetableCardTheme == "Dark") {
     color = Color(0xFF212121);
   } else if (globals.timetableCardTheme == "Subject") {
-    color = getColorBasedOnSubject(lesson.subject.fullName.toLowerCase());
+    color = getColorBasedOnSubject(lesson.subject);
   }
   return color;
 }

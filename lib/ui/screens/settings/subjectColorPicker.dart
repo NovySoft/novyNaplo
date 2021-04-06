@@ -5,6 +5,20 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 
+class SubjColor {
+  String id;
+  int color;
+  String name;
+  SubjColor({
+    this.id,
+    this.color,
+    this.name,
+  });
+
+  @override
+  String toString() => "$id:$color:$name";
+}
+
 class SubjectColorPicker extends StatefulWidget {
   @override
   _SubjectColorPickerState createState() => _SubjectColorPickerState();
@@ -14,20 +28,22 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
   // create some values
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
-  List<MapEntry<String, int>> colorList = [];
+  List<SubjColor> colorList = [];
+  Map<String, String> idToName = new Map<String, String>();
 
-  void showColorPickerDialog(MapEntry<String, int> input) {
-    pickerColor = Color(input.value);
+  void showColorPickerDialog(SubjColor input) {
+    pickerColor = Color(input.color);
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(capitalize(input.key)),
+          title: Text(capitalize(input.name)),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: pickerColor,
               onColorChanged: changeColor,
               showLabel: true,
+              enableAlpha: false,
               pickerAreaHeightPercent: 0.8,
             ),
           ),
@@ -36,13 +52,14 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
               child: Text('OK'),
               onPressed: () {
                 setState(() {
-                  subjectColors.subjectColorMap[input.key] = pickerColor.value;
+                  subjectColors.subjectColorMap[input.id] = pickerColor.value;
                   reFreshColors();
                 });
                 //Also update database
                 DatabaseHelper.insertColor(
-                  input.key,
+                  input.id,
                   pickerColor.value,
+                  input.name,
                 );
                 Navigator.of(context).pop();
               },
@@ -55,14 +72,31 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
 
   @override
   void initState() {
-    reFreshColors();
+    getIdToName();
     super.initState();
+  }
+
+  void getIdToName() async {
+    idToName = await DatabaseHelper.getColorNames();
+    reFreshColors();
   }
 
   void reFreshColors() {
     colorList = [];
-    colorList.addAll(subjectColors.subjectColorMap.entries);
-    colorList.sort((a, b) => a.key.compareTo(b.key));
+    for (var n in subjectColors.subjectColorMap.entries) {
+      colorList.add(SubjColor(
+        id: n.key,
+        color: n.value,
+        name: idToName[n.key],
+      ));
+    }
+    setState(() {
+      colorList.sort(
+        (a, b) => a.name.toLowerCase().compareTo(
+              b.name.toLowerCase(),
+            ),
+      );
+    });
   }
 
   // ValueChanged<Color> callback
@@ -84,17 +118,30 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
             onTap: () {
               showColorPickerDialog(colorList[index]);
             },
-            leading: Text(
-              "${capitalize(colorList[index].key)}:",
-              style: TextStyle(
-                fontSize: 16,
-              ),
+            leading: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${colorList[index].name}:",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  "(${colorList[index].id.length > 25 ? colorList[index].id.substring(0, 25) + '...' : colorList[index].id})",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
             trailing: Container(
               height: 30,
               width: 30,
               decoration: BoxDecoration(
-                color: Color(colorList[index].value),
+                color: Color(colorList[index].color),
                 shape: BoxShape.circle,
               ),
             ),

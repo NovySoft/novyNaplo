@@ -570,10 +570,21 @@ class _StatisticsTabState extends State<StatisticsTab>
     if (index >= allParsedSubjectsWithoutZeros.length + 1) {
       return SizedBox(height: 100);
     }
-    Color currColor = getStatiscticsCardColor(index);
+    Color currColor = getStatiscticsCardColor(
+      index,
+      context: context,
+      eval: index == 0
+          ? Evals(
+              subject: Subject(fullName: "-contracted-"),
+            )
+          : allParsedSubjectsWithoutZeros[index - 1][0],
+    );
     if (index == 0) {
       return SafeArea(
         child: AnimatedChartsTitleCard(
+          eval: Evals(
+            subject: Subject(fullName: "-contracted-"),
+          ),
           title: capitalize(getTranslatedString("contracted")),
           color: currColor,
           heroAnimation: AlwaysStoppedAnimation(0),
@@ -598,6 +609,7 @@ class _StatisticsTabState extends State<StatisticsTab>
     }
     return SafeArea(
       child: AnimatedChartsTitleCard(
+        eval: allParsedSubjectsWithoutZeros[index - 1][0],
         title: capitalize(
             allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
         color: currColor,

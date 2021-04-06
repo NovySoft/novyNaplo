@@ -16,7 +16,7 @@ Color getHomeworkCardColor({@required Homework hw, @required int index}) {
   } else if (globals.homeworkCardTheme == "Dark") {
     color = Color(0xFF212121);
   } else if (globals.homeworkCardTheme == "Subject") {
-    color = getColorBasedOnSubject(hw.subject.fullName.toLowerCase());
+    color = getColorBasedOnSubject(hw.subject);
   }
   return color;
 }

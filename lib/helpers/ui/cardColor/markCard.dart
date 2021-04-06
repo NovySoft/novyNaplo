@@ -58,7 +58,7 @@ Color getMarkCardColor({@required Evals eval, @required int index}) {
   } else if (globals.markCardTheme == "Dark") {
     color = Color(0xFF212121);
   } else if (globals.markCardTheme == "Subject") {
-    color = getColorBasedOnSubject(eval.subject.fullName.toLowerCase());
+    color = getColorBasedOnSubject(eval.subject);
   } else {
     color = Colors.red;
   }

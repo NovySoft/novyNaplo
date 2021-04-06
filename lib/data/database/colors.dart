@@ -11,20 +11,35 @@ Future<Map<String, int>> getAllColors() async {
   Map<String, int> output = new Map<String, int>();
   //Ez nem tudom mi a tök, de nem érdekel, mert működik
   for (var i = 0; i < maps.length; i++) {
-    output[maps[i]["Name"]] = maps[i]["Color"];
+    output[maps[i]["id"]] = maps[i]["color"];
   }
   return output;
 }
 
-Future<void> insertColor(String name, int color) async {
+Future<void> insertColor(String id, int color, String name) async {
   FirebaseCrashlytics.instance.log("insertColor");
 
   await globals.db.insert(
     'Colors',
     {
-      "Name": name,
-      "Color": color,
+      "id": id,
+      "color": color,
+      "name": name,
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
+}
+
+Future<Map<String, String>> getColorNames() async {
+  FirebaseCrashlytics.instance.log("getColorNames");
+
+  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    'SELECT id, name FROM Colors',
+  );
+  Map<String, String> output = new Map<String, String>();
+  for (var i = 0; i < maps.length; i++) {
+    output[maps[i]["id"]] = maps[i]["name"];
+  }
+
+  return output;
 }

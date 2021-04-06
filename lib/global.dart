@@ -34,11 +34,13 @@ String homeworkCardTheme = "Subject"; //Homework card's theme
 String noticesAndEventsCardTheme =
     "Véletlenszerű"; //Notices and exams card's theme
 String examsCardTheme = "Subject"; //Exams card's theme
-String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
+String statisticsCardTheme = "Subject"; //Exams card's theme
 bool timetableTextColSubject =
     false; //Timetable text color based on subject color?
 bool marksTextColSubject = false; //Marks text color based on subject color?
 bool examsTextColSubject = false; //Exams text color based on subject color?
+bool statisticsTextColSubject =
+    false; //Statistics card text color based on subject color?
 bool homeworkTextColSubject =
     false; //Homework text color based on subject color?
 String howManyGraph =
@@ -224,15 +226,26 @@ Future<void> setGlobals() async {
     examsTextColSubject,
   );
 
+  if (prefs.getBool("statisticsTextColSubject") == null) {
+    statisticsTextColSubject = false;
+    await prefs.setBool("statisticsTextColSubject", statisticsTextColSubject);
+  } else {
+    statisticsTextColSubject = prefs.getBool("statisticsTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "statisticsTextColSubject",
+    statisticsTextColSubject,
+  );
+
   if (prefs.getBool("homeworkTextColSubject") == null) {
     homeworkTextColSubject = false;
-    await prefs.setBool("homeworkTextColSubject", examsTextColSubject);
+    await prefs.setBool("homeworkTextColSubject", homeworkTextColSubject);
   } else {
     examsTextColSubject = prefs.getBool("homeworkTextColSubject");
   }
   FirebaseCrashlytics.instance.setCustomKey(
-    "examsTextColSubject",
-    examsTextColSubject,
+    "homeworkTextColSubject",
+    homeworkTextColSubject,
   );
 
   if (prefs.getString("howManyGraph") == null) {
@@ -329,7 +342,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("statisticsCardTheme") == null) {
-    statisticsCardTheme = "Véletlenszerű";
+    statisticsCardTheme = "Subject";
     prefs.setString("statisticsCardTheme", statisticsCardTheme);
   } else {
     statisticsCardTheme = prefs.getString("statisticsCardTheme");

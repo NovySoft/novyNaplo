@@ -16,7 +16,7 @@ Color getExamsCardColor(int index, {@required Exam exam}) {
   } else if (globals.examsCardTheme == "Dark") {
     color = Color(0xFF212121);
   } else if (globals.examsCardTheme == "Subject") {
-    color = getColorBasedOnSubject(exam.subject.fullName.toLowerCase());
+    color = getColorBasedOnSubject(exam.subject);
   }
   return color;
 }

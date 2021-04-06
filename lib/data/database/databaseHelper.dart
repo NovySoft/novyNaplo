@@ -76,5 +76,8 @@ class DatabaseHelper {
   static Future<void> Function(Student, bool) setFetched = users.setFetched;
 
   static Future<Map<String, int>> Function() getAllColors = colors.getAllColors;
-  static Future<void> Function(String, int) insertColor = colors.insertColor;
+  static Future<void> Function(String, int, String) insertColor =
+      colors.insertColor;
+  static Future<Map<String, String>> Function() getColorNames =
+      colors.getColorNames;
 }

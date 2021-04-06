@@ -25,8 +25,7 @@ class _UIsettingsState extends State<UIsettings> {
         globals.homeworkCardTheme == "Dark" &&
         globals.examsCardTheme == "Dark" &&
         globals.noticesAndEventsCardTheme == "Dark" &&
-        globals.statisticsCardTheme == "Dark" &&
-        globals.timetableTextColSubject) {
+        globals.statisticsCardTheme == "Dark") {
       status = Icon(MdiIcons.check);
     } else {
       status = Icon(
@@ -94,6 +93,16 @@ class _UIsettingsState extends State<UIsettings> {
       "homeworkCardTheme",
       globals.homeworkCardTheme,
     );
+    //Homework text
+    globals.homeworkTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "homeworkTextColSubject",
+      globals.homeworkTextColSubject,
+    );
+    globals.prefs.setBool(
+      "homeworkTextColSubject",
+      globals.homeworkTextColSubject,
+    );
     //Exams
     globals.examsCardTheme = "Dark";
     FirebaseCrashlytics.instance.setCustomKey(
@@ -133,6 +142,16 @@ class _UIsettingsState extends State<UIsettings> {
     globals.prefs.setString(
       "statisticsCardTheme",
       globals.statisticsCardTheme,
+    );
+    //Statistics text
+    globals.statisticsTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "statisticsTextColSubject",
+      globals.statisticsTextColSubject,
+    );
+    globals.prefs.setBool(
+      "statisticsTextColSubject",
+      globals.statisticsTextColSubject,
     );
   }
 
@@ -247,7 +266,7 @@ class _UIsettingsState extends State<UIsettings> {
     }
     //Statistics
     if (globals.statisticsCardTheme == "Dark") {
-      globals.statisticsCardTheme = "Véletlenszerű";
+      globals.statisticsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "statisticsCardTheme",
         globals.statisticsCardTheme,
@@ -255,6 +274,18 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "statisticsCardTheme",
         globals.statisticsCardTheme,
+      );
+    }
+    //Statistics card text
+    if (globals.statisticsTextColSubject) {
+      globals.statisticsTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "statisticsTextColSubject",
+        globals.statisticsTextColSubject,
+      );
+      globals.prefs.setBool(
+        "statisticsTextColSubject",
+        globals.statisticsTextColSubject,
       );
     }
   }

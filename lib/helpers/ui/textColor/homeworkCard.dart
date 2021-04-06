@@ -6,7 +6,7 @@ import 'package:novynaplo/global.dart' as globals;
 Color getHomeworkCardTextColor({@required Homework hw}) {
   Color color = Colors.black;
   if (globals.homeworkTextColSubject && globals.homeworkCardTheme == "Dark") {
-    color = getColorBasedOnSubject(hw.subject.fullName.toLowerCase());
+    color = getColorBasedOnSubject(hw.subject);
   } else if (globals.homeworkCardTheme == "Dark") {
     color = Colors.grey[350];
   }

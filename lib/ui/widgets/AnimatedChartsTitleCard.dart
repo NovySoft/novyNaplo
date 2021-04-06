@@ -1,7 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/helpers/ui/textColor/statisticsCard.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 class AnimatedChartsTitleCard extends StatelessWidget {
   AnimatedChartsTitleCard({
@@ -9,12 +10,14 @@ class AnimatedChartsTitleCard extends StatelessWidget {
     this.color,
     this.onPressed,
     this.heroAnimation,
+    this.eval,
   });
 
   final String title;
   final Color color;
   final Animation<double> heroAnimation;
   final Widget onPressed;
+  final Evals eval;
 
   @override
   Widget build(context) {
@@ -62,9 +65,7 @@ class AnimatedChartsTitleCard extends StatelessWidget {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: globals.statisticsCardTheme == "Dark"
-                                      ? Colors.grey[350]
-                                      : Colors.black,
+                                  color: getStatisticsCardTextColor(eval: eval),
                                   fontSize: 25.0,
                                 ),
                               ),
