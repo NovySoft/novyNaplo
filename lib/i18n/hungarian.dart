@@ -412,5 +412,8 @@ final Map<String, String> translation = {
   "disablePerformance":
       "Ha kikapcsolod a teljesítmény figyelést, akkor nem látjuk milyen gyors az alkalmazás, és nem tudjuk javítani a betöltési időket.",
   "subjectColors": "Tantárgyak színe",
-  "textColSubject": "Szöveg színe megegyezik a tantárgy színével"
+  "textColSubject": "Szöveg színe megegyezik a tantárgy színével",
+  "categoryEdit": "Egy kategóriát szerkesztesz!",
+  "category": "Kategória",
+  "overwriteMultCols": "Több színt készülsz felülírni!",
 };

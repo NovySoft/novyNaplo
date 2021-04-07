@@ -30,6 +30,5 @@ List<Color> getRandomColors(int amount) {
   if (amount == null) amount = 10;
   return List<Color>.generate(amount, (index) {
     return myListOfRandomColors[_random.nextInt(myListOfRandomColors.length)];
-    //return _myListOfRandomColors[2];
   });
 }

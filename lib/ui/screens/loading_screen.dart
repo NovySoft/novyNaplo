@@ -179,6 +179,7 @@ class _LoadingPageState extends State<LoadingPage> {
         loadingText = getTranslatedString("readTimetableColors");
       });
       subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
+      subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       globals.isDataLoaded = true;

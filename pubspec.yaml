@@ -56,7 +56,7 @@ dependencies:
       ref: 0.4.1
   path_provider: any
   open_file: any
-  fluttertoast: any
+  fluttertoast: 7.1.6
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: 0.4.0

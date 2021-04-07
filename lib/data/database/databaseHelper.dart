@@ -7,6 +7,7 @@ import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/subjectColor.dart';
 
 import 'absences.dart' as absences;
 import 'average.dart' as average;
@@ -78,6 +79,8 @@ class DatabaseHelper {
   static Future<Map<String, int>> Function() getAllColors = colors.getAllColors;
   static Future<void> Function(String, int, String) insertColor =
       colors.insertColor;
-  static Future<Map<String, String>> Function() getColorNames =
+  static Future<List<SubjectColor>> Function() getColorNames =
       colors.getColorNames;
+  static Future<void> Function(String, int) updateColorCategory =
+      colors.updateColorCategory;
 }

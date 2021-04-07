@@ -46,12 +46,12 @@ Future<void> initDatabase() async {
         'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,nickname TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,password TEXT,school TEXT,iv TEXT,"current" INTEGER DEFAULT 0,fetched INTEGER DEFAULT 0);',
       );
       await db.execute(
-        'CREATE TABLE Colors (id TEXT PRIMARY KEY,color INTEGER,name TEXT);',
+        'CREATE TABLE Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
       );
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
       await db.execute(
-        'CREATE TABLE IF NOT EXISTS Colors (id TEXT PRIMARY KEY,color INTEGER,name TEXT);',
+        'CREATE TABLE IF NOT EXISTS Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
       );
     },
     // Set the version. This executes the onCreate function and provides a
