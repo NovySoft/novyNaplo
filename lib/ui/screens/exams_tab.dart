@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/exam.dart';
@@ -20,10 +21,45 @@ class ExamsTab extends StatefulWidget {
 }
 
 class _ExamsTabState extends State<ExamsTab> {
+  bool listOpen = false;
+  bool animationDone = true;
+  final GlobalKey<AnimatedListState> _animatedListkey =
+      GlobalKey<AnimatedListState>(debugLabel: "examAnimList");
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Exams");
     super.initState();
+  }
+
+  void handleListOpen(int lastNotDone) {
+    if (!animationDone) return;
+    if (listOpen) {
+      for (int i = allParsedExams.length - (lastNotDone + 1) - 1; i >= 0; i--) {
+        _animatedListkey.currentState.removeItem(i, (context, animation) {
+          return ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Curves.ease,
+            ),
+            child: examCardBuilder(
+              exam: allParsedExams[i + lastNotDone + 1],
+              context: context,
+              isDone: true,
+              index: i + lastNotDone + 1,
+            ),
+          );
+        });
+      }
+    } else {
+      for (var i = 0; i < allParsedExams.length - (lastNotDone + 1); i++) {
+        _animatedListkey.currentState.insertItem(i);
+      }
+    }
+    setState(() {
+      listOpen = !listOpen;
+      animationDone = true;
+    });
   }
 
   @override
@@ -43,12 +79,130 @@ class _ExamsTabState extends State<ExamsTab> {
     if (allParsedExams.length == 0) {
       return noExam();
     } else {
-      return ListView.builder(
-        itemCount: allParsedExams.length,
-        padding: EdgeInsets.symmetric(vertical: 12),
-        itemBuilder: _examBuilder,
+      int lastNotDone = allParsedExams.lastIndexWhere(
+        (element) {
+          return DateTime.now().isBefore(element.dateOfWriting);
+        },
+      );
+      Widget currentExams;
+      if (lastNotDone == -1) {
+        //Minden készen van
+        currentExams = SizedBox(
+          height: MediaQuery.of(context).size.height / 4,
+          child: allDone(),
+        );
+      } else {
+        currentExams = ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: lastNotDone + 1,
+          itemBuilder: (context, index) {
+            return examCardBuilder(
+              exam: allParsedExams[index],
+              context: context,
+              isDone: false,
+              index: index,
+            );
+          },
+        );
+      }
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
+          children: [
+            currentExams,
+            GestureDetector(
+              onTap: () {
+                handleListOpen(lastNotDone);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      "${getTranslatedString('doneExams')}:",
+                      textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                          ? TextAlign.center
+                          : TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                      ),
+                    ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 150),
+                      firstChild: const Icon(
+                        Icons.keyboard_arrow_up,
+                        size: 30,
+                      ),
+                      secondChild: const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 30,
+                      ),
+                      crossFadeState: listOpen
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            AnimatedList(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              key: _animatedListkey,
+              itemBuilder: (context, index, animation) {
+                return ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.ease,
+                  ),
+                  child: examCardBuilder(
+                    exam: allParsedExams[index + lastNotDone + 1],
+                    context: context,
+                    isDone: true,
+                    index: index + lastNotDone + 1,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       );
     }
+  }
+
+  Widget examCardBuilder({
+    @required Exam exam,
+    @required BuildContext context,
+    @required bool isDone,
+    @required int index,
+  }) {
+    DateTime examDate = exam.dateOfWriting;
+    String subtitle =
+        "${examDate.toDayOnlyString()} ${parseIntToWeekdayString(examDate.weekday)} (${exam.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
+    Color currColor = getExamsCardColor(
+      index,
+      exam: exam,
+    );
+    return SafeArea(
+      child: AnimatedExamsCard(
+        isDone: isDone,
+        title: exam.theme,
+        subTitle: subtitle,
+        color: currColor,
+        exam: exam,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: ExamsDetailTab(
+          color: currColor,
+          exam: exam,
+        ),
+      ),
+    );
   }
 
   Widget noExam() {
@@ -69,40 +223,24 @@ class _ExamsTabState extends State<ExamsTab> {
     );
   }
 
-  Widget _examBuilder(BuildContext context, int index) {
-    //TODO: Matrix and title like in absences
-    if (index >= allParsedExams.length) {
-      return SizedBox(
-        height: 100,
-      );
-    } else {
-      bool isDone = false;
-      DateTime examDate = allParsedExams[index].dateOfWriting;
-      String subtitle =
-          "${examDate.toDayOnlyString()} ${parseIntToWeekdayString(examDate.weekday)} (${allParsedExams[index].lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})";
-      if (DateTime.now().compareTo(
-              allParsedExams[index].dateOfWriting.add(Duration(days: 1))) >
-          0) {
-        isDone = true;
-      }
-      Color currColor = getExamsCardColor(
-        index,
-        exam: allParsedExams[index],
-      );
-      return SafeArea(
-        child: AnimatedExamsCard(
-          isDone: isDone,
-          title: allParsedExams[index].theme,
-          subTitle: subtitle,
-          color: currColor,
-          exam: allParsedExams[index],
-          heroAnimation: AlwaysStoppedAnimation(0),
-          onPressed: ExamsDetailTab(
-            color: currColor,
-            exam: allParsedExams[index],
+  Widget allDone() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MdiIcons.clipboardCheck,
+            size: 50,
           ),
-        ),
-      );
-    }
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            getTranslatedString("allDone"),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
   }
 }

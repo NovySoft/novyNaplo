@@ -416,4 +416,7 @@ final Map<String, String> translation = {
   "categoryEdit": "Egy kategóriát szerkesztesz!",
   "category": "Kategória",
   "overwriteMultCols": "Több színt készülsz felülírni!",
+  "allDone": "Minden készen van!",
+  "noColorYet": "Még nincs szín!",
+  "doneExams": "Már megírt dolgozatok",
 };

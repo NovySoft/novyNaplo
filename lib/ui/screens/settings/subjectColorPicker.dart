@@ -1,5 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/subjectColor.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
@@ -84,6 +86,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("Shown SubjectColorPicker");
     _listOpenList = List.filled(subjectColors.subjectColorList.length, false);
     _listKeyList = [];
     for (var i = 0; i < subjectColors.subjectColorList.length; i++) {
@@ -110,14 +113,15 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
   }
 
   List<List<SubjectColor>> makeColorsMatrix(List<SubjectColor> input) {
+    if (input.length == 0) return [];
     List<List<SubjectColor>> output = [[]];
-    String categoryBefore = input[0].category;
     int index = 0;
     input.sort(
       (a, b) => a.category.toLowerCase().compareTo(
             b.category.toLowerCase(),
           ),
     );
+    String categoryBefore = input[0].category;
     for (var n in input) {
       if (!(n.category == categoryBefore)) {
         output[index].sort(
@@ -131,7 +135,6 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
       }
       output[index].add(n);
     }
-
     return output;
   }
 
@@ -197,103 +200,50 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
       appBar: AppBar(
         title: Text(getTranslatedString("subjectColors")),
       ),
-      body: ListView.separated(
-        separatorBuilder: (_, __) => Divider(),
-        itemCount: colorMatrix.length,
-        itemBuilder: (context, index) {
-          if (colorMatrix[index].length == 1) {
-            return ListTile(
-              onTap: () {
-                showColorPickerDialog(colorMatrix[index][0]);
-              },
-              leading: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: colorMatrix.length == 0
+          ? Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "${colorMatrix[index][0].id}:",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  Icon(
+                    MdiIcons.emoticonSadOutline,
+                    size: 50,
                   ),
-                  Text(
-                    "(${colorMatrix[index][0].category.length > 25 ? colorMatrix[index][0].category.substring(0, 25) + '...' : colorMatrix[index][0].category})",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+                  SizedBox(height: 5),
+                  Text(getTranslatedString("noColorYet")),
                 ],
               ),
-              trailing: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Color(colorMatrix[index][0].color),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            );
-          } else {
-            Widget trailingWidget;
-            if (colorMatrix[index].map((e) => e.color).toSet().length > 1) {
-              trailingWidget = Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  GestureDetector(
+            )
+          : ListView.separated(
+              separatorBuilder: (_, __) => Divider(),
+              itemCount: colorMatrix.length,
+              itemBuilder: (context, index) {
+                if (colorMatrix[index].length == 1) {
+                  return ListTile(
                     onTap: () {
-                      ErrorToast.showErrorToast(
-                        getTranslatedString("overwriteMultCols"),
-                      );
-                      showColorPickerDialog(
-                        colorMatrix[index][0],
-                        isCategoryEdit: true,
-                      );
+                      showColorPickerDialog(colorMatrix[index][0]);
                     },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: colorMatrix[index]
-                              .map((e) => Color(e.color))
-                              .toList(),
+                    leading: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${colorMatrix[index][0].id}:",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                        shape: BoxShape.circle,
-                      ),
+                        Text(
+                          "(${colorMatrix[index][0].category.length > 25 ? colorMatrix[index][0].category.substring(0, 25) + '...' : colorMatrix[index][0].category})",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      animationHandler(index);
-                    },
-                    child: Icon(
-                      _listOpenList[index]
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              trailingWidget = Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      ErrorToast.showErrorToast(
-                        getTranslatedString("categoryEdit"),
-                      );
-                      showColorPickerDialog(
-                        colorMatrix[index][0],
-                        isCategoryEdit: true,
-                      );
-                    },
-                    child: Container(
+                    trailing: Container(
                       height: 30,
                       width: 30,
                       decoration: BoxDecoration(
@@ -301,77 +251,166 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                         shape: BoxShape.circle,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      animationHandler(index);
-                    },
-                    child: Icon(
-                      _listOpenList[index]
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                    ),
-                  ),
-                ],
-              );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ListTile(
-                  leading: Text(
-                    "${capitalize(colorMatrix[index][0].category)} (${colorMatrix[index].length}):",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  trailing: trailingWidget,
-                ),
-                AnimatedList(
-                  physics: NeverScrollableScrollPhysics(),
-                  key: _listKeyList[index],
-                  shrinkWrap: true,
-                  itemBuilder: (context, indexJ, animation) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.5, 0),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.ease,
-                      )),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.only(
-                          left: 30,
-                          right: 16,
+                  );
+                } else {
+                  Widget trailingWidget;
+                  if (colorMatrix[index].map((e) => e.color).toSet().length >
+                      1) {
+                    trailingWidget = Wrap(
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            ErrorToast.showErrorToast(
+                              getTranslatedString("overwriteMultCols"),
+                            );
+                            showColorPickerDialog(
+                              colorMatrix[index][0],
+                              isCategoryEdit: true,
+                            );
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: colorMatrix[index]
+                                    .map((e) => Color(e.color))
+                                    .toList(),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                        onTap: () {
-                          showColorPickerDialog(colorMatrix[index][indexJ]);
-                        },
+                        GestureDetector(
+                          onTap: () {
+                            animationHandler(index);
+                          },
+                          child: AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 150),
+                            firstChild: const Icon(
+                              Icons.keyboard_arrow_up,
+                              size: 30,
+                            ),
+                            secondChild: const Icon(
+                              Icons.keyboard_arrow_down,
+                              size: 30,
+                            ),
+                            crossFadeState: _listOpenList[index]
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    trailingWidget = Wrap(
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            ErrorToast.showErrorToast(
+                              getTranslatedString("categoryEdit"),
+                            );
+                            showColorPickerDialog(
+                              colorMatrix[index][0],
+                              isCategoryEdit: true,
+                            );
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Color(colorMatrix[index][0].color),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            animationHandler(index);
+                          },
+                          child: AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 150),
+                            firstChild: const Icon(
+                              Icons.keyboard_arrow_up,
+                              size: 30,
+                            ),
+                            secondChild: const Icon(
+                              Icons.keyboard_arrow_down,
+                              size: 30,
+                            ),
+                            crossFadeState: _listOpenList[index]
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ListTile(
                         leading: Text(
-                          "${colorMatrix[index][indexJ].id}:",
+                          "${capitalize(colorMatrix[index][0].category)} (${colorMatrix[index].length}):",
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                        trailing: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Color(colorMatrix[index][indexJ].color),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
+                        trailing: trailingWidget,
                       ),
-                    );
-                  },
-                ),
-              ],
-            );
-          }
-        },
-      ),
+                      AnimatedList(
+                        physics: NeverScrollableScrollPhysics(),
+                        key: _listKeyList[index],
+                        shrinkWrap: true,
+                        itemBuilder: (context, indexJ, animation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset(1.5, 0),
+                              end: Offset.zero,
+                            ).animate(CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.ease,
+                            )),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.only(
+                                left: 30,
+                                right: 16,
+                              ),
+                              onTap: () {
+                                showColorPickerDialog(
+                                    colorMatrix[index][indexJ]);
+                              },
+                              leading: Text(
+                                "${colorMatrix[index][indexJ].id}:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              trailing: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color:
+                                      Color(colorMatrix[index][indexJ].color),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
     );
   }
 }

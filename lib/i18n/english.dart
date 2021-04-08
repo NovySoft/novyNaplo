@@ -417,4 +417,7 @@ final Map<String, String> translation = {
   "categoryEdit": "You are editing a category!",
   "category": "Category",
   "overwriteMultCols": "You are overwriting multiple colors!",
+  "allDone": "All done!",
+  "noColorYet": "No color, yet!",
+  "doneExams": "Exams already taken",
 };
