@@ -1,5 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/exam.dart';
@@ -21,20 +21,26 @@ class ExamsTab extends StatefulWidget {
 }
 
 class _ExamsTabState extends State<ExamsTab> {
-  bool listOpen = false;
-  bool animationDone = true;
+  bool _listOpen = false;
+  bool _animationDone = true;
+  int lastNotDone = -1;
   final GlobalKey<AnimatedListState> _animatedListkey =
       GlobalKey<AnimatedListState>(debugLabel: "examAnimList");
 
   @override
   void initState() {
+    lastNotDone = allParsedExams.lastIndexWhere(
+      (element) {
+        return DateTime.now().isBefore(element.dateOfWriting);
+      },
+    );
     FirebaseCrashlytics.instance.log("Shown Exams");
     super.initState();
   }
 
-  void handleListOpen(int lastNotDone) {
-    if (!animationDone) return;
-    if (listOpen) {
+  void _handleListOpen() {
+    if (!_animationDone) return;
+    if (_listOpen) {
       for (int i = allParsedExams.length - (lastNotDone + 1) - 1; i >= 0; i--) {
         _animatedListkey.currentState.removeItem(i, (context, animation) {
           return ScaleTransition(
@@ -57,8 +63,8 @@ class _ExamsTabState extends State<ExamsTab> {
       }
     }
     setState(() {
-      listOpen = !listOpen;
-      animationDone = true;
+      _listOpen = !_listOpen;
+      _animationDone = true;
     });
   }
 
@@ -79,11 +85,6 @@ class _ExamsTabState extends State<ExamsTab> {
     if (allParsedExams.length == 0) {
       return noExam();
     } else {
-      int lastNotDone = allParsedExams.lastIndexWhere(
-        (element) {
-          return DateTime.now().isBefore(element.dateOfWriting);
-        },
-      );
       Widget currentExams;
       if (lastNotDone == -1) {
         //Minden készen van
@@ -116,7 +117,7 @@ class _ExamsTabState extends State<ExamsTab> {
             currentExams,
             GestureDetector(
               onTap: () {
-                handleListOpen(lastNotDone);
+                _handleListOpen();
               },
               child: Padding(
                 padding: EdgeInsets.only(left: 15.0),
@@ -143,7 +144,7 @@ class _ExamsTabState extends State<ExamsTab> {
                         Icons.keyboard_arrow_down,
                         size: 30,
                       ),
-                      crossFadeState: listOpen
+                      crossFadeState: _listOpen
                           ? CrossFadeState.showFirst
                           : CrossFadeState.showSecond,
                     ),

@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/models/homework.dart';
@@ -12,8 +13,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedHomeworkCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 
-//TODO make groups by date and also some kind of dropdown style lists
-//TODO: should also make a checkbox to save homework as selected
+//TODO: should also make a checkbox to save homework as done
 List<Homework> globalHomework = [];
 
 class HomeworkTab extends StatefulWidget {
@@ -25,8 +25,31 @@ class HomeworkTab extends StatefulWidget {
 }
 
 class _HomeworkTabState extends State<HomeworkTab> {
+  int lastTodoHw = 0;
+  List<Homework> currentHomework = [];
+  bool _listOpen = false;
+  bool _animationDone = true;
+  final GlobalKey<AnimatedListState> _animatedListkey =
+      GlobalKey<AnimatedListState>(debugLabel: "homeworkAnimList");
+
   @override
   void initState() {
+    currentHomework = List.from(globalHomework);
+    //Hide if it isn't needed
+    currentHomework.removeWhere((element) {
+      DateTime afterDue = element.dueDate;
+      if (globals.howLongKeepDataForHw != -1) {
+        afterDue =
+            afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
+        return (afterDue.compareTo(DateTime.now()) < 0);
+      } else {
+        return false;
+      }
+    });
+    lastTodoHw = currentHomework.lastIndexWhere((element) {
+      var left = element.dueDate.difference(DateTime.now());
+      return (left.inMinutes / 60 < 0);
+    });
     FirebaseCrashlytics.instance.log("Shown Homeworks");
     super.initState();
   }
@@ -44,61 +67,156 @@ class _HomeworkTabState extends State<HomeworkTab> {
     );
   }
 
+  void _handleListOpen() {
+    if (!_animationDone) return;
+    if (_listOpen) {
+      for (int i = lastTodoHw - 1; i >= 0; i--) {
+        _animatedListkey.currentState.removeItem(i, (context, animation) {
+          return ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Curves.ease,
+            ),
+            child: buildHomeworkCard(
+              dueOver: true,
+              homework: currentHomework[i],
+              index: i,
+            ),
+          );
+        });
+      }
+    } else {
+      for (var i = 0; i < lastTodoHw; i++) {
+        _animatedListkey.currentState.insertItem(i);
+      }
+    }
+    setState(() {
+      _listOpen = !_listOpen;
+      _animationDone = true;
+    });
+  }
+
   Widget _body() {
-    if (globalHomework.length == 0) {
+    if (currentHomework.length == 0) {
       return noHomework();
     } else {
-      return ListView.builder(
-        itemCount: globalHomework.length,
-        itemBuilder: _listBuilder,
+      Widget homeworkToDo;
+      if (lastTodoHw == -1) {
+        homeworkToDo = SizedBox(
+          height: MediaQuery.of(context).size.height / 4,
+          child: allDone(),
+        );
+      } else {
+        homeworkToDo = ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: (currentHomework.length - lastTodoHw) - 1,
+          itemBuilder: (context, index) {
+            return buildHomeworkCard(
+              dueOver: false,
+              homework: currentHomework[lastTodoHw + index + 1],
+              index: lastTodoHw + index + 1,
+            );
+          },
+        );
+      }
+
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
+          children: [
+            homeworkToDo,
+            GestureDetector(
+              onTap: () {
+                _handleListOpen();
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      "${getTranslatedString('doneHw')}:",
+                      textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                          ? TextAlign.center
+                          : TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                      ),
+                    ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 150),
+                      firstChild: const Icon(
+                        Icons.keyboard_arrow_up,
+                        size: 30,
+                      ),
+                      secondChild: const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 30,
+                      ),
+                      crossFadeState: _listOpen
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            AnimatedList(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              key: _animatedListkey,
+              itemBuilder: (context, index, animation) {
+                return ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.ease,
+                  ),
+                  child: buildHomeworkCard(
+                    dueOver: true,
+                    homework: currentHomework[index],
+                    index: index,
+                  ),
+                );
+              },
+            )
+          ],
+        ),
       );
     }
   }
 
-  Widget _listBuilder(BuildContext context, int index) {
-    if (index >= globalHomework.length) {
-      return SizedBox(
-        height: 100,
-      );
-    } else {
-      //Hide if it doesn't needed
-      DateTime afterDue = globalHomework[index].dueDate;
-      if (globals.howLongKeepDataForHw != -1) {
-        afterDue =
-            afterDue.add(Duration(days: globals.howLongKeepDataForHw.toInt()));
-        if (afterDue.compareTo(DateTime.now()) < 0) {
-          return SizedBox(height: 0, width: 0);
-        }
-      }
-
-      bool dueOver = false;
-      var left = globalHomework[index].dueDate.difference(DateTime.now());
-      if (left.inMinutes / 60 < 0) {
-        dueOver = true;
-      }
-      String subTitle = "${getTranslatedString("due")}: " +
-          globalHomework[index].dueDate.toDayOnlyString() +
-          " " +
-          parseIntToWeekdayString(globalHomework[index].dueDate.weekday);
-      Color color = getHomeworkCardColor(
-        hw: globalHomework[index],
-        index: index,
-      );
-      return SafeArea(
-        child: AnimatedHomeworkCard(
-          homework: globalHomework[index],
-          dueOver: dueOver,
-          title: globalHomework[index].subject.name,
-          subTitle: subTitle,
+  Widget buildHomeworkCard({
+    @required Homework homework,
+    @required int index,
+    @required bool dueOver,
+  }) {
+    String subTitle = "${getTranslatedString("due")}: " +
+        homework.dueDate.toDayOnlyString() +
+        " " +
+        parseIntToWeekdayString(homework.dueDate.weekday);
+    Color color = getHomeworkCardColor(
+      hw: homework,
+      index: index,
+    );
+    return SafeArea(
+      child: AnimatedHomeworkCard(
+        homework: homework,
+        dueOver: dueOver,
+        title: homework.subject.name,
+        subTitle: subTitle,
+        color: color,
+        heroAnimation: AlwaysStoppedAnimation(0),
+        onPressed: HomeworkDetailTab(
           color: color,
-          heroAnimation: AlwaysStoppedAnimation(0),
-          onPressed: HomeworkDetailTab(
-            color: color,
-            hwInfo: globalHomework[index],
-          ),
+          hwInfo: homework,
         ),
-      );
-    }
+      ),
+    );
   }
 
   Widget noHomework() {
@@ -114,6 +232,44 @@ class _HomeworkTabState extends State<HomeworkTab> {
             getTranslatedString("noHw"),
             textAlign: TextAlign.center,
           )
+        ],
+      ),
+    );
+  }
+
+  Widget allDone() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 100,
+            width: 100,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Icon(
+                  MdiIcons.bagPersonalOutline,
+                  size: 50,
+                ),
+                new Positioned(
+                  left: 50,
+                  top: 65,
+                  child: new Icon(
+                    Icons.check,
+                    size: 36.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            getTranslatedString("allDone"),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

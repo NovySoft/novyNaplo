@@ -166,8 +166,7 @@ final Map<String, String> translation = {
   "hLeft": "you got",
   "givenUpBy": "Given up by",
   "due": "Due",
-  "noHw":
-      "No homework!\n(Currently I can only show you homework from the last 2 weeks)",
+  "noHw": "No homework!",
   "purple": "Purple",
   "whatIf": "What if",
   "general": "General",
@@ -420,4 +419,5 @@ final Map<String, String> translation = {
   "allDone": "All done!",
   "noColorYet": "No color, yet!",
   "doneExams": "Exams already taken",
+  "doneHw": "Homework done",
 };

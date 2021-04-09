@@ -87,8 +87,7 @@ final Map<String, String> translation = {
   "hLeft": "van még",
   "givenUpBy": "Házifeladatot feladta",
   "due": "Határidő",
-  "noHw":
-      "Nincs házifeladat!\n(Jelenleg csak az elmúlt 2 hétre feladott leckét tudom mutatni)",
+  "noHw": "Nincs házifeladat!",
   "whatIf": "Mi van ha",
   "general": "Általános",
   "bySubject": "Tantárgy szerint",
@@ -419,4 +418,5 @@ final Map<String, String> translation = {
   "allDone": "Minden készen van!",
   "noColorYet": "Még nincs szín!",
   "doneExams": "Már megírt dolgozatok",
+  "doneHw": "Kész házifeladatok",
 };

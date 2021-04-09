@@ -1,5 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
