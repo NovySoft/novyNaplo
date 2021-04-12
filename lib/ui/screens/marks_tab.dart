@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
@@ -245,6 +245,7 @@ class MarksTabState extends State<MarksTab>
                 height: 106,
                 child: SafeArea(
                   child: AnimatedSubjectsCard(
+                    eval: allParsedBySubject[listIndex][index],
                     subTitle: getMarkCardSubtitle(
                       eval: allParsedBySubject[listIndex][index],
                     ),
@@ -268,6 +269,7 @@ class MarksTabState extends State<MarksTab>
           height: 106,
           child: SafeArea(
             child: AnimatedSubjectsCard(
+              eval: allParsedBySubject[listIndex][index],
               subTitle: getMarkCardSubtitle(
                 eval: allParsedBySubject[listIndex][index],
               ),

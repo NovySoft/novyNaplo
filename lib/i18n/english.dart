@@ -166,8 +166,7 @@ final Map<String, String> translation = {
   "hLeft": "you got",
   "givenUpBy": "Given up by",
   "due": "Due",
-  "noHw":
-      "No homework!\n(Currently I can only show you homework from the last 2 weeks)",
+  "noHw": "No homework!",
   "purple": "Purple",
   "whatIf": "What if",
   "general": "General",
@@ -210,6 +209,7 @@ final Map<String, String> translation = {
   "readNotices": "Reading notifications from database",
   "readAvs": "Reading averages from database",
   "readTimetable": "Reading timetable from database",
+  "readTimetableColors": "Reading subject colors from database",
   "readExam": "Reading exams from database",
   "readEvents": "Reading events from database",
   "almReady": "Almost ready",
@@ -411,4 +411,14 @@ final Map<String, String> translation = {
       "If you disable analytics, then we cannot see how you use the application and improve your experience.\nAlso analytics is used to report back unknown subjects/icons/translations.",
   "disablePerformance":
       "If you disable performance monitoring, then we cannot see and improve loading times.",
+  "subjectColors": "Subject coloring",
+  "textColSubject": "Text color based on subject color",
+  "textColEval": "Text color based on evaluation value",
+  "categoryEdit": "You are editing a category!",
+  "category": "Category",
+  "overwriteMultCols": "You are overwriting multiple colors!",
+  "allDone": "All done!",
+  "noColorYet": "No color, yet!",
+  "doneExams": "Exams already taken",
+  "doneHw": "Homework done",
 };

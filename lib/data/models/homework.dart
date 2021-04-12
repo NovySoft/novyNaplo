@@ -37,6 +37,10 @@ class Homework {
     this.uid,
   });
 
+  String toString() {
+    return dueDate.toString();
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'attachments': json.encode(attachments),

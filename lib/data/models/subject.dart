@@ -9,7 +9,7 @@ class Subject {
   String name;
   String fullName;
 
-  Subject({this.uid, this.category, this.name});
+  Subject({this.uid, this.category, this.name, this.fullName});
 
   Subject.fromJson(Map<String, dynamic> inpJson) {
     uid = inpJson['Uid'];

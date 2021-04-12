@@ -16,13 +16,19 @@ class _TimetableSettingsState extends State<TimetableSettings> {
         getTranslatedString("random"),
       ),
     ),
+    DropdownMenuItem(
+      value: "Subject",
+      child: Text(
+        getTranslatedString("subject"),
+      ),
+    ),
   ];
 
   @override
   void initState() {
     if (globals.darker)
       _dropDownItems.insert(
-        1,
+        2,
         DropdownMenuItem(
           value: "Dark",
           child: Text(
@@ -31,7 +37,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
         ),
       );
     else if (globals.timetableCardTheme == "Dark") {
-      globals.timetableCardTheme = "Véletlenszerű";
+      globals.timetableCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "timetableCardTheme",
         globals.timetableCardTheme,
@@ -52,7 +58,7 @@ class _TimetableSettingsState extends State<TimetableSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 2,
+          itemCount: 2 + (globals.timetableCardTheme == "Dark" ? 1 : 0),
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -120,14 +126,48 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                       setState(() {
                         globals.timetableCardTheme = value;
                       });
+                      if (value != "Dark" && globals.timetableTextColSubject) {
+                        globals.prefs.setBool(
+                          "timetableTextColSubject",
+                          false,
+                        );
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "timetableTextColSubject",
+                          false,
+                        );
+                        setState(() {
+                          globals.timetableTextColSubject = false;
+                        });
+                      }
                     },
                     value: globals.timetableCardTheme,
                   ),
                 );
                 break;
+              case 2:
+                return ListTile(
+                  leading: Text("${getTranslatedString("textColSubject")}:"),
+                  trailing: Switch(
+                    value: globals.timetableTextColSubject,
+                    onChanged: (switchVal) {
+                      globals.prefs.setBool(
+                        "timetableTextColSubject",
+                        switchVal,
+                      );
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "timetableTextColSubject",
+                        switchVal,
+                      );
+                      setState(() {
+                        globals.timetableTextColSubject = switchVal;
+                      });
+                    },
+                  ),
+                );
+                break;
               default:
+                return SizedBox(height: 10, width: 10);
             }
-            return SizedBox(height: 10, width: 10);
           }),
     );
   }

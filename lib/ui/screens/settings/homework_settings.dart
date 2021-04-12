@@ -19,6 +19,12 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
         getTranslatedString("random"),
       ),
     ),
+    DropdownMenuItem(
+      value: "Subject",
+      child: Text(
+        getTranslatedString("subject"),
+      ),
+    ),
   ];
 
   @override
@@ -34,7 +40,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
         ),
       );
     else if (globals.homeworkCardTheme == "Dark") {
-      globals.homeworkCardTheme = "Véletlenszerű";
+      globals.homeworkCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "homeworkCardTheme",
         globals.homeworkCardTheme,
@@ -67,7 +73,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
       ),
       body: ListView.separated(
           separatorBuilder: (_, __) => Divider(),
-          itemCount: 2,
+          itemCount: 2 + (globals.homeworkCardTheme == "Dark" ? 1 : 0),
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -132,8 +138,42 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
                       setState(() {
                         globals.homeworkCardTheme = value;
                       });
+                      if (value != "Dark" && globals.homeworkTextColSubject) {
+                        globals.prefs.setBool(
+                          "homeworkTextColSubject",
+                          false,
+                        );
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "homeworkTextColSubject",
+                          false,
+                        );
+                        setState(() {
+                          globals.homeworkTextColSubject = false;
+                        });
+                      }
                     },
                     value: globals.homeworkCardTheme,
+                  ),
+                );
+                break;
+              case 2:
+                return ListTile(
+                  leading: Text("${getTranslatedString("textColSubject")}:"),
+                  trailing: Switch(
+                    value: globals.homeworkTextColSubject,
+                    onChanged: (switchVal) {
+                      globals.prefs.setBool(
+                        "homeworkTextColSubject",
+                        switchVal,
+                      );
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "homeworkTextColSubject",
+                        switchVal,
+                      );
+                      setState(() {
+                        globals.homeworkTextColSubject = switchVal;
+                      });
+                    },
                   ),
                 );
                 break;

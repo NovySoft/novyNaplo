@@ -63,6 +63,27 @@ class _UIsettingsState extends State<UIsettings> {
       "markCardTheme",
       globals.markCardTheme,
     );
+    //Marks text
+    globals.marksTextColEval = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "marksTextColEval",
+      globals.marksTextColEval,
+    );
+    globals.prefs.setBool(
+      "marksTextColEval",
+      globals.marksTextColEval,
+    );
+    if (globals.marksTextColSubject) {
+      globals.marksTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+      globals.prefs.setBool(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+    }
     //Timetable
     globals.timetableCardTheme = "Dark";
     FirebaseCrashlytics.instance.setCustomKey(
@@ -72,6 +93,16 @@ class _UIsettingsState extends State<UIsettings> {
     globals.prefs.setString(
       "timetableCardTheme",
       globals.timetableCardTheme,
+    );
+    //Timetable text
+    globals.timetableTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "timetableTextColSubject",
+      globals.timetableTextColSubject,
+    );
+    globals.prefs.setBool(
+      "timetableTextColSubject",
+      globals.timetableTextColSubject,
     );
     //Homework
     globals.homeworkCardTheme = "Dark";
@@ -83,6 +114,16 @@ class _UIsettingsState extends State<UIsettings> {
       "homeworkCardTheme",
       globals.homeworkCardTheme,
     );
+    //Homework text
+    globals.homeworkTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "homeworkTextColSubject",
+      globals.homeworkTextColSubject,
+    );
+    globals.prefs.setBool(
+      "homeworkTextColSubject",
+      globals.homeworkTextColSubject,
+    );
     //Exams
     globals.examsCardTheme = "Dark";
     FirebaseCrashlytics.instance.setCustomKey(
@@ -92,6 +133,16 @@ class _UIsettingsState extends State<UIsettings> {
     globals.prefs.setString(
       "examsCardTheme",
       globals.examsCardTheme,
+    );
+    //Exams text
+    globals.examsTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "examsTextColSubject",
+      globals.examsTextColSubject,
+    );
+    globals.prefs.setBool(
+      "examsTextColSubject",
+      globals.examsTextColSubject,
     );
     //Notices and events
     globals.noticesAndEventsCardTheme = "Dark";
@@ -113,6 +164,16 @@ class _UIsettingsState extends State<UIsettings> {
       "statisticsCardTheme",
       globals.statisticsCardTheme,
     );
+    //Statistics text
+    globals.statisticsTextColSubject = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "statisticsTextColSubject",
+      globals.statisticsTextColSubject,
+    );
+    globals.prefs.setBool(
+      "statisticsTextColSubject",
+      globals.statisticsTextColSubject,
+    );
   }
 
   void disableDarkCards() {
@@ -128,9 +189,32 @@ class _UIsettingsState extends State<UIsettings> {
         globals.markCardTheme,
       );
     }
+    //Marks card text
+    if (globals.marksTextColSubject) {
+      globals.marksTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+      globals.prefs.setBool(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+    }
+    if (globals.marksTextColEval) {
+      globals.marksTextColEval = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColEval",
+        globals.marksTextColEval,
+      );
+      globals.prefs.setBool(
+        "marksTextColEval",
+        globals.marksTextColEval,
+      );
+    }
     //Timetable card
     if (globals.timetableCardTheme == "Dark") {
-      globals.timetableCardTheme = "Véletlenszerű";
+      globals.timetableCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "timetableCardTheme",
         globals.timetableCardTheme,
@@ -138,11 +222,23 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "timetableCardTheme",
         globals.timetableCardTheme,
+      );
+    }
+    //Timetable text
+    if (globals.timetableTextColSubject) {
+      globals.timetableTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "timetableTextColSubject",
+        globals.timetableTextColSubject,
+      );
+      globals.prefs.setBool(
+        "timetableTextColSubject",
+        globals.timetableTextColSubject,
       );
     }
     //Homework card
     if (globals.homeworkCardTheme == "Dark") {
-      globals.homeworkCardTheme = "Véletlenszerű";
+      globals.homeworkCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "homeworkCardTheme",
         globals.homeworkCardTheme,
@@ -152,9 +248,21 @@ class _UIsettingsState extends State<UIsettings> {
         globals.homeworkCardTheme,
       );
     }
+    //Homework card text
+    if (globals.homeworkTextColSubject) {
+      globals.homeworkTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "homeworkTextColSubject",
+        globals.homeworkTextColSubject,
+      );
+      globals.prefs.setBool(
+        "homeworkTextColSubject",
+        globals.homeworkTextColSubject,
+      );
+    }
     //Exam card
     if (globals.examsCardTheme == "Dark") {
-      globals.examsCardTheme = "Véletlenszerű";
+      globals.examsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "examsCardTheme",
         globals.examsCardTheme,
@@ -162,6 +270,18 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "examsCardTheme",
         globals.examsCardTheme,
+      );
+    }
+    //Exams card text
+    if (globals.examsTextColSubject) {
+      globals.examsTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "examsTextColSubject",
+        globals.examsTextColSubject,
+      );
+      globals.prefs.setBool(
+        "examsTextColSubject",
+        globals.examsTextColSubject,
       );
     }
     //Notices and events card
@@ -178,7 +298,7 @@ class _UIsettingsState extends State<UIsettings> {
     }
     //Statistics
     if (globals.statisticsCardTheme == "Dark") {
-      globals.statisticsCardTheme = "Véletlenszerű";
+      globals.statisticsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "statisticsCardTheme",
         globals.statisticsCardTheme,
@@ -186,6 +306,18 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setString(
         "statisticsCardTheme",
         globals.statisticsCardTheme,
+      );
+    }
+    //Statistics card text
+    if (globals.statisticsTextColSubject) {
+      globals.statisticsTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "statisticsTextColSubject",
+        globals.statisticsTextColSubject,
+      );
+      globals.prefs.setBool(
+        "statisticsTextColSubject",
+        globals.statisticsTextColSubject,
       );
     }
   }
@@ -236,6 +368,20 @@ class _UIsettingsState extends State<UIsettings> {
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Bright");
                       } else if (value == "Dark") {
+                        //Update button status
+                        if (globals.markCardTheme == "Dark" &&
+                            globals.timetableCardTheme == "Dark" &&
+                            globals.homeworkCardTheme == "Dark" &&
+                            globals.examsCardTheme == "Dark" &&
+                            globals.noticesAndEventsCardTheme == "Dark" &&
+                            globals.statisticsCardTheme == "Dark") {
+                          status = Icon(MdiIcons.check);
+                        } else {
+                          status = Icon(
+                            MdiIcons.closeCircle, /*check*/
+                          );
+                        }
+                        //Update prefs
                         globals.prefs.setBool("darker", false);
                         globals.darker = false;
                         ThemeHelper()

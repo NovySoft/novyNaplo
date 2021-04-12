@@ -58,7 +58,7 @@ class _NoticesAndEventsSettingsState extends State<NoticesAndEventsSettings> {
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => Divider(),
-        itemCount: 2,
+        itemCount: 1,
         itemBuilder: (context, index) {
           switch (index) {
             case 0:

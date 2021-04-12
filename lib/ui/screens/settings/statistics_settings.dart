@@ -24,6 +24,12 @@ class _StatisticSettingsState extends State<StatisticSettings> {
         getTranslatedString("random"),
       ),
     ),
+    DropdownMenuItem(
+      value: "Subject",
+      child: Text(
+        getTranslatedString("subject"),
+      ),
+    ),
   ];
 
   @override
@@ -39,7 +45,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
         ),
       );
     else if (globals.statisticsCardTheme == "Dark") {
-      globals.statisticsCardTheme = "Véletlenszerű";
+      globals.statisticsCardTheme = "Subject";
       FirebaseCrashlytics.instance.setCustomKey(
         "statisticsCardTheme",
         globals.statisticsCardTheme,
@@ -99,22 +105,66 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                 );
                 break;
               case 1:
-                return ListTile(
-                  title: Text("${getTranslatedString("statisticsCardColor")}:"),
-                  trailing: DropdownButton<String>(
-                    items: _dropDownItems,
-                    onChanged: (String value) async {
-                      FirebaseCrashlytics.instance.setCustomKey(
-                        "statisticsCardTheme",
-                        value,
-                      );
-                      globals.prefs.setString("statisticsCardTheme", value);
-                      setState(() {
-                        globals.statisticsCardTheme = value;
-                      });
-                    },
-                    value: globals.statisticsCardTheme,
-                  ),
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                          "${getTranslatedString("statisticsCardColor")}:"),
+                      trailing: DropdownButton<String>(
+                        items: _dropDownItems,
+                        onChanged: (String value) async {
+                          FirebaseCrashlytics.instance.setCustomKey(
+                            "statisticsCardTheme",
+                            value,
+                          );
+                          globals.prefs.setString("statisticsCardTheme", value);
+                          setState(() {
+                            globals.statisticsCardTheme = value;
+                          });
+                          if (globals.statisticsCardTheme != "Dark" &&
+                              globals.statisticsTextColSubject) {
+                            globals.prefs.setBool(
+                              "statisticsTextColSubject",
+                              false,
+                            );
+                            FirebaseCrashlytics.instance.setCustomKey(
+                              "statisticsTextColSubject",
+                              false,
+                            );
+                            setState(() {
+                              globals.statisticsTextColSubject = false;
+                            });
+                          }
+                        },
+                        value: globals.statisticsCardTheme,
+                      ),
+                    ),
+                    globals.statisticsCardTheme == "Dark"
+                        ? Divider()
+                        : SizedBox(height: 0, width: 0),
+                    globals.statisticsCardTheme == "Dark"
+                        ? ListTile(
+                            leading: Text(
+                                "${getTranslatedString("textColSubject")}:"),
+                            trailing: Switch(
+                              value: globals.statisticsTextColSubject,
+                              onChanged: (switchVal) {
+                                globals.prefs.setBool(
+                                  "statisticsTextColSubject",
+                                  switchVal,
+                                );
+                                FirebaseCrashlytics.instance.setCustomKey(
+                                  "statisticsTextColSubject",
+                                  switchVal,
+                                );
+                                setState(() {
+                                  globals.statisticsTextColSubject = switchVal;
+                                });
+                              },
+                            ),
+                          )
+                        : SizedBox(height: 0, width: 0),
+                  ],
                 );
                 break;
               case 2:

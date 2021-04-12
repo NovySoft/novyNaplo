@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
+import 'package:novynaplo/helpers/ui/textColor/markCard.dart';
 import 'package:novynaplo/ui/widgets/PressableCard.dart';
 import 'package:novynaplo/global.dart' as globals;
 
@@ -74,9 +75,9 @@ class AnimatedMarksCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         style: TextStyle(
-                                          color: globals.markCardTheme == "Dark"
-                                              ? Colors.grey[350]
-                                              : Colors.black,
+                                          color: getMarkCardTextColor(
+                                            eval: eval,
+                                          ),
                                           fontSize: 21,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -86,10 +87,9 @@ class AnimatedMarksCard extends StatelessWidget {
                                         textDirection: TextDirection.ltr,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: globals.markCardTheme == "Dark"
-                                              ? Colors.grey[350]
-                                                  .withOpacity(0.9)
-                                              : Colors.black,
+                                          color: getMarkCardTextColor(
+                                            eval: eval,
+                                          ).withOpacity(0.9),
                                           fontSize: 21,
                                           fontWeight: FontWeight.normal,
                                         ),

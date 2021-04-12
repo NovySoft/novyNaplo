@@ -29,12 +29,21 @@ String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
 String markCardConstColor = "Orange"; //If theme is constant what color is it
 String lessonCardSubtitle = "Tanterem"; //Lesson card's subtitle
-String timetableCardTheme = "Véletlenszerű"; //Timetable card's theme
-String homeworkCardTheme = "Véletlenszerű"; //Homework card's theme
+String timetableCardTheme = "Subject"; //Timetable card's theme
+String homeworkCardTheme = "Subject"; //Homework card's theme
 String noticesAndEventsCardTheme =
     "Véletlenszerű"; //Notices and exams card's theme
-String examsCardTheme = "Véletlenszerű"; //Exams card's theme
-String statisticsCardTheme = "Véletlenszerű"; //Exams card's theme
+String examsCardTheme = "Subject"; //Exams card's theme
+String statisticsCardTheme = "Subject"; //Exams card's theme
+bool timetableTextColSubject =
+    false; //Timetable text color based on subject color?
+bool marksTextColSubject = false; //Marks text color based on subject color?
+bool examsTextColSubject = false; //Exams text color based on subject color?
+bool statisticsTextColSubject =
+    false; //Statistics card text color based on subject color?
+bool homeworkTextColSubject =
+    false; //Homework text color based on subject color?
+bool marksTextColEval = false; //Marks text color based on eval value?
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -185,6 +194,72 @@ Future<void> setGlobals() async {
     backgroundFetchCanWakeUpPhone,
   );
 
+  if (prefs.getBool("timetableTextColSubject") == null) {
+    timetableTextColSubject = false;
+    await prefs.setBool("timetableTextColSubject", timetableTextColSubject);
+  } else {
+    timetableTextColSubject = prefs.getBool("timetableTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "timetableTextColSubject",
+    timetableTextColSubject,
+  );
+
+  if (prefs.getBool("marksTextColSubject") == null) {
+    marksTextColSubject = false;
+    await prefs.setBool("marksTextColSubject", marksTextColSubject);
+  } else {
+    marksTextColSubject = prefs.getBool("marksTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "marksTextColSubject",
+    marksTextColSubject,
+  );
+
+  if (prefs.getBool("marksTextColEval") == null) {
+    marksTextColEval = false;
+    await prefs.setBool("marksTextColEval", marksTextColEval);
+  } else {
+    marksTextColEval = prefs.getBool("marksTextColEval");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "marksTextColEval",
+    marksTextColEval,
+  );
+
+  if (prefs.getBool("examsTextColSubject") == null) {
+    examsTextColSubject = false;
+    await prefs.setBool("examsTextColSubject", examsTextColSubject);
+  } else {
+    examsTextColSubject = prefs.getBool("examsTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "examsTextColSubject",
+    examsTextColSubject,
+  );
+
+  if (prefs.getBool("statisticsTextColSubject") == null) {
+    statisticsTextColSubject = false;
+    await prefs.setBool("statisticsTextColSubject", statisticsTextColSubject);
+  } else {
+    statisticsTextColSubject = prefs.getBool("statisticsTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "statisticsTextColSubject",
+    statisticsTextColSubject,
+  );
+
+  if (prefs.getBool("homeworkTextColSubject") == null) {
+    homeworkTextColSubject = false;
+    await prefs.setBool("homeworkTextColSubject", homeworkTextColSubject);
+  } else {
+    examsTextColSubject = prefs.getBool("homeworkTextColSubject");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "homeworkTextColSubject",
+    homeworkTextColSubject,
+  );
+
   if (prefs.getString("howManyGraph") == null) {
     howManyGraph = "Kör diagram";
     prefs.setString("howManyGraph", howManyGraph);
@@ -246,7 +321,7 @@ Future<void> setGlobals() async {
   FirebaseCrashlytics.instance.setCustomKey("markCardTheme", markCardTheme);
 
   if (prefs.getString("timetableCardTheme") == null) {
-    timetableCardTheme = "Véletlenszerű";
+    timetableCardTheme = "Subject";
     prefs.setString("timetableCardTheme", timetableCardTheme);
   } else {
     timetableCardTheme = prefs.getString("timetableCardTheme");
@@ -257,7 +332,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("homeworkCardTheme") == null) {
-    homeworkCardTheme = "Véletlenszerű";
+    homeworkCardTheme = "Subject";
     prefs.setString("homeworkCardTheme", homeworkCardTheme);
   } else {
     homeworkCardTheme = prefs.getString("homeworkCardTheme");
@@ -268,7 +343,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("examsCardTheme") == null) {
-    examsCardTheme = "Véletlenszerű";
+    examsCardTheme = "Subject";
     prefs.setString("examsCardTheme", examsCardTheme);
   } else {
     examsCardTheme = prefs.getString("examsCardTheme");
@@ -279,7 +354,7 @@ Future<void> setGlobals() async {
   );
 
   if (prefs.getString("statisticsCardTheme") == null) {
-    statisticsCardTheme = "Véletlenszerű";
+    statisticsCardTheme = "Subject";
     prefs.setString("statisticsCardTheme", statisticsCardTheme);
   } else {
     statisticsCardTheme = prefs.getString("statisticsCardTheme");

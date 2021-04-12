@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/ui/screens/settings/firebase_settings.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -17,10 +18,10 @@ import 'homework_settings.dart';
 import 'marksTab_settings.dart';
 import 'networkAndNotification_settings.dart';
 import 'statistics_settings.dart';
+import 'subjectColorPicker.dart';
 import 'ui_settings.dart';
 
 //TODO: Make settings more user friendly
-//TODO: Implement: https://pub.dev/packages/flutter_material_color_picker
 int indexModifier = 0;
 
 class SettingsTab extends StatefulWidget {
@@ -80,7 +81,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 13,
+      itemCount: 15,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -373,7 +374,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 9) {
+        } else if (index == 10) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -405,7 +406,39 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
+        } else if (index == 9) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectColorPicker(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Ionicons.md_color_palette,
+                  ),
+                  label: Text(
+                    getTranslatedString("subjectColors"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 11) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -441,7 +474,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 11) {
+        } else if (index == 12) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -539,7 +572,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 12) {
+        } else if (index == 13) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -580,7 +613,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 13) {
+        } else if (index == 14) {
           return ListTile(
             title: Center(
               child: Padding(
