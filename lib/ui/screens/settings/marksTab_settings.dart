@@ -45,9 +45,10 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
 
   @override
   void initState() {
-    if (globals.markCardTheme == "Egyszínű" ||
-        globals.markCardTheme == "Dark") {
+    if (globals.markCardTheme == "Egyszínű") {
       indexModifier = 1;
+    } else if (globals.markCardTheme == "Dark") {
+      indexModifier = 2;
     } else {
       indexModifier = 0;
     }
@@ -108,9 +109,13 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       setState(() {
                         globals.markCardTheme = value;
                       });
-                      if (value == "Egyszínű" || value == "Dark") {
+                      if (value == "Egyszínű") {
                         setState(() {
                           indexModifier = 1;
+                        });
+                      } else if (value == "Dark") {
+                        setState(() {
+                          indexModifier = 2;
                         });
                       } else {
                         setState(() {
@@ -306,6 +311,19 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                     trailing: Switch(
                       value: globals.marksTextColSubject,
                       onChanged: (switchVal) {
+                        if (switchVal) {
+                          globals.prefs.setBool(
+                            "marksTextColEval",
+                            false,
+                          );
+                          FirebaseCrashlytics.instance.setCustomKey(
+                            "marksTextColEval",
+                            false,
+                          );
+                          setState(() {
+                            globals.marksTextColEval = false;
+                          });
+                        }
                         globals.prefs.setBool(
                           "marksTextColSubject",
                           switchVal,
@@ -320,6 +338,40 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                       },
                     ),
                   );
+                break;
+              case 3:
+                return ListTile(
+                  leading: Text("${getTranslatedString("textColEval")}:"),
+                  trailing: Switch(
+                    value: globals.marksTextColEval,
+                    onChanged: (switchVal) {
+                      if (switchVal) {
+                        globals.prefs.setBool(
+                          "marksTextColSubject",
+                          false,
+                        );
+                        FirebaseCrashlytics.instance.setCustomKey(
+                          "marksTextColSubject",
+                          false,
+                        );
+                        setState(() {
+                          globals.marksTextColSubject = false;
+                        });
+                      }
+                      globals.prefs.setBool(
+                        "marksTextColEval",
+                        switchVal,
+                      );
+                      FirebaseCrashlytics.instance.setCustomKey(
+                        "marksTextColEval",
+                        switchVal,
+                      );
+                      setState(() {
+                        globals.marksTextColEval = switchVal;
+                      });
+                    },
+                  ),
+                );
                 break;
               default:
                 return SizedBox(height: 10, width: 10);

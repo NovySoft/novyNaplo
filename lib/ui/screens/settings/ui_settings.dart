@@ -63,6 +63,27 @@ class _UIsettingsState extends State<UIsettings> {
       "markCardTheme",
       globals.markCardTheme,
     );
+    //Marks text
+    globals.marksTextColEval = true;
+    FirebaseCrashlytics.instance.setCustomKey(
+      "marksTextColEval",
+      globals.marksTextColEval,
+    );
+    globals.prefs.setBool(
+      "marksTextColEval",
+      globals.marksTextColEval,
+    );
+    if (globals.marksTextColSubject) {
+      globals.marksTextColSubject = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+      globals.prefs.setBool(
+        "marksTextColSubject",
+        globals.marksTextColSubject,
+      );
+    }
     //Timetable
     globals.timetableCardTheme = "Dark";
     FirebaseCrashlytics.instance.setCustomKey(
@@ -178,6 +199,17 @@ class _UIsettingsState extends State<UIsettings> {
       globals.prefs.setBool(
         "marksTextColSubject",
         globals.marksTextColSubject,
+      );
+    }
+    if (globals.marksTextColEval) {
+      globals.marksTextColEval = false;
+      FirebaseCrashlytics.instance.setCustomKey(
+        "marksTextColEval",
+        globals.marksTextColEval,
+      );
+      globals.prefs.setBool(
+        "marksTextColEval",
+        globals.marksTextColEval,
       );
     }
     //Timetable card
@@ -336,6 +368,20 @@ class _UIsettingsState extends State<UIsettings> {
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Bright");
                       } else if (value == "Dark") {
+                        //Update button status
+                        if (globals.markCardTheme == "Dark" &&
+                            globals.timetableCardTheme == "Dark" &&
+                            globals.homeworkCardTheme == "Dark" &&
+                            globals.examsCardTheme == "Dark" &&
+                            globals.noticesAndEventsCardTheme == "Dark" &&
+                            globals.statisticsCardTheme == "Dark") {
+                          status = Icon(MdiIcons.check);
+                        } else {
+                          status = Icon(
+                            MdiIcons.closeCircle, /*check*/
+                          );
+                        }
+                        //Update prefs
                         globals.prefs.setBool("darker", false);
                         globals.darker = false;
                         ThemeHelper()

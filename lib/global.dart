@@ -43,6 +43,7 @@ bool statisticsTextColSubject =
     false; //Statistics card text color based on subject color?
 bool homeworkTextColSubject =
     false; //Homework text color based on subject color?
+bool marksTextColEval = false; //Marks text color based on eval value?
 String howManyGraph =
     "Kör diagram"; //What should we show? A pie- or a bar-chart
 bool chartAnimations = true; //Do we need to animate the charts
@@ -213,6 +214,17 @@ Future<void> setGlobals() async {
   FirebaseCrashlytics.instance.setCustomKey(
     "marksTextColSubject",
     marksTextColSubject,
+  );
+
+  if (prefs.getBool("marksTextColEval") == null) {
+    marksTextColEval = false;
+    await prefs.setBool("marksTextColEval", marksTextColEval);
+  } else {
+    marksTextColEval = prefs.getBool("marksTextColEval");
+  }
+  FirebaseCrashlytics.instance.setCustomKey(
+    "marksTextColEval",
+    marksTextColEval,
   );
 
   if (prefs.getBool("examsTextColSubject") == null) {
