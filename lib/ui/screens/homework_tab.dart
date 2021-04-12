@@ -31,6 +31,10 @@ class _HomeworkTabState extends State<HomeworkTab> {
   bool _animationDone = true;
   final GlobalKey<AnimatedListState> _animatedListkey =
       GlobalKey<AnimatedListState>(debugLabel: "homeworkAnimList");
+  final _scrollController =
+      new ScrollController(debugLabel: "homeworkScrollList");
+  final _dataKey = new GlobalKey(debugLabel: "homeworkDropdownLabel");
+  double _closedOfset = 0;
 
   @override
   void initState() {
@@ -67,9 +71,16 @@ class _HomeworkTabState extends State<HomeworkTab> {
     );
   }
 
-  void _handleListOpen() {
+  void _handleListOpen() async {
     if (!_animationDone) return;
+    ScrollableState scrollableState = Scrollable.of(_dataKey.currentContext);
+    ScrollPosition position = scrollableState.position;
     if (_listOpen) {
+      _scrollController.animateTo(
+        _closedOfset,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
       for (int i = lastTodoHw - 1; i >= 0; i--) {
         _animatedListkey.currentState.removeItem(i, (context, animation) {
           return ScaleTransition(
@@ -86,6 +97,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
         });
       }
     } else {
+      _closedOfset = position.pixels;
       for (var i = 0; i < lastTodoHw; i++) {
         _animatedListkey.currentState.insertItem(i);
       }
@@ -122,6 +134,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       }
 
       return SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
@@ -129,40 +142,43 @@ class _HomeworkTabState extends State<HomeworkTab> {
               : CrossAxisAlignment.start,
           children: [
             homeworkToDo,
-            GestureDetector(
-              onTap: () {
-                _handleListOpen();
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text(
-                      "${getTranslatedString('doneHw')}:",
-                      textAlign: defaultTargetPlatform == TargetPlatform.iOS
-                          ? TextAlign.center
-                          : TextAlign.left,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 21,
+            Container(
+              key: _dataKey,
+              child: GestureDetector(
+                onTap: () {
+                  _handleListOpen();
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        "${getTranslatedString('doneHw')}:",
+                        textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                            ? TextAlign.center
+                            : TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21,
+                        ),
                       ),
-                    ),
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 150),
-                      firstChild: const Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 30,
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 150),
+                        firstChild: const Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 30,
+                        ),
+                        secondChild: const Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 30,
+                        ),
+                        crossFadeState: _listOpen
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
                       ),
-                      secondChild: const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 30,
-                      ),
-                      crossFadeState: _listOpen
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
