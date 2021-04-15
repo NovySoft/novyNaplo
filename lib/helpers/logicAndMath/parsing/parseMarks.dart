@@ -56,7 +56,9 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
       }
       outputList.add(tempIteratorList);
     } else {
-      outputList.add(n);
+      List<Evals> tempList = List.from(n);
+      tempList.removeWhere((element) => element.valueType.name == "Szoveges");
+      outputList.add(tempList);
     }
   }
   for (var n in outputList) {

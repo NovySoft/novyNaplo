@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 
-//Fixme: "Warnings when disabled"
 class FirebaseSettings extends StatefulWidget {
   @override
   _FirebaseSettingsState createState() => _FirebaseSettingsState();
