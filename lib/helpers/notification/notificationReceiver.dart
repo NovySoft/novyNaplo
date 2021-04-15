@@ -39,8 +39,6 @@ import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'notificationHelper.dart';
 
-//FIXME: Do not use random colors
-
 class NotificationReceiver {
   //!THIS DOESN'T WORK WITH MULTIUSER
   static Future<void> selectNotification(

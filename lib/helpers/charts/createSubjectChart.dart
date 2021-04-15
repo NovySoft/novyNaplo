@@ -20,7 +20,7 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
     if (!Evals.nonAvTypes.contains(n.type.name) ||
         n.kindOf == "Magatartas" ||
         n.kindOf == "Szorgalom") {
-      if (n.valueType.name == "Szazalekos" ) {
+      if (n.valueType.name == "Szazalekos" || n.valueType.name == "Szoveges") {
         if (isSzovegesOnly) {
           //Convert percentage mark to a normal one
           double markValue = (n.numberValue / 100) * 5;
