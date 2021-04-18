@@ -12,6 +12,16 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
+## Kréta DMCA
+
+A kréta március elsején távolította el az alkalmazást a play áruházból... Mi ezután nem sokkal írtunk egy levelet a DMCA-ban található email címre, melyre azóta sem jött válasz. Az alkalmazás fejlesztését, nem hagyjuk abba, viszont **sajnos le kellet mondanunk az applikáció áruházakban való jelenlétünkről.**
+
+### Letöltés:
+
+GitHub-ról: [![GitHub release (latest by date)](https://img.shields.io/github/downloads/NovySoft/NovyNaplo/latest/total)](https://github.com/NovySoft/novyNaplo/releases/latest)
+
+F-droid-ról: [![Fdroid release](https://img.shields.io/badge/F--droid-latest-brightgreen)](https://fdroid.novy.software/)
+
 ## Jelenlegi funkciók
 
 - Jegyek megtekintése
