@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:minimize_app/minimize_app.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -44,10 +45,11 @@ List<dynamic> colors;
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static String title = capitalize(getTranslatedString("marks"));
+  final bool isFirstNavigator;
 
-  const MarksTab({Key key, this.androidDrawer}) : super(key: key);
-
-  final Widget androidDrawer;
+  const MarksTab(
+    this.isFirstNavigator,
+  );
 
   @override
   MarksTabState createState() => MarksTabState();
@@ -291,7 +293,7 @@ class MarksTabState extends State<MarksTab>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Widget mainWidget = Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
@@ -338,6 +340,16 @@ class MarksTabState extends State<MarksTab>
             }
           }).toList()),
     );
+    return widget.isFirstNavigator
+        ? WillPopScope(
+            onWillPop: () async {
+              FirebaseCrashlytics.instance.log("Minimize app");
+              MinimizeApp.minimizeApp();
+              return false;
+            },
+            child: mainWidget,
+          )
+        : mainWidget;
   }
 
   Widget noMarks() {

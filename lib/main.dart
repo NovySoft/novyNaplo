@@ -69,7 +69,7 @@ void main() async {
   routes = <String, WidgetBuilder>{
     "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
-    MarksTab.tag: (context) => MarksTab(),
+    MarksTab.tag: (context) => MarksTab(false),
     SettingsTab.tag: (context) => SettingsTab(),
     NoticesTab.tag: (context) => NoticesTab(),
     StatisticsTab.tag: (context) => StatisticsTab(),

@@ -60,6 +60,7 @@ dependencies:
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: 0.4.0
+  minimize_app: any
 
 flutter_icons:
   android: true
