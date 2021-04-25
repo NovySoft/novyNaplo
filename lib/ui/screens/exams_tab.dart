@@ -23,7 +23,7 @@ class ExamsTab extends StatefulWidget {
 class _ExamsTabState extends State<ExamsTab> {
   bool _listOpen = false;
   bool _animationDone = true;
-  int lastNotDone = -1;
+  int firstNotDone = -1;
   final GlobalKey<AnimatedListState> _animatedListkey =
       GlobalKey<AnimatedListState>(debugLabel: "examAnimList");
   final _scrollController = new ScrollController(debugLabel: "exanScrollList");
@@ -32,7 +32,7 @@ class _ExamsTabState extends State<ExamsTab> {
 
   @override
   void initState() {
-    lastNotDone = allParsedExams.lastIndexWhere(
+    firstNotDone = allParsedExams.indexWhere(
       (element) {
         return DateTime.now().isBefore(element.dateOfWriting);
       },
@@ -51,7 +51,7 @@ class _ExamsTabState extends State<ExamsTab> {
         duration: Duration(milliseconds: 500),
         curve: Curves.ease,
       );
-      for (int i = allParsedExams.length - (lastNotDone + 1) - 1; i >= 0; i--) {
+      for (int i = firstNotDone - 1; i >= 0; i--) {
         _animatedListkey.currentState.removeItem(i, (context, animation) {
           return ScaleTransition(
             scale: CurvedAnimation(
@@ -59,17 +59,23 @@ class _ExamsTabState extends State<ExamsTab> {
               curve: Curves.ease,
             ),
             child: examCardBuilder(
-              exam: allParsedExams[i + lastNotDone + 1],
+              exam: allParsedExams[allParsedExams.length -
+                  (allParsedExams.length - firstNotDone) -
+                  1 -
+                  i],
               context: context,
               isDone: true,
-              index: i + lastNotDone + 1,
+              index: allParsedExams.length -
+                  (allParsedExams.length - firstNotDone) -
+                  1 -
+                  i,
             ),
           );
         });
       }
     } else {
       _closedOfset = position.pixels;
-      for (var i = 0; i < allParsedExams.length - (lastNotDone + 1); i++) {
+      for (var i = 0; i < firstNotDone; i++) {
         _animatedListkey.currentState.insertItem(i);
       }
     }
@@ -97,7 +103,7 @@ class _ExamsTabState extends State<ExamsTab> {
       return noExam();
     } else {
       Widget currentExams;
-      if (lastNotDone == -1) {
+      if (firstNotDone == -1) {
         //Minden készen van
         currentExams = SizedBox(
           height: MediaQuery.of(context).size.height / 4,
@@ -107,13 +113,13 @@ class _ExamsTabState extends State<ExamsTab> {
         currentExams = ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: lastNotDone + 1,
+          itemCount: allParsedExams.length - firstNotDone,
           itemBuilder: (context, index) {
             return examCardBuilder(
-              exam: allParsedExams[index],
+              exam: allParsedExams[firstNotDone + index],
               context: context,
               isDone: false,
-              index: index,
+              index: firstNotDone + index,
             );
           },
         );
@@ -178,10 +184,16 @@ class _ExamsTabState extends State<ExamsTab> {
                     curve: Curves.ease,
                   ),
                   child: examCardBuilder(
-                    exam: allParsedExams[index + lastNotDone + 1],
+                    exam: allParsedExams[allParsedExams.length -
+                        (allParsedExams.length - firstNotDone) -
+                        1 -
+                        index],
                     context: context,
                     isDone: true,
-                    index: index + lastNotDone + 1,
+                    index: allParsedExams.length -
+                        (allParsedExams.length - firstNotDone) -
+                        1 -
+                        index,
                   ),
                 );
               },

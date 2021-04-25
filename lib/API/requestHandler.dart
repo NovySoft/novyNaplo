@@ -353,9 +353,10 @@ class RequestHandler {
         ),
       );
       if (sort) {
-        exams.sort((a, b) => (b.dateOfWriting.toString() +
-                b.lessonNumber.toString())
-            .compareTo(a.dateOfWriting.toString() + a.lessonNumber.toString()));
+        exams.sort((a, b) => (a.dateOfWriting.toDayOnlyString() +
+                a.lessonNumber.toString())
+            .compareTo(
+                b.dateOfWriting.toDayOnlyString() + b.lessonNumber.toString()));
       }
       DatabaseHelper.batchInsertExams(
         exams,

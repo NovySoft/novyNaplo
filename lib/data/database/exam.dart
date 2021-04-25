@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -21,7 +22,9 @@ Future<List<Exam>> getAllExams() async {
     return temp;
   });
 
-  tempList.sort((a, b) => b.dateOfWriting.compareTo(a.dateOfWriting));
+  tempList.sort((a, b) =>
+      (a.dateOfWriting.toDayOnlyString() + a.lessonNumber.toString()).compareTo(
+          b.dateOfWriting.toDayOnlyString() + b.lessonNumber.toString()));
 
   return tempList;
 }
