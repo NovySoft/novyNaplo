@@ -81,7 +81,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 15,
+      itemCount: 16,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -374,38 +374,6 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
-          return ListTile(
-            title: Center(
-              child: SizedBox(
-                height: 38,
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FirebaseSettings(),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    MdiIcons.incognitoCircle,
-                  ),
-                  label: Text(
-                    getTranslatedString("privacySettings"),
-                  ),
-                ),
-              ),
-            ),
-          );
         } else if (index == 9) {
           return ListTile(
             title: Center(
@@ -438,7 +406,71 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
+        } else if (index == 10) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectColorPicker(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.tagMultiple,
+                  ),
+                  label: Text(
+                    getTranslatedString("subjectNicknames"),
+                  ),
+                ),
+              ),
+            ),
+          );
         } else if (index == 11) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FirebaseSettings(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.incognitoCircle,
+                  ),
+                  label: Text(
+                    getTranslatedString("privacySettings"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 12) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -474,7 +506,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 12) {
+        } else if (index == 13) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -572,7 +604,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 13) {
+        } else if (index == 14) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -613,7 +645,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 14) {
+        } else if (index == 15) {
           return ListTile(
             title: Center(
               child: Padding(

@@ -160,10 +160,13 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                 onTap: () {
                   showColorPickerDialog(colorMatrix[index][i]);
                 },
-                leading: Text(
-                  "${colorMatrix[index][i].id}:",
-                  style: TextStyle(
-                    fontSize: 16,
+                leading: FractionallySizedBox(
+                  widthFactor: 0.75,
+                  child: Text(
+                    "${colorMatrix[index][i].id}:",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 trailing: Container(
@@ -357,10 +360,13 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ListTile(
-                        leading: Text(
-                          "${capitalize(colorMatrix[index][0].category)} (${colorMatrix[index].length}):",
-                          style: TextStyle(
-                            fontSize: 16,
+                        leading: FractionallySizedBox(
+                          widthFactor: 0.75,
+                          child: Text(
+                            "${capitalize(colorMatrix[index][0].category)} (${colorMatrix[index].length}):",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                         trailing: trailingWidget,
@@ -387,10 +393,13 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                                 showColorPickerDialog(
                                     colorMatrix[index][indexJ]);
                               },
-                              leading: Text(
-                                "${colorMatrix[index][indexJ].id}:",
-                                style: TextStyle(
-                                  fontSize: 16,
+                              leading: FractionallySizedBox(
+                                widthFactor: 0.75,
+                                child: Text(
+                                  "${colorMatrix[index][indexJ].id}:",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                               trailing: Container(

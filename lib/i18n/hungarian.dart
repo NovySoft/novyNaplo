@@ -420,4 +420,5 @@ final Map<String, String> translation = {
   "noColorYet": "Még nincs szín!",
   "doneExams": "Már megírt dolgozatok",
   "doneHw": "Kész házifeladatok",
+  "subjectNicknames": "Tantárgy rövidítések",
 };

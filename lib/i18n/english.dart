@@ -421,4 +421,5 @@ final Map<String, String> translation = {
   "noColorYet": "No color, yet!",
   "doneExams": "Exams already taken",
   "doneHw": "Homework done",
+  "subjectNicknames": "Subject nicknames",
 };

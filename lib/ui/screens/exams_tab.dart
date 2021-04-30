@@ -45,6 +45,7 @@ class _ExamsTabState extends State<ExamsTab> {
     if (!_animationDone) return;
     ScrollableState scrollableState = Scrollable.of(_dataKey.currentContext);
     ScrollPosition position = scrollableState.position;
+    //FIXME: Add small icon, if there is nothing done
     if (_listOpen) {
       _scrollController.animateTo(
         _closedOfset,
