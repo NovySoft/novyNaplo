@@ -104,8 +104,9 @@ class _ExamsTabState extends State<ExamsTab> {
       return noExam();
     } else {
       Widget currentExams;
-      if (firstNotDone == -1) {
+      if (firstNotDone == -1 || firstNotDone == allParsedExams.length) {
         //Minden készen van
+        firstNotDone = allParsedExams.length;
         currentExams = SizedBox(
           height: MediaQuery.of(context).size.height / 4,
           child: allDone(),

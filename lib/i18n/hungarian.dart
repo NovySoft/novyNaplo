@@ -128,6 +128,7 @@ final Map<String, String> translation = {
   "savTimetable": "Órarend mentése",
   "checkVersion": "Verzió ellenőrzése",
   "readMarks": "Jegyek olvasása az adatbázisból",
+  "readSubjShorts": "Tantárgy nevek olvasása az adatbázisból",
   "readHw": "Házifeladat olvasása az adatbázisból",
   "readNotices": "Feljegyzések olvasása az adatbázisból",
   "readAvs": "Átlagok olvasása az adatbázisból",

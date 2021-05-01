@@ -4,6 +4,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjCol;
 
+//Todo one function to do it all
 Future<Map<String, int>> getAllColors() async {
   FirebaseCrashlytics.instance.log("getAllColors");
 

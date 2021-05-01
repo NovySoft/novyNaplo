@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/ui/screens/settings/firebase_settings.dart';
+import 'package:novynaplo/ui/screens/settings/subjNickname_settings.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -424,7 +425,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SubjectColorPicker(),
+                        builder: (context) => SubjectNicknameSettings(),
                       ),
                     );
                   },

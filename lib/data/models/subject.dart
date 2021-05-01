@@ -11,6 +11,7 @@ class Subject {
 
   Subject({this.uid, this.category, this.name, this.fullName});
 
+  //TODO: I believe this can be optimized further
   Subject.fromJson(Map<String, dynamic> inpJson) {
     uid = inpJson['Uid'];
     category = inpJson['Kategoria'] != null
@@ -19,7 +20,7 @@ class Subject {
             : inpJson['Kategoria'])
         : null;
     fullName = inpJson['Nev'];
-    name = shortenSubject(inpJson['Nev']);
+    name = shortenSubject(this);
   }
 
   String toJson() {

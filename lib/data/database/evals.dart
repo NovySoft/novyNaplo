@@ -89,6 +89,7 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
             eval.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
+          print("Mark modified $eval");
           NotificationDispatcher.toBeDispatchedNotifications.marks.add(
             NotificationData(
               title: '${getTranslatedString("markModified")}: ' +

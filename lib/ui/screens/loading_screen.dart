@@ -28,6 +28,7 @@ import 'package:path/path.dart' as fpath;
 import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
+import 'package:novynaplo/helpers/misc/shortenSubject.dart' as subjShorts;
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -111,6 +112,11 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       FirebaseCrashlytics.instance
           .setCustomKey("Version", config.currentAppVersionCode);
+      //*Subject shortenings
+      setState(() {
+        loadingText = getTranslatedString("readSubjShorts");
+      });
+      subjShorts.subjectNicknameMap = await DatabaseHelper.getAllSubjNicks();
       //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");
