@@ -166,6 +166,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                     "${colorMatrix[index][i].id}:",
                     style: TextStyle(
                       fontSize: 16,
+                      color: Theme.of(context).textTheme.subtitle1.color,
                     ),
                   ),
                 ),
@@ -235,6 +236,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                           "${colorMatrix[index][0].id}:",
                           style: TextStyle(
                             fontSize: 16,
+                            color: Theme.of(context).textTheme.subtitle1.color,
                           ),
                         ),
                         Text(
@@ -242,6 +244,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 16,
+                            color: Theme.of(context).textTheme.subtitle1.color,
                           ),
                         ),
                       ],
@@ -366,6 +369,8 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                             "${capitalize(colorMatrix[index][0].category)} (${colorMatrix[index].length}):",
                             style: TextStyle(
                               fontSize: 16,
+                              color:
+                                  Theme.of(context).textTheme.subtitle1.color,
                             ),
                           ),
                         ),
@@ -399,6 +404,10 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                                   "${colorMatrix[index][indexJ].id}:",
                                   style: TextStyle(
                                     fontSize: 16,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        .color,
                                   ),
                                 ),
                               ),

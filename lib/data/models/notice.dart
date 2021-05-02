@@ -20,14 +20,16 @@ class Notice {
   int databaseId;
   int userId;
 
-  Notice(
-      {this.title,
-      this.teacher,
-      this.group,
-      this.content,
-      this.type,
-      this.uid});
+  Notice({
+    this.title,
+    this.teacher,
+    this.group,
+    this.content,
+    this.type,
+    this.uid,
+  });
 
+  //TODO: Fix missing subject
   Notice.fromJson(Map<String, dynamic> json, Student userDetails) {
     userId = userDetails.userId;
     title = json['Cim'];
@@ -63,9 +65,8 @@ class Notice {
         ? null
         : ClassGroup.fromJson(json.decode(map['group']));
     content = map['content'];
-    subject = map['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(map['subject']));
+    subject =
+        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
     type = map['type'] == null
         ? null
         : Description.fromJson(json.decode(map['type']));
@@ -84,7 +85,7 @@ class Notice {
       'seenDate': seenDate == null ? null : seenDate.toUtc().toIso8601String(),
       'group': group == null ? null : group.toJson(),
       'content': content,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'type': type == null ? null : type.toJson(),
       'uid': uid,
       'databaseId': databaseId,

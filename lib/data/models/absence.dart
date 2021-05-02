@@ -50,9 +50,8 @@ class Absence {
         ? null
         : AbsenceLesson.fromJson(json.decode(map['lesson']));
     teacher = map['teacher'];
-    subject = map['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(map['subject']));
+    subject =
+        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
     type = map['type'] == null
         ? null
         : Description.fromJson(json.decode(map['type']));
@@ -80,7 +79,11 @@ class Absence {
         json['Ora'] != null ? new AbsenceLesson.fromJson(json['Ora']) : null;
     teacher = json['RogzitoTanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            "eval",
+            null,
+          )
         : null;
     type =
         json['Tipus'] != null ? new Description.fromJson(json['Tipus']) : null;
@@ -96,7 +99,7 @@ class Absence {
       'userId': userId,
       'uid': uid,
       'teacher': teacher,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'justificationState': justificationState,
       'justificationType':
           justificationType == null ? null : justificationType.toJson(),

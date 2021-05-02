@@ -49,7 +49,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
       );
       await db.execute(
-        'CREATE TABLE SubjNicks (subject TEXT PRIMARY KEY,nickname TEXT,category TEXT);',
+        'CREATE TABLE Subjects (uid TEXT PRIMARY KEY,category TEXT,nickname TEXT, fullname TEXT, teacher TEXT);',
       );
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
@@ -57,7 +57,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE IF NOT EXISTS Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
       );
       await db.execute(
-        'CREATE TABLE IF NOT EXISTS SubjNicks (subject TEXT PRIMARY KEY,nickname TEXT,category TEXT);',
+        'CREATE TABLE IF NOT EXISTS Subjects (uid TEXT PRIMARY KEY,category TEXT,nickname TEXT, fullname TEXT, teacher TEXT);',
       );
     },
     // Set the version. This executes the onCreate function and provides a

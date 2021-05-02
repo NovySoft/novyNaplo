@@ -28,7 +28,7 @@ import 'package:path/path.dart' as fpath;
 import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
-import 'package:novynaplo/helpers/misc/shortenSubject.dart' as subjShorts;
+import 'package:novynaplo/data/models/subject.dart' as subject;
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -116,7 +116,7 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readSubjShorts");
       });
-      subjShorts.subjectNicknameMap = await DatabaseHelper.getAllSubjNicks();
+      subject.subjectMap = await DatabaseHelper.getSubjectMap();
       //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");

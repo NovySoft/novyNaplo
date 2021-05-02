@@ -1,16 +1,12 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/subject.dart';
 
-Map<String, String> subjectNicknameMap = new Map<String, String>();
-
-//TODO: Teacher nicknames and timetable nicknames
 //TODO: Apply the lowercase stuff to colors too...
 String shortenSubject(Subject input) {
   String lowerSubject = input.fullName.toLowerCase();
-  if (subjectNicknameMap.containsKey(lowerSubject)) {
+  if (subjectMap.containsKey(input.uid)) {
     //If we have a shorthand subject we can safely return
-    return subjectNicknameMap[lowerSubject];
+    return subjectMap[input.uid].name;
   }
   String output = input.fullName;
   if (lowerSubject.contains("kötelező komplex természettudomány")) {
@@ -41,13 +37,5 @@ String shortenSubject(Subject input) {
       },
     );
   }
-  subjectNicknameMap[lowerSubject] = output;
-  DatabaseHelper.insertSubjNick(
-    Subject(
-      fullName: lowerSubject,
-      name: output,
-      category: input.category,
-    ),
-  );
   return output;
 }

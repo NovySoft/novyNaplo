@@ -45,7 +45,7 @@ class Exam {
       'mode': mode == null ? null : mode.toJson(),
       'lessonNumber': lessonNumber,
       'teacher': teacher,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'theme': theme,
       'group': group == null ? null : group.toJson(),
       'uid': uid,
@@ -66,9 +66,8 @@ class Exam {
         : Description.fromJson(json.decode(map['mode']));
     lessonNumber = map['lessonNumber'];
     teacher = map['teacher'];
-    subject = map['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(map['subject']));
+    subject =
+        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
     theme = map['theme'];
     group = map['group'] == null
         ? null
@@ -92,7 +91,7 @@ class Exam {
     lessonNumber = json['OrarendiOraOraszama'];
     teacher = json['RogzitoTanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(json['Tantargy'], "eval", null)
         : null;
     theme = json['Temaja'];
     group = json['OsztalyCsoport'] != null

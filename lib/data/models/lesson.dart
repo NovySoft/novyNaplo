@@ -84,7 +84,7 @@ class Lesson {
       'teacherHwUid': teacherHwUid,
       'isHWSolved': isHWSolved ? 1 : 0,
       'teacher': teacher,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'presence': presence == null ? null : presence.toJson(),
       'theme': theme,
       'classroom': classroom,
@@ -160,9 +160,8 @@ class Lesson {
     }
     isHWSolved = map['teacherHwUid'] == 1 ? true : false;
     teacher = map['teacher'];
-    subject = map['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(map['subject']));
+    subject =
+        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
     presence = map['presence'] == null
         ? null
         : Description.fromJson(json.decode(map['presence']));
@@ -246,7 +245,11 @@ class Lesson {
     isHWSolved = json['IsHaziFeladatMegoldva'];
     teacher = json['TanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            "timetable",
+            teacher,
+          )
         : null;
     presence = json['TanuloJelenlet'] != null
         ? new Description.fromJson(json['TanuloJelenlet'])

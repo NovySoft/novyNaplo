@@ -9,8 +9,6 @@ import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/data/models/subjectColor.dart';
-import 'package:novynaplo/data/models/subjectNicknames.dart';
-import 'package:novynaplo/ui/screens/settings/subjNickname_settings.dart';
 
 import 'absences.dart' as absences;
 import 'average.dart' as average;
@@ -24,7 +22,7 @@ import 'timetable.dart' as timetable;
 import 'users.dart' as users;
 import 'mainSql.dart' as main;
 import 'colors.dart' as colors;
-import 'subjNicks.dart' as subjNicks;
+import 'subjects.dart' as subjects;
 
 ///List of pointers to the corresponding functions
 class DatabaseHelper {
@@ -88,10 +86,8 @@ class DatabaseHelper {
   static Future<void> Function(String, int) updateColorCategory =
       colors.updateColorCategory;
 
-  static Future<void> Function(Subject) insertSubjNick =
-      subjNicks.insertSubjNick;
-  static Future<Map<String, String>> Function() getAllSubjNicks =
-      subjNicks.getAllSubjNicks;
-  static Future<List<List<SubjectNicknames>>> Function() getSubjNickMatrix =
-      subjNicks.getSubjNickMatrix;
+  static Future<void> Function(Subject, String) insertSubject =
+      subjects.insertSubject;
+  static Future<Map<String, Subject>> Function() getSubjectMap =
+      subjects.getSubjectMap;
 }

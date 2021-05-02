@@ -53,7 +53,7 @@ class Homework {
       'isSolved': isSolved ? 1 : 0,
       'teacher': teacher,
       'content': content,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'group': group == null ? null : group.toJson(),
       'uid': uid,
       'userId': userId,
@@ -79,9 +79,8 @@ class Homework {
     isSolved = map['isSolved'] == 1 ? true : false;
     teacher = map['teacher'];
     content = map['content'];
-    subject = map['subject'] == null
-        ? null
-        : Subject.fromJson(json.decode(map['subject']));
+    subject =
+        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
     group = map['group'] == null
         ? null
         : ClassGroup.fromJson(json.decode(map['group']));
@@ -113,7 +112,11 @@ class Homework {
     teacher = json['RogzitoTanarNeve'];
     content = htmlLinkify(json['Szoveg']);
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            "eval",
+            null,
+          )
         : null;
     group = json['OsztalyCsoport'] != null
         ? new ClassGroup.fromJson(json['OsztalyCsoport'])
