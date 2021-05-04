@@ -39,14 +39,14 @@ class Subject {
         fullName = decoded["Nev"];
         name = shortenSubject(this);
         if (!this.isSameKretaSide(subjectMap[uid])) {
+          subjectMap[uid] = this;
           DatabaseHelper.updateSubject(
             dbId: dbId,
-            uid: uid,
+            uid: dbUid,
             dbName: dbName,
             subject: this.uid,
           );
           DatabaseHelper.insertSubject(this, teacher);
-          subjectMap[uid] = this;
         }
       } catch (e) {
         uid = inpUID;

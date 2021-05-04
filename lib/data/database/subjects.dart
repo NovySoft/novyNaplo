@@ -45,7 +45,7 @@ Future<void> updateSubject({
       dbName,
       subject,
       uid,
-      dbId,
+      dbId ?? "null",
     ],
   );
 }
