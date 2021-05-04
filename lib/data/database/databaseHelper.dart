@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/average.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -90,4 +91,10 @@ class DatabaseHelper {
       subjects.insertSubject;
   static Future<Map<String, Subject>> Function() getSubjectMap =
       subjects.getSubjectMap;
+  static Future<void> Function({
+    @required String uid,
+    @required int dbId,
+    @required String subject,
+    @required String dbName,
+  }) updateSubject = subjects.updateSubject;
 }

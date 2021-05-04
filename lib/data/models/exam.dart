@@ -71,7 +71,10 @@ class Exam {
         : Subject.fromDatabaseId(
             map['subject'],
             "eval",
-            null,
+            teacher,
+            dbId: databaseId,
+            dbUid: uid,
+            dbName: "Exams",
           );
     theme = map['theme'];
     group = map['group'] == null
@@ -96,7 +99,11 @@ class Exam {
     lessonNumber = json['OrarendiOraOraszama'];
     teacher = json['RogzitoTanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'], "eval", null)
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            "eval",
+            teacher,
+          )
         : null;
     theme = json['Temaja'];
     group = json['OsztalyCsoport'] != null

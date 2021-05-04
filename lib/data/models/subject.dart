@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/helpers/misc/shortenSubject.dart';
 import 'description.dart';
@@ -19,22 +21,37 @@ class Subject {
 
   Subject({this.uid, this.category, this.name, this.fullName});
 
-  Subject.fromDatabaseId(String inpUID, String type, String teacher) {
+  Subject.fromDatabaseId(
+    String inpUID,
+    String type,
+    String teacher, {
+    @required int dbId,
+    @required String dbUid,
+    @required String dbName,
+  }) {
     if (subjectMap[inpUID] == null) {
       try {
         Map<String, dynamic> decoded = json.decode(inpUID);
         uid = decoded["Uid"];
         uid += type;
+        uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
         category = Description.fromJson(json.decode(decoded['Kategoria']));
         fullName = decoded["Nev"];
         name = shortenSubject(this);
         if (!this.isSameKretaSide(subjectMap[uid])) {
+          DatabaseHelper.updateSubject(
+            dbId: dbId,
+            uid: uid,
+            dbName: dbName,
+            subject: this.uid,
+          );
           DatabaseHelper.insertSubject(this, teacher);
           subjectMap[uid] = this;
         }
       } catch (e) {
         uid = inpUID;
         uid += type;
+        uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
         category = Description(
           uid: inpUID,
           name: inpUID,
@@ -61,6 +78,7 @@ class Subject {
   Subject.fromJson(Map<String, dynamic> inpJson, String type, String teacher) {
     uid = inpJson['Uid'];
     uid += type;
+    uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
     category = inpJson['Kategoria'] != null
         ? new Description.fromJson(inpJson['Kategoria'].runtimeType == String
             ? json.decode(inpJson['Kategoria'])

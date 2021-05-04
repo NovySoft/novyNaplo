@@ -70,9 +70,11 @@ class Notice {
         : Subject.fromDatabaseId(
             map['subject'],
             "eval",
-            null,
+            teacher,
+            dbId: databaseId,
+            dbUid: uid,
+            dbName: "Notices",
           );
-    ;
     type = map['type'] == null
         ? null
         : Description.fromJson(json.decode(map['type']));

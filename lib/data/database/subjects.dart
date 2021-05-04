@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
@@ -30,4 +31,21 @@ Future<Map<String, Subject>> getSubjectMap() async {
   }
 
   return output;
+}
+
+Future<void> updateSubject({
+  @required String uid,
+  @required int dbId,
+  @required String subject,
+  @required String dbName,
+}) async {
+  await globals.db.rawUpdate(
+    "UPDATE ? SET Subject = ? WHERE uid = ? OR databaseId = ?",
+    [
+      dbName,
+      subject,
+      uid,
+      dbId,
+    ],
+  );
 }
