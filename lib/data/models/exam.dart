@@ -66,8 +66,13 @@ class Exam {
         : Description.fromJson(json.decode(map['mode']));
     lessonNumber = map['lessonNumber'];
     teacher = map['teacher'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "eval",
+            null,
+          );
     theme = map['theme'];
     group = map['group'] == null
         ? null

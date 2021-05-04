@@ -19,16 +19,22 @@ class Subject {
 
   Subject({this.uid, this.category, this.name, this.fullName});
 
-  Subject.fromDatabaseId(String inpUID) {
+  Subject.fromDatabaseId(String inpUID, String type, String teacher) {
     if (subjectMap[inpUID] == null) {
       try {
         Map<String, dynamic> decoded = json.decode(inpUID);
         uid = decoded["Uid"];
+        uid += type;
         category = Description.fromJson(json.decode(decoded['Kategoria']));
         fullName = decoded["Nev"];
         name = shortenSubject(this);
+        if (!this.isSameKretaSide(subjectMap[uid])) {
+          DatabaseHelper.insertSubject(this, teacher);
+          subjectMap[uid] = this;
+        }
       } catch (e) {
         uid = inpUID;
+        uid += type;
         category = Description(
           uid: inpUID,
           name: inpUID,

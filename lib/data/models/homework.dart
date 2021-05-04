@@ -79,8 +79,13 @@ class Homework {
     isSolved = map['isSolved'] == 1 ? true : false;
     teacher = map['teacher'];
     content = map['content'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "eval",
+            null,
+          );
     group = map['group'] == null
         ? null
         : ClassGroup.fromJson(json.decode(map['group']));

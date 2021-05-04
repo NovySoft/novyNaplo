@@ -65,8 +65,14 @@ class Notice {
         ? null
         : ClassGroup.fromJson(json.decode(map['group']));
     content = map['content'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "eval",
+            null,
+          );
+    ;
     type = map['type'] == null
         ? null
         : Description.fromJson(json.decode(map['type']));

@@ -78,8 +78,13 @@ class Evals {
     numberValue = map['numberValue'];
     textValue = map['textValue'];
     shortTextValue = map['shortTextValue'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "eval",
+            null,
+          );
     theme = map['theme'];
     type = map['type'] == null
         ? null

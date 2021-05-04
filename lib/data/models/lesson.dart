@@ -160,8 +160,13 @@ class Lesson {
     }
     isHWSolved = map['teacherHwUid'] == 1 ? true : false;
     teacher = map['teacher'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "timetable",
+            teacher,
+          );
     presence = map['presence'] == null
         ? null
         : Description.fromJson(json.decode(map['presence']));

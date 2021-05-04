@@ -50,8 +50,13 @@ class Absence {
         ? null
         : AbsenceLesson.fromJson(json.decode(map['lesson']));
     teacher = map['teacher'];
-    subject =
-        map['subject'] == null ? null : Subject.fromDatabaseId(map['subject']);
+    subject = map['subject'] == null
+        ? null
+        : Subject.fromDatabaseId(
+            map['subject'],
+            "eval",
+            null,
+          );
     type = map['type'] == null
         ? null
         : Description.fromJson(json.decode(map['type']));
