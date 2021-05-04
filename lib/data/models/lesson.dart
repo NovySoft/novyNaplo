@@ -166,8 +166,8 @@ class Lesson {
             map['subject'],
             "timetable",
             teacher,
-            dbId: databaseId,
-            dbUid: uid,
+            dbId: this.databaseId,
+            dbUid: this.uid,
             dbName: "Timetable",
           );
     presence = map['presence'] == null

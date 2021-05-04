@@ -56,8 +56,8 @@ class Absence {
             map['subject'],
             "eval",
             teacher,
-            dbId: databaseId,
-            dbUid: uid,
+            dbId: this.databaseId,
+            dbUid: this.uid,
             dbName: "Absences",
           );
     type = map['type'] == null

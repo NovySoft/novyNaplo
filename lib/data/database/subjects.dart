@@ -39,13 +39,15 @@ Future<void> updateSubject({
   @required String subject,
   @required String dbName,
 }) async {
+  if (uid == null || dbId == null || subject == null || dbName == null) return;
+  print(
+      "UPDATE $dbName SET Subject = $subject WHERE uid = $uid OR databaseId = $dbId");
   await globals.db.rawUpdate(
-    "UPDATE ? SET Subject = ? WHERE uid = ? OR databaseId = ?",
+    "UPDATE $dbName SET Subject = ? WHERE uid = ? OR databaseId = ?",
     [
-      dbName,
       subject,
       uid,
-      dbId ?? "null",
+      dbId,
     ],
   );
 }

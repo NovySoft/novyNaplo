@@ -38,16 +38,14 @@ class Subject {
         category = Description.fromJson(json.decode(decoded['Kategoria']));
         fullName = decoded["Nev"];
         name = shortenSubject(this);
-        if (!this.isSameKretaSide(subjectMap[uid])) {
-          subjectMap[uid] = this;
-          DatabaseHelper.updateSubject(
-            dbId: dbId,
-            uid: dbUid,
-            dbName: dbName,
-            subject: this.uid,
-          );
-          DatabaseHelper.insertSubject(this, teacher);
-        }
+        subjectMap[uid] = this;
+        DatabaseHelper.updateSubject(
+          dbId: dbId,
+          uid: dbUid,
+          dbName: dbName,
+          subject: this.uid,
+        );
+        DatabaseHelper.insertSubject(this, teacher);
       } catch (e) {
         uid = inpUID;
         uid += type;

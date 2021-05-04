@@ -71,8 +71,8 @@ class Notice {
             map['subject'],
             "eval",
             teacher,
-            dbId: databaseId,
-            dbUid: uid,
+            dbId: this.databaseId,
+            dbUid: this.uid,
             dbName: "Notices",
           );
     type = map['type'] == null

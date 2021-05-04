@@ -84,8 +84,8 @@ class Evals {
             map['subject'],
             "eval",
             teacher,
-            dbId: databaseId,
-            dbUid: uid,
+            dbId: this.databaseId,
+            dbUid: this.uid,
             dbName: "Evals",
           );
     theme = map['theme'];
