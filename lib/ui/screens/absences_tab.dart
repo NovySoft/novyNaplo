@@ -321,7 +321,7 @@ class AbsencencesDetailTab extends StatelessWidget {
                 collapseMode: CollapseMode.parallax,
                 stretchModes: [StretchMode.zoomBackground],
                 background: Icon(
-                  parseSubjectToIcon(subject: absence.subject.fullName),
+                  parseSubjectToIcon(subject: absence.subject.name),
                   size: 150,
                   color: Colors.black38,
                   textDirection: TextDirection.ltr,

@@ -7,7 +7,7 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   }
   List<Evals> jegyArray = List.from(input);
   List<List<Evals>> jegyMatrix = [];
-  jegyArray.sort((a, b) => a.subject.fullName.compareTo(b.subject.fullName));
+  jegyArray.sort((a, b) => a.subject.name.compareTo(b.subject.name));
   String lastString = "";
   for (var n in jegyArray) {
     if ((n.valueType.name != "Szazalekos" &&
@@ -15,9 +15,9 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
             !(Evals.nonAvTypes.contains(n.type.name))) ||
         n.kindOf == "Magatartas" ||
         n.kindOf == "Szorgalom") {
-      if (n.subject.fullName != lastString) {
+      if (n.subject.name != lastString) {
         jegyMatrix.add([]);
-        lastString = n.subject.fullName;
+        lastString = n.subject.name;
       }
       jegyMatrix.last.add(n);
     }
@@ -35,8 +35,8 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
     if (isSzovegesOnly) {
       List<Evals> listOfSubjectX = jegyArray
           .where((element) =>
-              element.subject.fullName.toLowerCase() ==
-              n[0].subject.fullName.toLowerCase())
+              element.subject.name.toLowerCase() ==
+              n[0].subject.name.toLowerCase())
           .toList();
       List<Evals> tempIteratorList = [];
       for (var i = 0; i < listOfSubjectX.length; i++) {
@@ -70,16 +70,16 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
 
 List<List<Evals>> sortByDateAndSubject(List<Evals> inputOne) {
   List<Evals> input = List.from(inputOne);
-  input.sort((a, b) => a.subject.fullName.compareTo(b.subject.fullName));
+  input.sort((a, b) => a.subject.name.compareTo(b.subject.name));
   int _currentIndex = 0;
   List<List<Evals>> _tempArray = [[]];
   if (input != null && input.length != 0) {
-    String _beforeSubject = input[0].subject.fullName;
+    String _beforeSubject = input[0].subject.name;
     for (var n in input) {
-      if (n.subject.fullName != _beforeSubject) {
+      if (n.subject.name != _beforeSubject) {
         _currentIndex++;
         _tempArray.add([]);
-        _beforeSubject = n.subject.fullName;
+        _beforeSubject = n.subject.name;
       }
       _tempArray[_currentIndex].add(n);
     }
