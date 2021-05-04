@@ -21,14 +21,22 @@ class Subject {
 
   Subject.fromDatabaseId(String inpUID) {
     if (subjectMap[inpUID] == null) {
-      uid = inpUID;
-      category = Description(
-        uid: inpUID,
-        name: inpUID,
-        description: inpUID,
-      );
-      name = inpUID;
-      fullName = inpUID;
+      try {
+        Map<String, dynamic> decoded = json.decode(inpUID);
+        uid = decoded["Uid"];
+        category = Description.fromJson(json.decode(decoded['Kategoria']));
+        fullName = decoded["Nev"];
+        name = shortenSubject(this);
+      } catch (e) {
+        uid = inpUID;
+        category = Description(
+          uid: inpUID,
+          name: inpUID,
+          description: inpUID,
+        );
+        name = inpUID;
+        fullName = inpUID;
+      }
     } else {
       uid = inpUID;
       category = subjectMap[inpUID].category;

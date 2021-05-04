@@ -112,6 +112,12 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       FirebaseCrashlytics.instance
           .setCustomKey("Version", config.currentAppVersionCode);
+      if (globals.prefs.getBool("isMigratedToNewSubjectsDB") == null) {
+        for (Student n in allUsers) {
+          await DatabaseHelper.setFetched(n, false);
+        }
+        globals.prefs.setBool("isMigratedToNewSubjectsDB", true);
+      }
       //*Subject shortenings
       setState(() {
         loadingText = getTranslatedString("readSubjShorts");
