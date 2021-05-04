@@ -70,7 +70,7 @@ class Exam {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            teacher,
+            null,
             dbId: this.databaseId,
             dbUid: this.uid,
             dbName: "Exams",
@@ -100,7 +100,7 @@ class Exam {
     subject = json['Tantargy'] != null
         ? new Subject.fromJson(
             json['Tantargy'],
-            teacher,
+            null,
           )
         : null;
     theme = json['Temaja'];

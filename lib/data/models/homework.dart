@@ -83,7 +83,7 @@ class Homework {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            teacher,
+            null,
             dbId: this.databaseId,
             dbUid: this.uid,
             dbName: "Homework",
@@ -121,7 +121,7 @@ class Homework {
     subject = json['Tantargy'] != null
         ? new Subject.fromJson(
             json['Tantargy'],
-            teacher,
+            null,
           )
         : null;
     group = json['OsztalyCsoport'] != null

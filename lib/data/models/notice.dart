@@ -69,7 +69,7 @@ class Notice {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            teacher,
+            null,
             dbId: this.databaseId,
             dbUid: this.uid,
             dbName: "Notices",
