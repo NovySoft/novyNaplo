@@ -54,7 +54,6 @@ class Absence {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            "eval",
             teacher,
             dbId: this.databaseId,
             dbUid: this.uid,
@@ -89,7 +88,6 @@ class Absence {
     subject = json['Tantargy'] != null
         ? new Subject.fromJson(
             json['Tantargy'],
-            "eval",
             teacher,
           )
         : null;

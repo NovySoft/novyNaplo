@@ -7,7 +7,7 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   }
   List<Evals> jegyArray = List.from(input);
   List<List<Evals>> jegyMatrix = [];
-  jegyArray.sort((a, b) => a.subject.name.compareTo(b.subject.name));
+  jegyArray.sort((a, b) => a.subject.fullName.compareTo(b.subject.fullName));
   String lastString = "";
   for (var n in jegyArray) {
     if ((n.valueType.name != "Szazalekos" &&
@@ -15,9 +15,9 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
             !(Evals.nonAvTypes.contains(n.type.name))) ||
         n.kindOf == "Magatartas" ||
         n.kindOf == "Szorgalom") {
-      if (n.subject.name != lastString) {
+      if (n.subject.fullName != lastString) {
         jegyMatrix.add([]);
-        lastString = n.subject.name;
+        lastString = n.subject.fullName;
       }
       jegyMatrix.last.add(n);
     }
@@ -35,8 +35,8 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
     if (isSzovegesOnly) {
       List<Evals> listOfSubjectX = jegyArray
           .where((element) =>
-              element.subject.name.toLowerCase() ==
-              n[0].subject.name.toLowerCase())
+              element.subject.fullName.toLowerCase() ==
+              n[0].subject.fullName.toLowerCase())
           .toList();
       List<Evals> tempIteratorList = [];
       for (var i = 0; i < listOfSubjectX.length; i++) {

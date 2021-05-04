@@ -23,7 +23,6 @@ class Subject {
 
   Subject.fromDatabaseId(
     String inpUID,
-    String type,
     String teacher, {
     @required int dbId,
     @required String dbUid,
@@ -33,7 +32,6 @@ class Subject {
       try {
         Map<String, dynamic> decoded = json.decode(inpUID);
         uid = decoded["Uid"];
-        uid += type;
         uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
         category = Description.fromJson(json.decode(decoded['Kategoria']));
         fullName = decoded["Nev"];
@@ -48,7 +46,6 @@ class Subject {
         DatabaseHelper.insertSubject(this, teacher);
       } catch (e) {
         uid = inpUID;
-        uid += type;
         uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
         category = Description(
           uid: inpUID,
@@ -73,9 +70,8 @@ class Subject {
     fullName = map['fullname'];
   }
 
-  Subject.fromJson(Map<String, dynamic> inpJson, String type, String teacher) {
+  Subject.fromJson(Map<String, dynamic> inpJson, String teacher) {
     uid = inpJson['Uid'];
-    uid += type;
     uid += md5.convert(utf8.encode(teacher ?? "null")).toString();
     category = inpJson['Kategoria'] != null
         ? new Description.fromJson(inpJson['Kategoria'].runtimeType == String

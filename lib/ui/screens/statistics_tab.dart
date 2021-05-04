@@ -591,18 +591,21 @@ class _StatisticsTabState extends State<StatisticsTab>
             id: index,
             subject: capitalize(getTranslatedString("contracted")),
             color: currColor,
-            inputList: [Evals(subject: Subject(name: "Összesített"))],
+            inputList: [Evals(subject: Subject(name: "-contracted-"))],
             animate: globals.chartAnimations,
           ),
         ),
       );
     }
-    int statListIndex = marks.allParsedBySubject.indexWhere((element) =>
-        element[0].subject.name.toLowerCase() ==
-        allParsedSubjectsWithoutZeros[index - 1][0].subject.name.toLowerCase());
+    int statListIndex = allParsedSubjects.indexWhere((element) =>
+        element[0].subject.fullName.toLowerCase() ==
+        allParsedSubjectsWithoutZeros[index - 1][0]
+            .subject
+            .fullName
+            .toLowerCase());
     List<Evals> chartListPoints = [];
     if (statListIndex != -1) {
-      chartListPoints = List.from(marks.allParsedBySubject[statListIndex]);
+      chartListPoints = List.from(allParsedSubjects[statListIndex]);
     } else if (allParsedSubjectsWithoutZeros[index - 1].length > 0) {
       chartListPoints = List.from(allParsedSubjectsWithoutZeros[index - 1]);
     }
@@ -616,7 +619,7 @@ class _StatisticsTabState extends State<StatisticsTab>
         onPressed: ChartsDetailTab(
           id: index,
           subject: capitalize(
-              allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
+              allParsedSubjectsWithoutZeros[index - 1][0].subject.fullName),
           color: currColor,
           inputList: chartListPoints,
           animate: globals.chartAnimations,

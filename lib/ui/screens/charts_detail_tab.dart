@@ -46,12 +46,12 @@ class ChartsDetailTab extends StatelessWidget {
   Widget build(BuildContext context) {
     List<charts.Series<LinearMarkChartData, int>> seriesList = [];
     if (inputList.length > 0) {
-      if (inputList[0].subject.name == "Összesített") {
+      if (inputList[0].subject.name == "-contracted-") {
         seriesList = createOsszesitett(stats.allParsedSubjectsWithoutZeros);
       } else {
         seriesList = createSubjectChart(
           inputList,
-          inputList[0].subject.name,
+          inputList[0].subject.fullName,
         );
       }
     }

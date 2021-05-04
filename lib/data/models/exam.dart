@@ -70,7 +70,6 @@ class Exam {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            "eval",
             teacher,
             dbId: this.databaseId,
             dbUid: this.uid,
@@ -101,7 +100,6 @@ class Exam {
     subject = json['Tantargy'] != null
         ? new Subject.fromJson(
             json['Tantargy'],
-            "eval",
             teacher,
           )
         : null;

@@ -430,7 +430,7 @@ class NotificationReceiver {
                         subject: capitalize(
                             _tempMatrixWithoutZeros[tempIndexTwo][0]
                                 .subject
-                                .name),
+                                .fullName),
                         color: currColor,
                         inputList: _tempMatrixWithoutZeros[tempIndexTwo],
                         animate: globals.chartAnimations,
@@ -456,7 +456,7 @@ class NotificationReceiver {
                       subject: capitalize(statsTab
                           .allParsedSubjectsWithoutZeros[tempIndex][0]
                           .subject
-                          .name),
+                          .fullName),
                       color: currColor,
                       inputList:
                           statsTab.allParsedSubjectsWithoutZeros[tempIndex],

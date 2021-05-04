@@ -10,6 +10,7 @@ import 'package:novynaplo/ui/screens/reports_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedLeadingTrailingCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
 
 Map<String, List<Evals>> reportMaps = {
@@ -162,14 +163,17 @@ class _ReportsTabState extends State<ReportsTab>
                   eval: reportMaps[tabName][index],
                   index: index,
                 );
-                int statListIndex = marks.allParsedBySubject.indexWhere(
+                int statListIndex = stats.allParsedSubjects.indexWhere(
                     (element) =>
-                        element[0].subject.name.toLowerCase() ==
-                        reportMaps[tabName][index].subject.name.toLowerCase());
+                        element[0].subject.fullName.toLowerCase() ==
+                        reportMaps[tabName][index]
+                            .subject
+                            .fullName
+                            .toLowerCase());
                 List<Evals> chartListPoints = [];
                 if (statListIndex != -1) {
                   chartListPoints =
-                      marks.allParsedBySubject[statListIndex].where((element) {
+                      stats.allParsedSubjects[statListIndex].where((element) {
                     if (element.date
                             .compareTo(reportMaps[tabName][index].date) <=
                         0) {
@@ -213,7 +217,7 @@ class _ReportsTabState extends State<ReportsTab>
                     value;
                 return AnimatedLeadingTrailingCard(
                   leading: Text(
-                    capitalize(reportMaps[tabName][index].subject.name),
+                    capitalize(reportMaps[tabName][index].subject.fullName),
                     textDirection: TextDirection.ltr,
                     textAlign: TextAlign.left,
                     maxLines: 3,
@@ -241,7 +245,7 @@ class _ReportsTabState extends State<ReportsTab>
                   color: color,
                   onPressed: ReportsDetailTab(
                     title:
-                        "${getTranslatedString(tabName).toLowerCase()} ${reportMaps[tabName][index].subject.name}",
+                        "${getTranslatedString(tabName).toLowerCase()} ${reportMaps[tabName][index].subject.fullName}",
                     eval: reportMaps[tabName][index],
                     color: color,
                     inputList: chartListPoints,

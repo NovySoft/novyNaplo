@@ -69,7 +69,6 @@ class Notice {
         ? null
         : Subject.fromDatabaseId(
             map['subject'],
-            "eval",
             teacher,
             dbId: this.databaseId,
             dbUid: this.uid,

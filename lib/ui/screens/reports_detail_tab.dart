@@ -211,7 +211,7 @@ class ReportsDetailTab extends StatelessWidget {
               int performancePercentage = calcPercentFromEvalsList(
                 av: result,
                 evalList: getSameSubjectEvals(
-                  subject: eval.subject.name,
+                  subject: eval.subject.fullName,
                   sort: true,
                   onlyBefore: eval.date,
                 ),
