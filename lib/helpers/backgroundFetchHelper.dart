@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
-import 'package:novynaplo/data/database/users.dart';
+//import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -54,7 +54,7 @@ void backgroundFetch() async {
       return;
     }
     List<Student> allUsers = await DatabaseHelper.getAllUsers();
-    int errorNotifId = -1;
+    //int errorNotifId = -1;
     for (var currentUser in allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
@@ -63,7 +63,9 @@ void backgroundFetch() async {
           setData: false,
         );
         FirebaseAnalytics().logEvent(name: "BackgroundFetchSuccess");
-      } else if (status.status == "invalid_username_or_password") {
+      }
+      //!Kréta update fucks up and says that password is wrong, but in reality it is an update
+      /*else if (status.status == "invalid_username_or_password") {
         String name = await getUsersNameFromUserId(currentUser.userId);
         await NotificationHelper.show(
           errorNotifId,
@@ -72,13 +74,16 @@ void backgroundFetch() async {
           NotificationHelper.platformChannelSpecificsAlertAll,
         );
         errorNotifId -= 1;
-      } else {
-        FirebaseAnalytics().logEvent(
-          name: "BackgroundFetchFail",
-          parameters: {
-            "status": status.status,
-          },
-        );
+      }*/
+      else {
+        if (!status.status.contains(getTranslatedString('kretaUpgrade'))) {
+          FirebaseAnalytics().logEvent(
+            name: "BackgroundFetchFail",
+            parameters: {
+              "status": status.status,
+            },
+          );
+        }
       }
     }
   } catch (e, s) {

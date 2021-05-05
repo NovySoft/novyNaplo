@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/subject.dart';
+import 'package:novynaplo/data/models/subjectNicknames.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:sqflite/sqflite.dart';
 
@@ -48,6 +51,55 @@ Future<void> updateSubject({
       subject,
       uid,
       dbId,
+    ],
+  );
+}
+
+Future<List<List<SubjectNicknames>>> getSubjNickMatrix(bool isTimetable) async {
+  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    isTimetable
+        ? 'SELECT * FROM Subjects WHERE teacher IS NOT NULL'
+        : 'SELECT * FROM Subjects WHERE teacher IS NULL',
+  );
+
+  List<List<SubjectNicknames>> output = [[]];
+  List<SubjectNicknames> temp = [];
+  for (var n in maps) {
+    temp.add(
+      SubjectNicknames(
+        uid: n["uid"],
+        fullName: n["fullname"],
+        nickName: n["nickname"],
+        category: json.decode(n["category"])["Nev"],
+        teacher: n["teacher"],
+      ),
+    );
+  }
+  temp.sort((a, b) => a.category.compareTo(b.category));
+  //Create matrix
+  int index = 0;
+  String categoryBefore = temp[0].category;
+  for (var n in temp) {
+    if (n.category != categoryBefore) {
+      index++;
+      output.last.sort((a, b) => a.fullName.compareTo(b.fullName));
+      output.add([]);
+      categoryBefore = n.category;
+    }
+    output[index].add(n);
+  }
+
+  return output;
+}
+
+Future<void> updateNickname(Subject subject) async {
+  print(
+      "UPDATE Subjects SET nickname = ${subject.name} WHERE uid = ${subject.uid}");
+  await globals.db.rawUpdate(
+    "UPDATE Subjects SET nickname = ? WHERE uid = ?",
+    [
+      subject.name,
+      subject.uid,
     ],
   );
 }

@@ -425,7 +425,9 @@ class _SettingsBodyState extends State<SettingsBody> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SubjectNicknameSettings(),
+                        builder: (context) => SubjectNicknameSettings(
+                          isTimetable: false,
+                        ),
                       ),
                     );
                   },
@@ -457,6 +459,40 @@ class _SettingsBodyState extends State<SettingsBody> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
+                        builder: (context) => SubjectNicknameSettings(
+                          isTimetable: true,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.tagMultiple,
+                  ),
+                  label: Text(
+                    getTranslatedString("timetableNicknames"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 12) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => FirebaseSettings(),
                       ),
                     );
@@ -471,7 +507,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 12) {
+        } else if (index == 13) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -507,7 +543,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 13) {
+        } else if (index == 14) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -605,7 +641,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 14) {
+        } else if (index == 15) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -646,7 +682,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 15) {
+        } else if (index == 16) {
           return ListTile(
             title: Center(
               child: Padding(

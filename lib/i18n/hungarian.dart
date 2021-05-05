@@ -422,4 +422,9 @@ final Map<String, String> translation = {
   "doneExams": "Már megírt dolgozatok",
   "doneHw": "Kész házifeladatok",
   "subjectNicknames": "Tantárgy rövidítések",
+  "timetableNicknames": "Órarend rövidítések",
+  "noSameNick": "Duplikált rövidítés!",
+  "warning": "Figyelmeztetés",
+  "effectOnNextStart":
+      "A változtatások az applikáció újraindításakor fognak életbe lépni!",
 };

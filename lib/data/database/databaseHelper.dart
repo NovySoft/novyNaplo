@@ -10,6 +10,7 @@ import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/data/models/subjectColor.dart';
+import 'package:novynaplo/data/models/subjectNicknames.dart';
 
 import 'absences.dart' as absences;
 import 'average.dart' as average;
@@ -97,4 +98,8 @@ class DatabaseHelper {
     @required String subject,
     @required String dbName,
   }) updateSubject = subjects.updateSubject;
+  static Future<List<List<SubjectNicknames>>> Function(bool isTimetable)
+      getSubjNickMatrix = subjects.getSubjNickMatrix;
+  static Future<void> Function(Subject subject) updateNickname =
+      subjects.updateNickname;
 }

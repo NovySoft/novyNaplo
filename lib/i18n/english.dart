@@ -423,4 +423,9 @@ final Map<String, String> translation = {
   "doneExams": "Exams already taken",
   "doneHw": "Homework done",
   "subjectNicknames": "Subject nicknames",
+  "timetableNicknames": "Timetable nicknames",
+  "noSameNick": "Duplicate nickname!",
+  "warning": "Warning",
+  "effectOnNextStart":
+      "Changes will take effect the next time you launch the application!",
 };
