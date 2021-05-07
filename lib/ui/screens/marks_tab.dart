@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:minimize_app/minimize_app.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -345,8 +344,7 @@ class MarksTabState extends State<MarksTab>
         ? WillPopScope(
             onWillPop: () async {
               FirebaseCrashlytics.instance.log("Minimize app");
-              MinimizeApp.minimizeApp();
-              return false;
+              return true;
             },
             child: mainWidget,
           )

@@ -13,4 +13,4 @@ final String clientId = "kreta-ellenorzo-mobile";
 String menuLogo = "assets/home.png";
 
 //App version, so I can do special version names:
-String currentAppVersionCode = "V1.1.5+7+SubjectBETA";
+String currentAppVersionCode = "V1.1.5+8";
