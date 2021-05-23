@@ -30,6 +30,18 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
         }
       },
     );
+    bool isSzovegesOnly = n.indexWhere((element) =>
+                element.valueType.name != "Szazalekos" &&
+                element.valueType.name != "Szoveges" &&
+                element.valueType.name != "SzazalekosAtszamolt") ==
+            -1
+        ? true
+        : false;
+    if (!isSzovegesOnly) {
+      n.removeWhere((element) =>
+          element.valueType.name == "Szoveges" ||
+          element.valueType.name == "Szazalekos");
+    }
     //Get half year marker for stats and reports
     int itemIndex = n.indexWhere(
       (element) => element.type.name == "felevi_jegy_ertekeles",
@@ -47,13 +59,6 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
               element.kindOf == "Magatartas" ||
               element.kindOf == "Szorgalom");
     });
-    bool isSzovegesOnly = n.indexWhere((element) =>
-                element.valueType.name != "Szazalekos" &&
-                element.valueType.name != "Szoveges" &&
-                element.valueType.name != "SzazalekosAtszamolt") ==
-            -1
-        ? true
-        : false;
     if (isSzovegesOnly && n.length > 0) {
       List<Evals> listOfSubjectX = jegyArray
           .where((element) =>
@@ -79,9 +84,6 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
       outputList.add(tempIteratorList);
     } else {
       List<Evals> tempList = List.from(n);
-      tempList.removeWhere((element) =>
-          element.valueType.name == "Szoveges" ||
-          element.valueType.name == "Szazalekos");
       outputList.add(tempList);
     }
   }
