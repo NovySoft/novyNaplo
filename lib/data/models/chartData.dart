@@ -50,3 +50,10 @@ class MarkForBars {
 
   MarkForBars(this.name, this.count);
 }
+
+class ChartReturn {
+  List<charts.Series<LinearMarkChartData, int>> points;
+  double halfYearMarker;
+
+  ChartReturn(this.points, this.halfYearMarker);
+}

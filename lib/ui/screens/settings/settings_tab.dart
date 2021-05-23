@@ -82,7 +82,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 16,
+      itemCount: 17,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(

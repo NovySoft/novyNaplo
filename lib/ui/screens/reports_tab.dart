@@ -249,6 +249,8 @@ class _ReportsTabState extends State<ReportsTab>
                     eval: reportMaps[tabName][index],
                     color: color,
                     inputList: chartListPoints,
+                    hideMarker:
+                        !(tabName == "EndOfYear" || tabName == "ThirdQuarter"),
                   ),
                 );
               },

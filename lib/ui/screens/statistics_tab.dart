@@ -27,6 +27,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
+Map<String, double> halfYearMarkers = {};
 //FIXME: Keepalives, once loaded
 
 final List<Tab> statTabs = <Tab>[

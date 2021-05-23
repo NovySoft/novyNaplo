@@ -52,7 +52,11 @@ class Evals {
   @override
   String toString() {
     //return this.valueType.name;
-    return this.subject.name + ":" + this.date.toString();
+    return this.subject.name +
+        ":" +
+        this.date.toString() +
+        ":" +
+        this.type.name;
   }
 
   Evals.fromSqlite(Map<String, dynamic> map) {

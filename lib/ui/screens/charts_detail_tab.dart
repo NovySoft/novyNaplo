@@ -1,5 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:customgauge/customgauge.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,14 +46,17 @@ class ChartsDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<charts.Series<LinearMarkChartData, int>> seriesList = [];
+    double halfYearMarker;
     if (inputList.length > 0) {
       if (inputList[0].subject.name == "-contracted-") {
         seriesList = createOsszesitett(stats.allParsedSubjectsWithoutZeros);
       } else {
-        seriesList = createSubjectChart(
+        ChartReturn data = createSubjectChart(
           inputList,
           inputList[0].subject.fullName,
         );
+        seriesList = data.points;
+        halfYearMarker = data.halfYearMarker;
       }
     }
     FirebaseCrashlytics.instance.log("Shown Charts_detail_tab");
@@ -194,12 +198,44 @@ class ChartsDetailTab extends StatelessWidget {
                               height: 500,
                               child: new charts.LineChart(
                                 seriesList,
-                                behaviors: [new charts.PanAndZoomBehavior()],
+                                behaviors: [
+                                  new charts.PanAndZoomBehavior(),
+                                  if (halfYearMarker != null)
+                                    new charts.RangeAnnotation([
+                                      new charts.LineAnnotationSegment(
+                                          halfYearMarker,
+                                          charts.RangeAnnotationAxisType.domain,
+                                          startLabel: "   " +
+                                              getTranslatedString(
+                                                "HalfYearChart",
+                                              ),
+                                          labelPosition: charts
+                                              .AnnotationLabelPosition.margin,
+                                          labelAnchor: charts
+                                              .AnnotationLabelAnchor.start,
+                                          color: DynamicTheme.of(context)
+                                                      .brightness ==
+                                                  Brightness.dark
+                                              ? charts.Color.white
+                                              : charts.Color.fromHex(
+                                                  code: "#000000",
+                                                ),
+                                          labelStyleSpec: charts.TextStyleSpec(
+                                            fontSize: 18,
+                                            color: DynamicTheme.of(context)
+                                                        .brightness ==
+                                                    Brightness.dark
+                                                ? charts.Color.white
+                                                : charts.Color.black,
+                                          )),
+                                    ]),
+                                ],
                                 animate: animate,
                                 domainAxis: axisTwo,
                                 primaryMeasureAxis: axis,
                                 defaultRenderer: new charts.LineRendererConfig(
-                                    includePoints: true),
+                                  includePoints: true,
+                                ),
                               ),
                             ),
                           ),

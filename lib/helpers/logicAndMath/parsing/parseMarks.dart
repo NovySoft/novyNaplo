@@ -1,5 +1,6 @@
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
 List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   if (input == null) {
@@ -10,29 +11,50 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
   jegyArray.sort((a, b) => a.subject.fullName.compareTo(b.subject.fullName));
   String lastString = "";
   for (var n in jegyArray) {
-    if ((n.valueType.name != "Szazalekos" &&
-            //A félévi jegyek nem számítanak, de a magatartás és szorgalom igen
-            !(Evals.nonAvTypes.contains(n.type.name))) ||
-        n.kindOf == "Magatartas" ||
-        n.kindOf == "Szorgalom") {
-      if (n.subject.fullName != lastString) {
-        jegyMatrix.add([]);
-        lastString = n.subject.fullName;
-      }
-      jegyMatrix.last.add(n);
+    if (n.subject.fullName != lastString) {
+      jegyMatrix.add([]);
+      lastString = n.subject.fullName;
     }
+    jegyMatrix.last.add(n);
   }
   //Calc avarage where there is only percentage and text av-s
   //?This usually applies to first graders
   List<List<Evals>> outputList = [];
   for (var n in jegyMatrix) {
+    n.sort(
+      (a, b) {
+        if (a.date.isSameDay(b.date)) {
+          return a.createDate.compareTo(b.createDate);
+        } else {
+          return a.date.compareTo(b.date);
+        }
+      },
+    );
+    //Get half year marker for stats and reports
+    int itemIndex = n.indexWhere(
+      (element) => element.type.name == "felevi_jegy_ertekeles",
+    );
+    if (itemIndex != 0 && itemIndex != -1) {
+      stats.halfYearMarkers[n[0].subject.fullName] = itemIndex -
+          (n[0].kindOf == "Magatartas" || n[0].kindOf == "Szorgalom"
+              ? 0.0
+              : 0.5);
+    }
+    n.removeWhere((element) {
+      return !(
+          //A félévi jegyek nem számítanak, de a magatartás és szorgalom igen
+          !(Evals.nonAvTypes.contains(element.type.name)) ||
+              element.kindOf == "Magatartas" ||
+              element.kindOf == "Szorgalom");
+    });
     bool isSzovegesOnly = n.indexWhere((element) =>
                 element.valueType.name != "Szazalekos" &&
-                element.valueType.name != "Szoveges") ==
+                element.valueType.name != "Szoveges" &&
+                element.valueType.name != "SzazalekosAtszamolt") ==
             -1
         ? true
         : false;
-    if (isSzovegesOnly) {
+    if (isSzovegesOnly && n.length > 0) {
       List<Evals> listOfSubjectX = jegyArray
           .where((element) =>
               element.subject.fullName.toLowerCase() ==
@@ -57,13 +79,24 @@ List<List<Evals>> categorizeSubjectsFromEvals(List<Evals> input) {
       outputList.add(tempIteratorList);
     } else {
       List<Evals> tempList = List.from(n);
-      tempList.removeWhere((element) => element.valueType.name == "Szoveges");
+      tempList.removeWhere((element) =>
+          element.valueType.name == "Szoveges" ||
+          element.valueType.name == "Szazalekos");
       outputList.add(tempList);
     }
   }
   for (var n in outputList) {
-    n.sort((a, b) => a.date.compareTo(b.date));
+    n.sort(
+      (a, b) {
+        if (a.date.isSameDay(b.date)) {
+          return a.createDate.compareTo(b.createDate);
+        } else {
+          return a.date.compareTo(b.date);
+        }
+      },
+    );
   }
+  outputList.removeWhere((e) => e.length == 0);
   outputList.sort((a, b) => a[0].sortIndex.compareTo(b[0].sortIndex));
   return outputList;
 }

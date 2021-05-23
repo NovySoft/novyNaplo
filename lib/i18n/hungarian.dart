@@ -292,6 +292,7 @@ final Map<String, String> translation = {
   "reports": "Jelentések",
   "FirstQuarter": "Negyed éves",
   "HalfYear": "Féléves",
+  "HalfYearChart": "Félév",
   "ThirdQuarter": "Háromnegyed éves",
   "EndOfYear": "Évvégi",
   "inAv": "Átalagosan",
