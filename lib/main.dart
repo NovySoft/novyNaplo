@@ -18,7 +18,7 @@ import 'package:novynaplo/ui/screens/login_page.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
-import 'package:novynaplo/ui/screens/calculator_tab.dart';
+import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/loading_screen.dart';

@@ -54,7 +54,7 @@ F-droid-ról: [![Fdroid release](https://img.shields.io/badge/F--droid-latest-br
 - BKK integráció
 - Integrált chat felület
 - Házifeladat segédletek
-- **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
+- **Wear OS** kompatibilitás (feltehetőleg teljesen másik applikáció keretében)
 
 ## Modulok
 

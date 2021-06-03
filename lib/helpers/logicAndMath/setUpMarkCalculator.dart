@@ -3,7 +3,8 @@ import 'package:novynaplo/data/models/calculator.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/ui/screens/calculator_tab.dart' as calculatorPage;
+import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart'
+    as calculatorPage;
 
 void setUpCalculatorPage(List<List<Evals>> input) {
   FirebaseCrashlytics.instance.log("setUpCalculatorPage");

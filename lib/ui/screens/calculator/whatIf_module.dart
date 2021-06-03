@@ -1,51 +1,31 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:novynaplo/data/models/calculator.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
-import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
+import 'calculator_tab.dart' as calcTab;
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/ui/widgets/Drawer.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
-//Fixme: This is garbage, REFACTOR when updgrading to mark calc V2
-//TODO: Add option to add mark calculator marks to what if
-//TODO: add performance to mark calculator and also make averages a before and after gauge pair
-List<String> dropdownValues = [];
-String dropdownValue = dropdownValues[0];
-List<CalculatorData> averageList = [];
-var currentIndex = 0;
-num currCount;
-num currSum;
-double elakErni = 5.0;
-double turesHatar = 1;
-String text1 = " ";
-String text2 = " ";
-double tantargyiAtlagUtanna = 0;
-TabController _tabController;
-final List<Tab> calcTabs = <Tab>[
-  Tab(text: getTranslatedString("markCalc"), icon: Icon(MdiIcons.calculator)),
-  Tab(
-      text: "${getTranslatedString("whatIf")}?",
-      icon: Icon(MdiIcons.headQuestion)),
-];
-List<VirtualMarks> virtualMarks = [];
-int radioGroup = 5;
 TextEditingController weightController = TextEditingController(text: "100");
 TextEditingController countController = TextEditingController(text: "1");
 final FocusNode _weightFocus = FocusNode();
 final FocusNode _countFocus = FocusNode();
 final SlidableController slidableController = SlidableController();
-List<Evals> currentSubject = [];
-List<LinearMarkChartData> secondaryChartData = [];
+int radioGroup = 5;
+List<VirtualMarks> virtualMarks = [];
+
+Color afterAvCol = Colors.orange;
+String afterAvDiff = "0";
+Widget afterAvIcon = Icon(
+  Icons.linear_scale,
+  color: Colors.orange,
+);
+
 final axis = charts.NumericAxisSpec(
     renderSpec: charts.GridlineRendererSpec(
         labelStyle: charts.TextStyleSpec(
@@ -58,12 +38,9 @@ final axisTwo = charts.NumericAxisSpec(
   labelStyle: charts.TextStyleSpec(
       fontSize: 10, color: charts.MaterialPalette.blue.shadeDefault),
 ));
-Color afterAvCol = Colors.orange;
-String afterAvDiff = "0";
-Widget afterAvIcon = Icon(
-  Icons.linear_scale,
-  color: Colors.orange,
-);
+
+List<LinearMarkChartData> secondaryChartData = [];
+double tantargyiAtlagUtanna = 0;
 
 class FormKey {
   static final formKey = GlobalKey<FormState>();
@@ -75,16 +52,29 @@ class VirtualMarks {
   int weight;
 }
 
-class CalculatorTab extends StatefulWidget {
-  static String tag = 'calculator';
-  static String title = getTranslatedString("markCalc");
+class WhatIFModule extends StatefulWidget {
+  WhatIFModule(this.setStateCallback);
+
+  final Function setStateCallback;
 
   @override
-  CalculatorTabState createState() => CalculatorTabState();
+  _WhatIFModuleState createState() => _WhatIFModuleState();
 }
 
-class CalculatorTabState extends State<CalculatorTab>
-    with SingleTickerProviderStateMixin {
+class _WhatIFModuleState extends State<WhatIFModule> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      createWhatIfChartAndMarks(
+        setAvAfter,
+        defaultValues: calcTab.currentSubject,
+        id: "whatIfChart",
+        virtualValues: virtualMarks,
+      );
+    });
+    super.initState();
+  }
+
   Future<void> cardModal(
       {BuildContext context, bool isEditing, int index}) async {
     if (isEditing) {
@@ -387,79 +377,25 @@ class CalculatorTabState extends State<CalculatorTab>
     );
   }
 
-  Widget noMarks() {
-    return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(
-        MdiIcons.emoticonSadOutline,
-        size: 50,
-      ),
-      Text(
-        getTranslatedString("possibleNoMarks"),
-        textAlign: TextAlign.center,
-      )
-    ]));
-  }
-
-  @override
-  void initState() {
-    FirebaseCrashlytics.instance.log("Shown MarkCalculator");
-    //Set dropdown to item 0
-    if (marksPage.allParsedByDate.length != 0) {
-      dropdownValue = dropdownValues[0];
-      currentIndex = 0;
-      currCount = averageList[0].count;
-      currSum = averageList[0].sum;
-      currentSubject = stats.allParsedSubjects[0];
-    }
-    getAllSubjectsAv(stats.allParsedSubjects);
-    _tabController = new TabController(vsync: this, length: 2);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawerScrimColor:
-          globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(CalculatorTab.tag, context),
-      appBar: AppBar(
-        title: Text(CalculatorTab.title),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: calcTabs,
+      floatingActionButton:
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        FloatingActionButton(
+          onPressed: () {
+            cardModal(context: context, isEditing: false);
+          },
+          child: Icon(MdiIcons.plus),
+          tooltip: getTranslatedString("addVmark"),
+          elevation: 10,
         ),
-      ),
-      body: TabBarView(
-          controller: _tabController,
-          children: calcTabs.map((Tab tab) {
-            if (marksPage.allParsedByDate.length == 0) {
-              return noMarks();
-            }
-            if (tab.text == getTranslatedString("markCalc")) {
-              return _calculatorBody();
-            } else {
-              return Scaffold(
-                floatingActionButton:
-                    Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      cardModal(context: context, isEditing: false);
-                    },
-                    child: Icon(MdiIcons.plus),
-                    tooltip: getTranslatedString("addVmark"),
-                    elevation: 10,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ]),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
-                body: _whatIfBody(),
-              );
-            }
-          }).toList()),
+        SizedBox(
+          height: 15,
+        ),
+      ]),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: _whatIfBody(),
     );
   }
 
@@ -497,7 +433,8 @@ class CalculatorTabState extends State<CalculatorTab>
       });
     }
     createWhatIfChartAndMarks(
-      defaultValues: currentSubject,
+      setAvAfter,
+      defaultValues: calcTab.currentSubject,
       id: "whatIfChart",
       virtualValues: virtualMarks,
     );
@@ -510,38 +447,11 @@ class CalculatorTabState extends State<CalculatorTab>
       virtualMarks[index].szamErtek = input.szamErtek;
     });
     createWhatIfChartAndMarks(
-      defaultValues: currentSubject,
+      setAvAfter,
+      defaultValues: calcTab.currentSubject,
       id: "whatIfChart",
       virtualValues: virtualMarks,
     );
-  }
-
-  void setAvAfter(double input) {
-    setState(() {
-      if (currSum / currCount == input) {
-        afterAvCol = Colors.orange;
-        afterAvDiff = "0";
-        afterAvIcon = Icon(
-          Icons.linear_scale,
-          color: Colors.orange,
-        );
-      } else if (currSum / currCount > input) {
-        afterAvCol = Colors.red;
-        afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
-        afterAvIcon = Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.red,
-        );
-      } else {
-        afterAvCol = Colors.green;
-        afterAvDiff = (input - currSum / currCount).toStringAsFixed(3);
-        afterAvIcon = Icon(
-          Icons.keyboard_arrow_up,
-          color: Colors.green,
-        );
-      }
-      tantargyiAtlagUtanna = input;
-    });
   }
 
   Widget _whatIfBody() {
@@ -559,7 +469,7 @@ class CalculatorTabState extends State<CalculatorTab>
             children: <Widget>[
               Container(
                 child: DropdownButton<String>(
-                  value: dropdownValue,
+                  value: calcTab.dropdownValue,
                   icon: Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -569,20 +479,25 @@ class CalculatorTabState extends State<CalculatorTab>
                   ),
                   onChanged: (String newValue) async {
                     setState(() {
-                      dropdownValue = newValue;
-                      currentIndex = dropdownValues.indexOf(newValue);
-                      currentSubject = stats
-                          .allParsedSubjects[currentIndex]; //INDEX 0 = OLDEST
-                      currCount = averageList[currentIndex].count;
-                      currSum = averageList[currentIndex].sum;
+                      calcTab.dropdownValue = newValue;
+                      calcTab.currentIndex =
+                          calcTab.dropdownValues.indexOf(newValue);
+                      calcTab.currentSubject = stats.allParsedSubjects[
+                          calcTab.currentIndex]; //INDEX 0 = OLDEST
+                      calcTab.currCount =
+                          calcTab.averageList[calcTab.currentIndex].count;
+                      calcTab.currSum =
+                          calcTab.averageList[calcTab.currentIndex].sum;
                     });
+                    widget.setStateCallback();
                     createWhatIfChartAndMarks(
-                      defaultValues: currentSubject,
+                      setAvAfter,
+                      defaultValues: calcTab.currentSubject,
                       id: "whatIfChart",
                       virtualValues: virtualMarks,
                     );
                   },
-                  items: dropdownValues
+                  items: calcTab.dropdownValues
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -680,7 +595,8 @@ class CalculatorTabState extends State<CalculatorTab>
                                 virtualMarks.removeAt(index);
                               });
                               createWhatIfChartAndMarks(
-                                defaultValues: currentSubject,
+                                setAvAfter,
+                                defaultValues: calcTab.currentSubject,
                                 id: "whatIfChart",
                                 virtualValues: virtualMarks,
                               );
@@ -718,7 +634,8 @@ class CalculatorTabState extends State<CalculatorTab>
                                     virtualMarks[index].count -= 1;
                                   });
                                   createWhatIfChartAndMarks(
-                                    defaultValues: currentSubject,
+                                    setAvAfter,
+                                    defaultValues: calcTab.currentSubject,
                                     id: "whatIfChart",
                                     virtualValues: virtualMarks,
                                   );
@@ -738,7 +655,8 @@ class CalculatorTabState extends State<CalculatorTab>
                                     virtualMarks[index].count += 1;
                                   });
                                   createWhatIfChartAndMarks(
-                                    defaultValues: currentSubject,
+                                    setAvAfter,
+                                    defaultValues: calcTab.currentSubject,
                                     id: "whatIfChart",
                                     virtualValues: virtualMarks,
                                   );
@@ -769,7 +687,8 @@ class CalculatorTabState extends State<CalculatorTab>
                                   virtualMarks.removeAt(index);
                                 });
                                 createWhatIfChartAndMarks(
-                                  defaultValues: currentSubject,
+                                  setAvAfter,
+                                  defaultValues: calcTab.currentSubject,
                                   id: "whatIfChart",
                                   virtualValues: virtualMarks,
                                 );
@@ -817,7 +736,8 @@ class CalculatorTabState extends State<CalculatorTab>
                   virtualMarks = [];
                 });
                 createWhatIfChartAndMarks(
-                  defaultValues: currentSubject,
+                  setAvAfter,
+                  defaultValues: calcTab.currentSubject,
                   id: "whatIfChart",
                   virtualValues: virtualMarks,
                 );
@@ -846,9 +766,10 @@ class CalculatorTabState extends State<CalculatorTab>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      dropdownValue +
+                      calcTab.dropdownValue +
                           " ${getTranslatedString("avBefore")}: " +
-                          (currSum / currCount).toStringAsFixed(3),
+                          (calcTab.currSum / calcTab.currCount)
+                              .toStringAsFixed(3),
                       textAlign: TextAlign.start,
                       style: new TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
@@ -857,7 +778,7 @@ class CalculatorTabState extends State<CalculatorTab>
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
-                          dropdownValue +
+                          calcTab.dropdownValue +
                               " ${getTranslatedString("avAfter")}: " +
                               tantargyiAtlagUtanna.toStringAsFixed(3),
                           textAlign: TextAlign.start,
@@ -883,7 +804,8 @@ class CalculatorTabState extends State<CalculatorTab>
             height: 500,
             child: new charts.NumericComboChart(
               createWhatIfChartAndMarks(
-                defaultValues: currentSubject,
+                setAvAfter,
+                defaultValues: calcTab.currentSubject,
                 id: "whatIfChart",
                 virtualValues: virtualMarks,
               ),
@@ -901,348 +823,77 @@ class CalculatorTabState extends State<CalculatorTab>
     );
   }
 
-  Widget _calculatorBody() {
-    if (marksPage.allParsedByDate.length == 0) {
-      return noMarks();
-    } else {
-      return ListView(
-        children: <Widget>[
-          Center(
-            child: Container(
-              child: DropdownButton<String>(
-                value: dropdownValue,
-                icon: Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                underline: Container(
-                  color: Theme.of(context).accentColor,
-                  height: 2,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    dropdownValue = newValue;
-                    currentIndex = dropdownValues.indexOf(newValue);
-                    currentSubject = stats.allParsedSubjects[currentIndex];
-                    currCount = averageList[currentIndex].count;
-                    currSum = averageList[currentIndex].sum;
-                  });
-                  createWhatIfChartAndMarks(
-                    defaultValues: currentSubject,
-                    id: "whatIfChart",
-                    virtualValues: virtualMarks,
-                  );
-                },
-                items: dropdownValues
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              alignment: Alignment(0, 0),
-              margin: EdgeInsets.all(5),
-            ),
-          ),
-          Text(
-              "${getTranslatedString("marksSumWeighted")}: " +
-                  currSum.toString(),
-              textAlign: TextAlign.center),
-          Icon(MdiIcons.division),
-          Text(
-              "${getTranslatedString("marksCountWeighted")}: " +
-                  currCount.toString(),
-              textAlign: TextAlign.center),
-          Icon(MdiIcons.equal),
-          Text(
-              "${getTranslatedString("yourAv")}: " +
-                  (currSum / currCount).toStringAsFixed(3),
-              textAlign: TextAlign.center),
-          SizedBox(height: 20),
-          Text("${getTranslatedString("wantGet")}? $elakErni",
-              textAlign: TextAlign.center),
-          Slider(
-            value: elakErni,
-            onChanged: (newValue) {
-              setState(() {
-                elakErni = newValue;
-              });
-            },
-            min: 1,
-            max: 5,
-            divisions: 40,
-            label: elakErni.toString(),
-          ),
-          Text("${getTranslatedString("underHowMany")}? $turesHatar",
-              textAlign: TextAlign.center),
-          Slider(
-            value: turesHatar,
-            onChanged: (newValue) {
-              setState(() {
-                turesHatar = newValue.roundToDouble();
-              });
-            },
-            min: 1,
-            max: 10,
-            divisions: 10,
-            label: turesHatar.toString(),
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      reCalculate();
-                    });
-                  },
-                  child: Text(
-                    getTranslatedString("go"),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  text1,
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(width: 10),
-            ],
-          ),
-          SizedBox(
-            height: 250,
-          ),
-        ],
-      );
-    }
+  void setAvAfter(double input) {
+    setState(() {
+      if (calcTab.currSum / calcTab.currCount == input) {
+        afterAvCol = Colors.orange;
+        afterAvDiff = "0";
+        afterAvIcon = Icon(
+          Icons.linear_scale,
+          color: Colors.orange,
+        );
+      } else if (calcTab.currSum / calcTab.currCount > input) {
+        afterAvCol = Colors.red;
+        afterAvDiff =
+            (input - calcTab.currSum / calcTab.currCount).toStringAsFixed(3);
+        afterAvIcon = Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.red,
+        );
+      } else {
+        afterAvCol = Colors.green;
+        afterAvDiff =
+            (input - calcTab.currSum / calcTab.currCount).toStringAsFixed(3);
+        afterAvIcon = Icon(
+          Icons.keyboard_arrow_up,
+          color: Colors.green,
+        );
+      }
+      tantargyiAtlagUtanna = input;
+    });
   }
+}
 
-  List<charts.Series<LinearMarkChartData, int>> createWhatIfChartAndMarks(
-      {List<Evals> defaultValues,
-      List<VirtualMarks> virtualValues,
-      String id}) {
-    List<LinearMarkChartData> primaryChartData = [];
-    secondaryChartData = [];
-    double sum = 0;
-    double index = 0;
-    int listArray = 0;
-    for (var n in defaultValues) {
-      sum += n.numberValue * n.weight / 100;
+List<charts.Series<LinearMarkChartData, int>> createWhatIfChartAndMarks(
+    Function(double) setAvAfter,
+    {List<Evals> defaultValues,
+    List<VirtualMarks> virtualValues,
+    String id}) {
+  List<LinearMarkChartData> primaryChartData = [];
+  secondaryChartData = [];
+  double sum = 0;
+  double index = 0;
+  int listArray = 0;
+  for (var n in defaultValues) {
+    sum += n.numberValue * n.weight / 100;
+    index += 1 * n.weight / 100;
+    primaryChartData.add(new LinearMarkChartData(listArray, sum / index));
+    listArray++;
+  }
+  secondaryChartData.add(new LinearMarkChartData(listArray - 1, sum / index));
+  for (var n in virtualValues) {
+    for (var i = 0; i < n.count; i++) {
+      sum += n.szamErtek * n.weight / 100;
       index += 1 * n.weight / 100;
-      primaryChartData.add(new LinearMarkChartData(listArray, sum / index));
+      secondaryChartData.add(new LinearMarkChartData(listArray, sum / index));
       listArray++;
     }
-    secondaryChartData.add(new LinearMarkChartData(listArray - 1, sum / index));
-    for (var n in virtualValues) {
-      for (var i = 0; i < n.count; i++) {
-        sum += n.szamErtek * n.weight / 100;
-        index += 1 * n.weight / 100;
-        secondaryChartData.add(new LinearMarkChartData(listArray, sum / index));
-        listArray++;
-      }
-    }
-    setAvAfter(secondaryChartData.last.value);
-    return [
-      new charts.Series<LinearMarkChartData, int>(
-        id: id + "secondary",
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (LinearMarkChartData marks, _) => marks.count,
-        measureFn: (LinearMarkChartData marks, _) => marks.value,
-        data: secondaryChartData,
-      ),
-      new charts.Series<LinearMarkChartData, int>(
-        id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearMarkChartData marks, _) => marks.count,
-        measureFn: (LinearMarkChartData marks, _) => marks.value,
-        data: primaryChartData,
-      )
-    ];
   }
-}
-
-void reCalculate() {
-  text1 = getEasiest(currSum, currCount, turesHatar, elakErni);
-  if (text1 != getTranslatedString("notPos")) {
-    text1 = "${getTranslatedString("getAbout")}: " + text1;
-  }
-}
-
-/// Get the easiest way to get to a specific average
-/// Parameters:
-///
-/// ```dart
-/// getEasiest(jegyekÖsszege,jegyekSzáma,mennyiJegyAlattt,elAkarÉrni)
-/// ```
-String getEasiest(num jegyek, jsz, th, elak) {
-  bool isInteger(num value) => value is int || value == value.roundToDouble();
-  //jegyek = "jegyeid összege"
-  //jsz = "jegyeid száma"
-  //th = "mennyi jegy alatt akarod elérni?"
-  //elak = "milyen átlagot akarsz elérni?"
-
-  if (jsz == 0 || jegyek == 0) {
-    if (isInteger(elak)) {
-      return "1 ${getTranslatedString("count")} $elak";
-    }
-  }
-
-  var atlag = jegyek / jsz; //átlag
-  var x = elak * jsz +
-      elak * th -
-      jegyek; //mennyi jegyet kell hozzáadni, hogy elérjük az adott átlagot
-
-  var j2 = th *
-      5; // rontásnál mennyi jegyet kell hozzáadni, hogy elérjük az adottátlagot
-  var j1 = jegyek + j2 / jsz + th; // az átlag amit a rontásnál számolunk
-
-  if (!isInteger(x)) {
-    x = x.round();
-  }
-
-  while (j1 > elak) {
-    j2 = j2 - 1;
-    j1 = (jegyek + j2) / (th + jsz);
-  }
-
-  if (!isInteger(j1)) {
-    j1 = j1.round();
-  }
-
-  var t = th;
-  var n = 0;
-  num c = x / th;
-  num cc = j2 / th;
-
-  int ww = cc.toInt();
-  int w = c.toInt();
-  if (elak >= atlag) {
-    if (x - 5 * th > 0) {
-      return getTranslatedString("notPos");
-    } else {
-      switch (w) {
-        case 1:
-          while (t + n * 2 != x) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("twos")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("ones")}";
-          break;
-        case 2:
-          while (t * 2 + n * 3 != x) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("threes")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("twos")}";
-          break;
-        case 3:
-          while (t * 3 + n * 4 != x) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("threes")}";
-          break;
-        case 4:
-          while (t * 4 + n * 5 != x) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$t ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $n ${getTranslatedString("count")} ${getTranslatedString("fives")}";
-          break;
-        case 5:
-          return "$th ${getTranslatedString("count")} ${getTranslatedString("fives")}";
-          break;
-        default:
-          return getTranslatedString("notPos");
-          break;
-      }
-    }
-  } else {
-    if (j2 - th < 0) {
-      return getTranslatedString("notPos");
-    } else {
-      switch (ww) {
-        case 1:
-          while (t + n * 2 != j2) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("twos")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("ones")}";
-          break;
-        case 2:
-          while (t * 2 + n * 3 != j2) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("threes")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("twos")}";
-          break;
-        case 3:
-          while (t * 3 + n * 4 != j2) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$n ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $t ${getTranslatedString("count")} ${getTranslatedString("threes")}";
-          break;
-        case 4:
-          while (t * 4 + n * 5 != j2) {
-            t = t - 1;
-            n = n + 1;
-          }
-          return "$t ${getTranslatedString("count")} ${getTranslatedString("fours")} ${getTranslatedString("and")} $n ${getTranslatedString("count")} ${getTranslatedString("fives")}";
-          break;
-        default:
-          return getTranslatedString("notPos");
-          break;
-      }
-    }
-  }
-}
-
-/// How many 5's are needed to get to a specific average
-/// Parameters:
-///
-/// ```dart
-/// getWithFivesOnly(jegyekÖsszege,jegyekSzáma,elAkarÉrni)
-/// ```
-String getWithFivesOnly(num jegyek, jsz, elak) {
-  //JEGYEK = "Jegyeid összege"
-  //JSZ = "Jegyeid száma"
-  //ELAK = "Milyen átlagot szeretnél elérni"
-  num average = jegyek / jsz;
-  int index = 0;
-  if (average > elak) {
-    return "Nem lehetséges ötösökkel";
-  }
-  while (average < elak) {
-    jsz++;
-    jegyek += 5;
-    index++;
-    average = jegyek / jsz;
-  }
-  return "$index ${getTranslatedString("count")} ötös";
+  setAvAfter(secondaryChartData.last.value);
+  return [
+    new charts.Series<LinearMarkChartData, int>(
+      id: id + "secondary",
+      colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
+      data: secondaryChartData,
+    ),
+    new charts.Series<LinearMarkChartData, int>(
+      id: id,
+      colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
+      data: primaryChartData,
+    )
+  ];
 }
