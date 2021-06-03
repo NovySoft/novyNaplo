@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/ui/screens/calculator/whatIf_module.dart' as whatIf;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
+import 'calculatorVtwo.dart';
 import 'calculator_tab.dart' as calcTab;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
+import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/data/models/extensions.dart';
 
 double elakErni = 5.0;
 double turesHatar = 1;
-String text1 = "";
 
 class CalculatorModule extends StatefulWidget {
   CalculatorModule(this.setStateCallback);
@@ -19,6 +20,8 @@ class CalculatorModule extends StatefulWidget {
 }
 
 class _CalculatorModuleState extends State<CalculatorModule> {
+  String text1 = "";
+
   @override
   Widget build(BuildContext context) {
     if (marksPage.allParsedByDate.length == 0) {
@@ -162,9 +165,39 @@ class _CalculatorModuleState extends State<CalculatorModule> {
   }
 
   void reCalculate() {
-    //text1 = getEasiest(calcTab.currSum, calcTab.currCount, turesHatar, elakErni);
-    if (text1 != getTranslatedString("notPos")) {
-      text1 = "${getTranslatedString("getAbout")}: " + text1;
+    List<int> calcResponse = jegyszamolo(
+      jegyekInput: calcTab.currentSubject,
+      kivantAtlag: elakErni,
+      hatar: turesHatar,
+    );
+    //* calcResponse = [jegy1, jegy1db, jegy2, jegy2db]
+    if ((((calcResponse[0] < 1 || calcResponse[0] > 5) &&
+                calcResponse[1] != 0) ||
+            ((calcResponse[2] < 1 || calcResponse[2] > 5) &&
+                calcResponse[3] != 0)) &&
+        !globals.calcLorincMode) {
+      text1 = getTranslatedString("notPos");
+    } else {
+      text1 = "${getTranslatedString("getAbout")}: \n\n";
+      if (calcResponse[1] != 0) {
+        text1 += getTranslatedString(
+              "markCalcOut",
+              replaceVariables: [
+                calcResponse[1].toString(),
+                calcResponse[0].intToEsEnding(),
+              ],
+            ) +
+            "\n";
+      }
+      if (calcResponse[3] != 0) {
+        text1 += getTranslatedString(
+          "markCalcOut",
+          replaceVariables: [
+            calcResponse[3].toString(),
+            calcResponse[2].intToEsEnding(),
+          ],
+        );
+      }
     }
   }
 }

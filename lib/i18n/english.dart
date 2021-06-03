@@ -271,11 +271,6 @@ final Map<String, String> translation = {
   "errRestart": "An error occurred\nPlease restart the application!",
   "notPos": "Not possible",
   "getAbout": "Get about",
-  "ones": "of ones",
-  "twos": "of twos",
-  "threes": "of threes",
-  "fours": "of fours",
-  "fives": "of fives",
   "newMark": "New mark",
   "markModified": "Mark modified",
   "newHw": "New homework",
@@ -429,4 +424,6 @@ final Map<String, String> translation = {
   "warning": "Warning",
   "effectOnNextStart":
       "Changes will take effect the next time you launch the application!",
+  "markCalcOut": "?{0} pieces of  ?{1}",
+  "mode": "mode",
 };

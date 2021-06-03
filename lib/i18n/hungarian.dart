@@ -197,11 +197,6 @@ final Map<String, String> translation = {
   "readData": "Adatok olvasása az adatbázisból",
   "notPos": "Nem lehetséges",
   "getAbout": "Szerezz kb.",
-  "ones": "egyest",
-  "twos": "kettest",
-  "threes": "hármast",
-  "fours": "négyest",
-  "fives": "ötöst",
   "theme": "Téma",
   "chartAnimations": "Grafikon animációk",
   "bright": "Világos",
@@ -428,4 +423,6 @@ final Map<String, String> translation = {
   "warning": "Figyelmeztetés",
   "effectOnNextStart":
       "A változtatások az applikáció újraindításakor fognak életbe lépni!",
+  "markCalcOut": "?{0} db  ?{1}-t",
+  "mode": "mód",
 };

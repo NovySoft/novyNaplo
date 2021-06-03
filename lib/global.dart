@@ -64,6 +64,7 @@ String language =
 bool collapseNotifications =
     true; //Automatically collapse all notifications, on by default
 bool darker = false; //Darker theme
+bool calcLorincMode = false; //Should calculator show "invalid" outputs
 
 Future<void> resetAllGlobals() async {
   await DatabaseHelper.clearAllTables();
@@ -133,6 +134,13 @@ Future<void> setGlobals() async {
   } else {
     await prefs.setBool("darker", false);
     darker = false;
+  }
+
+  if (prefs.getBool("calcLorincMode") != null) {
+    calcLorincMode = prefs.getBool("calcLorincMode");
+  } else {
+    await prefs.setBool("calcLorincMode", false);
+    calcLorincMode = false;
   }
 
   if (prefs.getDouble("howLongKeepDataForHw") != null) {
