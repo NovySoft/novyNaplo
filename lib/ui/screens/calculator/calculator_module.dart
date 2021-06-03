@@ -10,6 +10,7 @@ import 'package:novynaplo/data/models/extensions.dart';
 
 double elakErni = 5.0;
 double turesHatar = 1;
+String text1 = "";
 
 class CalculatorModule extends StatefulWidget {
   CalculatorModule(this.setStateCallback);
@@ -20,8 +21,6 @@ class CalculatorModule extends StatefulWidget {
 }
 
 class _CalculatorModuleState extends State<CalculatorModule> {
-  String text1 = "";
-
   @override
   Widget build(BuildContext context) {
     if (marksPage.allParsedByDate.length == 0) {

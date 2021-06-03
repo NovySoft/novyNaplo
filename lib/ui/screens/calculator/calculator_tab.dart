@@ -19,7 +19,6 @@ List<String> dropdownValues = [];
 String dropdownValue = dropdownValues[0];
 List<CalculatorData> averageList = [];
 int currentIndex = 0;
-TabController _tabController;
 
 num currCount = 0;
 num currSum = 0;
@@ -42,6 +41,8 @@ class CalculatorTab extends StatefulWidget {
 
 class CalculatorTabState extends State<CalculatorTab>
     with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown MarkCalculator");
@@ -52,6 +53,9 @@ class CalculatorTabState extends State<CalculatorTab>
       currCount = averageList[0].count;
       currSum = averageList[0].sum;
       currentSubject = stats.allParsedSubjects[0];
+      text1 = "";
+      turesHatar = 1;
+      elakErni = 5.0;
     }
     getAllSubjectsAv(stats.allParsedSubjects);
     _tabController = new TabController(vsync: this, length: 2);
