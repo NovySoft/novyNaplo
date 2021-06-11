@@ -144,8 +144,11 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                         : SizedBox(height: 0, width: 0),
                     globals.statisticsCardTheme == "Dark"
                         ? ListTile(
-                            leading: Text(
-                                "${getTranslatedString("textColSubject")}:"),
+                            leading: FractionallySizedBox(
+                              widthFactor: 0.8,
+                              child: Text(
+                                  "${getTranslatedString("textColSubject")}:"),
+                            ),
                             trailing: Switch(
                               value: globals.statisticsTextColSubject,
                               onChanged: (switchVal) {

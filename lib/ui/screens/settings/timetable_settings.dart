@@ -146,7 +146,10 @@ class _TimetableSettingsState extends State<TimetableSettings> {
                 break;
               case 2:
                 return ListTile(
-                  leading: Text("${getTranslatedString("textColSubject")}:"),
+                  leading: FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: Text("${getTranslatedString("textColSubject")}:"),
+                  ),
                   trailing: Switch(
                     value: globals.timetableTextColSubject,
                     onChanged: (switchVal) {
