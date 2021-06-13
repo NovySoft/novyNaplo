@@ -185,6 +185,7 @@ final Map<String, String> translation = {
   "schId": "Iskola azonosító",
   "username": "Felhasználónév",
   "password": "Jelszó",
+  "changePass": "Jelszó módosítása",
   "login": "Bejelentkezés",
   "timeoutErr": "Hiba: Kérés timeout. Próbáld újra később",
   "err": "Hiba",
@@ -427,4 +428,6 @@ final Map<String, String> translation = {
       "A változtatások az applikáció újraindításakor fognak életbe lépni!",
   "markCalcOut": "?{0} db  ?{1}-t",
   "mode": "mód",
+  "invPassOrKretaDownWarning":
+      "A jelszavad megváltozott vagy a kréta a frissít. Amennyiben ténylegesen megváltozott a jelszavad kérlek nyomj a jelszó módosítása gombra, különben a mégse gombra.",
 };

@@ -428,4 +428,7 @@ final Map<String, String> translation = {
       "Changes will take effect the next time you launch the application!",
   "markCalcOut": "?{0} pieces of  ?{1}",
   "mode": "mode",
+  "invPassOrKretaDownWarning":
+      "Your password has been changed, or kréta is updating. If your password really changed, click on change password, otherwise click on cancel.",
+  "changePass": "Change password",
 };

@@ -157,16 +157,41 @@ class MarksTabState extends State<MarksTab>
           _setData();
         });
       } else if (status.status == "invalid_username_or_password") {
-        //FIXME: AlertBox instead of force shit
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => login.LoginPage(
-              userDetails: currentUser,
-              isEditing: true,
-            ),
-          ),
-        );
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                elevation: globals.darker ? 0 : 24,
+                title: Text(getTranslatedString("err")),
+                content: Text(getTranslatedString("invPassOrKretaDownWarning")),
+                actions: [
+                  TextButton(
+                    child: Text(getTranslatedString("cancel")),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      getTranslatedString("changePass"),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => login.LoginPage(
+                            userDetails: currentUser,
+                            isEditing: true,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            });
         break;
       } else {
         ErrorToast.showErrorToastLong(
