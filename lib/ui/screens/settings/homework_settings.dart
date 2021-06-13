@@ -159,6 +159,7 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
               case 2:
                 return ListTile(
                   leading: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
                     widthFactor: 0.8,
                     child: Text("${getTranslatedString("textColSubject")}:"),
                   ),

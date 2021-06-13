@@ -95,6 +95,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
               case 1:
                 return ListTile(
                   title: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
                     widthFactor: 0.8,
                     child:
                         Text("${getTranslatedString("marksCardColorTheme")}:"),
@@ -312,6 +313,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 else
                   return ListTile(
                     leading: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
                       widthFactor: 0.8,
                       child: Text("${getTranslatedString("textColSubject")}:"),
                     ),
@@ -349,6 +351,7 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
               case 3:
                 return ListTile(
                   leading: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
                     widthFactor: 0.8,
                     child: Text("${getTranslatedString("textColEval")}:"),
                   ),

@@ -96,6 +96,7 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
             case 1:
               return ListTile(
                 leading: FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
                   widthFactor: 0.8,
                   child: Text("${getTranslatedString("textColSubject")}:"),
                 ),

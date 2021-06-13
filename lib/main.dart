@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: NavigatorKey.navigatorKey,
           theme: theme,
           title: 'Novy Napló',
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: true,
           routes: routes,
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),

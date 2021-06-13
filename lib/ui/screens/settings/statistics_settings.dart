@@ -145,6 +145,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                     globals.statisticsCardTheme == "Dark"
                         ? ListTile(
                             leading: FractionallySizedBox(
+                              alignment: Alignment.centerLeft,
                               widthFactor: 0.8,
                               child: Text(
                                   "${getTranslatedString("textColSubject")}:"),

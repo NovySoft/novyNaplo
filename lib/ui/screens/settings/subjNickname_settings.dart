@@ -89,6 +89,7 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                       );
                       return ListTile(
                         leading: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
                           widthFactor: 0.6,
                           child: Text(
                             capitalize(subjNicknames[index][indexJ].fullName) +
@@ -106,6 +107,7 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                           ),
                         ),
                         trailing: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
                           widthFactor: 0.4,
                           child: TextFormField(
                             showCursor: false,
