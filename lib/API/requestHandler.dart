@@ -42,6 +42,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 var client = http.Client();
+bool isError = false;
 
 class RequestHandler {
   static Future<bool> checkForKretaUpdatingStatus(
@@ -255,7 +256,8 @@ class RequestHandler {
         reason: 'getEvaluations',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return marksPage.allParsedByDate;
     }
   }
 
@@ -323,7 +325,8 @@ class RequestHandler {
         reason: 'getAbsencesMatrix',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return absencesPage.allParsedAbsences;
     }
   }
 
@@ -369,7 +372,8 @@ class RequestHandler {
         reason: 'getExams',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return examsPage.allParsedExams;
     }
   }
 
@@ -409,7 +413,8 @@ class RequestHandler {
         reason: 'getHomeworks',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return homeworkPage.globalHomework;
     }
   }
 
@@ -466,7 +471,7 @@ class RequestHandler {
 
       if (lessonList == null) {
         errored = true;
-        return null;
+        return [];
       }
 
       return lessonList;
@@ -478,6 +483,7 @@ class RequestHandler {
         reason: 'getSpecifiedWeeksLesson',
         printDetails: true,
       );
+      isError = true;
       errored = true;
       return [];
     } finally {
@@ -522,7 +528,8 @@ class RequestHandler {
         reason: 'getThreeWeeksLessons',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return timetablePage.lessonsList;
     }
   }
 
@@ -612,7 +619,8 @@ class RequestHandler {
         reason: 'getEvents',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return eventsPage.allParsedEvents;
     }
   }
 
@@ -654,7 +662,8 @@ class RequestHandler {
         reason: 'getNotices',
         printDetails: true,
       );
-      return null;
+      isError = true;
+      return noticesPage.allParsedNotices;
     }
   }
 
@@ -715,11 +724,13 @@ class RequestHandler {
     }
   }
 
-  static Future<void> getEverything(
+  ///Returns true on failure
+  static Future<bool> getEverything(
     Student user, {
     bool setData = false,
   }) async {
     FirebaseCrashlytics.instance.log("getEverything");
+    isError = false;
     if (setData) {
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);
@@ -782,6 +793,7 @@ class RequestHandler {
       NotificationDispatcher.toBeDispatchedNotifications =
           ToBeDispatchedNotifications();
     }
+    return isError;
   }
 
   static void printWrapped(String text) {

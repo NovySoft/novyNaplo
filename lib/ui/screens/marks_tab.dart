@@ -134,10 +134,18 @@ class MarksTabState extends State<MarksTab>
           globals.currentUser.token = status.userinfo.token;
           globals.currentUser.tokenDate = status.userinfo.tokenDate;
         }
-        await RequestHandler.getEverything(
+        bool isErrored = await RequestHandler.getEverything(
           status.userinfo,
           setData: currentUser.current,
         );
+        if (isErrored) {
+          ErrorToast.showErrorToastLong(
+            context,
+            getTranslatedString("errWhileFetch") +
+                "\n" +
+                getTranslatedString("incorrectData"),
+          );
+        }
         if (!currentUser.fetched) {
           currentUser.fetched = true;
           DatabaseHelper.setFetched(

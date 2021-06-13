@@ -35,6 +35,7 @@ final Map<String, String> translation = {
   "gettingData": "Adatok lekérése",
   "currGetData": "Éppen zajlik az adatok lekérése",
   "errWhileFetch": "Hiba történt a lekérés közben",
+  "incorrectData": "Az adatok nem a legújabbak",
   "missingInput": "Hiányzó bemenet",
   "wrongUserPass": "Hibás felhasználónév/jelszó",
   "wrongSchId": "Rossz iskola azonosító",

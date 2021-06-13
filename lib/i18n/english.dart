@@ -116,6 +116,7 @@ final Map<String, String> translation = {
   "gettingData": "Getting data",
   "currGetData": "We're currently trying to get data",
   "errWhileFetch": "An error happened while trying to get data",
+  "incorrectData": "Data may not be up-to-date",
   "missingInput": "Missing input",
   "wrongUserPass": "Wrong username/password",
   "wrongSchId": "Wrong school id",
