@@ -403,7 +403,7 @@ class RequestHandler {
         homeworks.add(await getHomeworkId(userDetails, id: n['Uid']));
       }
       homeworks.removeWhere((element) => element == null);
-      homeworks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+      homeworks.sort((a, b) => b.dueDate.compareTo(a.dueDate));
       DatabaseHelper.batchInsertHomework(homeworks);
       return homeworks;
     } catch (e, s) {

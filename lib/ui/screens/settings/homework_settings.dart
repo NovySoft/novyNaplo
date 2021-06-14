@@ -62,7 +62,6 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
     homeworkPage.globalHomework = await DatabaseHelper.getAllHomework(
       ignoreDue: false,
     );
-    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
   }
 
   @override

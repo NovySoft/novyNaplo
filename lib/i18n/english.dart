@@ -431,4 +431,5 @@ final Map<String, String> translation = {
   "invPassOrKretaDownWarning":
       "Your password has been changed, or kréta is updating. If your password really changed, click on change password, otherwise click on cancel.",
   "changePass": "Change password",
+  "noDone": "Nothings done",
 };

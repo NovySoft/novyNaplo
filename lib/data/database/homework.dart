@@ -41,7 +41,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
       }
     });
   }
-  tempList.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  tempList.sort((a, b) => b.dueDate.compareTo(a.dueDate));
   deleteOldHomework(tempList);
   return tempList;
 }
