@@ -23,20 +23,23 @@ class ExamsTab extends StatefulWidget {
 class _ExamsTabState extends State<ExamsTab> {
   bool _listOpen = false;
   bool _animationDone = true;
-  int firstNotDone = -1;
   final GlobalKey<AnimatedListState> _animatedListkey =
       GlobalKey<AnimatedListState>(debugLabel: "examAnimList");
   final _scrollController = new ScrollController(debugLabel: "exanScrollList");
   final _dataKey = new GlobalKey(debugLabel: "examDropdownLabel");
   double _closedOfset = 0;
+  List<Exam> notDoneExams = [];
+  List<Exam> alreadyDoneExams = [];
 
   @override
   void initState() {
-    firstNotDone = allParsedExams.indexWhere(
+    int lastNotDone = allParsedExams.lastIndexWhere(
       (element) {
         return DateTime.now().isBefore(element.dateOfWriting);
       },
     );
+    notDoneExams = allParsedExams.sublist(0, lastNotDone + 1);
+    alreadyDoneExams = allParsedExams.sublist(lastNotDone + 1);
     FirebaseCrashlytics.instance.log("Shown Exams");
     super.initState();
   }
@@ -52,7 +55,7 @@ class _ExamsTabState extends State<ExamsTab> {
         duration: Duration(milliseconds: 500),
         curve: Curves.ease,
       );
-      for (int i = firstNotDone - 1; i >= 0; i--) {
+      for (int i = alreadyDoneExams.length - 1; i >= 0; i--) {
         _animatedListkey.currentState.removeItem(i, (context, animation) {
           return ScaleTransition(
             scale: CurvedAnimation(
@@ -60,23 +63,17 @@ class _ExamsTabState extends State<ExamsTab> {
               curve: Curves.ease,
             ),
             child: examCardBuilder(
-              exam: allParsedExams[allParsedExams.length -
-                  (allParsedExams.length - firstNotDone) -
-                  1 -
-                  i],
+              exam: alreadyDoneExams[i],
               context: context,
               isDone: true,
-              index: allParsedExams.length -
-                  (allParsedExams.length - firstNotDone) -
-                  1 -
-                  i,
+              index: i,
             ),
           );
         });
       }
     } else {
       _closedOfset = position.pixels;
-      for (var i = 0; i < firstNotDone; i++) {
+      for (var i = 0; i < alreadyDoneExams.length; i++) {
         _animatedListkey.currentState.insertItem(i);
       }
     }
@@ -104,9 +101,8 @@ class _ExamsTabState extends State<ExamsTab> {
       return noExam();
     } else {
       Widget currentExams;
-      if (firstNotDone == -1 || firstNotDone == allParsedExams.length) {
+      if (notDoneExams.length == 0) {
         //Minden készen van
-        firstNotDone = allParsedExams.length;
         currentExams = SizedBox(
           height: MediaQuery.of(context).size.height / 4,
           child: allDone(),
@@ -115,13 +111,13 @@ class _ExamsTabState extends State<ExamsTab> {
         currentExams = ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: allParsedExams.length - firstNotDone,
+          itemCount: notDoneExams.length,
           itemBuilder: (context, index) {
             return examCardBuilder(
-              exam: allParsedExams[firstNotDone + index],
+              exam: notDoneExams[index],
               context: context,
               isDone: false,
-              index: firstNotDone + index,
+              index: index,
             );
           },
         );
@@ -135,71 +131,70 @@ class _ExamsTabState extends State<ExamsTab> {
               : CrossAxisAlignment.start,
           children: [
             currentExams,
-            Container(
-              key: _dataKey,
-              child: GestureDetector(
-                onTap: () {
-                  _handleListOpen();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 15.0),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        "${getTranslatedString('doneExams')}:",
-                        textAlign: defaultTargetPlatform == TargetPlatform.iOS
-                            ? TextAlign.center
-                            : TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21,
+            alreadyDoneExams.length == 0
+                ? SizedBox()
+                : Container(
+                    key: _dataKey,
+                    child: GestureDetector(
+                      onTap: () {
+                        _handleListOpen();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              "${getTranslatedString('doneExams')}:",
+                              textAlign:
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                                      ? TextAlign.center
+                                      : TextAlign.left,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 21,
+                              ),
+                            ),
+                            AnimatedCrossFade(
+                              duration: const Duration(milliseconds: 150),
+                              firstChild: const Icon(
+                                Icons.keyboard_arrow_up,
+                                size: 30,
+                              ),
+                              secondChild: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 30,
+                              ),
+                              crossFadeState: _listOpen
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                            ),
+                          ],
                         ),
                       ),
-                      AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 150),
-                        firstChild: const Icon(
-                          Icons.keyboard_arrow_up,
-                          size: 30,
+                    ),
+                  ),
+            alreadyDoneExams.length == 0
+                ? Center(child: allDone(isDone: false))
+                : AnimatedList(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    key: _animatedListkey,
+                    itemBuilder: (context, index, animation) {
+                      return ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.ease,
                         ),
-                        secondChild: const Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 30,
+                        child: examCardBuilder(
+                          exam: alreadyDoneExams[index],
+                          context: context,
+                          isDone: true,
+                          index: index,
                         ),
-                        crossFadeState: _listOpen
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
-              ),
-            ),
-            AnimatedList(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              key: _animatedListkey,
-              itemBuilder: (context, index, animation) {
-                return ScaleTransition(
-                  scale: CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.ease,
-                  ),
-                  child: examCardBuilder(
-                    exam: allParsedExams[allParsedExams.length -
-                        (allParsedExams.length - firstNotDone) -
-                        1 -
-                        index],
-                    context: context,
-                    isDone: true,
-                    index: allParsedExams.length -
-                        (allParsedExams.length - firstNotDone) -
-                        1 -
-                        index,
-                  ),
-                );
-              },
-            ),
           ],
         ),
       );
@@ -253,20 +248,22 @@ class _ExamsTabState extends State<ExamsTab> {
     );
   }
 
-  Widget allDone() {
+  Widget allDone({isDone = true}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            MdiIcons.clipboardCheck,
+            isDone ? MdiIcons.clipboardCheck : MdiIcons.clipboardAlert,
             size: 50,
           ),
           SizedBox(
             height: 5,
           ),
           Text(
-            getTranslatedString("allDone"),
+            isDone
+                ? getTranslatedString("allDone")
+                : getTranslatedString("noDone"),
             textAlign: TextAlign.center,
           ),
         ],

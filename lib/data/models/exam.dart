@@ -113,6 +113,6 @@ class Exam {
 
   @override
   String toString() {
-    return this.mode.name + ":" + this.theme;
+    return this.dateOfWriting.toString() + ":" + this.theme;
   }
 }

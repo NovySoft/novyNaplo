@@ -23,8 +23,8 @@ Future<List<Exam>> getAllExams() async {
   });
 
   tempList.sort((a, b) =>
-      (a.dateOfWriting.toDayOnlyString() + a.lessonNumber.toString()).compareTo(
-          b.dateOfWriting.toDayOnlyString() + b.lessonNumber.toString()));
+      (b.dateOfWriting.toDayOnlyString() + b.lessonNumber.toString()).compareTo(
+          a.dateOfWriting.toDayOnlyString() + a.lessonNumber.toString()));
 
   return tempList;
 }
