@@ -15,6 +15,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
 
+// TODO: Fix landscape UI
 class ChartsDetailTab extends StatelessWidget {
   ChartsDetailTab({
     this.subject,

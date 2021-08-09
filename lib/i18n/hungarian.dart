@@ -430,5 +430,6 @@ final Map<String, String> translation = {
   "mode": "mód",
   "invPassOrKretaDownWarning":
       "A jelszavad megváltozott vagy a kréta a frissít. Amennyiben ténylegesen megváltozott a jelszavad kérlek nyomj a jelszó módosítása gombra, különben a mégse gombra.",
-  "noDone": "Semmi sincs még kész",
+  "noDone": "Semmi sincs még készen",
+  "manageUsers": "Felhasználók kezelése"
 };

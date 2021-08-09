@@ -1,6 +1,7 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
@@ -35,9 +36,14 @@ class GlobalDrawer {
               title: new Container(),
               leading: new Container(),
               backgroundColor: globals.darker ? Color(0xFF212121) : Colors.grey,
-              expandedHeight: 150.0,
+              expandedHeight: 120.0,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(config.menuLogo, fit: BoxFit.contain),
+                background: Image.asset(
+                  config.menuLogo,
+                  fit: BoxFit.contain,
+                ),
+/*                 title: 
+                titlePadding: EdgeInsets.only(left: 5), */
               ),
             ),
             SliverList(
@@ -45,8 +51,82 @@ class GlobalDrawer {
                 (BuildContext context, int index) {
                   switch (index) {
                     case 0:
-                      return SizedBox(
-                        height: 5,
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: "Novotny Levente",
+                                  icon: const Icon(Icons.arrow_downward),
+                                  underline: Container(
+                                      height: 0, color: Colors.transparent),
+                                  iconSize: 17,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                                  onChanged: (String newValue) {
+                                    /* setState(() {
+                                      dropdownValue = newValue;
+                                    }); */
+                                  },
+                                  items: <String>[
+                                        'Novotny Levente',
+                                        'Teásk Anna',
+                                        'Ebéd Elek'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList() +
+                                      [
+                                        DropdownMenuItem<String>(
+                                          value: "manageUsers",
+                                          child: Row(
+                                            children: [
+                                              Icon(Feather.users),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                getTranslatedString(
+                                                    "manageUsers"),
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 1,
+                            color: globals.darker
+                                ? Color(0xFF212121)
+                                : Colors.grey,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
                       );
                       break;
                     case 1:
