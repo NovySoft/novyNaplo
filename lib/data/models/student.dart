@@ -131,6 +131,7 @@ class Parent {
   String name;
   String phoneNumber;
   String uid;
+  bool isLegalGuardian;
   Parent();
 
   Map<String, dynamic> toJson() {
@@ -139,6 +140,7 @@ class Parent {
     data['Nev'] = this.name;
     data['Telefonszam'] = this.phoneNumber;
     data['Uid'] = this.uid;
+    data['IsTorvenyesKepviselo'] = this.isLegalGuardian;
     return data;
   }
 
@@ -155,6 +157,7 @@ class Parent {
     name = json['Nev'];
     phoneNumber = json['Telefonszam'];
     uid = json['Uid'];
+    isLegalGuardian = json['IsTorvenyesKepviselo'];
   }
 }
 
@@ -202,6 +205,8 @@ class Institution {
     if (this.customizationOptions != null) {
       data['TestreszabasBeallitasok'] = this.customizationOptions.toJson();
     }
+    data['LinkId'] = this.linkId;
+    data['Name'] = this.name;
     return json.encode(data);
   }
 
@@ -217,6 +222,9 @@ class Institution {
     customizationOptions = json['TestreszabasBeallitasok'] != null
         ? new CustomizationOptions.fromJson(json['TestreszabasBeallitasok'])
         : null;
+    //* These two are novynaplo internal stuff
+    this.linkId = json['LinkId'];
+    this.name = json['Name'];
   }
 }
 
@@ -243,6 +251,7 @@ class CustomizationOptions {
   bool canViewThemeOfLesson;
   bool canViewClassAV;
   int evalShowDelay;
+  String nextUpdate;
   CustomizationOptions();
 
   Map<String, dynamic> toJson() {
@@ -253,6 +262,7 @@ class CustomizationOptions {
     data['IsOsztalyAtlagMegjeleniteseEllenorzoben'] = this.canViewClassAV;
     data['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'] =
         this.evalShowDelay;
+    data['KovetkezoTelepitesDatuma'] = this.nextUpdate;
     return data;
   }
 
@@ -261,5 +271,6 @@ class CustomizationOptions {
     canViewThemeOfLesson = json['IsTanorakTemajaMegtekinthetoEllenorzoben'];
     canViewClassAV = json['IsOsztalyAtlagMegjeleniteseEllenorzoben'];
     evalShowDelay = json['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'];
+    nextUpdate = json['KovetkezoTelepitesDatuma'];
   }
 }

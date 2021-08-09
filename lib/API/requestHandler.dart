@@ -54,7 +54,8 @@ class RequestHandler {
     /*
     Always check the school site for updating as the school site handles the data and 
     the IDP server is completly independent from the school site. This means that the idp maybe working, but
-    the school site can be offline at the same time*/
+    the school site can be offline at the same time
+    */
     try {
       var response = await client.get(
         BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin,
