@@ -44,6 +44,7 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        // TODO: Only show on changes
         await showDialog(
           context: context,
           builder: (context) {

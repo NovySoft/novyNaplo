@@ -1,5 +1,4 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -18,9 +17,21 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 
-//TODO Add option to remove items from drawer or reorder cards
-class GlobalDrawer {
-  static Widget getDrawer(String screen, BuildContext context) {
+String userDropdownValue = "Novotny Levente";
+
+class CustomDrawer extends StatefulWidget {
+  const CustomDrawer(
+    this.screen,
+  );
+  final String screen;
+
+  @override
+  _CustomDrawerState createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       elevation: globals.darker ? 0 : 16,
       child: Container(
@@ -42,8 +53,6 @@ class GlobalDrawer {
                   config.menuLogo,
                   fit: BoxFit.contain,
                 ),
-/*                 title: 
-                titlePadding: EdgeInsets.only(left: 5), */
               ),
             ),
             SliverList(
@@ -66,7 +75,7 @@ class GlobalDrawer {
                               Expanded(
                                 child: DropdownButton<String>(
                                   isExpanded: true,
-                                  value: "Novotny Levente",
+                                  value: userDropdownValue,
                                   icon: const Icon(Icons.arrow_downward),
                                   underline: Container(
                                       height: 0, color: Colors.transparent),
@@ -76,9 +85,10 @@ class GlobalDrawer {
                                     color: Theme.of(context).iconTheme.color,
                                   ),
                                   onChanged: (String newValue) {
-                                    /* setState(() {
-                                      dropdownValue = newValue;
-                                    }); */
+                                    if (newValue == "manageUsers") return;
+                                    setState(() {
+                                      userDropdownValue = newValue;
+                                    });
                                   },
                                   items: <String>[
                                         'Novotny Levente',
@@ -134,20 +144,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("marks"))),
                         leading: Icon(Icons.create),
                         onTap: () {
-                          if (screen == MarksTab.tag) {
+                          if (widget.screen == MarksTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, MarksTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, MarksTab.tag);
                           }
                         },
                       );
@@ -157,20 +157,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("reports"))),
                         leading: Icon(MdiIcons.fileChart),
                         onTap: () {
-                          if (screen == ReportsTab.tag) {
+                          if (widget.screen == ReportsTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, ReportsTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, ReportsTab.tag);
                           }
                         },
                       );
@@ -181,20 +171,10 @@ class GlobalDrawer {
                             Text(capitalize(getTranslatedString("timetable"))),
                         leading: Icon(Icons.today),
                         onTap: () {
-                          if (screen == TimetableTab.tag) {
+                          if (widget.screen == TimetableTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, TimetableTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, TimetableTab.tag);
                           }
                         },
                       );
@@ -204,20 +184,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("exams"))),
                         leading: Icon(MdiIcons.clipboardText),
                         onTap: () {
-                          if (screen == ExamsTab.tag) {
+                          if (widget.screen == ExamsTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, ExamsTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, ExamsTab.tag);
                           }
                         },
                       );
@@ -227,20 +197,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("hw"))),
                         leading: Icon(MdiIcons.bagPersonalOutline),
                         onTap: () {
-                          if (screen == HomeworkTab.tag) {
+                          if (widget.screen == HomeworkTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, HomeworkTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, HomeworkTab.tag);
                           }
                         },
                       );
@@ -250,20 +210,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("notices"))),
                         leading: Icon(Icons.layers),
                         onTap: () {
-                          if (screen == NoticesTab.tag) {
+                          if (widget.screen == NoticesTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, NoticesTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, NoticesTab.tag);
                           }
                         },
                       );
@@ -273,20 +223,10 @@ class GlobalDrawer {
                         title: Text(capitalize(getTranslatedString("events"))),
                         leading: Icon(MdiIcons.pin),
                         onTap: () {
-                          if (screen == EventsTab.tag) {
+                          if (widget.screen == EventsTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, EventsTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, EventsTab.tag);
                           }
                         },
                       );
@@ -297,20 +237,10 @@ class GlobalDrawer {
                             Text(capitalize(getTranslatedString("statistics"))),
                         leading: Icon(MdiIcons.chartScatterPlotHexbin),
                         onTap: () {
-                          if (screen == StatisticsTab.tag) {
+                          if (widget.screen == StatisticsTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, StatisticsTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, StatisticsTab.tag);
                           }
                         },
                       );
@@ -321,20 +251,10 @@ class GlobalDrawer {
                             Text(capitalize(getTranslatedString("markCalc"))),
                         leading: new Icon(MdiIcons.calculator),
                         onTap: () {
-                          if (screen == CalculatorTab.tag) {
+                          if (widget.screen == CalculatorTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, CalculatorTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, CalculatorTab.tag);
                           }
                         },
                       );
@@ -345,20 +265,10 @@ class GlobalDrawer {
                             Text(capitalize(getTranslatedString("settings"))),
                         leading: Icon(Icons.settings_applications),
                         onTap: () {
-                          if (screen == SettingsTab.tag) {
+                          if (widget.screen == SettingsTab.tag) {
                             Navigator.pop(context);
                           } else {
-                            try {
-                              Navigator.pushNamed(context, SettingsTab.tag);
-                            } catch (e, s) {
-                              FirebaseCrashlytics.instance.recordError(
-                                e,
-                                s,
-                                reason: 'getDrawer',
-                                printDetails: true,
-                              );
-                              print(e.message);
-                            }
+                            Navigator.pushNamed(context, SettingsTab.tag);
                           }
                         },
                       );
@@ -378,3 +288,5 @@ class GlobalDrawer {
     );
   }
 }
+
+//TODO Add option to remove items from drawer or reorder cards

@@ -12,6 +12,7 @@ class BaseURL {
 class NovyNaploEndpoints {
   static const schoolList = "/schoolList.json";
   static const header = "/kretaHeader.json";
+  static const certificates = "/kretaCerts.json";
 }
 
 class KretaEndpoints {

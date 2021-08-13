@@ -91,7 +91,7 @@ class _ExamsTabState extends State<ExamsTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(ExamsTab.tag, context),
+      drawer: CustomDrawer(ExamsTab.tag),
       body: _body(context),
     );
   }

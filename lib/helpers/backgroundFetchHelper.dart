@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 //import 'package:novynaplo/data/database/users.dart';
@@ -54,6 +55,7 @@ void backgroundFetch() async {
       return;
     }
     List<Student> allUsers = await DatabaseHelper.getAllUsers();
+    trustedCerts = await DatabaseHelper.getTrustedCerts();
     //int errorNotifId = -1;
     for (var currentUser in allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);

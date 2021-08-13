@@ -94,7 +94,7 @@ class _StatisticsTabState extends State<StatisticsTab>
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(StatisticsTab.tag, context),
+      drawer: CustomDrawer(StatisticsTab.tag),
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {

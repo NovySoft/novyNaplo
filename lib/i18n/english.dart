@@ -402,7 +402,7 @@ final Map<String, String> translation = {
   "privacySettings": "Privacy settings",
   "Analytics": "Analytics",
   "PerfM": "Performance monitoring",
-  "Crashlytics": "Crash reporting",
+  "FirebaseCrashlytics": "Crash reporting",
   "noticesAndEventsSettings": "Notices and events settings",
   "disableCrashlytics":
       "If you disable crash reporting, then we cannot see and resolve crashes and problems with the application.",

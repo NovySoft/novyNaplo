@@ -401,7 +401,7 @@ final Map<String, String> translation = {
   "privacySettings": "Adatvédelmi beállítások",
   "Analytics": "Analitika",
   "PerfM": "Teljesítmény figyelés",
-  "Crashlytics": "Összeomlás jelentés",
+  "FirebaseCrashlytics": "Összeomlás jelentés",
   "noticesAndEventsSettings": "Feljegyzések és faliújság beállításai",
   "examSettings": "Dolgozat oldal beállításai",
   "disableCrashlytics":

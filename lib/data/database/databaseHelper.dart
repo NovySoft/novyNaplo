@@ -5,6 +5,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/kretaCert.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/student.dart';
@@ -25,6 +26,7 @@ import 'users.dart' as users;
 import 'mainSql.dart' as main;
 import 'colors.dart' as colors;
 import 'subjects.dart' as subjects;
+import 'trustedCerts.dart' as trustedCerts;
 
 ///List of pointers to the corresponding functions
 class DatabaseHelper {
@@ -102,4 +104,9 @@ class DatabaseHelper {
       getSubjNickMatrix = subjects.getSubjNickMatrix;
   static Future<void> Function(Subject subject) updateNickname =
       subjects.updateNickname;
+
+  static Future<List<KretaCert>> Function() getTrustedCerts =
+      trustedCerts.getTrustedCerts;
+  static Future<void> Function(List<KretaCert>) setTrustedCerts =
+      trustedCerts.setTrustedCerts;
 }

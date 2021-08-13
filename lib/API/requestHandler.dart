@@ -12,6 +12,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/kretaCert.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/school.dart';
@@ -45,6 +46,47 @@ var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
+  static Future<List<KretaCert>> getKretaTrustedCerts() async {
+    try {
+      FirebaseCrashlytics.instance.log("getKretaTrustedCerts");
+      print("Updating trusted certificates");
+
+      var result = await client.get(
+        Uri.parse(BaseURL.NOVY_NAPLO + NovyNaploEndpoints.certificates),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      ).timeout(Duration(seconds: 30), onTimeout: () {
+        return http.Response("Timeout", 408);
+      });
+      if (result.statusCode == 200) {
+        List responseJson = jsonDecode(result.body);
+        List<KretaCert> output = [];
+
+        for (var cert in responseJson) {
+          output.add(new KretaCert(
+            radixModulus: cert['radixModulus'],
+            exponent: cert['exponent'],
+            subject: cert['subject'],
+          ));
+          print(cert['subject']);
+        }
+        DatabaseHelper.setTrustedCerts(output);
+        return output;
+      } else {
+        return [];
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getKretaTrustedCerts',
+        printDetails: true,
+      );
+      return [];
+    }
+  }
+
   static Future<bool> checkForKretaUpdatingStatus(
     Student userDetails, {
     bool retry = false,
@@ -58,7 +100,7 @@ class RequestHandler {
     */
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin),
         headers: {
           "User-Agent": config.userAgent,
         },
@@ -111,7 +153,7 @@ class RequestHandler {
       }
 
       var response = await client.post(
-        BaseURL.KRETA_IDP + KretaEndpoints.token,
+        Uri.parse(BaseURL.KRETA_IDP + KretaEndpoints.token),
         body: {
           "userName": user.username,
           "password": user.password,
@@ -182,7 +224,7 @@ class RequestHandler {
     }
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.student,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.student),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -218,7 +260,8 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getEvaluations");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations,
+        Uri.parse(
+            BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -266,7 +309,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getSchoolList");
     try {
       var response = await client.get(
-        BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList,
+        Uri.parse(BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList),
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': config.userAgent,
@@ -297,7 +340,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getAbsencesMatrix");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.absences),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -338,7 +381,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getExams");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.exams),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -386,10 +429,10 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getHomeworks");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) +
+        Uri.parse(BaseURL.kreta(userDetails.school) +
             KretaEndpoints.homeworks +
             "?datumTol=" +
-            fromDue.toUtc().toIso8601String(),
+            fromDue.toUtc().toIso8601String()),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -544,12 +587,12 @@ class RequestHandler {
 
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) +
+        Uri.parse(BaseURL.kreta(userDetails.school) +
             KretaEndpoints.timetable +
             "?datumTol=" +
             from.toUtc().toDayOnlyString() +
             "&datumIg=" +
-            to.toUtc().toDayOnlyString(),
+            to.toUtc().toDayOnlyString()),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -590,7 +633,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getEvents");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.events,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.events),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -632,7 +675,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getNotices");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.notes,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.notes),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -697,7 +740,8 @@ class RequestHandler {
     }
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id),
+        Uri.parse(
+            BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id)),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -848,7 +892,7 @@ class RequestHandler {
       return file;
     } else {
       var response = await client.get(
-        url,
+        Uri.parse(url),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,

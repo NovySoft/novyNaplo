@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -127,6 +128,7 @@ class MarksTabState extends State<MarksTab>
       platformChannelSpecificsGetNotif,
     );
     List<Student> allUsers = await DatabaseHelper.getAllUsers();
+    trustedCerts = await DatabaseHelper.getTrustedCerts();
     for (var currentUser in allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
@@ -329,7 +331,7 @@ class MarksTabState extends State<MarksTab>
     Widget mainWidget = Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
+      drawer: CustomDrawer(MarksTab.tag),
       appBar: AppBar(
         title: Text(MarksTab.title),
         bottom: TabBar(

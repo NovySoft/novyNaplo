@@ -46,7 +46,7 @@ class _SettingsTabState extends State<SettingsTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(SettingsTab.tag, context),
+      drawer: CustomDrawer(SettingsTab.tag),
       body: SettingsBody(),
     );
   }

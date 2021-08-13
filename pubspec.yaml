@@ -29,12 +29,12 @@ dependencies:
   http: any
   flutter_launcher_icons: any
   shared_preferences: any
-  encrypt: 4.1.0
+  encrypt: 5.0.1
   connectivity: any
   flutter_spinkit: any
   dynamic_theme:
     git: https://github.com/bartektartanus/dynamic_theme.git
-  firebase_crashlytics: any
+  firebase_crashlytics: 2.1.1
   firebase_analytics: any
   charts_flutter: any
   firebase_performance: any
@@ -43,12 +43,12 @@ dependencies:
   flutter_icons: any
   sqflite: any
   animations: any
-  flutter_html: any
+  flutter_html: 2.1.1
   customgauge: any
   flutter_slidable: any
   flutter_local_notifications: any
   android_alarm_manager: any
-  flutter_svg: 0.19.3
+  flutter_svg: 0.22.0
   json_table: any
   flutter_calendar_week:
     git:
@@ -60,6 +60,8 @@ dependencies:
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: 0.4.0
+  rsa_pkcs: ^2.0.0
+  
 
 flutter_icons:
   android: true

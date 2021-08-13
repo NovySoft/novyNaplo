@@ -51,6 +51,9 @@ Future<void> initDatabase() async {
       await db.execute(
         'CREATE TABLE Subjects (uid TEXT PRIMARY KEY,category TEXT,nickname TEXT, fullname TEXT, teacher TEXT);',
       );
+      await db.execute(
+        'CREATE TABLE TrustedCerts (radixModulus TEXT, exponent INTEGER, subject TEXT, date TEXT);',
+      );
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
       await db.execute(
@@ -59,10 +62,13 @@ Future<void> initDatabase() async {
       await db.execute(
         'CREATE TABLE IF NOT EXISTS Subjects (uid TEXT PRIMARY KEY,category TEXT,nickname TEXT, fullname TEXT, teacher TEXT);',
       );
+      await db.execute(
+        'CREATE TABLE IF NOT EXISTS TrustedCerts (radixModulus TEXT, exponent INTEGER, subject TEXT, date TEXT);',
+      );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 3,
+    version: 4,
   );
   globals.db = await database;
 }
