@@ -13,6 +13,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/kretaCert.dart';
+import 'package:novynaplo/data/models/kretaNonce.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/school.dart';
@@ -42,10 +43,41 @@ import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import 'calcKretaNonce.dart';
+
 var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
+  static Future<KretaNonce> getNonce(Student userDetails) async {
+    try {
+      FirebaseCrashlytics.instance.log("getNonce");
+
+      var result = await client.get(
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.nonce),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      return new KretaNonce(
+        nonce: result.body,
+        key: calculateKretaNonceKey(userDetails, result.body),
+        version: "v1",
+      );
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getNonce',
+        printDetails: true,
+      );
+      return new KretaNonce(
+        version: "v1",
+      );
+    }
+  }
+
   static Future<List<KretaCert>> getKretaTrustedCerts() async {
     try {
       FirebaseCrashlytics.instance.log("getKretaTrustedCerts");
@@ -59,6 +91,7 @@ class RequestHandler {
       ).timeout(Duration(seconds: 30), onTimeout: () {
         return http.Response("Timeout", 408);
       });
+
       if (result.statusCode == 200) {
         List responseJson = jsonDecode(result.body);
         List<KretaCert> output = [];
@@ -71,6 +104,7 @@ class RequestHandler {
           ));
           print(cert['subject']);
         }
+
         DatabaseHelper.setTrustedCerts(output);
         return output;
       } else {
@@ -152,8 +186,15 @@ class RequestHandler {
         );
       }
 
+      KretaNonce nonce = await getNonce(user);
+      print("""
+      "X-AuthorizationPolicy-Nonce": ${nonce.nonce},
+      "X-AuthorizationPolicy-Key": ${nonce.key},
+      "X-AuthorizationPolicy-Version": ${nonce.version},
+      """);
+
       var response = await client.post(
-        Uri.parse(BaseURL.KRETA_IDP + KretaEndpoints.token),
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),
         body: {
           "userName": user.username,
           "password": user.password,
@@ -164,6 +205,9 @@ class RequestHandler {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "User-Agent": config.userAgent,
+          "X-AuthorizationPolicy-Nonce": nonce.nonce,
+          "X-AuthorizationPolicy-Key": nonce.key,
+          "X-AuthorizationPolicy-Version": nonce.version
         },
       );
 

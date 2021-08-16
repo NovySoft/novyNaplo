@@ -15,9 +15,13 @@ class NovyNaploEndpoints {
   static const certificates = "/kretaCerts.json";
 }
 
+class IDPEndpoints {
+  static const token = "/connect/token";
+  static const nonce = "/nonce";
+}
+
 class KretaEndpoints {
   static const webLogin = "/Adminisztracio/Login";
-  static const token = "/connect/token";
   static const notes = "/ellenorzo/V3/Sajat/Feljegyzesek";
   static const events = "/ellenorzo/V3/Sajat/FaliujsagElemek";
   static const student = "/ellenorzo/V3/Sajat/TanuloAdatlap";

@@ -127,9 +127,9 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    List<Student> allUsers = await DatabaseHelper.getAllUsers();
+    globals.allUsers = await DatabaseHelper.getAllUsers();
     trustedCerts = await DatabaseHelper.getTrustedCerts();
-    for (var currentUser in allUsers) {
+    for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
         if (currentUser.current) {
@@ -196,9 +196,10 @@ class MarksTabState extends State<MarksTab>
             });
         break;
       } else {
+        print("Error while getting tokens: ${status.status}");
         ErrorToast.showErrorToastLong(
           context,
-          status.status,
+          getTranslatedString("errToken") + ":\n" + status.status,
         );
       }
     }

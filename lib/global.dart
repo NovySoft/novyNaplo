@@ -16,6 +16,7 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 //Variables used globally;
 //* Session
+List<Student> allUsers; // List of all students
 SharedPreferences prefs; //Global shared preferences
 bool didFetch = false; //True if we fetched the data, false if we didn't
 bool isNavigatorLoaded =

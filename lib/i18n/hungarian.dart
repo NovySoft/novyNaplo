@@ -112,7 +112,7 @@ final Map<String, String> translation = {
   "checkNet": "Hálózat ellenőrzése",
   "getToken": "Token lekérése",
   "decodeToken": "Token dekódolása",
-  "errToken": "Hiba a tokennel való lekérés közben\nÚjra próbálkozás",
+  "errToken": "Hiba a tokennel lekérése közben",
   "getEvents": "Faliújság lekérése",
   "decodeEvents": "Faliújság dekódolása",
   "saveEvents": "Faliújság mentése",

@@ -48,8 +48,8 @@ class _LoadingPageState extends State<LoadingPage> {
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
     try {
-      List<Student> allUsers = await DatabaseHelper.getAllUsers();
-      if (allUsers.length <= 0) {
+      globals.allUsers = await DatabaseHelper.getAllUsers();
+      if (globals.allUsers.length <= 0) {
         //Yes I know I misspelled it, live with it
         String path =
             fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
@@ -106,14 +106,14 @@ class _LoadingPageState extends State<LoadingPage> {
           return;
         }
       }
-      globals.currentUser = allUsers.firstWhere(
+      globals.currentUser = globals.allUsers.firstWhere(
         (element) => element.current,
-        orElse: () => allUsers[0],
+        orElse: () => globals.allUsers[0],
       );
       FirebaseCrashlytics.instance
           .setCustomKey("Version", config.currentAppVersionCode);
       if (globals.prefs.getBool("isMigratedToNewSubjectsDB") == null) {
-        for (Student n in allUsers) {
+        for (Student n in globals.allUsers) {
           await DatabaseHelper.setFetched(n, false);
         }
         globals.prefs.setBool("isMigratedToNewSubjectsDB", true);

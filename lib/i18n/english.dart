@@ -188,7 +188,7 @@ final Map<String, String> translation = {
   "plsWait": "Please wait",
   "setUpMarkCalc": "Setting up mark calculator",
   "getToken": "Getting token",
-  "errToken": "Error while getting token\nRetrying",
+  "errToken": "Error while getting token",
   "getEvents": "Getting events",
   "decodeEvents": "Decoding events",
   "saveEvents": "Saving events",

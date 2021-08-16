@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class UserManager extends StatefulWidget {
   @override
@@ -8,11 +10,7 @@ class UserManager extends StatefulWidget {
 }
 
 class _UserManagerState extends State<UserManager> {
-  final List<String> _items = [
-    "Novy*",
-    "Anna*",
-    "Ebéd Elek",
-  ];
+  final List<Student> _items = List.from(globals.allUsers);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,9 @@ class _UserManagerState extends State<UserManager> {
                 ListTile(
                   key: Key('$index'),
                   leading: Icon(MaterialIcons.drag_handle),
-                  title: Text('${_items[index]}'),
+                  title: Text(
+                    '${_items[index].nickname != null ? _items[index].nickname + "*" : _items[index].name}',
+                  ),
                   trailing: GestureDetector(
                     onTap: () {
                       //TODO
@@ -53,7 +53,7 @@ class _UserManagerState extends State<UserManager> {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
-                final String item = _items.removeAt(oldIndex);
+                final Student item = _items.removeAt(oldIndex);
                 _items.insert(newIndex, item);
               });
             },
