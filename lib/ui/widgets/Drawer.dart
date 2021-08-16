@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -12,6 +13,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/reports_tab.dart';
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
+import 'package:novynaplo/ui/screens/settings/user/userManager_settings.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/config.dart' as config;
@@ -104,21 +106,40 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       [
                                         DropdownMenuItem<String>(
                                           value: "manageUsers",
-                                          child: Row(
-                                            children: [
-                                              Icon(Feather.users),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                getTranslatedString(
-                                                    "manageUsers"),
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Theme.of(context)
-                                                      .iconTheme
-                                                      .color,
+                                          child: OpenContainer(
+                                            closedColor:
+                                                Theme.of(context).canvasColor,
+                                            openColor:
+                                                Theme.of(context).canvasColor,
+                                            closedElevation: 0,
+                                            openElevation: 0,
+                                            transitionDuration: Duration(
+                                              milliseconds: 450,
+                                            ),
+                                            closedBuilder: (
+                                              BuildContext context,
+                                              VoidCallback openContainer,
+                                            ) =>
+                                                Row(
+                                              children: [
+                                                Icon(Feather.users),
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  getTranslatedString(
+                                                      "manageUsers"),
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Theme.of(context)
+                                                        .iconTheme
+                                                        .color,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
+                                            openBuilder: (BuildContext context,
+                                                    VoidCallback
+                                                        openContainer) =>
+                                                UserManager(),
                                           ),
                                         )
                                       ],

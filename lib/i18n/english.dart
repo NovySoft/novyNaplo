@@ -433,4 +433,6 @@ final Map<String, String> translation = {
   "changePass": "Change password",
   "noDone": "Nothings done",
   "manageUsers": "Manage users",
+  "reordUsers": "Drag&Drop users to reorder them",
+  "newUser": "New user",
 };
