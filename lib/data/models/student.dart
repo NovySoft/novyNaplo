@@ -6,7 +6,8 @@ class Student {
   List<Parent> parents;
   String name;
   String nickname;
-  String birthDay;
+  String birthDayString;
+  DateTime birthDay;
   String placeOfBirth;
   String birthName;
   String schoolYearUid;
@@ -14,12 +15,13 @@ class Student {
   BankAccount bankAccount;
   //Should I merge these two?
   Institution institution;
-  String school;
 
+  String school;
   String username;
   String password;
   String token;
   String iv;
+
   DateTime tokenDate;
   int userId;
   bool current;
@@ -31,6 +33,7 @@ class Student {
     this.parents,
     this.name,
     this.nickname,
+    this.birthDayString,
     this.birthDay,
     this.placeOfBirth,
     this.birthName,
@@ -62,6 +65,7 @@ class Student {
     parents = input.parents;
     name = input.name;
     nickname = input.nickname;
+    birthDayString = input.birthDayString;
     birthDay = input.birthDay;
     placeOfBirth = input.placeOfBirth;
     birthName = input.birthName;
@@ -85,7 +89,7 @@ class Student {
       'parents': json.encode(parents),
       'name': name,
       'nickname': nickname,
-      'birthDay': birthDay,
+      'birthDay': birthDayString,
       'placeOfBirth': placeOfBirth,
       'birthName': birthName,
       'schoolYearUid': schoolYearUid,
@@ -110,7 +114,8 @@ class Student {
       });
     }
     name = json['Nev'];
-    birthDay = json['SzuletesiDatum'];
+    birthDayString = json['SzuletesiDatum'];
+    birthDay = DateTime.parse(birthDayString).toLocal();
     placeOfBirth = json['SzuletesiHely'];
     birthName = json['SzuletesiNev'];
     schoolYearUid = json['TanevUid'];

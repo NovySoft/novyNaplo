@@ -187,11 +187,6 @@ class RequestHandler {
       }
 
       KretaNonce nonce = await getNonce(user);
-      print("""
-      "X-AuthorizationPolicy-Nonce": ${nonce.nonce},
-      "X-AuthorizationPolicy-Key": ${nonce.key},
-      "X-AuthorizationPolicy-Version": ${nonce.version},
-      """);
 
       var response = await client.post(
         Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),

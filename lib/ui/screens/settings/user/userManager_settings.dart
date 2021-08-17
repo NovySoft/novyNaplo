@@ -4,6 +4,8 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 
+import 'user_detail_settings.dart';
+
 class UserManager extends StatefulWidget {
   @override
   _UserManagerState createState() => _UserManagerState();
@@ -35,13 +37,24 @@ class _UserManagerState extends State<UserManager> {
               for (int index = 0; index < _items.length; index++)
                 ListTile(
                   key: Key('$index'),
-                  leading: Icon(MaterialIcons.drag_handle),
+                  leading: InkWell(
+                    borderRadius: BorderRadius.circular(32),
+                    onLongPress: () {},
+                    child: Icon(MaterialIcons.drag_handle),
+                  ),
                   title: Text(
                     '${_items[index].nickname != null ? _items[index].nickname + "*" : _items[index].name}',
                   ),
-                  trailing: GestureDetector(
+                  trailing: InkWell(
+                    borderRadius: BorderRadius.circular(32),
                     onTap: () {
-                      //TODO
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => UserDetails(
+                            userDetails: _items[index],
+                          ),
+                        ),
+                      );
                     },
                     child: Icon(Icons.edit),
                   ),
