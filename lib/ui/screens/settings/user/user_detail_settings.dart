@@ -1,7 +1,11 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
+import 'package:novynaplo/helpers/toasts/okToast.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
 import 'builders/bankAccDetailsBuilder.dart';
@@ -12,19 +16,17 @@ import 'builders/schoolDetailsBuilder.dart';
 class UserDetails extends StatefulWidget {
   const UserDetails({
     @required this.userDetails,
+    @required this.setStateCallback,
   });
   final Student userDetails;
+  final Function setStateCallback;
 
   @override
   _UserDetailsState createState() => _UserDetailsState();
 }
 
 class _UserDetailsState extends State<UserDetails> {
-  bool _isAnimationDone = true;
-
-  final GlobalKey<AnimatedListState> schoolDetailsListKey =
-      GlobalKey<AnimatedListState>(debugLabel: "schoolDetailsListKey");
-  bool schoolDetailsOpen = false;
+  final TextEditingController _newNickNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,20 +66,29 @@ class _UserDetailsState extends State<UserDetails> {
           ),
           SizedBox(height: 10),
           Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.userDetails.nickname ?? widget.userDetails.name,
-                  style: TextStyle(fontSize: 21),
+            child: InkWell(
+              onTap: () => showNicknameChange(),
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: widget.userDetails.nickname ??
+                            widget.userDetails.name,
+                        style: TextStyle(fontSize: 21),
+                      ),
+                      WidgetSpan(
+                        child: SizedBox(width: 10),
+                      ),
+                      WidgetSpan(
+                        child: Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  child: Icon(Icons.edit),
-                )
-              ],
+              ),
             ),
           ),
           SizedBox(height: 15),
@@ -114,5 +125,74 @@ class _UserDetailsState extends State<UserDetails> {
         ],
       ),
     );
+  }
+
+  Future<void> showNicknameChange() async {
+    _newNickNameController.text = widget.userDetails.nickname ?? "";
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(getTranslatedString("changeNickname")),
+          content: TextFormField(
+            controller: _newNickNameController,
+            onFieldSubmitted: (inp) async {
+              if (await handleNicknameSave())
+                setState(() {
+                  Navigator.pop(context);
+                });
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                if (await handleNicknameSave())
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> handleNicknameSave() async {
+    String newNickName = _newNickNameController.text;
+    if (widget.userDetails.nickname == newNickName) return true;
+    if (globals.allUsers.any((element) =>
+        element.nickname == newNickName &&
+        element.uid != widget.userDetails.uid)) {
+      ErrorToast.showErrorToastLong(
+        context,
+        getTranslatedString("noSameUserNick"),
+      );
+      return false;
+    }
+    try {
+      await DatabaseHelper.changeNickname(
+        widget.userDetails,
+        newNickName,
+      );
+      setState(() {
+        OkToast.showOkToast(getTranslatedString("nickSucces"));
+      });
+      widget.setStateCallback();
+      return true;
+    } catch (e, s) {
+      ErrorToast.showErrorToastLong(
+        context,
+        getTranslatedString("unkError"),
+      );
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        printDetails: true,
+        reason: "handleNicknameSave",
+      );
+      return false;
+    }
   }
 }

@@ -454,4 +454,7 @@ final Map<String, String> translation = {
   "lessonTheme": "Óra téma",
   "classAv": "Osztályátlag",
   "evalDelay": "Jegyek Késleltetése",
+  "changeNickname": "Becenév Megváltoztatása",
+  "noSameUserNick": "Duplikált becenév!",
+  "nickSucces": "Sikeres becenév változtatás",
 };

@@ -455,4 +455,7 @@ final Map<String, String> translation = {
   "lessonTheme": "Lesson Theme",
   "classAv": "Class Avarage",
   "evalDelay": "Evaulation Delay",
+  "changeNickname": "Change Nickname",
+  "noSameUserNick": "Duplicate nickname!",
+  "nickSucces": "Nicname changed successfully"
 };

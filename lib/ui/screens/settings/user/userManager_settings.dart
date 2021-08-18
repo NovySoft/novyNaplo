@@ -12,7 +12,7 @@ class UserManager extends StatefulWidget {
 }
 
 class _UserManagerState extends State<UserManager> {
-  final List<Student> _items = List.from(globals.allUsers);
+  List<Student> _items = List.from(globals.allUsers);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +52,7 @@ class _UserManagerState extends State<UserManager> {
                         MaterialPageRoute(
                           builder: (_) => UserDetails(
                             userDetails: _items[index],
+                            setStateCallback: setStateCallback,
                           ),
                         ),
                       );
@@ -95,5 +96,11 @@ class _UserManagerState extends State<UserManager> {
         ],
       ),
     );
+  }
+
+  void setStateCallback() {
+    setState(() {
+      _items = List.from(globals.allUsers);
+    });
   }
 }

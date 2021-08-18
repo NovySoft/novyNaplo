@@ -75,6 +75,8 @@ class DatabaseHelper {
   static Future<void> Function(Student) insertUser = users.insertUser;
   static Future<List<Student>> Function({bool decrypt}) getAllUsers =
       users.getAllUsers;
+  static Future<void> Function(Student, String) changeNickname =
+      users.changeNickname;
 
   static Future<void> Function() initDatabase = main.initDatabase;
 

@@ -78,3 +78,18 @@ Future<void> setFetched(Student user, bool value) async {
     [value ? 1 : 0, user.userId, user.uid],
   );
 }
+
+Future<void> changeNickname(Student user, String nickname) async {
+  FirebaseCrashlytics.instance.log("changeNickname");
+  String nickanameToBeSet = nickname;
+  if (nickanameToBeSet.length == 0) nickanameToBeSet = null;
+  await globals.db.rawUpdate(
+    "UPDATE Users SET nickname = ? WHERE id = ? OR uid = ?",
+    [nickanameToBeSet, user.userId, user.uid],
+  );
+  globals.allUsers
+      .firstWhere(
+        (element) => element.userId == user.userId || element.uid == user.uid,
+      )
+      .nickname = nickanameToBeSet;
+}
