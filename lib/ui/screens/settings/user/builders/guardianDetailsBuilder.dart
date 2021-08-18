@@ -3,7 +3,6 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'package:novynaplo/ui/widgets/TitleSubtitleColumn.dart';
 
 class GuardianDetailsDropdown extends StatefulWidget {
   GuardianDetailsDropdown({

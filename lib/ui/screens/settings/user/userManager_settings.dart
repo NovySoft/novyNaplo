@@ -3,10 +3,14 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-
 import 'user_detail_settings.dart';
 
 class UserManager extends StatefulWidget {
+  UserManager({
+    @required this.setStateCallback,
+  });
+  final Function setStateCallback;
+
   @override
   _UserManagerState createState() => _UserManagerState();
 }
@@ -99,6 +103,7 @@ class _UserManagerState extends State<UserManager> {
   }
 
   void setStateCallback() {
+    widget.setStateCallback(true);
     setState(() {
       _items = List.from(globals.allUsers);
     });

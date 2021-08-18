@@ -19,7 +19,7 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/global.dart' as globals;
 
-String userDropdownValue = "Novotny Levente";
+String userDropdownValue = "";
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer(
@@ -32,6 +32,23 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  List<String> dropdownItems = [];
+  bool isEdited = false;
+
+  void updateUserList(bool outsideCall) {
+    isEdited = outsideCall;
+    dropdownItems =
+        globals.allUsers.map((user) => user.nickname ?? user.name).toList();
+    userDropdownValue =
+        globals.currentUser.nickname ?? globals.currentUser.name;
+  }
+
+  @override
+  void initState() {
+    updateUserList(false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -87,17 +104,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     color: Theme.of(context).iconTheme.color,
                                   ),
                                   onChanged: (String newValue) {
-                                    if (newValue == "manageUsers") return;
                                     setState(() {
+                                      if (newValue == "manageUsers") return;
                                       userDropdownValue = newValue;
                                     });
                                   },
-                                  items: <String>[
-                                        'Novotny Levente',
-                                        'Teásk Anna',
-                                        'Ebéd Elek'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
+                                  items: dropdownItems
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -107,6 +121,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                         DropdownMenuItem<String>(
                                           value: "manageUsers",
                                           child: OpenContainer(
+                                            onClosed: (_) {
+                                              if (isEdited) {
+                                                Navigator.of(context).pop();
+                                                isEdited = false;
+                                              }
+                                            },
                                             closedColor:
                                                 Theme.of(context).canvasColor,
                                             openColor:
@@ -139,7 +159,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                             openBuilder: (BuildContext context,
                                                     VoidCallback
                                                         openContainer) =>
-                                                UserManager(),
+                                                UserManager(
+                                              setStateCallback: updateUserList,
+                                            ),
                                           ),
                                         )
                                       ],

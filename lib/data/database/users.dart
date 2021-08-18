@@ -92,4 +92,7 @@ Future<void> changeNickname(Student user, String nickname) async {
         (element) => element.userId == user.userId || element.uid == user.uid,
       )
       .nickname = nickanameToBeSet;
+  if (user.current) {
+    globals.currentUser.nickname = nickanameToBeSet;
+  }
 }

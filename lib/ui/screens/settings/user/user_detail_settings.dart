@@ -162,6 +162,13 @@ class _UserDetailsState extends State<UserDetails> {
   Future<bool> handleNicknameSave() async {
     String newNickName = _newNickNameController.text;
     if (widget.userDetails.nickname == newNickName) return true;
+    if (newNickName == "manageUsers") {
+      ErrorToast.showErrorToastLong(
+        context,
+        getTranslatedString("unkError"),
+      );
+      return false;
+    }
     if (globals.allUsers.any((element) =>
         element.nickname == newNickName &&
         element.uid != widget.userDetails.uid)) {
