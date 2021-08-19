@@ -11,12 +11,23 @@ import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
 import 'package:flutter/foundation.dart';
 
-Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
+Future<List<Homework>> getAllHomework({
+  bool ignoreDue = true,
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllHw");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Homework GROUP BY userId, uid ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Homework WHERE userId = ? GROUP BY userId, uid ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Homework WHERE userId = ? GROUP BY userId, uid ORDER BY databaseId',
+    );
+  }
 
   List<Homework> tempList = List.generate(maps.length, (i) {
     Homework temp = new Homework.fromSqlite(maps[i]);

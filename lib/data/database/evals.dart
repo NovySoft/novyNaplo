@@ -10,12 +10,22 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:flutter/foundation.dart';
 
-Future<List<Evals>> getAllEvals() async {
+Future<List<Evals>> getAllEvals({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllEvals");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Evals GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Evals WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Evals GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Evals> tempList = List.generate(maps.length, (i) {
     Evals temp = new Evals.fromSqlite(maps[i]);

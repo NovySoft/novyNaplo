@@ -49,7 +49,7 @@ class LoginPage extends StatefulWidget {
   final bool isAutoFill;
   final bool isEditing;
   final bool isNewUser;
-  Function setStateCallback = () {};
+  final Function setStateCallback;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -291,7 +291,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ).pop();
           }
         }
-        widget.setStateCallback();
+        if (widget.setStateCallback != null) widget.setStateCallback();
         if (widget.isNewUser) {
           Navigator.of(context).pop();
         } else {

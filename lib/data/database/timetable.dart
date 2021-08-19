@@ -12,12 +12,22 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:flutter/foundation.dart';
 
-Future<List<Lesson>> getAllTimetable() async {
+Future<List<Lesson>> getAllTimetable({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllTimetable");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Timetable GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Timetable WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Timetable GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Lesson> outputTempList = List.generate(maps.length, (i) {
     Lesson temp = new Lesson.fromSqlite(maps[i]);

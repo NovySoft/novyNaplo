@@ -8,12 +8,22 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 
-Future<List<Event>> getAllEvents() async {
+Future<List<Event>> getAllEvents({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllEvents");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Events GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Events WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Events GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Event> tempList = List.generate(maps.length, (i) {
     Event temp = new Event.fromSqlite(maps[i]);

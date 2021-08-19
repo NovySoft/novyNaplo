@@ -127,7 +127,9 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readMarks");
       });
-      List<Evals> tempEvals = await DatabaseHelper.getAllEvals();
+      List<Evals> tempEvals = await DatabaseHelper.getAllEvals(
+        userSpecific: true,
+      );
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
@@ -153,35 +155,47 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readNotices");
       });
-      noticesPage.allParsedNotices = await DatabaseHelper.getAllNotices();
+      noticesPage.allParsedNotices = await DatabaseHelper.getAllNotices(
+        userSpecific: true,
+      );
       //*Events
       setState(() {
         loadingText = getTranslatedString("readEvents");
       });
-      eventsPage.allParsedEvents = await DatabaseHelper.getAllEvents();
+      eventsPage.allParsedEvents = await DatabaseHelper.getAllEvents(
+        userSpecific: true,
+      );
       //*Absences
       setState(() {
         loadingText = getTranslatedString("readAbsences");
       });
       absencesPage.allParsedAbsences =
-          await DatabaseHelper.getAllAbsencesMatrix();
+          await DatabaseHelper.getAllAbsencesMatrix(
+        userSpecific: true,
+      );
       //*Homework
       setState(() {
         loadingText = getTranslatedString("readHw");
       });
-      homeworkPage.globalHomework =
-          await DatabaseHelper.getAllHomework(ignoreDue: false);
+      homeworkPage.globalHomework = await DatabaseHelper.getAllHomework(
+        ignoreDue: false,
+        userSpecific: true,
+      );
       //*Exams
       setState(() {
         loadingText = getTranslatedString("readHw");
       });
-      examsPage.allParsedExams = await DatabaseHelper.getAllExams();
+      examsPage.allParsedExams = await DatabaseHelper.getAllExams(
+        userSpecific: true,
+      );
       //*Timetable
       //?EXAMS AND HOMEWORK MUST BE LOADED BEFORE TIMETABLE
       setState(() {
         loadingText = getTranslatedString("readTimetable");
       });
-      List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable();
+      List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable(
+        userSpecific: true,
+      );
       timetablePage.lessonsList = await makeTimetableMatrix(
         tempLessonList,
         addToFetchDayList: false,

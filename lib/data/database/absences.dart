@@ -9,12 +9,22 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
-Future<List<List<Absence>>> getAllAbsencesMatrix() async {
+Future<List<List<Absence>>> getAllAbsencesMatrix({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllAbsencesMatrix");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Absences GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Absences WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Absences GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Absence> tempList = List.generate(maps.length, (i) {
     Absence temp = new Absence.fromSqlite(maps[i]);
