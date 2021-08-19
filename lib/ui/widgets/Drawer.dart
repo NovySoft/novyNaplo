@@ -106,7 +106,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     color: Theme.of(context).iconTheme.color,
                                   ),
                                   onChanged: (String newValue) async {
-                                    if (newValue == "manageUsers") return;
+                                    if (newValue == "manageUsers" ||
+                                        newValue == userDropdownValue) return;
                                     setState(() {
                                       userDropdownValue = newValue;
                                     });

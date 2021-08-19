@@ -665,7 +665,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                             applicationName: "Novy Napló",
                             applicationVersion: config.currentAppVersionCode,
                             applicationLegalese:
-                                "This application is contributed under the MIT license",
+                                "This application is distributed under the MIT license",
                             applicationIcon: Image.asset(
                               "assets/icon/icon.png",
                               height: 100,
