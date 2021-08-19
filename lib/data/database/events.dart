@@ -93,10 +93,14 @@ Future<void> handleEventDeletion({
 }) async {
   if (remoteEvents == null) return;
   if (remoteEvents.length == 0) return;
+  List<Event> filteredLocalEvents = List.from(localEvents)
+      .where((element) => element.userId == remoteEvents[0].userId)
+      .toList()
+      .cast<Event>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localEvents) {
+  for (var local in filteredLocalEvents) {
     if (remoteEvents.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

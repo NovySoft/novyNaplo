@@ -94,22 +94,26 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   if (inserted) {
     await batch.commit();
   }
-  handleEvalsDeletion(
+  handleAbsenceDeletion(
     remoteAbsences: absenceList,
     localAbsences: allAbsences,
   );
 }
 
-Future<void> handleEvalsDeletion({
+Future<void> handleAbsenceDeletion({
   List<Absence> remoteAbsences,
   List<Absence> localAbsences,
 }) async {
   if (remoteAbsences == null) return;
   if (remoteAbsences.length == 0) return;
+  List<Absence> filteredLocalAbsences = List.from(localAbsences)
+      .where((element) => element.userId == remoteAbsences[0].userId)
+      .toList()
+      .cast<Absence>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localAbsences) {
+  for (var local in filteredLocalAbsences) {
     if (remoteAbsences.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

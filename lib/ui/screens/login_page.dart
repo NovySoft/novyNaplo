@@ -37,15 +37,19 @@ class KeyLoaderKey {
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
-  const LoginPage({
+  LoginPage({
     this.userDetails,
     this.isAutoFill = false,
     this.isEditing = false,
+    this.isNewUser = false,
+    this.setStateCallback,
   });
 
   final Student userDetails;
   final bool isAutoFill;
   final bool isEditing;
+  final bool isNewUser;
+  Function setStateCallback = () {};
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -287,7 +291,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ).pop();
           }
         }
-        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+        widget.setStateCallback();
+        if (widget.isNewUser) {
+          Navigator.of(context).pop();
+        } else {
+          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+        }
       } catch (e, s) {
         FirebaseCrashlytics.instance.recordError(
           e,

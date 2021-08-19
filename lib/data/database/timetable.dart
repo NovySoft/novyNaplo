@@ -155,10 +155,14 @@ Future<void> handleTimetableDeletion({
 }) async {
   if (remoteLessons == null) return;
   if (remoteLessons.length == 0) return;
+  List<Lesson> filteredLocalLessons = List.from(localLessons)
+      .where((element) => element.userId == remoteLessons[0].userId)
+      .toList()
+      .cast<Lesson>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localLessons) {
+  for (var local in filteredLocalLessons) {
     if (remoteLessons.indexWhere(
               (element) =>
                   element.uid == local.uid && element.userId == local.userId,

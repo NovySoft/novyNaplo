@@ -36,6 +36,7 @@ Future<void> batchInsertAverages(List<Average> averageList) async {
           element.userId == average.userId);
     });
     if (matchedAv.length == 0) {
+      // FIXME: Fix null userID issues
       inserted = true;
       batch.insert(
         'Average',

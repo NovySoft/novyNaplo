@@ -109,10 +109,14 @@ Future<void> handleExamDeletion({
 }) async {
   if (remoteExams == null) return;
   if (remoteExams.length == 0) return;
+  List<Exam> filteredLocalExams = List.from(localExams)
+      .where((element) => element.userId == remoteExams[0].userId)
+      .toList()
+      .cast<Exam>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localExams) {
+  for (var local in filteredLocalExams) {
     if (remoteExams.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

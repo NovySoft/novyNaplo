@@ -99,10 +99,14 @@ Future<void> handleNoticeDeletion({
 }) async {
   if (remoteNotices == null) return;
   if (remoteNotices.length == 0) return;
+  List<Notice> filteredLocalNotices = List.from(localNotices)
+      .where((element) => element.userId == remoteNotices[0].userId)
+      .toList()
+      .cast<Notice>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localNotices) {
+  for (var local in filteredLocalNotices) {
     if (remoteNotices.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

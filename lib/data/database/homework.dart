@@ -230,10 +230,14 @@ Future<void> handleHomeworkDeletion({
 }) async {
   if (remoteHomework == null) return;
   if (remoteHomework.length == 0) return;
+  List<Homework> filteredLocalHomeworks = List.from(localHomework)
+      .where((element) => element.userId == remoteHomework[0].userId)
+      .toList()
+      .cast<Homework>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localHomework) {
+  for (var local in filteredLocalHomeworks) {
     if (remoteHomework.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

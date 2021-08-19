@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/ui/screens/login_page.dart';
 import 'user_detail_settings.dart';
 
 class UserManager extends StatefulWidget {
@@ -87,7 +88,12 @@ class _UserManagerState extends State<UserManager> {
                 ),
               ),
               onPressed: () async {
-                //TODO
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => LoginPage(
+                    setStateCallback: setStateCallback,
+                    isNewUser: true,
+                  ),
+                ));
               },
               icon: Icon(
                 Feather.user_plus,
