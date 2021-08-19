@@ -82,6 +82,7 @@ void main() async {
     EventsTab.tag: (context) => EventsTab(),
     ReportsTab.tag: (context) => ReportsTab(),
     AbsencesTab.tag: (context) => AbsencesTab(),
+    LoadingPage.tag: (context) => LoadingPage(),
   };
   runZonedGuarded(() async {
     await DatabaseHelper.initDatabase();

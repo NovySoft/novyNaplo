@@ -3,12 +3,14 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart';
+import 'package:novynaplo/ui/screens/loading_screen.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/reports_tab.dart';
@@ -103,11 +105,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     fontSize: 15,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  onChanged: (String newValue) {
+                                  onChanged: (String newValue) async {
+                                    if (newValue == "manageUsers") return;
                                     setState(() {
-                                      if (newValue == "manageUsers") return;
                                       userDropdownValue = newValue;
                                     });
+                                    await DatabaseHelper.setCurrentUser(
+                                      globals.allUsers
+                                          .firstWhere(
+                                            (element) =>
+                                                element.nickname == newValue ||
+                                                element.name == newValue,
+                                          )
+                                          .userId,
+                                    );
+                                    await Navigator.pushReplacementNamed(
+                                      context,
+                                      LoadingPage.tag,
+                                    );
                                   },
                                   items: dropdownItems
                                           .map<DropdownMenuItem<String>>(

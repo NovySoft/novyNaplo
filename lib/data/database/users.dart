@@ -96,3 +96,14 @@ Future<void> changeNickname(Student user, String nickname) async {
     globals.currentUser.nickname = nickanameToBeSet;
   }
 }
+
+Future<void> setCurrentUser(int newCurrentUserId) async {
+  FirebaseCrashlytics.instance.log("setCurrentUser");
+  await globals.db.rawUpdate(
+    "UPDATE Users SET current = 0",
+  );
+  await globals.db.rawUpdate(
+    "UPDATE Users SET current = 1 WHERE id = ?",
+    [newCurrentUserId],
+  );
+}

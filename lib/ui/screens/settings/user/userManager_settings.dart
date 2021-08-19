@@ -42,11 +42,7 @@ class _UserManagerState extends State<UserManager> {
               for (int index = 0; index < _items.length; index++)
                 ListTile(
                   key: Key('$index'),
-                  leading: InkWell(
-                    borderRadius: BorderRadius.circular(32),
-                    onLongPress: () {},
-                    child: Icon(MaterialIcons.drag_handle),
-                  ),
+                  leading: Icon(MaterialIcons.drag_handle),
                   title: Text(
                     '${_items[index].nickname != null ? _items[index].nickname + "*" : _items[index].name}',
                   ),
