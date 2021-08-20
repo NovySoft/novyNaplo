@@ -389,7 +389,7 @@ final Map<String, String> translation = {
   "XPassWrong": "?{0} jelszava megváltozott",
   "ComeAndChangePass": "Nyisd meg az appot és add meg újra a jelszavadat!",
   "reEnterPass": "Kérlek add meg újra a jelszavadat!",
-  "currEditing": "Jelenleg ?{0} jelszavát változtatod",
+  "currEditing": "Jelenleg ?{0} jelszavát módosítod",
   "splitText": "Szöveg tördelése grafikonnál:",
   "Igazolando": "Igazolandó",
   "prManager": "Public Relations",
@@ -429,7 +429,7 @@ final Map<String, String> translation = {
   "markCalcOut": "?{0} db  ?{1}-t",
   "mode": "mód",
   "invPassOrKretaDownWarning":
-      "A jelszavad megváltozott vagy a kréta a frissít. Amennyiben ténylegesen megváltozott a jelszavad kérlek nyomj a jelszó módosítása gombra, különben a mégse gombra.",
+      "A jelszavad megváltozott vagy a kréta frissít. Amennyiben ténylegesen megváltozott a jelszavad kérlek nyomj a jelszó módosítása gombra, különben a mégse gombra.",
   "noDone": "Semmi sincs még készen",
   "manageUsers": "Felhasználók kezelése",
   "reordUsers": "Húzd el a kártyákat az átrendezéshez",
