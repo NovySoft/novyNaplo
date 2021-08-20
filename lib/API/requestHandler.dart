@@ -272,6 +272,7 @@ class RequestHandler {
 
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
+
       if (embedEncryptedDetails) {
         student.userId = encryptedDetails.userId;
         student.iv = encryptedDetails.iv;
@@ -279,6 +280,9 @@ class RequestHandler {
         student.username = encryptedDetails.username;
         student.password = encryptedDetails.password;
         student.current = encryptedDetails.current;
+      } else {
+        student.userId = userDetails.userId;
+        DatabaseHelper.updateKretaGivenParameters(student);
       }
       return student;
     } catch (e, s) {
@@ -815,6 +819,7 @@ class RequestHandler {
   }) async {
     FirebaseCrashlytics.instance.log("getEverything");
     isError = false;
+    await getStudentInfo(user);
     if (setData) {
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);

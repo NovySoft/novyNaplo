@@ -120,14 +120,14 @@ class Student {
     birthName = json['SzuletesiNev'];
     schoolYearUid = json['TanevUid'];
     uid = json['Uid'];
-    institution.name = json['IntezmenyNev'];
-    institution.linkId = json['IntezmenyAzonosito'];
     bankAccount = json['Bankszamla'] != null
         ? new BankAccount.fromJson(json['Bankszamla'])
         : null;
     institution = json['Intezmeny'] != null
         ? new Institution.fromJson(json['Intezmeny'])
         : Institution();
+    institution.name = json['IntezmenyNev'];
+    institution.linkId = json['IntezmenyAzonosito'];
   }
 }
 

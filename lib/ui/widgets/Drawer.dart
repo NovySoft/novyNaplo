@@ -43,6 +43,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
         globals.allUsers.map((user) => user.nickname ?? user.name).toList();
     userDropdownValue =
         globals.currentUser.nickname ?? globals.currentUser.name;
+    if (outsideCall) {
+      setState(() {
+        isEdited = isEdited;
+        dropdownItems = dropdownItems;
+        userDropdownValue = userDropdownValue;
+      });
+    }
   }
 
   @override

@@ -260,7 +260,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       try {
         Student finalUserObject = await encryptUserDetails(tempUser);
         finalUserObject.current = isFirstUser;
-        //Fixme, also get student info on every fetch
         finalUserObject = await RequestHandler.getStudentInfo(
           tempUser,
           embedEncryptedDetails: true,
@@ -291,7 +290,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ).pop();
           }
         }
-        if (widget.setStateCallback != null) widget.setStateCallback();
+        if (widget.setStateCallback != null) {
+          globals.allUsers = await DatabaseHelper.getAllUsers();
+          widget.setStateCallback();
+        }
         if (widget.isNewUser) {
           Navigator.of(context).pop();
         } else {

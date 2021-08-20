@@ -107,3 +107,30 @@ Future<void> setCurrentUser(int newCurrentUserId) async {
     [newCurrentUserId],
   );
 }
+
+Future<void> updateKretaGivenParameters(Student user) async {
+  FirebaseCrashlytics.instance.log("updateKretaGivenParameters");
+  if (user.userId == null) return;
+
+  Student tempStudent = Student.from(user);
+  tempStudent.current = false;
+  tempStudent.fetched = true;
+
+  Map<String, dynamic> updateObject = tempStudent.toMap();
+  // Remove internal stuff....
+  updateObject.remove('id');
+  updateObject.remove('nickname');
+  updateObject.remove('username');
+  updateObject.remove('password');
+  updateObject.remove('school');
+  updateObject.remove('iv');
+  updateObject.remove('current');
+  updateObject.remove('fetched');
+
+  await globals.db.update(
+    "Users",
+    updateObject,
+    where: "id = ?",
+    whereArgs: [user.userId],
+  );
+}
