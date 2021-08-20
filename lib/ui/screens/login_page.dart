@@ -276,8 +276,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           nonEncrypted.username = tempUser.username;
           nonEncrypted.password = tempUser.password;
           nonEncrypted.school = tempUser.school;
-          globals.currentUser = nonEncrypted;
-
+          if (!widget.isNewUser) {
+            globals.currentUser = nonEncrypted;
+          }
           if (widget.isAutoFill) {
             //*Delete the prefs version of login data
             globals.prefs.remove("code");
