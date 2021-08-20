@@ -32,7 +32,7 @@ class _SchoolDetailsDropdownState extends State<SchoolDetailsDropdown> {
             if (!_isAnimationDone) return;
             _isAnimationDone = false;
             if (_listOpen) {
-              for (int i = 6 - 1; i >= 0; i--) {
+              for (int i = 4 - 1; i >= 0; i--) {
                 _animatedListKey.currentState.removeItem(i,
                     (context, animation) {
                   return SlideTransition(
@@ -55,7 +55,7 @@ class _SchoolDetailsDropdownState extends State<SchoolDetailsDropdown> {
                 await delay(50);
               }
             } else {
-              for (var i = 0; i < 6; i++) {
+              for (var i = 0; i < 4; i++) {
                 _animatedListKey.currentState.insertItem(i);
                 await delay(50);
               }
