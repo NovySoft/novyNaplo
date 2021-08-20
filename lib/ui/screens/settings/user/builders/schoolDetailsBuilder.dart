@@ -144,7 +144,11 @@ class SchoolDetails extends StatelessWidget {
           children: [
             TitleSubtitleColumn(
               title: getTranslatedString("name+uid"),
-              subtitle: schoolDetails.name + " #" + schoolDetails.uid,
+              subtitle: (schoolDetails.name ??
+                      (schoolDetails.shortName ??
+                          getTranslatedString("unknown"))) +
+                  " #" +
+                  (schoolDetails.uid ?? getTranslatedString("unknown")),
             ),
             SizedBox(
               height: 5,

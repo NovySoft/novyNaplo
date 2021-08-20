@@ -197,28 +197,29 @@ class GuardianDetails extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 5),
-                        if (guardianInfo.isLegalGuardian)
-                          Row(
-                            children: [
-                              //* Telefon
-                              Icon(
-                                MaterialCommunityIcons.account_child,
-                                color: Colors.green,
-                                size: 16,
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  getTranslatedString("legGuardian"),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+                        if (guardianInfo.isLegalGuardian != null)
+                          if (guardianInfo.isLegalGuardian)
+                            Row(
+                              children: [
+                                //* Telefon
+                                Icon(
+                                  MaterialCommunityIcons.account_child,
+                                  color: Colors.green,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
-                          ),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    getTranslatedString("legGuardian"),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
                       ],
                     ),
                   )
