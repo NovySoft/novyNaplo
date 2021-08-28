@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
@@ -39,8 +40,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void updateUserList(bool outsideCall) {
     isEdited = outsideCall;
-    dropdownItems =
-        globals.allUsers.map((user) => user.nickname ?? user.name).toList();
+    List<Student> tempList = List.from(globals.allUsers);
+    tempList.sort(
+      (a, b) => a.institution.userPosition.compareTo(
+        b.institution.userPosition,
+      ),
+    );
+    dropdownItems = tempList.map((user) => user.nickname ?? user.name).toList();
     userDropdownValue =
         globals.currentUser.nickname ?? globals.currentUser.name;
     if (outsideCall) {

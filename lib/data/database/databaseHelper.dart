@@ -84,6 +84,8 @@ class DatabaseHelper {
   static Future<void> Function(int) setCurrentUser = users.setCurrentUser;
   static Future<void> Function(Student) updateKretaGivenParameters =
       users.updateKretaGivenParameters;
+  static Future<void> Function(List<Student>) batchUpdateUserPositions =
+      users.batchUpdateUserPositions;
 
   static Future<void> Function() initDatabase = main.initDatabase;
 

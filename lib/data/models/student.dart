@@ -195,6 +195,7 @@ class Institution {
   String linkId;
   String shortName;
   String name;
+  int userPosition = 0;
   List<SystemModules> systemModules;
   CustomizationOptions customizationOptions;
   Institution();
@@ -212,6 +213,7 @@ class Institution {
     }
     data['LinkId'] = this.linkId;
     data['Name'] = this.name;
+    data['userPosition'] = this.userPosition;
     return json.encode(data);
   }
 
@@ -230,6 +232,7 @@ class Institution {
     //* These two are novynaplo internal stuff
     this.linkId = json['LinkId'];
     this.name = json['Name'];
+    this.userPosition = json['userPosition'] ?? 0;
   }
 }
 

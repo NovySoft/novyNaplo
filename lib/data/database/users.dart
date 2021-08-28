@@ -134,3 +134,20 @@ Future<void> updateKretaGivenParameters(Student user) async {
     whereArgs: [user.userId],
   );
 }
+
+Future<void> batchUpdateUserPositions(List<Student> userList) async {
+  FirebaseCrashlytics.instance.log("batchUpdateUserPositions");
+
+  final Batch batch = globals.db.batch();
+  for (Student user in userList) {
+    batch.update(
+      "Users",
+      {
+        'institution': user.institution.toJson(),
+      },
+      where: "id = ?",
+      whereArgs: [user.userId],
+    );
+  }
+  await batch.commit();
+}

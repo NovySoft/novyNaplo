@@ -207,21 +207,25 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (term) async {
-              final Database db = globals.db;
-              if (term.toLowerCase().contains("insert")) {
-                int tempId = await db.rawInsert(term);
-                result = "inserted at id: " + tempId.toString();
-              } else if (term.toLowerCase().contains("delete")) {
-                int tempId = await db.rawDelete(term);
-                result = tempId.toString() + " items deleted";
-              } else if (term.toLowerCase().contains("select")) {
-                var temp = await db.rawQuery(term);
-                JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-                String prettyprint = encoder.convert(temp);
-                result = prettyprint;
-              } else if (term.toLowerCase().contains("update")) {
-                int tempId = await db.rawUpdate(term);
-                result = tempId.toString() + " items modified";
+              try {
+                final Database db = globals.db;
+                if (term.toLowerCase().contains("insert")) {
+                  int tempId = await db.rawInsert(term);
+                  result = "inserted at id: " + tempId.toString();
+                } else if (term.toLowerCase().contains("delete")) {
+                  int tempId = await db.rawDelete(term);
+                  result = tempId.toString() + " items deleted";
+                } else if (term.toLowerCase().contains("select")) {
+                  var temp = await db.rawQuery(term);
+                  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                  String prettyprint = encoder.convert(temp);
+                  result = prettyprint;
+                } else if (term.toLowerCase().contains("update")) {
+                  int tempId = await db.rawUpdate(term);
+                  result = tempId.toString() + " items modified";
+                }
+              } catch (e) {
+                result = e.toString();
               }
               setState(() {
                 result = result;

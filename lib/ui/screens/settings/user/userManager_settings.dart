@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -17,7 +18,17 @@ class UserManager extends StatefulWidget {
 }
 
 class _UserManagerState extends State<UserManager> {
-  List<Student> _items = List.from(globals.allUsers);
+  List<Student> _items = [];
+
+  @override
+  void initState() {
+    setStateCallback(
+      createItemList: true,
+      callExternalUpdate: false,
+      callInternalUpdate: false,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +82,23 @@ class _UserManagerState extends State<UserManager> {
                 final Student item = _items.removeAt(oldIndex);
                 _items.insert(newIndex, item);
               });
+              globals.allUsers = globals.allUsers
+                  .map((e) {
+                    int temp = _items.indexWhere(
+                      (element) => element.userId == e.userId,
+                    );
+                    e.institution.userPosition = temp == -1 ? 0 : temp;
+                    return e;
+                  })
+                  .toList()
+                  .cast<Student>();
+              //* I have a feeling this will cause problems
+              DatabaseHelper.batchUpdateUserPositions(globals.allUsers);
+              setStateCallback(
+                callInternalUpdate: false,
+                callExternalUpdate: true,
+                createItemList: false,
+              );
             },
           ),
           SizedBox(height: 15),
@@ -104,10 +132,24 @@ class _UserManagerState extends State<UserManager> {
     );
   }
 
-  void setStateCallback() {
-    widget.setStateCallback(true);
-    setState(() {
+  void setStateCallback({
+    bool callExternalUpdate = true,
+    bool callInternalUpdate = true,
+    bool createItemList = true,
+  }) {
+    if (callExternalUpdate) widget.setStateCallback(true);
+    if (createItemList) {
       _items = List.from(globals.allUsers);
-    });
+      _items.sort(
+        (a, b) => a.institution.userPosition.compareTo(
+          b.institution.userPosition,
+        ),
+      );
+    }
+    if (callInternalUpdate) {
+      setState(() {
+        _items = _items;
+      });
+    }
   }
 }
