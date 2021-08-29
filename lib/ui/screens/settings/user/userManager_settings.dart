@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
@@ -5,7 +6,10 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/ui/screens/login_page.dart';
+import '../../loading_screen.dart';
 import 'user_detail_settings.dart';
+
+bool isReloadRequired = false;
 
 class UserManager extends StatefulWidget {
   UserManager({
@@ -22,6 +26,7 @@ class _UserManagerState extends State<UserManager> {
 
   @override
   void initState() {
+    isReloadRequired = false;
     setStateCallback(
       createItemList: true,
       callExternalUpdate: false,
@@ -57,19 +62,46 @@ class _UserManagerState extends State<UserManager> {
                   title: Text(
                     '${_items[index].nickname != null ? _items[index].nickname + "*" : _items[index].name}',
                   ),
-                  trailing: InkWell(
-                    borderRadius: BorderRadius.circular(32),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => UserDetails(
-                            userDetails: _items[index],
-                            setStateCallback: setStateCallback,
-                          ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(40),
+                        splashColor: Colors.red,
+                        onTap: () {
+                          showDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (_) {
+                                return LogOutDialog(
+                                  user: _items[index],
+                                  setStateCallback: setStateCallback,
+                                );
+                              });
+                        },
+                        child: Icon(
+                          Feather.trash_2,
+                          color: Colors.red,
                         ),
-                      );
-                    },
-                    child: Icon(Icons.edit),
+                      ),
+                      SizedBox(width: 10),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(32),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => UserDetails(
+                                userDetails: _items[index],
+                                setStateCallback: setStateCallback,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Icon(Icons.edit),
+                      ),
+                    ],
                   ),
                   enableFeedback: true,
                 ),
@@ -151,5 +183,72 @@ class _UserManagerState extends State<UserManager> {
         _items = _items;
       });
     }
+  }
+}
+
+class LogOutDialog extends StatelessWidget {
+  LogOutDialog({
+    @required this.setStateCallback,
+    @required this.user,
+  });
+  final Function setStateCallback;
+  final Student user;
+
+  @override
+  Widget build(BuildContext context) {
+    return new AlertDialog(
+      elevation: globals.darker ? 0 : 24,
+      title: new Text(getTranslatedString("logOut")),
+      content: SingleChildScrollView(
+        child: Text(
+          getTranslatedString(
+            "sureRemoveUser",
+            replaceVariables: [
+              user.nickname ?? user.name,
+            ],
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(
+            getTranslatedString("yes"),
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () async {
+            FirebaseAnalytics().logEvent(name: "sign_out");
+            if (globals.allUsers.length > 1) {
+              globals.allUsers.removeWhere(
+                (element) => element.userId == user.userId,
+              );
+              await DatabaseHelper.deleteUserAndAssociatedData(user);
+              if (user.current) {
+                isReloadRequired = true;
+              }
+              this.setStateCallback();
+              Navigator.of(context).pop();
+            } else {
+              //Last user
+              //FIXME: Go to login page
+            }
+            /*
+            await globals.resetAllGlobals();
+             Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => login.LoginPage()),
+              ModalRoute.withName('login-page'),
+            ); */
+          },
+        ),
+        TextButton(
+          child: Text(getTranslatedString("no")),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
   }
 }

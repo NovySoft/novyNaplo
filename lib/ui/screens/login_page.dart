@@ -501,6 +501,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             onTap: () {
               togglePasswordVisibility();
             },
+            //TODO: An animation would be nice to have
             child: Icon(_obscureText ? MdiIcons.eyeOff : MdiIcons.eye),
           ),
           hintText: getTranslatedString("password"),

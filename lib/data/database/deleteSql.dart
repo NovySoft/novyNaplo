@@ -27,5 +27,54 @@ Future<void> clearAllTables() async {
   batch.delete("Timetable");
   batch.delete("Absences");
   batch.delete("Users");
+  batch.delete("Colors");
+  batch.delete("Subjects");
+  batch.delete("TrustedCerts");
+  await batch.commit();
+}
+
+Future<void> deleteUsersData(int userId) async {
+  FirebaseCrashlytics.instance.log("clearAllTables");
+  final batch = globals.db.batch();
+  batch.delete(
+    "Evals",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Average",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Notices",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Events",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Exams",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Homework",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Timetable",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
+  batch.delete(
+    "Absences",
+    where: "userId = ?",
+    whereArgs: [userId],
+  );
   await batch.commit();
 }

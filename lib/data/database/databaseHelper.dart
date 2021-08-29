@@ -43,6 +43,7 @@ class DatabaseHelper {
   static Future<void> Function(int, String) deleteFromDbByID =
       deleteSql.deleteFromDbByID;
   static Future<void> Function() clearAllTables = deleteSql.clearAllTables;
+  static Future<void> Function(int) deleteUsersData = deleteSql.deleteUsersData;
 
   static Future<List<Evals>> Function({bool userSpecific}) getAllEvals =
       evals.getAllEvals;
@@ -86,6 +87,8 @@ class DatabaseHelper {
       users.updateKretaGivenParameters;
   static Future<void> Function(List<Student>) batchUpdateUserPositions =
       users.batchUpdateUserPositions;
+  static Future<void> Function(Student) deleteUserAndAssociatedData =
+      users.deleteUserAndAssociatedData;
 
   static Future<void> Function() initDatabase = main.initDatabase;
 

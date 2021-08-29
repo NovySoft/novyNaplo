@@ -4,6 +4,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'databaseHelper.dart';
 
 Future<void> insertUser(Student user) async {
   FirebaseCrashlytics.instance.log("insertUser");
@@ -150,4 +151,21 @@ Future<void> batchUpdateUserPositions(List<Student> userList) async {
     );
   }
   await batch.commit();
+}
+
+Future<void> deleteUserAndAssociatedData(Student user) async {
+  FirebaseCrashlytics.instance.log("deleteUserAndAssociatedData");
+  await globals.db.delete(
+    "Users",
+    where: "id = ?",
+    whereArgs: [user.userId],
+  );
+  if (user.current) {
+    print(
+      "Deleted user is current user too, new currUser: ${globals.allUsers[0].name}",
+    );
+    await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
+    globals.currentUser = globals.allUsers[0];
+  }
+  DatabaseHelper.deleteUsersData(user.userId);
 }

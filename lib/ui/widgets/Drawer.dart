@@ -16,7 +16,8 @@ import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/reports_tab.dart';
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
-import 'package:novynaplo/ui/screens/settings/user/userManager_settings.dart';
+import 'package:novynaplo/ui/screens/settings/user/userManager_settings.dart'
+    show UserManager, isReloadRequired;
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/config.dart' as config;
@@ -41,14 +42,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
   void updateUserList(bool outsideCall) {
     isEdited = outsideCall;
     List<Student> tempList = List.from(globals.allUsers);
+    userDropdownValue =
+        globals.currentUser.nickname ?? globals.currentUser.name;
     tempList.sort(
       (a, b) => a.institution.userPosition.compareTo(
         b.institution.userPosition,
       ),
     );
     dropdownItems = tempList.map((user) => user.nickname ?? user.name).toList();
-    userDropdownValue =
-        globals.currentUser.nickname ?? globals.currentUser.name;
     if (outsideCall) {
       setState(() {
         isEdited = isEdited;
@@ -160,6 +161,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                               if (isEdited) {
                                                 Navigator.of(context).pop();
                                                 isEdited = false;
+                                              }
+                                              if (isReloadRequired) {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoadingPage(
+                                                      isFirstLoad: false,
+                                                    ),
+                                                  ),
+                                                );
                                               }
                                             },
                                             closedColor:

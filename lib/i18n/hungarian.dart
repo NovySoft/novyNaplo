@@ -459,4 +459,5 @@ final Map<String, String> translation = {
   "nickSucces": "Sikeres becenév változtatás",
   "switchingUser": "Felhasználók váltása",
   "userAlreadyExits": "Ez a felhasználó már bejelentkezett",
+  "sureRemoveUser": "?{0} el lesz távolítva. Biztosan ezt szeretnéd?",
 };
