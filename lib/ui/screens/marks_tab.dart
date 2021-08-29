@@ -154,9 +154,11 @@ class MarksTabState extends State<MarksTab>
             true,
           );
         }
-        setState(() {
-          _setData();
-        });
+        if (this.mounted) {
+          setState(() {
+            _setData();
+          });
+        }
       } else if (status.status == "invalid_username_or_password") {
         showDialog(
             context: context,
