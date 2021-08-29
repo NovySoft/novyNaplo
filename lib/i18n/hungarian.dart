@@ -457,4 +457,5 @@ final Map<String, String> translation = {
   "changeNickname": "Becenév Megváltoztatása",
   "noSameUserNick": "Duplikált becenév!",
   "nickSucces": "Sikeres becenév változtatás",
+  "switchingUser": "Felhasználók váltása",
 };

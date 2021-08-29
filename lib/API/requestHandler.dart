@@ -532,7 +532,7 @@ class RequestHandler {
       }
       days.sort((a, b) => a.compareTo(b));
       DateTime endDate = now;
-      if (userDetails.tokenDate.isBefore(
+      if ((userDetails.tokenDate ?? DateTime(1970)).isBefore(
         DateTime.now().subtract(
           Duration(
             minutes: 25,

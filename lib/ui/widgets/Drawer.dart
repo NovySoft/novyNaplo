@@ -133,9 +133,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                           )
                                           .userId,
                                     );
-                                    await Navigator.pushReplacementNamed(
+                                    globals.isDataLoaded = false;
+                                    globals.isNavigatorLoaded = false;
+                                    await Navigator.pushReplacement(
                                       context,
-                                      LoadingPage.tag,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoadingPage(
+                                          isFirstLoad: false,
+                                        ),
+                                      ),
                                     );
                                   },
                                   items: dropdownItems

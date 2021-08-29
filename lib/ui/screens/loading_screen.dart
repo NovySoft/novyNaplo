@@ -39,6 +39,11 @@ int tokenIndex = 0;
 
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
+  LoadingPage({
+    this.isFirstLoad = true,
+  });
+  final bool isFirstLoad;
+
   @override
   _LoadingPageState createState() => new _LoadingPageState();
 }
@@ -119,10 +124,12 @@ class _LoadingPageState extends State<LoadingPage> {
         globals.prefs.setBool("isMigratedToNewSubjectsDB", true);
       }
       //*Subject shortenings
-      setState(() {
-        loadingText = getTranslatedString("readSubjShorts");
-      });
-      subject.subjectMap = await DatabaseHelper.getSubjectMap();
+      if (widget.isFirstLoad) {
+        setState(() {
+          loadingText = getTranslatedString("readSubjShorts");
+        });
+        subject.subjectMap = await DatabaseHelper.getSubjectMap();
+      }
       //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");
@@ -183,7 +190,7 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       //*Exams
       setState(() {
-        loadingText = getTranslatedString("readHw");
+        loadingText = getTranslatedString("readExam");
       });
       examsPage.allParsedExams = await DatabaseHelper.getAllExams(
         userSpecific: true,
@@ -201,11 +208,13 @@ class _LoadingPageState extends State<LoadingPage> {
         addToFetchDayList: false,
       );
       //*Timetable colors
-      setState(() {
-        loadingText = getTranslatedString("readTimetableColors");
-      });
-      subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
-      subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
+      if (widget.isFirstLoad) {
+        setState(() {
+          loadingText = getTranslatedString("readTimetableColors");
+        });
+        subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
+        subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
+      }
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       globals.isDataLoaded = true;
@@ -254,7 +263,9 @@ class _LoadingPageState extends State<LoadingPage> {
             SizedBox(height: 5.0),
             Center(
               child: Text(
-                getTranslatedString("Welcome to novynaplo"),
+                widget.isFirstLoad
+                    ? getTranslatedString("Welcome to novynaplo")
+                    : getTranslatedString("switchingUser"),
                 style: TextStyle(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
@@ -264,7 +275,9 @@ class _LoadingPageState extends State<LoadingPage> {
             ),
             Center(
               child: Text(
-                "Ver: " + config.currentAppVersionCode,
+                widget.isFirstLoad
+                    ? "Ver: " + config.currentAppVersionCode
+                    : globals.currentUser.nickname ?? globals.currentUser.name,
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),

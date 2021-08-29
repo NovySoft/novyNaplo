@@ -457,5 +457,6 @@ final Map<String, String> translation = {
   "evalDelay": "Evaulation Delay",
   "changeNickname": "Change Nickname",
   "noSameUserNick": "Duplicate nickname!",
-  "nickSucces": "Nicname changed successfully"
+  "nickSucces": "Nicname changed successfully",
+  "switchingUser": "Switching users",
 };
