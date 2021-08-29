@@ -459,4 +459,5 @@ final Map<String, String> translation = {
   "noSameUserNick": "Duplicate nickname!",
   "nickSucces": "Nicname changed successfully",
   "switchingUser": "Switching users",
+  "userAlreadyExits": "User already logged in",
 };
