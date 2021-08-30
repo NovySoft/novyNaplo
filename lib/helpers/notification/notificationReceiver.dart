@@ -117,7 +117,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Evals WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -196,7 +196,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Homework WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -244,7 +244,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Notices WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -351,7 +351,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Exams WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -476,7 +476,7 @@ class NotificationReceiver {
               },
             );
             if (tempIndex == -1) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Events WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
@@ -524,7 +524,7 @@ class NotificationReceiver {
             });
 
             if (tempItem == null) {
-              //?Strange, data was not found in the loaded items
+              //?Strange, data was not found in the loaded items, maybe a different user?
               final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
                 'SELECT * FROM Absences WHERE userId = ? and uid = ? GROUP BY uid, userId',
                 [payloadUserId, payloadUid],
