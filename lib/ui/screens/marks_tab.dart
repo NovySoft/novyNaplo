@@ -83,7 +83,8 @@ class MarksTabState extends State<MarksTab>
       await delay(500);
       globals.isNavigatorLoaded = true;
       if (globals.continueSession != null && globals.currentUser.fetched) {
-        Navigator.of(context).pushNamed(globals.continueSession);
+        if (globals.continueSession != MarksTab.tag)
+          Navigator.of(context).pushNamed(globals.continueSession);
       }
       globals.continueSession = null;
     });
