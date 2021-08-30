@@ -24,6 +24,7 @@ bool isDataLoaded =
     false; //Whether app data has been loaded, and we can start fetching data for notifications
 Database db; //Global database access
 Student currentUser = Student(); //The currently shown user
+String continueSession; // Should we renavigate to other page on userchange
 //* "Permanent"
 String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme

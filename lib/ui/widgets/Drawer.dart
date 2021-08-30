@@ -136,6 +136,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     );
                                     globals.isDataLoaded = false;
                                     globals.isNavigatorLoaded = false;
+                                    globals.continueSession = widget.screen;
                                     await Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
