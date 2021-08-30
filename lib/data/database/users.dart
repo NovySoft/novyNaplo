@@ -161,11 +161,13 @@ Future<void> deleteUserAndAssociatedData(Student user) async {
     whereArgs: [user.userId],
   );
   if (user.current) {
-    print(
-      "Deleted user is current user too, new currUser: ${globals.allUsers[0].name}",
-    );
-    await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
-    globals.currentUser = globals.allUsers[0];
+    if (globals.allUsers.length > 0) {
+      print(
+        "Deleted user is current user too, new currUser: ${globals.allUsers[0].name}",
+      );
+      await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
+      globals.currentUser = globals.allUsers[0];
+    }
   }
   DatabaseHelper.deleteUsersData(user.userId);
 }

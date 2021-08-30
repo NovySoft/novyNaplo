@@ -67,11 +67,7 @@ bool collapseNotifications =
 bool darker = false; //Darker theme
 bool calcLorincMode = false; //Should calculator show "invalid" outputs
 
-Future<void> resetAllGlobals() async {
-  await DatabaseHelper.clearAllTables();
-  await prefs.clear();
-  await prefs.setBool("isNew", true);
-  await prefs.setString("Language", language);
+Future<void> resetSessionGlobals() async {
   didFetch = false;
   marksPage.allParsedByDate = [];
   marksPage.allParsedBySubject = [];

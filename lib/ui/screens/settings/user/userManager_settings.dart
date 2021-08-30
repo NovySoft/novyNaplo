@@ -218,11 +218,11 @@ class LogOutDialog extends StatelessWidget {
           ),
           onPressed: () async {
             FirebaseAnalytics().logEvent(name: "sign_out");
-            if (globals.allUsers.length > 1) {
-              globals.allUsers.removeWhere(
-                (element) => element.userId == user.userId,
-              );
-              await DatabaseHelper.deleteUserAndAssociatedData(user);
+            globals.allUsers.removeWhere(
+              (element) => element.userId == user.userId,
+            );
+            await DatabaseHelper.deleteUserAndAssociatedData(user);
+            if (globals.allUsers.length > 0) {
               if (user.current) {
                 isReloadRequired = true;
               }
@@ -230,16 +230,14 @@ class LogOutDialog extends StatelessWidget {
               Navigator.of(context).pop();
             } else {
               //Last user
-              //FIXME: Go to login page
+              globals.resetSessionGlobals();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()),
+                ModalRoute.withName('login-page'),
+              );
             }
-            /*
-            await globals.resetAllGlobals();
-             Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => login.LoginPage()),
-              ModalRoute.withName('login-page'),
-            ); */
           },
         ),
         TextButton(

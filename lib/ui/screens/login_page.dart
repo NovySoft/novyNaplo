@@ -252,17 +252,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     tempUser.school = selectedSchool.code;
     tempUser.username = _userController.text;
     tempUser.password = _passController.text;
-    if (globals.allUsers.indexWhere(
-          (element) =>
-              element.username == tempUser.username &&
-              element.password == tempUser.password,
-        ) !=
-        -1) {
-      //User alread exists
-      ErrorToast.showErrorToast(
-        getTranslatedString("userAlreadyExits"),
-      );
-      return;
+    if (globals.allUsers != null) {
+      if (globals.allUsers.indexWhere(
+            (element) =>
+                element.username == tempUser.username &&
+                element.password == tempUser.password,
+          ) !=
+          -1) {
+        //User alread exists
+        ErrorToast.showErrorToast(
+          getTranslatedString("userAlreadyExits"),
+        );
+        return;
+      }
     }
     TokenResponse result = await RequestHandler.login(tempUser)
         .timeout(Duration(seconds: 15), onTimeout: () {

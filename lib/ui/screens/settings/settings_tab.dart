@@ -82,7 +82,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 17,
+      itemCount: 16,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -682,83 +682,10 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 16) {
-          return ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: SizedBox(
-                    height: 38,
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          showDialog<void>(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (_) {
-                                return LogOutDialog();
-                              });
-                        },
-                        icon: Icon(
-                          MdiIcons.logout,
-                        ),
-                        label: Text(
-                          getTranslatedString("logOut"),
-                        ))),
-              ),
-            ),
-          );
         } else {
           return SizedBox(height: 100);
         }
       },
-    );
-  }
-}
-
-class LogOutDialog extends StatefulWidget {
-  @override
-  _LogOutDialogState createState() => new _LogOutDialogState();
-}
-
-class _LogOutDialogState extends State<LogOutDialog> {
-  Widget build(BuildContext context) {
-    return new AlertDialog(
-      elevation: globals.darker ? 0 : 24,
-      title: new Text(getTranslatedString("logOut")),
-      content: Text(
-        getTranslatedString("sureLogout"),
-        textAlign: TextAlign.left,
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getTranslatedString("yes")),
-          onPressed: () async {
-            FirebaseAnalytics().logEvent(name: "sign_out");
-            await globals.resetAllGlobals();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => login.LoginPage()),
-              ModalRoute.withName('login-page'),
-            );
-          },
-        ),
-        TextButton(
-          child: Text(getTranslatedString("no")),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
     );
   }
 }
