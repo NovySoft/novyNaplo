@@ -28,6 +28,7 @@ import 'package:novynaplo/ui/screens/exams_detail_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsTab;
 import 'package:novynaplo/ui/screens/homework_detail_tab.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkTab;
+import 'package:novynaplo/ui/screens/loading_screen.dart';
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:novynaplo/ui/screens/notices_detail_tab.dart';
@@ -37,6 +38,7 @@ import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
+import '../../main.dart';
 import 'notificationHelper.dart';
 
 class NotificationReceiver {
@@ -65,7 +67,19 @@ class NotificationReceiver {
         payloadUid = payload.split(" ").sublist(2).join();
       }
       //*If content is missing it means, that the user clicked on a "combined" notification and we can just navigate to the according page
-      //FIXME: When multiuser support is added we also have to change users. And also make an option to show the data without changing users
+      if (globals.currentUser.userId != payloadUserId) {
+        globals.isDataLoaded = false;
+        globals.isNavigatorLoaded = false;
+        //Quickly switch users
+        await DatabaseHelper.setCurrentUser(payloadUserId);
+        await NavigatorKey.navigatorKey.currentState.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => LoadingPage(
+              isFirstLoad: false,
+            ),
+          ),
+        );
+      }
       if (payloadUid == null || payloadUid == "") {
         switch (payloadPrefix) {
           case "marks":

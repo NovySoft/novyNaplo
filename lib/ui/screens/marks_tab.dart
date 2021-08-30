@@ -80,7 +80,7 @@ class MarksTabState extends State<MarksTab>
     super.initState();
     //Handle loaded state
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await delay(2000);
+      await delay(500);
       globals.isNavigatorLoaded = true;
     });
   }
