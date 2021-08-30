@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
-import 'data/database/databaseHelper.dart';
 import 'data/models/student.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;

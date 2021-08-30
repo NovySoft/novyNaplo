@@ -6,7 +6,6 @@ import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
