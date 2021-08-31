@@ -11,6 +11,7 @@ import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/data/models/github.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/kretaCert.dart';
 import 'package:novynaplo/data/models/kretaNonce.dart';
@@ -49,6 +50,55 @@ var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
+  static Future<GitHubReleaseInfo> getLatestNovyNaploVersion() async {
+    try {
+      FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
+      bool checkForTestVersions =
+          globals.prefs.getBool("checkForTestVersions") ?? false;
+
+      var response = await client.get(
+        Uri.parse(
+          BaseURL.NOVY_NAPLO_GITHUB_REPO +
+              (checkForTestVersions
+                  ? GitHubApiEndpoints.getReleases()
+                  : GitHubApiEndpoints.getLatestVersion),
+        ),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        if (checkForTestVersions) {
+          List responseJson = jsonDecode(response.body);
+          List<GitHubReleaseInfo> releases = [];
+          for (var item in responseJson) {
+            releases.add(GitHubReleaseInfo.fromJson(item));
+          }
+          return releases.firstWhere((element) => element.preRelease);
+        } else {
+          Map<String, dynamic> responseJson = jsonDecode(response.body);
+          return GitHubReleaseInfo.fromJson(responseJson);
+        }
+      }
+
+      // On error we should return current version
+      return GitHubReleaseInfo(
+        tagName: config.currentAppVersionCode,
+      );
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getLatestNovyNaploVersion',
+        printDetails: true,
+      );
+      return GitHubReleaseInfo(
+        tagName: config.currentAppVersionCode,
+      );
+    }
+  }
+
   static Future<KretaNonce> getNonce(Student userDetails) async {
     try {
       FirebaseCrashlytics.instance.log("getNonce");

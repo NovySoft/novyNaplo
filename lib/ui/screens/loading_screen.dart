@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/API/requestHandler.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -123,6 +124,8 @@ class _LoadingPageState extends State<LoadingPage> {
         }
         globals.prefs.setBool("isMigratedToNewSubjectsDB", true);
       }
+      //* Check for new version
+      print(await RequestHandler.getLatestNovyNaploVersion());
       //*Subject shortenings
       if (widget.isFirstLoad) {
         setState(() {

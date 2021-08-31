@@ -163,6 +163,7 @@ class _UserDetailsState extends State<UserDetails> {
     String newNickName = _newNickNameController.text;
     if (widget.userDetails.nickname == newNickName) return true;
     if (newNickName == "manageUsers") {
+      //FIXME: use validators instead
       ErrorToast.showErrorToastLong(
         context,
         getTranslatedString("unkError"),
