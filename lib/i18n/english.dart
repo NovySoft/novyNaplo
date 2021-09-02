@@ -66,6 +66,7 @@ final Map<String, String> translation = {
   "forDay": "days",
   "forInfinity": "For infinity",
   "newVersion": "New version",
+  "newVersionAv": "New version available",
   "details": "Details",
   "update": "Update",
   "timetableSubtitle": "Timetable subtitle",

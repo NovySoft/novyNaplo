@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,12 @@ class RequestHandler {
       FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
       bool checkForTestVersions =
           globals.prefs.getBool("checkForTestVersions") ?? false;
+      ConnectivityResult result = await Connectivity().checkConnectivity();
+      if (result != ConnectivityResult.wifi) {
+        return GitHubReleaseInfo(
+          tagName: config.currentAppVersionCode,
+        );
+      }
 
       var response = await client.get(
         Uri.parse(

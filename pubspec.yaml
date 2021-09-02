@@ -61,6 +61,7 @@ dependencies:
   introduction_screen: any
   flutter_colorpicker: 0.4.0
   rsa_pkcs: ^2.0.0
+  flutter_markdown: ^0.6.5
   
 
 flutter_icons:

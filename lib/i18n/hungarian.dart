@@ -239,6 +239,7 @@ final Map<String, String> translation = {
   "delete": "Törlés",
   "deleteDB": "Adatbázis törlése",
   "newVersion": "Új verzió",
+  "newVersionAv": "Új verzió érhető el",
   "details": "Részletek",
   "update": "Frissítés",
   "timetableSubtitle": "Órarend alcím",

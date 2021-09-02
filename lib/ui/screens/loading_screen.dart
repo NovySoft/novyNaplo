@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
+import 'package:novynaplo/data/models/github.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
@@ -30,6 +33,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 import 'package:novynaplo/data/models/subject.dart' as subject;
+
+import '../../main.dart';
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -124,8 +129,6 @@ class _LoadingPageState extends State<LoadingPage> {
         }
         globals.prefs.setBool("isMigratedToNewSubjectsDB", true);
       }
-      //* Check for new version
-      print(await RequestHandler.getLatestNovyNaploVersion());
       //*Subject shortenings
       if (widget.isFirstLoad) {
         setState(() {
@@ -221,10 +224,107 @@ class _LoadingPageState extends State<LoadingPage> {
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       globals.isDataLoaded = true;
-      await Navigator.pushReplacement(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => marksPage.MarksTab(true)),
       );
+      //* Check for updates
+      if (globals.prefs.getBool("checkForUpdates") ?? true) {
+        GitHubReleaseInfo latestVersion =
+            await RequestHandler.getLatestNovyNaploVersion();
+        // I do versioning like this: 1.major.minor+patch(+nonsense giberrish, if test version)
+        if (latestVersion.tagName != config.currentAppVersionCode) {
+          //Check if it is higher than current version
+          String splitVlatest = latestVersion.tagName.split('V')[1];
+          String splitVcurrent = config.currentAppVersionCode.split('V')[1];
+
+          int mainVLatest = int.parse(splitVlatest.split('.')[0]);
+          int majorVLatest = int.parse(splitVlatest.split('.')[1]);
+          int minorVLatest = int.parse(
+            splitVlatest.split('.')[2].split('+')[0],
+          );
+          int patchVLatest = int.parse(splitVlatest.split('+')[1]);
+          String commentVLatest = splitVlatest.split('+').length >= 3
+              ? splitVlatest.split('+')[2]
+              : "";
+
+          print(
+            "Latest server version: $mainVLatest.$majorVLatest.$minorVLatest+$patchVLatest+$commentVLatest",
+          );
+
+          int mainVCurrent = int.parse(splitVcurrent.split('.')[0]);
+          int majorVCurrent = int.parse(splitVcurrent.split('.')[1]);
+          int minorVCurrent = int.parse(
+            splitVcurrent.split('.')[2].split('+')[0],
+          );
+          int patchVCurrent = int.parse(splitVcurrent.split('+')[1]);
+          String commentVCurrent = splitVcurrent.split('+').length >= 3
+              ? splitVcurrent.split('+')[2]
+              : "";
+
+          print(
+            "Current version: $mainVCurrent.$majorVCurrent.$minorVCurrent+$patchVCurrent+$commentVCurrent",
+          );
+
+          if (mainVLatest > mainVCurrent ||
+              majorVLatest > majorVCurrent ||
+              minorVLatest > minorVCurrent ||
+              patchVLatest > patchVCurrent ||
+              commentVLatest != commentVCurrent) {
+            //There is a newer version
+            print("Update available");
+            showDialog<void>(
+              context: NavigatorKey.navigatorKey.currentContext,
+              builder: (context) {
+                return AlertDialog(
+                  elevation: globals.darker ? 0 : 24,
+                  title: Text(getTranslatedString("newVersion")),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text(getTranslatedString("newVersionAv")),
+                        Wrap(
+                          children: [
+                            Text(config.currentAppVersionCode),
+                            Icon(AntDesign.arrowright, size: 16),
+                            Text(latestVersion.tagName),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text(getTranslatedString("details")),
+                      onPressed: () {
+                        showDialog(
+                          context: NavigatorKey.navigatorKey.currentContext,
+                          barrierColor: Colors.black,
+                          builder: (context) {
+                            return Center(
+                              child: Markdown(
+                                data: latestVersion.releaseNotes,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    TextButton(
+                      child: Text(getTranslatedString("update")),
+                      onPressed: () {},
+                    ),
+                    TextButton(
+                      child: Text("F-Droid"),
+                      onPressed: () {},
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        }
+      }
       return;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');
