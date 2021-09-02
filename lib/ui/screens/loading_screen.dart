@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -297,12 +298,28 @@ class _LoadingPageState extends State<LoadingPage> {
                     TextButton(
                       child: Text(getTranslatedString("details")),
                       onPressed: () {
+                        bool isBright = DynamicTheme.of(context).brightness ==
+                            Brightness.light;
                         showDialog(
+                          barrierColor: Colors.black87,
                           context: NavigatorKey.navigatorKey.currentContext,
-                          barrierColor: Colors.black,
                           builder: (context) {
                             return Center(
                               child: Markdown(
+                                styleSheet: MarkdownStyleSheet(
+                                  a: TextStyle(color: Colors.white),
+                                  p: TextStyle(color: Colors.white),
+                                  h1: TextStyle(color: Colors.white),
+                                  h2: TextStyle(color: Colors.white),
+                                  h3: TextStyle(color: Colors.white),
+                                  h4: TextStyle(color: Colors.white),
+                                  h5: TextStyle(color: Colors.white),
+                                  h6: TextStyle(color: Colors.white),
+                                  listBullet: TextStyle(color: Colors.white),
+                                  em: TextStyle(color: Colors.white),
+                                  strong: TextStyle(color: Colors.white),
+                                  blockquote: TextStyle(color: Colors.white),
+                                ),
                                 data: latestVersion.releaseNotes,
                               ),
                             );
