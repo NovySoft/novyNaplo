@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/event.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -33,7 +34,10 @@ Future<List<Event>> getAllEvents({
   return tempList;
 }
 
-Future<void> batchInsertEvents(List<Event> eventList) async {
+Future<void> batchInsertEvents(
+  List<Event> eventList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertEvents");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -98,21 +102,20 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
   handleEventDeletion(
     remoteEvents: eventList,
     localEvents: allEvents,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleEventDeletion({
   @required List<Event> remoteEvents,
   @required List<Event> localEvents,
+  @required Student userDetails,
 }) async {
   if (remoteEvents == null) return;
-  List<Event> filteredLocalEvents = List.from(localEvents);
-  if (remoteEvents.length > 0) {
-    filteredLocalEvents = filteredLocalEvents
-        .where((element) => element.userId == remoteEvents[0].userId)
-        .toList()
-        .cast<Event>();
-  }
+  List<Event> filteredLocalEvents = List.from(localEvents)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Event>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

@@ -391,7 +391,7 @@ class RequestHandler {
           },
         );
       }
-      DatabaseHelper.batchInsertEvals(evaluations);
+      DatabaseHelper.batchInsertEvals(evaluations, userDetails);
       return evaluations;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -460,7 +460,7 @@ class RequestHandler {
       );
       //No need to sort, the make function has a builtin sorting function
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
-      DatabaseHelper.batchInsertAbsences(absences);
+      DatabaseHelper.batchInsertAbsences(absences, userDetails);
       return outputList;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -507,6 +507,7 @@ class RequestHandler {
       }
       DatabaseHelper.batchInsertExams(
         exams,
+        userDetails,
       );
       return exams;
     } catch (e, s) {
@@ -548,7 +549,7 @@ class RequestHandler {
       }
       homeworks.removeWhere((element) => element == null);
       homeworks.sort((a, b) => b.dueDate.compareTo(a.dueDate));
-      DatabaseHelper.batchInsertHomework(homeworks);
+      DatabaseHelper.batchInsertHomework(homeworks, userDetails);
       return homeworks;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -712,6 +713,7 @@ class RequestHandler {
       List<List<Lesson>> output = await makeTimetableMatrix(lessons);
       DatabaseHelper.batchInsertLessons(
         lessons,
+        userDetails,
         lookAtDate: true,
       );
       return output;
@@ -754,7 +756,7 @@ class RequestHandler {
       if (sort) {
         events.sort((a, b) => b.endDate.compareTo(a.endDate));
       }
-      DatabaseHelper.batchInsertEvents(events);
+      DatabaseHelper.batchInsertEvents(events, userDetails);
       return events;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -797,7 +799,7 @@ class RequestHandler {
       if (sort) {
         notes.sort((a, b) => b.date.compareTo(a.date));
       }
-      DatabaseHelper.batchInsertNotices(notes);
+      DatabaseHelper.batchInsertNotices(notes, userDetails);
       return notes;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(

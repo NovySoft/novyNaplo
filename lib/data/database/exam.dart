@@ -40,7 +40,7 @@ Future<List<Exam>> getAllExams({
   return tempList;
 }
 
-Future<void> batchInsertExams(List<Exam> examList) async {
+Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
   FirebaseCrashlytics.instance.log("batchInsertExams");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -111,21 +111,20 @@ Future<void> batchInsertExams(List<Exam> examList) async {
   handleExamDeletion(
     remoteExams: examList,
     localExams: allExam,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleExamDeletion({
   @required List<Exam> remoteExams,
   @required List<Exam> localExams,
+  @required Student userDetails,
 }) async {
   if (remoteExams == null) return;
-  List<Exam> filteredLocalExams = List.from(localExams);
-  if (remoteExams.length > 0) {
-    filteredLocalExams = filteredLocalExams
-        .where((element) => element.userId == remoteExams[0].userId)
-        .toList()
-        .cast<Exam>();
-  }
+  List<Exam> filteredLocalExams = List.from(localExams)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Exam>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

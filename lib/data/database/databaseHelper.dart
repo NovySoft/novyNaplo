@@ -32,7 +32,7 @@ import 'trustedCerts.dart' as trustedCerts;
 class DatabaseHelper {
   static Future<List<List<Absence>>> Function({bool userSpecific})
       getAllAbsencesMatrix = absences.getAllAbsencesMatrix;
-  static Future<void> Function(List<Absence>) batchInsertAbsences =
+  static Future<void> Function(List<Absence>, Student) batchInsertAbsences =
       absences.batchInsertAbsences;
 
   static Future<List<Average>> Function() getAllAverages =
@@ -47,34 +47,34 @@ class DatabaseHelper {
 
   static Future<List<Evals>> Function({bool userSpecific}) getAllEvals =
       evals.getAllEvals;
-  static Future<void> Function(List<Evals>) batchInsertEvals =
+  static Future<void> Function(List<Evals>, Student) batchInsertEvals =
       evals.batchInsertEvals;
 
   static Future<List<Event>> Function({bool userSpecific}) getAllEvents =
       events.getAllEvents;
-  static Future<void> Function(List<Event>) batchInsertEvents =
+  static Future<void> Function(List<Event>, Student) batchInsertEvents =
       events.batchInsertEvents;
 
   static Future<List<Exam>> Function({bool userSpecific}) getAllExams =
       exam.getAllExams;
-  static Future<void> Function(List<Exam>) batchInsertExams =
+  static Future<void> Function(List<Exam>, Student) batchInsertExams =
       exam.batchInsertExams;
 
   static Future<List<Homework>> Function({bool ignoreDue, bool userSpecific})
       getAllHomework = homework.getAllHomework;
-  static Future<void> Function(List<Homework>) batchInsertHomework =
+  static Future<void> Function(List<Homework>, Student) batchInsertHomework =
       homework.batchInsertHomework;
   static Future<void> Function(Homework, {bool edited}) insertHomework =
       homework.insertHomework;
 
   static Future<List<Notice>> Function({bool userSpecific}) getAllNotices =
       notices.getAllNotices;
-  static Future<void> Function(List<Notice>) batchInsertNotices =
+  static Future<void> Function(List<Notice>, Student) batchInsertNotices =
       notices.batchInsertNotices;
 
   static Future<List<Lesson>> Function({bool userSpecific}) getAllTimetable =
       timetable.getAllTimetable;
-  static Future<void> Function(List<Lesson>, {bool lookAtDate})
+  static Future<void> Function(List<Lesson>, Student, {bool lookAtDate})
       batchInsertLessons = timetable.batchInsertLessons;
 
   static Future<void> Function(Student) insertUser = users.insertUser;

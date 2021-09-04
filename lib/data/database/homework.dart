@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -79,7 +80,10 @@ void deleteOldHomework(List<Homework> input) async {
   }
 }
 
-Future<void> batchInsertHomework(List<Homework> hwList) async {
+Future<void> batchInsertHomework(
+  List<Homework> hwList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertHomework");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -158,6 +162,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   handleHomeworkDeletion(
     remoteHomework: hwList,
     localHomework: allHw,
+    userDetails: userDetails,
   );
 }
 
@@ -238,15 +243,13 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
 Future<void> handleHomeworkDeletion({
   @required List<Homework> remoteHomework,
   @required List<Homework> localHomework,
+  @required Student userDetails,
 }) async {
   if (remoteHomework == null) return;
-  List<Homework> filteredLocalHomeworks = List.from(localHomework);
-  if (remoteHomework.length > 0) {
-    filteredLocalHomeworks = filteredLocalHomeworks
-        .where((element) => element.userId == remoteHomework[0].userId)
-        .toList()
-        .cast<Homework>();
-  }
+  List<Homework> filteredLocalHomeworks = List.from(localHomework)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Homework>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

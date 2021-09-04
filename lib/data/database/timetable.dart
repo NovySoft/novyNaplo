@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -60,8 +61,11 @@ void deleteOldLessonsFromList(List<Lesson> input) async {
   }
 }
 
-Future<void> batchInsertLessons(List<Lesson> lessonList,
-    {bool lookAtDate = false}) async {
+Future<void> batchInsertLessons(
+  List<Lesson> lessonList,
+  Student userDetails, {
+  bool lookAtDate = false,
+}) async {
   FirebaseCrashlytics.instance.log("batchInsertLessons");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -156,21 +160,20 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
   handleTimetableDeletion(
     remoteLessons: lessonList,
     localLessons: allTimetable,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleTimetableDeletion({
   @required List<Lesson> remoteLessons,
   @required List<Lesson> localLessons,
+  @required Student userDetails,
 }) async {
   if (remoteLessons == null) return;
-  List<Lesson> filteredLocalLessons = List.from(localLessons);
-  if (remoteLessons.length > 0) {
-    filteredLocalLessons = filteredLocalLessons
-        .where((element) => element.userId == remoteLessons[0].userId)
-        .toList()
-        .cast<Lesson>();
-  }
+  List<Lesson> filteredLocalLessons = List.from(localLessons)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Lesson>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

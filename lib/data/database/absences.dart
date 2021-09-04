@@ -1,7 +1,9 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -34,7 +36,10 @@ Future<List<List<Absence>>> getAllAbsencesMatrix({
   return makeAbsencesMatrix(tempList);
 }
 
-Future<void> batchInsertAbsences(List<Absence> absenceList) async {
+Future<void> batchInsertAbsences(
+  List<Absence> absenceList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertAbsences");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -107,21 +112,20 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   handleAbsenceDeletion(
     remoteAbsences: absenceList,
     localAbsences: allAbsences,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleAbsenceDeletion({
-  List<Absence> remoteAbsences,
-  List<Absence> localAbsences,
+  @required List<Absence> remoteAbsences,
+  @required List<Absence> localAbsences,
+  @required Student userDetails,
 }) async {
   if (remoteAbsences == null) return;
-  List<Absence> filteredLocalAbsences = List.from(localAbsences);
-  if (remoteAbsences.length > 0) {
-    filteredLocalAbsences = filteredLocalAbsences
-        .where((element) => element.userId == remoteAbsences[0].userId)
-        .toList()
-        .cast<Absence>();
-  }
+  List<Absence> filteredLocalAbsences = List.from(localAbsences)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Absence>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

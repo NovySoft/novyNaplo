@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -36,7 +37,10 @@ Future<List<Notice>> getAllNotices({
   return tempList;
 }
 
-Future<void> batchInsertNotices(List<Notice> noticeList) async {
+Future<void> batchInsertNotices(
+  List<Notice> noticeList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertNotices");
   bool inserted = false;
   // Get a reference to the database.
@@ -103,21 +107,20 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
   handleNoticeDeletion(
     remoteNotices: noticeList,
     localNotices: allNotices,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleNoticeDeletion({
   @required List<Notice> remoteNotices,
   @required List<Notice> localNotices,
+  @required Student userDetails,
 }) async {
   if (remoteNotices == null) return;
-  List<Notice> filteredLocalNotices = List.from(localNotices);
-  if (remoteNotices.length > 0) {
-    filteredLocalNotices = filteredLocalNotices
-        .where((element) => element.userId == remoteNotices[0].userId)
-        .toList()
-        .cast<Notice>();
-  }
+  List<Notice> filteredLocalNotices = List.from(localNotices)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Notice>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

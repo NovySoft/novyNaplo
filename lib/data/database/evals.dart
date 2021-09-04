@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -45,7 +46,7 @@ Future<List<Evals>> getAllEvals({
 }
 
 // A function that inserts multiple evals into the database
-Future<void> batchInsertEvals(List<Evals> evalList) async {
+Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
   FirebaseCrashlytics.instance.log("batchInsertEval");
   bool inserted = false;
   // Get a reference to the database.
@@ -123,21 +124,20 @@ Future<void> batchInsertEvals(List<Evals> evalList) async {
   handleEvalsDeletion(
     remoteEvals: evalList,
     localEvals: allEvals,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleEvalsDeletion({
   @required List<Evals> remoteEvals,
   @required List<Evals> localEvals,
+  @required Student userDetails,
 }) async {
   if (remoteEvals == null) return;
-  List<Evals> filteredLocalEvals = List.from(localEvals);
-  if (remoteEvals.length > 0) {
-    filteredLocalEvals = filteredLocalEvals
-        .where((element) => element.userId == remoteEvals[0].userId)
-        .toList()
-        .cast<Evals>();
-  }
+  List<Evals> filteredLocalEvals = List.from(localEvals)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Evals>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
