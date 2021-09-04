@@ -2,19 +2,16 @@ import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:novynaplo/API/requestHandler.dart';
 import 'dart:async';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/github.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/config.dart' as config;
@@ -33,8 +30,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 import 'package:novynaplo/data/models/subject.dart' as subject;
-
-import '../../main.dart';
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -230,114 +225,7 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       //* Check for updates
       if (globals.prefs.getBool("checkForUpdates") ?? true) {
-        GitHubReleaseInfo latestVersion =
-            await RequestHandler.getLatestNovyNaploVersion();
-        // I do versioning like this: 1.major.minor+patch(+nonsense giberrish, if test version)
-        if (latestVersion.tagName != config.currentAppVersionCode) {
-          //Check if it is higher than current version
-          String splitVlatest = latestVersion.tagName.split('V')[1];
-          String splitVcurrent = config.currentAppVersionCode.split('V')[1];
-
-          int mainVLatest = int.parse(splitVlatest.split('.')[0]);
-          int majorVLatest = int.parse(splitVlatest.split('.')[1]);
-          int minorVLatest = int.parse(
-            splitVlatest.split('.')[2].split('+')[0],
-          );
-          int patchVLatest = int.parse(splitVlatest.split('+')[1]);
-          String commentVLatest = splitVlatest.split('+').length >= 3
-              ? splitVlatest.split('+')[2]
-              : "";
-
-          print(
-            "Latest server version: $mainVLatest.$majorVLatest.$minorVLatest+$patchVLatest+$commentVLatest",
-          );
-
-          int mainVCurrent = int.parse(splitVcurrent.split('.')[0]);
-          int majorVCurrent = int.parse(splitVcurrent.split('.')[1]);
-          int minorVCurrent = int.parse(
-            splitVcurrent.split('.')[2].split('+')[0],
-          );
-          int patchVCurrent = int.parse(splitVcurrent.split('+')[1]);
-          String commentVCurrent = splitVcurrent.split('+').length >= 3
-              ? splitVcurrent.split('+')[2]
-              : "";
-
-          print(
-            "Current version: $mainVCurrent.$majorVCurrent.$minorVCurrent+$patchVCurrent+$commentVCurrent",
-          );
-
-          if (mainVLatest > mainVCurrent ||
-              majorVLatest > majorVCurrent ||
-              minorVLatest > minorVCurrent ||
-              patchVLatest > patchVCurrent ||
-              commentVLatest != commentVCurrent) {
-            //There is a newer version
-            print("Update available");
-            showDialog<void>(
-              context: NavigatorKey.navigatorKey.currentContext,
-              builder: (context) {
-                return AlertDialog(
-                  elevation: globals.darker ? 0 : 24,
-                  title: Text(getTranslatedString("newVersion")),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(getTranslatedString("newVersionAv")),
-                        Wrap(
-                          children: [
-                            Text(config.currentAppVersionCode),
-                            Icon(AntDesign.arrowright, size: 16),
-                            Text(latestVersion.tagName),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text(getTranslatedString("details")),
-                      onPressed: () {
-                        showDialog(
-                          barrierColor: Colors.black87,
-                          context: NavigatorKey.navigatorKey.currentContext,
-                          builder: (context) {
-                            return Center(
-                              child: Markdown(
-                                styleSheet: MarkdownStyleSheet(
-                                  a: TextStyle(color: Colors.white),
-                                  p: TextStyle(color: Colors.white),
-                                  h1: TextStyle(color: Colors.white),
-                                  h2: TextStyle(color: Colors.white),
-                                  h3: TextStyle(color: Colors.white),
-                                  h4: TextStyle(color: Colors.white),
-                                  h5: TextStyle(color: Colors.white),
-                                  h6: TextStyle(color: Colors.white),
-                                  listBullet: TextStyle(color: Colors.white),
-                                  em: TextStyle(color: Colors.white),
-                                  strong: TextStyle(color: Colors.white),
-                                  blockquote: TextStyle(color: Colors.white),
-                                ),
-                                data: latestVersion.releaseNotes,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    TextButton(
-                      child: Text(getTranslatedString("update")),
-                      onPressed: () {},
-                    ),
-                    TextButton(
-                      child: Text("F-Droid"),
-                      onPressed: () {},
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-        }
+        VersionHelper.checkForUpdates();
       }
       return;
     } catch (e, s) {

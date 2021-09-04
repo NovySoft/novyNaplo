@@ -461,4 +461,6 @@ final Map<String, String> translation = {
   "switchingUser": "Felhasználók váltása",
   "userAlreadyExits": "Ez a felhasználó már bejelentkezett",
   "sureRemoveUser": "?{0} el lesz távolítva. Biztosan ezt szeretnéd?",
+  "downloads": "letöltés",
+  "updating": "Frissítés",
 };

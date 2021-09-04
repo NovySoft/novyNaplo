@@ -969,35 +969,42 @@ class RequestHandler {
       }
     }
     File file = await downloadFile(
-      userDetails,
+      userDetails: userDetails,
       url: BaseURL.kreta(userDetails.school) +
           KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.type),
       filename: hwInfo.uid + "." + hwInfo.name,
+      sendKretaAuth: true,
     );
     return file;
   }
 
-  static Future<File> downloadFile(
-    Student userDetails, {
+  static Future<File> downloadFile({
+    Student userDetails,
     String url,
     String filename,
     bool open = true,
+    bool sendKretaAuth = false,
+    bool reDownload = false,
   }) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
     File file = new File(path);
-    if (await file.exists()) {
+    if (await file.exists() && !reDownload) {
       if (open) {
         await OpenFile.open(path);
       }
       return file;
     } else {
+      Map<String, String> headerMap = {
+        "User-Agent": config.userAgent,
+      };
+      if (sendKretaAuth) {
+        headerMap["Authorization"] = "Bearer ${userDetails.token}";
+      }
+
       var response = await client.get(
         Uri.parse(url),
-        headers: {
-          "Authorization": "Bearer ${userDetails.token}",
-          "User-Agent": config.userAgent,
-        },
+        headers: headerMap,
       );
 
       await file.writeAsBytes(response.bodyBytes);

@@ -462,4 +462,6 @@ final Map<String, String> translation = {
   "switchingUser": "Switching users",
   "userAlreadyExits": "User already logged in",
   "sureRemoveUser": "Are you sure you want to remove ?{0}?",
+  "downloads": "downloads",
+  "updating": "Updating",
 };
