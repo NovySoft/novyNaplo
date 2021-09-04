@@ -240,11 +240,13 @@ Future<void> handleHomeworkDeletion({
   @required List<Homework> localHomework,
 }) async {
   if (remoteHomework == null) return;
-  if (remoteHomework.length == 0) return;
-  List<Homework> filteredLocalHomeworks = List.from(localHomework)
-      .where((element) => element.userId == remoteHomework[0].userId)
-      .toList()
-      .cast<Homework>();
+  List<Homework> filteredLocalHomeworks = List.from(localHomework);
+  if (remoteHomework.length > 0) {
+    filteredLocalHomeworks = filteredLocalHomeworks
+        .where((element) => element.userId == remoteHomework[0].userId)
+        .toList()
+        .cast<Homework>();
+  }
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

@@ -131,11 +131,13 @@ Future<void> handleEvalsDeletion({
   @required List<Evals> localEvals,
 }) async {
   if (remoteEvals == null) return;
-  if (remoteEvals.length == 0) return;
-  List<Evals> filteredLocalEvals = List.from(localEvals)
-      .where((element) => element.userId == remoteEvals[0].userId)
-      .toList()
-      .cast<Evals>();
+  List<Evals> filteredLocalEvals = List.from(localEvals);
+  if (remoteEvals.length > 0) {
+    filteredLocalEvals = filteredLocalEvals
+        .where((element) => element.userId == remoteEvals[0].userId)
+        .toList()
+        .cast<Evals>();
+  }
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

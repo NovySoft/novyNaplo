@@ -95,6 +95,10 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
   if (inserted) {
     await batch.commit();
   }
+  handleEventDeletion(
+    remoteEvents: eventList,
+    localEvents: allEvents,
+  );
 }
 
 Future<void> handleEventDeletion({
@@ -102,11 +106,13 @@ Future<void> handleEventDeletion({
   @required List<Event> localEvents,
 }) async {
   if (remoteEvents == null) return;
-  if (remoteEvents.length == 0) return;
-  List<Event> filteredLocalEvents = List.from(localEvents)
-      .where((element) => element.userId == remoteEvents[0].userId)
-      .toList()
-      .cast<Event>();
+  List<Event> filteredLocalEvents = List.from(localEvents);
+  if (remoteEvents.length > 0) {
+    filteredLocalEvents = filteredLocalEvents
+        .where((element) => element.userId == remoteEvents[0].userId)
+        .toList()
+        .cast<Event>();
+  }
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

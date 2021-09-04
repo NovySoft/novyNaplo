@@ -115,11 +115,13 @@ Future<void> handleAbsenceDeletion({
   List<Absence> localAbsences,
 }) async {
   if (remoteAbsences == null) return;
-  if (remoteAbsences.length == 0) return;
-  List<Absence> filteredLocalAbsences = List.from(localAbsences)
-      .where((element) => element.userId == remoteAbsences[0].userId)
-      .toList()
-      .cast<Absence>();
+  List<Absence> filteredLocalAbsences = List.from(localAbsences);
+  if (remoteAbsences.length > 0) {
+    filteredLocalAbsences = filteredLocalAbsences
+        .where((element) => element.userId == remoteAbsences[0].userId)
+        .toList()
+        .cast<Absence>();
+  }
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;

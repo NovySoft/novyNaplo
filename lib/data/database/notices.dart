@@ -100,6 +100,10 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
   if (inserted) {
     await batch.commit();
   }
+  handleNoticeDeletion(
+    remoteNotices: noticeList,
+    localNotices: allNotices,
+  );
 }
 
 Future<void> handleNoticeDeletion({
@@ -107,11 +111,13 @@ Future<void> handleNoticeDeletion({
   @required List<Notice> localNotices,
 }) async {
   if (remoteNotices == null) return;
-  if (remoteNotices.length == 0) return;
-  List<Notice> filteredLocalNotices = List.from(localNotices)
-      .where((element) => element.userId == remoteNotices[0].userId)
-      .toList()
-      .cast<Notice>();
+  List<Notice> filteredLocalNotices = List.from(localNotices);
+  if (remoteNotices.length > 0) {
+    filteredLocalNotices = filteredLocalNotices
+        .where((element) => element.userId == remoteNotices[0].userId)
+        .toList()
+        .cast<Notice>();
+  }
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
