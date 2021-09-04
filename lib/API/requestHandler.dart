@@ -57,7 +57,7 @@ class RequestHandler {
       bool checkForTestVersions =
           globals.prefs.getBool("checkForTestVersions") ?? false;
       ConnectivityResult result = await Connectivity().checkConnectivity();
-      if (result != ConnectivityResult.wifi) {
+      if (result == ConnectivityResult.none) {
         return GitHubReleaseInfo(
           tagName: config.currentAppVersionCode,
         );

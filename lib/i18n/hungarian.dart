@@ -463,4 +463,6 @@ final Map<String, String> translation = {
   "sureRemoveUser": "?{0} el lesz távolítva. Biztosan ezt szeretnéd?",
   "downloads": "letöltés",
   "updating": "Frissítés",
+  "checkForUpdates": "Frissítések keresése",
+  "checkForTestVersions": "Teszt verziók keresése"
 };

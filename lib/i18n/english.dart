@@ -464,4 +464,6 @@ final Map<String, String> translation = {
   "sureRemoveUser": "Are you sure you want to remove ?{0}?",
   "downloads": "downloads",
   "updating": "Updating",
+  "checkForUpdates": "Check for updates",
+  "checkForTestVersions": "Check for test versions",
 };
