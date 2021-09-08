@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:novynaplo/data/models/exam.dart';
+import 'package:novynaplo/data/models/github.dart';
 import 'package:novynaplo/data/models/homework.dart';
+import 'package:novynaplo/data/models/kretaCert.dart';
+import 'package:novynaplo/data/models/kretaNonce.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/notice.dart';
 import 'package:novynaplo/data/models/school.dart';
@@ -41,10 +45,139 @@ import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import 'calcKretaNonce.dart';
+
 var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
+  static Future<GitHubReleaseInfo> getLatestNovyNaploVersion() async {
+    try {
+      FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
+      bool checkForTestVersions =
+          globals.prefs.getBool("checkForTestVersions") ?? false;
+      ConnectivityResult result = await Connectivity().checkConnectivity();
+      if (result == ConnectivityResult.none) {
+        return GitHubReleaseInfo(
+          tagName: config.currentAppVersionCode,
+        );
+      }
+
+      var response = await client.get(
+        Uri.parse(
+          BaseURL.NOVY_NAPLO_GITHUB_REPO +
+              (checkForTestVersions
+                  ? GitHubApiEndpoints.getReleases()
+                  : GitHubApiEndpoints.getLatestVersion),
+        ),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        if (checkForTestVersions) {
+          List responseJson = jsonDecode(response.body);
+          List<GitHubReleaseInfo> releases = [];
+          for (var item in responseJson) {
+            releases.add(GitHubReleaseInfo.fromJson(item));
+          }
+          return releases.firstWhere((element) => element.preRelease);
+        } else {
+          Map<String, dynamic> responseJson = jsonDecode(response.body);
+          return GitHubReleaseInfo.fromJson(responseJson);
+        }
+      }
+
+      // On error we should return current version
+      return GitHubReleaseInfo(
+        tagName: config.currentAppVersionCode,
+      );
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getLatestNovyNaploVersion',
+        printDetails: true,
+      );
+      return GitHubReleaseInfo(
+        tagName: config.currentAppVersionCode,
+      );
+    }
+  }
+
+  static Future<KretaNonce> getNonce(Student userDetails) async {
+    try {
+      FirebaseCrashlytics.instance.log("getNonce");
+
+      var result = await client.get(
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.nonce),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      );
+
+      return new KretaNonce(
+        nonce: result.body,
+        key: calculateKretaNonceKey(userDetails, result.body),
+        version: "v1",
+      );
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getNonce',
+        printDetails: true,
+      );
+      return new KretaNonce(
+        version: "v1",
+      );
+    }
+  }
+
+  static Future<List<KretaCert>> getKretaTrustedCerts() async {
+    try {
+      FirebaseCrashlytics.instance.log("getKretaTrustedCerts");
+      print("Updating trusted certificates");
+
+      var result = await client.get(
+        Uri.parse(BaseURL.NOVY_NAPLO + NovyNaploEndpoints.certificates),
+        headers: {
+          "User-Agent": config.userAgent,
+        },
+      ).timeout(Duration(seconds: 30), onTimeout: () {
+        return http.Response("Timeout", 408);
+      });
+
+      if (result.statusCode == 200) {
+        List responseJson = jsonDecode(result.body);
+        List<KretaCert> output = [];
+
+        for (var cert in responseJson) {
+          output.add(new KretaCert(
+            radixModulus: cert['radixModulus'],
+            exponent: cert['exponent'],
+            subject: cert['subject'],
+          ));
+          print(cert['subject']);
+        }
+
+        DatabaseHelper.setTrustedCerts(output);
+        return output;
+      } else {
+        return [];
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getKretaTrustedCerts',
+        printDetails: true,
+      );
+      return [];
+    }
+  }
+
   static Future<bool> checkForKretaUpdatingStatus(
     Student userDetails, {
     bool retry = false,
@@ -54,10 +187,11 @@ class RequestHandler {
     /*
     Always check the school site for updating as the school site handles the data and 
     the IDP server is completly independent from the school site. This means that the idp maybe working, but
-    the school site can be offline at the same time*/
+    the school site can be offline at the same time
+    */
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.webLogin),
         headers: {
           "User-Agent": config.userAgent,
         },
@@ -109,8 +243,10 @@ class RequestHandler {
         );
       }
 
+      KretaNonce nonce = await getNonce(user);
+
       var response = await client.post(
-        BaseURL.KRETA_IDP + KretaEndpoints.token,
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),
         body: {
           "userName": user.username,
           "password": user.password,
@@ -121,6 +257,9 @@ class RequestHandler {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "User-Agent": config.userAgent,
+          "X-AuthorizationPolicy-Nonce": nonce.nonce,
+          "X-AuthorizationPolicy-Key": nonce.key,
+          "X-AuthorizationPolicy-Version": nonce.version
         },
       );
 
@@ -181,7 +320,7 @@ class RequestHandler {
     }
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.student,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.student),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -190,6 +329,7 @@ class RequestHandler {
 
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
+
       if (embedEncryptedDetails) {
         student.userId = encryptedDetails.userId;
         student.iv = encryptedDetails.iv;
@@ -197,6 +337,9 @@ class RequestHandler {
         student.username = encryptedDetails.username;
         student.password = encryptedDetails.password;
         student.current = encryptedDetails.current;
+      } else {
+        student.userId = userDetails.userId;
+        DatabaseHelper.updateKretaGivenParameters(student);
       }
       return student;
     } catch (e, s) {
@@ -217,7 +360,8 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getEvaluations");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations,
+        Uri.parse(
+            BaseURL.kreta(userDetails.school) + KretaEndpoints.evaluations),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -247,7 +391,7 @@ class RequestHandler {
           },
         );
       }
-      DatabaseHelper.batchInsertEvals(evaluations);
+      DatabaseHelper.batchInsertEvals(evaluations, userDetails);
       return evaluations;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -265,7 +409,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getSchoolList");
     try {
       var response = await client.get(
-        BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList,
+        Uri.parse(BaseURL.NOVY_NAPLO + NovyNaploEndpoints.schoolList),
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': config.userAgent,
@@ -296,7 +440,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getAbsencesMatrix");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.absences,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.absences),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -316,7 +460,7 @@ class RequestHandler {
       );
       //No need to sort, the make function has a builtin sorting function
       List<List<Absence>> outputList = await makeAbsencesMatrix(absences);
-      DatabaseHelper.batchInsertAbsences(absences);
+      DatabaseHelper.batchInsertAbsences(absences, userDetails);
       return outputList;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -337,7 +481,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getExams");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.exams,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.exams),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -363,6 +507,7 @@ class RequestHandler {
       }
       DatabaseHelper.batchInsertExams(
         exams,
+        userDetails,
       );
       return exams;
     } catch (e, s) {
@@ -385,10 +530,10 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getHomeworks");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) +
+        Uri.parse(BaseURL.kreta(userDetails.school) +
             KretaEndpoints.homeworks +
             "?datumTol=" +
-            fromDue.toUtc().toIso8601String(),
+            fromDue.toUtc().toIso8601String()),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -404,7 +549,7 @@ class RequestHandler {
       }
       homeworks.removeWhere((element) => element == null);
       homeworks.sort((a, b) => b.dueDate.compareTo(a.dueDate));
-      DatabaseHelper.batchInsertHomework(homeworks);
+      DatabaseHelper.batchInsertHomework(homeworks, userDetails);
       return homeworks;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -445,7 +590,7 @@ class RequestHandler {
       }
       days.sort((a, b) => a.compareTo(b));
       DateTime endDate = now;
-      if (userDetails.tokenDate.isBefore(
+      if ((userDetails.tokenDate ?? DateTime(1970)).isBefore(
         DateTime.now().subtract(
           Duration(
             minutes: 25,
@@ -543,12 +688,12 @@ class RequestHandler {
 
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) +
+        Uri.parse(BaseURL.kreta(userDetails.school) +
             KretaEndpoints.timetable +
             "?datumTol=" +
             from.toUtc().toDayOnlyString() +
             "&datumIg=" +
-            to.toUtc().toDayOnlyString(),
+            to.toUtc().toDayOnlyString()),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -568,6 +713,7 @@ class RequestHandler {
       List<List<Lesson>> output = await makeTimetableMatrix(lessons);
       DatabaseHelper.batchInsertLessons(
         lessons,
+        userDetails,
         lookAtDate: true,
       );
       return output;
@@ -589,7 +735,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getEvents");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.events,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.events),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -610,7 +756,7 @@ class RequestHandler {
       if (sort) {
         events.sort((a, b) => b.endDate.compareTo(a.endDate));
       }
-      DatabaseHelper.batchInsertEvents(events);
+      DatabaseHelper.batchInsertEvents(events, userDetails);
       return events;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -631,7 +777,7 @@ class RequestHandler {
     FirebaseCrashlytics.instance.log("getNotices");
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.notes,
+        Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.notes),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -653,7 +799,7 @@ class RequestHandler {
       if (sort) {
         notes.sort((a, b) => b.date.compareTo(a.date));
       }
-      DatabaseHelper.batchInsertNotices(notes);
+      DatabaseHelper.batchInsertNotices(notes, userDetails);
       return notes;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
@@ -696,7 +842,8 @@ class RequestHandler {
     }
     try {
       var response = await client.get(
-        BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id),
+        Uri.parse(
+            BaseURL.kreta(userDetails.school) + KretaEndpoints.homeworkId(id)),
         headers: {
           "Authorization": "Bearer ${userDetails.token}",
           "User-Agent": config.userAgent,
@@ -731,6 +878,7 @@ class RequestHandler {
   }) async {
     FirebaseCrashlytics.instance.log("getEverything");
     isError = false;
+    await getStudentInfo(user);
     if (setData) {
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);
@@ -823,35 +971,42 @@ class RequestHandler {
       }
     }
     File file = await downloadFile(
-      userDetails,
+      userDetails: userDetails,
       url: BaseURL.kreta(userDetails.school) +
           KretaEndpoints.downloadHomeworkCsatolmany(hwInfo.uid, hwInfo.type),
       filename: hwInfo.uid + "." + hwInfo.name,
+      sendKretaAuth: true,
     );
     return file;
   }
 
-  static Future<File> downloadFile(
-    Student userDetails, {
+  static Future<File> downloadFile({
+    Student userDetails,
     String url,
     String filename,
     bool open = true,
+    bool sendKretaAuth = false,
+    bool reDownload = false,
   }) async {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
     File file = new File(path);
-    if (await file.exists()) {
+    if (await file.exists() && !reDownload) {
       if (open) {
         await OpenFile.open(path);
       }
       return file;
     } else {
+      Map<String, String> headerMap = {
+        "User-Agent": config.userAgent,
+      };
+      if (sendKretaAuth) {
+        headerMap["Authorization"] = "Bearer ${userDetails.token}";
+      }
+
       var response = await client.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${userDetails.token}",
-          "User-Agent": config.userAgent,
-        },
+        Uri.parse(url),
+        headers: headerMap,
       );
 
       await file.writeAsBytes(response.bodyBytes);

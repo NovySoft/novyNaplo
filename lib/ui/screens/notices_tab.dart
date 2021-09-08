@@ -29,7 +29,7 @@ class _NoticesTabState extends State<NoticesTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(NoticesTab.tag, context),
+      drawer: CustomDrawer(NoticesTab.tag),
       body: _body(context),
     );
   }

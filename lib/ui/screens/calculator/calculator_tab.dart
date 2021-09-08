@@ -71,7 +71,7 @@ class CalculatorTabState extends State<CalculatorTab>
     return Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(CalculatorTab.tag, context),
+      drawer: CustomDrawer(CalculatorTab.tag),
       appBar: AppBar(
         title: Text(CalculatorTab.title),
         bottom: TabBar(

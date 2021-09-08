@@ -31,6 +31,7 @@ Future<void> batchInsertAverages(List<Average> averageList) async {
 
   List<Average> allAv = await getAllAverages();
   for (var average in averageList) {
+    if (average.userId == null) continue;
     var matchedAv = allAv.where((element) {
       return (element.subject == average.subject &&
           element.userId == average.userId);

@@ -99,6 +99,14 @@ class ThemeHelper {
             TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
           },
         ),
+        dialogTheme: DialogTheme(
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            wordSpacing: 0.15,
+          ),
+        ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.white,
           selectionColor: Color(0xFF212121),
@@ -171,6 +179,14 @@ class ThemeHelper {
               TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
             },
           ),
+          dialogTheme: DialogTheme(
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              wordSpacing: 0.15,
+            ),
+          ),
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: Colors.blue,
             selectionColor: Colors.blue,
@@ -225,6 +241,14 @@ class ThemeHelper {
             cursorColor: Colors.blue,
             selectionColor: Colors.blue,
             selectionHandleColor: Colors.blue,
+          ),
+          dialogTheme: DialogTheme(
+            titleTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              wordSpacing: 0.15,
+            ),
           ),
           sliderTheme: SliderThemeData(
               inactiveTickMarkColor: Colors.black,

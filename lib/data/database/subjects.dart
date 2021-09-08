@@ -75,6 +75,7 @@ Future<List<List<SubjectNicknames>>> getSubjNickMatrix(bool isTimetable) async {
       ),
     );
   }
+  if (temp.length == 0) return [];
   temp.sort((a, b) => a.category.compareTo(b.category));
   //Create matrix
   int index = 0;
@@ -93,8 +94,6 @@ Future<List<List<SubjectNicknames>>> getSubjNickMatrix(bool isTimetable) async {
 }
 
 Future<void> updateNickname(Subject subject) async {
-  print(
-      "UPDATE Subjects SET nickname = ${subject.name} WHERE uid = ${subject.uid}");
   await globals.db.rawUpdate(
     "UPDATE Subjects SET nickname = ? WHERE uid = ?",
     [

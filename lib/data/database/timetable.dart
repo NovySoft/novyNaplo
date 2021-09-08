@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -12,12 +13,22 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:flutter/foundation.dart';
 
-Future<List<Lesson>> getAllTimetable() async {
+Future<List<Lesson>> getAllTimetable({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllTimetable");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Timetable GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Timetable WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Timetable GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Lesson> outputTempList = List.generate(maps.length, (i) {
     Lesson temp = new Lesson.fromSqlite(maps[i]);
@@ -50,8 +61,11 @@ void deleteOldLessonsFromList(List<Lesson> input) async {
   }
 }
 
-Future<void> batchInsertLessons(List<Lesson> lessonList,
-    {bool lookAtDate = false}) async {
+Future<void> batchInsertLessons(
+  List<Lesson> lessonList,
+  Student userDetails, {
+  bool lookAtDate = false,
+}) async {
   FirebaseCrashlytics.instance.log("batchInsertLessons");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -146,19 +160,24 @@ Future<void> batchInsertLessons(List<Lesson> lessonList,
   handleTimetableDeletion(
     remoteLessons: lessonList,
     localLessons: allTimetable,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleTimetableDeletion({
   @required List<Lesson> remoteLessons,
   @required List<Lesson> localLessons,
+  @required Student userDetails,
 }) async {
   if (remoteLessons == null) return;
-  if (remoteLessons.length == 0) return;
+  List<Lesson> filteredLocalLessons = List.from(localLessons)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Lesson>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localLessons) {
+  for (var local in filteredLocalLessons) {
     if (remoteLessons.indexWhere(
               (element) =>
                   element.uid == local.uid && element.userId == local.userId,

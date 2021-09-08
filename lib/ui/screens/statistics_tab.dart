@@ -16,6 +16,7 @@ import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/cardColor/statiscticsCard.dart';
+import 'package:novynaplo/helpers/ui/modifyColor.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -94,7 +95,7 @@ class _StatisticsTabState extends State<StatisticsTab>
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(StatisticsTab.tag, context),
+      drawer: CustomDrawer(StatisticsTab.tag),
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
@@ -294,7 +295,11 @@ class _StatisticsTabState extends State<StatisticsTab>
                               avIcon,
                               Text(
                                 osszesitettAv.diffSinceLast.toStringAsFixed(3),
-                                style: TextStyle(color: avColor, fontSize: 18),
+                                style: TextStyle(
+                                  color: lighten(avColor, 20),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -364,21 +369,27 @@ class _StatisticsTabState extends State<StatisticsTab>
                                       capitalize(currentAv.subject) + ": ",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontSize: 18, color: avgColor),
+                                        fontSize: 18,
+                                        color: avgColor,
+                                      ),
                                     ),
                                     Text(
                                       currentAv.value.toStringAsFixed(3),
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
                                     ),
                                     diffIcon,
                                     Text(
                                       currentAv.diffSinceLast
                                           .toStringAsFixed(3),
                                       style: TextStyle(
-                                          color: diffColor, fontSize: 18),
+                                        color: lighten(diffColor, 20),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     )
                                   ],
                                 );

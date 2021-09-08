@@ -1,7 +1,9 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -9,12 +11,22 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
-Future<List<List<Absence>>> getAllAbsencesMatrix() async {
+Future<List<List<Absence>>> getAllAbsencesMatrix({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllAbsencesMatrix");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Absences GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Absences WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Absences GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Absence> tempList = List.generate(maps.length, (i) {
     Absence temp = new Absence.fromSqlite(maps[i]);
@@ -24,7 +36,10 @@ Future<List<List<Absence>>> getAllAbsencesMatrix() async {
   return makeAbsencesMatrix(tempList);
 }
 
-Future<void> batchInsertAbsences(List<Absence> absenceList) async {
+Future<void> batchInsertAbsences(
+  List<Absence> absenceList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertAbsences");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -60,7 +75,9 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
         //!Update didn't work so we delete and create a new one
         if (n.justificationState != absence.justificationState ||
             (n.justificationType == null ? "" : n.justificationType.toJson()) !=
-            (absence.justificationType == null ? "" : absence.justificationType.toJson())  ||
+                (absence.justificationType == null
+                    ? ""
+                    : absence.justificationType.toJson()) ||
             n.delayInMinutes != absence.delayInMinutes) {
           inserted = true;
           batch.delete(
@@ -92,22 +109,27 @@ Future<void> batchInsertAbsences(List<Absence> absenceList) async {
   if (inserted) {
     await batch.commit();
   }
-  handleEvalsDeletion(
+  handleAbsenceDeletion(
     remoteAbsences: absenceList,
     localAbsences: allAbsences,
+    userDetails: userDetails,
   );
 }
 
-Future<void> handleEvalsDeletion({
-  List<Absence> remoteAbsences,
-  List<Absence> localAbsences,
+Future<void> handleAbsenceDeletion({
+  @required List<Absence> remoteAbsences,
+  @required List<Absence> localAbsences,
+  @required Student userDetails,
 }) async {
   if (remoteAbsences == null) return;
-  if (remoteAbsences.length == 0) return;
+  List<Absence> filteredLocalAbsences = List.from(localAbsences)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Absence>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localAbsences) {
+  for (var local in filteredLocalAbsences) {
     if (remoteAbsences.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

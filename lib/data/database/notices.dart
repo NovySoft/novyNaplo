@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/notice.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -9,13 +10,22 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:flutter/foundation.dart';
 
-Future<List<Notice>> getAllNotices() async {
+Future<List<Notice>> getAllNotices({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllNotices");
   // Get a reference to the database.
-
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Notices GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Notices WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Notices GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Notice> tempList = List.generate(maps.length, (i) {
     Notice temp = new Notice.fromSqlite(maps[i]);
@@ -27,7 +37,10 @@ Future<List<Notice>> getAllNotices() async {
   return tempList;
 }
 
-Future<void> batchInsertNotices(List<Notice> noticeList) async {
+Future<void> batchInsertNotices(
+  List<Notice> noticeList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertNotices");
   bool inserted = false;
   // Get a reference to the database.
@@ -91,18 +104,27 @@ Future<void> batchInsertNotices(List<Notice> noticeList) async {
   if (inserted) {
     await batch.commit();
   }
+  handleNoticeDeletion(
+    remoteNotices: noticeList,
+    localNotices: allNotices,
+    userDetails: userDetails,
+  );
 }
 
 Future<void> handleNoticeDeletion({
   @required List<Notice> remoteNotices,
   @required List<Notice> localNotices,
+  @required Student userDetails,
 }) async {
   if (remoteNotices == null) return;
-  if (remoteNotices.length == 0) return;
+  List<Notice> filteredLocalNotices = List.from(localNotices)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Notice>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localNotices) {
+  for (var local in filteredLocalNotices) {
     if (remoteNotices.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

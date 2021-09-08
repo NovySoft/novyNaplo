@@ -29,9 +29,11 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
-import 'dart:io' show Platform;
+import 'dart:io' show HttpOverrides, Platform;
 import 'package:flutter/foundation.dart' as foundation show kDebugMode;
 import 'package:firebase_performance/firebase_performance.dart';
+
+import 'API/certValidation.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 bool isNew = true;
@@ -80,10 +82,12 @@ void main() async {
     EventsTab.tag: (context) => EventsTab(),
     ReportsTab.tag: (context) => ReportsTab(),
     AbsencesTab.tag: (context) => AbsencesTab(),
+    LoadingPage.tag: (context) => LoadingPage(),
   };
   runZonedGuarded(() async {
     await DatabaseHelper.initDatabase();
     await NotificationHelper.setupNotifications();
+    HttpOverrides.global = new MyHttpOverrides();
     runApp(
       MyApp(),
     );

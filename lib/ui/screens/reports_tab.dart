@@ -126,7 +126,7 @@ class _ReportsTabState extends State<ReportsTab>
     return Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(ReportsTab.tag, context),
+      drawer: CustomDrawer(ReportsTab.tag),
       appBar: AppBar(
         title: Text(ReportsTab.title),
         bottom: TabBar(

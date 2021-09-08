@@ -33,7 +33,7 @@ class _EventsTabState extends State<EventsTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(EventsTab.tag, context),
+      drawer: CustomDrawer(EventsTab.tag),
       body: _body(),
     );
   }

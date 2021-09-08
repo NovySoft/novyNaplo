@@ -70,7 +70,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(HomeworkTab.tag, context),
+      drawer: CustomDrawer(HomeworkTab.tag),
       body: _body(),
     );
   }

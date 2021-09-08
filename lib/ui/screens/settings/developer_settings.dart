@@ -207,21 +207,25 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (term) async {
-              final Database db = globals.db;
-              if (term.toLowerCase().contains("insert")) {
-                int tempId = await db.rawInsert(term);
-                result = "inserted at id: " + tempId.toString();
-              } else if (term.toLowerCase().contains("delete")) {
-                int tempId = await db.rawDelete(term);
-                result = tempId.toString() + " items deleted";
-              } else if (term.toLowerCase().contains("select")) {
-                var temp = await db.rawQuery(term);
-                JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-                String prettyprint = encoder.convert(temp);
-                result = prettyprint;
-              } else if (term.toLowerCase().contains("update")) {
-                int tempId = await db.rawUpdate(term);
-                result = tempId.toString() + " items modified";
+              try {
+                final Database db = globals.db;
+                if (term.toLowerCase().contains("insert")) {
+                  int tempId = await db.rawInsert(term);
+                  result = "inserted at id: " + tempId.toString();
+                } else if (term.toLowerCase().contains("delete")) {
+                  int tempId = await db.rawDelete(term);
+                  result = tempId.toString() + " items deleted";
+                } else if (term.toLowerCase().contains("select")) {
+                  var temp = await db.rawQuery(term);
+                  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+                  String prettyprint = encoder.convert(temp);
+                  result = prettyprint;
+                } else if (term.toLowerCase().contains("update")) {
+                  int tempId = await db.rawUpdate(term);
+                  result = tempId.toString() + " items modified";
+                }
+              } catch (e) {
+                result = e.toString();
               }
               setState(() {
                 result = result;
@@ -275,6 +279,16 @@ class DeveloperSettings extends StatefulWidget {
 }
 
 class _DeveloperSettingsState extends State<DeveloperSettings> {
+  bool _checkForUpdates = true;
+  bool _checkForTestVersions = false;
+
+  @override
+  void initState() {
+    _checkForUpdates = globals.prefs.get("checkForUpdates") ?? true;
+    _checkForTestVersions = globals.prefs.get("checkForTestVersions") ?? false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,7 +298,7 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3,
+          itemCount: 4,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -338,6 +352,42 @@ class _DeveloperSettingsState extends State<DeveloperSettings> {
                     ),
                   ),
                 );
+                break;
+              case 2:
+                return ListTile(
+                  title: Text(getTranslatedString("checkForUpdates")),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      setState(() {
+                        _checkForUpdates = switchOn;
+                      });
+                      await globals.prefs.setBool("checkForUpdates", switchOn);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("checkForUpdates", switchOn);
+                    },
+                    value: _checkForUpdates,
+                  ),
+                );
+                break;
+              case 3:
+                if (_checkForUpdates)
+                  return ListTile(
+                    title: Text(getTranslatedString("checkForTestVersions")),
+                    trailing: Switch(
+                      onChanged: (bool switchOn) async {
+                        setState(() {
+                          _checkForTestVersions = switchOn;
+                        });
+                        await globals.prefs
+                            .setBool("checkForTestVersions", switchOn);
+                        FirebaseCrashlytics.instance
+                            .setCustomKey("checkForTestVersions", switchOn);
+                      },
+                      value: _checkForTestVersions,
+                    ),
+                  );
+                else
+                  return SizedBox(height: 0, width: 0);
                 break;
               default:
                 return SizedBox(height: 10, width: 10);

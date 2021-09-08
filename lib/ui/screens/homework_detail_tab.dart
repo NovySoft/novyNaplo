@@ -111,7 +111,12 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
               ),
               Html(
                 data: widget.hwInfo.content,
-                onLinkTap: (url) async {
+                onLinkTap: (
+                  String url,
+                  RenderContext context,
+                  Map<String, String> attributes,
+                  var element,
+                ) async {
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {

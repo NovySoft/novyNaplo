@@ -4,6 +4,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'databaseHelper.dart';
 
 Future<void> insertUser(Student user) async {
   FirebaseCrashlytics.instance.log("insertUser");
@@ -30,7 +31,8 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
       parents: Parent.fromJsonList(maps[i]['parents']),
       name: maps[i]['name'],
       nickname: maps[i]['nickname'],
-      birthDay: maps[i]['birthDay'],
+      birthDayString: maps[i]['birthDay'],
+      birthDay: DateTime.parse(maps[i]['birthDay']).toLocal(),
       placeOfBirth: maps[i]['placeOfBirth'],
       birthName: maps[i]['birthName'],
       schoolYearUid: maps[i]['schoolYearUid'],
@@ -76,4 +78,96 @@ Future<void> setFetched(Student user, bool value) async {
     "UPDATE Users SET fetched = ? WHERE id = ? OR uid = ?",
     [value ? 1 : 0, user.userId, user.uid],
   );
+}
+
+Future<void> changeNickname(Student user, String nickname) async {
+  FirebaseCrashlytics.instance.log("changeNickname");
+  String nickanameToBeSet = nickname;
+  if (nickanameToBeSet.length == 0) nickanameToBeSet = null;
+  await globals.db.rawUpdate(
+    "UPDATE Users SET nickname = ? WHERE id = ? OR uid = ?",
+    [nickanameToBeSet, user.userId, user.uid],
+  );
+  globals.allUsers
+      .firstWhere(
+        (element) => element.userId == user.userId || element.uid == user.uid,
+      )
+      .nickname = nickanameToBeSet;
+  if (user.current) {
+    globals.currentUser.nickname = nickanameToBeSet;
+  }
+}
+
+Future<void> setCurrentUser(int newCurrentUserId) async {
+  FirebaseCrashlytics.instance.log("setCurrentUser");
+  await globals.db.rawUpdate(
+    "UPDATE Users SET current = 0",
+  );
+  await globals.db.rawUpdate(
+    "UPDATE Users SET current = 1 WHERE id = ?",
+    [newCurrentUserId],
+  );
+}
+
+Future<void> updateKretaGivenParameters(Student user) async {
+  FirebaseCrashlytics.instance.log("updateKretaGivenParameters");
+  if (user.userId == null) return;
+
+  Student tempStudent = Student.from(user);
+  tempStudent.current = false;
+  tempStudent.fetched = true;
+
+  Map<String, dynamic> updateObject = tempStudent.toMap();
+  // Remove internal stuff....
+  updateObject.remove('id');
+  updateObject.remove('nickname');
+  updateObject.remove('username');
+  updateObject.remove('password');
+  updateObject.remove('school');
+  updateObject.remove('iv');
+  updateObject.remove('current');
+  updateObject.remove('fetched');
+
+  await globals.db.update(
+    "Users",
+    updateObject,
+    where: "id = ?",
+    whereArgs: [user.userId],
+  );
+}
+
+Future<void> batchUpdateUserPositions(List<Student> userList) async {
+  FirebaseCrashlytics.instance.log("batchUpdateUserPositions");
+
+  final Batch batch = globals.db.batch();
+  for (Student user in userList) {
+    batch.update(
+      "Users",
+      {
+        'institution': user.institution.toJson(),
+      },
+      where: "id = ?",
+      whereArgs: [user.userId],
+    );
+  }
+  await batch.commit();
+}
+
+Future<void> deleteUserAndAssociatedData(Student user) async {
+  FirebaseCrashlytics.instance.log("deleteUserAndAssociatedData");
+  await globals.db.delete(
+    "Users",
+    where: "id = ?",
+    whereArgs: [user.userId],
+  );
+  if (user.current) {
+    if (globals.allUsers.length > 0) {
+      print(
+        "Deleted user is current user too, new currUser: ${globals.allUsers[0].name}",
+      );
+      await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
+      globals.currentUser = globals.allUsers[0];
+    }
+  }
+  DatabaseHelper.deleteUsersData(user.userId);
 }

@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -68,7 +68,7 @@ class MarksTabState extends State<MarksTab>
     _tabController = new TabController(vsync: this, length: 2);
     //Fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!globals.didFetch) {
+      if (!globals.didFetch || !globals.currentUser.fetched) {
         globals.didFetch = true;
         androidRefreshKey.currentState?.show();
       }
@@ -80,8 +80,13 @@ class MarksTabState extends State<MarksTab>
     super.initState();
     //Handle loaded state
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await delay(2000);
+      await delay(500);
       globals.isNavigatorLoaded = true;
+      if (globals.continueSession != null && globals.currentUser.fetched) {
+        if (globals.continueSession != MarksTab.tag)
+          Navigator.of(context).pushNamed(globals.continueSession);
+      }
+      globals.continueSession = null;
     });
   }
 
@@ -126,8 +131,9 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    List<Student> allUsers = await DatabaseHelper.getAllUsers();
-    for (var currentUser in allUsers) {
+    globals.allUsers = await DatabaseHelper.getAllUsers();
+    trustedCerts = await DatabaseHelper.getTrustedCerts();
+    for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
         if (currentUser.current) {
@@ -153,9 +159,11 @@ class MarksTabState extends State<MarksTab>
             true,
           );
         }
-        setState(() {
-          _setData();
-        });
+        if (this.mounted) {
+          setState(() {
+            _setData();
+          });
+        }
       } else if (status.status == "invalid_username_or_password") {
         showDialog(
             context: context,
@@ -194,9 +202,10 @@ class MarksTabState extends State<MarksTab>
             });
         break;
       } else {
+        print("Error while getting tokens: ${status.status}");
         ErrorToast.showErrorToastLong(
           context,
-          status.status,
+          getTranslatedString("errToken") + ":\n" + status.status,
         );
       }
     }
@@ -329,7 +338,7 @@ class MarksTabState extends State<MarksTab>
     Widget mainWidget = Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
+      drawer: CustomDrawer(MarksTab.tag),
       appBar: AppBar(
         title: Text(MarksTab.title),
         bottom: TabBar(

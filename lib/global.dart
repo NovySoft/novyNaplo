@@ -3,7 +3,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' show Platform;
-import 'data/database/databaseHelper.dart';
 import 'data/models/student.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart' as noticesPage;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as statisticsPage;
@@ -16,6 +15,7 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
 
 //Variables used globally;
 //* Session
+List<Student> allUsers; // List of all students
 SharedPreferences prefs; //Global shared preferences
 bool didFetch = false; //True if we fetched the data, false if we didn't
 bool isNavigatorLoaded =
@@ -24,6 +24,7 @@ bool isDataLoaded =
     false; //Whether app data has been loaded, and we can start fetching data for notifications
 Database db; //Global database access
 Student currentUser = Student(); //The currently shown user
+String continueSession; // Should we renavigate to other page on userchange
 //* "Permanent"
 String markCardSubtitle = "Téma"; //Marks subtitle
 String markCardTheme = "Értékelés nagysága"; //Marks color theme
@@ -66,11 +67,7 @@ bool collapseNotifications =
 bool darker = false; //Darker theme
 bool calcLorincMode = false; //Should calculator show "invalid" outputs
 
-Future<void> resetAllGlobals() async {
-  await DatabaseHelper.clearAllTables();
-  await prefs.clear();
-  await prefs.setBool("isNew", true);
-  await prefs.setString("Language", language);
+Future<void> resetSessionGlobals() async {
   didFetch = false;
   marksPage.allParsedByDate = [];
   marksPage.allParsedBySubject = [];

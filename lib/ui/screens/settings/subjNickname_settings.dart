@@ -21,8 +21,11 @@ class SubjectNicknameSettings extends StatefulWidget {
 }
 
 class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
+  bool isAnythingChanged = false;
+
   @override
   void initState() {
+    isAnythingChanged = false;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       subjNicknames = await DatabaseHelper.getSubjNickMatrix(
         widget.isTimetable,
@@ -44,25 +47,27 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(getTranslatedString("warning")),
-              content: Text(
-                getTranslatedString("effectOnNextStart"),
-              ),
-              actions: [
-                TextButton(
-                  child: Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+        if (isAnythingChanged) {
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(getTranslatedString("warning")),
+                content: Text(
+                  getTranslatedString("effectOnNextStart"),
                 ),
-              ],
-            );
-          },
-        );
+                actions: [
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
         return true;
       },
       child: Scaffold(
@@ -174,6 +179,10 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                         name: _tempController.text,
                       ),
                     );
+                    if (subjNicknames[index][indexJ].nickName !=
+                        _tempController.text) {
+                      isAnythingChanged = true;
+                    }
                     subjNicknames[index][indexJ].nickName =
                         _tempController.text;
                     subjectMap[subjNicknames[index][indexJ].uid].name =
@@ -215,6 +224,10 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                         name: _tempController.text,
                       ),
                     );
+                    if (subjNicknames[index][indexJ].nickName !=
+                        _tempController.text) {
+                      isAnythingChanged = true;
+                    }
                     subjNicknames[index][indexJ].nickName =
                         _tempController.text;
                     subjectMap[subjNicknames[index][indexJ].uid].name =
