@@ -1,4 +1,5 @@
 import 'package:customgauge/customgauge.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/chartData.dart';
@@ -17,12 +18,14 @@ class ReportsDetailTab extends StatelessWidget {
     @required this.color,
     @required this.title,
     @required this.inputList,
+    this.hideMarker = false,
   });
 
   final Evals eval;
   final Color color;
   final String title;
   final List<Evals> inputList;
+  final bool hideMarker;
 
   final axis = charts.NumericAxisSpec(
       renderSpec: charts.GridlineRendererSpec(
@@ -42,8 +45,14 @@ class ReportsDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Reports_detail_tab");
     List<LinearMarkChartData> avList = [LinearMarkChartData(0, 0)];
     List<charts.Series<dynamic, num>> chartList = [];
+    double halfYearMarker;
     if (inputList.length > 0) {
-      chartList = createSubjectChart(inputList, inputList[0].subject.name);
+      ChartReturn data =
+          createSubjectChart(inputList, inputList[0].subject.name);
+      chartList = data.points;
+      if (!hideMarker) {
+        halfYearMarker = data.halfYearMarker;
+      }
     }
     List<charts.Series<dynamic, num>> chartPointList = [];
     if (chartList != null) {
@@ -110,7 +119,34 @@ class ReportsDetailTab extends StatelessWidget {
                 height: 200,
                 child: new charts.LineChart(
                   chartPointList,
-                  behaviors: [new charts.PanAndZoomBehavior()],
+                  behaviors: [
+                    new charts.PanAndZoomBehavior(),
+                    if (halfYearMarker != null)
+                      new charts.RangeAnnotation([
+                        new charts.LineAnnotationSegment(halfYearMarker,
+                            charts.RangeAnnotationAxisType.domain,
+                            startLabel: "   " +
+                                getTranslatedString(
+                                  "HalfYearChart",
+                                ),
+                            labelPosition:
+                                charts.AnnotationLabelPosition.margin,
+                            labelAnchor: charts.AnnotationLabelAnchor.start,
+                            color: DynamicTheme.of(context).brightness ==
+                                    Brightness.dark
+                                ? charts.Color.white
+                                : charts.Color.fromHex(
+                                    code: "#000000",
+                                  ),
+                            labelStyleSpec: charts.TextStyleSpec(
+                              fontSize: 18,
+                              color: DynamicTheme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? charts.Color.white
+                                  : charts.Color.black,
+                            )),
+                      ]),
+                  ],
                   animate: globals.chartAnimations,
                   domainAxis: axisTwo,
                   primaryMeasureAxis: axis,
@@ -211,7 +247,7 @@ class ReportsDetailTab extends StatelessWidget {
               int performancePercentage = calcPercentFromEvalsList(
                 av: result,
                 evalList: getSameSubjectEvals(
-                  subject: eval.subject.name,
+                  subject: eval.subject.fullName,
                   sort: true,
                   onlyBefore: eval.date,
                 ),

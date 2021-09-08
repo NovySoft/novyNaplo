@@ -16,6 +16,7 @@ import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/ui/cardColor/statiscticsCard.dart';
+import 'package:novynaplo/helpers/ui/modifyColor.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/charts_detail_tab.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -27,6 +28,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
+Map<String, double> halfYearMarkers = {};
 //FIXME: Keepalives, once loaded
 
 final List<Tab> statTabs = <Tab>[
@@ -93,7 +95,7 @@ class _StatisticsTabState extends State<StatisticsTab>
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(StatisticsTab.tag, context),
+      drawer: CustomDrawer(StatisticsTab.tag),
       body: TabBarView(
           controller: _tabController,
           children: statTabs.map((Tab tab) {
@@ -293,7 +295,11 @@ class _StatisticsTabState extends State<StatisticsTab>
                               avIcon,
                               Text(
                                 osszesitettAv.diffSinceLast.toStringAsFixed(3),
-                                style: TextStyle(color: avColor, fontSize: 18),
+                                style: TextStyle(
+                                  color: lighten(avColor, 20),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -363,21 +369,27 @@ class _StatisticsTabState extends State<StatisticsTab>
                                       capitalize(currentAv.subject) + ": ",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontSize: 18, color: avgColor),
+                                        fontSize: 18,
+                                        color: avgColor,
+                                      ),
                                     ),
                                     Text(
                                       currentAv.value.toStringAsFixed(3),
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
                                     ),
                                     diffIcon,
                                     Text(
                                       currentAv.diffSinceLast
                                           .toStringAsFixed(3),
                                       style: TextStyle(
-                                          color: diffColor, fontSize: 18),
+                                        color: lighten(diffColor, 20),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     )
                                   ],
                                 );
@@ -591,18 +603,21 @@ class _StatisticsTabState extends State<StatisticsTab>
             id: index,
             subject: capitalize(getTranslatedString("contracted")),
             color: currColor,
-            inputList: [Evals(subject: Subject(name: "Összesített"))],
+            inputList: [Evals(subject: Subject(name: "-contracted-"))],
             animate: globals.chartAnimations,
           ),
         ),
       );
     }
-    int statListIndex = marks.allParsedBySubject.indexWhere((element) =>
-        element[0].subject.name.toLowerCase() ==
-        allParsedSubjectsWithoutZeros[index - 1][0].subject.name.toLowerCase());
+    int statListIndex = allParsedSubjects.indexWhere((element) =>
+        element[0].subject.fullName.toLowerCase() ==
+        allParsedSubjectsWithoutZeros[index - 1][0]
+            .subject
+            .fullName
+            .toLowerCase());
     List<Evals> chartListPoints = [];
     if (statListIndex != -1) {
-      chartListPoints = List.from(marks.allParsedBySubject[statListIndex]);
+      chartListPoints = List.from(allParsedSubjects[statListIndex]);
     } else if (allParsedSubjectsWithoutZeros[index - 1].length > 0) {
       chartListPoints = List.from(allParsedSubjectsWithoutZeros[index - 1]);
     }
@@ -616,7 +631,7 @@ class _StatisticsTabState extends State<StatisticsTab>
         onPressed: ChartsDetailTab(
           id: index,
           subject: capitalize(
-              allParsedSubjectsWithoutZeros[index - 1][0].subject.name),
+              allParsedSubjectsWithoutZeros[index - 1][0].subject.fullName),
           color: currColor,
           inputList: chartListPoints,
           animate: globals.chartAnimations,

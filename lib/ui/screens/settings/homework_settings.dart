@@ -62,7 +62,6 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
     homeworkPage.globalHomework = await DatabaseHelper.getAllHomework(
       ignoreDue: false,
     );
-    homeworkPage.globalHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
   }
 
   @override
@@ -158,7 +157,11 @@ class _HomeworkSettingsTabState extends State<HomeworkSettingsTab> {
                 break;
               case 2:
                 return ListTile(
-                  leading: Text("${getTranslatedString("textColSubject")}:"),
+                  leading: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: 0.8,
+                    child: Text("${getTranslatedString("textColSubject")}:"),
+                  ),
                   trailing: Switch(
                     value: globals.homeworkTextColSubject,
                     onChanged: (switchVal) {

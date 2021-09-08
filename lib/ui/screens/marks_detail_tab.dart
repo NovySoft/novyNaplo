@@ -134,7 +134,7 @@ class MarksDetailTab extends StatelessWidget {
                         SizedBox(height: 10, width: 5),
                         Text(
                           "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
-                              eval.numberValue.toString(),
+                              eval.numberValue.toStringAsFixed(3),
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

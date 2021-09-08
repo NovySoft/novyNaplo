@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
-import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
@@ -44,10 +44,11 @@ List<dynamic> colors;
 class MarksTab extends StatefulWidget {
   static String tag = 'marks';
   static String title = capitalize(getTranslatedString("marks"));
+  final bool isFirstNavigator;
 
-  const MarksTab({Key key, this.androidDrawer}) : super(key: key);
-
-  final Widget androidDrawer;
+  const MarksTab(
+    this.isFirstNavigator,
+  );
 
   @override
   MarksTabState createState() => MarksTabState();
@@ -67,7 +68,7 @@ class MarksTabState extends State<MarksTab>
     _tabController = new TabController(vsync: this, length: 2);
     //Fetching data
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!globals.didFetch) {
+      if (!globals.didFetch || !globals.currentUser.fetched) {
         globals.didFetch = true;
         androidRefreshKey.currentState?.show();
       }
@@ -79,8 +80,13 @@ class MarksTabState extends State<MarksTab>
     super.initState();
     //Handle loaded state
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await delay(2000);
+      await delay(500);
       globals.isNavigatorLoaded = true;
+      if (globals.continueSession != null && globals.currentUser.fetched) {
+        if (globals.continueSession != MarksTab.tag)
+          Navigator.of(context).pushNamed(globals.continueSession);
+      }
+      globals.continueSession = null;
     });
   }
 
@@ -125,18 +131,27 @@ class MarksTabState extends State<MarksTab>
       '${getTranslatedString("currGetData")}...',
       platformChannelSpecificsGetNotif,
     );
-    List<Student> allUsers = await DatabaseHelper.getAllUsers();
-    for (var currentUser in allUsers) {
+    globals.allUsers = await DatabaseHelper.getAllUsers();
+    trustedCerts = await DatabaseHelper.getTrustedCerts();
+    for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
         if (currentUser.current) {
           globals.currentUser.token = status.userinfo.token;
           globals.currentUser.tokenDate = status.userinfo.tokenDate;
         }
-        await RequestHandler.getEverything(
+        bool isErrored = await RequestHandler.getEverything(
           status.userinfo,
           setData: currentUser.current,
         );
+        if (isErrored) {
+          ErrorToast.showErrorToastLong(
+            context,
+            getTranslatedString("errWhileFetch") +
+                "\n" +
+                getTranslatedString("incorrectData"),
+          );
+        }
         if (!currentUser.fetched) {
           currentUser.fetched = true;
           DatabaseHelper.setFetched(
@@ -144,24 +159,53 @@ class MarksTabState extends State<MarksTab>
             true,
           );
         }
-        setState(() {
-          _setData();
-        });
+        if (this.mounted) {
+          setState(() {
+            _setData();
+          });
+        }
       } else if (status.status == "invalid_username_or_password") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => login.LoginPage(
-              userDetails: currentUser,
-              isEditing: true,
-            ),
-          ),
-        );
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                elevation: globals.darker ? 0 : 24,
+                title: Text(getTranslatedString("err")),
+                content: Text(getTranslatedString("invPassOrKretaDownWarning")),
+                actions: [
+                  TextButton(
+                    child: Text(getTranslatedString("cancel")),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      getTranslatedString("changePass"),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => login.LoginPage(
+                            userDetails: currentUser,
+                            isEditing: true,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            });
         break;
       } else {
+        print("Error while getting tokens: ${status.status}");
         ErrorToast.showErrorToastLong(
           context,
-          status.status,
+          getTranslatedString("errToken") + ":\n" + status.status,
         );
       }
     }
@@ -291,10 +335,10 @@ class MarksTabState extends State<MarksTab>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Widget mainWidget = Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(MarksTab.tag, context),
+      drawer: CustomDrawer(MarksTab.tag),
       appBar: AppBar(
         title: Text(MarksTab.title),
         bottom: TabBar(
@@ -338,6 +382,15 @@ class MarksTabState extends State<MarksTab>
             }
           }).toList()),
     );
+    return widget.isFirstNavigator
+        ? WillPopScope(
+            onWillPop: () async {
+              FirebaseCrashlytics.instance.log("Minimize app");
+              return true;
+            },
+            child: mainWidget,
+          )
+        : mainWidget;
   }
 
   Widget noMarks() {

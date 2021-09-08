@@ -18,7 +18,7 @@ import 'package:novynaplo/ui/screens/login_page.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
-import 'package:novynaplo/ui/screens/calculator_tab.dart';
+import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/welcome_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/loading_screen.dart';
@@ -29,9 +29,11 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
     as backgroundFetchHelper;
-import 'dart:io' show Platform;
+import 'dart:io' show HttpOverrides, Platform;
 import 'package:flutter/foundation.dart' as foundation show kDebugMode;
 import 'package:firebase_performance/firebase_performance.dart';
+
+import 'API/certValidation.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 bool isNew = true;
@@ -69,7 +71,7 @@ void main() async {
   routes = <String, WidgetBuilder>{
     "/": (context) => isNew ? WelcomeScreen() : LoadingPage(),
     LoginPage.tag: (context) => LoginPage(),
-    MarksTab.tag: (context) => MarksTab(),
+    MarksTab.tag: (context) => MarksTab(false),
     SettingsTab.tag: (context) => SettingsTab(),
     NoticesTab.tag: (context) => NoticesTab(),
     StatisticsTab.tag: (context) => StatisticsTab(),
@@ -80,10 +82,12 @@ void main() async {
     EventsTab.tag: (context) => EventsTab(),
     ReportsTab.tag: (context) => ReportsTab(),
     AbsencesTab.tag: (context) => AbsencesTab(),
+    LoadingPage.tag: (context) => LoadingPage(),
   };
   runZonedGuarded(() async {
     await DatabaseHelper.initDatabase();
     await NotificationHelper.setupNotifications();
+    HttpOverrides.global = new MyHttpOverrides();
     runApp(
       MyApp(),
     );
@@ -120,7 +124,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: NavigatorKey.navigatorKey,
           theme: theme,
           title: 'Novy Napló',
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: true,
           routes: routes,
           navigatorObservers: [
             FirebaseAnalyticsObserver(analytics: analytics),

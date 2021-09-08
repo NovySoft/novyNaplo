@@ -43,7 +43,7 @@ class _FirebaseSettingsState extends State<FirebaseSettings> {
             switch (index) {
               case 0:
                 return ListTile(
-                  title: Text(getTranslatedString("Crashlytics")),
+                  title: Text(getTranslatedString("FirebaseCrashlytics")),
                   trailing: Switch(
                     onChanged: (bool switchOn) async {
                       if (!switchOn) {

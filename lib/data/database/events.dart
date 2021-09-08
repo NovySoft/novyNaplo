@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/event.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -8,12 +9,22 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 
-Future<List<Event>> getAllEvents() async {
+Future<List<Event>> getAllEvents({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllEvents");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Events GROUP BY uid, userId ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Events WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Events GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Event> tempList = List.generate(maps.length, (i) {
     Event temp = new Event.fromSqlite(maps[i]);
@@ -23,7 +34,10 @@ Future<List<Event>> getAllEvents() async {
   return tempList;
 }
 
-Future<void> batchInsertEvents(List<Event> eventList) async {
+Future<void> batchInsertEvents(
+  List<Event> eventList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertEvents");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -85,18 +99,27 @@ Future<void> batchInsertEvents(List<Event> eventList) async {
   if (inserted) {
     await batch.commit();
   }
+  handleEventDeletion(
+    remoteEvents: eventList,
+    localEvents: allEvents,
+    userDetails: userDetails,
+  );
 }
 
 Future<void> handleEventDeletion({
   @required List<Event> remoteEvents,
   @required List<Event> localEvents,
+  @required Student userDetails,
 }) async {
   if (remoteEvents == null) return;
-  if (remoteEvents.length == 0) return;
+  List<Event> filteredLocalEvents = List.from(localEvents)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Event>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localEvents) {
+  for (var local in filteredLocalEvents) {
     if (remoteEvents.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

@@ -1,9 +1,9 @@
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
-List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
-    List<Evals> input, String id) {
+ChartReturn createSubjectChart(List<Evals> input, String id) {
   List<Evals> manipulableData = List.from(input);
   manipulableData.sort((a, b) => a.date.compareTo(b.date));
   List<LinearMarkChartData> chartData = [];
@@ -12,7 +12,8 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
   int listArray = 0;
   bool isSzovegesOnly = manipulableData.indexWhere((element) =>
               element.valueType.name != "Szazalekos" &&
-              element.valueType.name != "Szoveges") ==
+              element.valueType.name != "Szoveges" &&
+              element.valueType.name != "SzazalekosAtszamolt") ==
           -1
       ? true
       : false;
@@ -20,10 +21,15 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
     if (!Evals.nonAvTypes.contains(n.type.name) ||
         n.kindOf == "Magatartas" ||
         n.kindOf == "Szorgalom") {
-      if (n.valueType.name == "Szazalekos" || n.valueType.name == "Szoveges") {
+      if (n.valueType.name == "Szazalekos" ||
+          n.valueType.name == "SzazalekosAtszamolt" ||
+          n.valueType.name == "Szoveges") {
         if (isSzovegesOnly) {
+          double markValue = n.numberValue;
           //Convert percentage mark to a normal one
-          double markValue = (n.numberValue / 100) * 5;
+          if (n.valueType.name == "Szazalekos") {
+            markValue = (n.numberValue / 100) * 5;
+          }
           if (markValue < 1) {
             markValue = 1;
           }
@@ -38,7 +44,7 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
       listArray++;
     }
   }
-  return [
+  return ChartReturn([
     new charts.Series<LinearMarkChartData, int>(
       id: id,
       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
@@ -46,5 +52,5 @@ List<charts.Series<LinearMarkChartData, int>> createSubjectChart(
       measureFn: (LinearMarkChartData marks, _) => marks.value,
       data: chartData,
     )
-  ];
+  ], stats.halfYearMarkers[manipulableData[0].subject.fullName]);
 }

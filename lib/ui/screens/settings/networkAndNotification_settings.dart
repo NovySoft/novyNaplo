@@ -100,7 +100,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'marks 1 ' +
+                            payload: 'marks ${globals.currentUser.userId} ' +
                                 (allParsedByDate.length == 0
                                     ? "0"
                                     : allParsedByDate[0].uid.toString()),
@@ -138,7 +138,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'hw 1 ' +
+                            payload: 'hw ${globals.currentUser.userId} ' +
                                 (globalHomework.length == 0
                                     ? "0"
                                     : globalHomework[0].uid.toString()),
@@ -176,7 +176,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'notice 1 ' +
+                            payload: 'notice ${globals.currentUser.userId} ' +
                                 (allParsedNotices.length == 0
                                     ? "0"
                                     : allParsedNotices[0].uid.toString()),
@@ -214,10 +214,11 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'timetable 1 ' +
-                                (lessonsList[0].length == 0
-                                    ? "0"
-                                    : lessonsList[0][0].uid.toString()),
+                            payload:
+                                'timetable ${globals.currentUser.userId} ' +
+                                    (lessonsList[0].length == 0
+                                        ? "0"
+                                        : lessonsList[0][0].uid.toString()),
                           );
                         },
                         icon: Icon(
@@ -252,7 +253,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'exam 1 ' +
+                            payload: 'exam ${globals.currentUser.userId} ' +
                                 (examsPage.allParsedExams.length == 0
                                     ? "0"
                                     : examsPage.allParsedExams[0].uid
@@ -292,7 +293,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
                             payload:
-                                'average 1 ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
+                                'average ${globals.currentUser.userId} ${allParsedSubjectsWithoutZeros[0][0].subject.name}',
                           );
                         },
                         icon: Icon(
@@ -327,7 +328,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'event 1 ' +
+                            payload: 'event ${globals.currentUser.userId} ' +
                                 (allParsedEvents.length == 0
                                     ? "0"
                                     : allParsedEvents[0].uid.toString()),
@@ -365,7 +366,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             getTranslatedString("testNotif"),
                             getTranslatedString("thisIsHowItWillLookLike"),
                             NotificationHelper.platformChannelSpecificsAlertAll,
-                            payload: 'absence 1 ' +
+                            payload: 'absence ${globals.currentUser.userId} ' +
                                 (allParsedAbsences.length == 0
                                     ? "0"
                                     : allParsedAbsences[0][0].uid.toString()),

@@ -95,7 +95,11 @@ class _ExamSettingsTabState extends State<ExamSettingsTab> {
               break;
             case 1:
               return ListTile(
-                leading: Text("${getTranslatedString("textColSubject")}:"),
+                leading: FractionallySizedBox(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: 0.8,
+                  child: Text("${getTranslatedString("textColSubject")}:"),
+                ),
                 trailing: Switch(
                   value: globals.examsTextColSubject,
                   onChanged: (switchVal) {

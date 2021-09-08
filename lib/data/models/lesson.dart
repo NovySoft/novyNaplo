@@ -84,7 +84,7 @@ class Lesson {
       'teacherHwUid': teacherHwUid,
       'isHWSolved': isHWSolved ? 1 : 0,
       'teacher': teacher,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'presence': presence == null ? null : presence.toJson(),
       'theme': theme,
       'classroom': classroom,
@@ -162,7 +162,13 @@ class Lesson {
     teacher = map['teacher'];
     subject = map['subject'] == null
         ? null
-        : Subject.fromJson(json.decode(map['subject']));
+        : Subject.fromDatabaseId(
+            map['subject'],
+            teacher,
+            dbId: this.databaseId,
+            dbUid: this.uid,
+            dbName: "Timetable",
+          );
     presence = map['presence'] == null
         ? null
         : Description.fromJson(json.decode(map['presence']));
@@ -246,7 +252,10 @@ class Lesson {
     isHWSolved = json['IsHaziFeladatMegoldva'];
     teacher = json['TanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            teacher,
+          )
         : null;
     presence = json['TanuloJelenlet'] != null
         ? new Description.fromJson(json['TanuloJelenlet'])

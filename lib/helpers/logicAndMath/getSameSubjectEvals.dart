@@ -29,7 +29,7 @@ List<Evals> getSameSubjectEvals(
   _tempList = List.from(
     stats.allParsedSubjects.firstWhere(
         (element) =>
-            element[0].subject.name.toLowerCase() == subject.toLowerCase(),
+            element[0].subject.fullName.toLowerCase() == subject.toLowerCase(),
         orElse: () {
       return [];
     }),

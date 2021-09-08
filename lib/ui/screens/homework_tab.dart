@@ -25,8 +25,9 @@ class HomeworkTab extends StatefulWidget {
 }
 
 class _HomeworkTabState extends State<HomeworkTab> {
-  int lastTodoHw = 0;
   List<Homework> currentHomework = [];
+  List<Homework> toBeDoneHomework = [];
+  List<Homework> alreadyDoneHomework = [];
   bool _listOpen = false;
   bool _animationDone = true;
   final GlobalKey<AnimatedListState> _animatedListkey =
@@ -50,10 +51,13 @@ class _HomeworkTabState extends State<HomeworkTab> {
         return false;
       }
     });
-    lastTodoHw = currentHomework.lastIndexWhere((element) {
-      var left = element.dueDate.difference(DateTime.now());
-      return (left.inMinutes / 60 < 0);
+    //Parse into seperate lists
+    int lastNotDone = currentHomework.lastIndexWhere((element) {
+      return element.dueDate.isAfter(DateTime.now());
     });
+    toBeDoneHomework = currentHomework.sublist(0, lastNotDone + 1);
+    alreadyDoneHomework = currentHomework.sublist(lastNotDone + 1);
+    alreadyDoneHomework.sort((a, b) => a.dueDate.compareTo(b.dueDate));
     FirebaseCrashlytics.instance.log("Shown Homeworks");
     super.initState();
   }
@@ -66,7 +70,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(HomeworkTab.tag, context),
+      drawer: CustomDrawer(HomeworkTab.tag),
       body: _body(),
     );
   }
@@ -75,13 +79,14 @@ class _HomeworkTabState extends State<HomeworkTab> {
     if (!_animationDone) return;
     ScrollableState scrollableState = Scrollable.of(_dataKey.currentContext);
     ScrollPosition position = scrollableState.position;
+    //FIXME: Add small icon, if there is nothing done
     if (_listOpen) {
       _scrollController.animateTo(
         _closedOfset,
         duration: Duration(milliseconds: 500),
         curve: Curves.ease,
       );
-      for (int i = lastTodoHw - 1; i >= 0; i--) {
+      for (int i = alreadyDoneHomework.length - 1; i >= 0; i--) {
         _animatedListkey.currentState.removeItem(i, (context, animation) {
           return ScaleTransition(
             scale: CurvedAnimation(
@@ -90,7 +95,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
             ),
             child: buildHomeworkCard(
               dueOver: true,
-              homework: currentHomework[i],
+              homework: alreadyDoneHomework[i],
               index: i,
             ),
           );
@@ -98,7 +103,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       }
     } else {
       _closedOfset = position.pixels;
-      for (var i = 0; i < lastTodoHw; i++) {
+      for (var i = 0; i < alreadyDoneHomework.length; i++) {
         _animatedListkey.currentState.insertItem(i);
       }
     }
@@ -113,7 +118,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
       return noHomework();
     } else {
       Widget homeworkToDo;
-      if (lastTodoHw == -1) {
+      if (toBeDoneHomework.length == 0) {
         homeworkToDo = SizedBox(
           height: MediaQuery.of(context).size.height / 4,
           child: allDone(),
@@ -122,12 +127,12 @@ class _HomeworkTabState extends State<HomeworkTab> {
         homeworkToDo = ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: (currentHomework.length - lastTodoHw) - 1,
+          itemCount: toBeDoneHomework.length,
           itemBuilder: (context, index) {
             return buildHomeworkCard(
               dueOver: false,
-              homework: currentHomework[lastTodoHw + index + 1],
-              index: lastTodoHw + index + 1,
+              homework: toBeDoneHomework[index],
+              index: index,
             );
           },
         );
@@ -142,64 +147,69 @@ class _HomeworkTabState extends State<HomeworkTab> {
               : CrossAxisAlignment.start,
           children: [
             homeworkToDo,
-            Container(
-              key: _dataKey,
-              child: GestureDetector(
-                onTap: () {
-                  _handleListOpen();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 15.0),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        "${getTranslatedString('doneHw')}:",
-                        textAlign: defaultTargetPlatform == TargetPlatform.iOS
-                            ? TextAlign.center
-                            : TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21,
+            alreadyDoneHomework.length == 0
+                ? SizedBox()
+                : Container(
+                    key: _dataKey,
+                    child: GestureDetector(
+                      onTap: () {
+                        _handleListOpen();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              "${getTranslatedString('doneHw')}:",
+                              textAlign:
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                                      ? TextAlign.center
+                                      : TextAlign.left,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 21,
+                              ),
+                            ),
+                            AnimatedCrossFade(
+                              duration: const Duration(milliseconds: 150),
+                              firstChild: const Icon(
+                                Icons.keyboard_arrow_up,
+                                size: 30,
+                              ),
+                              secondChild: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 30,
+                              ),
+                              crossFadeState: _listOpen
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                            ),
+                          ],
                         ),
                       ),
-                      AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 150),
-                        firstChild: const Icon(
-                          Icons.keyboard_arrow_up,
-                          size: 30,
+                    ),
+                  ),
+            alreadyDoneHomework.length == 0
+                ? Center(child: allDone(isDone: false))
+                : AnimatedList(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    key: _animatedListkey,
+                    itemBuilder: (context, index, animation) {
+                      return ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.ease,
                         ),
-                        secondChild: const Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 30,
+                        child: buildHomeworkCard(
+                          dueOver: true,
+                          homework: alreadyDoneHomework[index],
+                          index: index,
                         ),
-                        crossFadeState: _listOpen
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            AnimatedList(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              key: _animatedListkey,
-              itemBuilder: (context, index, animation) {
-                return ScaleTransition(
-                  scale: CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.ease,
-                  ),
-                  child: buildHomeworkCard(
-                    dueOver: true,
-                    homework: currentHomework[index],
-                    index: index,
-                  ),
-                );
-              },
-            )
+                      );
+                    },
+                  )
           ],
         ),
       );
@@ -253,7 +263,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
     );
   }
 
-  Widget allDone() {
+  Widget allDone({bool isDone = true}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -272,7 +282,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
                   left: 50,
                   top: 65,
                   child: new Icon(
-                    Icons.check,
+                    isDone ? Icons.check : Icons.cancel_outlined,
                     size: 36.0,
                   ),
                 ),
@@ -283,7 +293,9 @@ class _HomeworkTabState extends State<HomeworkTab> {
             height: 5,
           ),
           Text(
-            getTranslatedString("allDone"),
+            isDone
+                ? getTranslatedString("allDone")
+                : getTranslatedString("noDone"),
             textAlign: TextAlign.center,
           ),
         ],

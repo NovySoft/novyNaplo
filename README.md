@@ -12,6 +12,16 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
+## Kréta DMCA
+
+A kréta március elsején távolította el az alkalmazást a play áruházból... Mi ezután nem sokkal írtunk egy levelet a DMCA-ban található email címre, melyre azóta sem jött válasz. Az alkalmazás fejlesztését, nem hagyjuk abba, viszont **sajnos le kellet mondanunk az applikáció áruházakban való jelenlétünkről.**
+
+### Letöltés
+
+GitHub-ról: [![GitHub release (latest by date)](https://img.shields.io/github/downloads/NovySoft/NovyNaplo/latest/total)](https://github.com/NovySoft/novyNaplo/releases/latest)
+
+F-droid-ról: [![Fdroid release](https://img.shields.io/badge/F--droid-latest-brightgreen)](https://fdroid.novy.software/)
+
 ## Jelenlegi funkciók
 
 - Jegyek megtekintése
@@ -20,7 +30,7 @@ Novy teljesen nem eredeti kréta kliense.
 - Feljegyzések megtekintése
 - Órarend megtekintése
 - Átlagok grafikonon való megtekintése
-- Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
+- Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** és **[LŐRINC](https://github.com/lordlorinc)** közreműködésével
 - Mi van ha, virtuális jegyszámoló
 - Statisztika oldal
 - Értesítések
@@ -29,12 +39,12 @@ Novy teljesen nem eredeti kréta kliense.
 - Fordítások (Angol, Magyar)
 - Éves, féléves, és negyedéves értesítők megetekintése
 - Hiányzások és késések
+- Több felhasználós támogatás
 
 ## **HAMAROSAN**
 
 - Tanulói házifeladat felírása
 - Házifeladat TODO lista szerűség
-- Több felhasználós támogatás
 - E-Ügyintézés
 - Támogatók oldal - **Gáti Úr** közreműködésével
 - Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)
@@ -44,7 +54,7 @@ Novy teljesen nem eredeti kréta kliense.
 - BKK integráció
 - Integrált chat felület
 - Házifeladat segédletek
-- **Wear OS** kompatibilitás (felthetőleg teljesen másik applikáció keretében)
+- **Wear OS** kompatibilitás (feltehetőleg teljesen másik applikáció keretében)
 
 ## Modulok
 

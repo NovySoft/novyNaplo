@@ -1,7 +1,9 @@
 //Copied from https://github.com/filcnaplo/filcnaplo/blob/dev/lib/kreta/api.dart
 //HUGE thanks to filcnaplo
 class BaseURL {
-  static const NOVY_NAPLO = "https://api.novy.vip/";
+  static const NOVY_NAPLO = "https://api.novy.vip";
+  static const NOVY_NAPLO_GITHUB_REPO =
+      "https://api.github.com/repos/NovySoft/NovyNaplo";
   static String kreta(String instituteCode) =>
       "https://$instituteCode.e-kreta.hu";
   static const KRETA_IDP = "https://idp.e-kreta.hu";
@@ -12,11 +14,21 @@ class BaseURL {
 class NovyNaploEndpoints {
   static const schoolList = "/schoolList.json";
   static const header = "/kretaHeader.json";
+  static const certificates = "/kretaCerts.json";
+}
+
+class GitHubApiEndpoints {
+  static String getReleases({int number = 5}) => "/releases?per_page=$number";
+  static const getLatestVersion = "/releases/latest";
+}
+
+class IDPEndpoints {
+  static const token = "/connect/token";
+  static const nonce = "/nonce";
 }
 
 class KretaEndpoints {
   static const webLogin = "/Adminisztracio/Login";
-  static const token = "/connect/token";
   static const notes = "/ellenorzo/V3/Sajat/Feljegyzesek";
   static const events = "/ellenorzo/V3/Sajat/FaliujsagElemek";
   static const student = "/ellenorzo/V3/Sajat/TanuloAdatlap";

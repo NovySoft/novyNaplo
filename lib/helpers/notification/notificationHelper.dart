@@ -127,6 +127,13 @@ class NotificationHelper {
         );
       },
     );
+    if (didNotificationLaunchApp) {
+      print("App awaken by notification");
+      NotificationReceiver.selectNotification(
+        notificationAppLaunchDetails.payload,
+        didNotificationLaunchApp,
+      );
+    }
   }
 
   static Future<void> Function(

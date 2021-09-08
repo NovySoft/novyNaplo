@@ -45,7 +45,7 @@ class Exam {
       'mode': mode == null ? null : mode.toJson(),
       'lessonNumber': lessonNumber,
       'teacher': teacher,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'theme': theme,
       'group': group == null ? null : group.toJson(),
       'uid': uid,
@@ -68,7 +68,13 @@ class Exam {
     teacher = map['teacher'];
     subject = map['subject'] == null
         ? null
-        : Subject.fromJson(json.decode(map['subject']));
+        : Subject.fromDatabaseId(
+            map['subject'],
+            null,
+            dbId: this.databaseId,
+            dbUid: this.uid,
+            dbName: "Exams",
+          );
     theme = map['theme'];
     group = map['group'] == null
         ? null
@@ -92,7 +98,10 @@ class Exam {
     lessonNumber = json['OrarendiOraOraszama'];
     teacher = json['RogzitoTanarNeve'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            null,
+          )
         : null;
     theme = json['Temaja'];
     group = json['OsztalyCsoport'] != null
@@ -104,6 +113,6 @@ class Exam {
 
   @override
   String toString() {
-    return this.mode.name + ":" + this.theme;
+    return this.dateOfWriting.toString() + ":" + this.theme;
   }
 }

@@ -27,7 +27,7 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 1,
+          itemCount: 2,
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -39,12 +39,29 @@ class _CalculatorSettingsState extends State<CalculatorSettings> {
                       setState(() {
                         globals.shouldVirtualMarksCollapse = switchOn;
                       });
-                      globals.prefs
+                      await globals.prefs
                           .setBool("shouldVirtualMarksCollapse", switchOn);
                       FirebaseCrashlytics.instance
                           .setCustomKey("shouldVirtualMarksCollapse", switchOn);
                     },
                     value: globals.shouldVirtualMarksCollapse,
+                  ),
+                );
+                break;
+              case 1:
+                return ListTile(
+                  //! NOT A REAL TRADEMARK, IT'S A JOKE
+                  title: Text("Lőrinc™ " + getTranslatedString("mode")),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      setState(() {
+                        globals.calcLorincMode = switchOn;
+                      });
+                      await globals.prefs.setBool("calcLorincMode", switchOn);
+                      FirebaseCrashlytics.instance
+                          .setCustomKey("calcLorincMode", switchOn);
+                    },
+                    value: globals.calcLorincMode,
                   ),
                 );
                 break;

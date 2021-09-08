@@ -124,6 +124,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       job: getTranslatedString("leadDev"),
                     ),
                     PeopleCard(
+                      name: "Lőrinc",
+                      job: getTranslatedString("markCalcDevV2"),
+                    ),
+                    PeopleCard(
                       name: "Zoller András",
                       job: getTranslatedString("markCalcDev"),
                     ),

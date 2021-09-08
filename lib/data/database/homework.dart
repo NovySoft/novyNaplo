@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/homework.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -11,12 +12,23 @@ import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
 import 'package:flutter/foundation.dart';
 
-Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
+Future<List<Homework>> getAllHomework({
+  bool ignoreDue = true,
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllHw");
 
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Homework GROUP BY userId, uid ORDER BY databaseId',
-  );
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Homework WHERE userId = ? GROUP BY userId, uid ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Homework WHERE userId = ? GROUP BY userId, uid ORDER BY databaseId',
+    );
+  }
 
   List<Homework> tempList = List.generate(maps.length, (i) {
     Homework temp = new Homework.fromSqlite(maps[i]);
@@ -41,7 +53,7 @@ Future<List<Homework>> getAllHomework({bool ignoreDue = true}) async {
       }
     });
   }
-  tempList.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  tempList.sort((a, b) => b.dueDate.compareTo(a.dueDate));
   deleteOldHomework(tempList);
   return tempList;
 }
@@ -68,7 +80,10 @@ void deleteOldHomework(List<Homework> input) async {
   }
 }
 
-Future<void> batchInsertHomework(List<Homework> hwList) async {
+Future<void> batchInsertHomework(
+  List<Homework> hwList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertHomework");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -147,6 +162,7 @@ Future<void> batchInsertHomework(List<Homework> hwList) async {
   handleHomeworkDeletion(
     remoteHomework: hwList,
     localHomework: allHw,
+    userDetails: userDetails,
   );
 }
 
@@ -227,13 +243,17 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
 Future<void> handleHomeworkDeletion({
   @required List<Homework> remoteHomework,
   @required List<Homework> localHomework,
+  @required Student userDetails,
 }) async {
   if (remoteHomework == null) return;
-  if (remoteHomework.length == 0) return;
+  List<Homework> filteredLocalHomeworks = List.from(localHomework)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Homework>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localHomework) {
+  for (var local in filteredLocalHomeworks) {
     if (remoteHomework.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

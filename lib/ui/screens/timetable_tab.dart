@@ -188,7 +188,7 @@ class _TimetableTabState extends State<TimetableTab> {
     return Scaffold(
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(TimetableTab.tag, context),
+      drawer: CustomDrawer(TimetableTab.tag),
       appBar: AppBar(
         title: new Text(capitalize(getTranslatedString("timetable"))),
       ),

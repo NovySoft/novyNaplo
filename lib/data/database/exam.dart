@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/data/models/student.dart';
+import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
 import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
@@ -10,23 +11,36 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:flutter/foundation.dart';
 
-Future<List<Exam>> getAllExams() async {
+Future<List<Exam>> getAllExams({
+  bool userSpecific = false,
+}) async {
   FirebaseCrashlytics.instance.log("getAllExams");
-  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
-    'SELECT * FROM Exams GROUP BY uid, userId ORDER BY databaseId',
-  );
+
+  List<Map<String, dynamic>> maps;
+  if (userSpecific) {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Exams WHERE userId = ? GROUP BY uid, userId ORDER BY databaseId',
+      [globals.currentUser.userId],
+    );
+  } else {
+    maps = await globals.db.rawQuery(
+      'SELECT * FROM Exams GROUP BY uid, userId ORDER BY databaseId',
+    );
+  }
 
   List<Exam> tempList = List.generate(maps.length, (i) {
     Exam temp = new Exam.fromSqlite(maps[i]);
     return temp;
   });
 
-  tempList.sort((a, b) => b.dateOfWriting.compareTo(a.dateOfWriting));
+  tempList.sort((a, b) =>
+      (b.dateOfWriting.toDayOnlyString() + b.lessonNumber.toString()).compareTo(
+          a.dateOfWriting.toDayOnlyString() + a.lessonNumber.toString()));
 
   return tempList;
 }
 
-Future<void> batchInsertExams(List<Exam> examList) async {
+Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
   FirebaseCrashlytics.instance.log("batchInsertExams");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -97,19 +111,24 @@ Future<void> batchInsertExams(List<Exam> examList) async {
   handleExamDeletion(
     remoteExams: examList,
     localExams: allExam,
+    userDetails: userDetails,
   );
 }
 
 Future<void> handleExamDeletion({
   @required List<Exam> remoteExams,
   @required List<Exam> localExams,
+  @required Student userDetails,
 }) async {
   if (remoteExams == null) return;
-  if (remoteExams.length == 0) return;
+  List<Exam> filteredLocalExams = List.from(localExams)
+      .where((element) => element.userId == userDetails.userId)
+      .toList()
+      .cast<Exam>();
   // Get a reference to the database.
   final Batch batch = globals.db.batch();
   bool deleted = false;
-  for (var local in localExams) {
+  for (var local in filteredLocalExams) {
     if (remoteExams.indexWhere(
           (element) =>
               element.uid == local.uid && element.userId == local.userId,

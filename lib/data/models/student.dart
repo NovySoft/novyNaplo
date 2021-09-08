@@ -6,7 +6,8 @@ class Student {
   List<Parent> parents;
   String name;
   String nickname;
-  String birthDay;
+  String birthDayString;
+  DateTime birthDay;
   String placeOfBirth;
   String birthName;
   String schoolYearUid;
@@ -14,12 +15,13 @@ class Student {
   BankAccount bankAccount;
   //Should I merge these two?
   Institution institution;
-  String school;
 
+  String school;
   String username;
   String password;
   String token;
   String iv;
+
   DateTime tokenDate;
   int userId;
   bool current;
@@ -31,6 +33,7 @@ class Student {
     this.parents,
     this.name,
     this.nickname,
+    this.birthDayString,
     this.birthDay,
     this.placeOfBirth,
     this.birthName,
@@ -62,6 +65,7 @@ class Student {
     parents = input.parents;
     name = input.name;
     nickname = input.nickname;
+    birthDayString = input.birthDayString;
     birthDay = input.birthDay;
     placeOfBirth = input.placeOfBirth;
     birthName = input.birthName;
@@ -85,7 +89,7 @@ class Student {
       'parents': json.encode(parents),
       'name': name,
       'nickname': nickname,
-      'birthDay': birthDay,
+      'birthDay': birthDayString,
       'placeOfBirth': placeOfBirth,
       'birthName': birthName,
       'schoolYearUid': schoolYearUid,
@@ -110,7 +114,8 @@ class Student {
       });
     }
     name = json['Nev'];
-    birthDay = json['SzuletesiDatum'];
+    birthDayString = json['SzuletesiDatum'];
+    birthDay = DateTime.parse(birthDayString).toLocal();
     placeOfBirth = json['SzuletesiHely'];
     birthName = json['SzuletesiNev'];
     schoolYearUid = json['TanevUid'];
@@ -131,6 +136,7 @@ class Parent {
   String name;
   String phoneNumber;
   String uid;
+  bool isLegalGuardian;
   Parent();
 
   Map<String, dynamic> toJson() {
@@ -139,6 +145,7 @@ class Parent {
     data['Nev'] = this.name;
     data['Telefonszam'] = this.phoneNumber;
     data['Uid'] = this.uid;
+    data['IsTorvenyesKepviselo'] = this.isLegalGuardian;
     return data;
   }
 
@@ -155,6 +162,7 @@ class Parent {
     name = json['Nev'];
     phoneNumber = json['Telefonszam'];
     uid = json['Uid'];
+    isLegalGuardian = json['IsTorvenyesKepviselo'];
   }
 }
 
@@ -187,6 +195,7 @@ class Institution {
   String linkId;
   String shortName;
   String name;
+  int userPosition = 0;
   List<SystemModules> systemModules;
   CustomizationOptions customizationOptions;
   Institution();
@@ -202,6 +211,9 @@ class Institution {
     if (this.customizationOptions != null) {
       data['TestreszabasBeallitasok'] = this.customizationOptions.toJson();
     }
+    data['LinkId'] = this.linkId;
+    data['Name'] = this.name;
+    data['userPosition'] = this.userPosition;
     return json.encode(data);
   }
 
@@ -217,6 +229,10 @@ class Institution {
     customizationOptions = json['TestreszabasBeallitasok'] != null
         ? new CustomizationOptions.fromJson(json['TestreszabasBeallitasok'])
         : null;
+    //* These two are novynaplo internal stuff
+    this.linkId = json['LinkId'];
+    this.name = json['Name'];
+    this.userPosition = json['userPosition'] ?? 0;
   }
 }
 
@@ -243,6 +259,7 @@ class CustomizationOptions {
   bool canViewThemeOfLesson;
   bool canViewClassAV;
   int evalShowDelay;
+  String nextUpdate;
   CustomizationOptions();
 
   Map<String, dynamic> toJson() {
@@ -253,6 +270,7 @@ class CustomizationOptions {
     data['IsOsztalyAtlagMegjeleniteseEllenorzoben'] = this.canViewClassAV;
     data['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'] =
         this.evalShowDelay;
+    data['KovetkezoTelepitesDatuma'] = this.nextUpdate;
     return data;
   }
 
@@ -261,5 +279,6 @@ class CustomizationOptions {
     canViewThemeOfLesson = json['IsTanorakTemajaMegtekinthetoEllenorzoben'];
     canViewClassAV = json['IsOsztalyAtlagMegjeleniteseEllenorzoben'];
     evalShowDelay = json['ErtekelesekMegjelenitesenekKesleltetesenekMerteke'];
+    nextUpdate = json['KovetkezoTelepitesDatuma'];
   }
 }

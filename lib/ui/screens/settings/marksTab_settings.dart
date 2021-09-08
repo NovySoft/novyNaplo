@@ -94,7 +94,12 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
             switch (index) {
               case 1:
                 return ListTile(
-                  title: Text("${getTranslatedString("marksCardColorTheme")}:"),
+                  title: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: 0.8,
+                    child:
+                        Text("${getTranslatedString("marksCardColorTheme")}:"),
+                  ),
                   trailing: DropdownButton<String>(
                     items: _dropDownItems,
                     onChanged: (String value) async {
@@ -307,7 +312,11 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                   );
                 else
                   return ListTile(
-                    leading: Text("${getTranslatedString("textColSubject")}:"),
+                    leading: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: 0.8,
+                      child: Text("${getTranslatedString("textColSubject")}:"),
+                    ),
                     trailing: Switch(
                       value: globals.marksTextColSubject,
                       onChanged: (switchVal) {
@@ -341,7 +350,11 @@ class _MarksTabSettingsState extends State<MarksTabSettings> {
                 break;
               case 3:
                 return ListTile(
-                  leading: Text("${getTranslatedString("textColEval")}:"),
+                  leading: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: 0.8,
+                    child: Text("${getTranslatedString("textColEval")}:"),
+                  ),
                   trailing: Switch(
                     value: globals.marksTextColEval,
                     onChanged: (switchVal) {

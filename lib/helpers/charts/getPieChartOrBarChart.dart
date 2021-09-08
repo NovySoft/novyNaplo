@@ -5,14 +5,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 void getPieChartOrBarChart(var input) {
   List<LinearPieData> tempData = [];
   int index = 0;
-  String name = "";
   for (var n in input) {
-    if (n[0].subject.name.startsWith("magyar")) {
-      name = n[0].subject.name.split(" ")[1];
-    } else {
-      name = n[0].subject.name;
-    }
-    tempData.add(new LinearPieData(index, n.length, name));
+    tempData.add(new LinearPieData(index, n.length, n[0].subject.name));
     index++;
   }
   tempData.sort((a, b) => a.value.compareTo(b.value));

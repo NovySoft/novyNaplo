@@ -38,7 +38,6 @@ Color getColorBasedOnSubject(Subject subject) {
       }
     }
     if (!found) {
-      print("Not found");
       color = Color.fromARGB(
         255,
         getRandomIntBetween(

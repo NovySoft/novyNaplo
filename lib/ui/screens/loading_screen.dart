@@ -11,6 +11,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/versionHelper.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/config.dart' as config;
@@ -28,6 +29,7 @@ import 'package:path/path.dart' as fpath;
 import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
+import 'package:novynaplo/data/models/subject.dart' as subject;
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
@@ -38,6 +40,11 @@ int tokenIndex = 0;
 
 class LoadingPage extends StatefulWidget {
   static String tag = 'loading-page';
+  LoadingPage({
+    this.isFirstLoad = true,
+  });
+  final bool isFirstLoad;
+
   @override
   _LoadingPageState createState() => new _LoadingPageState();
 }
@@ -47,8 +54,8 @@ class _LoadingPageState extends State<LoadingPage> {
   void onLoad(var context) async {
     FirebaseCrashlytics.instance.log("Shown Loading screen");
     try {
-      List<Student> allUsers = await DatabaseHelper.getAllUsers();
-      if (allUsers.length <= 0) {
+      globals.allUsers = await DatabaseHelper.getAllUsers();
+      if (globals.allUsers.length <= 0) {
         //Yes I know I misspelled it, live with it
         String path =
             fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
@@ -105,17 +112,32 @@ class _LoadingPageState extends State<LoadingPage> {
           return;
         }
       }
-      globals.currentUser = allUsers.firstWhere(
+      globals.currentUser = globals.allUsers.firstWhere(
         (element) => element.current,
-        orElse: () => allUsers[0],
+        orElse: () => globals.allUsers[0],
       );
       FirebaseCrashlytics.instance
           .setCustomKey("Version", config.currentAppVersionCode);
+      if (globals.prefs.getBool("isMigratedToNewSubjectsDB") == null) {
+        for (Student n in globals.allUsers) {
+          await DatabaseHelper.setFetched(n, false);
+        }
+        globals.prefs.setBool("isMigratedToNewSubjectsDB", true);
+      }
+      //*Subject shortenings
+      if (widget.isFirstLoad) {
+        setState(() {
+          loadingText = getTranslatedString("readSubjShorts");
+        });
+        subject.subjectMap = await DatabaseHelper.getSubjectMap();
+      }
       //*Marks
       setState(() {
         loadingText = getTranslatedString("readMarks");
       });
-      List<Evals> tempEvals = await DatabaseHelper.getAllEvals();
+      List<Evals> tempEvals = await DatabaseHelper.getAllEvals(
+        userSpecific: true,
+      );
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
@@ -141,49 +163,70 @@ class _LoadingPageState extends State<LoadingPage> {
       setState(() {
         loadingText = getTranslatedString("readNotices");
       });
-      noticesPage.allParsedNotices = await DatabaseHelper.getAllNotices();
+      noticesPage.allParsedNotices = await DatabaseHelper.getAllNotices(
+        userSpecific: true,
+      );
       //*Events
       setState(() {
         loadingText = getTranslatedString("readEvents");
       });
-      eventsPage.allParsedEvents = await DatabaseHelper.getAllEvents();
+      eventsPage.allParsedEvents = await DatabaseHelper.getAllEvents(
+        userSpecific: true,
+      );
       //*Absences
       setState(() {
         loadingText = getTranslatedString("readAbsences");
       });
       absencesPage.allParsedAbsences =
-          await DatabaseHelper.getAllAbsencesMatrix();
+          await DatabaseHelper.getAllAbsencesMatrix(
+        userSpecific: true,
+      );
       //*Homework
       setState(() {
         loadingText = getTranslatedString("readHw");
       });
-      homeworkPage.globalHomework =
-          await DatabaseHelper.getAllHomework(ignoreDue: false);
+      homeworkPage.globalHomework = await DatabaseHelper.getAllHomework(
+        ignoreDue: false,
+        userSpecific: true,
+      );
       //*Exams
       setState(() {
-        loadingText = getTranslatedString("readHw");
+        loadingText = getTranslatedString("readExam");
       });
-      examsPage.allParsedExams = await DatabaseHelper.getAllExams();
+      examsPage.allParsedExams = await DatabaseHelper.getAllExams(
+        userSpecific: true,
+      );
       //*Timetable
       //?EXAMS AND HOMEWORK MUST BE LOADED BEFORE TIMETABLE
       setState(() {
         loadingText = getTranslatedString("readTimetable");
       });
-      List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable();
+      List<Lesson> tempLessonList = await DatabaseHelper.getAllTimetable(
+        userSpecific: true,
+      );
       timetablePage.lessonsList = await makeTimetableMatrix(
         tempLessonList,
         addToFetchDayList: false,
       );
       //*Timetable colors
-      setState(() {
-        loadingText = getTranslatedString("readTimetableColors");
-      });
-      subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
-      subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
+      if (widget.isFirstLoad) {
+        setState(() {
+          loadingText = getTranslatedString("readTimetableColors");
+        });
+        subjectColors.subjectColorMap = await DatabaseHelper.getAllColors();
+        subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
+      }
       //*Done
       FirebaseAnalytics().logEvent(name: "login");
       globals.isDataLoaded = true;
-      await Navigator.pushReplacementNamed(context, marksPage.MarksTab.tag);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => marksPage.MarksTab(true)),
+      );
+      //* Check for updates
+      if (globals.prefs.getBool("checkForUpdates") ?? true) {
+        VersionHelper.checkForUpdates();
+      }
       return;
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(e, s, reason: 'onLoad');
@@ -225,7 +268,9 @@ class _LoadingPageState extends State<LoadingPage> {
             SizedBox(height: 5.0),
             Center(
               child: Text(
-                getTranslatedString("Welcome to novynaplo"),
+                widget.isFirstLoad
+                    ? getTranslatedString("Welcome to novynaplo")
+                    : getTranslatedString("switchingUser"),
                 style: TextStyle(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
@@ -235,7 +280,9 @@ class _LoadingPageState extends State<LoadingPage> {
             ),
             Center(
               child: Text(
-                "Ver: " + config.currentAppVersionCode,
+                widget.isFirstLoad
+                    ? "Ver: " + config.currentAppVersionCode
+                    : globals.currentUser.nickname ?? globals.currentUser.name,
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),

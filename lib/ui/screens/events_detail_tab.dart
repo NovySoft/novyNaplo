@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/data/models/extensions.dart';
@@ -94,7 +93,12 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                 children: [
                   Html(
                     data: widget.eventDetails.content,
-                    onLinkTap: (url) async {
+                    onLinkTap: (
+                      String url,
+                      RenderContext context,
+                      Map<String, String> attributes,
+                      var element,
+                    ) async {
                       if (await canLaunch(url)) {
                         await launch(url);
                       } else {

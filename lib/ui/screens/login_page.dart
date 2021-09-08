@@ -37,15 +37,19 @@ class KeyLoaderKey {
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
-  const LoginPage({
+  LoginPage({
     this.userDetails,
     this.isAutoFill = false,
     this.isEditing = false,
+    this.isNewUser = false,
+    this.setStateCallback,
   });
 
   final Student userDetails;
   final bool isAutoFill;
   final bool isEditing;
+  final bool isNewUser;
+  final Function setStateCallback;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -248,6 +252,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     tempUser.school = selectedSchool.code;
     tempUser.username = _userController.text;
     tempUser.password = _passController.text;
+    if (globals.allUsers != null) {
+      if (globals.allUsers.indexWhere(
+            (element) =>
+                element.username == tempUser.username &&
+                element.password == tempUser.password,
+          ) !=
+          -1) {
+        //User alread exists
+        ErrorToast.showErrorToast(
+          getTranslatedString("userAlreadyExits"),
+        );
+        return;
+      }
+    }
     TokenResponse result = await RequestHandler.login(tempUser)
         .timeout(Duration(seconds: 15), onTimeout: () {
       return TokenResponse(status: "TIMEOUT");
@@ -256,7 +274,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       try {
         Student finalUserObject = await encryptUserDetails(tempUser);
         finalUserObject.current = isFirstUser;
-        //Fixme, also get student info on every fetch
         finalUserObject = await RequestHandler.getStudentInfo(
           tempUser,
           embedEncryptedDetails: true,
@@ -273,8 +290,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           nonEncrypted.username = tempUser.username;
           nonEncrypted.password = tempUser.password;
           nonEncrypted.school = tempUser.school;
-          globals.currentUser = nonEncrypted;
-
+          if (!widget.isNewUser) {
+            globals.currentUser = nonEncrypted;
+          }
           if (widget.isAutoFill) {
             //*Delete the prefs version of login data
             globals.prefs.remove("code");
@@ -287,7 +305,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ).pop();
           }
         }
-        Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+        if (widget.setStateCallback != null) {
+          globals.allUsers = await DatabaseHelper.getAllUsers();
+          widget.setStateCallback();
+        }
+        if (widget.isNewUser) {
+          Navigator.of(context).pop();
+        } else {
+          Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
+        }
       } catch (e, s) {
         FirebaseCrashlytics.instance.recordError(
           e,
@@ -477,6 +503,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             onTap: () {
               togglePasswordVisibility();
             },
+            //TODO: An animation would be nice to have
             child: Icon(_obscureText ? MdiIcons.eyeOff : MdiIcons.eye),
           ),
           hintText: getTranslatedString("password"),

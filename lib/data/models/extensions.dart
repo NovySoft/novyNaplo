@@ -43,6 +43,43 @@ extension MyInt on int {
     }
     return number + "th";
   }
+
+  String intToEsEnding() {
+    int input = this;
+    String number = input.toString();
+    if (globals.language == "en") return number + "s";
+    if (number.endsWith("1") ||
+        number.endsWith("2") ||
+        number.endsWith("4") ||
+        number.endsWith("7") ||
+        number.endsWith("9") ||
+        number.endsWith("10") ||
+        number.endsWith("40") ||
+        number.endsWith("50") ||
+        number.endsWith("70") ||
+        number.endsWith("90")) {
+      return number + "es";
+    }
+    if (number.endsWith("3") ||
+        number.endsWith("8") ||
+        number.endsWith("20") ||
+        number.endsWith("30") ||
+        number.endsWith("60") ||
+        number.endsWith("80") ||
+        number.endsWith("100")) {
+      return number + "as";
+    }
+    if (number.endsWith("5")) {
+      return number + "ös";
+    }
+    if (number.endsWith("6")) {
+      return number + "os";
+    }
+    if (number == "0") {
+      return number + "ás";
+    }
+    return number;
+  }
 }
 
 String intToTHEnding(input) {

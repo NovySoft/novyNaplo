@@ -52,7 +52,11 @@ class Evals {
   @override
   String toString() {
     //return this.valueType.name;
-    return this.subject.name + ":" + this.date.toString();
+    return this.subject.name +
+        ":" +
+        this.date.toString() +
+        ":" +
+        this.type.name;
   }
 
   Evals.fromSqlite(Map<String, dynamic> map) {
@@ -80,7 +84,13 @@ class Evals {
     shortTextValue = map['shortTextValue'];
     subject = map['subject'] == null
         ? null
-        : Subject.fromJson(json.decode(map['subject']));
+        : Subject.fromDatabaseId(
+            map['subject'],
+            null,
+            dbId: this.databaseId,
+            dbUid: this.uid,
+            dbName: "Evals",
+          );
     theme = map['theme'];
     type = map['type'] == null
         ? null
@@ -184,7 +194,10 @@ class Evals {
     }
     shortTextValue = json['SzovegesErtekelesRovidNev'];
     subject = json['Tantargy'] != null
-        ? new Subject.fromJson(json['Tantargy'])
+        ? new Subject.fromJson(
+            json['Tantargy'],
+            null,
+          )
         : null;
     theme = json['Tema'];
     group = json['OsztalyCsoport'] != null
@@ -201,12 +214,13 @@ class Evals {
     if (theme == null) {
       if (mode != null) {
         theme = mode.description;
+      } else if (type != null) {
+        theme = type.description;
       } else {
-        //mode is null when it is a magatartás/szorgalom mark
-        theme = subject.name;
+        theme = subject.fullName;
       }
     }
-    icon = subject.name == null
+    icon = subject.fullName == null
         ? Icons.create
         : parseSubjectToIcon(subject: subject.fullName);
   }
@@ -228,7 +242,7 @@ class Evals {
       'numberValue': numberValue,
       'textValue': textValue,
       'shortTextValue': shortTextValue,
-      'subject': subject == null ? null : subject.toJson(),
+      'subject': subject == null ? null : subject.uid,
       'theme': theme,
       'type': type == null ? null : type.toJson(),
       'group': group == null ? null : group.toJson(),

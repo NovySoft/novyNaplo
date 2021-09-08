@@ -259,7 +259,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                           Html(
                             data:
                                 "${widget.lessonInfo.examList[index].mode.description}: ${widget.lessonInfo.examList[index].theme}",
-                            onLinkTap: (url) async {
+                            onLinkTap: (
+                              String url,
+                              RenderContext context,
+                              Map<String, String> attributes,
+                              var element,
+                            ) async {
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -335,7 +340,12 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                         TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                 Html(
                   data: widget.lessonInfo.homework.content,
-                  onLinkTap: (url) async {
+                  onLinkTap: (
+                    String url,
+                    RenderContext context,
+                    Map<String, String> attributes,
+                    var element,
+                  ) async {
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {

@@ -1,11 +1,11 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/ui/screens/settings/firebase_settings.dart';
+import 'package:novynaplo/ui/screens/settings/subjNickname_settings.dart';
 import 'package:novynaplo/ui/screens/settings/timetable_settings.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +45,7 @@ class _SettingsTabState extends State<SettingsTab> {
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
-      drawer: GlobalDrawer.getDrawer(SettingsTab.tag, context),
+      drawer: CustomDrawer(SettingsTab.tag),
       body: SettingsBody(),
     );
   }
@@ -81,7 +81,7 @@ class _SettingsBodyState extends State<SettingsBody> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(),
-      itemCount: 15,
+      itemCount: 16,
       itemBuilder: (context, index) {
         if (index == 0) {
           return ListTile(
@@ -374,38 +374,6 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 10) {
-          return ListTile(
-            title: Center(
-              child: SizedBox(
-                height: 38,
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FirebaseSettings(),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    MdiIcons.incognitoCircle,
-                  ),
-                  label: Text(
-                    getTranslatedString("privacySettings"),
-                  ),
-                ),
-              ),
-            ),
-          );
         } else if (index == 9) {
           return ListTile(
             title: Center(
@@ -438,7 +406,107 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
+        } else if (index == 10) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectNicknameSettings(
+                          isTimetable: false,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.tagMultiple,
+                  ),
+                  label: Text(
+                    getTranslatedString("subjectNicknames"),
+                  ),
+                ),
+              ),
+            ),
+          );
         } else if (index == 11) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectNicknameSettings(
+                          isTimetable: true,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.tagMultiple,
+                  ),
+                  label: Text(
+                    getTranslatedString("timetableNicknames"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 12) {
+          return ListTile(
+            title: Center(
+              child: SizedBox(
+                height: 38,
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FirebaseSettings(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.incognitoCircle,
+                  ),
+                  label: Text(
+                    getTranslatedString("privacySettings"),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (index == 13) {
           return ListTile(
             title: Center(
               child: SizedBox(
@@ -474,7 +542,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 12) {
+        } else if (index == 14) {
           return ListTile(
             title: Center(
                 child: Column(children: [
@@ -572,7 +640,7 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ])),
           );
-        } else if (index == 13) {
+        } else if (index == 15) {
           return ListTile(
             title: Center(
               child: Padding(
@@ -596,7 +664,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                             applicationName: "Novy Napló",
                             applicationVersion: config.currentAppVersionCode,
                             applicationLegalese:
-                                "This application is contributed under the MIT license",
+                                "This application is distributed under the MIT license",
                             applicationIcon: Image.asset(
                               "assets/icon/icon.png",
                               height: 100,
@@ -613,83 +681,10 @@ class _SettingsBodyState extends State<SettingsBody> {
               ),
             ),
           );
-        } else if (index == 14) {
-          return ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: SizedBox(
-                    height: 38,
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          showDialog<void>(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (_) {
-                                return LogOutDialog();
-                              });
-                        },
-                        icon: Icon(
-                          MdiIcons.logout,
-                        ),
-                        label: Text(
-                          getTranslatedString("logOut"),
-                        ))),
-              ),
-            ),
-          );
         } else {
           return SizedBox(height: 100);
         }
       },
-    );
-  }
-}
-
-class LogOutDialog extends StatefulWidget {
-  @override
-  _LogOutDialogState createState() => new _LogOutDialogState();
-}
-
-class _LogOutDialogState extends State<LogOutDialog> {
-  Widget build(BuildContext context) {
-    return new AlertDialog(
-      elevation: globals.darker ? 0 : 24,
-      title: new Text(getTranslatedString("logOut")),
-      content: Text(
-        getTranslatedString("sureLogout"),
-        textAlign: TextAlign.left,
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(getTranslatedString("yes")),
-          onPressed: () async {
-            FirebaseAnalytics().logEvent(name: "sign_out");
-            await globals.resetAllGlobals();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => login.LoginPage()),
-              ModalRoute.withName('login-page'),
-            );
-          },
-        ),
-        TextButton(
-          child: Text(getTranslatedString("no")),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
     );
   }
 }

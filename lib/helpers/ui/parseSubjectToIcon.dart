@@ -86,6 +86,9 @@ IconData parseSubjectToIcon({@required String subject}) {
       subject.toLowerCase().contains("automatizálás")) {
     return MdiIcons.robotIndustrial;
   }
+  if (subject.toLowerCase().contains("elektronika")) {
+    return MdiIcons.memory;
+  }
   if (subject.toLowerCase().contains("informatika") ||
       subject.toLowerCase().contains("számtech") ||
       subject.toLowerCase().contains("távközlés") ||
@@ -189,9 +192,6 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("hegeszt")) {
     return MdiIcons.divingScubaTank;
-  }
-  if (subject.toLowerCase().contains("elektronika")) {
-    return MdiIcons.memory;
   }
   if (subject.toLowerCase().contains("elektrotechnika")) {
     return Entypo.flow_cascade;
