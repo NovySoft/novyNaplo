@@ -30,7 +30,7 @@ F-droid-ról: [![Fdroid release](https://img.shields.io/badge/F--droid-latest-br
 - Feljegyzések megtekintése
 - Órarend megtekintése
 - Átlagok grafikonon való megtekintése
-- Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** közreműködésével
+- Jegy számoló - **[HUNCUT2016](https://github.com/huncut2016)** és **[LŐRINC](https://github.com/lordlorinc)** közreműködésével
 - Mi van ha, virtuális jegyszámoló
 - Statisztika oldal
 - Értesítések
@@ -39,12 +39,12 @@ F-droid-ról: [![Fdroid release](https://img.shields.io/badge/F--droid-latest-br
 - Fordítások (Angol, Magyar)
 - Éves, féléves, és negyedéves értesítők megetekintése
 - Hiányzások és késések
+- Több felhasználós támogatás
 
 ## **HAMAROSAN**
 
 - Tanulói házifeladat felírása
 - Házifeladat TODO lista szerűség
-- Több felhasználós támogatás
 - E-Ügyintézés
 - Támogatók oldal - **Gáti Úr** közreműködésével
 - Szuper egyedi és egyéni beállítások (**Már most is** van sok, de több lesz)
