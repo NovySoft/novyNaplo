@@ -234,7 +234,7 @@ final Map<String, String> translation = {
   "backgroundFetch": "Háttér lekérések",
   "cantLeaveEmpty": "Ezt nem hagyhatod üresen",
   "dbSettings": "Adatbázis beállítások",
-  "db": "adatbase",
+  "db": "adatbázis",
   "onlyAdvanced": "Csak haladóknak",
   "delete": "Törlés",
   "deleteDB": "Adatbázis törlése",
