@@ -135,12 +135,10 @@ class ThemeHelper {
         buttonTheme: ButtonThemeData(
           buttonColor: Color(0xFF212121),
         ),
-        buttonColor: Color(0xFF212121),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF212121),
         ),
-        accentColor: Colors.white,
         backgroundColor: Colors.black,
         scaffoldBackgroundColor: Colors.black,
         primarySwatch: MaterialColor(0xFF212121, {
@@ -214,7 +212,6 @@ class ThemeHelper {
             buttonColor: Colors.orange,
             textTheme: ButtonTextTheme.primary,
           ),
-          buttonColor: Colors.orange,
           backgroundColor: Colors.black,
           primarySwatch: Colors.orange,
           primaryColor: Colors.orange,
@@ -269,7 +266,6 @@ class ThemeHelper {
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.lightBlueAccent,
           ),
-          buttonColor: Colors.lightBlueAccent,
           primaryColor: Colors.lightBlueAccent,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: Colors.black,
