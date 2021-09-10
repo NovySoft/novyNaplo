@@ -134,7 +134,7 @@ class VersionHelper {
                             key: _dialogKey,
                             elevation: globals.darker ? 0 : 24,
                             children: [
-                              SpinKitPouringHourglass(
+                              SpinKitPouringHourGlass(
                                 color: Colors.lightBlueAccent,
                               ),
                               SizedBox(height: 10),
