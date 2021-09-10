@@ -22,7 +22,7 @@ class LoadingSpinnerState extends State<LoadingSpinner> {
           Center(
             child: Column(
               children: [
-                SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                SpinKitPouringHourGlass(color: Colors.lightBlueAccent),
                 SizedBox(height: 10),
                 Text(
                   loadingText,

@@ -36,7 +36,7 @@ class _CalculatorModuleState extends State<CalculatorModule> {
                 iconSize: 24,
                 elevation: 16,
                 underline: Container(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   height: 2,
                 ),
                 onChanged: (String newValue) {

@@ -290,7 +290,7 @@ class _LoadingPageState extends State<LoadingPage> {
             SizedBox(
               height: 50,
             ),
-            SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+            SpinKitPouringHourGlass(color: Colors.lightBlueAccent),
             SizedBox(height: 10),
             Text(
               loadingText,

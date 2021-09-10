@@ -622,7 +622,7 @@ class SpinnerDialogState extends State<SpinnerDialog> {
           Center(
             child: Column(
               children: [
-                SpinKitPouringHourglass(color: Colors.lightBlueAccent),
+                SpinKitPouringHourGlass(color: Colors.lightBlueAccent),
                 SizedBox(height: 10),
                 Text(
                   getTranslatedString("migrateDB"),
