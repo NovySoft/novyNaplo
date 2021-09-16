@@ -12,6 +12,17 @@ import 'package:sqflite/sqflite.dart';
 import 'deleteSql.dart';
 import 'package:flutter/foundation.dart';
 
+Future<int> getHomeworkUser(String uid) async {
+  List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    'SELECT userId FROM Homework WHERE uid = ?',
+    [uid],
+  );
+  if (maps.length == 0) {
+    throw "Homework with $uid uid not found";
+  }
+  return maps[0]['userId'];
+}
+
 Future<List<Homework>> getAllHomework({
   bool ignoreDue = true,
   bool userSpecific = false,
@@ -90,6 +101,8 @@ Future<void> batchInsertHomework(
 
   //We need everything that is in the db, so ignore due removing
   List<Homework> allHw = await getAllHomework(ignoreDue: true);
+  print("allHw: $allHw");
+
   for (var hw in hwList) {
     DateTime afterDue = hw.dueDate;
     afterDue = afterDue.add(Duration(days: 30));
@@ -97,6 +110,8 @@ Future<void> batchInsertHomework(
       var matchedHw = allHw.where((element) {
         return (element.uid == hw.uid && element.userId == hw.userId);
       });
+      print("matchedHw: $matchedHw");
+
       if (matchedHw.length == 0) {
         inserted = true;
         batch.insert(

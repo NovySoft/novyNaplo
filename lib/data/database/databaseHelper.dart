@@ -66,6 +66,8 @@ class DatabaseHelper {
       homework.batchInsertHomework;
   static Future<void> Function(Homework, {bool edited}) insertHomework =
       homework.insertHomework;
+  static Future<int> Function(String) getHomeworkUser =
+      homework.getHomeworkUser;
 
   static Future<List<Notice>> Function({bool userSpecific}) getAllNotices =
       notices.getAllNotices;
@@ -80,6 +82,8 @@ class DatabaseHelper {
   static Future<void> Function(Student) insertUser = users.insertUser;
   static Future<List<Student>> Function({bool decrypt}) getAllUsers =
       users.getAllUsers;
+  static Future<Student> Function(int id, {bool decrypt}) getUserById =
+      users.getUserById;
   static Future<void> Function(Student, String) changeNickname =
       users.changeNickname;
   static Future<void> Function(int) setCurrentUser = users.setCurrentUser;

@@ -148,7 +148,7 @@ class Lesson {
         orElse: () {
           Homework homework = Homework();
           RequestHandler.getHomeworkId(
-            globals.currentUser,
+            null,
             id: teacherHwUid,
             isStandAloneCall: true,
           ).then((value) {
@@ -239,7 +239,7 @@ class Lesson {
         orElse: () {
           Homework temp;
           RequestHandler.getHomeworkId(
-            globals.currentUser,
+            userDetails,
             id: teacherHwUid,
             isStandAloneCall: true,
           ).then((value) {

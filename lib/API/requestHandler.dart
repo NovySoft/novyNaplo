@@ -230,6 +230,7 @@ class RequestHandler {
 
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
+    print("networkLoginRequest");
     try {
       //First check for kreta status then continue loging in
       bool isKretaUpdating = await checkForKretaUpdatingStatus(
@@ -814,12 +815,26 @@ class RequestHandler {
   }
 
   static Future<Homework> getHomeworkId(
-    Student userDetails, {
+    Student inputUserDetails, {
     @required String id,
     bool isStandAloneCall = false,
   }) async {
+    Student userDetails = inputUserDetails;
     FirebaseCrashlytics.instance.log("getHomeworkId");
     if (id == null) return Homework();
+    if (isStandAloneCall == true) {
+      if (inputUserDetails == null) {
+        inputUserDetails = Student();
+        inputUserDetails.userId = await DatabaseHelper.getHomeworkUser(id);
+      }
+      userDetails = await DatabaseHelper.getUserById(inputUserDetails.userId);
+      userDetails.token = globals.allUsers
+          .firstWhere(
+            (element) => element.userId == inputUserDetails.userId,
+            orElse: () => null,
+          )
+          ?.token;
+    }
     if (userDetails.token == null) {
       if (userDetails.userId != null) {
         if (globals.currentUser.name == userDetails.name &&

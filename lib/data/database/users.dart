@@ -15,6 +15,44 @@ Future<void> insertUser(Student user) async {
   );
 }
 
+Future<Student> getUserById(int id, {bool decrypt = true}) async {
+  FirebaseCrashlytics.instance.log("getAllUsers");
+
+  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    'SELECT * FROM Users WHERE id = ?',
+    [id],
+  );
+  if (maps.length == 0) {
+    throw "No user with id $id was found!";
+  }
+  Student temp = new Student(
+    userId: maps[0]['id'],
+    uid: maps[0]['uid'],
+    mothersName: maps[0]['mothersName'],
+    addressList: json.decode(maps[0]['adressList']).cast<String>(),
+    parents: Parent.fromJsonList(maps[0]['parents']),
+    name: maps[0]['name'],
+    nickname: maps[0]['nickname'],
+    birthDayString: maps[0]['birthDay'],
+    birthDay: DateTime.parse(maps[0]['birthDay']).toLocal(),
+    placeOfBirth: maps[0]['placeOfBirth'],
+    birthName: maps[0]['birthName'],
+    schoolYearUid: maps[0]['schoolYearUid'],
+    bankAccount: BankAccount.fromJson(json.decode(maps[0]['bankAccount'])),
+    institution: Institution.fromJson(json.decode(maps[0]['institution'])),
+    school: maps[0]['school'],
+    username: maps[0]['username'],
+    password: maps[0]['password'],
+    iv: maps[0]['iv'],
+    current: maps[0]['current'] == 1 ? true : false,
+    fetched: maps[0]['fetched'] == 1 ? true : false,
+  );
+  if (decrypt) {
+    return decryptUserDetails(temp);
+  }
+  return temp;
+}
+
 Future<List<Student>> getAllUsers({bool decrypt = true}) async {
   FirebaseCrashlytics.instance.log("getAllUsers");
 
