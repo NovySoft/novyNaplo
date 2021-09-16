@@ -37,7 +37,7 @@ Future<List<Homework>> getAllHomework({
     );
   } else {
     maps = await globals.db.rawQuery(
-      'SELECT * FROM Homework WHERE userId = ? GROUP BY userId, uid ORDER BY databaseId',
+      'SELECT * FROM Homework GROUP BY userId, uid ORDER BY databaseId',
     );
   }
 
@@ -101,7 +101,6 @@ Future<void> batchInsertHomework(
 
   //We need everything that is in the db, so ignore due removing
   List<Homework> allHw = await getAllHomework(ignoreDue: true);
-  print("allHw: $allHw");
 
   for (var hw in hwList) {
     DateTime afterDue = hw.dueDate;
@@ -110,7 +109,6 @@ Future<void> batchInsertHomework(
       var matchedHw = allHw.where((element) {
         return (element.uid == hw.uid && element.userId == hw.userId);
       });
-      print("matchedHw: $matchedHw");
 
       if (matchedHw.length == 0) {
         inserted = true;

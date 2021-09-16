@@ -230,7 +230,7 @@ class RequestHandler {
 
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
-    print("networkLoginRequest");
+
     try {
       //First check for kreta status then continue loging in
       bool isKretaUpdating = await checkForKretaUpdatingStatus(
