@@ -51,6 +51,49 @@ var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
+  static Future<GitHubReleaseInfo> getLatestGitVer() async {
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.NOVY_NAPLO_GITHUB_REPO + GitHubApiEndpoints.getLatestVersion,
+      ),
+      headers: {
+        "User-Agent": config.userAgent,
+      },
+    );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseJson = jsonDecode(response.body);
+      return GitHubReleaseInfo.fromJson(responseJson);
+    }
+    return GitHubReleaseInfo(
+      tagName: config.currentAppVersionCode,
+    );
+  }
+
+  static Future<GitHubReleaseInfo> getLatestPreGitVer() async {
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.NOVY_NAPLO_GITHUB_REPO + GitHubApiEndpoints.getReleases(),
+      ),
+      headers: {
+        "User-Agent": config.userAgent,
+      },
+    );
+    if (response.statusCode == 200) {
+      List responseJson = jsonDecode(response.body);
+      List<GitHubReleaseInfo> releases = [];
+      for (var item in responseJson) {
+        releases.add(GitHubReleaseInfo.fromJson(item));
+      }
+      GitHubReleaseInfo latestPrev = releases.firstWhere(
+        (element) => element.preRelease,
+      );
+      return latestPrev;
+    }
+    return GitHubReleaseInfo(
+      tagName: config.currentAppVersionCode,
+    );
+  }
+
   static Future<GitHubReleaseInfo> getLatestNovyNaploVersion() async {
     try {
       FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
@@ -63,36 +106,20 @@ class RequestHandler {
         );
       }
 
-      var response = await client.get(
-        Uri.parse(
-          BaseURL.NOVY_NAPLO_GITHUB_REPO +
-              (checkForTestVersions
-                  ? GitHubApiEndpoints.getReleases()
-                  : GitHubApiEndpoints.getLatestVersion),
-        ),
-        headers: {
-          "User-Agent": config.userAgent,
-        },
-      );
+      GitHubReleaseInfo latest = await RequestHandler.getLatestGitVer();
+      GitHubReleaseInfo latestPre = await RequestHandler.getLatestPreGitVer();
 
-      if (response.statusCode == 200) {
-        if (checkForTestVersions) {
-          List responseJson = jsonDecode(response.body);
-          List<GitHubReleaseInfo> releases = [];
-          for (var item in responseJson) {
-            releases.add(GitHubReleaseInfo.fromJson(item));
-          }
-          return releases.firstWhere((element) => element.preRelease);
-        } else {
-          Map<String, dynamic> responseJson = jsonDecode(response.body);
-          return GitHubReleaseInfo.fromJson(responseJson);
+      if (checkForTestVersions) {
+        if (config.currentAppVersionCode == latest.tagName) {
+          return latest;
         }
+        return latestPre;
+      } else {
+        if (config.currentAppVersionCode == latestPre.tagName) {
+          return latestPre;
+        }
+        return latest;
       }
-
-      // On error we should return current version
-      return GitHubReleaseInfo(
-        tagName: config.currentAppVersionCode,
-      );
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(
         e,
