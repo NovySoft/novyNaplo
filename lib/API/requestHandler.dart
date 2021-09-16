@@ -94,45 +94,6 @@ class RequestHandler {
     );
   }
 
-  static Future<GitHubReleaseInfo> getLatestNovyNaploVersion() async {
-    try {
-      FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
-      bool checkForTestVersions =
-          globals.prefs.getBool("checkForTestVersions") ?? false;
-      ConnectivityResult result = await Connectivity().checkConnectivity();
-      if (result == ConnectivityResult.none) {
-        return GitHubReleaseInfo(
-          tagName: config.currentAppVersionCode,
-        );
-      }
-
-      GitHubReleaseInfo latest = await RequestHandler.getLatestGitVer();
-      GitHubReleaseInfo latestPre = await RequestHandler.getLatestPreGitVer();
-
-      if (checkForTestVersions) {
-        if (config.currentAppVersionCode == latest.tagName) {
-          return latest;
-        }
-        return latestPre;
-      } else {
-        if (config.currentAppVersionCode == latestPre.tagName) {
-          return latestPre;
-        }
-        return latest;
-      }
-    } catch (e, s) {
-      FirebaseCrashlytics.instance.recordError(
-        e,
-        s,
-        reason: 'getLatestNovyNaploVersion',
-        printDetails: true,
-      );
-      return GitHubReleaseInfo(
-        tagName: config.currentAppVersionCode,
-      );
-    }
-  }
-
   static Future<KretaNonce> getNonce(Student userDetails) async {
     try {
       FirebaseCrashlytics.instance.log("getNonce");

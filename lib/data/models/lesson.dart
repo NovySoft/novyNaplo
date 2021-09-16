@@ -13,7 +13,6 @@ import 'homework.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/homework_tab.dart' as homeworkPage;
 import 'classGroup.dart';
-import 'package:novynaplo/global.dart' as globals;
 
 class Lesson {
   Description state;
