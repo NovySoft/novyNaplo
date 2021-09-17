@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
