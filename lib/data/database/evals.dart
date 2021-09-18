@@ -69,10 +69,16 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
       );
       NotificationDispatcher.toBeDispatchedNotifications.marks.add(
         NotificationData(
-          title: '${getTranslatedString("newMark")}: ' +
-              capitalize(eval.subject.name) +
-              " " +
-              eval.textValue,
+          title:
+              '${(globals.allUsers.length == 1 ? getTranslatedString("newMark") : getTranslatedString(
+                      "XsNewMark",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ' +
+                  capitalize(eval.subject.name) +
+                  " " +
+                  eval.textValue,
           subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
           userId: eval.userId,
           uid: eval.uid,
@@ -103,10 +109,16 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
           print("Mark modified $eval");
           NotificationDispatcher.toBeDispatchedNotifications.marks.add(
             NotificationData(
-              title: '${getTranslatedString("markModified")}: ' +
-                  capitalize(eval.subject.name) +
-                  " " +
-                  eval.textValue,
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("markModified") : getTranslatedString(
+                          "XsMarkModified",
+                          replaceVariables: [
+                            userDetails.nickname ?? userDetails.name
+                          ],
+                        ))}: ' +
+                      capitalize(eval.subject.name) +
+                      " " +
+                      eval.textValue,
               subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
               userId: eval.userId,
               uid: eval.uid,

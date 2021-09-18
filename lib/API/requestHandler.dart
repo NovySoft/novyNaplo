@@ -859,7 +859,7 @@ class RequestHandler {
       );
       if (isStandAloneCall) {
         //This function is also called when we can't found a homework attached to a lesson, and if we found it we bsave
-        DatabaseHelper.insertHomework(homework);
+        DatabaseHelper.insertHomework(homework, userDetails);
       }
       return homework;
     } catch (e, s) {

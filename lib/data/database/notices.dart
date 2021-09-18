@@ -61,8 +61,14 @@ Future<void> batchInsertNotices(
       );
       NotificationDispatcher.toBeDispatchedNotifications.notices.add(
         NotificationData(
-          title: '${getTranslatedString("newNotice")}: ' +
-              capitalize(notice.title),
+          title:
+              '${(globals.allUsers.length == 1 ? getTranslatedString("newNotice") : getTranslatedString(
+                      "XsNewNotice",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ' +
+                  capitalize(notice.title),
           subtitle: notice.teacher,
           userId: notice.userId,
           uid: notice.uid,
@@ -88,8 +94,14 @@ Future<void> batchInsertNotices(
           );
           NotificationDispatcher.toBeDispatchedNotifications.notices.add(
             NotificationData(
-              title: '${getTranslatedString("noticeModified")}: ' +
-                  capitalize(notice.title),
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("noticeModified") : getTranslatedString(
+                          "XsNoticeModified",
+                          replaceVariables: [
+                            userDetails.nickname ?? userDetails.name
+                          ],
+                        ))}: ' +
+                      capitalize(notice.title),
               subtitle: notice.teacher,
               userId: notice.userId,
               uid: notice.uid,

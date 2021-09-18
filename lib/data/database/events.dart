@@ -56,7 +56,11 @@ Future<void> batchInsertEvents(
       );
       NotificationDispatcher.toBeDispatchedNotifications.events.add(
         NotificationData(
-          title: '${getTranslatedString("newEvent")}: ',
+          title:
+              '${globals.allUsers.length == 1 ? getTranslatedString("newEvent") : getTranslatedString(
+                  "XsNewEvent",
+                  replaceVariables: [userDetails.nickname ?? userDetails.name],
+                )}: ',
           subtitle: event.title,
           userId: event.userId,
           uid: event.uid,
@@ -84,7 +88,13 @@ Future<void> batchInsertEvents(
           );
           NotificationDispatcher.toBeDispatchedNotifications.events.add(
             NotificationData(
-              title: '${getTranslatedString("editedEvent")}: ',
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("editedEvent") : getTranslatedString(
+                      "XsEditedEvent",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ',
               subtitle: event.title,
               userId: event.userId,
               uid: event.uid,

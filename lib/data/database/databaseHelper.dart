@@ -37,7 +37,7 @@ class DatabaseHelper {
 
   static Future<List<Average>> Function() getAllAverages =
       average.getAllAverages;
-  static Future<void> Function(List<Average>) batchInsertAverages =
+  static Future<void> Function(List<Average>, Student) batchInsertAverages =
       average.batchInsertAverages;
 
   static Future<void> Function(int, String) deleteFromDbByID =
@@ -64,8 +64,8 @@ class DatabaseHelper {
       getAllHomework = homework.getAllHomework;
   static Future<void> Function(List<Homework>, Student) batchInsertHomework =
       homework.batchInsertHomework;
-  static Future<void> Function(Homework, {bool edited}) insertHomework =
-      homework.insertHomework;
+  static Future<void> Function(Homework, Student, {bool edited})
+      insertHomework = homework.insertHomework;
   static Future<int> Function(String) getHomeworkUser =
       homework.getHomeworkUser;
 

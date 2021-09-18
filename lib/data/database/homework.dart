@@ -119,8 +119,14 @@ Future<void> batchInsertHomework(
         );
         NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
           NotificationData(
-            title: '${getTranslatedString("newHw")}: ' +
-                capitalize(hw.subject.name),
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
+                        "XsNewHw",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(hw.subject.name),
             subtitle:
                 "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
             userId: hw.userId,
@@ -151,8 +157,14 @@ Future<void> batchInsertHomework(
             );
             NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
               NotificationData(
-                title: '${getTranslatedString("hwModified")}: ' +
-                    capitalize(hw.subject.name),
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
+                            "XsHwModified",
+                            replaceVariables: [
+                              userDetails.nickname ?? userDetails.name
+                            ],
+                          ))}: ' +
+                        capitalize(hw.subject.name),
                 subtitle:
                     "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
                 userId: hw.userId,
@@ -179,7 +191,11 @@ Future<void> batchInsertHomework(
   );
 }
 
-Future<void> insertHomework(Homework hw, {bool edited = false}) async {
+Future<void> insertHomework(
+  Homework hw,
+  Student userDetails, {
+  bool edited = false,
+}) async {
   FirebaseCrashlytics.instance.log("insertSingleHw");
 
   //We need everything that is in the db, so ignore due removing
@@ -206,8 +222,14 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
     if (edited) {
       NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
         NotificationData(
-          title: '${getTranslatedString("hwModified")}: ' +
-              capitalize(hw.subject.name),
+          title:
+              '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
+                      "XsHwModified",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ' +
+                  capitalize(hw.subject.name),
           subtitle:
               "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
           userId: hw.userId,
@@ -221,7 +243,13 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
       NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
         NotificationData(
           title:
-              '${getTranslatedString("newHw")}: ' + capitalize(hw.subject.name),
+              '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
+                      "XsNewHw",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ' +
+                  capitalize(hw.subject.name),
           subtitle:
               "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
           userId: hw.userId,
@@ -247,7 +275,7 @@ Future<void> insertHomework(Homework hw, {bool edited = false}) async {
           n.giveUpDate.toUtc().toIso8601String() !=
               hw.giveUpDate.toUtc().toIso8601String()) {
         await deleteFromDbByID(n.databaseId, "Homework");
-        insertHomework(hw, edited: true);
+        insertHomework(hw, userDetails, edited: true);
       }
     }
   }

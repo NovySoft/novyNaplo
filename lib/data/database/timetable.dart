@@ -137,9 +137,15 @@ Future<void> batchInsertLessons(
             if (lesson.subject != null) {
               NotificationDispatcher.toBeDispatchedNotifications.timetables.add(
                 NotificationData(
-                  title: '${getTranslatedString("editedLesson")}: ' +
-                      capitalize(lesson.subject.name) +
-                      " (${parseIntToWeekdayString(lesson.date.weekday)})",
+                  title:
+                      '${(globals.allUsers.length == 1 ? getTranslatedString("editedLesson") : getTranslatedString(
+                              "XsEditedLesson",
+                              replaceVariables: [
+                                userDetails.nickname ?? userDetails.name
+                              ],
+                            ))}: ' +
+                          capitalize(lesson.subject.name) +
+                          " (${parseIntToWeekdayString(lesson.date.weekday)})",
                   subtitle: subTitle,
                   userId: lesson.userId,
                   uid: lesson.uid,
