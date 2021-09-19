@@ -11,8 +11,6 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'databaseHelper.dart';
-
 Future<List<List<Absence>>> getAllAbsencesMatrix({
   bool userSpecific = false,
 }) async {

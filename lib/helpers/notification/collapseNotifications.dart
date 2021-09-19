@@ -232,7 +232,8 @@ Future<NotificationData> createNotificationData(
   //These notifications have additional info to be displayed
   if (notificationType == "hw" ||
       notificationType == "timetable" ||
-      notificationType == "exam") {
+      notificationType == "exam" ||
+      notificationType == "marks") {
     Set<String> additionalKeySet = Set();
     for (var n in inputNotifications) {
       additionalKeySet.add(n.additionalKey);
@@ -240,9 +241,55 @@ Future<NotificationData> createNotificationData(
     if (notificationType == "timetable") {
       replaceVariables[0] = inputNotifications.length.toString();
       replaceVariables[1] = additionalKeySet.join(", ");
+      return NotificationData(
+        title: getTranslatedString(
+          "${notificationType}XsChanged",
+          replaceVariables: [username],
+        ),
+        subtitle: getTranslatedString(
+          "${notificationType}XnewAndXchanged",
+          replaceVariables: replaceVariables,
+        ),
+        uid: null,
+        userId: inputNotifications[0].userId,
+        isEdited: false,
+        payload: notificationType,
+      );
     } else {
       replaceVariables.add(additionalKeySet.join(", "));
     }
+  }
+
+  if (newItemLength == 0) {
+    return NotificationData(
+      title: getTranslatedString(
+        "${notificationType}XsChanged",
+        replaceVariables: [username],
+      ),
+      subtitle: getTranslatedString(
+        "${notificationType}Xchanged",
+        replaceVariables: replaceVariables,
+      ),
+      uid: null,
+      userId: inputNotifications[0].userId,
+      isEdited: false,
+      payload: notificationType,
+    );
+  } else if (editedItemLength == 0) {
+    return NotificationData(
+      title: getTranslatedString(
+        "${notificationType}XsChanged",
+        replaceVariables: [username],
+      ),
+      subtitle: getTranslatedString(
+        "${notificationType}Xnew",
+        replaceVariables: replaceVariables,
+      ),
+      uid: null,
+      userId: inputNotifications[0].userId,
+      isEdited: false,
+      payload: notificationType,
+    );
   }
 
   return NotificationData(
