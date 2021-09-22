@@ -17,6 +17,8 @@ import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/cardColor/examsCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/homeworkCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/noticesAndEventsCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/statiscticsCard.dart';
+import 'package:novynaplo/helpers/ui/cardColor/timetableCard.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -226,7 +228,7 @@ class NotificationReceiver {
                     MaterialPageRoute(
                       builder: (context) => HomeworkDetailTab(
                         hwInfo: tempHw,
-                        color: getRandomColors(1)[0],
+                        color: getHomeworkCardColor(hw: tempHw, index: 0),
                       ),
                     ),
                   ),
@@ -349,7 +351,10 @@ class NotificationReceiver {
                   MaterialPageRoute(
                     builder: (context) => TimetableDetailTab(
                       icon: tempLesson.icon,
-                      color: marksTab.colors[colorIndex],
+                      color: getTimetableCardColor(
+                        lesson: tempLesson,
+                        index: colorIndex,
+                      ),
                       lessonInfo: tempLesson,
                     ),
                   ),
@@ -428,8 +433,6 @@ class NotificationReceiver {
                   ),
                 );
               } else {
-                Color currColor = marksTab.colors[tempIndexTwo + 1];
-
                 globalWaitAndPush(
                   MaterialPageRoute(
                     builder: (context) => statsTab.StatisticsTab(
@@ -442,10 +445,15 @@ class NotificationReceiver {
                       builder: (context) => ChartsDetailTab(
                         id: tempIndexTwo,
                         subject: capitalize(
-                            _tempMatrixWithoutZeros[tempIndexTwo][0]
-                                .subject
-                                .fullName),
-                        color: currColor,
+                          _tempMatrixWithoutZeros[tempIndexTwo][0]
+                              .subject
+                              .fullName,
+                        ),
+                        color: getStatiscticsCardColor(
+                          tempIndexTwo,
+                          eval: _tempMatrixWithoutZeros[tempIndexTwo][0],
+                          context: NavigatorKey.navigatorKey.currentContext,
+                        ),
                         inputList: _tempMatrixWithoutZeros[tempIndexTwo],
                         animate: globals.chartAnimations,
                       ),
@@ -454,8 +462,6 @@ class NotificationReceiver {
                 });
               }
             } else {
-              Color currColor = marksTab.colors[tempIndex + 1];
-
               globalWaitAndPush(
                 MaterialPageRoute(
                   builder: (context) => statsTab.StatisticsTab(
@@ -471,7 +477,12 @@ class NotificationReceiver {
                           .allParsedSubjectsWithoutZeros[tempIndex][0]
                           .subject
                           .fullName),
-                      color: currColor,
+                      color: getStatiscticsCardColor(
+                        tempIndex,
+                        eval: statsTab.allParsedSubjectsWithoutZeros[tempIndex]
+                            [0],
+                        context: NavigatorKey.navigatorKey.currentContext,
+                      ),
                       inputList:
                           statsTab.allParsedSubjectsWithoutZeros[tempIndex],
                       animate: globals.chartAnimations,

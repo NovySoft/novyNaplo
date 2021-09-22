@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/models/average.dart';
+import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/notification/models.dart';
@@ -24,7 +25,10 @@ Future<List<Average>> getAllAverages() async {
   });
 }
 
-Future<void> batchInsertAverages(List<Average> averageList) async {
+Future<void> batchInsertAverages(
+  List<Average> averageList,
+  Student userDetails,
+) async {
   FirebaseCrashlytics.instance.log("batchInsertAvarage");
   bool inserted = false;
   final Batch batch = globals.db.batch();
@@ -73,8 +77,14 @@ Future<void> batchInsertAverages(List<Average> averageList) async {
           }
           NotificationDispatcher.toBeDispatchedNotifications.averages.add(
             NotificationData(
-              title: '${getTranslatedString("avChanged")}: ' +
-                  capitalize(average.subject),
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("avChanged") : getTranslatedString(
+                          "XsAvChanged",
+                          replaceVariables: [
+                            userDetails.nickname ?? userDetails.name
+                          ],
+                        ))}: ' +
+                      capitalize(average.subject),
               subtitle: '${getTranslatedString("newAv")}: ' +
                   average.value.toStringAsFixed(5) +
                   " ($diff)",

@@ -38,7 +38,7 @@ class Homework {
   });
 
   String toString() {
-    return dueDate.toString();
+    return "$userId: $uid";
   }
 
   Map<String, dynamic> toMap() {

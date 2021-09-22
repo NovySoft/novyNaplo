@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:novynaplo/data/models/lesson.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
@@ -209,6 +210,15 @@ class _SendTestNotifState extends State<SendTestNotif> {
                           ),
                         ),
                         onPressed: () async {
+                          String tempIndex = "0";
+                          if (lessonsList[0].length > 0) {
+                            Lesson tempLesson = lessonsList[0].firstWhere(
+                              (element) => element.subject != null,
+                              orElse: () => null,
+                            );
+                            tempIndex =
+                                tempLesson != null ? tempLesson.uid : "0";
+                          }
                           await NotificationHelper.show(
                             1,
                             getTranslatedString("testNotif"),
@@ -216,9 +226,7 @@ class _SendTestNotifState extends State<SendTestNotif> {
                             NotificationHelper.platformChannelSpecificsAlertAll,
                             payload:
                                 'timetable ${globals.currentUser.userId} ' +
-                                    (lessonsList[0].length == 0
-                                        ? "0"
-                                        : lessonsList[0][0].uid.toString()),
+                                    tempIndex,
                           );
                         },
                         icon: Icon(

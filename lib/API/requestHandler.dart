@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -51,59 +50,47 @@ var client = http.Client();
 bool isError = false;
 
 class RequestHandler {
-  static Future<GitHubReleaseInfo> getLatestNovyNaploVersion() async {
-    try {
-      FirebaseCrashlytics.instance.log("getLatestNovyNaploVersion");
-      bool checkForTestVersions =
-          globals.prefs.getBool("checkForTestVersions") ?? false;
-      ConnectivityResult result = await Connectivity().checkConnectivity();
-      if (result == ConnectivityResult.none) {
-        return GitHubReleaseInfo(
-          tagName: config.currentAppVersionCode,
-        );
-      }
-
-      var response = await client.get(
-        Uri.parse(
-          BaseURL.NOVY_NAPLO_GITHUB_REPO +
-              (checkForTestVersions
-                  ? GitHubApiEndpoints.getReleases()
-                  : GitHubApiEndpoints.getLatestVersion),
-        ),
-        headers: {
-          "User-Agent": config.userAgent,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        if (checkForTestVersions) {
-          List responseJson = jsonDecode(response.body);
-          List<GitHubReleaseInfo> releases = [];
-          for (var item in responseJson) {
-            releases.add(GitHubReleaseInfo.fromJson(item));
-          }
-          return releases.firstWhere((element) => element.preRelease);
-        } else {
-          Map<String, dynamic> responseJson = jsonDecode(response.body);
-          return GitHubReleaseInfo.fromJson(responseJson);
-        }
-      }
-
-      // On error we should return current version
-      return GitHubReleaseInfo(
-        tagName: config.currentAppVersionCode,
-      );
-    } catch (e, s) {
-      FirebaseCrashlytics.instance.recordError(
-        e,
-        s,
-        reason: 'getLatestNovyNaploVersion',
-        printDetails: true,
-      );
-      return GitHubReleaseInfo(
-        tagName: config.currentAppVersionCode,
-      );
+  static Future<GitHubReleaseInfo> getLatestGitVer() async {
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.NOVY_NAPLO_GITHUB_REPO + GitHubApiEndpoints.getLatestVersion,
+      ),
+      headers: {
+        "User-Agent": config.userAgent,
+      },
+    );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseJson = jsonDecode(response.body);
+      return GitHubReleaseInfo.fromJson(responseJson);
     }
+    return GitHubReleaseInfo(
+      tagName: config.currentAppVersionCode,
+    );
+  }
+
+  static Future<GitHubReleaseInfo> getLatestPreGitVer() async {
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.NOVY_NAPLO_GITHUB_REPO + GitHubApiEndpoints.getReleases(),
+      ),
+      headers: {
+        "User-Agent": config.userAgent,
+      },
+    );
+    if (response.statusCode == 200) {
+      List responseJson = jsonDecode(response.body);
+      List<GitHubReleaseInfo> releases = [];
+      for (var item in responseJson) {
+        releases.add(GitHubReleaseInfo.fromJson(item));
+      }
+      GitHubReleaseInfo latestPrev = releases.firstWhere(
+        (element) => element.preRelease,
+      );
+      return latestPrev;
+    }
+    return GitHubReleaseInfo(
+      tagName: config.currentAppVersionCode,
+    );
   }
 
   static Future<KretaNonce> getNonce(Student userDetails) async {
@@ -230,6 +217,7 @@ class RequestHandler {
 
   static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
+
     try {
       //First check for kreta status then continue loging in
       bool isKretaUpdating = await checkForKretaUpdatingStatus(
@@ -814,12 +802,26 @@ class RequestHandler {
   }
 
   static Future<Homework> getHomeworkId(
-    Student userDetails, {
+    Student inputUserDetails, {
     @required String id,
     bool isStandAloneCall = false,
   }) async {
+    Student userDetails = inputUserDetails;
     FirebaseCrashlytics.instance.log("getHomeworkId");
     if (id == null) return Homework();
+    if (isStandAloneCall == true) {
+      if (inputUserDetails == null) {
+        inputUserDetails = Student();
+        inputUserDetails.userId = await DatabaseHelper.getHomeworkUser(id);
+      }
+      userDetails = await DatabaseHelper.getUserById(inputUserDetails.userId);
+      userDetails.token = globals.allUsers
+          .firstWhere(
+            (element) => element.userId == inputUserDetails.userId,
+            orElse: () => null,
+          )
+          ?.token;
+    }
     if (userDetails.token == null) {
       if (userDetails.userId != null) {
         if (globals.currentUser.name == userDetails.name &&
@@ -857,7 +859,7 @@ class RequestHandler {
       );
       if (isStandAloneCall) {
         //This function is also called when we can't found a homework attached to a lesson, and if we found it we bsave
-        DatabaseHelper.insertHomework(homework);
+        DatabaseHelper.insertHomework(homework, userDetails);
       }
       return homework;
     } catch (e, s) {

@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
-import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -53,10 +52,10 @@ void backgroundFetch() async {
         await Connectivity().checkConnectivity() == ConnectivityResult.mobile) {
       return;
     }
-    List<Student> allUsers = await DatabaseHelper.getAllUsers();
+    globals.allUsers = await DatabaseHelper.getAllUsers();
     trustedCerts = await DatabaseHelper.getTrustedCerts();
     //int errorNotifId = -1;
-    for (var currentUser in allUsers) {
+    for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
         await RequestHandler.getEverything(

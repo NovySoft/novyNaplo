@@ -59,8 +59,14 @@ Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
       );
       NotificationDispatcher.toBeDispatchedNotifications.exams.add(
         NotificationData(
-          title: '${getTranslatedString("newExam")}: ' +
-              capitalize(exam.subject.name),
+          title:
+              '${(globals.allUsers.length == 1 ? getTranslatedString("newExam") : getTranslatedString(
+                      "XsNewExam",
+                      replaceVariables: [
+                        userDetails.nickname ?? userDetails.name
+                      ],
+                    ))}: ' +
+                  capitalize(exam.subject.name),
           subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
           userId: exam.userId,
           uid: exam.uid,
@@ -91,8 +97,14 @@ Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
           );
           NotificationDispatcher.toBeDispatchedNotifications.exams.add(
             NotificationData(
-              title: '${getTranslatedString("examModified")}: ' +
-                  capitalize(exam.subject.name),
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("examModified") : getTranslatedString(
+                          "XsExamModified",
+                          replaceVariables: [
+                            userDetails.nickname ?? userDetails.name
+                          ],
+                        ))}: ' +
+                      capitalize(exam.subject.name),
               subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
               userId: exam.userId,
               uid: exam.uid,

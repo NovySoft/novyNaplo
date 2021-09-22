@@ -59,7 +59,7 @@ Future<void> getMarksWithChanges(
     );
   }
   stats.allSubjectsAv = List.from(tempMatrix.expand((element) => element));
-  await DatabaseHelper.batchInsertAverages(tempList);
+  await DatabaseHelper.batchInsertAverages(tempList, userDetails);
 }
 
 Future<void> onlyCalcAndInsertAverages(
@@ -93,5 +93,5 @@ Future<void> onlyCalcAndInsertAverages(
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
-  await DatabaseHelper.batchInsertAverages(tempList);
+  await DatabaseHelper.batchInsertAverages(tempList, userDetails);
 }

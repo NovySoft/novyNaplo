@@ -13,8 +13,19 @@ import 'package:url_launcher/url_launcher.dart';
 
 class VersionHelper {
   static Future<void> checkForUpdates() async {
-    GitHubReleaseInfo latestVersion =
-        await RequestHandler.getLatestNovyNaploVersion();
+    bool checkForTestVersions =
+        globals.prefs.getBool("checkForTestVersions") ?? false;
+    GitHubReleaseInfo latestVersion = await RequestHandler.getLatestGitVer();
+    GitHubReleaseInfo latestPreVersion =
+        await RequestHandler.getLatestPreGitVer();
+
+    if (checkForTestVersions) {
+      if (latestVersion.tagName != config.currentAppVersionCode)
+        latestVersion = latestPreVersion;
+    } else if (latestPreVersion.tagName == config.currentAppVersionCode) {
+      latestVersion = latestPreVersion;
+    }
+
     // I do versioning like this: 1.major.minor+patch(+nonsense giberrish, if test version)
     if (latestVersion.tagName != config.currentAppVersionCode) {
       //Check if it is higher than current version
@@ -47,6 +58,8 @@ class VersionHelper {
       print(
         "Current version: $mainVCurrent.$majorVCurrent.$minorVCurrent+$patchVCurrent+$commentVCurrent",
       );
+
+      if (patchVLatest < patchVCurrent) return;
 
       if (mainVLatest > mainVCurrent ||
           majorVLatest > majorVCurrent ||
@@ -134,7 +147,7 @@ class VersionHelper {
                             key: _dialogKey,
                             elevation: globals.darker ? 0 : 24,
                             children: [
-                              SpinKitPouringHourglass(
+                              SpinKitPouringHourGlass(
                                 color: Colors.lightBlueAccent,
                               ),
                               SizedBox(height: 10),

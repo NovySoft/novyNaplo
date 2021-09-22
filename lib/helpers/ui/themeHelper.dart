@@ -122,6 +122,14 @@ class ThemeHelper {
           valueIndicatorTextStyle: TextStyle(color: Colors.white),
         ),
         dividerColor: Colors.grey,
+        appBarTheme: AppBarTheme(
+          foregroundColor: Colors.white,
+          backgroundColor: Color(0xFF212121),
+        ),
+        tabBarTheme: TabBarTheme(
+          labelStyle: TextStyle(color: Colors.white),
+          labelColor: Colors.white,
+        ),
         textTheme: TextTheme(
           subtitle1: TextStyle(color: Colors.white),
           headline6: TextStyle(color: Colors.white),
@@ -135,12 +143,10 @@ class ThemeHelper {
         buttonTheme: ButtonThemeData(
           buttonColor: Color(0xFF212121),
         ),
-        buttonColor: Color(0xFF212121),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF212121),
         ),
-        accentColor: Colors.white,
         backgroundColor: Colors.black,
         scaffoldBackgroundColor: Colors.black,
         primarySwatch: MaterialColor(0xFF212121, {
@@ -205,6 +211,14 @@ class ThemeHelper {
             valueIndicatorTextStyle: TextStyle(color: Colors.orange),
           ),
           dividerColor: Colors.orange,
+          appBarTheme: AppBarTheme(
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.orange,
+          ),
+          tabBarTheme: TabBarTheme(
+            labelStyle: TextStyle(color: Colors.black),
+            labelColor: Colors.black,
+          ),
           textTheme: TextTheme(
             subtitle1: TextStyle(color: Colors.orange),
             headline6: TextStyle(color: Colors.black),
@@ -214,7 +228,6 @@ class ThemeHelper {
             buttonColor: Colors.orange,
             textTheme: ButtonTextTheme.primary,
           ),
-          buttonColor: Colors.orange,
           backgroundColor: Colors.black,
           primarySwatch: Colors.orange,
           primaryColor: Colors.orange,
@@ -259,6 +272,14 @@ class ThemeHelper {
               activeTrackColor: Colors.lightBlueAccent,
               valueIndicatorTextStyle: TextStyle(color: Colors.white)),
           dividerColor: Colors.black,
+          appBarTheme: AppBarTheme(
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.lightBlueAccent,
+          ),
+          tabBarTheme: TabBarTheme(
+            labelStyle: TextStyle(color: Colors.black),
+            labelColor: Colors.black,
+          ),
           textTheme: TextTheme(
             subtitle1: TextStyle(color: Colors.black),
             headline6: TextStyle(color: Colors.black),
@@ -269,7 +290,6 @@ class ThemeHelper {
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.lightBlueAccent,
           ),
-          buttonColor: Colors.lightBlueAccent,
           primaryColor: Colors.lightBlueAccent,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: Colors.black,
