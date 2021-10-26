@@ -232,11 +232,17 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "${colorMatrix[index][0].id}:",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme.subtitle1.color,
+                        FractionallySizedBox(
+                          widthFactor: 0.75,
+                          child: Text(
+                            "${colorMatrix[index][0].id}:",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color:
+                                  Theme.of(context).textTheme.subtitle1.color,
+                            ),
                           ),
                         ),
                         Text(
