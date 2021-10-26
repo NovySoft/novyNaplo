@@ -936,13 +936,6 @@ class RequestHandler {
         user,
       );
     }
-    if (globals.notifications && user.fetched) {
-      await NotificationDispatcher.dispatchNotifications();
-    } else {
-      //Clear the notification list if we are not sending it -> otherwise the next time it will send them.
-      NotificationDispatcher.toBeDispatchedNotifications =
-          ToBeDispatchedNotifications();
-    }
     return isError;
   }
 

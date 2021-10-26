@@ -8,6 +8,8 @@ import 'package:novynaplo/API/certValidation.dart';
 import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/config.dart' as config;
@@ -85,6 +87,13 @@ void backgroundFetch() async {
           );
         }
       }
+    }
+    if (globals.notifications) {
+      await NotificationDispatcher.dispatchNotifications();
+    } else {
+      //Clear the notification list if we are not sending it -> otherwise the next time it will send them.
+      NotificationDispatcher.toBeDispatchedNotifications =
+          ToBeDispatchedNotifications();
     }
   } catch (e, s) {
     FirebaseAnalytics().logEvent(name: "BackgroundFetchError");
