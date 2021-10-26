@@ -41,7 +41,7 @@ dependencies:
   firebase_performance: any
   url_launcher: any
   material_design_icons_flutter: any
-  flutter_icons: any
+  flutter_icons: ^1.1.0
   sqflite: any
   animations: any
   flutter_html: 2.1.1
