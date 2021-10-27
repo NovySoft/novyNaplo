@@ -423,7 +423,6 @@ class _StatisticsTabState extends State<StatisticsTab>
                       );
                       break;
                     case 7:
-                      //TODO: Fix chart labels
                       if (globals.howManyGraph == "Kör diagram") {
                         return SizedBox(
                             height: 400,

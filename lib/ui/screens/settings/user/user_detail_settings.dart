@@ -27,6 +27,7 @@ class UserDetails extends StatefulWidget {
 
 class _UserDetailsState extends State<UserDetails> {
   final TextEditingController _newNickNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -134,22 +135,48 @@ class _UserDetailsState extends State<UserDetails> {
       builder: (context) {
         return AlertDialog(
           title: Text(getTranslatedString("changeNickname")),
-          content: TextFormField(
-            controller: _newNickNameController,
-            onFieldSubmitted: (inp) async {
-              if (await handleNicknameSave())
-                setState(() {
-                  Navigator.pop(context);
-                });
-            },
+          content: Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _newNickNameController,
+              validator: (newNickName) {
+                if (newNickName == "manageUsers") {
+                  ErrorToast.showErrorToastLong(
+                    context,
+                    getTranslatedString("unkError"),
+                  );
+                  return getTranslatedString("unkError");
+                }
+                if (globals.allUsers.any((element) =>
+                    element.nickname == newNickName &&
+                    element.uid != widget.userDetails.uid)) {
+                  ErrorToast.showErrorToastLong(
+                    context,
+                    getTranslatedString("noSameUserNick"),
+                  );
+                  return getTranslatedString("noSameUserNick");
+                }
+                return null;
+              },
+              onFieldSubmitted: (inp) async {
+                if (_formKey.currentState.validate()) {
+                  if (await handleNicknameSave())
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                }
+              },
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () async {
-                if (await handleNicknameSave())
-                  setState(() {
-                    Navigator.pop(context);
-                  });
+                if (_formKey.currentState.validate()) {
+                  if (await handleNicknameSave())
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                }
               },
               child: Text("OK"),
             ),
@@ -162,23 +189,6 @@ class _UserDetailsState extends State<UserDetails> {
   Future<bool> handleNicknameSave() async {
     String newNickName = _newNickNameController.text;
     if (widget.userDetails.nickname == newNickName) return true;
-    if (newNickName == "manageUsers") {
-      //FIXME: use validators instead
-      ErrorToast.showErrorToastLong(
-        context,
-        getTranslatedString("unkError"),
-      );
-      return false;
-    }
-    if (globals.allUsers.any((element) =>
-        element.nickname == newNickName &&
-        element.uid != widget.userDetails.uid)) {
-      ErrorToast.showErrorToastLong(
-        context,
-        getTranslatedString("noSameUserNick"),
-      );
-      return false;
-    }
     try {
       await DatabaseHelper.changeNickname(
         widget.userDetails,
