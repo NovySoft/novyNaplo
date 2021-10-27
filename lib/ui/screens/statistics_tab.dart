@@ -431,12 +431,20 @@ class _StatisticsTabState extends State<StatisticsTab>
                             child: new charts.PieChart(
                               pieList,
                               animate: globals.chartAnimations,
-                              defaultRenderer: new charts.ArcRendererConfig(
-                                  arcRendererDecorators: [
-                                    new charts.ArcLabelDecorator(
-                                        labelPosition:
-                                            charts.ArcLabelPosition.inside)
-                                  ]),
+                              defaultRenderer: new charts
+                                  .ArcRendererConfig(arcRendererDecorators: [
+                                new charts.ArcLabelDecorator(
+                                  labelPosition: charts.ArcLabelPosition.auto,
+                                  outsideLabelStyleSpec: charts.TextStyleSpec(
+                                    fontSize: 12,
+                                    color:
+                                        DynamicTheme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? charts.Color.white
+                                            : charts.Color.black,
+                                  ),
+                                )
+                              ]),
                             ));
                       } else {
                         return SizedBox(
