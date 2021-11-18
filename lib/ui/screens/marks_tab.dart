@@ -135,6 +135,10 @@ class MarksTabState extends State<MarksTab>
     );
     globals.allUsers = await DatabaseHelper.getAllUsers();
     trustedCerts = await DatabaseHelper.getTrustedCerts();
+    if (globals.allUsers.length == 1 && globals.allUsers[0].current == false) {
+      await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
+      globals.allUsers[0].current = true;
+    }
     for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
