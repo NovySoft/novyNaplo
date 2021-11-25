@@ -12,6 +12,10 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
+## **Státusz**
+
+A novynapló mostantól **LTS (Long Term Support) állapotba lép**, az alkalmazás új funkciókat nem fog kapni, viszont a felmerülő hibákat megjavítjuk (akár alkalmazással kapcsolatos hiba, vagy a kréta "inoválásából" adódó hiba).
+
 ## Kréta DMCA
 
 A kréta március elsején távolította el az alkalmazást a play áruházból... Mi ezután nem sokkal írtunk egy levelet a DMCA-ban található email címre, melyre azóta sem jött válasz. Az alkalmazás fejlesztését, nem hagyjuk abba, viszont **sajnos le kellet mondanunk az applikáció áruházakban való jelenlétünkről.**

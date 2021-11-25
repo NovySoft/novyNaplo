@@ -8,6 +8,21 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("higién")) {
     return MdiIcons.dishwasherAlert;
   }
+  if (subject.toLowerCase().contains("gasztroenterológia")) {
+    return MdiIcons.stomach;
+  }
+  if (subject.toLowerCase().contains("anatómia")) {
+    return MaterialCommunityIcons.human_male_height_variant;
+  }
+  if (subject.toLowerCase().contains("kardiológia")) {
+    return FontAwesome.heartbeat;
+  }
+  if (subject.toLowerCase().contains("korrep")) {
+    return Entypo.open_book;
+  }
+  if (subject.toLowerCase().contains("logopéd")) {
+    return MaterialIcons.graphic_eq;
+  }
   if (subject.toLowerCase().contains("gazdaság") ||
       subject.toLowerCase().contains("pénzügy")) {
     return MdiIcons.cashMultiple;
@@ -24,7 +39,7 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.handHeart;
   }
   if (subject.toLowerCase().contains("szorgalom")) {
-    return MdiIcons.teach;
+    return MdiIcons.humanMaleBoard;
   }
   if (subject.toLowerCase().contains("irodalom") ||
       subject.toLowerCase().contains("irodalm")) {
@@ -42,6 +57,7 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.musicClefTreble;
   }
   if (subject.toLowerCase().contains("testnevelés") ||
+      subject.toLowerCase().contains("testnev") ||
       subject.toLowerCase().contains("tesi") ||
       subject.toLowerCase().contains("sport") ||
       subject.toLowerCase().contains("labdarúgás")) {
@@ -123,6 +139,7 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("környezet") ||
       subject.toLowerCase().contains("természet") ||
+      subject.toLowerCase().contains("komplex") ||
       subject.toLowerCase().contains("kkterm") ||
       subject.toLowerCase().contains("faipar")) {
     return MdiIcons.tree;
@@ -138,7 +155,8 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("munkavállaló")) {
     return MdiIcons.accountTie;
   }
-  if (subject.toLowerCase().contains("projekt")) {
+  if (subject.toLowerCase().contains("projekt") ||
+      subject.toLowerCase().contains("tervezés")) {
     return MdiIcons.pencilRuler;
   }
   if (subject.toLowerCase().contains("programozás")) {
@@ -413,7 +431,7 @@ IconData parseSubjectToIcon({@required String subject}) {
     return FontAwesome5Solid.route;
   }
   if (subject.toLowerCase().contains("műszaki cikk")) {
-    return MdiIcons.laptopChromebook;
+    return MdiIcons.laptop;
   }
   if (subject.toLowerCase().contains("kertfenntartás")) {
     return MdiIcons.beeFlower;

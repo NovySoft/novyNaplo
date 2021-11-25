@@ -15,15 +15,12 @@ class VersionHelper {
   static Future<void> checkForUpdates() async {
     bool checkForTestVersions =
         globals.prefs.getBool("checkForTestVersions") ?? false;
-    GitHubReleaseInfo latestVersion = await RequestHandler.getLatestGitVer();
-    GitHubReleaseInfo latestPreVersion =
-        await RequestHandler.getLatestPreGitVer();
+    GitHubReleaseInfo latestVersion;
 
     if (checkForTestVersions) {
-      if (latestVersion.tagName != config.currentAppVersionCode)
-        latestVersion = latestPreVersion;
-    } else if (latestPreVersion.tagName == config.currentAppVersionCode) {
-      latestVersion = latestPreVersion;
+      latestVersion = await RequestHandler.getLatestPreGitVer();
+    } else {
+      latestVersion = await RequestHandler.getLatestGitVer();
     }
 
     // I do versioning like this: 1.major.minor+patch(+nonsense giberrish, if test version)
@@ -65,7 +62,7 @@ class VersionHelper {
           majorVLatest > majorVCurrent ||
           minorVLatest > minorVCurrent ||
           patchVLatest > patchVCurrent ||
-          commentVLatest != commentVCurrent) {
+          (commentVLatest != commentVCurrent && patchVLatest > patchVCurrent)) {
         //There is a newer version
         print("Update available");
         showDialog<void>(

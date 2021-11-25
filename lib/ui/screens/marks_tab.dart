@@ -13,6 +13,8 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/helpers/notification/models.dart';
+import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
@@ -133,6 +135,10 @@ class MarksTabState extends State<MarksTab>
     );
     globals.allUsers = await DatabaseHelper.getAllUsers();
     trustedCerts = await DatabaseHelper.getTrustedCerts();
+    if (globals.allUsers.length == 1 && globals.allUsers[0].current == false) {
+      await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
+      globals.allUsers[0].current = true;
+    }
     for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
       if (status.status == "OK") {
@@ -211,6 +217,13 @@ class MarksTabState extends State<MarksTab>
     }
 
     await NotificationHelper.cancel(-111);
+    if (globals.notifications) {
+      await NotificationDispatcher.dispatchNotifications();
+    } else {
+      //Clear the notification list if we are not sending it -> otherwise the next time it will send them.
+      NotificationDispatcher.toBeDispatchedNotifications =
+          ToBeDispatchedNotifications();
+    }
   }
 
   Widget _dateListBuilder(BuildContext context, int index) {

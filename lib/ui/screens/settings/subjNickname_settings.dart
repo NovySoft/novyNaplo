@@ -6,6 +6,7 @@ import 'package:novynaplo/data/models/subjectNicknames.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
+//TODO Group subject nicks by fullname
 List<List<SubjectNicknames>> subjNicknames = [];
 
 class SubjectNicknameSettings extends StatefulWidget {

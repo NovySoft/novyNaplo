@@ -27,8 +27,6 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
-import 'package:novynaplo/helpers/notification/models.dart';
-import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/data/models/extensions.dart';
@@ -935,13 +933,6 @@ class RequestHandler {
             .cast<List<Evals>>(),
         user,
       );
-    }
-    if (globals.notifications && user.fetched) {
-      await NotificationDispatcher.dispatchNotifications();
-    } else {
-      //Clear the notification list if we are not sending it -> otherwise the next time it will send them.
-      NotificationDispatcher.toBeDispatchedNotifications =
-          ToBeDispatchedNotifications();
     }
     return isError;
   }
