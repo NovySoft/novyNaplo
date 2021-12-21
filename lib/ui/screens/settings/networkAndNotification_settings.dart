@@ -462,7 +462,7 @@ class _NetworkAndNotificationSettingsState
                         globals.prefs.setBool("notifications", isOn);
                         FirebaseCrashlytics.instance
                             .setCustomKey("notifications", isOn);
-                        FirebaseAnalytics().setUserProperty(
+                        FirebaseAnalytics.instance.setUserProperty(
                           name: "Notifications",
                           value: isOn ? "ON" : "OFF",
                         );

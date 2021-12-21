@@ -163,7 +163,7 @@ Future<void> handleEvalsDeletion({
         -1) {
       deleted = true;
       print("Local eval doesn't exist in remote $local ${local.databaseId}");
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "evals",

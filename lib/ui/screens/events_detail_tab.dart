@@ -102,7 +102,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
                       if (await canLaunch(url)) {
                         await launch(url);
                       } else {
-                        FirebaseAnalytics().logEvent(
+                        FirebaseAnalytics.instance.logEvent(
                           name: "LinkFail",
                           parameters: {"link": url},
                         );

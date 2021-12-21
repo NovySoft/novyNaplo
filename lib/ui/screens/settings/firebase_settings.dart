@@ -116,7 +116,7 @@ class _FirebaseSettingsState extends State<FirebaseSettings> {
                       setState(() {
                         _analytics = switchOn;
                       });
-                      FirebaseAnalytics()
+                      FirebaseAnalytics.instance
                           .setAnalyticsCollectionEnabled(switchOn);
                       await globals.prefs.setBool("AnalyticsEnabled", switchOn);
                     },

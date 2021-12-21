@@ -530,7 +530,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         textInputAction: TextInputAction.done,
         onFieldSubmitted: (term) async {
           _passFocus.unfocus();
-          FirebaseAnalytics().logEvent(name: "sign_up");
+          FirebaseAnalytics.instance.logEvent(name: "sign_up");
           resetInputFieldColor();
           if (!isPressed) {
             isPressed = true;

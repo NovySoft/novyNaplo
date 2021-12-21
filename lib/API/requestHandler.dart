@@ -194,7 +194,7 @@ class RequestHandler {
         print("FRISSÍT");
         printWrapped(response.body);
         print(response.statusCode);
-        FirebaseAnalytics().logEvent(
+        FirebaseAnalytics.instance.logEvent(
           name: "KretaUpdating",
         );
         return true;

@@ -152,7 +152,7 @@ Future<void> handleAbsenceDeletion({
         where: "databaseId = ?",
         whereArgs: [local.databaseId],
       );
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "absence",

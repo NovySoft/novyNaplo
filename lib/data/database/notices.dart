@@ -144,7 +144,7 @@ Future<void> handleNoticeDeletion({
         -1) {
       deleted = true;
       print("Local notice doesn't exist in remote $local ${local.databaseId}");
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "notices",

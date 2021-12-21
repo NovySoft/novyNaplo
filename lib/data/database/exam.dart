@@ -148,7 +148,7 @@ Future<void> handleExamDeletion({
         -1) {
       deleted = true;
       print("Local exam doesn't exist in remote $local ${local.databaseId}");
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "exams",

@@ -267,7 +267,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
-                                FirebaseAnalytics().logEvent(
+                                FirebaseAnalytics.instance.logEvent(
                                   name: "LinkFail",
                                   parameters: {"link": url},
                                 );
@@ -348,7 +348,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {
-                      FirebaseAnalytics().logEvent(
+                      FirebaseAnalytics.instance.logEvent(
                         name: "LinkFail",
                         parameters: {"link": url},
                       );

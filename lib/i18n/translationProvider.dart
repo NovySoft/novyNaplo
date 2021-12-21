@@ -20,7 +20,7 @@ String getTranslatedString(String input, {List<String> replaceVariables}) {
     return tempString;
   }
   print("Can't translate: $input, lang: ${globals.language}");
-  FirebaseAnalytics().logEvent(
+  FirebaseAnalytics.instance.logEvent(
     name: "UnknownTranslation",
     parameters: {
       "language": globals.language,

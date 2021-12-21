@@ -69,7 +69,7 @@ class _LoadingPageState extends State<LoadingPage> {
             Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);
             return;
           } else {
-            FirebaseAnalytics().logEvent(
+            FirebaseAnalytics.instance.logEvent(
               name: "migrateDB",
             );
             var decryptedPass, decryptedUser, decryptedCode;
@@ -217,7 +217,7 @@ class _LoadingPageState extends State<LoadingPage> {
         subjectColors.subjectColorList = await DatabaseHelper.getColorNames();
       }
       //*Done
-      FirebaseAnalytics().logEvent(name: "login");
+      FirebaseAnalytics.instance.logEvent(name: "login");
       globals.isDataLoaded = true;
       Navigator.pushReplacement(
         context,

@@ -566,7 +566,7 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   //LogUnknown subject so I can add that later
   if (subject.isNotEmpty) {
-    FirebaseAnalytics().logEvent(
+    FirebaseAnalytics.instance.logEvent(
       name: "UnknownSubject",
       parameters: {"subject": subject},
     );

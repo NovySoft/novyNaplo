@@ -137,7 +137,7 @@ Future<void> handleEventDeletion({
         -1) {
       deleted = true;
       print("Local event doesn't exist in remote $local ${local.databaseId}");
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "events",

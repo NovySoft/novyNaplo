@@ -8,7 +8,6 @@ import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
@@ -34,7 +33,7 @@ import 'package:firebase_performance/firebase_performance.dart';
 
 import 'API/certValidation.dart';
 
-FirebaseAnalytics analytics = FirebaseAnalytics();
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
@@ -49,7 +48,7 @@ void main() async {
   await globals.setGlobals();
   if (foundation.kDebugMode) {
     print("Firebase disabled");
-    FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
+    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
   }

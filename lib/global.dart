@@ -113,7 +113,7 @@ Future<void> setGlobals() async {
     }
     prefs.setString("Language", language);
   }
-  FirebaseAnalytics().setUserProperty(
+  FirebaseAnalytics.instance.setUserProperty(
     name: "Language",
     value: language,
   );
@@ -156,7 +156,7 @@ Future<void> setGlobals() async {
     notifications = true;
   }
   FirebaseCrashlytics.instance.setCustomKey("notifications", notifications);
-  FirebaseAnalytics().setUserProperty(
+  FirebaseAnalytics.instance.setUserProperty(
     name: "Notifications",
     value: notifications ? "ON" : "OFF",
   );

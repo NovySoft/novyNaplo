@@ -103,7 +103,7 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _refreshData() async {
-    FirebaseAnalytics().logEvent(name: "RefreshData");
+    FirebaseAnalytics.instance.logEvent(name: "RefreshData");
     FirebaseCrashlytics.instance.log("RefreshData");
     if (!(await NetworkHelper.isNetworkAvailable())) {
       await showDialog<void>(

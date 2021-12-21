@@ -30,7 +30,7 @@ String shortenSubject(Subject input) {
       input.fullName.isNotEmpty &&
       output == input.fullName) {
     print("Long boi: " + input.fullName);
-    FirebaseAnalytics().logEvent(
+    FirebaseAnalytics.instance.logEvent(
       name: "LongSubject",
       parameters: {
         "subject": input.fullName,

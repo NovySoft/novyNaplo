@@ -304,7 +304,7 @@ Future<void> handleHomeworkDeletion({
       print(
         "Local homework doesn't exist in remote $local ${local.databaseId}",
       );
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "homeworks",

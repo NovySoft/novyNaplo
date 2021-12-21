@@ -34,7 +34,7 @@ dependencies:
   flutter_spinkit: any
   dynamic_theme:
     git: https://github.com/bartektartanus/dynamic_theme.git
-  firebase_crashlytics: 2.1.1
+  firebase_crashlytics: any
   firebase_analytics: any
   charts_flutter:
     git: https://github.com/Legolaszstudio/charts
