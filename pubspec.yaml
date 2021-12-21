@@ -48,7 +48,6 @@ dependencies:
   customgauge: any
   flutter_slidable: any
   flutter_local_notifications: ^8.1.1+2
-  android_alarm_manager: any
   flutter_svg: 0.22.0
   json_table: any
   flutter_calendar_week:
@@ -63,6 +62,7 @@ dependencies:
   flutter_colorpicker: 0.6.0
   rsa_pkcs: ^2.0.0
   flutter_markdown: ^0.6.5
+  android_alarm_manager_plus: ^2.0.3
   
 
 flutter_icons:

@@ -1,8 +1,5 @@
 //Based on https://github.com/khadkarajesh/nepninja
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 
 bool squeezed = false;

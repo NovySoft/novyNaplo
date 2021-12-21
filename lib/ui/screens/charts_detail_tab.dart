@@ -2,7 +2,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:customgauge/customgauge.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';

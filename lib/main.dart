@@ -20,11 +20,10 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/welcome_screen.dart';
-import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/loading_screen.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
