@@ -105,7 +105,7 @@ Future<void> batchInsertAbsences(
                   replaceVariables: [userDetails.nickname ?? userDetails.name],
                 ))}:',
               subtitle:
-                  "${getTranslatedString(absence.justificationState)}: ${absence.subject} - ${absence.teacher}",
+                  "${getTranslatedString(absence.justificationState)}: ${absence.subject.name} - ${absence.teacher}",
               userId: absence.userId,
               uid: absence.uid,
               payload: "absence ${absence.userId} ${absence.uid}",
