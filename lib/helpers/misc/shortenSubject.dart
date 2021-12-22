@@ -22,6 +22,15 @@ String shortenSubject(Subject input) {
       output = "IT - Info és távköz";
     } else if (lowerSubject.contains("elektronika")) {
       output = "Elektronika - Info és távköz";
+    } else if (lowerSubject.contains("gyakorlat") &&
+        lowerSubject.contains("ii")) {
+      output = "Info és távköz gyakorlat 2";
+    } else if (lowerSubject.contains("gyakorlat")) {
+      output = "Info és távköz gyakorlat";
+    } else if (lowerSubject.contains("alapok") && lowerSubject.contains("ii")) {
+      output = "Info és távköz alapok 2";
+    } else if (lowerSubject.contains("alapok")) {
+      output = "Info és távköz alapok";
     } else {
       output = "Info és távköz";
     }
