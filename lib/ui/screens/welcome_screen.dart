@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Color(0xff121212),
+      pageColor: Color.fromARGB(1, 48, 48, 48),
       imagePadding: EdgeInsets.zero,
     );
 
