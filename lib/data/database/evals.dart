@@ -67,26 +67,27 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
         eval.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      NotificationDispatcher.toBeDispatchedNotifications.marks.add(
-        NotificationData(
-          title:
-              '${(globals.allUsers.length == 1 ? getTranslatedString("newMark") : getTranslatedString(
-                      "XsNewMark",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ' +
-                  capitalize(eval.subject.name) +
-                  " " +
-                  eval.textValue,
-          subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
-          userId: eval.userId,
-          uid: eval.uid,
-          additionalKey: eval.subject.name,
-          payload: "marks ${eval.userId} ${eval.uid}",
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.marks.add(
+          NotificationData(
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("newMark") : getTranslatedString(
+                        "XsNewMark",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(eval.subject.name) +
+                    " " +
+                    eval.textValue,
+            subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
+            userId: eval.userId,
+            uid: eval.uid,
+            additionalKey: eval.subject.name,
+            payload: "marks ${eval.userId} ${eval.uid}",
+            isEdited: false,
+          ),
+        );
     } else {
       for (var n in matchedEvals) {
         //!Update didn't work so we delete and create a new one
@@ -108,26 +109,27 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           print("Mark modified $eval");
-          NotificationDispatcher.toBeDispatchedNotifications.marks.add(
-            NotificationData(
-              title:
-                  '${(globals.allUsers.length == 1 ? getTranslatedString("markModified") : getTranslatedString(
-                          "XsMarkModified",
-                          replaceVariables: [
-                            userDetails.nickname ?? userDetails.name
-                          ],
-                        ))}: ' +
-                      capitalize(eval.subject.name) +
-                      " " +
-                      eval.textValue,
-              subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
-              userId: eval.userId,
-              uid: eval.uid,
-              additionalKey: eval.subject.name,
-              payload: "marks ${eval.userId} ${eval.uid}",
-              isEdited: true,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.marks.add(
+              NotificationData(
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("markModified") : getTranslatedString(
+                            "XsMarkModified",
+                            replaceVariables: [
+                              userDetails.nickname ?? userDetails.name
+                            ],
+                          ))}: ' +
+                        capitalize(eval.subject.name) +
+                        " " +
+                        eval.textValue,
+                subtitle: '${getTranslatedString("theme")}: ' + eval.theme,
+                userId: eval.userId,
+                uid: eval.uid,
+                additionalKey: eval.subject.name,
+                payload: "marks ${eval.userId} ${eval.uid}",
+                isEdited: true,
+              ),
+            );
         }
       }
     }

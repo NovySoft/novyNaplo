@@ -135,25 +135,27 @@ Future<void> batchInsertLessons(
               subTitle = lesson.classroom;
             }
             if (lesson.subject != null) {
-              NotificationDispatcher.toBeDispatchedNotifications.timetables.add(
-                NotificationData(
-                  title:
-                      '${(globals.allUsers.length == 1 ? getTranslatedString("editedLesson") : getTranslatedString(
-                              "XsEditedLesson",
-                              replaceVariables: [
-                                userDetails.nickname ?? userDetails.name
-                              ],
-                            ))}: ' +
-                          capitalize(lesson.subject.name) +
-                          " (${parseIntToWeekdayString(lesson.date.weekday)})",
-                  subtitle: subTitle,
-                  userId: lesson.userId,
-                  uid: lesson.uid,
-                  payload: "timetable ${lesson.userId} ${lesson.uid}",
-                  isEdited: true,
-                  additionalKey: parseIntToWeekdayString(lesson.date.weekday),
-                ),
-              );
+              if (userDetails.fetched)
+                NotificationDispatcher.toBeDispatchedNotifications.timetables
+                    .add(
+                  NotificationData(
+                    title:
+                        '${(globals.allUsers.length == 1 ? getTranslatedString("editedLesson") : getTranslatedString(
+                                "XsEditedLesson",
+                                replaceVariables: [
+                                  userDetails.nickname ?? userDetails.name
+                                ],
+                              ))}: ' +
+                            capitalize(lesson.subject.name) +
+                            " (${parseIntToWeekdayString(lesson.date.weekday)})",
+                    subtitle: subTitle,
+                    userId: lesson.userId,
+                    uid: lesson.uid,
+                    payload: "timetable ${lesson.userId} ${lesson.uid}",
+                    isEdited: true,
+                    additionalKey: parseIntToWeekdayString(lesson.date.weekday),
+                  ),
+                );
             }
           }
         }

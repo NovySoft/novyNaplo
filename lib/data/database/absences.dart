@@ -58,23 +58,24 @@ Future<void> batchInsertAbsences(
         absence.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      NotificationDispatcher.toBeDispatchedNotifications.absences.add(
-        NotificationData(
-          title: '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? (globals.allUsers.length == 1 ? getTranslatedString("newAbsence") : getTranslatedString(
-              "XsNewAbsence",
-              replaceVariables: [userDetails.nickname ?? userDetails.name],
-            )) : (globals.allUsers.length == 1 ? getTranslatedString("newDelay") : getTranslatedString(
-              "XsNewDelay",
-              replaceVariables: [userDetails.nickname ?? userDetails.name],
-            ))}: ',
-          subtitle:
-              "${absence.date.toDayOnlyString()} (${absence.lesson.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})",
-          userId: absence.userId,
-          uid: absence.uid,
-          payload: "absence ${absence.userId} ${absence.uid}",
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.absences.add(
+          NotificationData(
+            title: '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? (globals.allUsers.length == 1 ? getTranslatedString("newAbsence") : getTranslatedString(
+                "XsNewAbsence",
+                replaceVariables: [userDetails.nickname ?? userDetails.name],
+              )) : (globals.allUsers.length == 1 ? getTranslatedString("newDelay") : getTranslatedString(
+                "XsNewDelay",
+                replaceVariables: [userDetails.nickname ?? userDetails.name],
+              ))}: ',
+            subtitle:
+                "${absence.date.toDayOnlyString()} (${absence.lesson.lessonNumber.intToTHEnding()} ${getTranslatedString("lesson")})",
+            userId: absence.userId,
+            uid: absence.uid,
+            payload: "absence ${absence.userId} ${absence.uid}",
+            isEdited: false,
+          ),
+        );
     } else {
       for (var n in matchedAbsences) {
         //!Update didn't work so we delete and create a new one
@@ -95,23 +96,28 @@ Future<void> batchInsertAbsences(
             absence.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          NotificationDispatcher.toBeDispatchedNotifications.absences.add(
-            NotificationData(
-              title: '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? (globals.allUsers.length == 1 ? getTranslatedString("editedAbsence") : getTranslatedString(
-                  "XsEditedAbsence",
-                  replaceVariables: [userDetails.nickname ?? userDetails.name],
-                )) : (globals.allUsers.length == 1 ? getTranslatedString("editedDelay") : getTranslatedString(
-                  "XsEditedDelay",
-                  replaceVariables: [userDetails.nickname ?? userDetails.name],
-                ))}:',
-              subtitle:
-                  "${getTranslatedString(absence.justificationState)}: ${absence.subject.name} - ${absence.teacher}",
-              userId: absence.userId,
-              uid: absence.uid,
-              payload: "absence ${absence.userId} ${absence.uid}",
-              isEdited: true,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.absences.add(
+              NotificationData(
+                title: '${absence.delayInMinutes == 0 || absence.delayInMinutes == null ? (globals.allUsers.length == 1 ? getTranslatedString("editedAbsence") : getTranslatedString(
+                    "XsEditedAbsence",
+                    replaceVariables: [
+                      userDetails.nickname ?? userDetails.name
+                    ],
+                  )) : (globals.allUsers.length == 1 ? getTranslatedString("editedDelay") : getTranslatedString(
+                    "XsEditedDelay",
+                    replaceVariables: [
+                      userDetails.nickname ?? userDetails.name
+                    ],
+                  ))}:',
+                subtitle:
+                    "${getTranslatedString(absence.justificationState)}: ${absence.subject.name} - ${absence.teacher}",
+                userId: absence.userId,
+                uid: absence.uid,
+                payload: "absence ${absence.userId} ${absence.uid}",
+                isEdited: true,
+              ),
+            );
         }
       }
     }

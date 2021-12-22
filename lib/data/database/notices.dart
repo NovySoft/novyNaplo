@@ -59,23 +59,24 @@ Future<void> batchInsertNotices(
         notice.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      NotificationDispatcher.toBeDispatchedNotifications.notices.add(
-        NotificationData(
-          title:
-              '${(globals.allUsers.length == 1 ? getTranslatedString("newNotice") : getTranslatedString(
-                      "XsNewNotice",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ' +
-                  capitalize(notice.title),
-          subtitle: notice.teacher,
-          userId: notice.userId,
-          uid: notice.uid,
-          payload: "notice ${notice.userId} ${notice.uid}",
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.notices.add(
+          NotificationData(
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("newNotice") : getTranslatedString(
+                        "XsNewNotice",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(notice.title),
+            subtitle: notice.teacher,
+            userId: notice.userId,
+            uid: notice.uid,
+            payload: "notice ${notice.userId} ${notice.uid}",
+            isEdited: false,
+          ),
+        );
     } else {
       for (var n in matchedNotices) {
         //!Update didn't work so we delete and create a new one
@@ -92,23 +93,24 @@ Future<void> batchInsertNotices(
             notice.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          NotificationDispatcher.toBeDispatchedNotifications.notices.add(
-            NotificationData(
-              title:
-                  '${(globals.allUsers.length == 1 ? getTranslatedString("noticeModified") : getTranslatedString(
-                          "XsNoticeModified",
-                          replaceVariables: [
-                            userDetails.nickname ?? userDetails.name
-                          ],
-                        ))}: ' +
-                      capitalize(notice.title),
-              subtitle: notice.teacher,
-              userId: notice.userId,
-              uid: notice.uid,
-              payload: "notice ${notice.userId} ${notice.uid}",
-              isEdited: true,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.notices.add(
+              NotificationData(
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("noticeModified") : getTranslatedString(
+                            "XsNoticeModified",
+                            replaceVariables: [
+                              userDetails.nickname ?? userDetails.name
+                            ],
+                          ))}: ' +
+                        capitalize(notice.title),
+                subtitle: notice.teacher,
+                userId: notice.userId,
+                uid: notice.uid,
+                payload: "notice ${notice.userId} ${notice.uid}",
+                isEdited: true,
+              ),
+            );
         }
       }
     }

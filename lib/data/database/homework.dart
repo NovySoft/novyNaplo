@@ -117,25 +117,26 @@ Future<void> batchInsertHomework(
           hw.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
-        NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-          NotificationData(
-            title:
-                '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
-                        "XsNewHw",
-                        replaceVariables: [
-                          userDetails.nickname ?? userDetails.name
-                        ],
-                      ))}: ' +
-                    capitalize(hw.subject.name),
-            subtitle:
-                "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-            userId: hw.userId,
-            uid: hw.uid,
-            payload: "hw ${hw.userId} ${hw.uid}",
-            additionalKey: hw.subject.name,
-            isEdited: false,
-          ),
-        );
+        if (userDetails.fetched)
+          NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+            NotificationData(
+              title:
+                  '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
+                          "XsNewHw",
+                          replaceVariables: [
+                            userDetails.nickname ?? userDetails.name
+                          ],
+                        ))}: ' +
+                      capitalize(hw.subject.name),
+              subtitle:
+                  "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+              userId: hw.userId,
+              uid: hw.uid,
+              payload: "hw ${hw.userId} ${hw.uid}",
+              additionalKey: hw.subject.name,
+              isEdited: false,
+            ),
+          );
       } else {
         for (var n in matchedHw) {
           //!Update didn't work so we delete and create a new one
@@ -155,25 +156,26 @@ Future<void> batchInsertHomework(
               hw.toMap(),
               conflictAlgorithm: ConflictAlgorithm.replace,
             );
-            NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-              NotificationData(
-                title:
-                    '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
-                            "XsHwModified",
-                            replaceVariables: [
-                              userDetails.nickname ?? userDetails.name
-                            ],
-                          ))}: ' +
-                        capitalize(hw.subject.name),
-                subtitle:
-                    "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-                userId: hw.userId,
-                uid: hw.uid,
-                payload: "hw ${hw.userId} ${hw.uid}",
-                additionalKey: hw.subject.name,
-                isEdited: true,
-              ),
-            );
+            if (userDetails.fetched)
+              NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+                NotificationData(
+                  title:
+                      '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
+                              "XsHwModified",
+                              replaceVariables: [
+                                userDetails.nickname ?? userDetails.name
+                              ],
+                            ))}: ' +
+                          capitalize(hw.subject.name),
+                  subtitle:
+                      "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+                  userId: hw.userId,
+                  uid: hw.uid,
+                  payload: "hw ${hw.userId} ${hw.uid}",
+                  additionalKey: hw.subject.name,
+                  isEdited: true,
+                ),
+              );
           }
         }
       }
@@ -220,45 +222,47 @@ Future<void> insertHomework(
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     if (edited) {
-      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-        NotificationData(
-          title:
-              '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
-                      "XsHwModified",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ' +
-                  capitalize(hw.subject.name),
-          subtitle:
-              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-          userId: hw.userId,
-          uid: hw.uid,
-          payload: "hw ${hw.userId} ${hw.uid}",
-          additionalKey: hw.subject.name,
-          isEdited: true,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+          NotificationData(
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("hwModified") : getTranslatedString(
+                        "XsHwModified",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(hw.subject.name),
+            subtitle:
+                "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+            userId: hw.userId,
+            uid: hw.uid,
+            payload: "hw ${hw.userId} ${hw.uid}",
+            additionalKey: hw.subject.name,
+            isEdited: true,
+          ),
+        );
     } else {
-      NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
-        NotificationData(
-          title:
-              '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
-                      "XsNewHw",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ' +
-                  capitalize(hw.subject.name),
-          subtitle:
-              "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
-          userId: hw.userId,
-          uid: hw.uid,
-          payload: "hw ${hw.userId} ${hw.uid}",
-          additionalKey: hw.subject.name,
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.homeworks.add(
+          NotificationData(
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("newHw") : getTranslatedString(
+                        "XsNewHw",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(hw.subject.name),
+            subtitle:
+                "${getTranslatedString("due")}: ${hw.dueDate.toDayOnlyString()}",
+            userId: hw.userId,
+            uid: hw.uid,
+            payload: "hw ${hw.userId} ${hw.uid}",
+            additionalKey: hw.subject.name,
+            isEdited: false,
+          ),
+        );
     }
   } else {
     for (var n in matchedHw) {

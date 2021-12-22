@@ -54,20 +54,23 @@ Future<void> batchInsertEvents(
         event.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      NotificationDispatcher.toBeDispatchedNotifications.events.add(
-        NotificationData(
-          title:
-              '${globals.allUsers.length == 1 ? getTranslatedString("newEvent") : getTranslatedString(
-                  "XsNewEvent",
-                  replaceVariables: [userDetails.nickname ?? userDetails.name],
-                )}: ',
-          subtitle: event.title,
-          userId: event.userId,
-          uid: event.uid,
-          payload: "event ${event.userId} ${event.uid}",
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.events.add(
+          NotificationData(
+            title:
+                '${globals.allUsers.length == 1 ? getTranslatedString("newEvent") : getTranslatedString(
+                    "XsNewEvent",
+                    replaceVariables: [
+                      userDetails.nickname ?? userDetails.name
+                    ],
+                  )}: ',
+            subtitle: event.title,
+            userId: event.userId,
+            uid: event.uid,
+            payload: "event ${event.userId} ${event.uid}",
+            isEdited: false,
+          ),
+        );
     } else {
       for (var n in matchedEvents) {
         //!Update didn't work so we delete and create a new one
@@ -86,22 +89,23 @@ Future<void> batchInsertEvents(
             event.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          NotificationDispatcher.toBeDispatchedNotifications.events.add(
-            NotificationData(
-              title:
-                  '${(globals.allUsers.length == 1 ? getTranslatedString("editedEvent") : getTranslatedString(
-                      "XsEditedEvent",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ',
-              subtitle: event.title,
-              userId: event.userId,
-              uid: event.uid,
-              payload: "event ${event.userId} ${event.uid}",
-              isEdited: false,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.events.add(
+              NotificationData(
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("editedEvent") : getTranslatedString(
+                        "XsEditedEvent",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ',
+                subtitle: event.title,
+                userId: event.userId,
+                uid: event.uid,
+                payload: "event ${event.userId} ${event.uid}",
+                isEdited: false,
+              ),
+            );
         }
       }
     }
