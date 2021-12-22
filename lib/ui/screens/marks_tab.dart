@@ -137,6 +137,7 @@ class MarksTabState extends State<MarksTab>
     if (globals.allUsers.length == 1 && globals.allUsers[0].current == false) {
       await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
       globals.allUsers[0].current = true;
+      globals.currentUser.current = true;
     }
     for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
@@ -157,8 +158,11 @@ class MarksTabState extends State<MarksTab>
                 getTranslatedString("incorrectData"),
           );
         }
-        if (!currentUser.fetched) {
+        if (!currentUser.fetched || !globals.currentUser.fetched) {
           currentUser.fetched = true;
+          if (currentUser.current) {
+            globals.currentUser.fetched = true;
+          }
           DatabaseHelper.setFetched(
             currentUser,
             true,
