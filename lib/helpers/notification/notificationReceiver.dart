@@ -44,7 +44,6 @@ import '../../main.dart';
 import 'notificationHelper.dart';
 
 class NotificationReceiver {
-  //!THIS DOESN'T WORK WITH MULTIUSER
   static Future<void> selectNotification(
     String payload,
     bool appLaunchedApp,
@@ -54,6 +53,7 @@ class NotificationReceiver {
       if (payload == null) {
         return;
       }
+      print("NotificationReceiver: " + payload);
 
       FirebaseCrashlytics.instance
           .log("selectNotification received (payload $payload)");

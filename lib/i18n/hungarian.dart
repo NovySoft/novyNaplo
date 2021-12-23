@@ -412,7 +412,9 @@ final Map<String, String> translation = {
       "Ez általában azt jelenti, hogy a kréta frissít/karbantartás alatt van, de ritka esetekben azt is jelentheti, hogy rosszul adtad meg a felhasználóneved/jelszavad.",
   "Egyéb": "Egyéb",
   "Szülői igazolás": "Szülői igazolás",
+  "szuloi_igazolas": "Szülői igazolás",
   "orvosi_igazolas": "Orvosi igazolás",
+  "iskolaerdeku_tavollet": "Iskolaérdekű távollét",
   "kretaUpgrade":
       "A kréta frissít vagy karbantartás alatt van! \n Próbáld újra később!",
   "XPassWrong": "?{0} jelszava megváltozott",
