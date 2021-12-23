@@ -53,7 +53,6 @@ class NotificationReceiver {
       if (payload == null) {
         return;
       }
-      print("NotificationReceiver: " + payload);
 
       FirebaseCrashlytics.instance
           .log("selectNotification received (payload $payload)");
