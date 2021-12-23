@@ -15,27 +15,3 @@ jobs:
         run: flutter pub get
       - name: Analyze
         run: flutter analyze
-      
-      
-  buildAndroid:
-    name: Build apk for android
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.5.3
-        with:
-           flutter-version: '2.8.1'
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Setup keystore
-        env:
-          KEYJKS: ${{ secrets.KEYJKS }}
-          KEYPROPERTIES: ${{ secrets.KEYPROPERTIES }}
-        run: |
-          cd android
-          wget "$KEYPROPERTIES" -O key.properties &> /dev/null
-          cd app
-          wget "$KEYJKS" -O key.jks &> /dev/null
-          cd ../../
-      - name: Build apk
-        run: flutter build apk --no-shrink --debug --verbose
