@@ -18,7 +18,7 @@ import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',
-  'Channel for sending novyNaplo load notifications',
+  channelDescription: 'Channel for sending novyNaplo load notifications',
   importance: Importance.low,
   priority: Priority.low,
   enableVibration: false,

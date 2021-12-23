@@ -44,10 +44,10 @@ dependencies:
   flutter_icons: ^1.1.0
   sqflite: any
   animations: any
-  flutter_html: 2.1.1
+  flutter_html: 2.2.1
   customgauge: any
-  flutter_slidable: any
-  flutter_local_notifications: ^8.1.1+2
+  flutter_slidable: 0.6.0
+  flutter_local_notifications: 9.1.5
   flutter_svg: 0.22.0
   json_table: any
   flutter_calendar_week:
@@ -59,7 +59,7 @@ dependencies:
   fluttertoast: 7.1.6
   flutter_linkify: any
   introduction_screen: any
-  flutter_colorpicker: 0.6.0
+  flutter_colorpicker: ^1.0.3
   rsa_pkcs: ^2.0.0
   flutter_markdown: ^0.6.5
   android_alarm_manager_plus: ^2.0.3
