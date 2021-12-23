@@ -25,9 +25,9 @@ jobs:
       - uses: subosito/flutter-action@v1.5.3
         with:
            flutter-version: '2.8.1'
-      - name: Give Permission
-        run: |
-          chmod 777 -R /usr/bin
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11.x
       - name: Install dependencies
         run: flutter pub get
       - name: Setup keystore
