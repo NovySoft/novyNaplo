@@ -239,7 +239,8 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
             : SizedBox(height: 0, width: 0);
         break;
       case 19:
-        if (widget.lessonInfo.examList.length != 0) {
+        if (widget.lessonInfo.examList != null &&
+            widget.lessonInfo.examList.length != 0) {
           return SizedBox(
             child: Center(
               child: Column(
