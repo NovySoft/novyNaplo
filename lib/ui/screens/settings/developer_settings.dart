@@ -79,7 +79,7 @@ class _DatabaseSettingsState extends State<DatabaseSettings> {
                                       child: Text(getTranslatedString("yes"),
                                           style: TextStyle(color: Colors.red)),
                                       onPressed: () async {
-                                        FirebaseAnalytics()
+                                        FirebaseAnalytics.instance
                                             .logEvent(name: "clear_database");
                                         FirebaseCrashlytics.instance
                                             .log("clear_database");

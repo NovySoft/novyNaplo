@@ -44,7 +44,6 @@ import '../../main.dart';
 import 'notificationHelper.dart';
 
 class NotificationReceiver {
-  //!THIS DOESN'T WORK WITH MULTIUSER
   static Future<void> selectNotification(
     String payload,
     bool appLaunchedApp,

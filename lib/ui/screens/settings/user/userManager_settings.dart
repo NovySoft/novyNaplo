@@ -216,7 +216,7 @@ class LogOutDialog extends StatelessWidget {
             style: TextStyle(color: Colors.red),
           ),
           onPressed: () async {
-            FirebaseAnalytics().logEvent(name: "sign_out");
+            FirebaseAnalytics.instance.logEvent(name: "sign_out");
             globals.allUsers.removeWhere(
               (element) => element.userId == user.userId,
             );

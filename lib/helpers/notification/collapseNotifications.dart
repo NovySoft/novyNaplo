@@ -253,7 +253,8 @@ Future<NotificationData> createNotificationData(
         uid: null,
         userId: inputNotifications[0].userId,
         isEdited: false,
-        payload: notificationType,
+        payload:
+            notificationType + " " + inputNotifications[0].userId.toString(),
       );
     } else {
       replaceVariables.add(additionalKeySet.join(", "));
@@ -273,7 +274,7 @@ Future<NotificationData> createNotificationData(
       uid: null,
       userId: inputNotifications[0].userId,
       isEdited: false,
-      payload: notificationType,
+      payload: notificationType + " " + inputNotifications[0].userId.toString(),
     );
   } else if (editedItemLength == 0) {
     return NotificationData(
@@ -288,7 +289,7 @@ Future<NotificationData> createNotificationData(
       uid: null,
       userId: inputNotifications[0].userId,
       isEdited: false,
-      payload: notificationType,
+      payload: notificationType + " " + inputNotifications[0].userId.toString(),
     );
   }
 
@@ -304,7 +305,7 @@ Future<NotificationData> createNotificationData(
     uid: null,
     userId: inputNotifications[0].userId,
     isEdited: false,
-    payload: notificationType,
+    payload: notificationType + " " + inputNotifications[0].userId.toString(),
   );
 }
 

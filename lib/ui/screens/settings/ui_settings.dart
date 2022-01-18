@@ -363,7 +363,7 @@ class _UIsettingsState extends State<UIsettings> {
                         globals.darker = false;
                         ThemeHelper()
                             .changeBrightness(context, Brightness.light);
-                        FirebaseAnalytics()
+                        FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Bright");
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Bright");
@@ -386,7 +386,7 @@ class _UIsettingsState extends State<UIsettings> {
                         globals.darker = false;
                         ThemeHelper()
                             .changeBrightness(context, Brightness.dark);
-                        FirebaseAnalytics()
+                        FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Dark");
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Dark");
@@ -395,7 +395,7 @@ class _UIsettingsState extends State<UIsettings> {
                         globals.darker = true;
                         ThemeHelper()
                             .changeBrightness(context, Brightness.dark);
-                        FirebaseAnalytics()
+                        FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Darker");
                         FirebaseCrashlytics.instance
                             .setCustomKey("Theme", "Darker");
@@ -429,7 +429,7 @@ class _UIsettingsState extends State<UIsettings> {
                     ],
                     onChanged: (String value) async {
                       await globals.prefs.setString("Language", value);
-                      await FirebaseAnalytics().setUserProperty(
+                      await FirebaseAnalytics.instance.setUserProperty(
                         name: "Language",
                         value: value,
                       );
@@ -490,11 +490,11 @@ class _UIsettingsState extends State<UIsettings> {
                       FirebaseCrashlytics.instance
                           .setCustomKey("ChartAnimations", switchOn);
                       if (switchOn) {
-                        FirebaseAnalytics().setUserProperty(
+                        FirebaseAnalytics.instance.setUserProperty(
                             name: "ChartAnimations", value: "YES");
                         globals.prefs.setBool("chartAnimations", true);
                       } else {
-                        FirebaseAnalytics().setUserProperty(
+                        FirebaseAnalytics.instance.setUserProperty(
                             name: "ChartAnimations", value: "NO");
                         globals.prefs.setBool("chartAnimations", false);
                       }

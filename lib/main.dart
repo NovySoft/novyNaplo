@@ -8,7 +8,6 @@ import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:novynaplo/ui/screens/absences_tab.dart';
 import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
@@ -20,11 +19,10 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';
 import 'package:novynaplo/ui/screens/calculator/calculator_tab.dart';
 import 'package:novynaplo/ui/screens/welcome_screen.dart';
-import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/loading_screen.dart';
 import 'package:novynaplo/ui/screens/homework_tab.dart';
 import 'package:novynaplo/ui/screens/exams_tab.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
@@ -35,7 +33,7 @@ import 'package:firebase_performance/firebase_performance.dart';
 
 import 'API/certValidation.dart';
 
-FirebaseAnalytics analytics = FirebaseAnalytics();
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
@@ -50,7 +48,7 @@ void main() async {
   await globals.setGlobals();
   if (foundation.kDebugMode) {
     print("Firebase disabled");
-    FirebaseAnalytics().setAnalyticsCollectionEnabled(false);
+    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
   }

@@ -34,7 +34,7 @@ class NotificationHelper {
     androidPlatformChannelSpecifics = new AndroidNotificationDetails(
       'novynaplo',
       'novynaplo',
-      'Channel for sending novyNaplo main notifications',
+      channelDescription: 'Channel for sending novyNaplo main notifications',
       groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
       groupAlertBehavior: GroupAlertBehavior.summary,
       importance: Importance.high,
@@ -60,7 +60,7 @@ class NotificationHelper {
         new AndroidNotificationDetails(
       'novynaplo',
       'novynaplo',
-      'Channel for sending novyNaplo main notifications',
+      channelDescription: 'Channel for sending novyNaplo main notifications',
       groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
       groupAlertBehavior: GroupAlertBehavior.all,
       importance: Importance.high,
@@ -85,7 +85,7 @@ class NotificationHelper {
     var androidPlatformChannelSpecificsSummary = new AndroidNotificationDetails(
       'novynaplo',
       'novynaplo',
-      'Channel for sending novyNaplo main notifications',
+      channelDescription: 'Channel for sending novyNaplo main notifications',
       groupKey: "novy.vip.novynaplo.MAIN_NOTIFICATIONS",
       setAsGroupSummary: true,
       groupAlertBehavior: GroupAlertBehavior.summary,

@@ -120,7 +120,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {
-                    FirebaseAnalytics().logEvent(
+                    FirebaseAnalytics.instance.logEvent(
                       name: "LinkFail",
                       parameters: {"link": url},
                     );

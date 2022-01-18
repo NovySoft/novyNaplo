@@ -20,6 +20,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
   List<List<SubjectColor>> colorMatrix = [];
   List<GlobalKey<AnimatedListState>> _listKeyList = [];
   List<bool> _listOpenList = [];
+  TextEditingController hexInput = new TextEditingController();
 
   void showColorPickerDialog(
     SubjectColor input, {
@@ -39,9 +40,10 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
             child: ColorPicker(
               pickerColor: pickerColor,
               onColorChanged: changeColor,
-              showLabel: true,
               enableAlpha: false,
               pickerAreaHeightPercent: 0.8,
+              hexInputBar: true,
+              hexInputController: hexInput,
             ),
           ),
           actions: <Widget>[

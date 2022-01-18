@@ -57,24 +57,25 @@ Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
         exam.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      NotificationDispatcher.toBeDispatchedNotifications.exams.add(
-        NotificationData(
-          title:
-              '${(globals.allUsers.length == 1 ? getTranslatedString("newExam") : getTranslatedString(
-                      "XsNewExam",
-                      replaceVariables: [
-                        userDetails.nickname ?? userDetails.name
-                      ],
-                    ))}: ' +
-                  capitalize(exam.subject.name),
-          subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
-          userId: exam.userId,
-          uid: exam.uid,
-          payload: "exam ${exam.userId} ${exam.uid}",
-          additionalKey: exam.subject.name,
-          isEdited: false,
-        ),
-      );
+      if (userDetails.fetched)
+        NotificationDispatcher.toBeDispatchedNotifications.exams.add(
+          NotificationData(
+            title:
+                '${(globals.allUsers.length == 1 ? getTranslatedString("newExam") : getTranslatedString(
+                        "XsNewExam",
+                        replaceVariables: [
+                          userDetails.nickname ?? userDetails.name
+                        ],
+                      ))}: ' +
+                    capitalize(exam.subject.name),
+            subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
+            userId: exam.userId,
+            uid: exam.uid,
+            payload: "exam ${exam.userId} ${exam.uid}",
+            additionalKey: exam.subject.name,
+            isEdited: false,
+          ),
+        );
     } else {
       for (var n in matchedExams) {
         //!Update didn't work so we delete and create a new one
@@ -95,24 +96,25 @@ Future<void> batchInsertExams(List<Exam> examList, Student userDetails) async {
             exam.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          NotificationDispatcher.toBeDispatchedNotifications.exams.add(
-            NotificationData(
-              title:
-                  '${(globals.allUsers.length == 1 ? getTranslatedString("examModified") : getTranslatedString(
-                          "XsExamModified",
-                          replaceVariables: [
-                            userDetails.nickname ?? userDetails.name
-                          ],
-                        ))}: ' +
-                      capitalize(exam.subject.name),
-              subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
-              userId: exam.userId,
-              uid: exam.uid,
-              payload: "exam ${exam.userId} ${exam.uid}",
-              additionalKey: exam.subject.name,
-              isEdited: true,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.exams.add(
+              NotificationData(
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("examModified") : getTranslatedString(
+                            "XsExamModified",
+                            replaceVariables: [
+                              userDetails.nickname ?? userDetails.name
+                            ],
+                          ))}: ' +
+                        capitalize(exam.subject.name),
+                subtitle: '${getTranslatedString("theme")}: ' + exam.theme,
+                userId: exam.userId,
+                uid: exam.uid,
+                payload: "exam ${exam.userId} ${exam.uid}",
+                additionalKey: exam.subject.name,
+                isEdited: true,
+              ),
+            );
         }
       }
     }
@@ -148,7 +150,7 @@ Future<void> handleExamDeletion({
         -1) {
       deleted = true;
       print("Local exam doesn't exist in remote $local ${local.databaseId}");
-      FirebaseAnalytics().logEvent(
+      FirebaseAnalytics.instance.logEvent(
         name: "RemoteDeletion",
         parameters: {
           "dataType": "exams",

@@ -18,7 +18,7 @@ import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 var androidFetchDetail = new AndroidNotificationDetails(
   'novynaplo02',
   'novynaplo2',
-  'Channel for sending novyNaplo load notifications',
+  channelDescription: 'Channel for sending novyNaplo load notifications',
   importance: Importance.low,
   priority: Priority.low,
   enableVibration: false,
@@ -37,8 +37,8 @@ void backgroundFetch() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    FirebaseAnalytics().logEvent(name: "BackgroundFetch");
-    FirebaseAnalytics()
+    FirebaseAnalytics.instance.logEvent(name: "BackgroundFetch");
+    FirebaseAnalytics.instance
         .setUserProperty(name: "Version", value: config.currentAppVersionCode);
     FirebaseCrashlytics.instance
         .setCustomKey("Version", config.currentAppVersionCode);
@@ -64,7 +64,7 @@ void backgroundFetch() async {
           status.userinfo,
           setData: false,
         );
-        FirebaseAnalytics().logEvent(name: "BackgroundFetchSuccess");
+        FirebaseAnalytics.instance.logEvent(name: "BackgroundFetchSuccess");
       }
       //!Kréta update fucks up and says that password is wrong, but in reality it is an update
       /*else if (status.status == "invalid_username_or_password") {
@@ -79,7 +79,7 @@ void backgroundFetch() async {
       }*/
       else {
         if (!status.status.contains(getTranslatedString('kretaUpgrade'))) {
-          FirebaseAnalytics().logEvent(
+          FirebaseAnalytics.instance.logEvent(
             name: "BackgroundFetchFail",
             parameters: {
               "status": status.status,
@@ -96,7 +96,7 @@ void backgroundFetch() async {
           ToBeDispatchedNotifications();
     }
   } catch (e, s) {
-    FirebaseAnalytics().logEvent(name: "BackgroundFetchError");
+    FirebaseAnalytics.instance.logEvent(name: "BackgroundFetchError");
     FirebaseCrashlytics.instance.recordError(
       e,
       s,

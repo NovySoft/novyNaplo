@@ -1,6 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -104,7 +103,7 @@ class MarksTabState extends State<MarksTab>
   }
 
   Future<void> _refreshData() async {
-    FirebaseAnalytics().logEvent(name: "RefreshData");
+    FirebaseAnalytics.instance.logEvent(name: "RefreshData");
     FirebaseCrashlytics.instance.log("RefreshData");
     if (!(await NetworkHelper.isNetworkAvailable())) {
       await showDialog<void>(
@@ -138,6 +137,7 @@ class MarksTabState extends State<MarksTab>
     if (globals.allUsers.length == 1 && globals.allUsers[0].current == false) {
       await DatabaseHelper.setCurrentUser(globals.allUsers[0].userId);
       globals.allUsers[0].current = true;
+      globals.currentUser.current = true;
     }
     for (var currentUser in globals.allUsers) {
       TokenResponse status = await RequestHandler.login(currentUser);
@@ -158,8 +158,11 @@ class MarksTabState extends State<MarksTab>
                 getTranslatedString("incorrectData"),
           );
         }
-        if (!currentUser.fetched) {
+        if (!currentUser.fetched || !globals.currentUser.fetched) {
           currentUser.fetched = true;
+          if (currentUser.current) {
+            globals.currentUser.fetched = true;
+          }
           DatabaseHelper.setFetched(
             currentUser,
             true,

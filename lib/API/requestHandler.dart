@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:novynaplo/API/apiEndpoints.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:novynaplo/data/database/databaseHelper.dart';
@@ -195,7 +194,7 @@ class RequestHandler {
         print("FRISSÍT");
         printWrapped(response.body);
         print(response.statusCode);
-        FirebaseAnalytics().logEvent(
+        FirebaseAnalytics.instance.logEvent(
           name: "KretaUpdating",
         );
         return true;

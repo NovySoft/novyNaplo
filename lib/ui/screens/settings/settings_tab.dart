@@ -590,7 +590,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                           if (await canLaunch(link)) {
                             await launch(link);
                           } else {
-                            FirebaseAnalytics().logEvent(
+                            FirebaseAnalytics.instance.logEvent(
                               name: "LinkFail",
                               parameters: {"link": link},
                             );
@@ -624,7 +624,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                           if (await canLaunch(link)) {
                             await launch(link);
                           } else {
-                            FirebaseAnalytics().logEvent(
+                            FirebaseAnalytics.instance.logEvent(
                               name: "LinkFail",
                               parameters: {"link": link},
                             );

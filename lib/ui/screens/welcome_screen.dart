@@ -18,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Welcome screen");
-    FirebaseAnalytics().logEvent(name: "tutorial_begin");
+    FirebaseAnalytics.instance.logEvent(name: "tutorial_begin");
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await delay(200);
       setState(() {
@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Color(0xff121212),
+      pageColor: Color.fromARGB(1, 48, 48, 48),
       imagePadding: EdgeInsets.zero,
     );
 
@@ -186,7 +186,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ],
           onDone: () {
             Navigator.pushReplacementNamed(context, LoginPage.tag);
-            FirebaseAnalytics().logEvent(name: "tutorial_complete");
+            FirebaseAnalytics.instance.logEvent(name: "tutorial_complete");
           },
           showSkipButton: true,
           skipFlex: 0,

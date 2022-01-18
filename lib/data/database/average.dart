@@ -75,25 +75,26 @@ Future<void> batchInsertAverages(
                 ? ("+${diffValue.toStringAsFixed(3)}")
                 : diffValue.toStringAsFixed(3);
           }
-          NotificationDispatcher.toBeDispatchedNotifications.averages.add(
-            NotificationData(
-              title:
-                  '${(globals.allUsers.length == 1 ? getTranslatedString("avChanged") : getTranslatedString(
-                          "XsAvChanged",
-                          replaceVariables: [
-                            userDetails.nickname ?? userDetails.name
-                          ],
-                        ))}: ' +
-                      capitalize(average.subject),
-              subtitle: '${getTranslatedString("newAv")}: ' +
-                  average.value.toStringAsFixed(5) +
-                  " ($diff)",
-              userId: average.userId,
-              uid: average.subject,
-              payload: "average ${average.userId} ${average.subject}",
-              isEdited: true,
-            ),
-          );
+          if (userDetails.fetched)
+            NotificationDispatcher.toBeDispatchedNotifications.averages.add(
+              NotificationData(
+                title:
+                    '${(globals.allUsers.length == 1 ? getTranslatedString("avChanged") : getTranslatedString(
+                            "XsAvChanged",
+                            replaceVariables: [
+                              userDetails.nickname ?? userDetails.name
+                            ],
+                          ))}: ' +
+                        capitalize(average.subject),
+                subtitle: '${getTranslatedString("newAv")}: ' +
+                    average.value.toStringAsFixed(5) +
+                    " ($diff)",
+                userId: average.userId,
+                uid: average.subject,
+                payload: "average ${average.userId} ${average.subject}",
+                isEdited: true,
+              ),
+            );
         }
       }
     }
