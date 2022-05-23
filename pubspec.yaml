@@ -11,7 +11,7 @@ description: Novy&#x27;s Unofficial Ekreta Client
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.1+19
+version: 1.2.1+20
 publish_to: none
 
 environment:
@@ -63,6 +63,7 @@ dependencies:
   rsa_pkcs: ^2.0.0
   flutter_markdown: ^0.6.5
   android_alarm_manager_plus: ^2.0.3
+  platform: ^3.1.0
   
 
 flutter_icons:

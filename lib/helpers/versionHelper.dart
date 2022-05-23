@@ -26,7 +26,15 @@ class VersionHelper {
     // I do versioning like this: 1.major.minor+patch(+nonsense giberrish, if test version)
     if (latestVersion.tagName != config.currentAppVersionCode) {
       //Check if it is higher than current version
-      String splitVlatest = latestVersion.tagName.split('V')[1];
+      List<String> latestNoV = latestVersion.tagName.split('V');
+
+      String splitVlatest;
+      if (latestNoV.length > 1) {
+        splitVlatest = latestNoV[1];
+      } else {
+        splitVlatest = latestNoV[0];
+      }
+      
       String splitVcurrent = config.currentAppVersionCode.split('V')[1];
 
       int mainVLatest = int.parse(splitVlatest.split('.')[0]);
