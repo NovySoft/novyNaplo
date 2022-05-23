@@ -60,9 +60,9 @@ dependencies:
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: ^1.0.3
-  rsa_pkcs: ^2.0.0
-  flutter_markdown: ^0.6.5
-  android_alarm_manager_plus: ^2.0.3
+  rsa_pkcs: ^2.0.1
+  flutter_markdown: ^0.6.10
+  android_alarm_manager_plus: ^2.0.5
   platform: ^3.1.0
   
 

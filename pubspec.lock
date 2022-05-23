@@ -21,7 +21,7 @@ packages:
       name: android_alarm_manager_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.5"
   animations:
     dependency: "direct main"
     description:
@@ -466,7 +466,7 @@ packages:
       name: flutter_markdown
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.6"
+    version: "0.6.10"
   flutter_math_fork:
     dependency: transitive
     description:
@@ -616,7 +616,7 @@ packages:
       name: markdown
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "5.0.0"
   matcher:
     dependency: transitive
     description:
@@ -840,7 +840,7 @@ packages:
       name: rsa_pkcs
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   rxdart:
     dependency: transitive
     description:
