@@ -15,7 +15,6 @@ TextEditingController weightController = TextEditingController(text: "100");
 TextEditingController countController = TextEditingController(text: "1");
 final FocusNode _weightFocus = FocusNode();
 final FocusNode _countFocus = FocusNode();
-final SlidableController slidableController = SlidableController();
 int radioGroup = 5;
 List<VirtualMarks> virtualMarks = [];
 
@@ -579,9 +578,6 @@ class _WhatIFModuleState extends State<WhatIFModule> {
                           default:
                         }
                         return Slidable(
-                          controller: slidableController,
-                          actionPane: SlidableBehindActionPane(),
-                          actionExtentRatio: 0.25,
                           child: GestureDetector(
                             onLongPress: () async {
                               await cardModal(
@@ -620,18 +616,80 @@ class _WhatIFModuleState extends State<WhatIFModule> {
                               ),
                             ),
                           ),
-                          actions: <Widget>[
-                            IconSlideAction(
-                              closeOnTap: false,
-                              caption: '-1',
-                              color: virtualMarks[index].count > 1
-                                  ? Colors.blue
-                                  : Colors.grey,
-                              icon: MdiIcons.minus,
-                              onTap: () {
-                                if (virtualMarks[index].count > 1) {
+                          startActionPane: ActionPane(
+                            motion: const BehindMotion(),
+                            extentRatio: 0.5,
+                            children: <Widget>[
+                              SlidableAction(
+                                autoClose: false,
+                                label: '-1',
+                                backgroundColor: virtualMarks[index].count > 1
+                                    ? Colors.blue
+                                    : Colors.grey,
+                                icon: MdiIcons.minus,
+                                onPressed: (context) {
+                                  if (virtualMarks[index].count > 1) {
+                                    setState(() {
+                                      virtualMarks[index].count -= 1;
+                                    });
+                                    createWhatIfChartAndMarks(
+                                      setAvAfter,
+                                      defaultValues: calcTab.currentSubject,
+                                      id: "whatIfChart",
+                                      virtualValues: virtualMarks,
+                                    );
+                                  }
+                                },
+                              ),
+                              SlidableAction(
+                                label: '+1',
+                                backgroundColor: virtualMarks[index].count < 100
+                                    ? Colors.red
+                                    : Colors.grey,
+                                autoClose: false,
+                                icon: MdiIcons.plus,
+                                onPressed: (context) {
+                                  if (virtualMarks[index].count < 100) {
+                                    setState(() {
+                                      virtualMarks[index].count += 1;
+                                    });
+                                    createWhatIfChartAndMarks(
+                                      setAvAfter,
+                                      defaultValues: calcTab.currentSubject,
+                                      id: "whatIfChart",
+                                      virtualValues: virtualMarks,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          endActionPane: ActionPane(
+                            motion: const BehindMotion(),
+                            extentRatio: 0.5,
+                            children: <Widget>[
+                              SlidableAction(
+                                autoClose: false,
+                                label: getTranslatedString("edit"),
+                                backgroundColor: Colors.black45,
+                                icon: Icons.create,
+                                onPressed: (context) async {
+                                  await cardModal(
+                                    context: context,
+                                    isEditing: true,
+                                    index: index,
+                                  );
+                                },
+                              ),
+                              SlidableAction(
+                                autoClose: false,
+                                label: getTranslatedString("delete"),
+                                backgroundColor: Colors.red,
+                                icon: Icons.delete,
+                                onPressed: (context) async {
+                                  await delay(480);
                                   setState(() {
-                                    virtualMarks[index].count -= 1;
+                                    virtualMarks.removeAt(index);
                                   });
                                   createWhatIfChartAndMarks(
                                     setAvAfter,
@@ -639,62 +697,10 @@ class _WhatIFModuleState extends State<WhatIFModule> {
                                     id: "whatIfChart",
                                     virtualValues: virtualMarks,
                                   );
-                                }
-                              },
-                            ),
-                            IconSlideAction(
-                              closeOnTap: false,
-                              caption: '+1',
-                              color: virtualMarks[index].count < 100
-                                  ? Colors.red
-                                  : Colors.grey,
-                              icon: MdiIcons.plus,
-                              onTap: () {
-                                if (virtualMarks[index].count < 100) {
-                                  setState(() {
-                                    virtualMarks[index].count += 1;
-                                  });
-                                  createWhatIfChartAndMarks(
-                                    setAvAfter,
-                                    defaultValues: calcTab.currentSubject,
-                                    id: "whatIfChart",
-                                    virtualValues: virtualMarks,
-                                  );
-                                }
-                              },
-                            ),
-                          ],
-                          secondaryActions: <Widget>[
-                            IconSlideAction(
-                              caption: getTranslatedString("edit"),
-                              color: Colors.black45,
-                              icon: Icons.create,
-                              onTap: () async {
-                                await cardModal(
-                                  context: context,
-                                  isEditing: true,
-                                  index: index,
-                                );
-                              },
-                            ),
-                            IconSlideAction(
-                              caption: getTranslatedString("delete"),
-                              color: Colors.red,
-                              icon: Icons.delete,
-                              onTap: () async {
-                                await delay(480);
-                                setState(() {
-                                  virtualMarks.removeAt(index);
-                                });
-                                createWhatIfChartAndMarks(
-                                  setAvAfter,
-                                  defaultValues: calcTab.currentSubject,
-                                  id: "whatIfChart",
-                                  virtualValues: virtualMarks,
-                                );
-                              },
-                            ),
-                          ],
+                                },
+                              ),
+                            ],
+                          ),
                         );
                       })
                   : Center(
