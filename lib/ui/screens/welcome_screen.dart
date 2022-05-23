@@ -34,7 +34,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     const pageDecoration = const PageDecoration(
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
-      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
       pageColor: Color.fromARGB(1, 48, 48, 48),
       imagePadding: EdgeInsets.zero,
     );
@@ -189,8 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             FirebaseAnalytics.instance.logEvent(name: "tutorial_complete");
           },
           showSkipButton: true,
-          skipFlex: 0,
-          nextFlex: 0,
+          showBackButton: false,
           skip: Text(getTranslatedString("skip")),
           next: const Icon(Icons.arrow_forward),
           done: Text(
@@ -205,6 +203,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             activeShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
+          ),
+          skipStyle: ButtonStyle(
+            padding: MaterialStateProperty.all(EdgeInsets.zero),
           ),
         ),
       ),

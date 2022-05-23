@@ -341,7 +341,6 @@ class _TimetableTabState extends State<TimetableTab> {
                             lesson: selectedLessonList[index],
                             index: index,
                           );
-                          print(selectedLessonList[index]);
                           return SafeArea(
                             child: AnimatedTimetableCard(
                               iconData: selectedLessonList[index].icon,
