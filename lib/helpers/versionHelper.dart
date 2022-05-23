@@ -120,8 +120,8 @@ class VersionHelper {
                               blockquote: TextStyle(color: Colors.white),
                             ),
                             onTapLink: (text, url, title) async {
-                              if (await canLaunch(url)) {
-                                await launch(url);
+                              if (await canLaunchUrl(Uri.parse(url))) {
+                                await launchUrl(Uri.parse(url));
                               } else {
                                 FirebaseAnalytics.instance.logEvent(
                                   name: "LinkFail",
@@ -184,7 +184,7 @@ class VersionHelper {
                   child: Text("F-Droid"),
                   onPressed: () async {
                     Navigator.of(context).pop();
-                    await launch(config.fdroidUrl);
+                    await launchUrl(Uri.parse(config.fdroidUrl));
                   },
                 ),
               ],
