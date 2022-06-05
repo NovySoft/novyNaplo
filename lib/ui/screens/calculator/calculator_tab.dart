@@ -22,6 +22,8 @@ int currentIndex = 0;
 num currCount = 0;
 num currSum = 0;
 
+bool fixedPhysics = false;
+
 final List<Tab> calcTabs = <Tab>[
   Tab(text: getTranslatedString("markCalc"), icon: Icon(MdiIcons.calculator)),
   Tab(
@@ -79,6 +81,9 @@ class CalculatorTabState extends State<CalculatorTab>
         ),
       ),
       body: TabBarView(
+          physics: fixedPhysics
+              ? NeverScrollableScrollPhysics()
+              : AlwaysScrollableScrollPhysics(),
           controller: _tabController,
           children: calcTabs.map((Tab tab) {
             if (marksPage.allParsedByDate.length == 0) {

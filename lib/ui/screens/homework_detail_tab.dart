@@ -117,8 +117,8 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
                   Map<String, String> attributes,
                   var element,
                 ) async {
-                  if (await canLaunch(url)) {
-                    await launch(url);
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
                   } else {
                     FirebaseAnalytics.instance.logEvent(
                       name: "LinkFail",

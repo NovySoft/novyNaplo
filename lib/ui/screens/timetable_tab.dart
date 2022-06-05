@@ -349,8 +349,12 @@ class _TimetableTabState extends State<TimetableTab> {
                                       null &&
                                   selectedLessonList[index].teacherHwUid != "",
                               hasExam:
-                                  selectedLessonList[index].examList.length !=
-                                      0,
+                                  selectedLessonList[index].examList == null
+                                      ? false
+                                      : (selectedLessonList[index]
+                                              .examList
+                                              .length !=
+                                          0),
                               color: color,
                               heroAnimation: AlwaysStoppedAnimation(0),
                               lessonInfo: selectedLessonList[index],

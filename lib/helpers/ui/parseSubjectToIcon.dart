@@ -89,7 +89,8 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("földrajz")) {
     return MdiIcons.mapCheck;
   }
-  if (subject.toLowerCase().contains("biológia")) {
+  if (subject.toLowerCase().contains("biológia") ||
+      subject.toLowerCase().contains("biosz")) {
     return MdiIcons.dna;
   }
   if (subject.toLowerCase().contains("kémia")) {
@@ -149,7 +150,7 @@ IconData parseSubjectToIcon({@required String subject}) {
     return MdiIcons.headLightbulb;
   }
   if (subject.toLowerCase().contains("digitális") &&
-      subject.toLowerCase().contains("alkalmazások")) {
+      subject.toLowerCase().contains("alkalmazás")) {
     return MdiIcons.devices;
   }
   if (subject.toLowerCase().contains("munkavállaló")) {
@@ -271,6 +272,9 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("honismeret")) {
     return MdiIcons.bankOutline;
+  }
+  if (subject.toLowerCase().contains("népism")) {
+    return MaterialCommunityIcons.sword_cross;
   }
   if (subject.toLowerCase().contains("munka") ||
       subject.toLowerCase().contains("admin")) {
@@ -561,8 +565,8 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("burkol")) {
     return MdiIcons.vectorRectangle;
   }
-  if (subject.toLowerCase().contains("labdarúgás")) {
-    return MdiIcons.vectorRectangle;
+  if (subject.toLowerCase().contains("szakkör")) {
+    return FontAwesome5Solid.people_carry;
   }
   //LogUnknown subject so I can add that later
   if (subject.isNotEmpty) {

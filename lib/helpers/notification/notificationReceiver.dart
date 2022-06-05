@@ -65,7 +65,7 @@ class NotificationReceiver {
         payloadUserId = int.parse(payload.split(" ")[1]);
       }
       if (payload.split(" ").length > 2) {
-        payloadUid = payload.split(" ").sublist(2).join();
+        payloadUid = payload.split(" ").sublist(2).join(" ");
       }
       //*If content is missing it means, that the user clicked on a "combined" notification and we can just navigate to the according page
       if (globals.currentUser.userId != payloadUserId) {

@@ -561,8 +561,13 @@ class _SettingsBodyState extends State<SettingsBody> {
                           ),
                         ),
                         onPressed: () async {
-                          await _ackAlert(context,
-                              "${getTranslatedString("youCanWriteToTheFollowingEmail")}\nnovysoftware@gmail.com");
+                          try {
+                            await launchUrl(
+                                Uri.parse("mailto:novysoftware@gmail.com"));
+                          } catch (e) {
+                            await _ackAlert(context,
+                                "${getTranslatedString("youCanWriteToTheFollowingEmail")}\n\nnovysoftware@gmail.com");
+                          }
                         },
                         icon: Icon(
                           MdiIcons.emailSend,
@@ -587,8 +592,8 @@ class _SettingsBodyState extends State<SettingsBody> {
                         ),
                         onPressed: () async {
                           String link = "https://www.facebook.com/NovySoftware";
-                          if (await canLaunch(link)) {
-                            await launch(link);
+                          if (await canLaunchUrl(Uri.parse(link))) {
+                            await launchUrl(Uri.parse(link));
                           } else {
                             FirebaseAnalytics.instance.logEvent(
                               name: "LinkFail",
@@ -621,8 +626,8 @@ class _SettingsBodyState extends State<SettingsBody> {
                         onPressed: () async {
                           String link =
                               "https://github.com/NovySoft/novyNaplo/issues/new/choose";
-                          if (await canLaunch(link)) {
-                            await launch(link);
+                          if (await canLaunchUrl(Uri.parse(link))) {
+                            await launchUrl(Uri.parse(link));
                           } else {
                             FirebaseAnalytics.instance.logEvent(
                               name: "LinkFail",
