@@ -84,6 +84,14 @@ class _CalculatorModuleState extends State<CalculatorModule> {
               textAlign: TextAlign.center),
           Slider(
             value: elakErni,
+            onChangeStart: (x) {
+              calcTab.fixedPhysics = true;
+              widget.setStateCallback();
+            },
+            onChangeEnd: (x) {
+              calcTab.fixedPhysics = false;
+              widget.setStateCallback();
+            },
             onChanged: (newValue) {
               setState(() {
                 elakErni = newValue;
@@ -98,6 +106,14 @@ class _CalculatorModuleState extends State<CalculatorModule> {
               textAlign: TextAlign.center),
           Slider(
             value: turesHatar,
+            onChangeStart: (x) {
+              calcTab.fixedPhysics = true;
+              widget.setStateCallback();
+            },
+            onChangeEnd: (x) {
+              calcTab.fixedPhysics = false;
+              widget.setStateCallback();
+            },
             onChanged: (newValue) {
               setState(() {
                 turesHatar = newValue.roundToDouble();
