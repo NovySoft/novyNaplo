@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>362994109207-oj8phs2l6v3qb8ndjnlvrkmc2rh10lk6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.362994109207-oj8phs2l6v3qb8ndjnlvrkmc2rh10lk6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>362994109207-t8k5firkkfi37uvlj87lf3k4tutuc8v2.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDuHIWqutnvL5fUuSY8cvLqyerc5328a0o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>362994109207</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>novy.vip.novynaplo</string>
+	<key>PROJECT_ID</key>
+	<string>novynaplo-152ec</string>
+	<key>STORAGE_BUCKET</key>
+	<string>novynaplo-152ec.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:362994109207:ios:6475f71943f0bce9480552</string>
+	<key>DATABASE_URL</key>
+	<string>https://novynaplo-152ec.firebaseio.com</string>
+</dict>
+</plist>
