@@ -89,8 +89,8 @@ class ThemeHelper {
     Colors.deepPurple[700],
   ];
 
-  ThemeData getTheme(brightness) {
-    if (brightness == Brightness.dark && globals.darker) {
+  ThemeData getTheme(ThemeMode brightness) {
+    if (brightness == ThemeMode.dark && globals.darker) {
       FirebaseCrashlytics.instance.setCustomKey("Theme", "Darker");
       return new ThemeData(
         pageTransitionsTheme: PageTransitionsTheme(
@@ -176,7 +176,7 @@ class ThemeHelper {
           focusColor: Color(0xFF212121),
         ),
       );
-    } else if (brightness == Brightness.dark) {
+    } else if (brightness == ThemeMode.dark) {
       FirebaseCrashlytics.instance.setCustomKey("Theme", "Dark");
       return new ThemeData(
           pageTransitionsTheme: PageTransitionsTheme(
@@ -308,8 +308,8 @@ class ThemeHelper {
     }
   }
 
-  void changeBrightness(var context, brightness) {
-    DynamicTheme.of(context).setBrightness(brightness);
+  void changeBrightness(BuildContext context, ThemeMode brightness) {
+    DynamicTheme.of(context).setThemeMode(brightness);
   }
 
   Color stringToColor(String input) {

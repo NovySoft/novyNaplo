@@ -253,10 +253,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8266025af95a138518560078f5d550185d5868c9"
-      url: "https://github.com/bartektartanus/dynamic_theme.git"
+      resolved-ref: "31786214283e11a8dc7d2d19f1e9744b9f38e813"
+      url: "https://github.com/Legolaszstudio/dynamic_theme"
     source: git
-    version: "2.0.0-nullsafety"
+    version: "2.1.0"
   encrypt:
     dependency: "direct main"
     description:

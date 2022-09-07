@@ -5,9 +5,9 @@ String passKey = "NovyNovyNovyNovy"; //
 String codeKey = "NovyNovyNovyNovy"; //
 String userKey = "NovyNovyNovyNovy"; //
 //Probably will change in future, agent used in network requests
-String userAgent = "Novy.Naplo.APIV3";
+String userAgent = "Novy.Naplo.APIV3.2";
 //Client Id used to login
-final String clientId = "kreta-ellenorzo-mobile";
+final String clientId = "kreta-ellenorzo-mobile-android";
 
 //menuLogo
 String menuLogo = "assets/home.png";

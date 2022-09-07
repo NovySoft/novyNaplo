@@ -214,8 +214,8 @@ class ChartsDetailTab extends StatelessWidget {
                                           labelAnchor: charts
                                               .AnnotationLabelAnchor.start,
                                           color: DynamicTheme.of(context)
-                                                      .brightness ==
-                                                  Brightness.dark
+                                                      .themeMode ==
+                                                  ThemeMode.dark
                                               ? charts.Color.white
                                               : charts.Color.fromHex(
                                                   code: "#000000",
@@ -223,8 +223,8 @@ class ChartsDetailTab extends StatelessWidget {
                                           labelStyleSpec: charts.TextStyleSpec(
                                             fontSize: 18,
                                             color: DynamicTheme.of(context)
-                                                        .brightness ==
-                                                    Brightness.dark
+                                                        .themeMode ==
+                                                    ThemeMode.dark
                                                 ? charts.Color.white
                                                 : charts.Color.black,
                                           )),

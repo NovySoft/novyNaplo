@@ -72,7 +72,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: Container(
         color: globals.darker
             ? Colors.black
-            : DynamicTheme.of(context).brightness == Brightness.light
+            : DynamicTheme.of(context).themeMode == ThemeMode.light
                 ? Colors.white
                 : Color.fromARGB(100, 48, 48, 48),
         child: CustomScrollView(

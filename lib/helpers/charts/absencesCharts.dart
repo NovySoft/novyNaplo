@@ -201,10 +201,10 @@ class CustomLegendBuilder extends charts.LegendContentBuilder {
         fontFamily: textStyle?.fontFamily,
         fontSize: 13,
         color: isHidden
-            ? (DynamicTheme.of(context).brightness == Brightness.light
+            ? (DynamicTheme.of(context).themeMode == ThemeMode.light
                 ? Colors.black.withOpacity(0.25)
                 : Colors.white.withOpacity(0.25))
-            : (DynamicTheme.of(context).brightness == Brightness.light
+            : (DynamicTheme.of(context).themeMode == ThemeMode.light
                 ? Colors.black
                 : Colors.white));
   }

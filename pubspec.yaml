@@ -33,7 +33,7 @@ dependencies:
   connectivity: any
   flutter_spinkit: any
   dynamic_theme:
-    git: https://github.com/bartektartanus/dynamic_theme.git
+    git: https://github.com/Legolaszstudio/dynamic_theme
   firebase_crashlytics: any
   firebase_analytics: any
   charts_flutter:

@@ -5,6 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 
 String dropDown;
 
@@ -35,9 +36,9 @@ class _UIsettingsState extends State<UIsettings> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         setState(() {
-          dropDown = Theme.of(context).brightness == Brightness.light
+          dropDown = DynamicTheme.of(context).themeMode == ThemeMode.light
               ? "Light"
-              : Theme.of(context).brightness == Brightness.dark &&
+              : DynamicTheme.of(context).themeMode == ThemeMode.dark &&
                       globals.darker
                   ? "Darker"
                   : "Dark";
@@ -362,7 +363,7 @@ class _UIsettingsState extends State<UIsettings> {
                         globals.prefs.setBool("darker", false);
                         globals.darker = false;
                         ThemeHelper()
-                            .changeBrightness(context, Brightness.light);
+                            .changeBrightness(context, ThemeMode.light);
                         FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Bright");
                         FirebaseCrashlytics.instance
@@ -384,8 +385,7 @@ class _UIsettingsState extends State<UIsettings> {
                         //Update prefs
                         globals.prefs.setBool("darker", false);
                         globals.darker = false;
-                        ThemeHelper()
-                            .changeBrightness(context, Brightness.dark);
+                        ThemeHelper().changeBrightness(context, ThemeMode.dark);
                         FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Dark");
                         FirebaseCrashlytics.instance
@@ -393,8 +393,7 @@ class _UIsettingsState extends State<UIsettings> {
                       } else if (value == "Darker") {
                         globals.prefs.setBool("darker", true);
                         globals.darker = true;
-                        ThemeHelper()
-                            .changeBrightness(context, Brightness.dark);
+                        ThemeHelper().changeBrightness(context, ThemeMode.dark);
                         FirebaseAnalytics.instance
                             .setUserProperty(name: "Theme", value: "Darker");
                         FirebaseCrashlytics.instance

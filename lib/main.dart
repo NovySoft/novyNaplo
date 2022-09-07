@@ -111,9 +111,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ErrorWidget.builder = ErrorMessageBuilder.build();
     return new DynamicTheme(
-      defaultBrightness: Brightness.dark,
+      defaultThemeMode: ThemeMode.dark,
       data: (brightness) => ThemeHelper().getTheme(brightness),
-      themedWidgetBuilder: (context, theme) {
+      themedWidgetBuilder: (context, mode, theme) {
         return MaterialApp(
           builder: (BuildContext context, Widget widget) {
             ErrorWidget.builder = ErrorMessageBuilder.build();
