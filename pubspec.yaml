@@ -11,7 +11,7 @@ description: Novy&#x27;s Unofficial Ekreta Client
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.1+22
+version: 1.2.2+23
 publish_to: none
 
 environment:
@@ -33,7 +33,7 @@ dependencies:
   connectivity: any
   flutter_spinkit: any
   dynamic_theme:
-    git: https://github.com/bartektartanus/dynamic_theme.git
+    git: https://github.com/Legolaszstudio/dynamic_theme
   firebase_crashlytics: any
   firebase_analytics: any
   charts_flutter:

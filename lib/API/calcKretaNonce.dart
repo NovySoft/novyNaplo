@@ -16,12 +16,12 @@ Novotny Levente (Novy)
 A Novy Napló fejlesztője
 */
 
-var encoderKey = utf8.encode("5Kmpmgd5fJ");
+var encoderKey = utf8.encode("baSsxOwlU1jM");
 
 String calculateKretaNonceKey(Student userDetails, String nonce) {
-  String toBeEncoded = userDetails.username.toLowerCase() +
-      userDetails.school.toLowerCase() +
-      nonce;
+  String toBeEncoded = userDetails.school.toUpperCase() +
+      nonce +
+      userDetails.username.toUpperCase();
   var toBeEncodedUtf = utf8.encode(toBeEncoded);
   var hmac = Hmac(sha512, encoderKey);
   var digest = hmac.convert(toBeEncodedUtf);

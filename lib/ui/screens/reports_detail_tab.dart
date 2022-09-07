@@ -132,16 +132,16 @@ class ReportsDetailTab extends StatelessWidget {
                             labelPosition:
                                 charts.AnnotationLabelPosition.margin,
                             labelAnchor: charts.AnnotationLabelAnchor.start,
-                            color: DynamicTheme.of(context).brightness ==
-                                    Brightness.dark
+                            color: DynamicTheme.of(context).themeMode ==
+                                    ThemeMode.dark
                                 ? charts.Color.white
                                 : charts.Color.fromHex(
                                     code: "#000000",
                                   ),
                             labelStyleSpec: charts.TextStyleSpec(
                               fontSize: 18,
-                              color: DynamicTheme.of(context).brightness ==
-                                      Brightness.dark
+                              color: DynamicTheme.of(context).themeMode ==
+                                      ThemeMode.dark
                                   ? charts.Color.white
                                   : charts.Color.black,
                             )),

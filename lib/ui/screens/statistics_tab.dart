@@ -181,14 +181,14 @@ class _StatisticsTabState extends State<StatisticsTab>
                             openElevation: 0,
                             openColor: globals.darker
                                 ? Colors.black
-                                : DynamicTheme.of(context).brightness ==
-                                        Brightness.light
+                                : DynamicTheme.of(context).themeMode ==
+                                        ThemeMode.light
                                     ? Colors.white
                                     : Color.fromARGB(100, 48, 48, 48),
                             closedColor: globals.darker
                                 ? Colors.black
-                                : DynamicTheme.of(context).brightness ==
-                                        Brightness.light
+                                : DynamicTheme.of(context).themeMode ==
+                                        ThemeMode.light
                                     ? Colors.white
                                     : Color.fromARGB(100, 48, 48, 48),
                             transitionDuration: Duration(milliseconds: 550),
@@ -342,8 +342,8 @@ class _StatisticsTabState extends State<StatisticsTab>
                                   );
                                 }
                                 Color avgColor =
-                                    DynamicTheme.of(context).brightness ==
-                                            Brightness.dark
+                                    DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.dark
                                         ? Colors.white
                                         : Colors.black;
                                 if (globals.colorAvsInStatisctics) {
@@ -435,11 +435,10 @@ class _StatisticsTabState extends State<StatisticsTab>
                                   labelPosition: charts.ArcLabelPosition.auto,
                                   outsideLabelStyleSpec: charts.TextStyleSpec(
                                     fontSize: 12,
-                                    color:
-                                        DynamicTheme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? charts.Color.white
-                                            : charts.Color.black,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.dark
+                                        ? charts.Color.white
+                                        : charts.Color.black,
                                   ),
                                 )
                               ]),
@@ -531,17 +530,20 @@ class _StatisticsTabState extends State<StatisticsTab>
                                         new charts.BarLabelDecorator<String>(
                                             insideLabelStyleSpec:
                                                 new charts.TextStyleSpec(
-                                                    color: charts
-                                                        .MaterialPalette.white),
+                                                    color: charts.MaterialPalette
+                                                        .white),
                                             outsideLabelStyleSpec:
                                                 new charts.TextStyleSpec(
-                                                    color: DynamicTheme.of(context)
-                                                                .brightness ==
-                                                            Brightness.dark
-                                                        ? charts.MaterialPalette
-                                                            .white
-                                                        : charts.MaterialPalette
-                                                            .black)),
+                                                    color:
+                                                        DynamicTheme.of(context)
+                                                                    .themeMode ==
+                                                                ThemeMode.dark
+                                                            ? charts
+                                                                .MaterialPalette
+                                                                .white
+                                                            : charts
+                                                                .MaterialPalette
+                                                                .black)),
                                     cornerStrategy:
                                         const charts.ConstCornerStrategy(30)),
                               ),

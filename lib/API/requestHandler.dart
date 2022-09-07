@@ -104,7 +104,7 @@ class RequestHandler {
       return new KretaNonce(
         nonce: result.body,
         key: calculateKretaNonceKey(userDetails, result.body),
-        version: "v1",
+        version: "v2",
       );
     } catch (e, s) {
       FirebaseCrashlytics.instance.recordError(

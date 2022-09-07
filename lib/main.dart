@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
@@ -44,7 +45,9 @@ class NavigatorKey {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await globals.setGlobals();
   if (foundation.kDebugMode) {
     print("Firebase disabled");
@@ -111,9 +114,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ErrorWidget.builder = ErrorMessageBuilder.build();
     return new DynamicTheme(
-      defaultBrightness: Brightness.dark,
+      defaultThemeMode: ThemeMode.dark,
       data: (brightness) => ThemeHelper().getTheme(brightness),
-      themedWidgetBuilder: (context, theme) {
+      themedWidgetBuilder: (context, mode, theme) {
         return MaterialApp(
           builder: (BuildContext context, Widget widget) {
             ErrorWidget.builder = ErrorMessageBuilder.build();

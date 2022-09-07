@@ -219,7 +219,7 @@ class _TimetableTabState extends State<TimetableTab> {
           dateBackgroundColor: Colors.transparent,
           backgroundColor: globals.darker
               ? Colors.black
-              : DynamicTheme.of(context).brightness == Brightness.light
+              : DynamicTheme.of(context).themeMode == ThemeMode.light
                   ? Colors.white
                   : Colors.grey[850],
           dayOfWeek: [
