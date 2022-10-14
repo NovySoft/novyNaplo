@@ -31,6 +31,8 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 import 'package:novynaplo/data/models/subject.dart' as subject;
 
+import '../../helpers/logicAndMath/getMarksWithChanges.dart';
+
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
 String agent = config.userAgent;
@@ -153,6 +155,10 @@ class _LoadingPageState extends State<LoadingPage> {
       );
       statisticsPage.allParsedSubjectsWithoutZeros.sort(
         (a, b) => a[0].sortIndex.compareTo(b[0].sortIndex),
+      );
+      getMarksWithChanges(
+        statisticsPage.allParsedSubjectsWithoutZeros,
+        globals.currentUser,
       );
       //*Load variables required to use the markCalculator
       setState(() {

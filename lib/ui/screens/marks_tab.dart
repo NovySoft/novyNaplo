@@ -8,6 +8,7 @@ import 'package:novynaplo/API/requestHandler.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
+import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
@@ -20,6 +21,7 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/modifyColor.dart';
 import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
@@ -29,6 +31,8 @@ import 'dart:async';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
+import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
+import '../../data/models/average.dart';
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];
@@ -168,6 +172,10 @@ class MarksTabState extends State<MarksTab>
             true,
           );
         }
+        getMarksWithChanges(
+          stats.allParsedSubjectsWithoutZeros,
+          globals.currentUser,
+        );
         if (this.mounted) {
           setState(() {
             _setData();
@@ -279,6 +287,27 @@ class MarksTabState extends State<MarksTab>
           index: indexSum + index,
         );
         if (index == 0) {
+          Average currentAv = stats.allSubjectsAv.firstWhere(
+            (element) =>
+                element.subject ==
+                allParsedBySubject[listIndex][index].subject.name,
+            orElse: () => null,
+          );
+          Color avColor;
+          Icon avIcon;
+          if (currentAv.diffSinceLast == 0) {
+            avColor = Colors.orange;
+            avIcon = Icon(
+              Icons.linear_scale,
+              color: avColor,
+            );
+          } else if (currentAv.diffSinceLast < 0) {
+            avColor = Colors.red;
+            avIcon = Icon(Icons.keyboard_arrow_down, color: avColor);
+          } else if (currentAv.diffSinceLast > 0) {
+            avColor = Colors.green;
+            avIcon = Icon(Icons.keyboard_arrow_up, color: avColor);
+          }
           return Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
@@ -287,17 +316,39 @@ class MarksTabState extends State<MarksTab>
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 15.0),
-                child: Text(
-                  capitalize(
-                          allParsedBySubject[listIndex][index].subject.name) +
-                      ":",
-                  textAlign: defaultTargetPlatform == TargetPlatform.iOS
-                      ? TextAlign.center
-                      : TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21,
-                  ),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      capitalize(allParsedBySubject[listIndex][index]
+                              .subject
+                              .name) +
+                          ":",
+                      textAlign: defaultTargetPlatform == TargetPlatform.iOS
+                          ? TextAlign.center
+                          : TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      currentAv.value.toStringAsFixed(3),
+                      textAlign: TextAlign.start,
+                      style: new TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    avIcon,
+                    Text(
+                      currentAv.diffSinceLast.toStringAsFixed(3),
+                      style: TextStyle(
+                        color: lighten(avColor, 20),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
