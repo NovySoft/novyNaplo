@@ -58,7 +58,7 @@ class CalculatorTabState extends State<CalculatorTab>
       turesHatar = 1;
       elakErni = 5.0;
     }
-    getAllSubjectsAv(stats.allParsedSubjects);
+
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
   }

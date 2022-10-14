@@ -462,9 +462,9 @@ class _WhatIFModuleState extends State<WhatIFModule> {
             style: TextStyle(fontSize: 21),
             textAlign: TextAlign.center,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: <Widget>[
               Container(
                 child: DropdownButton<String>(
