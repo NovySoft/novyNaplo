@@ -37,7 +37,8 @@ Future<void> getMarksWithChanges(
     temp.value = sum / index;
     temp.count = index.toDouble();
     temp.nonWeightedCount = nonWeightedCount;
-    temp.subject = n[0].subject.name;
+    temp.subjectName = n[0].subject.name;
+    temp.subjectUid = n[0].subject.uid;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }
@@ -89,7 +90,8 @@ Future<void> onlyCalcAndInsertAverages(
     }
     temp.value = sum / index;
     temp.count = index.toDouble();
-    temp.subject = n[0].subject.name;
+    temp.subjectName = n[0].subject.name;
+    temp.subjectUid = n[0].subject.uid;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     tempList.add(temp);
   }

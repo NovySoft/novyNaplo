@@ -494,5 +494,6 @@ final Map<String, String> translation = {
   "downloads": "letöltés",
   "updating": "Frissítés",
   "checkForUpdates": "Frissítések keresése",
-  "checkForTestVersions": "Teszt verziók keresése"
+  "checkForTestVersions": "Teszt verziók keresése",
+  "classAvS": "Osztályátlag"
 };

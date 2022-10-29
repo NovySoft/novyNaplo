@@ -45,6 +45,22 @@ Future<List<Evals>> getAllEvals({
   return tempList;
 }
 
+Future<double> getEvalAssocedClassAv(int userId, String uid) async {
+  FirebaseCrashlytics.instance.log("getEvalAssocedClassAv");
+  var result = await globals.db.rawQuery(
+    'SELECT classAv FROM Evals WHERE userId = ? AND uid = ?',
+    [
+      userId,
+      uid,
+    ],
+  );
+  if (result.length > 0) {
+    return result[0]['classAv'];
+  } else {
+    return null;
+  }
+}
+
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
   FirebaseCrashlytics.instance.log("batchInsertEval");
@@ -103,6 +119,8 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
             where: "databaseId = ?",
             whereArgs: [n.databaseId],
           );
+          // Keep old classAv
+          eval.classAv = n.classAv;
           batch.insert(
             'Evals',
             eval.toMap(),

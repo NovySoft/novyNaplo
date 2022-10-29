@@ -356,14 +356,27 @@ class RequestHandler {
       List responseJson = jsonDecode(response.body);
       List<Evals> evaluations = [];
 
-      responseJson.forEach(
-        (evaluation) => evaluations.add(
-          Evals.fromJson(
-            evaluation,
-            userDetails,
-          ),
-        ),
-      );
+      for (var evaluation in responseJson) {
+        Evals temp = Evals.fromJson(
+          evaluation,
+          userDetails,
+        );
+        double tempAv;
+        if (userDetails.institution.customizationOptions.canViewClassAV) {
+          tempAv = await DatabaseHelper.getEvalAssocedClassAv(
+            temp.userId,
+            temp.uid,
+          );
+          if (tempAv == null &&
+              temp.createDate.difference(DateTime.now()).inDays <= 7) {
+            tempAv = statisticsPage.classAverages[temp.subject.uid];
+          }
+        }
+        temp.classAv = tempAv;
+        evaluations.add(
+          temp,
+        );
+      }
 
       if (sort) {
         evaluations.sort(
@@ -879,6 +892,7 @@ class RequestHandler {
     isError = false;
     await getStudentInfo(user);
     if (setData) {
+      statisticsPage.classAverages = await getClassAverages(user);
       marksPage.allParsedByDate = await getEvaluations(user);
       examsPage.allParsedExams = await getExams(user);
       noticesPage.allParsedNotices = await getNotices(user);
@@ -909,6 +923,7 @@ class RequestHandler {
         user,
       );
     } else {
+      statisticsPage.classAverages = await getClassAverages(user);
       List<Evals> tempEvals = await getEvaluations(user);
       await getExams(user);
       await getNotices(user);
@@ -1007,5 +1022,46 @@ class RequestHandler {
       }
       return file;
     }
+  }
+
+  static Future<String> getClassGroupUid(Student user) async {
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.kreta(user.school) + KretaEndpoints.groups,
+      ),
+      headers: {
+        "Authorization": "Bearer ${user.token}",
+        "User-Agent": config.userAgent,
+      },
+    );
+    var responseJson = jsonDecode(response.body);
+    return responseJson[0]["OktatasNevelesiFeladat"]["Uid"];
+  }
+
+  static Future<Map<String, double>> getClassAverages(Student user) async {
+    if (user.institution.customizationOptions.canViewClassAV != true)
+      return null;
+
+    Map<String, double> output = {};
+    String mainGroup = await RequestHandler.getClassGroupUid(user);
+    var response = await client.get(
+      Uri.parse(
+        BaseURL.kreta(user.school) +
+            KretaEndpoints.classAverages +
+            "?oktatasiNevelesiFeladatUid=" +
+            mainGroup,
+      ),
+      headers: {
+        "Authorization": "Bearer ${user.token}",
+        "User-Agent": config.userAgent,
+      },
+    );
+    var responseJson = jsonDecode(response.body);
+
+    for (var item in responseJson) {
+      output[item["Uid"]] = item["OsztalyCsoportAtlag"];
+    }
+
+    return output;
   }
 }

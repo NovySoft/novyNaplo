@@ -484,7 +484,7 @@ final Map<String, String> translation = {
   "schCustom": "School Settings",
   "studentHomework": "Student Homework",
   "lessonTheme": "Lesson Theme",
-  "classAv": "Class Avarage",
+  "classAv": "Class Average",
   "evalDelay": "Evaulation Delay",
   "changeNickname": "Change Nickname",
   "noSameUserNick": "Duplicate nickname!",
@@ -496,4 +496,5 @@ final Map<String, String> translation = {
   "updating": "Updating",
   "checkForUpdates": "Check for updates",
   "checkForTestVersions": "Check for test versions",
+  "classAvS": "Class AV",
 };

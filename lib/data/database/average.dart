@@ -18,9 +18,10 @@ Future<List<Average>> getAllAverages() async {
   return List.generate(maps.length, (i) {
     Average temp = new Average();
     temp.databaseId = maps[i]['databaseId'];
-    temp.subject = maps[i]['subject'];
+    temp.subjectUid = maps[i]['subject'];
     temp.value = maps[i]['ownValue'];
     temp.userId = maps[i]['userId'];
+    temp.classAverage = maps[i]['classValue'];
     return temp;
   });
 }
@@ -37,7 +38,7 @@ Future<void> batchInsertAverages(
   for (var average in averageList) {
     if (average.userId == null) continue;
     var matchedAv = allAv.where((element) {
-      return (element.subject == average.subject &&
+      return (element.subjectUid == average.subjectUid &&
           element.userId == average.userId);
     });
     if (matchedAv.length == 0) {
@@ -50,7 +51,8 @@ Future<void> batchInsertAverages(
     } else {
       for (var n in matchedAv) {
         //!Update didn't work so we delete and create a new one
-        if (n.value != average.value) {
+        if (n.value != average.value ||
+            n.classAverage != average.classAverage) {
           inserted = true;
           batch.delete(
             "Average",
@@ -85,13 +87,13 @@ Future<void> batchInsertAverages(
                               userDetails.nickname ?? userDetails.name
                             ],
                           ))}: ' +
-                        capitalize(average.subject),
+                        capitalize(average.subjectName),
                 subtitle: '${getTranslatedString("newAv")}: ' +
                     average.value.toStringAsFixed(5) +
                     " ($diff)",
                 userId: average.userId,
-                uid: average.subject,
-                payload: "average ${average.userId} ${average.subject}",
+                uid: average.subjectUid,
+                payload: "average ${average.userId} ${average.subjectUid}",
                 isEdited: true,
               ),
             );

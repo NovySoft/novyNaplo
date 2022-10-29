@@ -99,93 +99,187 @@ class ChartsDetailTab extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   switch (index) {
                     case 0:
-                      int performancePercentage = calcPercentFromEvalsList(
-                        av: seriesList.last.data.last.value,
-                        evalList: getSameSubjectEvals(
-                          subject: subject,
-                          sort: true,
-                        ),
-                      );
-                      Color textColPercent;
-                      if (performancePercentage >= 75) {
-                        textColPercent = Colors.green;
-                      } else if (performancePercentage >= 50) {
-                        textColPercent = Colors.orange;
-                      } else if (performancePercentage >= 25) {
-                        textColPercent = Colors.red[400];
-                      } else {
-                        textColPercent = Colors.red[900];
-                      }
+                      if (globals.currentUser.institution.customizationOptions
+                              .canViewClassAV &&
+                          inputList[0].subject.name != "-contracted-") {
+                        double classAvOfSubject =
+                            stats.classAverages[inputList[0].subject.uid] ?? 0;
+                        Color classAvColor = Colors.red;
+                        if (classAvOfSubject < 2.5) {
+                          classAvColor = (Colors.redAccent[700]);
+                        } else if (classAvOfSubject < 3 &&
+                            classAvOfSubject >= 2.5) {
+                          classAvColor = (Colors.redAccent);
+                        } else if (classAvOfSubject < 4 &&
+                            classAvOfSubject >= 3) {
+                          classAvColor = (Colors.yellow[800]);
+                        } else if (classAvOfSubject >= 4) {
+                          classAvColor = (Colors.green);
+                        }
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            getTranslatedString("performance"),
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Wrap(
-                            children: <Widget>[
-                              CustomGauge(
-                                needleColor: globals.darker
-                                    ? Colors.white.withOpacity(0.5)
-                                    : Colors.black.withOpacity(0.5),
-                                gaugeSize: 200,
-                                minValue: 1,
-                                maxValue: 5,
-                                segments: [
-                                  GaugeSegment('1', 1, Colors.red[900]),
-                                  GaugeSegment('1', 1, Colors.red[400]),
-                                  GaugeSegment('2', 1, Colors.orange),
-                                  GaugeSegment('4', 1, Colors.green),
-                                ],
-                                currentValue: seriesList.last.data.last.value,
-                                displayWidget: Text(
-                                  '${capitalize(getTranslatedString("av"))}:',
-                                  style: TextStyle(fontSize: 18),
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              getTranslatedString("performance"),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Wrap(
+                              children: <Widget>[
+                                CustomGauge(
+                                  needleColor: globals.darker
+                                      ? Colors.white.withOpacity(0.5)
+                                      : Colors.black.withOpacity(0.5),
+                                  gaugeSize: 200,
+                                  minValue: 1,
+                                  maxValue: 5,
+                                  segments: [
+                                    GaugeSegment('1', 1, Colors.red[900]),
+                                    GaugeSegment('1', 1, Colors.red[400]),
+                                    GaugeSegment('2', 1, Colors.orange),
+                                    GaugeSegment('4', 1, Colors.green),
+                                  ],
+                                  currentValue: seriesList.last.data.last.value,
+                                  displayWidget: Text(
+                                    '${capitalize(getTranslatedString("av"))}:',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  valueWidget: Text(
+                                    seriesList.last.data.last.value
+                                        .toStringAsFixed(3),
+                                    style:
+                                        TextStyle(fontSize: 21, color: textCol),
+                                  ),
                                 ),
-                                valueWidget: Text(
-                                  seriesList.last.data.last.value
-                                      .toStringAsFixed(3),
-                                  style:
-                                      TextStyle(fontSize: 21, color: textCol),
+                                CustomGauge(
+                                  needleColor: globals.darker
+                                      ? Colors.white.withOpacity(0.5)
+                                      : Colors.black.withOpacity(0.5),
+                                  gaugeSize: 200,
+                                  minValue: 1,
+                                  maxValue: 5,
+                                  segments: [
+                                    GaugeSegment('1', 1, Colors.red[900]),
+                                    GaugeSegment('2', 1, Colors.red[400]),
+                                    GaugeSegment('3', 1, Colors.orange),
+                                    GaugeSegment('4', 1, Colors.green),
+                                  ],
+                                  currentValue: classAvOfSubject,
+                                  displayWidget: Text(
+                                    getTranslatedString("classAvS") + ":",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  valueWidget: Text(
+                                    classAvOfSubject.toStringAsFixed(2),
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: classAvColor,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              CustomGauge(
-                                needleColor: globals.darker
-                                    ? Colors.white.withOpacity(0.5)
-                                    : Colors.black.withOpacity(0.5),
-                                gaugeSize: 200,
-                                minValue: 0,
-                                maxValue: 100,
-                                segments: [
-                                  GaugeSegment('1', 25, Colors.red[900]),
-                                  GaugeSegment('2', 25, Colors.red[400]),
-                                  GaugeSegment('3', 25, Colors.orange),
-                                  GaugeSegment('4', 25, Colors.green),
-                                ],
-                                currentValue: performancePercentage.toDouble(),
-                                displayWidget: Text(
-                                  '${capitalize(getTranslatedString("inPc"))}:',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                valueWidget: Text(
-                                  performancePercentage.toString() + "%",
-                                  style: TextStyle(
-                                      fontSize: 21, color: textColPercent),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ],
+                        );
+                      } else {
+                        int performancePercentage = calcPercentFromEvalsList(
+                          av: seriesList.last.data.last.value,
+                          evalList: getSameSubjectEvals(
+                            subject: subject,
+                            sort: true,
                           ),
-                        ],
-                      );
+                        );
+                        Color textColPercent;
+                        if (performancePercentage >= 75) {
+                          textColPercent = Colors.green;
+                        } else if (performancePercentage >= 50) {
+                          textColPercent = Colors.orange;
+                        } else if (performancePercentage >= 25) {
+                          textColPercent = Colors.red[400];
+                        } else {
+                          textColPercent = Colors.red[900];
+                        }
+
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              getTranslatedString("performance"),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Wrap(
+                              children: <Widget>[
+                                CustomGauge(
+                                  needleColor: globals.darker
+                                      ? Colors.white.withOpacity(0.5)
+                                      : Colors.black.withOpacity(0.5),
+                                  gaugeSize: 200,
+                                  minValue: 1,
+                                  maxValue: 5,
+                                  segments: [
+                                    GaugeSegment('1', 1, Colors.red[900]),
+                                    GaugeSegment('1', 1, Colors.red[400]),
+                                    GaugeSegment('2', 1, Colors.orange),
+                                    GaugeSegment('4', 1, Colors.green),
+                                  ],
+                                  currentValue: seriesList.last.data.last.value,
+                                  displayWidget: Text(
+                                    '${capitalize(getTranslatedString("av"))}:',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  valueWidget: Text(
+                                    seriesList.last.data.last.value
+                                        .toStringAsFixed(3),
+                                    style:
+                                        TextStyle(fontSize: 21, color: textCol),
+                                  ),
+                                ),
+                                CustomGauge(
+                                  needleColor: globals.darker
+                                      ? Colors.white.withOpacity(0.5)
+                                      : Colors.black.withOpacity(0.5),
+                                  gaugeSize: 200,
+                                  minValue: 0,
+                                  maxValue: 100,
+                                  segments: [
+                                    GaugeSegment('1', 25, Colors.red[900]),
+                                    GaugeSegment('2', 25, Colors.red[400]),
+                                    GaugeSegment('3', 25, Colors.orange),
+                                    GaugeSegment('4', 25, Colors.green),
+                                  ],
+                                  currentValue:
+                                      performancePercentage.toDouble(),
+                                  displayWidget: Text(
+                                    '${capitalize(getTranslatedString("inPc"))}:',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  valueWidget: Text(
+                                    performancePercentage.toString() + "%",
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: textColPercent,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }
                       break;
                     case 1:
                       return Row(

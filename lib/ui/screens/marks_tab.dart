@@ -289,8 +289,8 @@ class MarksTabState extends State<MarksTab>
         if (index == 0) {
           Average currentAv = stats.allSubjectsAv.firstWhere(
             (element) =>
-                element.subject ==
-                allParsedBySubject[listIndex][index].subject.name,
+                element.subjectUid ==
+                allParsedBySubject[listIndex][index].subject.uid,
             orElse: () => null,
           );
           Color avColor;
