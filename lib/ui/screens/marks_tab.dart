@@ -277,7 +277,6 @@ class MarksTabState extends State<MarksTab>
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
-        //return Text(allParsedBySubject[listIndex][index].subject);
         int indexSum = 0;
         for (int i = 0; i <= listIndex - 1; i++) {
           indexSum += allParsedBySubject[i].length;
@@ -293,21 +292,6 @@ class MarksTabState extends State<MarksTab>
                 allParsedBySubject[listIndex][index].subject.uid,
             orElse: () => null,
           );
-          Color avColor;
-          Icon avIcon;
-          if (currentAv.diffSinceLast == 0) {
-            avColor = Colors.orange;
-            avIcon = Icon(
-              Icons.linear_scale,
-              color: avColor,
-            );
-          } else if (currentAv.diffSinceLast < 0) {
-            avColor = Colors.red;
-            avIcon = Icon(Icons.keyboard_arrow_down, color: avColor);
-          } else if (currentAv.diffSinceLast > 0) {
-            avColor = Colors.green;
-            avIcon = Icon(Icons.keyboard_arrow_up, color: avColor);
-          }
           return Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: defaultTargetPlatform == TargetPlatform.iOS
@@ -338,15 +322,6 @@ class MarksTabState extends State<MarksTab>
                       textAlign: TextAlign.start,
                       style: new TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    avIcon,
-                    Text(
-                      currentAv.diffSinceLast.toStringAsFixed(3),
-                      style: TextStyle(
-                        color: lighten(avColor, 20),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ],
                 ),
