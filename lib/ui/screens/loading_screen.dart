@@ -143,6 +143,11 @@ class _LoadingPageState extends State<LoadingPage> {
       marksPage.colors = getRandomColors(tempEvals.length);
       marksPage.allParsedByDate = tempEvals;
       marksPage.allParsedBySubject = sortByDateAndSubject(tempEvals);
+      //* Class averages if any
+      setState(() {
+        loadingText = getTranslatedString("readClassAv");
+      });
+      statisticsPage.classAverages = await DatabaseHelper.getClassAverages();
       //*Load variables required to show statistics
       setState(() {
         loadingText = getTranslatedString("setUpStatistics");

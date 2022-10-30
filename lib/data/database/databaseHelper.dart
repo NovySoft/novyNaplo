@@ -39,6 +39,8 @@ class DatabaseHelper {
       average.getAllAverages;
   static Future<void> Function(List<Average>, Student) batchInsertAverages =
       average.batchInsertAverages;
+  static Future<Map<String, double>> Function() getClassAverages =
+      average.getClassAverages;
 
   static Future<void> Function(int, String) deleteFromDbByID =
       deleteSql.deleteFromDbByID;

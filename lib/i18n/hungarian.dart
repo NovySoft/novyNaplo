@@ -137,6 +137,7 @@ final Map<String, String> translation = {
   "readTimetableColors": "Tantárgy színek olvasása az adatbázisból",
   "readExam": "Dolgozatok olvasása az adatbázisból",
   "readEvents": "Faliújság olvasása az adatbázisból",
+  "readClassAv": "Átlagok olvasása az adatbázisból",
   "almReady": "Mindjárt kész",
   "noNet": "Nincs internet kapcsolat",
   "byDate": "Dátum szerint",

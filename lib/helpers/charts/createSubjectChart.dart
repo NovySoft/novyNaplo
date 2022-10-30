@@ -7,6 +7,7 @@ ChartReturn createSubjectChart(List<Evals> input, String id) {
   List<Evals> manipulableData = List.from(input);
   manipulableData.sort((a, b) => a.date.compareTo(b.date));
   List<LinearMarkChartData> chartData = [];
+  List<LinearMarkChartData> classAvData = [];
   double sum = 0;
   double index = 0;
   int listArray = 0;
@@ -41,10 +42,21 @@ ChartReturn createSubjectChart(List<Evals> input, String id) {
         index += 1 * n.weight / 100;
       }
       chartData.add(new LinearMarkChartData(listArray, sum / index));
+      if (n.classAv != null) {
+        classAvData.add(new LinearMarkChartData(listArray, n.classAv));
+      }
       listArray++;
     }
   }
+  charts.Color classAvColor = charts.Color(r: 255, g: 255, b: 0, a: 128);
   return ChartReturn([
+    new charts.Series<LinearMarkChartData, int>(
+      id: id,
+      colorFn: (_, __) => classAvColor,
+      domainFn: (LinearMarkChartData marks, _) => marks.count,
+      measureFn: (LinearMarkChartData marks, _) => marks.value,
+      data: classAvData,
+    ),
     new charts.Series<LinearMarkChartData, int>(
       id: id,
       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,

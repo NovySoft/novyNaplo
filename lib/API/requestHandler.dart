@@ -368,7 +368,7 @@ class RequestHandler {
             temp.uid,
           );
           if (tempAv == null &&
-              temp.createDate.difference(DateTime.now()).inDays <= 7) {
+              temp.createDate.difference(DateTime.now()).inDays >= -7) {
             tempAv = statisticsPage.classAverages[temp.subject.uid];
           }
         }

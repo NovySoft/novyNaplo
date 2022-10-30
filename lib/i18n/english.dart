@@ -215,6 +215,7 @@ final Map<String, String> translation = {
   "readTimetableColors": "Reading subject colors from database",
   "readExam": "Reading exams from database",
   "readEvents": "Reading events from database",
+  "readClassAv": "Reading class averages from database",
   "almReady": "Almost ready",
   "noNet": "No internet connection was detected",
   "byDate": "By date",
