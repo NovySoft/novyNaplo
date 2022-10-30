@@ -108,8 +108,8 @@ Future<void> batchInsertAverages(
                       average.value.toStringAsFixed(5) +
                       " ($diff)",
                   userId: average.userId,
-                  uid: average.subjectUid,
-                  payload: "average ${average.userId} ${average.subjectUid}",
+                  uid: average.subjectName,
+                  payload: "average ${average.userId} ${average.subjectName}",
                   isEdited: true,
                 ),
               );
