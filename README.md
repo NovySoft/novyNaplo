@@ -18,7 +18,7 @@ A novynapló mostantól **LTS (Long Term Support) állapotba lép**, az alkalmaz
 
 ## Kréta DMCA
 
-A kréta március elsején távolította el az alkalmazást a play áruházból... Mi ezután nem sokkal írtunk egy levelet a DMCA-ban található email címre, melyre azóta sem jött válasz. Az alkalmazás fejlesztését, nem hagyjuk abba, viszont **sajnos le kellet mondanunk az applikáció áruházakban való jelenlétünkről.**
+A kréta 2021 március elsején távolította el az alkalmazást a play áruházból... Mi ezután nem sokkal írtunk egy levelet a DMCA-ban található email címre, melyre azóta sem jött válasz. Az alkalmazás fejlesztését, nem hagyjuk abba, viszont **sajnos le kellet mondanunk az applikáció áruházakban való jelenlétünkről.**
 
 ### Letöltés
 
