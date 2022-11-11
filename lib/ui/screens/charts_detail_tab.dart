@@ -86,7 +86,9 @@ class ChartsDetailTab extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 25,
-                        color: globals.statisticsCardTheme == "Dark"
+                        color: globals.statisticsCardTheme == "Dark" ||
+                                (globals.darker &&
+                                    inputList[0].subject.name == "-contracted-")
                             ? Colors.grey[350]
                             : Colors.black,
                       ),
