@@ -301,6 +301,20 @@ class ReportsDetailTab extends StatelessWidget {
                           result.toStringAsFixed(3),
                           style: TextStyle(fontSize: 21, color: textCol),
                         ),
+                        endMarkerStyle: TextStyle(
+                          fontSize: 10,
+                          color: DynamicTheme.of(context).themeMode ==
+                                  ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                        startMarkerStyle: TextStyle(
+                          fontSize: 10,
+                          color: DynamicTheme.of(context).themeMode ==
+                                  ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
                       ),
                       CustomGauge(
                         needleColor: globals.darker
@@ -323,6 +337,20 @@ class ReportsDetailTab extends StatelessWidget {
                         valueWidget: Text(
                           performancePercentage.toString() + "%",
                           style: TextStyle(fontSize: 21, color: textColPercent),
+                        ),
+                        endMarkerStyle: TextStyle(
+                          fontSize: 10,
+                          color: DynamicTheme.of(context).themeMode ==
+                                  ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                        startMarkerStyle: TextStyle(
+                          fontSize: 10,
+                          color: DynamicTheme.of(context).themeMode ==
+                                  ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
                     ],

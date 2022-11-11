@@ -28,6 +28,7 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
 Map<String, double> halfYearMarkers = {};
+Map<String, double> classAverages = {};
 //FIXME: Keepalives, once loaded
 
 final List<Tab> statTabs = <Tab>[
@@ -365,7 +366,7 @@ class _StatisticsTabState extends State<StatisticsTab>
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      capitalize(currentAv.subject) + ": ",
+                                      capitalize(currentAv.subjectName) + ": ",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 18,

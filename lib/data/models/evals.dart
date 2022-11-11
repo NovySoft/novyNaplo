@@ -28,6 +28,7 @@ class Evals {
   ClassGroup group;
   int sortIndex;
   IconData icon;
+  double classAv;
 
   Evals({
     this.teacher,
@@ -102,6 +103,7 @@ class Evals {
     icon = subject != null
         ? parseSubjectToIcon(subject: subject.fullName)
         : Icons.create;
+    classAv = map['classAv'];
   }
 
   Evals.fromJson(Map<String, dynamic> json, Student userDetails) {
@@ -247,6 +249,7 @@ class Evals {
       'type': type == null ? null : type.toJson(),
       'group': group == null ? null : group.toJson(),
       'sortIndex': sortIndex,
+      'classAv': classAv,
     };
   }
 

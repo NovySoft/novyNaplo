@@ -321,6 +321,24 @@ class _WhatIFModuleState extends State<WhatIFModule> {
                               onFieldSubmitted: (String input) {
                                 if (FormKey.formKey.currentState.validate()) {
                                   _countFocus.unfocus();
+                                  if (isEditing) {
+                                    VirtualMarks temp = new VirtualMarks();
+                                    temp.count =
+                                        int.parse(countController.text);
+                                    temp.weight =
+                                        int.parse(weightController.text);
+                                    temp.szamErtek = radioGroup;
+                                    editVirtualMark(input: temp, index: index);
+                                  } else {
+                                    VirtualMarks temp = new VirtualMarks();
+                                    temp.count =
+                                        int.parse(countController.text);
+                                    temp.weight =
+                                        int.parse(weightController.text);
+                                    temp.szamErtek = radioGroup;
+                                    addNewVirtualMark(temp);
+                                  }
+                                  Navigator.of(context).pop();
                                 }
                               },
                             ),
@@ -462,9 +480,9 @@ class _WhatIFModuleState extends State<WhatIFModule> {
             style: TextStyle(fontSize: 21),
             textAlign: TextAlign.center,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: <Widget>[
               Container(
                 child: DropdownButton<String>(

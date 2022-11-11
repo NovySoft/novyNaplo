@@ -39,6 +39,8 @@ class DatabaseHelper {
       average.getAllAverages;
   static Future<void> Function(List<Average>, Student) batchInsertAverages =
       average.batchInsertAverages;
+  static Future<Map<String, double>> Function() getClassAverages =
+      average.getClassAverages;
 
   static Future<void> Function(int, String) deleteFromDbByID =
       deleteSql.deleteFromDbByID;
@@ -49,6 +51,8 @@ class DatabaseHelper {
       evals.getAllEvals;
   static Future<void> Function(List<Evals>, Student) batchInsertEvals =
       evals.batchInsertEvals;
+  static Future<double> Function(int, String) getEvalAssocedClassAv =
+      evals.getEvalAssocedClassAv;
 
   static Future<List<Event>> Function({bool userSpecific}) getAllEvents =
       events.getAllEvents;

@@ -4,7 +4,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:novynaplo/data/models/calculator.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/logicAndMath/getAllSubjectsAv.dart';
 import 'package:novynaplo/ui/screens/calculator/whatIf_module.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
@@ -58,7 +57,7 @@ class CalculatorTabState extends State<CalculatorTab>
       turesHatar = 1;
       elakErni = 5.0;
     }
-    getAllSubjectsAv(stats.allParsedSubjects);
+
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
   }

@@ -8,6 +8,20 @@ import 'package:novynaplo/helpers/notification/notificationDispatcher.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:sqflite/sqflite.dart';
 
+Future<Map<String, double>> getClassAverages() async {
+  final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
+    'SELECT subject, classValue FROM Average WHERE userId = ? GROUP BY subject',
+    [globals.currentUser.userId],
+  );
+  Map<String, double> output = {};
+
+  for (var av in maps) {
+    output[av["subject"]] = av["classValue"];
+  }
+
+  return output;
+}
+
 Future<List<Average>> getAllAverages() async {
   FirebaseCrashlytics.instance.log("getAllAverages");
   // Get a reference to the database.
@@ -18,9 +32,10 @@ Future<List<Average>> getAllAverages() async {
   return List.generate(maps.length, (i) {
     Average temp = new Average();
     temp.databaseId = maps[i]['databaseId'];
-    temp.subject = maps[i]['subject'];
+    temp.subjectUid = maps[i]['subject'];
     temp.value = maps[i]['ownValue'];
     temp.userId = maps[i]['userId'];
+    temp.classAverage = maps[i]['classValue'];
     return temp;
   });
 }
@@ -37,7 +52,7 @@ Future<void> batchInsertAverages(
   for (var average in averageList) {
     if (average.userId == null) continue;
     var matchedAv = allAv.where((element) {
-      return (element.subject == average.subject &&
+      return (element.subjectUid == average.subjectUid &&
           element.userId == average.userId);
     });
     if (matchedAv.length == 0) {
@@ -50,7 +65,8 @@ Future<void> batchInsertAverages(
     } else {
       for (var n in matchedAv) {
         //!Update didn't work so we delete and create a new one
-        if (n.value != average.value) {
+        if (n.value != average.value ||
+            n.classAverage != average.classAverage) {
           inserted = true;
           batch.delete(
             "Average",
@@ -62,39 +78,42 @@ Future<void> batchInsertAverages(
             average.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          String diff;
-          if (average.value == null || n.value == null) {
-            if (average.value != null && n.value == null) {
-              diff = "+${average.value.toStringAsFixed(3)}";
+          //? Only send notification if own value has changed (ignore class average change)
+          if (n.value != average.value) {
+            String diff;
+            if (average.value == null || n.value == null) {
+              if (average.value != null && n.value == null) {
+                diff = "+${average.value.toStringAsFixed(3)}";
+              } else {
+                diff = "null";
+              }
             } else {
-              diff = "null";
+              double diffValue = average.value - n.value;
+              diff = diffValue > 0
+                  ? ("+${diffValue.toStringAsFixed(3)}")
+                  : diffValue.toStringAsFixed(3);
             }
-          } else {
-            double diffValue = average.value - n.value;
-            diff = diffValue > 0
-                ? ("+${diffValue.toStringAsFixed(3)}")
-                : diffValue.toStringAsFixed(3);
+            if (userDetails.fetched)
+              NotificationDispatcher.toBeDispatchedNotifications.averages.add(
+                NotificationData(
+                  title:
+                      '${(globals.allUsers.length == 1 ? getTranslatedString("avChanged") : getTranslatedString(
+                              "XsAvChanged",
+                              replaceVariables: [
+                                userDetails.nickname ?? userDetails.name
+                              ],
+                            ))}: ' +
+                          capitalize(average.subjectName),
+                  subtitle: '${getTranslatedString("newAv")}: ' +
+                      average.value.toStringAsFixed(5) +
+                      " ($diff)",
+                  userId: average.userId,
+                  uid: average.subjectName,
+                  payload: "average ${average.userId} ${average.subjectName}",
+                  isEdited: true,
+                ),
+              );
           }
-          if (userDetails.fetched)
-            NotificationDispatcher.toBeDispatchedNotifications.averages.add(
-              NotificationData(
-                title:
-                    '${(globals.allUsers.length == 1 ? getTranslatedString("avChanged") : getTranslatedString(
-                            "XsAvChanged",
-                            replaceVariables: [
-                              userDetails.nickname ?? userDetails.name
-                            ],
-                          ))}: ' +
-                        capitalize(average.subject),
-                subtitle: '${getTranslatedString("newAv")}: ' +
-                    average.value.toStringAsFixed(5) +
-                    " ($diff)",
-                userId: average.userId,
-                uid: average.subject,
-                payload: "average ${average.userId} ${average.subject}",
-                isEdited: true,
-              ),
-            );
         }
       }
     }

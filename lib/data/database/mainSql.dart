@@ -19,10 +19,10 @@ Future<void> initDatabase() async {
       FirebaseCrashlytics.instance.log("createSqlTables");
       // Run the CREATE TABLE statement on the database.
       await db.execute(
-        'CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,uid TEXT,teacher TEXT,valueType TEXT,kindOf TEXT,createDate TEXT,seenDate TEXT,mode TEXT,date TEXT,weight INTEGER,numberValue REAL,textValue TEXT,shortTextValue TEXT,subject TEXT,theme TEXT,"type" TEXT,"group" TEXT,sortIndex INTEGER,userId INTEGER);',
+        'CREATE TABLE Evals (databaseId INTEGER PRIMARY KEY,uid TEXT,teacher TEXT,valueType TEXT,kindOf TEXT,createDate TEXT,seenDate TEXT,mode TEXT,date TEXT,weight INTEGER,numberValue REAL,textValue TEXT,shortTextValue TEXT,subject TEXT,theme TEXT,"type" TEXT,"group" TEXT,classAv REAL,sortIndex INTEGER,userId INTEGER);',
       );
       await db.execute(
-        "CREATE TABLE Average (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,userId INTEGER);",
+        "CREATE TABLE Average (databaseId INTEGER PRIMARY KEY,subject TEXT,ownValue REAL,classValue REAL DEFAULT 0 NOT NULL,userId INTEGER);",
       );
       await db.execute(
         'CREATE TABLE Notices (databaseId INTEGER PRIMARY KEY,title TEXT,date TEXT,createDate TEXT,teacher TEXT,seenDate TEXT,"group" TEXT,content TEXT,subject TEXT,"type" TEXT,uid TEXT,userId INTEGER);',
@@ -57,18 +57,15 @@ Future<void> initDatabase() async {
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
       await db.execute(
-        'CREATE TABLE IF NOT EXISTS Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
+        "ALTER TABLE Evals ADD classAv REAL;",
       );
       await db.execute(
-        'CREATE TABLE IF NOT EXISTS Subjects (uid TEXT PRIMARY KEY,category TEXT,nickname TEXT, fullname TEXT, teacher TEXT);',
-      );
-      await db.execute(
-        'CREATE TABLE IF NOT EXISTS TrustedCerts (radixModulus TEXT, exponent INTEGER, subject TEXT, date TEXT);',
+        "ALTER TABLE Average ADD classValue REAL DEFAULT 0 NOT NULL;",
       );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 4,
+    version: 5,
   );
   globals.db = await database;
 }

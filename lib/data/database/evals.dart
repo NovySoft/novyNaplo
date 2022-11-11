@@ -45,6 +45,22 @@ Future<List<Evals>> getAllEvals({
   return tempList;
 }
 
+Future<double> getEvalAssocedClassAv(int userId, String uid) async {
+  FirebaseCrashlytics.instance.log("getEvalAssocedClassAv");
+  var result = await globals.db.rawQuery(
+    'SELECT classAv FROM Evals WHERE userId = ? AND uid = ?',
+    [
+      userId,
+      uid,
+    ],
+  );
+  if (result.length > 0) {
+    return result[0]['classAv'];
+  } else {
+    return null;
+  }
+}
+
 // A function that inserts multiple evals into the database
 Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
   FirebaseCrashlytics.instance.log("batchInsertEval");
@@ -95,7 +111,8 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
                 n.theme != eval.theme ||
                 n.date.toUtc().toIso8601String() !=
                     eval.date.toUtc().toIso8601String() ||
-                n.weight != eval.weight) &&
+                n.weight != eval.weight ||
+                n.classAv != eval.classAv) &&
             n.uid == eval.uid) {
           inserted = true;
           batch.delete(
@@ -103,13 +120,24 @@ Future<void> batchInsertEvals(List<Evals> evalList, Student userDetails) async {
             where: "databaseId = ?",
             whereArgs: [n.databaseId],
           );
+          // Keep old classAv (unless it has update from non null)
+          // lib\API\requestHandler.dart:371 <-- Only should update ones that were created no later than 7 days from now
+          bool onlyClassAvChange = n.numberValue == eval.numberValue &&
+              n.theme == eval.theme &&
+              n.date.toUtc().toIso8601String() ==
+                  eval.date.toUtc().toIso8601String() &&
+              n.weight == eval.weight &&
+              n.classAv != eval.classAv;
+          if (n.classAv != null) {
+            eval.classAv = n.classAv;
+          }
           batch.insert(
             'Evals',
             eval.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
           print("Mark modified $eval");
-          if (userDetails.fetched)
+          if (userDetails.fetched && !onlyClassAvChange)
             NotificationDispatcher.toBeDispatchedNotifications.marks.add(
               NotificationData(
                 title:
