@@ -159,6 +159,20 @@ class ChartsDetailTab extends StatelessWidget {
                                     style:
                                         TextStyle(fontSize: 21, color: textCol),
                                   ),
+                                  endMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  startMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
                                 ),
                                 CustomGauge(
                                   needleColor: globals.darker
@@ -184,6 +198,20 @@ class ChartsDetailTab extends StatelessWidget {
                                       fontSize: 21,
                                       color: classAvColor,
                                     ),
+                                  ),
+                                  endMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  startMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
                                   ),
                                 ),
                               ],
@@ -249,6 +277,20 @@ class ChartsDetailTab extends StatelessWidget {
                                     style:
                                         TextStyle(fontSize: 21, color: textCol),
                                   ),
+                                  endMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  startMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
                                 ),
                                 CustomGauge(
                                   needleColor: globals.darker
@@ -275,6 +317,20 @@ class ChartsDetailTab extends StatelessWidget {
                                       fontSize: 21,
                                       color: textColPercent,
                                     ),
+                                  ),
+                                  endMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  startMarkerStyle: TextStyle(
+                                    fontSize: 10,
+                                    color: DynamicTheme.of(context).themeMode ==
+                                            ThemeMode.light
+                                        ? Colors.black
+                                        : Colors.white,
                                   ),
                                 ),
                               ],
