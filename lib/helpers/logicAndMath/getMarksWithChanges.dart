@@ -69,6 +69,7 @@ Future<void> getMarksWithChanges(
 Future<void> onlyCalcAndInsertAverages(
   List<List<Evals>> input,
   Student userDetails,
+  Map<String, double> classAverages,
 ) async {
   List<Average> tempList = [];
   double sum = 0, index = 0;
@@ -97,8 +98,8 @@ Future<void> onlyCalcAndInsertAverages(
     temp.subjectUid = n[0].subject.uid;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
     if (userDetails.institution.customizationOptions.canViewClassAV &&
-        stats.classAverages != null) {
-      temp.classAverage = stats.classAverages[temp.subjectUid];
+        classAverages != null) {
+      temp.classAverage = classAverages[temp.subjectUid];
     }
     tempList.add(temp);
   }

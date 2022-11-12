@@ -339,7 +339,8 @@ class RequestHandler {
   }
 
   static Future<List<Evals>> getEvaluations(
-    Student userDetails, {
+    Student userDetails,
+    Map<String, double> classAverages, {
     bool sort = true,
   }) async {
     FirebaseCrashlytics.instance.log("getEvaluations");
@@ -368,8 +369,9 @@ class RequestHandler {
             temp.uid,
           );
           if (tempAv == null &&
-              temp.createDate.difference(DateTime.now()).inDays >= -7) {
-            tempAv = statisticsPage.classAverages[temp.subject.uid];
+              temp.createDate.difference(DateTime.now()).inDays >= -7 &&
+              classAverages != null) {
+            tempAv = classAverages[temp.subject.uid];
           }
         }
         temp.classAv = tempAv;
@@ -893,7 +895,10 @@ class RequestHandler {
     await getStudentInfo(user);
     if (setData) {
       statisticsPage.classAverages = await getClassAverages(user);
-      marksPage.allParsedByDate = await getEvaluations(user);
+      marksPage.allParsedByDate = await getEvaluations(
+        user,
+        statisticsPage.classAverages,
+      );
       examsPage.allParsedExams = await getExams(user);
       noticesPage.allParsedNotices = await getNotices(user);
       homeworkPage.globalHomework = await getHomeworks(
@@ -921,10 +926,14 @@ class RequestHandler {
       await onlyCalcAndInsertAverages(
         statisticsPage.allParsedSubjectsWithoutZeros,
         user,
+        statisticsPage.classAverages,
       );
     } else {
-      statisticsPage.classAverages = await getClassAverages(user);
-      List<Evals> tempEvals = await getEvaluations(user);
+      Map<String, double> tempClassAverages = await getClassAverages(user);
+      List<Evals> tempEvals = await getEvaluations(
+        user,
+        tempClassAverages,
+      );
       await getExams(user);
       await getNotices(user);
       await getHomeworks(
@@ -946,6 +955,7 @@ class RequestHandler {
             .toList()
             .cast<List<Evals>>(),
         user,
+        tempClassAverages,
       );
     }
     return isError;
