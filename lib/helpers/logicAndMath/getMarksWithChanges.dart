@@ -40,7 +40,10 @@ Future<void> getMarksWithChanges(
     temp.subjectName = n[0].subject.name;
     temp.subjectUid = n[0].subject.uid;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
-    temp.classAverage = stats.classAverages[temp.subjectUid];
+    if (userDetails.institution.customizationOptions.canViewClassAV &&
+        stats.classAverages != null) {
+      temp.classAverage = stats.classAverages[temp.subjectUid];
+    }
     tempList.add(temp);
   }
   //?First sort by the values
@@ -93,7 +96,10 @@ Future<void> onlyCalcAndInsertAverages(
     temp.subjectName = n[0].subject.name;
     temp.subjectUid = n[0].subject.uid;
     temp.diffSinceLast = (temp.diffSinceLast - (sum / index)) * -1;
-    temp.classAverage = stats.classAverages[temp.subjectUid];
+    if (userDetails.institution.customizationOptions.canViewClassAV &&
+        stats.classAverages != null) {
+      temp.classAverage = stats.classAverages[temp.subjectUid];
+    }
     tempList.add(temp);
   }
   await DatabaseHelper.batchInsertAverages(tempList, userDetails);

@@ -47,8 +47,11 @@ class ReportsDetailTab extends StatelessWidget {
     List<charts.Series<dynamic, num>> chartList = [];
     double halfYearMarker;
     if (inputList.length > 0) {
-      ChartReturn data =
-          createSubjectChart(inputList, inputList[0].subject.name);
+      ChartReturn data = createSubjectChart(
+        inputList,
+        inputList[0].subject.name,
+        DynamicTheme.of(context).themeMode == ThemeMode.light,
+      );
       chartList = data.points;
       if (!hideMarker) {
         halfYearMarker = data.halfYearMarker;

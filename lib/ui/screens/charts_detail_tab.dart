@@ -54,6 +54,7 @@ class ChartsDetailTab extends StatelessWidget {
         ChartReturn data = createSubjectChart(
           inputList,
           inputList[0].subject.fullName,
+          DynamicTheme.of(context).themeMode == ThemeMode.light,
         );
         seriesList = data.points;
         halfYearMarker = data.halfYearMarker;
