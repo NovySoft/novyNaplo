@@ -3,7 +3,7 @@ import 'package:novynaplo/data/models/evals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
-ChartReturn createSubjectChart(List<Evals> input, String id) {
+ChartReturn createSubjectChart(List<Evals> input, String id, bool lightmode) {
   List<Evals> manipulableData = List.from(input);
   manipulableData.sort((a, b) => a.date.compareTo(b.date));
   List<LinearMarkChartData> chartData = [];
@@ -48,7 +48,20 @@ ChartReturn createSubjectChart(List<Evals> input, String id) {
       listArray++;
     }
   }
-  charts.Color classAvColor = charts.Color(r: 255, g: 255, b: 0, a: 128);
+  charts.Color classAvColor = charts.Color(
+    r: 255,
+    g: 255,
+    b: 0,
+    a: 128,
+  );
+  if (lightmode) {
+    classAvColor = charts.Color(
+      r: 251,
+      g: 192,
+      b: 45,
+      a: 128,
+    );
+  }
   return ChartReturn([
     new charts.Series<LinearMarkChartData, int>(
       id: id,

@@ -1025,43 +1025,67 @@ class RequestHandler {
   }
 
   static Future<String> getClassGroupUid(Student user) async {
-    var response = await client.get(
-      Uri.parse(
-        BaseURL.kreta(user.school) + KretaEndpoints.groups,
-      ),
-      headers: {
-        "Authorization": "Bearer ${user.token}",
-        "User-Agent": config.userAgent,
-      },
-    );
-    var responseJson = jsonDecode(response.body);
-    return responseJson[0]["OktatasNevelesiFeladat"]["Uid"];
+    try {
+      var response = await client.get(
+        Uri.parse(
+          BaseURL.kreta(user.school) + KretaEndpoints.groups,
+        ),
+        headers: {
+          "Authorization": "Bearer ${user.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+      var responseJson = jsonDecode(response.body);
+      return responseJson[0]["OktatasNevelesiFeladat"]["Uid"];
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getClassGroupUid',
+        printDetails: true,
+      );
+      isError = true;
+      return "";
+    }
   }
 
   static Future<Map<String, double>> getClassAverages(Student user) async {
-    if (user.institution.customizationOptions.canViewClassAV != true)
-      return null;
+    try {
+      if (user.institution.customizationOptions.canViewClassAV != true) {
+        return {};
+      }
 
-    Map<String, double> output = {};
-    String mainGroup = await RequestHandler.getClassGroupUid(user);
-    var response = await client.get(
-      Uri.parse(
-        BaseURL.kreta(user.school) +
-            KretaEndpoints.classAverages +
-            "?oktatasiNevelesiFeladatUid=" +
-            mainGroup,
-      ),
-      headers: {
-        "Authorization": "Bearer ${user.token}",
-        "User-Agent": config.userAgent,
-      },
-    );
-    var responseJson = jsonDecode(response.body);
+      FirebaseCrashlytics.instance.log("getClassAverages");
+      Map<String, double> output = {};
+      String mainGroup = await RequestHandler.getClassGroupUid(user);
+      var response = await client.get(
+        Uri.parse(
+          BaseURL.kreta(user.school) +
+              KretaEndpoints.classAverages +
+              "?oktatasiNevelesiFeladatUid=" +
+              mainGroup,
+        ),
+        headers: {
+          "Authorization": "Bearer ${user.token}",
+          "User-Agent": config.userAgent,
+        },
+      );
+      var responseJson = jsonDecode(response.body);
 
-    for (var item in responseJson) {
-      output[item["Uid"]] = item["OsztalyCsoportAtlag"];
+      for (var item in responseJson) {
+        output[item["Uid"]] = item["OsztalyCsoportAtlag"];
+      }
+
+      return output;
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'getClassAverages',
+        printDetails: true,
+      );
+      isError = true;
+      return statisticsPage.classAverages;
     }
-
-    return output;
   }
 }
