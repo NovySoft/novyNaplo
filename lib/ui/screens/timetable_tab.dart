@@ -193,7 +193,7 @@ class _TimetableTabState extends State<TimetableTab> {
         title: new Text(capitalize(getTranslatedString("timetable"))),
       ),
       body: Column(children: [
-        CalendarWeek(
+        /*CalendarWeek(
           controller: _controller,
           height: 100,
           minDate: minDate,
@@ -258,7 +258,7 @@ class _TimetableTabState extends State<TimetableTab> {
               ),
             ),
           ],
-        ),
+        ),*/
         SizedBox(
           height: 7,
         ),

@@ -17,7 +17,9 @@ IconData parseSubjectToIcon({@required String subject}) {
   if (subject.toLowerCase().contains("kardiológia")) {
     return FontAwesome.heartbeat;
   }
-  if (subject.toLowerCase().contains("korrep")) {
+  if (subject.toLowerCase().contains("korrep") ||
+      (subject.toLowerCase().contains("verseny") &&
+          subject.toLowerCase().contains("felkészítés"))) {
     return Entypo.open_book;
   }
   if (subject.toLowerCase().contains("logopéd")) {
@@ -567,6 +569,34 @@ IconData parseSubjectToIcon({@required String subject}) {
   }
   if (subject.toLowerCase().contains("szakkör")) {
     return FontAwesome5Solid.people_carry;
+  }
+  if (subject.toLowerCase().contains("gazdálkodás")) {
+    return FontAwesome5Solid.money_bill_alt;
+  }
+  if ((subject.toLowerCase().contains("villamos") ||
+          subject.toLowerCase().contains("elektro")) &&
+      subject.toLowerCase().contains("mérés")) {
+    return MdiIcons.sineWave;
+  }
+  if ((subject.toLowerCase().contains("villamos") ||
+          subject.toLowerCase().contains("elektro")) &&
+      subject.toLowerCase().contains("gyakorlat")) {
+    return MdiIcons.connection;
+  }
+  if (subject.toLowerCase().contains("dokumentáció")) {
+    return MdiIcons.fileDocumentMultiple;
+  }
+  if (subject.toLowerCase().contains("kompetencia")) {
+    return MdiIcons.headSync;
+  }
+  if (subject.toLowerCase().contains("tanórán kívül")) {
+    return MdiIcons.officeBuildingMarker;
+  }
+  if (subject.toLowerCase().contains("tehetséggondozás")) {
+    return FontAwesome5Solid.hands_helping;
+  }
+  if (subject.toLowerCase().contains("úszás")) {
+    return FontAwesome5Solid.swimmer;
   }
   //LogUnknown subject so I can add that later
   if (subject.isNotEmpty) {
