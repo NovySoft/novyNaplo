@@ -1,5 +1,8 @@
 //Copied from https://github.com/filcnaplo/filcnaplo/blob/dev/lib/kreta/api.dart
 //HUGE thanks to filcnaplo
+
+// https://bmszc-petrik.e-kreta.hu/Home/GetIsFrissitesWarrning
+
 class BaseURL {
   static const NOVY_NAPLO = "https://api.novy.vip";
   static const NOVY_NAPLO_GITHUB_REPO =
