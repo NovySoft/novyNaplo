@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:novynaplo/global.dart' as globals;
 
+import '../../helpers/ui/getRandomColors.dart';
+
 Future<Database> database;
 
 Future<void> initDatabase() async {
@@ -56,13 +58,27 @@ Future<void> initDatabase() async {
       );
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
-      await db.execute(
-        "ALTER TABLE Users ADD color INTEGER DEFAULT (4294940672);",
-      );
+      if (oldVersion <= 5) {
+        // Created in version 6 already (testing version)
+        await db.execute(
+          "ALTER TABLE Users ADD color INTEGER DEFAULT (4294940672);",
+        );
+      }
+      // Append colors to existing users
+      List<Map<String, dynamic>> users = await db.rawQuery('SELECT id FROM Users');
+      for (int i = 0; i < users.length; i++) {
+        await db.execute(
+          "UPDATE Users SET color = ? WHERE id = ?;",
+          [
+            myListOfRandomColors[i % myListOfRandomColors.length].value,
+            users[i]["id"],
+          ],
+        );
+      }
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 6,
+    version: 7,
   );
   globals.db = await database;
 }

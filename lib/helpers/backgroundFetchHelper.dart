@@ -32,7 +32,8 @@ var platformChannelSpecificsGetNotif = new NotificationDetails(
     android: androidFetchDetail, iOS: iOSPlatformChannelSpecifics);
 int notifId = 2;
 
-void backgroundFetch() async {
+@pragma('vm:entry-point')
+Future<void> backgroundFetch() async {
   print("BACKGROUND FETCH");
   try {
     WidgetsFlutterBinding.ensureInitialized();

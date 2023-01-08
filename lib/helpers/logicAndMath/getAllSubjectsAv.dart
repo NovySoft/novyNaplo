@@ -1,5 +1,7 @@
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 
+
+// FIXME: Itt valami nagyon nem működik (check grafikon nézet too)
 //Összesített átlag
 void getAllSubjectsAv(input) {
   double index = 0, sum = 0, tempIndex = 0;
