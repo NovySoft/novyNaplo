@@ -73,6 +73,10 @@ class CalculatorTabState extends State<CalculatorTab>
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: CustomDrawer(CalculatorTab.tag),
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: Text(CalculatorTab.title),
         bottom: TabBar(
           controller: _tabController,

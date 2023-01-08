@@ -22,7 +22,12 @@ class NoticeDetailTab extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Notices_detail_tab");
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+      ),
       body: body(),
     );
   }

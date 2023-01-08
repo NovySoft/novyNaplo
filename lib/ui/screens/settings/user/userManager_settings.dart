@@ -60,6 +60,9 @@ class _UserManagerState extends State<UserManager> {
                   leading: Icon(MaterialIcons.drag_handle),
                   title: Text(
                     '${_items[index].nickname != null ? _items[index].nickname + "*" : _items[index].name}',
+                    style: TextStyle(
+                      color: (globals.appBarColoredByUser || globals.appBarTextColoredByUser) ? _items[index].color : null,
+                    ),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

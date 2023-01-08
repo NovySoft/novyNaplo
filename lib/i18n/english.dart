@@ -498,4 +498,6 @@ final Map<String, String> translation = {
   "checkForUpdates": "Check for updates",
   "checkForTestVersions": "Check for test versions",
   "classAvS": "Class AV",
+  "appBarColoredByUser": "App bar color based on user",
+  "appBarTextColoredByUser": "App bar text color based on user",
 };

@@ -43,7 +43,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,uid TEXT,justificationState TEXT,justificationType TEXT,delayInMinutes INTEGER,mode TEXT,date TEXT,lesson TEXT,teacher TEXT,subject TEXT,"type" TEXT,"group" TEXT,createDate TEXT,userId INTEGER);',
       );
       await db.execute(
-        'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,nickname TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,password TEXT,school TEXT,iv TEXT,"current" INTEGER DEFAULT 0,fetched INTEGER DEFAULT 0);',
+        'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,nickname TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,password TEXT,school TEXT,iv TEXT,color INTEGER DEFAULT (4294940672),"current" INTEGER DEFAULT 0,fetched INTEGER DEFAULT 0);',
       );
       await db.execute(
         'CREATE TABLE Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
@@ -57,15 +57,12 @@ Future<void> initDatabase() async {
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
       await db.execute(
-        "ALTER TABLE Evals ADD classAv REAL;",
-      );
-      await db.execute(
-        "ALTER TABLE Average ADD classValue REAL DEFAULT 0 NOT NULL;",
+        "ALTER TABLE Users ADD color INTEGER DEFAULT (4294940672);",
       );
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 5,
+    version: 6,
   );
   globals.db = await database;
 }

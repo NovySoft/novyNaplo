@@ -87,6 +87,10 @@ class _StatisticsTabState extends State<StatisticsTab>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: Text(StatisticsTab.title),
         bottom: TabBar(
           controller: _tabController,

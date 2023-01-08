@@ -66,6 +66,9 @@ bool collapseNotifications =
     true; //Automatically collapse all notifications, on by default
 bool darker = false; //Darker theme
 bool calcLorincMode = false; //Should calculator show "invalid" outputs
+bool appBarColoredByUser = true; // Should color appbar based on user color
+bool appBarTextColoredByUser =
+    false; // Sgould color appbar text based on user color
 
 Future<void> resetSessionGlobals() async {
   didFetch = false;
@@ -393,6 +396,20 @@ Future<void> setGlobals() async {
     await prefs.setBool("collapseNotifications", true);
   } else {
     collapseNotifications = prefs.getBool("collapseNotifications");
+  }
+
+  if (prefs.getBool('appBarColoredByUser') == null) {
+    appBarColoredByUser = true;
+    await prefs.setBool("appBarColoredByUser", true);
+  } else {
+    appBarColoredByUser = prefs.getBool("appBarColoredByUser");
+  }
+
+  if (prefs.getBool('appBarTextColoredByUser') == null) {
+    appBarTextColoredByUser = false;
+    await prefs.setBool("appBarTextColoredByUser", false);
+  } else {
+    appBarTextColoredByUser = prefs.getBool("appBarTextColoredByUser");
   }
 
   FirebaseCrashlytics.instance

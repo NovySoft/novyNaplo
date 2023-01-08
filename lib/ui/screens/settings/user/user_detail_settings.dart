@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/student.dart';
@@ -28,11 +29,19 @@ class UserDetails extends StatefulWidget {
 class _UserDetailsState extends State<UserDetails> {
   final TextEditingController _newNickNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  Color pickerColor = Color(0xff443a49);
+  TextEditingController hexInput = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.userDetails.name)),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? widget.userDetails.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? widget.userDetails.color : null,
+        title: Text(widget.userDetails.name),
+      ),
       body: ListView(
         children: [
           SizedBox(
@@ -41,7 +50,7 @@ class _UserDetailsState extends State<UserDetails> {
           Center(
             child: GestureDetector(
               onTap: () {
-                ErrorToast.showErrorToast(getTranslatedString("soon") + "...");
+                showColorPickerDialog(widget.userDetails);
               },
               child: Container(
                 width: (MediaQuery.of(context).size.width / 5)
@@ -54,7 +63,7 @@ class _UserDetailsState extends State<UserDetails> {
                     18,
                 decoration: new BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.grey,
+                  color: widget.userDetails.color,
                 ),
                 child: Icon(
                   Feather.user,
@@ -212,5 +221,53 @@ class _UserDetailsState extends State<UserDetails> {
       );
       return false;
     }
+  }
+
+  void showColorPickerDialog(Student input) {
+    pickerColor = input.color;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            input.nickname ?? input.name,
+          ),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+              enableAlpha: false,
+              pickerAreaHeightPercent: 0.8,
+              hexInputBar: true,
+              hexInputController: hexInput,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () async {
+                await DatabaseHelper.changeUserColor(
+                  input,
+                  pickerColor,
+                );
+                setState(() {
+                  input.color = pickerColor;
+                  int userIndex = globals.allUsers.indexWhere((element) => element.userId == input.userId);
+                  globals.allUsers[userIndex].color = pickerColor;
+                  if (globals.currentUser.userId == input.userId) {
+                    globals.currentUser.color = pickerColor;
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
   }
 }

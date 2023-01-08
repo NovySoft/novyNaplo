@@ -10,6 +10,7 @@ import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
 import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 List<List<Absence>> allParsedAbsences = [];
 List<charts.Series> seriesList;
@@ -188,6 +189,10 @@ class _AbsencesTabState extends State<AbsencesTab>
     }
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: Text(capitalize(getTranslatedString("absencesAndDelays"))),
       ),
       body: Column(
@@ -307,7 +312,13 @@ class AbsencencesDetailTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(absence.subject.name))),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        title: Text(capitalize(absence.subject.name)),
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [

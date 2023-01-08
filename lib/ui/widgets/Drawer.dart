@@ -25,6 +25,12 @@ import 'package:novynaplo/global.dart' as globals;
 
 String userDropdownValue = "";
 
+class DropDownMaps {
+  String name;
+  Color color;
+  DropDownMaps(this.name, this.color);
+}
+
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer(
     this.screen,
@@ -36,7 +42,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  List<String> dropdownItems = [];
+  List<DropDownMaps> dropdownItems = [];
   bool isEdited = false;
 
   void updateUserList(bool outsideCall) {
@@ -49,7 +55,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
         b.institution.userPosition,
       ),
     );
-    dropdownItems = tempList.map((user) => user.nickname ?? user.name).toList();
+    dropdownItems = tempList
+        .map((user) => new DropDownMaps(user.nickname ?? user.name, user.color))
+        .toList();
     if (outsideCall) {
       setState(() {
         isEdited = isEdited;
@@ -148,10 +156,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                   },
                                   items: dropdownItems
                                           .map<DropdownMenuItem<String>>(
-                                              (String value) {
+                                              (DropDownMaps input) {
                                         return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
+                                          value: input.name,
+                                          child: Text(
+                                            input.name,
+                                            style: TextStyle(
+                                              color: (globals
+                                                          .appBarColoredByUser ||
+                                                      globals
+                                                          .appBarTextColoredByUser)
+                                                  ? input.color
+                                                  : null,
+                                            ),
+                                          ),
                                         );
                                       }).toList() +
                                       [

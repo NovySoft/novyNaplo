@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 class Student {
   String mothersName;
@@ -27,6 +28,8 @@ class Student {
   bool current;
   bool fetched = false;
 
+  Color color;
+
   Student({
     this.mothersName,
     this.addressList,
@@ -50,6 +53,7 @@ class Student {
     this.userId,
     this.current,
     this.fetched,
+    this.color,
   });
 
   @override
@@ -78,6 +82,7 @@ class Student {
     username = input.username;
     password = input.password;
     fetched = input.fetched;
+    color = input.color;
   }
 
   Map<String, dynamic> toMap() {
@@ -101,6 +106,7 @@ class Student {
       'iv': iv,
       'current': current ? 1 : 0,
       'fetched': fetched ? 1 : 0,
+      'color': color?.value ?? Colors.orange.value,
     };
   }
 
@@ -128,6 +134,30 @@ class Student {
         : Institution();
     institution.name = json['IntezmenyNev'];
     institution.linkId = json['IntezmenyAzonosito'];
+  }
+
+  Student.fromSqlite(Map<String, dynamic> map) {
+    userId = map['id'];
+    uid = map['uid'];
+    mothersName = map['mothersName'];
+    addressList = json.decode(map['adressList']).cast<String>();
+    parents = Parent.fromJsonList(map['parents']);
+    name = map['name'];
+    nickname = map['nickname'];
+    birthDayString = map['birthDay'];
+    birthDay = DateTime.parse(map['birthDay']).toLocal();
+    placeOfBirth = map['placeOfBirth'];
+    birthName = map['birthName'];
+    schoolYearUid = map['schoolYearUid'];
+    bankAccount = BankAccount.fromJson(json.decode(map['bankAccount']));
+    institution = Institution.fromJson(json.decode(map['institution']));
+    school = map['school'];
+    username = map['username'];
+    password = map['password'];
+    iv = map['iv'];
+    current = map['current'] == 1;
+    fetched = map['fetched'] == 1;
+    color = Color(map['color']);
   }
 }
 

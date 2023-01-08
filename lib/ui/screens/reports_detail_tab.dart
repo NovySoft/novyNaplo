@@ -70,6 +70,10 @@ class ReportsDetailTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
       ),
       body: ListView.builder(
         itemCount: 6,

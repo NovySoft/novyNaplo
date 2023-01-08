@@ -192,6 +192,10 @@ class _TimetableTabState extends State<TimetableTab> {
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: CustomDrawer(TimetableTab.tag),
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: new Text(capitalize(getTranslatedString("timetable"))),
       ),
       body: Column(

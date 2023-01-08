@@ -496,5 +496,7 @@ final Map<String, String> translation = {
   "updating": "Frissítés",
   "checkForUpdates": "Frissítések keresése",
   "checkForTestVersions": "Teszt verziók keresése",
-  "classAvS": "Osztályátlag"
+  "classAvS": "Osztályátlag",
+  "appBarColoredByUser": "Menü sáv szín a felhasználó alapján",
+  "appBarTextColoredByUser": "Menü sáv szöveg szín a felhasználó alapján",
 };

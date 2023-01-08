@@ -102,7 +102,13 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
         ? getTranslatedString("cancelled") + " " + widget.lessonInfo.name
         : widget.lessonInfo.name;
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        title: Text(title),
+      ),
       body: _buildBody(),
     );
   }
