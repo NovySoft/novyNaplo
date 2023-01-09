@@ -286,25 +286,33 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           finalUserObject.userId = widget.userDetails.userId;
           await DatabaseHelper.updatePassword(finalUserObject);
         } else {
-          if (globals.allUsers.length != 0) {
-            List<int> allColors = myListOfRandomColors
+          List<int> allColors = myListOfRandomColors
+              .map(
+                (e) => e.value,
+              )
+              .toList();
+          for (Student user in globals.allUsers ?? []) {
+            allColors.remove(user.color.value);
+          }
+          if (allColors.length == 0) {
+            allColors = myListOfRandomColors
                 .map(
                   (e) => e.value,
                 )
                 .toList();
-            for (Student user in globals.allUsers) {
-              allColors.remove(user.color.value);
-            }
-            if (allColors.length == 0) {
-              allColors = myListOfRandomColors
-                  .map(
-                    (e) => e.value,
-                  )
-                  .toList();
-            }
-            finalUserObject.color =
-                Color(allColors[Random().nextInt(allColors.length)]);
           }
+          finalUserObject.color =
+              Color(allColors[Random().nextInt(allColors.length)]);
+
+          if ((globals.allUsers ?? []).length == 0) {
+            finalUserObject.color = Colors.orange;
+          }
+
+          if (globals.allUsers.length == 1) {
+            await globals.prefs.setBool('appBarColoredByUser', true);
+            globals.appBarColoredByUser = true;
+          }
+
           await DatabaseHelper.insertUser(finalUserObject);
           await globals.prefs.setBool("isNew", false);
 

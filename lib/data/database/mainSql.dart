@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
@@ -65,13 +66,29 @@ Future<void> initDatabase() async {
         );
       }
       // Append colors to existing users
-      List<Map<String, dynamic>> users = await db.rawQuery('SELECT id FROM Users');
-      for (int i = 0; i < users.length; i++) {
+      List<Map<String, dynamic>> users =
+          await db.rawQuery('SELECT id FROM Users');
+
+      if (users.length > 1) {
+        // Enable coloring for multi user
+        await globals.prefs.setBool('appBarColoredByUser', true);
+        globals.appBarColoredByUser = true;
+
+        for (int i = 0; i < users.length; i++) {
+          await db.execute(
+            "UPDATE Users SET color = ? WHERE id = ?;",
+            [
+              myListOfRandomColors[i % myListOfRandomColors.length].value,
+              users[i]["id"],
+            ],
+          );
+        }
+      } else if (users.length == 1) {
         await db.execute(
           "UPDATE Users SET color = ? WHERE id = ?;",
           [
-            myListOfRandomColors[i % myListOfRandomColors.length].value,
-            users[i]["id"],
+            Colors.orange.value,
+            users[0]["id"],
           ],
         );
       }

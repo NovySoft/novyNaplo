@@ -66,7 +66,7 @@ bool collapseNotifications =
     true; //Automatically collapse all notifications, on by default
 bool darker = false; //Darker theme
 bool calcLorincMode = false; //Should calculator show "invalid" outputs
-bool appBarColoredByUser = true; // Should color appbar based on user color
+bool appBarColoredByUser = false; // Should color appbar based on user color
 bool appBarTextColoredByUser =
     false; // Sgould color appbar text based on user color
 
@@ -399,8 +399,8 @@ Future<void> setGlobals() async {
   }
 
   if (prefs.getBool('appBarColoredByUser') == null) {
-    appBarColoredByUser = true;
-    await prefs.setBool("appBarColoredByUser", true);
+    appBarColoredByUser = false;
+    await prefs.setBool("appBarColoredByUser", false);
   } else {
     appBarColoredByUser = prefs.getBool("appBarColoredByUser");
   }
