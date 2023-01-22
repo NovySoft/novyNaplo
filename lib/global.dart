@@ -70,7 +70,7 @@ bool appBarColoredByUser = false; // Should color appbar based on user color
 bool appBarTextColoredByUser =
     false; // Sgould color appbar text based on user color
 
-Future<void> resetSessionGlobals() async {
+void resetSessionGlobals() {
   didFetch = false;
   marksPage.allParsedByDate = [];
   marksPage.allParsedBySubject = [];
