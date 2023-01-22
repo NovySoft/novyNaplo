@@ -13,7 +13,7 @@ final String clientId = "kreta-ellenorzo-mobile-android";
 String menuLogo = "assets/home.png";
 
 //App version, so I can do special version names:
-String currentAppVersionCode = "V1.2.6+30";
+String currentAppVersionCode = "V1.2.6+31";
 
 //Fdroid url
 String fdroidUrl = "https://f-droid.org/packages/novy.vip.novynaplo";

@@ -309,6 +309,8 @@ final Map<String, String> translation = {
   "inPc": "In percent",
   "praiseworthy": "Praiseworthy",
   "arrowFirstMark": "The arrow is showing the difference from the first mark",
+  "arrowBestMark": "The arrow is showing the difference from the best mark",
+  "arrowWorstMark": "The arrow is showing the difference from the worst mark",
   "performance": "Performance",
   "you": "you",
   "later": "Later",

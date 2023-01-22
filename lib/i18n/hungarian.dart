@@ -308,6 +308,8 @@ final Map<String, String> translation = {
   "inPc": "Százalékosan",
   "praiseworthy": "Dicséretes",
   "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
+  "arrowBestMark": "A mutató a legjobb jegytől való különbözetet mutatja",
+  "arrowWorstMark": "A mutató a legrosszabb jegytől való különbözetet mutatja",
   "performance": "Teljesítmény",
   "later": "Később",
   "never": "Soha",
