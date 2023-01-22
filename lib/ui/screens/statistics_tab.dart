@@ -68,7 +68,7 @@ class _StatisticsTabState extends State<StatisticsTab>
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Statistics");
-    getAllSubjectsAv(allParsedSubjectsWithoutZeros);
+    getAllSubjectsAv(marks.allParsedByDate);
     getMarksWithChanges(
       allParsedSubjectsWithoutZeros,
       globals.currentUser,
