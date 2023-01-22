@@ -72,27 +72,28 @@ class _TimetableTabState extends State<TimetableTab> {
         0) {
       if (!(await NetworkHelper.isNetworkAvailable())) {
         showDialog<void>(
-            context: context,
-            barrierDismissible: true,
-            builder: (_) {
-              return AlertDialog(
-                elevation: globals.darker ? 0 : 24,
-                title: Text(getTranslatedString("status")),
-                content: SingleChildScrollView(
-                  child: Column(children: <Widget>[
-                    Text("${getTranslatedString("noNet")}:"),
-                  ]),
+          context: context,
+          barrierDismissible: true,
+          builder: (_) {
+            return AlertDialog(
+              elevation: globals.darker ? 0 : 24,
+              title: Text(getTranslatedString("status")),
+              content: SingleChildScrollView(
+                child: Column(children: <Widget>[
+                  Text("${getTranslatedString("noNet")}:"),
+                ]),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
+              ],
+            );
+          },
+        );
       } else {
         showDialog<void>(
             context: context,
@@ -124,28 +125,29 @@ class _TimetableTabState extends State<TimetableTab> {
             rootNavigator: true,
           ).pop();
           showDialog<void>(
-              context: context,
-              barrierDismissible: true,
-              builder: (_) {
-                return AlertDialog(
-                  elevation: globals.darker ? 0 : 24,
-                  title: Text(getTranslatedString("status")),
-                  content: SingleChildScrollView(
-                    child: Column(children: <Widget>[
-                      Text("${getTranslatedString("err")}"),
-                      Text(e.toString()),
-                    ]),
+            context: context,
+            barrierDismissible: true,
+            builder: (_) {
+              return AlertDialog(
+                elevation: globals.darker ? 0 : 24,
+                title: Text(getTranslatedString("status")),
+                content: SingleChildScrollView(
+                  child: Column(children: <Widget>[
+                    Text("${getTranslatedString("err")}"),
+                    Text(e.toString()),
+                  ]),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Ok'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              });
+                ],
+              );
+            },
+          );
         }
       }
     }
@@ -190,112 +192,103 @@ class _TimetableTabState extends State<TimetableTab> {
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: CustomDrawer(TimetableTab.tag),
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: new Text(capitalize(getTranslatedString("timetable"))),
       ),
-      body: Column(children: [
-        CalendarWeek(
-          controller: _controller,
-          height: 100,
-          minDate: minDate,
-          maxDate: DateTime.now().add(
-            Duration(days: 365),
-          ),
-          onDatePressed: (DateTime datetime) async {
-            await handleDateChange(datetime, context);
-          },
-          onDateLongPressed: (DateTime datetime) async {
-            await handleDateChange(datetime, context);
-          },
-          onWeekChanged: () {},
-          weekendsStyle:
-              TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
-          dayOfWeekStyle:
-              TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
-          dayOfWeekAlignment: FractionalOffset.bottomCenter,
-          dateAlignment: FractionalOffset.topCenter,
-          pressedDateBackgroundColor: Colors.blue,
-          pressedDateStyle:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
-          dateBackgroundColor: Colors.transparent,
-          backgroundColor: globals.darker
-              ? Colors.black
-              : DynamicTheme.of(context).themeMode == ThemeMode.light
-                  ? Colors.white
-                  : Colors.grey[850],
-          dayOfWeek: [
-            getTranslatedString('MON'),
-            getTranslatedString('TUE'),
-            getTranslatedString('WED'),
-            getTranslatedString('THU'),
-            getTranslatedString('FRI'),
-            getTranslatedString('SAT'),
-            getTranslatedString('SUN'),
-          ],
-          month: [
-            getTranslatedString("January"),
-            getTranslatedString("February"),
-            getTranslatedString("March"),
-            getTranslatedString("April"),
-            getTranslatedString("May"),
-            getTranslatedString("June"),
-            getTranslatedString("July"),
-            getTranslatedString("August"),
-            getTranslatedString("September"),
-            getTranslatedString("October"),
-            getTranslatedString("November"),
-            getTranslatedString("December"),
-          ],
-          showMonth: true,
-          spaceBetweenLabelAndDate: 0,
-          dayShapeBorder: CircleBorder(),
-          decorations: [
-            DecorationItem(
-              decorationAlignment: FractionalOffset.bottomRight,
-              date: DateTime.now(),
-              decoration: Icon(
-                Icons.today,
-                color: Colors.blue,
-              ),
+      body: Column(
+        children: [
+          CalendarWeek(
+            controller: _controller,
+            minDate: minDate,
+            maxDate: DateTime.now().add(
+              Duration(days: 365),
             ),
-          ],
-        ),
-        SizedBox(
-          height: 7,
-        ),
-        AnimatedOpacity(
-          opacity: fade ? 1 : 0,
-          duration: Duration(milliseconds: 250),
-          child: Center(
-            child: specialEventDay == null
-                ? SizedBox(height: 0, width: 0)
-                : Text(
-                    specialEventDay.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  ),
+            dateBackgroundColor: Colors.transparent,
+            backgroundColor: globals.darker
+                ? Colors.black
+                : DynamicTheme.of(context).themeMode == ThemeMode.light
+                    ? Colors.white
+                    : Colors.grey[850],
+            dayOfWeek: [
+              getTranslatedString('MON'),
+              getTranslatedString('TUE'),
+              getTranslatedString('WED'),
+              getTranslatedString('THU'),
+              getTranslatedString('FRI'),
+              getTranslatedString('SAT'),
+              getTranslatedString('SUN'),
+            ],
+            month: [
+              getTranslatedString("January"),
+              getTranslatedString("February"),
+              getTranslatedString("March"),
+              getTranslatedString("April"),
+              getTranslatedString("May"),
+              getTranslatedString("June"),
+              getTranslatedString("July"),
+              getTranslatedString("August"),
+              getTranslatedString("September"),
+              getTranslatedString("October"),
+              getTranslatedString("November"),
+              getTranslatedString("December"),
+            ],
+            decorations: [
+              DecorationItem(
+                decorationAlignment: FractionalOffset.bottomRight,
+                date: DateTime.now(),
+                decoration: Icon(
+                  Icons.today,
+                  color: Colors.blue,
+                ),
+              ),
+            ],
+            onDatePressed: (DateTime datetime) async {
+              await handleDateChange(datetime, context);
+            },
+            onDateLongPressed: (DateTime datetime) async {
+              await handleDateChange(datetime, context);
+            },
           ),
-        ),
-        SizedBox(
-          height: 7,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.0),
-          child: Container(
-            height: 2.0,
-            width: double.infinity,
-            color: globals.darker ? Colors.white : Colors.black,
+          SizedBox(
+            height: 7,
           ),
-        ),
-        Expanded(
-          child: Center(
-            child: AnimatedOpacity(
-              opacity: fade ? 1 : 0,
-              duration: Duration(milliseconds: 250),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onHorizontalDragEnd: (details) async {
-                  /*if (details.velocity.pixelsPerSecond.dx > 0) {
+          AnimatedOpacity(
+            opacity: fade ? 1 : 0,
+            duration: Duration(milliseconds: 250),
+            child: Center(
+              child: specialEventDay == null
+                  ? SizedBox(height: 0, width: 0)
+                  : Text(
+                      specialEventDay.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+            ),
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: Container(
+              height: 2.0,
+              width: double.infinity,
+              color: globals.darker ? Colors.white : Colors.black,
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: fade ? 1 : 0,
+                duration: Duration(milliseconds: 250),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onHorizontalDragEnd: (details) async {
+                    /*if (details.velocity.pixelsPerSecond.dx > 0) {
                     setState(() {
                       fade = false;
                     });
@@ -314,63 +307,66 @@ class _TimetableTabState extends State<TimetableTab> {
                       fade = true;
                     });
                   }*/
-                },
-                child: selectedLessonList.length == 0
-                    ? SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              MdiIcons.emoticonHappyOutline,
-                              size: 50,
-                            ),
-                            Text("${getTranslatedString("noLesson")}!")
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: selectedLessonList.length + 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index >= selectedLessonList.length) {
-                            return SizedBox(
-                              height: 100,
-                            );
-                          }
-                          Color color = getTimetableCardColor(
-                            lesson: selectedLessonList[index],
-                            index: index,
-                          );
-                          return SafeArea(
-                            child: AnimatedTimetableCard(
-                              iconData: selectedLessonList[index].icon,
-                              hasHomework: selectedLessonList[index]
-                                          .teacherHwUid !=
-                                      null &&
-                                  selectedLessonList[index].teacherHwUid != "",
-                              hasExam:
-                                  selectedLessonList[index].examList == null
-                                      ? false
-                                      : (selectedLessonList[index]
-                                              .examList
-                                              .length !=
-                                          0),
-                              color: color,
-                              heroAnimation: AlwaysStoppedAnimation(0),
-                              lessonInfo: selectedLessonList[index],
-                              onPressed: TimetableDetailTab(
-                                icon: selectedLessonList[index].icon,
-                                color: color,
-                                lessonInfo: selectedLessonList[index],
+                  },
+                  child: selectedLessonList.length == 0
+                      ? SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                MdiIcons.emoticonHappyOutline,
+                                size: 50,
                               ),
-                            ),
-                          );
-                        }),
+                              Text("${getTranslatedString("noLesson")}!")
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: selectedLessonList.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index >= selectedLessonList.length) {
+                              return SizedBox(
+                                height: 100,
+                              );
+                            }
+                            Color color = getTimetableCardColor(
+                              lesson: selectedLessonList[index],
+                              index: index,
+                            );
+                            return SafeArea(
+                              child: AnimatedTimetableCard(
+                                iconData: selectedLessonList[index].icon,
+                                hasHomework: selectedLessonList[index]
+                                            .teacherHwUid !=
+                                        null &&
+                                    selectedLessonList[index].teacherHwUid !=
+                                        "",
+                                hasExam:
+                                    selectedLessonList[index].examList == null
+                                        ? false
+                                        : (selectedLessonList[index]
+                                                .examList
+                                                .length !=
+                                            0),
+                                color: color,
+                                heroAnimation: AlwaysStoppedAnimation(0),
+                                lessonInfo: selectedLessonList[index],
+                                onPressed: TimetableDetailTab(
+                                  icon: selectedLessonList[index].icon,
+                                  color: color,
+                                  lessonInfo: selectedLessonList[index],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
               ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

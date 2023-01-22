@@ -186,7 +186,12 @@ class MarksDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(
-          title: Text(capitalize(eval.subject.name + " " + eval.textValue))),
+        title: Text(capitalize(eval.subject.name + " " + eval.textValue)),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+      ),
       body: _buildBody(),
     );
   }

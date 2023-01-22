@@ -30,6 +30,10 @@ class _EventsTabState extends State<EventsTab> {
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslatedString("events")),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,

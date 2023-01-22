@@ -67,6 +67,10 @@ class _HomeworkTabState extends State<HomeworkTab> {
     return Scaffold(
       appBar: AppBar(
         title: Text(HomeworkTab.title),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,

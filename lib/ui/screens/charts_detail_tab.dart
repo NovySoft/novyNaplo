@@ -72,7 +72,12 @@ class ChartsDetailTab extends StatelessWidget {
       textCol = Colors.red[900];
     }
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+      ),
       body: SafeArea(
         child: Column(
           children: [

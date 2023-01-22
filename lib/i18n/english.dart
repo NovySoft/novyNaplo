@@ -309,6 +309,8 @@ final Map<String, String> translation = {
   "inPc": "In percent",
   "praiseworthy": "Praiseworthy",
   "arrowFirstMark": "The arrow is showing the difference from the first mark",
+  "arrowBestMark": "The arrow is showing the difference from the best mark",
+  "arrowWorstMark": "The arrow is showing the difference from the worst mark",
   "performance": "Performance",
   "you": "you",
   "later": "Later",
@@ -498,4 +500,6 @@ final Map<String, String> translation = {
   "checkForUpdates": "Check for updates",
   "checkForTestVersions": "Check for test versions",
   "classAvS": "Class AV",
+  "appBarColoredByUser": "App bar color based on user",
+  "appBarTextColoredByUser": "App bar text color based on user",
 };

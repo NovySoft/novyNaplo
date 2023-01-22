@@ -308,6 +308,8 @@ final Map<String, String> translation = {
   "inPc": "Százalékosan",
   "praiseworthy": "Dicséretes",
   "arrowFirstMark": "A mutató az első jegytől való különbözetet mutatja",
+  "arrowBestMark": "A mutató a legjobb jegytől való különbözetet mutatja",
+  "arrowWorstMark": "A mutató a legrosszabb jegytől való különbözetet mutatja",
   "performance": "Teljesítmény",
   "later": "Később",
   "never": "Soha",
@@ -496,5 +498,7 @@ final Map<String, String> translation = {
   "updating": "Frissítés",
   "checkForUpdates": "Frissítések keresése",
   "checkForTestVersions": "Teszt verziók keresése",
-  "classAvS": "Osztályátlag"
+  "classAvS": "Osztályátlag",
+  "appBarColoredByUser": "Menü sáv szín a felhasználó alapján",
+  "appBarTextColoredByUser": "Menü sáv szöveg szín a felhasználó alapján",
 };

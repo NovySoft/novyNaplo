@@ -44,6 +44,7 @@ class ReportsDetailTab extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Reports_detail_tab");
     List<LinearMarkChartData> avList = [LinearMarkChartData(0, 0)];
+    List<LinearMarkChartData> classAvList;
     List<charts.Series<dynamic, num>> chartList = [];
     double halfYearMarker;
     if (inputList.length > 0) {
@@ -59,17 +60,38 @@ class ReportsDetailTab extends StatelessWidget {
     }
     List<charts.Series<dynamic, num>> chartPointList = [];
     if (chartList != null) {
-      if (chartList.length > 0) {
-        avList = List.from(chartList[0].data);
-        chartPointList = chartList;
+      chartPointList = chartList;
+      if (chartList.length >= 2 && chartList[1]?.data != null) {
+        avList = List.from(chartList[1].data);
+      }
+      if (chartList.length >= 2 && chartList[0]?.data != null) {
+        classAvList = List.from(chartList[0].data);
+        if (classAvList != null && classAvList.length == 0) {
+          classAvList = null;
+        }
       }
     }
     if (avList.length <= 0) {
       avList = [LinearMarkChartData(0, 0)];
     }
+
+    List<LinearMarkChartData> sortableAvList = List.from(avList);
+    sortableAvList.sort((a, b) => a.value.compareTo(b.value));
+    List<LinearMarkChartData> sortableClassAvList;
+    if (classAvList != null) {
+      sortableClassAvList = List.from(classAvList);
+      sortableClassAvList.sort((a, b) => a.value.compareTo(b.value));
+    }
+    double bestDiff = (avList.last.value - sortableAvList.last.value).abs();
+    double worstDiff = (avList.last.value - sortableAvList.first.value).abs();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(capitalize(title)),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
       ),
       body: ListView.builder(
         itemCount: 6,
@@ -159,36 +181,59 @@ class ReportsDetailTab extends StatelessWidget {
               );
               break;
             case 3:
-              return Center(
-                child: Text(
-                  getTranslatedString("arrowFirstMark"),
-                ),
-              );
+              if (worstDiff > bestDiff) {
+                // Távolabb van a legrosszabb átlag
+                return Center(
+                  child: Text(
+                    getTranslatedString("arrowWorstMark"),
+                  ),
+                );
+              } else if (bestDiff > worstDiff) {
+                // Távolabb van a legjobb átlag
+                return Center(
+                  child: Text(
+                    getTranslatedString("arrowBestMark"),
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    getTranslatedString("arrowFirstMark"),
+                  ),
+                );
+              }
               break;
             case 4:
-              List<LinearMarkChartData> sortableList = List.from(avList);
-              sortableList.sort((a, b) => a.value.compareTo(b.value));
               Color diffColor;
               Widget diffIcon;
-              if (avList.last.value - avList.first.value == 0) {
+              double diffShower = 0;
+
+              if (worstDiff > bestDiff) {
+                diffShower = avList.last.value - sortableAvList.first.value;
+              } else if (worstDiff < bestDiff) {
+                diffShower = avList.last.value - sortableAvList.last.value;
+              }
+
+              if (diffShower == 0) {
                 diffColor = Colors.orange;
                 diffIcon = Icon(
                   Icons.linear_scale,
                   color: diffColor,
                 );
-              } else if (avList.last.value - avList.first.value < 0) {
+              } else if (diffShower < 0) {
                 diffColor = Colors.red;
                 diffIcon = Icon(
                   Icons.keyboard_arrow_down,
                   color: diffColor,
                 );
-              } else if (avList.last.value - avList.first.value > 0) {
+              } else if (diffShower > 0) {
                 diffColor = Colors.green;
                 diffIcon = Icon(
                   Icons.keyboard_arrow_up,
                   color: diffColor,
                 );
               }
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -203,31 +248,78 @@ class ReportsDetailTab extends StatelessWidget {
                       children: <Widget>[
                         SizedBox(height: 15),
                         Text(
-                            "${getTranslatedString("worst")} ${getTranslatedString("av")}: " +
-                                sortableList.first.value.toStringAsFixed(3),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                          "${getTranslatedString("worst")} ${getTranslatedString("av")}: " +
+                              sortableAvList.first.value.toStringAsFixed(3),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        sortableClassAvList != null
+                            ? Text(
+                                "${getTranslatedString("worst")} ${getTranslatedString("classAv").toLowerCase()}: " +
+                                    sortableClassAvList.first.value
+                                        .toStringAsFixed(3),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : SizedBox(width: 0, height: 0),
+                        sortableClassAvList != null
+                            ? SizedBox(height: 15)
+                            : SizedBox(width: 0, height: 0),
                         Text(
-                            "${getTranslatedString("best")} ${getTranslatedString("av")}: " +
-                                sortableList.last.value.toStringAsFixed(3),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                          "${getTranslatedString("best")} ${getTranslatedString("av")}: " +
+                              sortableAvList.last.value.toStringAsFixed(3),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        sortableClassAvList != null
+                            ? Text(
+                                "${getTranslatedString("best")} ${getTranslatedString("classAv").toLowerCase()}: " +
+                                    sortableClassAvList.last.value
+                                        .toStringAsFixed(3),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : SizedBox(width: 0, height: 0),
+                        sortableClassAvList != null
+                            ? SizedBox(height: 15)
+                            : SizedBox(width: 0, height: 0),
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           alignment: WrapAlignment.start,
                           children: <Widget>[
                             Text(
-                                "${capitalize(title)} ${getTranslatedString("av")}: " +
-                                    avList.last.value.toStringAsFixed(3),
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                              "${capitalize(title)} ${getTranslatedString("av")}: " +
+                                  avList.last.value.toStringAsFixed(3),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             diffIcon,
                             Text(
-                              "${(avList.last.value - avList.first.value).toStringAsFixed(3)}",
+                              "${(diffShower).toStringAsFixed(3)}",
                               style: TextStyle(color: diffColor),
                             ),
                           ],
                         ),
+                        sortableClassAvList != null
+                            ? Text(
+                                "${capitalize(title)} ${getTranslatedString("classAv").toLowerCase()}: " +
+                                    classAvList.last.value.toStringAsFixed(3),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : SizedBox(width: 0, height: 0),
                       ],
                     ),
                   ),

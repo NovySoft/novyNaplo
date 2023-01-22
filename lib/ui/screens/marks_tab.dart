@@ -381,6 +381,8 @@ class MarksTabState extends State<MarksTab>
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: CustomDrawer(MarksTab.tag),
       appBar: AppBar(
+        backgroundColor: globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: Text(MarksTab.title),
         bottom: TabBar(
           controller: _tabController,

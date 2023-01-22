@@ -44,7 +44,12 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+      ),
       body: _body(),
     );
   }

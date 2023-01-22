@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,28 +25,7 @@ Future<Student> getUserById(int id, {bool decrypt = true}) async {
   if (maps.length == 0) {
     throw "No user with id $id was found!";
   }
-  Student temp = new Student(
-    userId: maps[0]['id'],
-    uid: maps[0]['uid'],
-    mothersName: maps[0]['mothersName'],
-    addressList: json.decode(maps[0]['adressList']).cast<String>(),
-    parents: Parent.fromJsonList(maps[0]['parents']),
-    name: maps[0]['name'],
-    nickname: maps[0]['nickname'],
-    birthDayString: maps[0]['birthDay'],
-    birthDay: DateTime.parse(maps[0]['birthDay']).toLocal(),
-    placeOfBirth: maps[0]['placeOfBirth'],
-    birthName: maps[0]['birthName'],
-    schoolYearUid: maps[0]['schoolYearUid'],
-    bankAccount: BankAccount.fromJson(json.decode(maps[0]['bankAccount'])),
-    institution: Institution.fromJson(json.decode(maps[0]['institution'])),
-    school: maps[0]['school'],
-    username: maps[0]['username'],
-    password: maps[0]['password'],
-    iv: maps[0]['iv'],
-    current: maps[0]['current'] == 1 ? true : false,
-    fetched: maps[0]['fetched'] == 1 ? true : false,
-  );
+  Student temp = new Student.fromSqlite(maps[0]);
   if (decrypt) {
     return decryptUserDetails(temp);
   }
@@ -61,28 +40,7 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
   );
 
   List<Student> tempList = List.generate(maps.length, (i) {
-    Student temp = new Student(
-      userId: maps[i]['id'],
-      uid: maps[i]['uid'],
-      mothersName: maps[i]['mothersName'],
-      addressList: json.decode(maps[i]['adressList']).cast<String>(),
-      parents: Parent.fromJsonList(maps[i]['parents']),
-      name: maps[i]['name'],
-      nickname: maps[i]['nickname'],
-      birthDayString: maps[i]['birthDay'],
-      birthDay: DateTime.parse(maps[i]['birthDay']).toLocal(),
-      placeOfBirth: maps[i]['placeOfBirth'],
-      birthName: maps[i]['birthName'],
-      schoolYearUid: maps[i]['schoolYearUid'],
-      bankAccount: BankAccount.fromJson(json.decode(maps[i]['bankAccount'])),
-      institution: Institution.fromJson(json.decode(maps[i]['institution'])),
-      school: maps[i]['school'],
-      username: maps[i]['username'],
-      password: maps[i]['password'],
-      iv: maps[i]['iv'],
-      current: maps[i]['current'] == 1 ? true : false,
-      fetched: maps[i]['fetched'] == 1 ? true : false,
-    );
+    Student temp = new Student.fromSqlite(maps[i]);
     if (decrypt) {
       return decryptUserDetails(temp);
     }
@@ -165,6 +123,7 @@ Future<void> updateKretaGivenParameters(Student user) async {
   updateObject.remove('iv');
   updateObject.remove('current');
   updateObject.remove('fetched');
+  updateObject.remove('color');
 
   await globals.db.update(
     "Users",
@@ -208,4 +167,16 @@ Future<void> deleteUserAndAssociatedData(Student user) async {
     }
   }
   DatabaseHelper.deleteUsersData(user.userId);
+}
+
+Future<void> changeUserColor(Student user, Color newColor) async {
+  FirebaseCrashlytics.instance.log("changeUserColor");
+  await globals.db.update(
+    "Users",
+    {
+      'color': newColor.value,
+    },
+    where: "id = ?",
+    whereArgs: [user.userId],
+  );
 }

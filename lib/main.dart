@@ -39,6 +39,8 @@ bool isNew = true;
 int fetchAlarmID = 0; //We're using 0, because why not
 Map<String, WidgetBuilder> routes;
 
+// FIXME: flutter.dev/go/android-splash-migration
+
 class NavigatorKey {
   static final navigatorKey = GlobalKey<NavigatorState>();
 }

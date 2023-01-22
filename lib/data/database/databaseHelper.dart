@@ -97,6 +97,7 @@ class DatabaseHelper {
       users.batchUpdateUserPositions;
   static Future<void> Function(Student) deleteUserAndAssociatedData =
       users.deleteUserAndAssociatedData;
+  static Future<void> Function(Student, Color) changeUserColor = users.changeUserColor;
 
   static Future<void> Function() initDatabase = main.initDatabase;
 

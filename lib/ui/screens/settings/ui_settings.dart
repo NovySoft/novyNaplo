@@ -175,6 +175,17 @@ class _UIsettingsState extends State<UIsettings> {
       "statisticsTextColSubject",
       globals.statisticsTextColSubject,
     );
+    // App bar
+    globals.appBarColoredByUser = false;
+    globals.prefs.setBool(
+      "appBarColoredByUser",
+      globals.appBarColoredByUser,
+    );
+    globals.appBarTextColoredByUser = true;
+    globals.prefs.setBool(
+      "appBarTextColoredByUser",
+      globals.appBarTextColoredByUser,
+    );
   }
 
   void disableDarkCards() {
@@ -331,7 +342,7 @@ class _UIsettingsState extends State<UIsettings> {
       ),
       body: ListView.separated(
           separatorBuilder: (context, index) => Divider(),
-          itemCount: 3 + (globals.darker ? 1 : 0),
+          itemCount: 5 + (globals.darker ? 1 : 0),
           itemBuilder: (context, index) {
             switch (index) {
               case 0:
@@ -503,6 +514,57 @@ class _UIsettingsState extends State<UIsettings> {
                 );
                 break;
               case 3:
+                return ListTile(
+                  title: Text(getTranslatedString("appBarColoredByUser")),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      setState(() {
+                        globals.appBarColoredByUser = switchOn;
+                      });
+                      if (switchOn) {
+                        globals.prefs.setBool("appBarColoredByUser", true);
+                        setState(() {
+                          globals.appBarTextColoredByUser = false;
+                          globals.prefs
+                              .setBool("appBarTextColoredByUser", false);
+                        });
+                      } else {
+                        globals.prefs.setBool("appBarColoredByUser", false);
+                      }
+                      DynamicTheme.of(context).setThemeMode(
+                        DynamicTheme.of(context).themeMode,
+                      );
+                    },
+                    value: globals.appBarColoredByUser,
+                  ),
+                );
+                break;
+              case 4:
+                return ListTile(
+                  title: Text(getTranslatedString("appBarTextColoredByUser")),
+                  trailing: Switch(
+                    onChanged: (bool switchOn) async {
+                      setState(() {
+                        globals.appBarTextColoredByUser = switchOn;
+                      });
+                      if (switchOn) {
+                        globals.prefs.setBool("appBarTextColoredByUser", true);
+                        setState(() {
+                          globals.appBarColoredByUser = false;
+                          globals.prefs.setBool("appBarColoredByUser", false);
+                        });
+                      } else {
+                        globals.prefs.setBool("appBarTextColoredByUser", false);
+                      }
+                      DynamicTheme.of(context).setThemeMode(
+                        DynamicTheme.of(context).themeMode,
+                      );
+                    },
+                    value: globals.appBarTextColoredByUser,
+                  ),
+                );
+                break;
+              case 5:
                 return ListTile(
                   title: Center(
                     child: SizedBox(

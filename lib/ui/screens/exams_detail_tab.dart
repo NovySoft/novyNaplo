@@ -14,7 +14,13 @@ class ExamsDetailTab extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.log("Shown Exams_detail_tab");
     return Scaffold(
-      appBar: AppBar(title: Text(capitalize(exam.theme))),
+      appBar: AppBar(
+        title: Text(capitalize(exam.theme)),
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+      ),
       body: _buildBody(exam, color),
     );
   }

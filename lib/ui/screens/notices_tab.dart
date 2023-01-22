@@ -24,6 +24,10 @@ class _NoticesTabState extends State<NoticesTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor:
+            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
         title: Text(NoticesTab.title),
       ),
       drawerScrimColor:

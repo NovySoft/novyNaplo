@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -25,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as fpath;
+import '../../helpers/ui/getRandomColors.dart';
 
 Function resetButtonAnimation;
 var schoolList = [];
@@ -283,6 +285,33 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           finalUserObject.userId = widget.userDetails.userId;
           await DatabaseHelper.updatePassword(finalUserObject);
         } else {
+          List<int> allColors = myListOfRandomColors
+              .map(
+                (e) => e.value,
+              )
+              .toList();
+          for (Student user in (globals.allUsers ?? [])) {
+            allColors.remove(user.color.value);
+          }
+          if (allColors.length == 0) {
+            allColors = myListOfRandomColors
+                .map(
+                  (e) => e.value,
+                )
+                .toList();
+          }
+          finalUserObject.color =
+              Color(allColors[Random().nextInt(allColors.length)]);
+
+          if ((globals.allUsers ?? []).length == 0) {
+            finalUserObject.color = Colors.orange;
+          }
+
+          if ((globals.allUsers ?? []).length == 1) {
+            await globals.prefs.setBool('appBarColoredByUser', true);
+            globals.appBarColoredByUser = true;
+          }
+
           await DatabaseHelper.insertUser(finalUserObject);
           await globals.prefs.setBool("isNew", false);
 

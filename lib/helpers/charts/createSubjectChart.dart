@@ -10,7 +10,7 @@ ChartReturn createSubjectChart(List<Evals> input, String id, bool lightmode) {
   List<LinearMarkChartData> classAvData = [];
   double sum = 0;
   double index = 0;
-  int listArray = 0;
+  int listIndex = 0;
   bool isSzovegesOnly = manipulableData.indexWhere((element) =>
               element.valueType.name != "Szazalekos" &&
               element.valueType.name != "Szoveges" &&
@@ -41,11 +41,11 @@ ChartReturn createSubjectChart(List<Evals> input, String id, bool lightmode) {
         sum += n.numberValue * n.weight / 100;
         index += 1 * n.weight / 100;
       }
-      chartData.add(new LinearMarkChartData(listArray, sum / index));
+      chartData.add(new LinearMarkChartData(listIndex, sum / index));
       if (n.classAv != null) {
-        classAvData.add(new LinearMarkChartData(listArray, n.classAv));
+        classAvData.add(new LinearMarkChartData(listIndex, n.classAv));
       }
-      listArray++;
+      listIndex++;
     }
   }
   charts.Color classAvColor = charts.Color(
