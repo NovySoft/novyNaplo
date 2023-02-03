@@ -289,7 +289,10 @@ class MarksTabState extends State<MarksTab>
             (element) =>
                 element.subjectUid ==
                 allParsedBySubject[listIndex][index].subject.uid,
-            orElse: () => null,
+            orElse: () => Average(
+              subjectUid: allParsedBySubject[listIndex][index].subject.uid,
+              value: 0,
+            ),
           );
           return Column(
             mainAxisSize: MainAxisSize.max,
