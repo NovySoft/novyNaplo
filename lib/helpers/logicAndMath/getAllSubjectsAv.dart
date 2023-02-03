@@ -1,24 +1,22 @@
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
+import '../../data/models/evals.dart';
 
-
-// FIXME: Itt valami nagyon nem működik (check grafikon nézet too)
 //Összesített átlag
-void getAllSubjectsAv(input) {
+void getAllSubjectsAv(List<Evals> input) {
   double index = 0, sum = 0, tempIndex = 0;
   double tempValue = 0;
   stats.osszesitettAv.count = 0;
   for (var n in input) {
-    tempIndex = 0;
-    for (var y in n) {
-      tempIndex++;
-      sum += y.numberValue * y.weight / 100;
-      index += 1 * y.weight / 100;
+    tempIndex++;
+    if (!Evals.nonAvTypes.contains(n.type.name)) {
+      sum += n.numberValue * n.weight / 100;
+      index += 1 * n.weight / 100;
       stats.osszesitettAv.value = sum / index;
-      if (tempIndex == n.length - 1) {
+      if (tempIndex == input.length - 1) {
         tempValue = sum / index;
       }
     }
   }
   stats.osszesitettAv.count = index;
-  stats.osszesitettAv.diffSinceLast = (tempValue - (sum / index)) * -1;
+  stats.osszesitettAv.diffSinceLast = (sum / index) - tempValue;
 }

@@ -10,6 +10,8 @@ class Average {
   int nonWeightedCount;
   double classAverage = 0;
 
+  Average({this.value, this.subjectName, this.subjectUid, this.count, this.databaseId, this.userId, this.classAverage, this.nonWeightedCount, this.diffSinceLast});
+
   @override
   String toString() {
     return this.subjectName + ": " + this.value.toStringAsFixed(3);
