@@ -13,6 +13,8 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
 
+import '../../helpers/misc/removeHTMLtags.dart';
+
 Map<String, List<Evals>> reportMaps = {
   "FirstQuarter": [],
   "HalfYear": [],
@@ -206,7 +208,7 @@ class _ReportsTabState extends State<ReportsTab>
                       value = "Elégtelen(1)";
                       break;
                     default:
-                      value = value.substring(0, 7) + "...";
+                      value = removeHTMLtags(value).substring(0, 7) + "...";
                       break;
                   }
                 }

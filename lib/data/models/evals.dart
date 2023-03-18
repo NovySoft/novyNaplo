@@ -172,7 +172,7 @@ class Evals {
           description: "Percentage Calculated By NovyNapló",
           name: "Szazalekos",
         );
-      } else {
+      } else if (!Evals.nonAvTypes.contains(type.name)) {
         if (textValue.toLowerCase().contains("kiváló") ||
             textValue.toLowerCase().contains("jeles") ||
             textValue.toLowerCase().contains("példás")) {
