@@ -6,8 +6,8 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/misc/removeHTMLtags.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});

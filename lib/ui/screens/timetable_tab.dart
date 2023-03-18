@@ -17,7 +17,7 @@ import 'package:novynaplo/ui/widgets/AnimatedTimetableCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
 import 'package:novynaplo/data/models/extensions.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];

@@ -24,7 +24,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];

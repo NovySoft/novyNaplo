@@ -13,7 +13,7 @@ import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 Timer timer;
 List<Widget> downloadIcon = [];

@@ -8,8 +8,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/toasts/okToast.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-
-import '../../../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 import 'builders/bankAccDetailsBuilder.dart';
 import 'builders/guardianDetailsBuilder.dart';
 import 'builders/personalDetailsBuilder.dart';

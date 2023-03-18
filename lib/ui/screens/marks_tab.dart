@@ -31,9 +31,9 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
-import '../../data/models/average.dart';
-import '../../helpers/misc/removeHTMLtags.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/data/models/average.dart';
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];

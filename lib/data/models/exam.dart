@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';
-
 import 'description.dart';
 import 'classGroup.dart';
 import 'subject.dart';

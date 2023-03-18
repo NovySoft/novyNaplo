@@ -26,7 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as fpath;
-import '../../helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 
 Function resetButtonAnimation;
 var schoolList = [];

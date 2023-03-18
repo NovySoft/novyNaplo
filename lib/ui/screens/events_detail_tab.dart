@@ -6,7 +6,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class EventsDetailTab extends StatefulWidget {
   const EventsDetailTab({

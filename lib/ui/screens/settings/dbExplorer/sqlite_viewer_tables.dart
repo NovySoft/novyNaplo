@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import './sqlite_viewer_values.dart';
 
 class TableList extends StatefulWidget {

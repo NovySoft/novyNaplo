@@ -11,7 +11,7 @@ import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<List<Absence>> allParsedAbsences = [];
 List<charts.Series> seriesList;

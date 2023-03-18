@@ -1,5 +1,5 @@
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
-import '../../data/models/evals.dart';
+import 'package:novynaplo/data/models/evals.dart';
 
 //Összesített átlag
 void getAllSubjectsAv(List<List<Evals>> input) {

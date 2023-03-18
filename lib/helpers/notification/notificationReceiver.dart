@@ -40,7 +40,7 @@ import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
-import '../../main.dart';
+import 'package:novynaplo/main.dart';
 import 'notificationHelper.dart';
 
 class NotificationReceiver {

@@ -11,7 +11,7 @@ import 'package:novynaplo/ui/widgets/AnimatedExamsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<Exam> allParsedExams = [];
 

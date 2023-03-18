@@ -13,7 +13,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 // TODO: Fix landscape UI
 class ChartsDetailTab extends StatelessWidget {

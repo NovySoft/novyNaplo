@@ -40,7 +40,6 @@ import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
 import 'calcKretaNonce.dart';
 
 var client = http.Client();

@@ -8,7 +8,7 @@ import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({

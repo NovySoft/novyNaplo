@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/ui/parseSubjectToIcon.dart';

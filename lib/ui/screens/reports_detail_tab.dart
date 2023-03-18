@@ -13,7 +13,7 @@ import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import '../../helpers/ui/textColor/drawerText.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class ReportsDetailTab extends StatelessWidget {
   ReportsDetailTab({
