@@ -9,6 +9,7 @@ import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/toasts/okToast.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 
+import '../../../../helpers/ui/textColor/drawerText.dart';
 import 'builders/bankAccDetailsBuilder.dart';
 import 'builders/guardianDetailsBuilder.dart';
 import 'builders/personalDetailsBuilder.dart';
@@ -38,8 +39,7 @@ class _UserDetailsState extends State<UserDetails> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? widget.userDetails.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? widget.userDetails.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(widget.userDetails.name),
       ),
       body: ListView(
@@ -252,7 +252,8 @@ class _UserDetailsState extends State<UserDetails> {
                 );
                 setState(() {
                   input.color = pickerColor;
-                  int userIndex = globals.allUsers.indexWhere((element) => element.userId == input.userId);
+                  int userIndex = globals.allUsers
+                      .indexWhere((element) => element.userId == input.userId);
                   globals.allUsers[userIndex].color = pickerColor;
                   if (globals.currentUser.userId == input.userId) {
                     globals.currentUser.color = pickerColor;

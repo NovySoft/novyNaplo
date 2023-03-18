@@ -17,6 +17,7 @@ import 'package:novynaplo/ui/widgets/AnimatedTimetableCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/widgets/LoadingSpinner.dart';
 import 'package:novynaplo/data/models/extensions.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 List<List<Lesson>> lessonsList = [];
 List<DateTime> fetchedDayList = [];
@@ -194,8 +195,7 @@ class _TimetableTabState extends State<TimetableTab> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: new Text(capitalize(getTranslatedString("timetable"))),
       ),
       body: Column(

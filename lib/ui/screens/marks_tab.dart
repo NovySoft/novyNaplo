@@ -33,6 +33,7 @@ import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import '../../data/models/average.dart';
 import '../../helpers/misc/removeHTMLtags.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];
@@ -387,12 +388,12 @@ class MarksTabState extends State<MarksTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(MarksTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: markTabs,
+          labelColor: getTabForeground(),
         ),
       ),
       body: TabBarView(

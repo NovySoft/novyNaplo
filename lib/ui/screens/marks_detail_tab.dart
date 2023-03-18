@@ -6,8 +6,8 @@ import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-
 import '../../helpers/misc/removeHTMLtags.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});
@@ -126,7 +126,10 @@ class MarksDetailTab extends StatelessWidget {
                         ),
                         SizedBox(height: 10, width: 5),
                         Text(
-                          "${getTranslatedString("eval")}: " + (eval.textValue.contains(htmlMatcher) ? '' : eval.textValue),
+                          "${getTranslatedString("eval")}: " +
+                              (eval.textValue.contains(htmlMatcher)
+                                  ? ''
+                                  : eval.textValue),
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -191,11 +194,11 @@ class MarksDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(
-        title: Text(capitalize(eval.subject.name + " " + removeHTMLtags(eval.textValue))),
+        title: Text(capitalize(
+            eval.subject.name + " " + removeHTMLtags(eval.textValue))),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: _buildBody(),
     );

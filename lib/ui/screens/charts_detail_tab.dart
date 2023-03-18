@@ -13,6 +13,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 // TODO: Fix landscape UI
 class ChartsDetailTab extends StatelessWidget {
@@ -75,8 +76,7 @@ class ChartsDetailTab extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: SafeArea(
         child: Column(

@@ -24,6 +24,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedChartsTitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 List<List<Evals>> allParsedSubjects = [];
 List<List<Evals>> allParsedSubjectsWithoutZeros = [];
@@ -89,12 +90,12 @@ class _StatisticsTabState extends State<StatisticsTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(StatisticsTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: statTabs,
+          labelColor: getTabForeground(),
         ),
       ),
       drawerScrimColor:

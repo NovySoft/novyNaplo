@@ -13,6 +13,7 @@ import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 Timer timer;
 List<Widget> downloadIcon = [];
@@ -47,8 +48,7 @@ class _HomeworkDetailTabState extends State<HomeworkDetailTab> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: _body(),
     );

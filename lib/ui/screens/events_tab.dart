@@ -9,6 +9,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 List<Event> allParsedEvents = [];
 
@@ -32,8 +33,7 @@ class _EventsTabState extends State<EventsTab> {
         title: Text(getTranslatedString("events")),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,

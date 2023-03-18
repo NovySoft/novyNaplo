@@ -8,6 +8,7 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 List<Notice> allParsedNotices = [];
 
@@ -26,8 +27,7 @@ class _NoticesTabState extends State<NoticesTab> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(NoticesTab.title),
       ),
       drawerScrimColor:

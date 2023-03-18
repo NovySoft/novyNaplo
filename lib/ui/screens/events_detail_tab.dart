@@ -6,6 +6,7 @@ import 'package:novynaplo/data/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 class EventsDetailTab extends StatefulWidget {
   const EventsDetailTab({
@@ -33,8 +34,7 @@ class _EventsDetailTabState extends State<EventsDetailTab> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: SafeArea(
         child: Column(

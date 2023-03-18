@@ -13,6 +13,7 @@ import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 class ReportsDetailTab extends StatelessWidget {
   ReportsDetailTab({
@@ -92,8 +93,7 @@ class ReportsDetailTab extends StatelessWidget {
         title: Text(capitalize(title)),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: ListView.builder(
         itemCount: 6,
@@ -139,7 +139,8 @@ class ReportsDetailTab extends StatelessWidget {
                       ],
                     ),
                     eval.textValue.contains(htmlMatcher)
-                        ? Center(child: Html(
+                        ? Center(
+                            child: Html(
                             data: eval.textValue,
                             shrinkWrap: true,
                           ))

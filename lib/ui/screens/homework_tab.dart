@@ -12,6 +12,7 @@ import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedHomeworkCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 //TODO: should also make a checkbox to save homework as done
 List<Homework> globalHomework = [];
@@ -69,8 +70,7 @@ class _HomeworkTabState extends State<HomeworkTab> {
         title: Text(HomeworkTab.title),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,

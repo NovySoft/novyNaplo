@@ -12,8 +12,8 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
-
 import '../../helpers/misc/removeHTMLtags.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 Map<String, List<Evals>> reportMaps = {
   "FirstQuarter": [],
@@ -132,12 +132,12 @@ class _ReportsTabState extends State<ReportsTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(ReportsTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: tabs,
+          labelColor: getTabForeground(),
         ),
       ),
       body: TabBarView(

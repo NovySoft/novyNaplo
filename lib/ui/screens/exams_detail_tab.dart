@@ -5,6 +5,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
+import '../../helpers/ui/textColor/drawerText.dart';
 
 class ExamsDetailTab extends StatelessWidget {
   ExamsDetailTab({@required this.exam, this.color});
@@ -18,8 +19,7 @@ class ExamsDetailTab extends StatelessWidget {
         title: Text(capitalize(exam.theme)),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: _buildBody(exam, color),
     );

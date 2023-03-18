@@ -13,6 +13,7 @@ import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/i18n/translationProvider.dart';
+import '../../helpers/ui/textColor/drawerText.dart';
 
 Timer timer;
 List<Widget> downloadIcon = [];
@@ -105,8 +106,7 @@ class _TimetableDetailTabState extends State<TimetableDetailTab> {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(title),
       ),
       body: _buildBody(),
