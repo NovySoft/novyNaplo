@@ -63,7 +63,7 @@ final Map<String, String> translation = {
   "VmarkSlide": "A kártyákat alrébb húzva érheted el majd a beállításokat!",
   "delAll": "Összes törlése",
   "avBefore": "átlag előtte",
-  "avAfter": "átlag utánna",
+  "avAfter": "átlag utána",
   "marksSumWeighted": "Jegyek összege (súlyozva)",
   "marksCountWeighted": "Jegyek száma (súlyozva)",
   "yourAv": "Átlagod",

@@ -911,7 +911,7 @@ class RequestHandler {
       );
       absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
       timetablePage.lessonsList = await getThreeWeeksLessons(user);
-      //Get stuff needed to make statistics
+      //Get stuff needed to make statistics (this removes percent marks if necessary)
       statisticsPage.allParsedSubjects =
           categorizeSubjectsFromEvals(marksPage.allParsedByDate);
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(
