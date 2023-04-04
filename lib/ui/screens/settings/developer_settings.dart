@@ -261,7 +261,6 @@ class _RawSqlQueryState extends State<RawSqlQuery> {
                 children: [
                   SelectableText(
                     result,
-                    toolbarOptions: ToolbarOptions(copy: true, selectAll: true),
                   ),
                 ],
               ),

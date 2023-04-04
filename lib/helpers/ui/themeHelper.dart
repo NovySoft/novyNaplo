@@ -131,9 +131,9 @@ class ThemeHelper {
           labelColor: Colors.white,
         ),
         textTheme: TextTheme(
-          subtitle1: TextStyle(color: Colors.white),
-          headline6: TextStyle(color: Colors.white),
-          button: TextStyle(color: Colors.white),
+          titleMedium: TextStyle(color: Colors.white),
+          titleLarge: TextStyle(color: Colors.white),
+          labelLarge: TextStyle(color: Colors.white),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -147,7 +147,10 @@ class ThemeHelper {
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF212121),
         ),
-        backgroundColor: Colors.black,
+        colorScheme: ColorScheme.dark(
+          background: Colors.black,
+          primary: Color(0xFF212121),
+        ),
         scaffoldBackgroundColor: Colors.black,
         primarySwatch: MaterialColor(0xFF212121, {
           50: Color.fromRGBO(133, 33, 33, .1),
@@ -220,15 +223,18 @@ class ThemeHelper {
             labelColor: Colors.black,
           ),
           textTheme: TextTheme(
-            subtitle1: TextStyle(color: Colors.orange),
-            headline6: TextStyle(color: Colors.black),
-            button: TextStyle(color: Colors.black),
+            titleMedium: TextStyle(color: Colors.orange),
+            titleLarge: TextStyle(color: Colors.black),
+            labelLarge: TextStyle(color: Colors.black),
           ),
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.orange,
             textTheme: ButtonTextTheme.primary,
           ),
-          backgroundColor: Colors.black,
+          colorScheme: ColorScheme.dark(
+            background: Colors.black,
+            primary: Colors.orange,
+          ),
           primarySwatch: Colors.orange,
           primaryColor: Colors.orange,
           brightness: Brightness.dark,
@@ -281,9 +287,9 @@ class ThemeHelper {
             labelColor: Colors.black,
           ),
           textTheme: TextTheme(
-            subtitle1: TextStyle(color: Colors.black),
-            headline6: TextStyle(color: Colors.black),
-            button: TextStyle(color: Colors.black),
+            titleMedium: TextStyle(color: Colors.black),
+            titleLarge: TextStyle(color: Colors.black),
+            labelLarge: TextStyle(color: Colors.black),
           ),
           brightness: Brightness.light,
           primarySwatch: Colors.lightBlue,
@@ -295,7 +301,10 @@ class ThemeHelper {
             foregroundColor: Colors.black,
             backgroundColor: Colors.lightBlueAccent,
           ),
-          backgroundColor: Colors.white,
+          colorScheme: ColorScheme.light(
+            background: Colors.white,
+            primary: Colors.blueAccent,
+          ),
           hintColor: Colors.lightBlue,
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: TextStyle(
