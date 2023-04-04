@@ -2,6 +2,7 @@ import 'package:customgauge/customgauge.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/data/models/chartData.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -10,7 +11,9 @@ import 'package:novynaplo/helpers/charts/createSubjectChart.dart';
 import 'package:novynaplo/helpers/logicAndMath/calcPercentFromEvalsList.dart';
 import 'package:novynaplo/helpers/logicAndMath/getSameSubjectEvals.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class ReportsDetailTab extends StatelessWidget {
   ReportsDetailTab({
@@ -90,8 +93,7 @@ class ReportsDetailTab extends StatelessWidget {
         title: Text(capitalize(title)),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: ListView.builder(
         itemCount: 6,
@@ -126,7 +128,9 @@ class ReportsDetailTab extends StatelessWidget {
                                     : "") +
                                 eval.subject.name +
                                 " " +
-                                eval.textValue),
+                                (eval.textValue.contains(htmlMatcher)
+                                    ? ''
+                                    : eval.textValue)),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           ),
@@ -134,7 +138,13 @@ class ReportsDetailTab extends StatelessWidget {
                         SizedBox(width: 10),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    eval.textValue.contains(htmlMatcher)
+                        ? Center(
+                            child: Html(
+                            data: eval.textValue,
+                            shrinkWrap: true,
+                          ))
+                        : SizedBox(height: 5),
                   ],
                 ),
               );

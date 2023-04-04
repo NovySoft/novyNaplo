@@ -3,7 +3,7 @@ import 'package:novynaplo/data/models/exam.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'package:novynaplo/helpers/ui/subjectColor.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
-import '../getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 
 Color getExamsCardColor(int index, {@required Exam exam}) {
   Color color = Colors.purple;

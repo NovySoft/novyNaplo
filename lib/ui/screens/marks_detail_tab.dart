@@ -1,10 +1,13 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class MarksDetailTab extends StatelessWidget {
   const MarksDetailTab({@required this.color, @required this.eval});
@@ -123,14 +126,19 @@ class MarksDetailTab extends StatelessWidget {
                         ),
                         SizedBox(height: 10, width: 5),
                         Text(
-                          "${getTranslatedString("eval")}: " + eval.textValue,
+                          "${getTranslatedString("eval")}: " +
+                              (eval.textValue.contains(htmlMatcher)
+                                  ? ''
+                                  : eval.textValue),
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: markColor,
                           ),
                         ),
-                        SizedBox(height: 10, width: 5),
+                        eval.textValue.contains(htmlMatcher)
+                            ? Html(data: eval.textValue, shrinkWrap: true)
+                            : SizedBox(height: 10, width: 5),
                         Text(
                           "${getTranslatedString("eval")} ${getTranslatedString("wNumber")}: " +
                               eval.numberValue.toStringAsFixed(3),
@@ -186,11 +194,11 @@ class MarksDetailTab extends StatelessWidget {
     FirebaseCrashlytics.instance.log("Shown Marks_detail_tab");
     return Scaffold(
       appBar: AppBar(
-        title: Text(capitalize(eval.subject.name + " " + eval.textValue)),
+        title: Text(capitalize(
+            eval.subject.name + " " + removeHTMLtags(eval.textValue))),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: _buildBody(),
     );

@@ -12,7 +12,6 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
 import 'package:novynaplo/data/models/subjectColor.dart';
 import 'package:novynaplo/data/models/subjectNicknames.dart';
-
 import 'absences.dart' as absences;
 import 'average.dart' as average;
 import 'deleteSql.dart' as deleteSql;

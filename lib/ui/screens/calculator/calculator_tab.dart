@@ -9,6 +9,7 @@ import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 import 'calculator_module.dart';
 
 //TODO: Add option to add mark calculator marks to what if
@@ -75,12 +76,12 @@ class CalculatorTabState extends State<CalculatorTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(CalculatorTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: calcTabs,
+          labelColor: getTabForeground(),
         ),
       ),
       body: TabBarView(

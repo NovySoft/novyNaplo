@@ -5,7 +5,7 @@ import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/helpers/ui/subjectColor.dart';
 import 'package:novynaplo/helpers/ui/themeHelper.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
-import '../getColorBasedOnEval.dart';
+import 'package:novynaplo/helpers/ui/getColorBasedOnEval.dart';
 
 Color getMarkCardColor({@required Evals eval, @required int index}) {
   Color color;

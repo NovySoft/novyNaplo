@@ -40,7 +40,6 @@ import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:open_file/open_file.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
 import 'calcKretaNonce.dart';
 
 var client = http.Client();
@@ -911,7 +910,7 @@ class RequestHandler {
       );
       absencesPage.allParsedAbsences = await getAbsencesMatrix(user);
       timetablePage.lessonsList = await getThreeWeeksLessons(user);
-      //Get stuff needed to make statistics
+      //Get stuff needed to make statistics (this removes percent marks if necessary)
       statisticsPage.allParsedSubjects =
           categorizeSubjectsFromEvals(marksPage.allParsedByDate);
       statisticsPage.allParsedSubjectsWithoutZeros = List.from(

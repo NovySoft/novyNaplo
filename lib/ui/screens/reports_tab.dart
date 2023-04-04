@@ -12,6 +12,8 @@ import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marks;
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 Map<String, List<Evals>> reportMaps = {
   "FirstQuarter": [],
@@ -130,12 +132,12 @@ class _ReportsTabState extends State<ReportsTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(ReportsTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: tabs,
+          labelColor: getTabForeground(),
         ),
       ),
       body: TabBarView(
@@ -206,7 +208,7 @@ class _ReportsTabState extends State<ReportsTab>
                       value = "Elégtelen(1)";
                       break;
                     default:
-                      value = value.substring(0, 7) + "...";
+                      value = removeHTMLtags(value).substring(0, 7) + "...";
                       break;
                   }
                 }

@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/helpers/misc/htmlLinkify.dart';
-
 import 'classGroup.dart';
 import 'subject.dart';
 

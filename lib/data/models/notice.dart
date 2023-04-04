@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/subject.dart';
-
 import 'description.dart';
 import 'classGroup.dart';
 

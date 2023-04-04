@@ -11,6 +11,7 @@ import 'package:novynaplo/ui/widgets/AnimatedExamsCard.dart';
 import 'package:novynaplo/ui/widgets/Drawer.dart';
 import 'package:novynaplo/data/models/extensions.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<Exam> allParsedExams = [];
 
@@ -90,8 +91,7 @@ class _ExamsTabState extends State<ExamsTab> {
         title: Text(getTranslatedString("exams")),
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       drawerScrimColor:
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,

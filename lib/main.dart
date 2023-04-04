@@ -31,7 +31,6 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart'
 import 'dart:io' show HttpOverrides, Platform;
 import 'package:flutter/foundation.dart' as foundation show kDebugMode;
 import 'package:firebase_performance/firebase_performance.dart';
-
 import 'API/certValidation.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;

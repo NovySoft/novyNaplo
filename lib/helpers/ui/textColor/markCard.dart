@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/evals.dart';
 import 'package:novynaplo/helpers/ui/subjectColor.dart';
 import 'package:novynaplo/global.dart' as globals;
-import '../getColorBasedOnEval.dart';
+import 'package:novynaplo/helpers/ui/getColorBasedOnEval.dart';
 
 Color getMarkCardTextColor({@required Evals eval}) {
   Color color = Colors.black;

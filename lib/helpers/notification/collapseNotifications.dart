@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/data/database/users.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-
 import 'models.dart';
 
 Future<ToBeDispatchedNotifications> collapseNotifications(

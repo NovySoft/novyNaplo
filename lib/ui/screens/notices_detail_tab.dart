@@ -8,6 +8,7 @@ import 'package:novynaplo/helpers/misc/parseIntToWeekdayString.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 class NoticeDetailTab extends StatelessWidget {
   const NoticeDetailTab({
@@ -25,8 +26,7 @@ class NoticeDetailTab extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
       ),
       body: body(),
     );

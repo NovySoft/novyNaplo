@@ -26,7 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart' as marksTab;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as fpath;
-import '../../helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 
 Function resetButtonAnimation;
 var schoolList = [];
@@ -307,9 +307,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             finalUserObject.color = Colors.orange;
           }
 
-          if ((globals.allUsers ?? []).length == 1) {
-            await globals.prefs.setBool('appBarColoredByUser', true);
-            globals.appBarColoredByUser = true;
+          if ((globals.allUsers ?? []).length == 1 &&
+              (globals.appBarColoredByUser == false &&
+                  globals.appBarTextColoredByUser == false)) {
+            //Just double checking to avoid a "invisible app bar"
+            if (globals.prefs.getBool('appBarColoredByUser') == false &&
+                globals.prefs.getBool('appBarTextColoredByUser') == false) {
+              if (globals.prefs.getBool('darker')) {
+                await globals.prefs.setBool('appBarTextColoredByUser', true);
+                globals.appBarTextColoredByUser = true;
+              } else {
+                await globals.prefs.setBool('appBarColoredByUser', true);
+                globals.appBarColoredByUser = true;
+              }
+            }
           }
 
           await DatabaseHelper.insertUser(finalUserObject);

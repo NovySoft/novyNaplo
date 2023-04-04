@@ -4,8 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:novynaplo/global.dart' as globals;
-
-import '../../helpers/ui/getRandomColors.dart';
+import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 
 Future<Database> database;
 

@@ -11,6 +11,7 @@ import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/ui/widgets/AnimatedTitleSubtitleCard.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<List<Absence>> allParsedAbsences = [];
 List<charts.Series> seriesList;
@@ -191,8 +192,7 @@ class _AbsencesTabState extends State<AbsencesTab>
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(capitalize(getTranslatedString("absencesAndDelays"))),
       ),
       body: Column(
@@ -315,8 +315,7 @@ class AbsencencesDetailTab extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:
             globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor:
-            globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(capitalize(absence.subject.name)),
       ),
       body: SafeArea(

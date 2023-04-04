@@ -31,7 +31,9 @@ import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/main.dart' as main;
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart' as stats;
-import '../../data/models/average.dart';
+import 'package:novynaplo/data/models/average.dart';
+import 'package:novynaplo/helpers/misc/removeHTMLtags.dart';
+import 'package:novynaplo/helpers/ui/textColor/drawerText.dart';
 
 List<Evals> allParsedByDate = [];
 List<List<Evals>> allParsedBySubject = [];
@@ -250,12 +252,12 @@ class MarksTabState extends State<MarksTab>
       child: AnimatedMarksCard(
         eval: allParsedByDate[index],
         iconData: allParsedByDate[index].icon,
-        subTitle: getMarkCardSubtitle(
+        subTitle: removeHTMLtags(getMarkCardSubtitle(
           eval: allParsedByDate[index],
-        ), //capitalize(allParsedByDate[index].theme),
+        )), //capitalize(allParsedByDate[index].theme),
         title: capitalize(allParsedByDate[index].subject.name +
             " " +
-            allParsedByDate[index].textValue),
+            removeHTMLtags(allParsedByDate[index].textValue)),
         color: color,
         onPressed: MarksDetailTab(
           eval: allParsedByDate[index],
@@ -358,12 +360,12 @@ class MarksTabState extends State<MarksTab>
           child: SafeArea(
             child: AnimatedSubjectsCard(
               eval: allParsedBySubject[listIndex][index],
-              subTitle: getMarkCardSubtitle(
-                eval: allParsedBySubject[listIndex][index],
-              ),
               title: capitalize(
-                allParsedBySubject[listIndex][index].textValue,
+                removeHTMLtags(allParsedBySubject[listIndex][index].textValue),
               ),
+              subTitle: removeHTMLtags(getMarkCardSubtitle(
+                eval: allParsedBySubject[listIndex][index],
+              )),
               color: color,
               heroAnimation: AlwaysStoppedAnimation(0),
               onPressed: MarksDetailTab(
@@ -384,12 +386,14 @@ class MarksTabState extends State<MarksTab>
           globals.darker ? Colors.black.withOpacity(0) : Colors.black54,
       drawer: CustomDrawer(MarksTab.tag),
       appBar: AppBar(
-        backgroundColor: globals.appBarColoredByUser ? globals.currentUser.color : null,
-        foregroundColor: globals.appBarTextColoredByUser ? globals.currentUser.color : null,
+        backgroundColor:
+            globals.appBarColoredByUser ? globals.currentUser.color : null,
+        foregroundColor: getDrawerForeground(),
         title: Text(MarksTab.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: markTabs,
+          labelColor: getTabForeground(),
         ),
       ),
       body: TabBarView(

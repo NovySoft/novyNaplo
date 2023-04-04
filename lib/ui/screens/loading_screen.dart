@@ -30,8 +30,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 import 'package:novynaplo/data/models/subject.dart' as subject;
-
-import '../../helpers/logicAndMath/getMarksWithChanges.dart';
+import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
 
 String loadingText = "${getTranslatedString("plsWait")}...";
 var status;
