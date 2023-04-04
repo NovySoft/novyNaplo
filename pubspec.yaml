@@ -46,19 +46,19 @@ dependencies:
   animations: any
   flutter_html: 3.0.0-alpha.6
   customgauge: any
-  flutter_slidable: 1.3.0
-  flutter_local_notifications: 13.0.0
+  flutter_slidable: any
+  flutter_local_notifications: ^13.0.0
   json_table: any
   flutter_calendar_week: any
   path_provider: any
   open_filex: any
-  fluttertoast: 8.0.9
+  fluttertoast: any
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: ^1.0.3
   rsa_pkcs: ^2.0.1
-  flutter_markdown: ^0.6.10
-  android_alarm_manager_plus: ^2.1.0
+  flutter_markdown: any
+  android_alarm_manager_plus: any
   platform: ^3.1.0
   
 

@@ -147,10 +147,6 @@ class ThemeHelper {
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF212121),
         ),
-        colorScheme: ColorScheme.dark(
-          background: Colors.black,
-          primary: Color(0xFF212121),
-        ),
         scaffoldBackgroundColor: Colors.black,
         primarySwatch: MaterialColor(0xFF212121, {
           50: Color.fromRGBO(133, 33, 33, .1),
@@ -231,10 +227,6 @@ class ThemeHelper {
             buttonColor: Colors.orange,
             textTheme: ButtonTextTheme.primary,
           ),
-          colorScheme: ColorScheme.dark(
-            background: Colors.black,
-            primary: Colors.orange,
-          ),
           primarySwatch: Colors.orange,
           primaryColor: Colors.orange,
           brightness: Brightness.dark,
@@ -300,10 +292,6 @@ class ThemeHelper {
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: Colors.black,
             backgroundColor: Colors.lightBlueAccent,
-          ),
-          colorScheme: ColorScheme.light(
-            background: Colors.white,
-            primary: Colors.blueAccent,
           ),
           hintColor: Colors.lightBlue,
           inputDecorationTheme: InputDecorationTheme(
