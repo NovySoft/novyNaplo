@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:novynaplo/API/requestHandler.dart';
@@ -13,6 +14,7 @@ import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
 import 'package:novynaplo/helpers/data/encryptionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
+import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/toasts/okToast.dart';
 import 'package:novynaplo/helpers/ui/animations/circularProgressButton.dart'
@@ -352,6 +354,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (widget.isNewUser) {
           Navigator.of(context).pop();
         } else {
+          //Request notification perms (for the first time)
+          globals.prefs.setBool("isOnboradingDone", true);
+          globals.isOnboradingDone = true;
+          NotificationHelper.flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>()
+              .requestPermission();
+
           Navigator.pushReplacementNamed(context, marksTab.MarksTab.tag);
         }
       } catch (e, s) {

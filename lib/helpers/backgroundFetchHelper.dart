@@ -27,7 +27,7 @@ var androidFetchDetail = new AndroidNotificationDetails(
   color: Color.fromARGB(255, 255, 165, 0),
   visibility: NotificationVisibility.public,
 );
-var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+var iOSPlatformChannelSpecifics = new DarwinNotificationDetails();
 var platformChannelSpecificsGetNotif = new NotificationDetails(
     android: androidFetchDetail, iOS: iOSPlatformChannelSpecifics);
 int notifId = 2;
