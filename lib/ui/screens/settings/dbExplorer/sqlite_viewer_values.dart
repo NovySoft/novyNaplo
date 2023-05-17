@@ -58,7 +58,7 @@ class _DataListState extends State<DataList> {
                 child: Text(
                   header,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline4.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 14.0,
                       ),
@@ -75,7 +75,7 @@ class _DataListState extends State<DataList> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
-                      .headline4
+                      .headlineMedium
                       .copyWith(fontSize: 14.0),
                 ),
               );

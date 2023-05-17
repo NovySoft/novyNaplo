@@ -168,7 +168,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                     "${colorMatrix[index][i].id}:",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Theme.of(context).textTheme.subtitle1.color,
+                      color: Theme.of(context).textTheme.titleMedium.color,
                     ),
                   ),
                 ),
@@ -243,7 +243,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  Theme.of(context).textTheme.subtitle1.color,
+                                  Theme.of(context).textTheme.titleMedium.color,
                             ),
                           ),
                         ),
@@ -252,7 +252,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Theme.of(context).textTheme.subtitle1.color,
+                            color: Theme.of(context).textTheme.titleMedium.color,
                           ),
                         ),
                       ],
@@ -378,7 +378,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  Theme.of(context).textTheme.subtitle1.color,
+                                  Theme.of(context).textTheme.titleMedium.color,
                             ),
                           ),
                         ),
@@ -414,7 +414,7 @@ class _SubjectColorPickerState extends State<SubjectColorPicker> {
                                     fontSize: 16,
                                     color: Theme.of(context)
                                         .textTheme
-                                        .subtitle1
+                                        .titleMedium
                                         .color,
                                   ),
                                 ),

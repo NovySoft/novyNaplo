@@ -107,7 +107,7 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.subtitle1.color,
+                                  Theme.of(context).textTheme.titleMedium.color,
                               fontSize: 16,
                             ),
                           ),
@@ -161,7 +161,7 @@ class _SubjectNicknameSettingsState extends State<SubjectNicknameSettings> {
                     ? "\n(${subjNicknames[index][indexJ].teacher})"
                     : ""),
             style: TextStyle(
-              color: Theme.of(context).textTheme.subtitle1.color,
+              color: Theme.of(context).textTheme.titleMedium.color,
               fontSize: 16,
             ),
           ),

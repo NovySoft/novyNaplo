@@ -570,7 +570,7 @@ class _SettingsBodyState extends State<SettingsBody> {
                           }
                         },
                         icon: Icon(
-                          MdiIcons.emailSend,
+                          MdiIcons.emailSeal,
                         ),
                         label: Text(
                           'Bug report (Email)',

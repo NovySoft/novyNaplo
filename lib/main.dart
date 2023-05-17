@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -57,6 +58,10 @@ void main() async {
     FirebasePerformance.instance.setPerformanceCollectionEnabled(false);
   }
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
+    return true;
+  };
   if (globals.prefs.getBool("isNew") == false) {
     isNew = false;
   } else {

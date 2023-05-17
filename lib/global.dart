@@ -69,6 +69,7 @@ bool calcLorincMode = false; //Should calculator show "invalid" outputs
 bool appBarColoredByUser = false; // Should color appbar based on user color
 bool appBarTextColoredByUser =
     false; // Sgould color appbar text based on user color
+bool isOnboradingDone = false; // Is onboarding done
 
 void resetSessionGlobals() {
   didFetch = false;
@@ -410,6 +411,13 @@ Future<void> setGlobals() async {
     await prefs.setBool("appBarTextColoredByUser", false);
   } else {
     appBarTextColoredByUser = prefs.getBool("appBarTextColoredByUser");
+  }
+
+  if (prefs.getBool("isOnboradingDone") == null) {
+    isOnboradingDone = false;
+    await prefs.setBool("isOnboradingDone", false);
+  } else {
+    isOnboradingDone = prefs.getBool("isOnboradingDone");
   }
 
   FirebaseCrashlytics.instance

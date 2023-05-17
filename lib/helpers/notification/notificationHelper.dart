@@ -3,11 +3,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'notificationReceiver.dart';
+import 'package:novynaplo/global.dart' as globals;
 
 class NotificationHelper {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   static AndroidNotificationDetails androidPlatformChannelSpecifics;
-  static IOSNotificationDetails iOSPlatformChannelSpecifics;
+  static DarwinNotificationDetails iOSPlatformChannelSpecifics;
 
   ///Normal notification, alert summary only behaviour
   static NotificationDetails platformChannelSpecifics;
@@ -18,9 +19,6 @@ class NotificationHelper {
   ///The summary notification
   static NotificationDetails platformChannelSpecificsSummary;
   static Int64List vibrationPattern;
-
-  //Notification launch
-  static bool didNotificationLaunchApp = false;
 
   static Future<void> setupNotifications() async {
     FirebaseCrashlytics.instance.log("setupNotifications");
@@ -48,7 +46,7 @@ class NotificationHelper {
       enableLights: true,
       playSound: true,
     );
-    iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    iOSPlatformChannelSpecifics = new DarwinNotificationDetails();
     platformChannelSpecifics = new NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
@@ -74,7 +72,7 @@ class NotificationHelper {
       enableLights: true,
       playSound: true,
     );
-    var iOSPlatformChannelSpecificsAlertAll = new IOSNotificationDetails();
+    var iOSPlatformChannelSpecificsAlertAll = new DarwinNotificationDetails();
     platformChannelSpecificsAlertAll = new NotificationDetails(
       android: androidPlatformChannelSpecificsAlertAll,
       iOS: iOSPlatformChannelSpecificsAlertAll,
@@ -100,37 +98,39 @@ class NotificationHelper {
       enableLights: true,
       playSound: true,
     );
-    var iOSPlatformChannelSpecificsSummary = new IOSNotificationDetails();
+    var iOSPlatformChannelSpecificsSummary = new DarwinNotificationDetails();
     platformChannelSpecificsSummary = new NotificationDetails(
       android: androidPlatformChannelSpecificsSummary,
       iOS: iOSPlatformChannelSpecificsSummary,
     );
     var initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettingsIOS = DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    final NotificationAppLaunchDetails notificationAppLaunchDetails =
-        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    didNotificationLaunchApp =
-        notificationAppLaunchDetails.didNotificationLaunchApp;
+
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: (String payload) async {
-        await NotificationReceiver.selectNotification(
-          payload,
-          didNotificationLaunchApp,
-        );
-      },
+      onDidReceiveNotificationResponse: NotificationReceiver.selectNotification,
+      onDidReceiveBackgroundNotificationResponse:
+          NotificationReceiver.selectNotificationAwake,
     );
-    if (didNotificationLaunchApp) {
-      print("App awaken by notification");
-      NotificationReceiver.selectNotification(
-        notificationAppLaunchDetails.payload,
-        didNotificationLaunchApp,
+
+    if (globals.isOnboradingDone) {
+      flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          .requestPermission();
+    }
+
+    final NotificationAppLaunchDetails notificationAppLaunchDetails =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails.didNotificationLaunchApp) {
+      NotificationReceiver.selectNotificationAwake(
+        notificationAppLaunchDetails.notificationResponse,
       );
     }
   }

@@ -37,7 +37,7 @@ import 'package:novynaplo/ui/screens/marks_tab.dart' as marksPage;
 import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'calcKretaNonce.dart';
@@ -1009,7 +1009,7 @@ class RequestHandler {
     File file = new File(path);
     if (await file.exists() && !reDownload) {
       if (open) {
-        await OpenFile.open(path);
+        await OpenFilex.open(path);
       }
       return file;
     } else {
@@ -1027,7 +1027,7 @@ class RequestHandler {
 
       await file.writeAsBytes(response.bodyBytes);
       if (open) {
-        await OpenFile.open(path);
+        await OpenFilex.open(path);
       }
       return file;
     }

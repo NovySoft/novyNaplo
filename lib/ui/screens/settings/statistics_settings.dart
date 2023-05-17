@@ -236,7 +236,7 @@ class _StatisticSettingsState extends State<StatisticSettings> {
                     SizedBox(height: 5),
                     Text(
                       "${getTranslatedString('splitText')} ${globals.splitChartLength}",
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Slider(
                       value: globals.splitChartLength.toDouble(),

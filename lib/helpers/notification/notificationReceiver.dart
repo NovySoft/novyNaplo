@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/absence.dart';
 import 'package:novynaplo/data/models/evals.dart';
@@ -41,13 +42,22 @@ import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetableTab;
 import 'package:novynaplo/helpers/ui/cardColor/absenceCard.dart';
 import 'package:novynaplo/helpers/ui/cardColor/markCard.dart';
 import 'package:novynaplo/main.dart';
-import 'notificationHelper.dart';
 
 class NotificationReceiver {
-  static Future<void> selectNotification(
-    String payload,
-    bool appLaunchedApp,
+  @pragma('vm:entry-point')
+  static Future<void> selectNotificationAwake(
+    NotificationResponse input,
   ) async {
+    print("A NOTIFICATION woke me up!");
+    await NotificationReceiver.selectNotification(input, appLaunchedApp: true);
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> selectNotification(
+    NotificationResponse input, {
+    bool appLaunchedApp = false,
+  }) async {
+    String payload = input.payload;
     await waitUntil(() => globals.isDataLoaded);
     try {
       if (payload == null) {
@@ -613,10 +623,6 @@ class NotificationReceiver {
         reason: 'Handle notification select',
         printDetails: true,
       );
-    } finally {
-      if (appLaunchedApp) {
-        NotificationHelper.didNotificationLaunchApp = false;
-      }
     }
   }
 }
