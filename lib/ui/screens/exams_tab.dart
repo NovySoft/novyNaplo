@@ -221,7 +221,7 @@ class _ExamsTabState extends State<ExamsTab> {
     return SafeArea(
       child: AnimatedExamsCard(
         isDone: isDone,
-        title: exam.theme,
+        title: exam.theme ?? "${getTranslatedString('unknown')} ${(exam.subject.name ?? exam.subject.fullName).toLowerCase()}",
         subTitle: subtitle,
         color: currColor,
         exam: exam,

@@ -88,26 +88,26 @@ Widget getExamDetails(Exam exam, BuildContext context, int index) {
       break;
     case 1:
       return SizedBox(
-        child: Text("${getTranslatedString("subject")}: " + exam.subject.name,
+        child: Text("${getTranslatedString("subject")}: ${exam.subject.name}",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       );
       break;
     case 3:
       return SizedBox(
-        child: Text("${getTranslatedString("theme")}: " + exam.theme,
+        child: Text("${getTranslatedString("theme")}: ${exam.theme}",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       );
       break;
     case 5:
       return SizedBox(
         child: Text(
-            "${getTranslatedString("examType")}: " + exam.mode.description,
+            "${getTranslatedString("examType")}: ${exam.mode.description}",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       );
       break;
     case 7:
       return SizedBox(
-        child: Text("${getTranslatedString("teacher")}: " + exam.teacher,
+        child: Text("${getTranslatedString("teacher")}: ${exam.teacher}",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
       );
       break;
