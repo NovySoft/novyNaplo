@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -58,5 +59,16 @@
             </intent-filter>
         </receiver>
         <meta-data android:name="flutterEmbedding" android:value="2" />
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="${applicationId}.fileProvider"
+                android:exported="false"
+                android:grantUriPermissions="true"
+                tools:replace="android:authorities">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/filepaths"
+                    tools:replace="android:resource" />
+        </provider>
     </application>
 </manifest>

@@ -34,7 +34,7 @@ class VersionHelper {
       } else {
         splitVlatest = latestNoV[0];
       }
-      
+
       String splitVcurrent = config.currentAppVersionCode.split('V')[1];
 
       int mainVLatest = int.parse(splitVlatest.split('.')[0]);
@@ -166,14 +166,46 @@ class VersionHelper {
                         );
                       },
                     );
-                    await RequestHandler.downloadFile(
-                      url: latestVersion.asset.downloadUrl,
-                      filename: "novynaplo.apk",
-                      open: true,
-                      reDownload: true,
-                    );
 
-                    if (_dialogKey.currentState.mounted)
+                    try {
+                      print(
+                          "DEBUG: latestVersion.asset.downloadUrl, ${latestVersion.asset.downloadUrl}"
+                      );
+                      await RequestHandler.downloadFile(
+                        url: latestVersion.asset.downloadUrl,
+                        filename: "novynaplo.apk",
+                        open: true,
+                        reDownload: true,
+                      );
+                    } catch (e) {
+                      print(e);
+                      showDialog(
+                        context: NavigatorKey.navigatorKey.currentContext,
+                        builder: (context) {
+                          return AlertDialog(
+                            elevation: globals.darker ? 0 : 24,
+                            title: Text(getTranslatedString("err")),
+                            content: Text(
+                              getTranslatedString("unkError") + "\n$e",
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(
+                                    _dialogKey.currentContext,
+                                    rootNavigator: true,
+                                  ).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+
+                    if (_dialogKey.currentState?.mounted ?? false)
                       Navigator.of(
                         _dialogKey.currentContext,
                         rootNavigator: true,
