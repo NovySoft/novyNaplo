@@ -1007,6 +1007,9 @@ class RequestHandler {
     String dir = (await getTemporaryDirectory()).path;
     String path = '$dir/temp.' + filename;
     File file = new File(path);
+
+    print("DEBUG: File access: $path (${file.path})");
+
     if (await file.exists() && !reDownload) {
       if (open) {
         await OpenFilex.open(path);
@@ -1020,14 +1023,23 @@ class RequestHandler {
         headerMap["Authorization"] = "Bearer ${userDetails.token}";
       }
 
+      print("DEBUG: Downloading file from $url");
+
       var response = await client.get(
         Uri.parse(url),
         headers: headerMap,
       );
 
+      print("DEBUG: Downloaded ${response.bodyBytes.length} bytes");
+
       await file.writeAsBytes(response.bodyBytes);
+
+      print("DEBUG: Wrote ${response.bodyBytes.length} bytes");
+
       if (open) {
+        print("DEBUG: Opening $path");
         await OpenFilex.open(path);
+        print("DEBUG: Opened $path");
       }
       return file;
     }
