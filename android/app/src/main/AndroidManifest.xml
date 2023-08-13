@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="novynaplo_v2"
+        android:label="Novy Napló"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
