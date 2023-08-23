@@ -1,7 +1,7 @@
 import 'package:theme_provider/theme_provider.dart';
-import './light_theme.dart';
-import './dark_theme.dart';
-import './oled_theme.dart';
+import 'package:novynaplo_v2/helpers/UI/theme/light_theme.dart';
+import 'package:novynaplo_v2/helpers/UI/theme/dark_theme.dart';
+import 'package:novynaplo_v2/helpers/UI/theme/oled_theme.dart';
 
 class ThemeHelper {
   static final AppTheme lightTheme = AppTheme(

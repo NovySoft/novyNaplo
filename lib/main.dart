@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:novynaplo_v2/helpers/UI/theme/theme_helper.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:novynaplo_v2/globals.dart' as globals;
 
 void main() {
   runApp(const MyApp());
@@ -22,14 +23,14 @@ class MyApp extends StatelessWidget {
       ],
       onInitCallback: (controller, previouslySavedThemeFuture) async {
         String? savedTheme = await previouslySavedThemeFuture;
-        print("Saved theme: $savedTheme");
+        globals.logger.d('Saved theme read from memory: $savedTheme');
 
         if (savedTheme != null) {
           controller.setTheme(savedTheme);
         } else {
           Brightness? platformBrightness =
               SchedulerBinding.instance.platformDispatcher.platformBrightness;
-          print("Platform brightness: $platformBrightness");
+          globals.logger.d('Initial platform brightness: $platformBrightness');
           if (platformBrightness == Brightness.dark) {
             controller.setTheme('dark');
           } else {
