@@ -4,8 +4,8 @@ final ThemeData oledThemeData = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
-    primary: Colors.orange,
-    secondary: Colors.orange,
+    primary: Color(0xFFFF770E),
+    secondary: Color(0xFFFF770E),
     surface: Colors.black,
     background: Colors.black,
     error: Colors.red,

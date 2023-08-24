@@ -4,8 +4,8 @@ final ThemeData lightThemeData = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
-    primary: Colors.orange,
-    secondary: Colors.orange,
+    primary: Color(0xFFFF770E),
+    secondary: Color(0xFFFF770E),
     surface: Colors.white,
     background: Colors.white,
     error: Colors.red,
