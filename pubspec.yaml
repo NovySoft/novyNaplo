@@ -13,6 +13,9 @@ dependencies:
   shared_preferences: 2.2.0
   theme_provider: 0.6.0
   logger: 2.0.1
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +31,4 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  generate: true

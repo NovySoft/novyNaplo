@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:novynaplo_v2/UI/screens/welcome_screen.dart';
 import 'package:novynaplo_v2/helpers/UI/theme/theme_helper.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:novynaplo_v2/globals.dart' as globals;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await globals.setGlobals();
   runApp(const MyApp());
 }
 
@@ -42,8 +47,17 @@ class MyApp extends StatelessWidget {
         child: Builder(
           builder: (themeContext) => MaterialApp(
             title: 'NovyNapló V2',
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeProvider.themeOf(themeContext).data,
-            home: const MyHomePage(title: 'Flutter Demo Home Page'),
+            home: (globals.prefs.getBool('isNew') ?? true)
+                ? const WelcomeScreen()
+                : const MyHomePage(),
           ),
         ),
       ),
@@ -52,8 +66,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -61,6 +74,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -73,14 +91,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(widget.title),
+        title: const Text("Demo"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              AppLocalizations.of(context)!.helloWorld,
             ),
             Text(
               '$_counter',
