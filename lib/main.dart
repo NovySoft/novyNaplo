@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeProvider.themeOf(themeContext).data,
+            //TODO: Locale wrapper
             home: (globals.prefs.getBool('isNew') ?? true)
                 ? const WelcomeScreen()
                 : const MyHomePage(),
