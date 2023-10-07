@@ -1,4 +1,5 @@
 # novynaplo_v2
+This branch is now protected under GPL license!
 
 NovyNapló V2
 
