@@ -83,6 +83,7 @@ class DatabaseHelper {
       batchInsertLessons = timetable.batchInsertLessons;
 
   static Future<void> Function(Student) insertUser = users.insertUser;
+  static Future<void> Function(Student) updateToken = users.updateToken;
   static Future<List<Student>> Function() getAllUsers =
       users.getAllUsers;
   static Future<Student> Function(int id) getUserById =

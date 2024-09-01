@@ -67,7 +67,10 @@ class _NewLoginPageState extends State<NewLoginPage> {
           Color(allColors[Random().nextInt(allColors.length)]);
       await DatabaseHelper.insertUser(finalUserObject);
       await globals.prefs.setBool("isNew", false);
-      globals.prefs.setBool("isOnboradingDone", true);
+      await globals.prefs.setBool("isOnboradingDone", true);
+
+      //TODO change this when multiuser support is added
+      globals.currentUser = finalUserObject;
       globals.isOnboradingDone = true;
       NotificationHelper.flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<

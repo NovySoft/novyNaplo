@@ -145,7 +145,7 @@ class MarksTabState extends State<MarksTab>
       globals.currentUser.current = true;
     }
     for (var currentUser in globals.allUsers) {
-      TokenResponse status = await RequestHandler.login(currentUser);
+      TokenResponse status = await RequestHandler.loginWRefresh(currentUser);
       if (status.status == "OK") {
         if (currentUser.current) {
           globals.currentUser.token = status.userinfo.token;

@@ -22,7 +22,6 @@ class Student {
   String password;
   String token;
   String refreshToken;
-  String iv;
 
   /// Date of login
   DateTime tokenDate;
@@ -51,11 +50,10 @@ class Student {
     this.school,
     this.token,
     this.refreshToken,
-    this.iv,
     this.tokenDate,
     this.userId,
     this.current,
-    this.fetched,
+    this.fetched = false,
     this.color,
   });
 
@@ -80,7 +78,6 @@ class Student {
     bankAccount = input.bankAccount;
     institution = input.institution;
     current = input.current;
-    iv = input.iv;
     school = input.school;
     username = input.username;
     password = input.password;
@@ -105,7 +102,6 @@ class Student {
       'institution': institution.toJson(),
       'username': username,
       'school': school,
-      'iv': iv,
       'current': current ? 1 : 0,
       'fetched': fetched ? 1 : 0,
       'color': color?.value ?? Colors.orange.value,
@@ -157,7 +153,6 @@ class Student {
     school = map['school'];
     username = map['username'];
     password = map['password'];
-    iv = map['iv'];
     current = map['current'] == 1;
     fetched = map['fetched'] == 1;
     color = Color(map['color']);

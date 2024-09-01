@@ -5,6 +5,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'databaseHelper.dart';
 
+Future<void> updateToken(Student user) async {
+  FirebaseCrashlytics.instance.log("updateToken");
+  print("New token: ${user.username}-${user.school} ${user.refreshToken}");
+  await globals.db.rawUpdate(
+    // Uses username and school so it can be used even during login
+    "UPDATE Users SET refreshToken = ? WHERE username = ? AND school = ?",
+    [user.refreshToken, user.username, user.school],
+  );
+}
+
 Future<void> insertUser(Student user) async {
   FirebaseCrashlytics.instance.log("insertUser");
   await globals.db.insert(
