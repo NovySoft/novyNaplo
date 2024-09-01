@@ -21,8 +21,10 @@ class Student {
   String username;
   String password;
   String token;
+  String refreshToken;
   String iv;
 
+  /// Date of login
   DateTime tokenDate;
   int userId;
   bool current;
@@ -48,6 +50,7 @@ class Student {
     this.password,
     this.school,
     this.token,
+    this.refreshToken,
     this.iv,
     this.tokenDate,
     this.userId,

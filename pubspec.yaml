@@ -60,6 +60,7 @@ dependencies:
   flutter_markdown: any
   android_alarm_manager_plus: any
   platform: ^3.1.0
+  webview_flutter: ^4.4.2
   
 
 flutter_icons:

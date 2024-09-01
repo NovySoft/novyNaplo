@@ -25,6 +25,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
+import 'package:novynaplo/helpers/misc/decodeJwt.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -1107,6 +1108,77 @@ class RequestHandler {
       );
       isError = true;
       return statisticsPage.classAverages;
+    }
+  }
+
+  static Future<TokenResponse> newLogin(String code) async {
+    try {
+      FirebaseCrashlytics.instance.log("newLogin");
+
+      var response = await client.post(
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),
+        body: {
+          "code": code,
+          "code_verifier": "DSpuqj_HhDX4wzQIbtn8lr8NLE5wEi1iVLMtMK0jY6c",
+          "redirect_uri":
+              "https://mobil.e-kreta.hu/ellenorzo-student/prod/oauthredirect",
+          "client_id": config.clientId,
+          "grant_type": "authorization_code",
+        },
+        headers: {
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "accept": "*/*",
+          "user-agent": "eKretaStudent/264745 CFNetwork/1494.0.7 Darwin/23.4.0",
+        },
+      );
+
+      Map responseJson = jsonDecode(response.body);
+
+      if (responseJson["error"] != null ||
+          responseJson["error_description"] != null) {
+        return TokenResponse(
+          status: responseJson["error_description"] != null
+              ? responseJson["error_description"]
+              : responseJson["error"],
+        );
+      } else if (response.statusCode == 200) {
+        Student user = Student();
+        user.token = responseJson["access_token"];
+        user.tokenDate = DateTime.now();
+        user.refreshToken = responseJson["refresh_token"];
+        user.school = JWT.parseJwt(responseJson["access_token"])["kreta:institute_code"];
+
+        return TokenResponse(
+          status: "OK",
+          userinfo: user,
+        );
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 403 ||
+          response.statusCode == 500 ||
+          response.statusCode == 502 ||
+          response.statusCode == 503) {
+        //Kreta IDP is probably updating
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgradeOrWrongCred')}",
+        );
+      } else {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
+        );
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'newLogin',
+        printDetails: true,
+      );
+      return TokenResponse(
+        status: "${getTranslatedString('unkError')}: \n $e",
+      );
     }
   }
 }
