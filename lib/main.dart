@@ -15,7 +15,7 @@ import 'package:novynaplo/ui/screens/events_tab.dart';
 import 'package:novynaplo/ui/screens/marks_tab.dart';
 import 'package:novynaplo/ui/screens/reports_tab.dart';
 import 'package:novynaplo/ui/screens/settings/settings_tab.dart';
-import 'package:novynaplo/ui/screens/login_page.dart';
+import 'package:novynaplo/ui/screens/login/login_page.dart';
 import 'package:novynaplo/ui/screens/notices_tab.dart';
 import 'package:novynaplo/ui/screens/statistics_tab.dart';
 import 'package:novynaplo/ui/screens/timetable_tab.dart';

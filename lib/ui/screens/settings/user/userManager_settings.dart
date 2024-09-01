@@ -5,7 +5,7 @@ import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/ui/screens/login_page.dart';
+import 'package:novynaplo/ui/screens/login/login_page.dart';
 import 'user_detail_settings.dart';
 
 bool isReloadRequired = false;

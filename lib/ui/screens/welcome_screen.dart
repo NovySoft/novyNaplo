@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'login_page.dart';
+import 'login/login_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override

@@ -21,7 +21,7 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
+import 'package:novynaplo/ui/screens/login/login_page.dart' as login;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
 import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';

@@ -12,7 +12,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
+import 'package:novynaplo/ui/screens/login/login_page.dart' as loginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
