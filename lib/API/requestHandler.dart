@@ -296,13 +296,9 @@ class RequestHandler {
 
   static Future<Student> getStudentInfo(
     Student userDetails, {
-    bool embedEncryptedDetails = false,
-    Student encryptedDetails,
+    bool embedDetails = false,
   }) async {
     FirebaseCrashlytics.instance.log("getStudentInfo");
-    if (embedEncryptedDetails && encryptedDetails == null) {
-      throw ErrorDescription("Encrypted details were not given");
-    }
     try {
       var response = await client.get(
         Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.student),
@@ -315,13 +311,12 @@ class RequestHandler {
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
 
-      if (embedEncryptedDetails) {
-        student.userId = encryptedDetails.userId;
-        student.iv = encryptedDetails.iv;
-        student.school = encryptedDetails.school;
-        student.username = encryptedDetails.username;
-        student.password = encryptedDetails.password;
-        student.current = encryptedDetails.current;
+      if (embedDetails) {
+        student.userId = userDetails.userId;
+        student.iv = userDetails.iv;
+        student.school = userDetails.school;
+        student.username = userDetails.username;
+        student.current = userDetails.current;
       } else {
         student.userId = userDetails.userId;
         DatabaseHelper.updateKretaGivenParameters(student);
@@ -1147,6 +1142,7 @@ class RequestHandler {
         user.tokenDate = DateTime.now();
         user.refreshToken = responseJson["refresh_token"];
         user.school = JWT.parseJwt(responseJson["access_token"])["kreta:institute_code"];
+        user.username = JWT.parseJwt(responseJson["access_token"])["kreta:user_name"];
 
         return TokenResponse(
           status: "OK",

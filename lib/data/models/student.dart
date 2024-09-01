@@ -104,12 +104,12 @@ class Student {
       'bankAccount': bankAccount.toJson(),
       'institution': institution.toJson(),
       'username': username,
-      'password': password,
       'school': school,
       'iv': iv,
       'current': current ? 1 : 0,
       'fetched': fetched ? 1 : 0,
       'color': color?.value ?? Colors.orange.value,
+      'refreshToken': refreshToken,
     };
   }
 
@@ -161,6 +161,7 @@ class Student {
     current = map['current'] == 1;
     fetched = map['fetched'] == 1;
     color = Color(map['color']);
+    refreshToken = map['refreshToken'];
   }
 }
 

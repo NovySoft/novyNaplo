@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:novynaplo/data/models/student.dart';
-import 'package:novynaplo/helpers/data/decryptionHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:novynaplo/global.dart' as globals;
 import 'databaseHelper.dart';
@@ -15,7 +14,7 @@ Future<void> insertUser(Student user) async {
   );
 }
 
-Future<Student> getUserById(int id, {bool decrypt = true}) async {
+Future<Student> getUserById(int id) async {
   FirebaseCrashlytics.instance.log("getAllUsers");
 
   final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
@@ -26,13 +25,10 @@ Future<Student> getUserById(int id, {bool decrypt = true}) async {
     throw "No user with id $id was found!";
   }
   Student temp = new Student.fromSqlite(maps[0]);
-  if (decrypt) {
-    return decryptUserDetails(temp);
-  }
   return temp;
 }
 
-Future<List<Student>> getAllUsers({bool decrypt = true}) async {
+Future<List<Student>> getAllUsers() async {
   FirebaseCrashlytics.instance.log("getAllUsers");
 
   final List<Map<String, dynamic>> maps = await globals.db.rawQuery(
@@ -41,9 +37,6 @@ Future<List<Student>> getAllUsers({bool decrypt = true}) async {
 
   List<Student> tempList = List.generate(maps.length, (i) {
     Student temp = new Student.fromSqlite(maps[i]);
-    if (decrypt) {
-      return decryptUserDetails(temp);
-    }
     return temp;
   });
   return tempList;
