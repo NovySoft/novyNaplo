@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: android_alarm_manager_plus
-      sha256: "8647cc5f9339f3955a2bd9ec40e0f10c3a80049f31f80b3ffdd87e07bb73fce2"
+      sha256: "88a8001851fdc9bd54fa4e30d0277bb900a50f3d86ff244da7f027400bf23ac0"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.4"
   animations:
     dependency: "direct main"
     description:
@@ -774,10 +774,10 @@ packages:
     dependency: "direct main"
     description:
       name: open_filex
-      sha256: "854aefd72dfd74219dc8c8d1767c34ec1eae64b8399a5be317bddb1ec2108915"
+      sha256: ba425ea49affd0a98a234aa9344b9ea5d4c4f7625a1377961eae9fe194c3d523
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.2"
+    version: "4.5.0"
   package_config:
     dependency: transitive
     description:

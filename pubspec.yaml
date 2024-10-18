@@ -51,14 +51,14 @@ dependencies:
   json_table: any
   flutter_calendar_week: any
   path_provider: any
-  open_filex: any
+  open_filex: ^4.5.0
   fluttertoast: any
   flutter_linkify: any
   introduction_screen: any
   flutter_colorpicker: ^1.0.3
   rsa_pkcs: ^2.0.1
   flutter_markdown: any
-  android_alarm_manager_plus: any
+  android_alarm_manager_plus: 2.1.4
   platform: ^3.1.0
   webview_flutter: ^4.4.2
   
