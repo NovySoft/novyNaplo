@@ -81,6 +81,8 @@ class Student {
     school = input.school;
     username = input.username;
     password = input.password;
+    token = input.token;
+    refreshToken = input.refreshToken;
     fetched = input.fetched;
     color = input.color;
   }

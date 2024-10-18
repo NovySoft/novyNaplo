@@ -212,7 +212,8 @@ class RequestHandler {
     }
   }
 
-  static Future<TokenResponse> login(Student user) async {
+   //DEPRECATED
+   /* static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
 
     try {
@@ -292,7 +293,7 @@ class RequestHandler {
         status: "${getTranslatedString('unkError')}: \n $e",
       );
     }
-  }
+  } */
 
   static Future<Student> getStudentInfo(
     Student userDetails, {
@@ -594,7 +595,7 @@ class RequestHandler {
           ),
         ),
       )) {
-        TokenResponse res = await login(userDetails);
+        TokenResponse res = await loginWRefresh(userDetails);
         if (res.status == "OK") {
           if (userDetails.current) {
             globals.currentUser.token = res.userinfo.token;
@@ -837,7 +838,7 @@ class RequestHandler {
             globals.currentUser.token != null) {
           userDetails.token = globals.currentUser.token;
         } else {
-          TokenResponse temp = await RequestHandler.login(userDetails);
+          TokenResponse temp = await RequestHandler.loginWRefresh(userDetails);
           if (temp.status == "OK") {
             userDetails = temp.userinfo;
             if (userDetails.current) {
@@ -974,7 +975,7 @@ class RequestHandler {
         ),
       ),
     )) {
-      TokenResponse res = await login(userDetails);
+      TokenResponse res = await loginWRefresh(userDetails);
       if (res.status == "OK") {
         if (userDetails.current) {
           globals.currentUser.token = res.userinfo.token;
@@ -1224,7 +1225,7 @@ class RequestHandler {
               : responseJson["error"],
         );
       } else if (response.statusCode == 200) {
-        Student user = Student();
+        // This a refresh login, we should have the user's data already
         user.token = responseJson["access_token"];
         user.tokenDate = DateTime.now();
         user.refreshToken = responseJson["refresh_token"];

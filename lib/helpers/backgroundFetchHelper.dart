@@ -59,7 +59,7 @@ Future<void> backgroundFetch() async {
     trustedCerts = await DatabaseHelper.getTrustedCerts();
     //int errorNotifId = -1;
     for (var currentUser in globals.allUsers) {
-      TokenResponse status = await RequestHandler.login(currentUser);
+      TokenResponse status = await RequestHandler.loginWRefresh(currentUser);
       if (status.status == "OK") {
         await RequestHandler.getEverything(
           status.userinfo,

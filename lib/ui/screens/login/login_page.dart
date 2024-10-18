@@ -269,7 +269,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         return;
       }
     }
-    TokenResponse result = await RequestHandler.login(tempUser)
+    //!FIGYELEM, itt a régi deprecated login metódus kellene!
+    TokenResponse result = await RequestHandler.loginWRefresh(tempUser)
         .timeout(Duration(seconds: 15), onTimeout: () {
       return TokenResponse(status: "TIMEOUT");
     });

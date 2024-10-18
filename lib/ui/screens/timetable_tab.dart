@@ -26,7 +26,6 @@ var selectedLessonList = [];
 int i = 0;
 DateTime _selectedDate = DateTime.now();
 var alma = DateTime.monday;
-final CalendarWeekController _controller = CalendarWeekController();
 bool fade = true;
 DateTime minDate;
 
@@ -41,6 +40,8 @@ class TimetableTab extends StatefulWidget {
 }
 
 class _TimetableTabState extends State<TimetableTab> {
+  final CalendarWeekController _controller = CalendarWeekController();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable");

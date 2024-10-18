@@ -70,7 +70,10 @@ class _NewLoginPageState extends State<NewLoginPage> {
       await globals.prefs.setBool("isOnboradingDone", true);
 
       //TODO change this when multiuser support is added
-      globals.currentUser = finalUserObject;
+      globals.allUsers = await DatabaseHelper.getAllUsers();
+      // Get highest userid -> newest user
+      globals.currentUser = globals.allUsers.reduce((value, element) =>
+          (value.userId > element.userId) ? value : element);
       globals.isOnboradingDone = true;
       NotificationHelper.flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
