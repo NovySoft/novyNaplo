@@ -893,6 +893,7 @@ class RequestHandler {
     user = await getStudentInfo(user, embedDetails: true);
     if (setData) {
       statisticsPage.classAverages = await getClassAverages(user);
+      //FIXME: Something not right with embeding the classAV!
       marksPage.allParsedByDate = await getEvaluations(
         user,
         statisticsPage.classAverages,
