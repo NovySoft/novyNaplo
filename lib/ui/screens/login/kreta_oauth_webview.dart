@@ -1,5 +1,7 @@
 // BASED OFF https://github.com/refilc/naplo/blob/master/refilc_mobile_ui/lib/screens/login/kreten_login.dart #4474562538219cdc2536f1c92ffc3ddd168185ab
 // UNDER AGPL-3 LICENSE
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -74,6 +76,7 @@ class _KretaOuathWebViewState extends State<KretaOuathWebView>
       return Center(child: SpinKitPulsingGrid(color: Colors.lightBlueAccent));
     }
     return WebViewWidget(
+      gestureRecognizers: Set()..add(Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())),
       controller: controller,
     );
   }

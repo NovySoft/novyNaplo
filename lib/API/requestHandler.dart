@@ -212,8 +212,8 @@ class RequestHandler {
     }
   }
 
-   //DEPRECATED
-   /* static Future<TokenResponse> login(Student user) async {
+  //DEPRECATED
+  /* static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
 
     try {
@@ -1184,7 +1184,8 @@ class RequestHandler {
     }
   }
 
-  static Future<TokenResponse> loginWRefresh(Student user) async {
+  static Future<TokenResponse> loginWRefresh(Student user,
+      {int retry = 0}) async {
     try {
       FirebaseCrashlytics.instance.log("loginWRefresh");
 
@@ -1217,9 +1218,13 @@ class RequestHandler {
 
       Map responseJson = jsonDecode(response.body);
 
-      if (responseJson["error"] != null ||
+      if (responseJson["error"] == "invalid_grant" && retry < 3) {
+        // token expired, probably, it returns this error every time
+        //FIXME: Check db for a newer token
+        await Future.delayed(Duration(seconds: 1));
+        return loginWRefresh(user, retry: retry + 1);
+      } else if (responseJson["error"] != null ||
           responseJson["error_description"] != null) {
-        // if (res["error"] == "invalid_grant")  // <-- token expired, probably, it returns this error every time
         return TokenResponse(
           status: responseJson["error_description"] != null
               ? responseJson["error_description"]
