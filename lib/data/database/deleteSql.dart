@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:novynaplo/global.dart' as globals;
+import 'package:sqflite/sqflite.dart';
 
 Future<void> deleteFromDbByID(int databaseId, String table) async {
   FirebaseCrashlytics.instance
@@ -15,9 +16,12 @@ Future<void> deleteFromDbByID(int databaseId, String table) async {
   );
 }
 
-Future<void> clearAllTables() async {
+Future<void> clearAllTables({bool delCerts = true, Database overrideDb}) async {
   FirebaseCrashlytics.instance.log("clearAllTables");
-  final batch = globals.db.batch();
+  Batch batch = globals.db.batch();
+  if (overrideDb != null) {
+    batch = overrideDb.batch();
+  }
   batch.delete("Evals");
   batch.delete("Average");
   batch.delete("Notices");
@@ -29,7 +33,7 @@ Future<void> clearAllTables() async {
   batch.delete("Users");
   batch.delete("Colors");
   batch.delete("Subjects");
-  batch.delete("TrustedCerts");
+  if (delCerts) batch.delete("TrustedCerts");
   await batch.commit();
 }
 

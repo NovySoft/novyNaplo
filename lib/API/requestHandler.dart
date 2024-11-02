@@ -1220,8 +1220,16 @@ class RequestHandler {
 
       if (responseJson["error"] == "invalid_grant" && retry < 3) {
         // token expired, probably, it returns this error every time
-        //FIXME: Check db for a newer token
         await Future.delayed(Duration(seconds: 1));
+        return loginWRefresh(user, retry: retry + 1);
+      } else if (responseJson["error"] == "invalid_grant" && retry == 3) {
+        // token expired, probably, it returns this error every time
+        // Check db for a newer token
+        final refreshTok = await globals.db.rawQuery(
+            "SELECT refreshToken FROM users WHERE id = ${user.userId} or (school = '${user.school}' and username = '${user.username}')");
+        if (refreshTok.isNotEmpty) {
+          user.refreshToken = refreshTok[0]["refreshToken"];
+        }
         return loginWRefresh(user, retry: retry + 1);
       } else if (responseJson["error"] != null ||
           responseJson["error_description"] != null) {

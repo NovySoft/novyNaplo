@@ -501,4 +501,6 @@ final Map<String, String> translation = {
   "classAvS": "Osztályátlag",
   "appBarColoredByUser": "Menü sáv szín a felhasználó alapján",
   "appBarTextColoredByUser": "Menü sáv szöveg szín a felhasználó alapján",
+  "attention": "Figyelem!",
+  "newOauth": "A kréta új bejelentkezési felületet kapott! Kérlek, jelentkezz be újra!",
 };

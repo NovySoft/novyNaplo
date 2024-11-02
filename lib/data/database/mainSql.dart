@@ -1,8 +1,14 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
+import 'package:novynaplo/main.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:novynaplo/global.dart' as globals;
+
+import '../../i18n/translationProvider.dart';
+import 'deleteSql.dart';
+
 Future<Database> database;
 
 Future<void> initDatabase() async {
@@ -60,12 +66,52 @@ Future<void> initDatabase() async {
         await db.execute(
           'ALTER TABLE Users ADD COLUMN refreshToken TEXT;',
         );
+        // DELETE All previous data
+        db.delete("Evals");
+        db.delete("Average");
+        db.delete("Notices");
+        db.delete("Events");
+        db.delete("Exams");
+        db.delete("Homework");
+        db.delete("Timetable");
+        db.delete("Absences");
+        db.delete("Users");
+        db.delete("Colors");
+        db.delete("Subjects");
+        // Show warning to user (DO NOT AWAIT)
+        showNewLoginWarning();
       }
-      //TODO: Delete all previous data and display a warning popup
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
     version: 8,
   );
   globals.db = await database;
+}
+
+Future<void> showNewLoginWarning() async {
+  while (NavigatorKey.navigatorKey.currentContext == null) {
+    await Future.delayed(Duration(seconds: 1));
+  }
+  await Future.delayed(Duration(seconds: 1));
+  showDialog(
+    context: NavigatorKey.navigatorKey.currentContext,
+    builder: (context) {
+      return AlertDialog(
+        elevation: globals.darker ? 0 : 24,
+        title: Text(getTranslatedString("attention")),
+        content: Text(
+          getTranslatedString("newOauth"),
+        ),
+        actions: [
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
