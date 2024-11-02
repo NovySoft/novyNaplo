@@ -25,6 +25,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseAbsences.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseMarks.dart';
 import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
+import 'package:novynaplo/helpers/misc/decodeJwt.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
@@ -211,7 +212,8 @@ class RequestHandler {
     }
   }
 
-  static Future<TokenResponse> login(Student user) async {
+  //DEPRECATED
+  /* static Future<TokenResponse> login(Student user) async {
     FirebaseCrashlytics.instance.log("networkLoginRequest");
 
     try {
@@ -291,17 +293,13 @@ class RequestHandler {
         status: "${getTranslatedString('unkError')}: \n $e",
       );
     }
-  }
+  } */
 
   static Future<Student> getStudentInfo(
     Student userDetails, {
-    bool embedEncryptedDetails = false,
-    Student encryptedDetails,
+    bool embedDetails = false,
   }) async {
     FirebaseCrashlytics.instance.log("getStudentInfo");
-    if (embedEncryptedDetails && encryptedDetails == null) {
-      throw ErrorDescription("Encrypted details were not given");
-    }
     try {
       var response = await client.get(
         Uri.parse(BaseURL.kreta(userDetails.school) + KretaEndpoints.student),
@@ -314,16 +312,17 @@ class RequestHandler {
       Map responseJson = jsonDecode(response.body);
       Student student = Student.fromJson(responseJson);
 
-      if (embedEncryptedDetails) {
-        student.userId = encryptedDetails.userId;
-        student.iv = encryptedDetails.iv;
-        student.school = encryptedDetails.school;
-        student.username = encryptedDetails.username;
-        student.password = encryptedDetails.password;
-        student.current = encryptedDetails.current;
+      if (embedDetails) {
+        student.userId = userDetails.userId;
+        student.school = userDetails.school;
+        student.username = userDetails.username;
+        student.current = userDetails.current;
+        student.refreshToken = userDetails.refreshToken;
+        student.tokenDate = userDetails.tokenDate;
+        student.token = userDetails.token;
       } else {
         student.userId = userDetails.userId;
-        DatabaseHelper.updateKretaGivenParameters(student);
+        await DatabaseHelper.updateKretaGivenParameters(student);
       }
       return student;
     } catch (e, s) {
@@ -596,7 +595,7 @@ class RequestHandler {
           ),
         ),
       )) {
-        TokenResponse res = await login(userDetails);
+        TokenResponse res = await loginWRefresh(userDetails);
         if (res.status == "OK") {
           if (userDetails.current) {
             globals.currentUser.token = res.userinfo.token;
@@ -839,7 +838,7 @@ class RequestHandler {
             globals.currentUser.token != null) {
           userDetails.token = globals.currentUser.token;
         } else {
-          TokenResponse temp = await RequestHandler.login(userDetails);
+          TokenResponse temp = await RequestHandler.loginWRefresh(userDetails);
           if (temp.status == "OK") {
             userDetails = temp.userinfo;
             if (userDetails.current) {
@@ -891,9 +890,10 @@ class RequestHandler {
   }) async {
     FirebaseCrashlytics.instance.log("getEverything");
     isError = false;
-    await getStudentInfo(user);
+    user = await getStudentInfo(user, embedDetails: true);
     if (setData) {
       statisticsPage.classAverages = await getClassAverages(user);
+      //FIXME: Something not right with embeding the classAV!
       marksPage.allParsedByDate = await getEvaluations(
         user,
         statisticsPage.classAverages,
@@ -976,7 +976,7 @@ class RequestHandler {
         ),
       ),
     )) {
-      TokenResponse res = await login(userDetails);
+      TokenResponse res = await loginWRefresh(userDetails);
       if (res.status == "OK") {
         if (userDetails.current) {
           globals.currentUser.token = res.userinfo.token;
@@ -1107,6 +1107,179 @@ class RequestHandler {
       );
       isError = true;
       return statisticsPage.classAverages;
+    }
+  }
+
+  static Future<TokenResponse> newLogin(String code) async {
+    try {
+      FirebaseCrashlytics.instance.log("newLogin");
+
+      var response = await client.post(
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),
+        body: {
+          "code": code,
+          "code_verifier": "DSpuqj_HhDX4wzQIbtn8lr8NLE5wEi1iVLMtMK0jY6c",
+          "redirect_uri":
+              "https://mobil.e-kreta.hu/ellenorzo-student/prod/oauthredirect",
+          "client_id": config.clientId,
+          "grant_type": "authorization_code",
+        },
+        headers: {
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "accept": "*/*",
+          "user-agent": config.userAgent,
+        },
+      );
+
+      Map responseJson = jsonDecode(response.body);
+
+      if (responseJson["error"] != null ||
+          responseJson["error_description"] != null) {
+        return TokenResponse(
+          status: responseJson["error_description"] != null
+              ? responseJson["error_description"]
+              : responseJson["error"],
+        );
+      } else if (response.statusCode == 200) {
+        Student user = Student();
+        user.token = responseJson["access_token"];
+        user.tokenDate = DateTime.now();
+        user.refreshToken = responseJson["refresh_token"];
+        user.school =
+            JWT.parseJwt(responseJson["access_token"])["kreta:institute_code"];
+        user.username =
+            JWT.parseJwt(responseJson["access_token"])["kreta:user_name"];
+        await DatabaseHelper.updateToken(user);
+        return TokenResponse(
+          status: "OK",
+          userinfo: user,
+        );
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 403 ||
+          response.statusCode == 500 ||
+          response.statusCode == 502 ||
+          response.statusCode == 503) {
+        //Kreta IDP is probably updating
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgradeOrWrongCred')}",
+        );
+      } else {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
+        );
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'newLogin',
+        printDetails: true,
+      );
+      return TokenResponse(
+        status: "${getTranslatedString('unkError')}: \n $e",
+      );
+    }
+  }
+
+  static Future<TokenResponse> loginWRefresh(Student user,
+      {int retry = 0}) async {
+    try {
+      FirebaseCrashlytics.instance.log("loginWRefresh");
+
+      bool isKretaUpdating = await checkForKretaUpdatingStatus(
+        user,
+        retry: true,
+      );
+      if (isKretaUpdating) {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}:\n${getTranslatedString('kretaUpgrade')}",
+        );
+      }
+
+      var response = await client.post(
+        Uri.parse(BaseURL.KRETA_IDP + IDPEndpoints.token),
+        body: {
+          "refresh_token": user.refreshToken,
+          "institute_code": user.school,
+          "client_id": config.clientId,
+          "grant_type": "refresh_token",
+          "refresh_user_data": "false",
+        },
+        headers: {
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "accept": "*/*",
+          "user-agent": config.userAgent,
+        },
+      );
+
+      Map responseJson = jsonDecode(response.body);
+
+      if (responseJson["error"] == "invalid_grant" && retry < 3) {
+        // token expired, probably, it returns this error every time
+        await Future.delayed(Duration(seconds: 1));
+        return loginWRefresh(user, retry: retry + 1);
+      } else if (responseJson["error"] == "invalid_grant" && retry == 3) {
+        // token expired, probably, it returns this error every time
+        // Check db for a newer token
+        final refreshTok = await globals.db.rawQuery(
+            "SELECT refreshToken FROM users WHERE id = ${user.userId} or (school = '${user.school}' and username = '${user.username}')");
+        if (refreshTok.isNotEmpty) {
+          user.refreshToken = refreshTok[0]["refreshToken"];
+        }
+        return loginWRefresh(user, retry: retry + 1);
+      } else if (responseJson["error"] != null ||
+          responseJson["error_description"] != null) {
+        return TokenResponse(
+          status: responseJson["error_description"] != null
+              ? responseJson["error_description"]
+              : responseJson["error"],
+        );
+      } else if (response.statusCode == 200) {
+        // This a refresh login, we should have the user's data already
+        user.token = responseJson["access_token"];
+        user.tokenDate = DateTime.now();
+        user.refreshToken = responseJson["refresh_token"];
+        user.school =
+            JWT.parseJwt(responseJson["access_token"])["kreta:institute_code"];
+        user.username =
+            JWT.parseJwt(responseJson["access_token"])["kreta:user_name"];
+        await DatabaseHelper.updateToken(user);
+
+        return TokenResponse(
+          status: "OK",
+          userinfo: user,
+        );
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 403 ||
+          response.statusCode == 500 ||
+          response.statusCode == 502 ||
+          response.statusCode == 503) {
+        //Kreta IDP is probably updating
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode} \n ${getTranslatedString('kretaUpgradeOrWrongCred')}",
+        );
+      } else {
+        return TokenResponse(
+          status:
+              "${getTranslatedString('errWhileFetch')}: ${response.statusCode}",
+        );
+      }
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'loginWRefresh',
+        printDetails: true,
+      );
+      return TokenResponse(
+        status: "${getTranslatedString('unkError')}: \n $e",
+      );
     }
   }
 }

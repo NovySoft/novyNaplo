@@ -12,7 +12,6 @@ import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/school.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/data/models/tokenResponse.dart';
-import 'package:novynaplo/helpers/data/encryptionHelper.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/notification/notificationHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
@@ -102,7 +101,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
     );
     super.initState();
-    DatabaseHelper.getAllUsers(decrypt: false)
+    DatabaseHelper.getAllUsers()
         .then((value) => isFirstUser = (value.length <= 0));
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -270,18 +269,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         return;
       }
     }
-    TokenResponse result = await RequestHandler.login(tempUser)
+    //!FIGYELEM, itt a régi deprecated login metódus kellene!
+    TokenResponse result = await RequestHandler.loginWRefresh(tempUser)
         .timeout(Duration(seconds: 15), onTimeout: () {
       return TokenResponse(status: "TIMEOUT");
     });
     if (result.status == "OK") {
       try {
-        Student finalUserObject = await encryptUserDetails(tempUser);
+        Student finalUserObject = tempUser;
         finalUserObject.current = isFirstUser;
         finalUserObject = await RequestHandler.getStudentInfo(
           tempUser,
-          embedEncryptedDetails: true,
-          encryptedDetails: finalUserObject,
+          embedDetails: true,
         );
         if (widget.isEditing) {
           finalUserObject.userId = widget.userDetails.userId;

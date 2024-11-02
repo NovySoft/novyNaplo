@@ -1,10 +1,13 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:novynaplo/main.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/helpers/ui/getRandomColors.dart';
+
+import '../../i18n/translationProvider.dart';
+import 'deleteSql.dart';
 
 Future<Database> database;
 
@@ -45,7 +48,7 @@ Future<void> initDatabase() async {
         'CREATE TABLE Absences (databaseId INTEGER PRIMARY KEY,uid TEXT,justificationState TEXT,justificationType TEXT,delayInMinutes INTEGER,mode TEXT,date TEXT,lesson TEXT,teacher TEXT,subject TEXT,"type" TEXT,"group" TEXT,createDate TEXT,userId INTEGER);',
       );
       await db.execute(
-        'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,nickname TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,password TEXT,school TEXT,iv TEXT,color INTEGER DEFAULT (4294940672),"current" INTEGER DEFAULT 0,fetched INTEGER DEFAULT 0);',
+        'CREATE TABLE Users (id INTEGER PRIMARY KEY,uid TEXT,mothersName TEXT,adressList TEXT,parents TEXT,name TEXT,nickname TEXT,birthDay TEXT,placeOfBirth TEXT,birthName TEXT,schoolYearUid TEXT,bankAccount TEXT,institution TEXT,username TEXT,school TEXT,color INTEGER DEFAULT (4294940672),"current" INTEGER DEFAULT 0,fetched INTEGER DEFAULT 0, refreshToken TEXT);',
       );
       await db.execute(
         'CREATE TABLE Colors (id TEXT PRIMARY KEY,color INTEGER,category TEXT);',
@@ -58,43 +61,57 @@ Future<void> initDatabase() async {
       );
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
-      if (oldVersion <= 5) {
-        // Created in version 6 already (testing version)
+      FirebaseCrashlytics.instance.log("upgradeSqlTables");
+      if (oldVersion <= 7) {
         await db.execute(
-          "ALTER TABLE Users ADD color INTEGER DEFAULT (4294940672);",
+          'ALTER TABLE Users ADD COLUMN refreshToken TEXT;',
         );
-      }
-      // Append colors to existing users
-      List<Map<String, dynamic>> users =
-          await db.rawQuery('SELECT id FROM Users');
-
-      if (users.length > 1) {
-        // Enable coloring for multi user
-        await globals.prefs.setBool('appBarColoredByUser', true);
-        globals.appBarColoredByUser = true;
-
-        for (int i = 0; i < users.length; i++) {
-          await db.execute(
-            "UPDATE Users SET color = ? WHERE id = ?;",
-            [
-              myListOfRandomColors[i % myListOfRandomColors.length].value,
-              users[i]["id"],
-            ],
-          );
-        }
-      } else if (users.length == 1) {
-        await db.execute(
-          "UPDATE Users SET color = ? WHERE id = ?;",
-          [
-            Colors.orange.value,
-            users[0]["id"],
-          ],
-        );
+        // DELETE All previous data
+        db.delete("Evals");
+        db.delete("Average");
+        db.delete("Notices");
+        db.delete("Events");
+        db.delete("Exams");
+        db.delete("Homework");
+        db.delete("Timetable");
+        db.delete("Absences");
+        db.delete("Users");
+        db.delete("Colors");
+        db.delete("Subjects");
+        // Show warning to user (DO NOT AWAIT)
+        showNewLoginWarning();
       }
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
-    version: 7,
+    version: 8,
   );
   globals.db = await database;
+}
+
+Future<void> showNewLoginWarning() async {
+  while (NavigatorKey.navigatorKey.currentContext == null) {
+    await Future.delayed(Duration(seconds: 1));
+  }
+  await Future.delayed(Duration(seconds: 1));
+  showDialog(
+    context: NavigatorKey.navigatorKey.currentContext,
+    builder: (context) {
+      return AlertDialog(
+        elevation: globals.darker ? 0 : 24,
+        title: Text(getTranslatedString("attention")),
+        content: Text(
+          getTranslatedString("newOauth"),
+        ),
+        actions: [
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

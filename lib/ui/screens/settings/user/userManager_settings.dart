@@ -5,7 +5,7 @@ import 'package:novynaplo/data/database/databaseHelper.dart';
 import 'package:novynaplo/data/models/student.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/global.dart' as globals;
-import 'package:novynaplo/ui/screens/login_page.dart';
+import 'package:novynaplo/ui/screens/login/new_login_page.dart';
 import 'user_detail_settings.dart';
 
 bool isReloadRequired = false;
@@ -147,7 +147,7 @@ class _UserManagerState extends State<UserManager> {
               ),
               onPressed: () async {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => LoginPage(
+                  builder: (_) => NewLoginPage(
                     setStateCallback: setStateCallback,
                     isNewUser: true,
                   ),
@@ -236,7 +236,7 @@ class LogOutDialog extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()),
+                    builder: (BuildContext context) => NewLoginPage()),
                 ModalRoute.withName('login-page'),
               );
             }

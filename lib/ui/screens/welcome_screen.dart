@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
-import 'login_page.dart';
+import 'package:novynaplo/ui/screens/login/new_login_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -147,7 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       job: getTranslatedString("mainDonator"),
                     ),
                     PeopleCard(
-                      name: "Boapps/Filc",
+                      name: "Boapps/Filc/reFilc",
                       job: "Ekréta API",
                     ),
                     PeopleCard(
@@ -184,7 +184,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ],
           onDone: () {
-            Navigator.pushReplacementNamed(context, LoginPage.tag);
+            Navigator.pushReplacementNamed(context, NewLoginPage.tag);
             FirebaseAnalytics.instance.logEvent(name: "tutorial_complete");
           },
           showSkipButton: true,

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ import 'package:novynaplo/helpers/logicAndMath/parsing/parseTimetable.dart';
 import 'package:novynaplo/helpers/logicAndMath/setUpMarkCalculator.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
 import 'package:novynaplo/helpers/versionHelper.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as loginPage;
+import 'package:novynaplo/ui/screens/login/new_login_page.dart' as newLoginPage;
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:novynaplo/config.dart' as config;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -25,9 +24,6 @@ import 'package:novynaplo/ui/screens/exams_tab.dart' as examsPage;
 import 'package:novynaplo/ui/screens/events_tab.dart' as eventsPage;
 import 'package:novynaplo/ui/screens/absences_tab.dart' as absencesPage;
 import 'package:novynaplo/ui/screens/timetable_tab.dart' as timetablePage;
-import 'package:path/path.dart' as fpath;
-import 'package:sqflite/sqflite.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:novynaplo/helpers/ui/subjectColor.dart' as subjectColors;
 import 'package:novynaplo/data/models/subject.dart' as subject;
 import 'package:novynaplo/helpers/logicAndMath/getMarksWithChanges.dart';
@@ -57,61 +53,8 @@ class _LoadingPageState extends State<LoadingPage> {
     try {
       globals.allUsers = await DatabaseHelper.getAllUsers();
       if (globals.allUsers.length <= 0) {
-        //Yes I know I misspelled it, live with it
-        String path =
-            fpath.join(await getDatabasesPath(), 'NovyNalploDatabase.db');
-        File file = new File(path);
-        if (file.existsSync()) {
-          //file.delete();
-          setState(() {
-            loadingText = getTranslatedString("migrateDB");
-          });
-          if (globals.prefs.getString("code") == null) {
-            Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);
-            return;
-          } else {
-            FirebaseAnalytics.instance.logEvent(
-              name: "migrateDB",
-            );
-            var decryptedPass, decryptedUser, decryptedCode;
-            final iv = encrypt.IV.fromBase64(globals.prefs.getString("iv"));
-            var passKey = encrypt.Key.fromUtf8(config.passKey);
-            var codeKey = encrypt.Key.fromUtf8(config.codeKey);
-            var userKey = encrypt.Key.fromUtf8(config.userKey);
-            final passEncrypter = encrypt.Encrypter(encrypt.AES(passKey));
-            final codeEncrypter = encrypt.Encrypter(encrypt.AES(codeKey));
-            final userEncrypter = encrypt.Encrypter(encrypt.AES(userKey));
-            decryptedCode = codeEncrypter.decrypt64(
-              globals.prefs.getString("code"),
-              iv: iv,
-            );
-            decryptedUser = userEncrypter.decrypt64(
-              globals.prefs.getString("user"),
-              iv: iv,
-            );
-            decryptedPass = passEncrypter.decrypt64(
-              globals.prefs.getString("password"),
-              iv: iv,
-            );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => loginPage.LoginPage(
-                  isAutoFill: true,
-                  userDetails: Student(
-                    school: decryptedCode,
-                    username: decryptedUser,
-                    password: decryptedPass,
-                  ),
-                ),
-              ),
-            );
-            return;
-          }
-        } else {
-          Navigator.pushReplacementNamed(context, loginPage.LoginPage.tag);
-          return;
-        }
+        Navigator.pushReplacementNamed(context, newLoginPage.NewLoginPage.tag);
+        return;
       }
       globals.currentUser = globals.allUsers.firstWhere(
         (element) => element.current,

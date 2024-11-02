@@ -8,7 +8,7 @@ import 'package:novynaplo/helpers/misc/capitalize.dart';
 import 'package:novynaplo/helpers/misc/delay.dart';
 import 'package:novynaplo/helpers/networkHelper.dart';
 import 'package:novynaplo/helpers/ui/cardColor/timetableCard.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
+import 'package:novynaplo/ui/screens/login/login_page.dart' as login;
 import 'package:novynaplo/ui/screens/timetable_detail_tab.dart';
 import 'package:novynaplo/i18n/translationProvider.dart';
 import 'package:flutter_calendar_week/flutter_calendar_week.dart';
@@ -26,7 +26,6 @@ var selectedLessonList = [];
 int i = 0;
 DateTime _selectedDate = DateTime.now();
 var alma = DateTime.monday;
-final CalendarWeekController _controller = CalendarWeekController();
 bool fade = true;
 DateTime minDate;
 
@@ -41,6 +40,8 @@ class TimetableTab extends StatefulWidget {
 }
 
 class _TimetableTabState extends State<TimetableTab> {
+  final CalendarWeekController _controller = CalendarWeekController();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.log("Shown Timetable");

@@ -1,6 +1,6 @@
 //Based on https://github.com/khadkarajesh/nepninja
 import 'package:flutter/material.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
+import 'package:novynaplo/ui/screens/login/login_page.dart' as login;
 
 bool squeezed = false;
 double _opacity = 1.0;

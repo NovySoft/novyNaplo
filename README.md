@@ -12,9 +12,15 @@
 
 Novy teljesen nem eredeti kréta kliense.
 
-## **Státusz**
+## **Státusz** (Updated 2023. 06. 08.)
 
-A novynapló mostantól **LTS (Long Term Support) állapotba lép**, az alkalmazás új funkciókat nem fog kapni, viszont a felmerülő hibákat megjavítjuk (akár alkalmazással kapcsolatos hiba, vagy a kréta "inoválásából" adódó hiba).
+A flutter eldopta a régi, nem null-safe alkalmazások támogatását a 3.7.12-es verzióban (2023. 04. 20.). Ez azt jelenti, hogy újabb rendszereket és technológiákat nem fogja tudni az alkalmazás támogatni.
+
+### Ez mit jelent?
+
+Fogalmam sincs mennyi időm lesz foglalkozni ezzel, de mondjuk egy sokkal jobb, fentarthatóbb **NovyNapló _V2_**-őt?!
+
+Természetesen a V2 és a jelenlegi alkalmazás fejlesztése teljese független lesz, így a jelenlegi alkalmazásban felmerülő hibákat is ki fogjuk javítani, amíg nem készül el az új változat.
 
 ## Kréta DMCA
 

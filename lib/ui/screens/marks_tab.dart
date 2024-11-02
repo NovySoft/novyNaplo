@@ -21,7 +21,6 @@ import 'package:novynaplo/helpers/backgroundFetchHelper.dart';
 import 'package:novynaplo/helpers/toasts/errorToast.dart';
 import 'package:novynaplo/helpers/ui/getMarkCardSubtitle.dart';
 import 'package:novynaplo/helpers/ui/getRandomColors.dart';
-import 'package:novynaplo/ui/screens/login_page.dart' as login;
 import 'package:novynaplo/ui/screens/marks_detail_tab.dart';
 import 'package:novynaplo/ui/widgets/AnimatedMarksCard.dart';
 import 'package:novynaplo/ui/widgets/AnimatedSubjectsCard.dart';
@@ -145,7 +144,7 @@ class MarksTabState extends State<MarksTab>
       globals.currentUser.current = true;
     }
     for (var currentUser in globals.allUsers) {
-      TokenResponse status = await RequestHandler.login(currentUser);
+      TokenResponse status = await RequestHandler.loginWRefresh(currentUser);
       if (status.status == "OK") {
         if (currentUser.current) {
           globals.currentUser.token = status.userinfo.token;
@@ -182,7 +181,9 @@ class MarksTabState extends State<MarksTab>
             _setData();
           });
         }
-      } else if (status.status == "invalid_username_or_password") {
+      }
+      //FIXME: This is no longer a valid error message
+      /* else if (status.status == "invalid_username_or_password") {
         showDialog(
             context: context,
             builder: (context) {
@@ -219,7 +220,8 @@ class MarksTabState extends State<MarksTab>
               );
             });
         break;
-      } else {
+      } */
+      else {
         print("Error while getting tokens: ${status.status}");
         ErrorToast.showErrorToastLong(
           context,

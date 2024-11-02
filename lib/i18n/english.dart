@@ -502,4 +502,6 @@ final Map<String, String> translation = {
   "classAvS": "Class AV",
   "appBarColoredByUser": "App bar color based on user",
   "appBarTextColoredByUser": "App bar text color based on user",
+  "attention": "Attention!",
+  "newOauth": "Kréta has changed the login method! Please log in again!",
 };
